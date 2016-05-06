@@ -1,10 +1,10 @@
 <?php
 	defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
 /**
- * Class: KBS_Install
- * 
- * 
  * The installation procedures for KBS
+ * 
+ * 
+ *
  */
 if( !class_exists( 'KBS_Install' ) ) :
 	class KBS_Install	{

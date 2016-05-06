@@ -4,12 +4,12 @@
  * Plugin Name: KB Support
  * Plugin URI: http://TBA
  * Description: All in one Support desk and knowledge base. Easy to use, easy to manage, loved by customers
- * Version: 0.0.1
- * Date: 04 December 2015
- * Author: Mike Howard <contact@mikeandniki.co.uk>
- * Author URI: http://TBA
+ * Version: 0.1
+ * Date: 06 May 2016
+ * Author: Mike Howard <mike@mikesplaugins.co.uk>
+ * Author URI: http://mikesplugins.co.uk
  * Text Domain: kb-support
- * Domain Path: /lang
+ * Domain Path: /languages
  * License: GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Tags: Support Desk, Knowledgebase, KB, Support, Ticketing System, Agents, Customers, Support Tool, Help Desk
@@ -38,43 +38,18 @@ if ( ! class_exists( 'KB_Support' ) ) :
 	class KB_Support	{
 		private static $instance;
 		/**
-		 * Run during plugin activation. Check for existance of version key and execute install procedures
-		 * if it does not exist. Otherwise simply return.
-		 * 
-		 *
-		 *
-		 *
-		 */
-		public static function activate()	{
-			if( !get_option( 'kbs_version' ) )
-				include( KBS_PLUGIN_DIR . '/admin/procedures/kbs-install.php' );
-		} // activate
-		
-		/**
-		 * Run during plugin deactivation.
-		 * 
-		 * 
-		 * 
-		 *
-		 *
-		 */
-		public static function deactivate()	{
-			
-		} // deactivate
-		
-		/**
 		 * Execute actions during 'plugins_loaded' hook
 		 *
 		 *
 		 *
 		 */
-		public static function plugins_loaded()	{
+		public static function load_textdomain()	{
 			// Load the text domain for translations
 			load_plugin_textdomain( 
 				'kb-support',
 				false, 
-				dirname( plugin_basename(__FILE__) ) . '/lang/' );
-		} // plugins_loaded
+				dirname( plugin_basename(__FILE__) ) . '/languages/' );
+		} // load_textdomain
 		
 		/**
 		 * Let's ensure we only have one instance of KBS loaded into memory at any time
@@ -84,17 +59,19 @@ if ( ! class_exists( 'KB_Support' ) ) :
 		 * @return The one true KB_Support
 		 */
 		public static function instance()	{
+
 			if( ! isset( self::$instance ) && ! ( self::$instance instanceof KB_Support ) ) {
 				self::$instance = new KB_Support();
 				
 				self::$instance->define_constants();
 				self::$instance->includes();
 				
-				add_action( 'plugins_loaded', array( __CLASS__, 'plugins_loaded' ) );
+				add_action( 'plugins_loaded', array( __CLASS__, 'load_textdomain' ) );
 								
 			}
-			
+
 			return self::$instance;
+
 		} // instance
 		
 		/**
@@ -119,8 +96,7 @@ if ( ! class_exists( 'KB_Support' ) ) :
 		 *
 		 */
 		public function define_constants()	{
-			define( 'KBS_VER', '0.0.1' );
-			define( 'KBS_VER_KEY', 'kbs_version');
+			define( 'KBS_VER', '0.1' );
 			define( 'KBS_PLUGIN_DIR', untrailingslashit( dirname( __FILE__ ) ) );
 			define( 'KBS_PLUGIN_URL', untrailingslashit( plugins_url( '', __FILE__ ) ) );
 		} // define_constants
@@ -132,15 +108,13 @@ if ( ! class_exists( 'KB_Support' ) ) :
 		 *
 		 */
 		public function includes()	{
+
+			require_once( KBS_PLUGIN_DIR . '/includes/post-types.php' );
+			require_once( KBS_PLUGIN_DIR . '/includes/actions.php' );
+
 			if( is_admin() )	{
-				require_once( KBS_PLUGIN_DIR . '/admin/kbs-menu.php' );
-			}
-			require_once( KBS_PLUGIN_DIR . '/includes/kbs-post-types.php' );
-			
-			if( is_admin() )	{
-				require_once( KBS_PLUGIN_DIR . '/admin/posts/kbs-posts-tickets.php' );
-				require_once( KBS_PLUGIN_DIR . '/admin/formatting/kbs-metabox-settings.php' );
-				require_once( KBS_PLUGIN_DIR . '/admin/formatting/kbs-formatting.php' );
+				require_once( KBS_PLUGIN_DIR . '/includes/admin/admin-pages.php' );
+				require_once( KBS_PLUGIN_DIR . '/includes/admin/tickets/tickets.php' );
 			}
 			
 		} // includes
@@ -156,10 +130,5 @@ endif;
 function KBS()	{
 	return KB_Support::instance();
 }
-
-error_reporting(E_ALL|E_STRICT);
-
-register_activation_hook( __FILE__, array( 'KB_Support', 'activate' ) );
-register_deactivation_hook( __FILE__, array( 'KB_Support', 'deactivate' ) );
 
 KBS();
