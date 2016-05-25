@@ -180,6 +180,7 @@ final class KB_Support {
 			require_once KBS_PLUGIN_DIR . '/includes/admin/tickets/tickets.php';
 			require_once KBS_PLUGIN_DIR . '/includes/admin/kb/kb.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/settings/display-settings.php';
+			require_once KBS_PLUGIN_DIR . 'includes/admin/settings/contextual-help.php';
 		} else	{
 			
 		}
