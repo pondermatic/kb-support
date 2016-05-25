@@ -106,15 +106,15 @@ class KBS_Roles {
 		}
 
 		if ( is_object( $wp_roles ) ) {
-			$wp_roles->add_cap( 'support_manager', 'view_case_reports' );
-			$wp_roles->add_cap( 'support_manager', 'view_case_sensitive_data' );
-			$wp_roles->add_cap( 'support_manager', 'export_case_reports' );
-			$wp_roles->add_cap( 'support_manager', 'manage_case_settings' );
+			$wp_roles->add_cap( 'support_manager', 'view_ticket_reports' );
+			$wp_roles->add_cap( 'support_manager', 'view_ticket_sensitive_data' );
+			$wp_roles->add_cap( 'support_manager', 'export_ticket_reports' );
+			$wp_roles->add_cap( 'support_manager', 'manage_ticket_settings' );
 
-			$wp_roles->add_cap( 'administrator', 'view_case_reports' );
-			$wp_roles->add_cap( 'administrator', 'view_case_sensitive_data' );
-			$wp_roles->add_cap( 'administrator', 'export_case_reports' );
-			$wp_roles->add_cap( 'administrator', 'manage_case_settings' );
+			$wp_roles->add_cap( 'administrator', 'view_ticket_reports' );
+			$wp_roles->add_cap( 'administrator', 'view_ticket_sensitive_data' );
+			$wp_roles->add_cap( 'administrator', 'export_ticket_reports' );
+			$wp_roles->add_cap( 'administrator', 'manage_ticket_settings' );
 
 			// Add the main post type capabilities
 			$capabilities = $this->get_core_caps();
@@ -126,14 +126,14 @@ class KBS_Roles {
 				}
 			}
 
-			$wp_roles->add_cap( 'support_customer', 'edit_case' );
-			$wp_roles->add_cap( 'support_customer', 'edit_cases' );
-			$wp_roles->add_cap( 'support_customer', 'delete_case' );
-			$wp_roles->add_cap( 'support_customer', 'delete_cases' );
-			$wp_roles->add_cap( 'support_customer', 'publish_cases' );
-			$wp_roles->add_cap( 'support_customer', 'edit_published_cases' );
+			$wp_roles->add_cap( 'support_customer', 'edit_ticket' );
+			$wp_roles->add_cap( 'support_customer', 'edit_tickets' );
+			$wp_roles->add_cap( 'support_customer', 'delete_ticket' );
+			$wp_roles->add_cap( 'support_customer', 'delete_tickets' );
+			$wp_roles->add_cap( 'support_customer', 'publish_tickets' );
+			$wp_roles->add_cap( 'support_customer', 'edit_published_tickets' );
 			$wp_roles->add_cap( 'support_customer', 'upload_files' );
-			$wp_roles->add_cap( 'support_customer', 'assign_case_terms' );
+			$wp_roles->add_cap( 'support_customer', 'assign_ticket_terms' );
 		}
 
 	} // add_caps
@@ -149,7 +149,7 @@ class KBS_Roles {
 
 		$capabilities = array();
 
-		$capability_types = array( 'case' );
+		$capability_types = array( 'ticket' );
 
 		foreach ( $capability_types as $capability_type ) {
 			$capabilities[ $capability_type ] = array(
@@ -194,7 +194,7 @@ class KBS_Roles {
 
 		switch( $cap ) {
 
-			case 'view_case_stats' :
+			case 'view_ticket_stats' :
 
 				if( empty( $args[0] ) ) {
 					break;
@@ -205,7 +205,7 @@ class KBS_Roles {
 					break;
 				}
 
-				if( user_can( $user_id, 'view_case_reports' ) || $user_id == $ticket->post_author ) {
+				if( user_can( $user_id, 'view_ticket_reports' ) || $user_id == $ticket->post_author ) {
 					$caps = array();
 				}
 
@@ -234,17 +234,17 @@ class KBS_Roles {
 		}
 
 		if ( is_object( $wp_roles ) ) {
-			/** Shop Manager Capabilities */
-			$wp_roles->remove_cap( 'support_manager', 'view_case_reports' );
-			$wp_roles->remove_cap( 'support_manager', 'view_case_sensitive_data' );
-			$wp_roles->remove_cap( 'support_manager', 'export_case_reports' );
-			$wp_roles->remove_cap( 'support_manager', 'manage_case_settings' );
+			/** Support Manager Capabilities */
+			$wp_roles->remove_cap( 'support_manager', 'view_ticket_reports' );
+			$wp_roles->remove_cap( 'support_manager', 'view_ticket_sensitive_data' );
+			$wp_roles->remove_cap( 'support_manager', 'export_ticket_reports' );
+			$wp_roles->remove_cap( 'support_manager', 'manage_ticket_settings' );
 
 			/** Site Administrator Capabilities */
-			$wp_roles->remove_cap( 'administrator', 'view_case_reports' );
-			$wp_roles->remove_cap( 'administrator', 'view_case_sensitive_data' );
-			$wp_roles->remove_cap( 'administrator', 'export_case_reports' );
-			$wp_roles->remove_cap( 'administrator', 'manage_case_settings' );
+			$wp_roles->remove_cap( 'administrator', 'view_ticket_reports' );
+			$wp_roles->remove_cap( 'administrator', 'view_ticket_sensitive_data' );
+			$wp_roles->remove_cap( 'administrator', 'export_ticket_reports' );
+			$wp_roles->remove_cap( 'administrator', 'manage_ticket_settings' );
 
 			/** Remove the Main Post Type Capabilities */
 			$capabilities = $this->get_core_caps();
@@ -257,13 +257,13 @@ class KBS_Roles {
 				}
 			}
 
-			/** Shop Vendor Capabilities */
-			$wp_roles->remove_cap( 'support_customer', 'edit_case' );
-			$wp_roles->remove_cap( 'support_customer', 'edit_cases' );
-			$wp_roles->remove_cap( 'support_customer', 'delete_case' );
-			$wp_roles->remove_cap( 'support_customer', 'delete_cases' );
-			$wp_roles->remove_cap( 'support_customer', 'publish_cases' );
-			$wp_roles->remove_cap( 'support_customer', 'edit_published_cases' );
+			/** Support Customer Capabilities */
+			$wp_roles->remove_cap( 'support_customer', 'edit_ticket' );
+			$wp_roles->remove_cap( 'support_customer', 'edit_tickets' );
+			$wp_roles->remove_cap( 'support_customer', 'delete_ticket' );
+			$wp_roles->remove_cap( 'support_customer', 'delete_tickets' );
+			$wp_roles->remove_cap( 'support_customer', 'publish_tickets' );
+			$wp_roles->remove_cap( 'support_customer', 'edit_published_tickets' );
 			$wp_roles->remove_cap( 'support_customer', 'upload_files' );
 		}
 

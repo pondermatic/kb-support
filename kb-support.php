@@ -156,8 +156,8 @@ final class KB_Support {
 
 		global $kbs_options;
 
-		//require_once KBS_PLUGIN_DIR . 'includes/admin/settings/register-settings.php';
-		//$kbs_options = kbs_get_settings();
+		require_once KBS_PLUGIN_DIR . 'includes/admin/settings/register-settings.php';
+		$kbs_options = kbs_get_settings();
 
 		require_once KBS_PLUGIN_DIR . 'includes/actions.php';
 
@@ -168,13 +168,16 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . '/includes/actions.php';
 		require_once KBS_PLUGIN_DIR . '/includes/post-types.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-roles.php';
-		require_once KBS_PLUGIN_DIR . 'includes/kb-articles/kb-article-functions.php';
+		require_once KBS_PLUGIN_DIR . 'includes/kb/kb-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/tickets/ticket-functions.php';
+		require_once KBS_PLUGIN_DIR . 'includes/formatting.php';
 
 		if( is_admin() )	{
 			require_once KBS_PLUGIN_DIR . '/includes/admin/admin-pages.php';
+			require_once KBS_PLUGIN_DIR . '/includes/admin/admin-notices.php';
 			require_once KBS_PLUGIN_DIR . '/includes/admin/tickets/tickets.php';
-			require_once KBS_PLUGIN_DIR . '/includes/admin/kb-articles/kb-articles.php';
+			require_once KBS_PLUGIN_DIR . '/includes/admin/kb/kb.php';
+			require_once KBS_PLUGIN_DIR . 'includes/admin/settings/display-settings.php';
 		} else	{
 			
 		}

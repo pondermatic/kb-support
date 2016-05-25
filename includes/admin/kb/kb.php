@@ -16,7 +16,7 @@
  * @param	arr		$columns	An array of column name ⇒ label. The label is shown as the column header.
  * @return	arr		$columns	Filtered array of column name => label to be shown as the column header.
  */
-function kbs_set_kbs_article_post_columns( $columns ) {
+function kbs_set_kbs_kb_post_columns( $columns ) {
     
 	$columns = array(
         'cb'               => '<input type="checkbox" />',
@@ -29,10 +29,10 @@ function kbs_set_kbs_article_post_columns( $columns ) {
 		'linked'           => sprintf( __( 'Linked %s', 'kb-support' ), kbs_get_ticket_label_plural() )
     );
 	
-	return apply_filters( 'kbs_article_post_columns', $columns );
+	return apply_filters( 'kbs_kb_post_columns', $columns );
 	
-} // kbs_set_kbs_article_post_columns
-add_filter( 'manage_kbs_article_posts_columns' , 'kbs_set_kbs_article_post_columns' );
+} // kbs_set_kbs_kb_post_columns
+add_filter( 'manage_kbs_kb_posts_columns' , 'kbs_set_kbs_kb_post_columns' );
 
 /**
  * Define the data to be displayed within the KBS Article post custom columns.
@@ -42,7 +42,7 @@ add_filter( 'manage_kbs_article_posts_columns' , 'kbs_set_kbs_article_post_colum
  * @param	int		$post_id		The ID of the current post for which data is being displayed.
  * @return	str
  */
-function kbs_set_kbs_article_column_data( $column_name, $post_id ) {
+function kbs_set_kbs_kb_column_data( $column_name, $post_id ) {
 
 	switch ( $column_name ) {
 		case 'views':
@@ -60,8 +60,8 @@ function kbs_set_kbs_article_column_data( $column_name, $post_id ) {
 			break;
 	}
 
-} // kbs_set_kbs_article_column_data
-add_action( 'manage_kbs_article_posts_custom_column' , 'kbs_set_kbs_article_column_data', 10, 2 );
+} // kbs_set_kbs_kb_column_data
+add_action( 'manage_kbs_kb_posts_custom_column' , 'kbs_set_kbs_kb_column_data', 10, 2 );
 
 /**
  * Save the KBS Article custom posts
@@ -73,20 +73,20 @@ add_action( 'manage_kbs_article_posts_custom_column' , 'kbs_set_kbs_article_colu
  *
  * @return	void
  */
-function kbs_article_post_save( $post_id, $post, $update )	{	
+function kbs_kb_post_save( $post_id, $post, $update )	{	
 
 	// Remove the save post action to avoid loops
-	remove_action( 'save_post_kbs_article', 'kbs_article_post_save', 10, 3 );
+	remove_action( 'save_post_kbs_kb', 'kbs_kb_post_save', 10, 3 );
 
 	// Fire the before save action but only if this is not a new article creation (i.e $post->post_status == 'draft')
 	if( $update === true )	{
-		do_action( 'kbs_article_before_save', $post_id, $post, $update );
+		do_action( 'kbs_kb_before_save', $post_id, $post, $update );
 	}
 
 	// Fire the after save action
-	do_action( 'kbs_article_after_save', $post_id, $post, $update );
+	do_action( 'kbs_kb_after_save', $post_id, $post, $update );
 
 	// Re-add the save post action
-	add_action( 'save_post_kbs_article', 'kbs_article_post_save', 10, 3 );
+	add_action( 'save_post_kbs_kb', 'kbs_kb_post_save', 10, 3 );
 }
-add_action( 'save_post_kbs_article', 'kbs_article_post_save', 10, 3 );
+add_action( 'save_post_kbs_kb', 'kbs_kb_post_save', 10, 3 );

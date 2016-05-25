@@ -1,0 +1,25 @@
+/**
+ * KBS Admin CSS
+ *
+ * @package     KBS
+ * @subpackage  Admin CSS
+ * @copyright   Copyright (c) 2016, Mike Howard
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+*/
+
+.kbs-hidden { display: none; }
+.kbs-clearfix:after { display: block; visibility: hidden; content: "."; text-indent: -9999px; height: 0; }
+.kbs-wrap a { text-decoration: none; }
+a.kbs-delete { color: #a00; }
+a.kbs-delete:hover { color: #f00; }
+
+/* General Settings Styles
+-------------------------------------------------------------- */
+.ticket_page_kbs-settings .form-table label { color: #666; font-size: 14px; font-style: italic; margin: 4px 0 0; }
+.ticket_page_kbs-settings .form-table select + label,
+.ticket_page_kbs-settings .form-table input.regular-text ~ label { display:block; }
+.ticket_page_kbs-settings .form-table input.small-text ~ label,
+.ticket_page_kbs-settings .form-table input[type="checkbox"] + label { display: inline; }
+.ticket_page_kbs-settings .form-table tr > th > strong,
+.ticket_page_kbs-settings .form-table tr > th > h3
+{ font-size: 1.2em; font-weight: 600; margin: 0 auto; }

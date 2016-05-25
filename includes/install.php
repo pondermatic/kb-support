@@ -81,7 +81,7 @@ function kbs_run_install() {
 	$current_options = get_option( 'kbs_settings', array() );
 
 	// Populate some default values
-	/*foreach( kbs_get_registered_settings() as $tab => $sections ) {	
+	foreach( kbs_get_registered_settings() as $tab => $sections ) {	
 		foreach( $sections as $section => $settings) {
 
 			// Check for backwards compatibility
@@ -100,12 +100,12 @@ function kbs_run_install() {
 			}
 		}
 
-	}*/
+	}
 
-	//$merged_options = array_merge( $kbs_options, $options );
-	//$kbs_options    = $merged_options;
+	$merged_options = array_merge( $kbs_options, $options );
+	$kbs_options    = $merged_options;
 
-	//update_option( 'kbs_settings', $merged_options );
+	update_option( 'kbs_settings', $merged_options );
 	update_option( 'kbs_version', KBS_VERSION );
 
 	// Create KBS support roles

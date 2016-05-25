@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * @return	int
  */
 function kbs_get_article_view_count( $article_id )	{
-	$view_count = get_post_meta( $article_id, '_article_views', true );
+	$view_count = get_post_meta( $article_id, '_kb_article_views', true );
 	
 	if ( ! $view_count )	{
 		$view_count = 0;
@@ -41,5 +41,5 @@ function kbs_get_article_view_count( $article_id )	{
 function kbs_increment_article_view_count( $article_id )	{
 	$view_count = kbs_get_article_view_count( $article_id );
 	
-	return update_post_meta( $article_id, '_article_views', $view_count++ );
+	return update_post_meta( $article_id, '_kb_article_views', $view_count++ );
 } // kbs_get_article_view_count
