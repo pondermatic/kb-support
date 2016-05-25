@@ -165,12 +165,14 @@ final class KB_Support {
 			require_once KBS_PLUGIN_DIR . 'includes/deprecated-functions.php';
 		}
 
-		require_once KBS_PLUGIN_DIR . '/includes/actions.php';
+		require_once KBS_PLUGIN_DIR . 'includes/ajax-functions.php';
+		require_once KBS_PLUGIN_DIR . 'includes/template-functions.php';
 		require_once KBS_PLUGIN_DIR . '/includes/post-types.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-roles.php';
 		require_once KBS_PLUGIN_DIR . 'includes/kb/kb-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/tickets/ticket-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/formatting.php';
+		require_once KBS_PLUGIN_DIR . 'includes/scripts.php';
 
 		if( is_admin() )	{
 			require_once KBS_PLUGIN_DIR . '/includes/admin/admin-pages.php';
