@@ -2,7 +2,7 @@
 	defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
 	
 /**
- * Manage kbs-tickets posts.
+ * Manage kbs-ticket posts.
  * 
  * @since		0.1
  * @package		KBS
@@ -33,7 +33,7 @@ function kbs_set_kbs_ticket_post_columns( $columns ) {
 	return apply_filters( 'kbs_ticket_post_columns', $columns );
 	
 }
-add_filter( 'manage_kbs-ticket_posts_columns' , 'kbs_set_kbs_ticket_post_columns' );
+add_filter( 'manage_kbs_ticket_posts_columns' , 'kbs_set_kbs_ticket_post_columns' );
 
 /**
  * Define the data to be displayed within the KBS ticket post custom columns.
@@ -62,10 +62,14 @@ function kbs_set_kbs_ticket_column_data( $column_name, $post_id ) {
 			echo $output = '';
 			echo apply_filters( 'kb_tickets_post_column_priority', $output, $post_id );
 			break;
+			
+		default:
+			echo __( 'No callback found for post column', 'kb-support' );
+			break;
 	}
 
 }
-add_action( 'manage_kbs-ticket_posts_custom_column' , 'kbs_set_kbs_ticket_column_data', 10, 2 );
+add_action( 'manage_kbs_ticket_posts_custom_column' , 'kbs_set_kbs_ticket_column_data', 10, 2 );
 
 /**
  * Save the KBS Ticket custom posts
@@ -80,7 +84,7 @@ add_action( 'manage_kbs-ticket_posts_custom_column' , 'kbs_set_kbs_ticket_column
 function kbs_ticket_post_save( $post_id, $post, $update )	{	
 
 	// Remove the save post action to avoid loops
-	remove_action( 'save_post_kbs-ticket', 'kbs_ticket_post_save', 10, 3 );
+	remove_action( 'save_post_kbs_ticket', 'kbs_ticket_post_save', 10, 3 );
 
 	// Fire the before save action but only if this is not a new ticket creation (i.e $post->post_status == 'draft')
 	if( $update === true )	{
@@ -91,6 +95,6 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
 	do_action( 'kbs_ticket_after_save', $post_id, $post, $update );
 
 	// Re-add the save post action
-	add_action( 'save_post_kbs-ticket', 'kbs_ticket_post_save', 10, 3 );
+	add_action( 'save_post_kbs_ticket', 'kbs_ticket_post_save', 10, 3 );
 }
-add_action( 'save_post_kbs-ticket', 'kbs_ticket_post_save', 10, 3 );
+add_action( 'save_post_kbs_ticket', 'kbs_ticket_post_save', 10, 3 );

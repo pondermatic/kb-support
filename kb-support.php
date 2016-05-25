@@ -138,6 +138,10 @@ final class KB_Support {
 		if ( ! defined( 'KBS_PLUGIN_DIR' ) )	{
 			define( 'KBS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 		}
+		
+		if ( ! defined( 'KBS_PLUGIN_FILE' ) )	{
+			define( 'KBS_PLUGIN_FILE', __FILE__ );
+		}
 
 	} // setup_constants
 			
@@ -156,16 +160,21 @@ final class KB_Support {
 		//$kbs_options = kbs_get_settings();
 
 		require_once KBS_PLUGIN_DIR . 'includes/actions.php';
+
 		if( file_exists( KBS_PLUGIN_DIR . 'includes/deprecated-functions.php' ) ) {
 			require_once KBS_PLUGIN_DIR . 'includes/deprecated-functions.php';
 		}
 
 		require_once KBS_PLUGIN_DIR . '/includes/actions.php';
 		require_once KBS_PLUGIN_DIR . '/includes/post-types.php';
+		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-roles.php';
+		require_once KBS_PLUGIN_DIR . 'includes/kb-articles/kb-article-functions.php';
+		require_once KBS_PLUGIN_DIR . 'includes/tickets/ticket-functions.php';
 
 		if( is_admin() )	{
 			require_once KBS_PLUGIN_DIR . '/includes/admin/admin-pages.php';
 			require_once KBS_PLUGIN_DIR . '/includes/admin/tickets/tickets.php';
+			require_once KBS_PLUGIN_DIR . '/includes/admin/kb-articles/kb-articles.php';
 		} else	{
 			
 		}
@@ -206,7 +215,7 @@ endif;
  * Example: <?php $kbs = KBS(); ?>
  *
  * @since	0.1
- * @return	obj		KB_Support	The one true Easy_Digital_Downloads Instance.
+ * @return	obj		KB_Support	The one true KB_Support Instance.
  */
 function KBS()	{
 	return KB_Support::instance();

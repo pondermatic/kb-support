@@ -43,7 +43,7 @@ function kbs_install( $network_wide = false ) {
 
 	} else {
 
-		edd_run_install();
+		kbs_run_install();
 
 	}
 
@@ -60,10 +60,10 @@ function kbs_run_install() {
 	global $wpdb, $kbs_options, $wp_version;
 
 	// Setup the Custom Post Types
-	kbs_setup_edd_post_types();
+	kbs_setup_kbs_post_types();
 
 	// Setup the Custom Taxonomies
-	kbs_setup_download_taxonomies();
+	kbs_setup_custom_taxonomies();
 
 	// Clear the permalinks
 	flush_rewrite_rules( false );
@@ -81,7 +81,7 @@ function kbs_run_install() {
 	$current_options = get_option( 'kbs_settings', array() );
 
 	// Populate some default values
-	foreach( kbs_get_registered_settings() as $tab => $sections ) {	
+	/*foreach( kbs_get_registered_settings() as $tab => $sections ) {	
 		foreach( $sections as $section => $settings) {
 
 			// Check for backwards compatibility
@@ -100,12 +100,12 @@ function kbs_run_install() {
 			}
 		}
 
-	}
+	}*/
 
-	$merged_options = array_merge( $kbs_options, $options );
-	$kbs_options    = $merged_options;
+	//$merged_options = array_merge( $kbs_options, $options );
+	//$kbs_options    = $merged_options;
 
-	update_option( 'kbs_settings', $merged_options );
+	//update_option( 'kbs_settings', $merged_options );
 	update_option( 'kbs_version', KBS_VERSION );
 
 	// Create KBS support roles
@@ -113,8 +113,8 @@ function kbs_run_install() {
 	$roles->add_roles();
 	$roles->add_caps();
 
-	// Add a temporary option to note that EDD pages have been created
-	set_transient( '_kbs_installed', $merged_options, 30 );
+	// Add a temporary option to note that KBS pages have been created
+	//set_transient( '_kbs_installed', $merged_options, 30 );
 
 	if ( ! $current_version ) {
 		require_once KBS_PLUGIN_DIR . 'includes/admin/upgrades/upgrade-functions.php';
