@@ -6,7 +6,7 @@ global $kbs_login_redirect;
 if ( ! is_user_logged_in() ) : ?>
 	<form id="kbs_login_form" class="kbs_form" action="" method="post">
 		<fieldset>
-			<span><legend><?php _e( 'Log into Your Account', 'kb-support' ); ?></legend></span>
+			<legend><?php _e( 'Log into Your Account', 'kb-support' ); ?></legend>
 			<?php do_action( 'kbs_login_fields_before' ); ?>
 			<p>
 				<label for="kbs_user_login"><?php _e( 'Username or Email', 'kb-support' ); ?></label>

@@ -76,8 +76,8 @@ function kbs_setup_kbs_post_types() {
 
 	/** KB Post Type */
 	$kb_labels = array(
-		'name'               => _x( '%2$s', 'kbs_kb_article type general name', 'kb-support' ),
-		'singular_name'      => _x( '%1$s', 'kbs_kb_article type singular name', 'kb-support' ),
+		'name'               => _x( '%2$s', 'kbs_kb type general name', 'kb-support' ),
+		'singular_name'      => _x( '%1$s', 'kbs_kb type singular name', 'kb-support' ),
 		'add_new'            => __( 'New %1$s', 'kb-support' ),
 		'add_new_item'       => __( 'New %1$s', 'kb-support' ),
 		'edit_item'          => __( 'Edit %1$s', 'kb-support' ),
@@ -113,6 +113,40 @@ function kbs_setup_kbs_post_types() {
 	);
 
 	register_post_type( 'kbs_kb', $kb_args );
+	
+	/** KB Form Type */
+	$form_labels = array(
+		'name'               => _x( 'Forms', 'kbs_form type general name', 'kb-support' ),
+		'singular_name'      => _x( 'Form', 'kbs_form type singular name', 'kb-support' ),
+		'add_new'            => __( 'New Form', 'kb-support' ),
+		'add_new_item'       => __( 'New Form', 'kb-support' ),
+		'edit_item'          => __( 'Edit Form', 'kb-support' ),
+		'new_item'           => __( 'New Form', 'kb-support' ),
+		'all_items'          => __( 'Forms', 'kb-support' ),
+		'view_item'          => __( 'View Form', 'kb-support' ),
+		'search_items'       => __( 'Search Forms', 'kb-support' ),
+		'not_found'          => __( 'No Forms found', 'kb-support' ),
+		'not_found_in_trash' => __( 'No Forms found in Trash', 'kb-support' ),
+		'parent_item_colon'  => '',
+		'menu_name'          => __( '%2$s', 'kb-support' )
+	);
+
+	$form_args = array(
+		'labels'             => $form_labels,
+		'public'             => false,
+		'show_ui'            => true,
+		'show_in_menu'       => 'edit.php?post_type=kbs_ticket',
+		'menu_icon'          => 'dashicons-book-alt',
+		'rewrite'            => false,
+		'capability_type'    => 'ticket',
+		'map_meta_cap'       => true,
+		'has_archive'        => false,
+		'hierarchical'       => false,
+		'supports'           => apply_filters( 'kbs_form_supports', array( 'title' ) ),
+		'can_export'         => true
+	);
+
+	register_post_type( 'kbs_form', $form_args );
 
 } // kbs_setup_kbs_post_types
 add_action( 'init', 'kbs_setup_kbs_post_types', 1 );
@@ -218,11 +252,11 @@ function kbs_change_default_title( $title ) {
 	 if ( 'kbs_ticket' == $screen->post_type ) {
 		$label = kbs_get_ticket_label_singular();
 		$title = sprintf( __( 'Enter %s name here', 'kb-support' ), $label );
-	 }
-	 
-	 if ( 'kbs_kb' == $screen->post_type ) {
+	 } elseif ( 'kbs_kb' == $screen->post_type ) {
 		$label = kbs_get_kb_label_singular();
 		$title = sprintf( __( 'Enter %s name here', 'kb-support' ), $label );
+	 } elseif ( 'kbs_form' == $screen->post_type )	{
+		$title = __( 'Enter form name here', 'kb-support' ); 
 	 }
 
 	 return $title;
@@ -407,6 +441,14 @@ function kbs_updated_messages( $messages ) {
 		6 => sprintf( __( '%2$s published. %1$sView %2$s%3$s.', 'kb-support' ), $url1, $url3, $url4 ),
 		7 => sprintf( __( '%2$s saved. %1$sView %2$s%3$s.', 'kb-support'     ), $url1, $url3, $url4 ),
 		8 => sprintf( __( '%2$s submitted. %1$sView %2$s%3$s.', 'kb-support' ), $url1, $url3, $url4 )
+	);
+	
+	$messages['kbs_form'] = array(
+		1 => sprintf( __( 'Form updated. %1$sView Form%2$s.', 'kb-support'   ), $url1, $url4 ),
+		4 => sprintf( __( 'Form updated. %1$sView Form%2$s.', 'kb-support'   ), $url1, $url4 ),
+		6 => sprintf( __( 'Form published. %1$sView Form%2$s.', 'kb-support' ), $url1, $url4 ),
+		7 => sprintf( __( 'Form saved. %1$sView Form%2$s.', 'kb-support'     ), $url1, $url4 ),
+		8 => sprintf( __( 'Form submitted. %1$sView Form%2$s.', 'kb-support' ), $url1, $url4 )
 	);
 
 	return $messages;

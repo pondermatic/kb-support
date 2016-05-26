@@ -66,7 +66,7 @@ add_action( 'manage_kbs_kb_posts_custom_column' , 'kbs_set_kbs_kb_column_data', 
 /**
  * Save the KBS Article custom posts
  *
- * @since	1.3
+ * @since	0.1
  * @param	int		$post_id		The ID of the post being saved.
  * @param	obj		$post			The WP_Post object of the post being saved.
  * @param	bool	$update			Whether an existing post if being updated or not.

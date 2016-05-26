@@ -1127,8 +1127,8 @@ function kbs_descriptive_text_callback( $args ) {
  * @global	$kbs_options	Array of all the KBS options
  * @return void
  */
-if ( ! function_exists( 'edd_license_key_callback' ) ) {
-	function edd_license_key_callback( $args ) {
+if ( ! function_exists( 'kbs_license_key_callback' ) ) {
+	function kbs_license_key_callback( $args ) {
 		global $kbs_options;
 
 		$messages = array();
@@ -1282,7 +1282,7 @@ if ( ! function_exists( 'edd_license_key_callback' ) ) {
 			echo '<div class="license-null">' . $html . '</div>';
 		}
 	}
-} // edd_license_key_callback
+} // kbs_license_key_callback
 
 /**
  * Hook Callback

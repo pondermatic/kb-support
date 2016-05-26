@@ -8,3 +8,28 @@
 */
 @charset "UTF-8";
 
+/* =Registration / login Form
+-------------------------------------------------------------- */
+#kbs_register_form fieldset legend,
+#kbs_login_form fieldset legend	{
+	padding-left: 1.5px;
+	padding-right: 1.5px;
+	font-weight: bold;
+}
+
+#kbs_register_form .kbs-input,
+#kbs_login_form .kbs-input,
+#kbs_register_form label,
+#kbs_login_form label {
+	display: inline-block;
+	width: 200px;
+}
+
+/* =Theme Specific styling
+-------------------------------------------------------------- */
+
+/* Twenty Twelve */
+.kbs_form input.kbs-input.required,
+.kbs_form select.kbs-select.required {
+	color: #000;
+}

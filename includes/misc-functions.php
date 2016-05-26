@@ -30,7 +30,7 @@ function kbs_no_guest_checkout() {
  * @return	bool	$ret	Whether or not the logged_in_only setting is set
  */
 function kbs_logged_in_only() {
-	$ret = edd_get_option( 'logged_in_only', false );
+	$ret = kbs_get_option( 'logged_in_only', false );
 	return (bool) apply_filters( 'kbs_logged_in_only', $ret );
 } // kbs_logged_in_only
 
@@ -101,8 +101,6 @@ function kbs_get_current_page_url() {
 
 	if ( is_front_page() ) {
 		$uri = home_url( '/' );
-	} elseif ( edd_is_checkout( array(), false ) ) {
-		$uri = edd_get_checkout_uri();
 	}
 
 	$uri = apply_filters( 'kbs_get_current_page_url', $uri );

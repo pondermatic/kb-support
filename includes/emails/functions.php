@@ -76,13 +76,13 @@ function kbs_email_test_ticket_received() {
 	$from_email  = apply_filters( 'kbs_test_ticket_from_address', $from_email, 0, array() );
 
 	$subject     = kbs_get_option( 'ticket_subject', __( 'Purchase Receipt', 'kb-support' ) );
-	$subject     = apply_filters( 'edd_purchase_subject', wp_strip_all_tags( $subject ), 0 );
-	$subject     = edd_do_email_tags( $subject, 0 );
+	$subject     = apply_filters( 'kbs_ticket_subject', wp_strip_all_tags( $subject ), 0 );
+	$subject     = kbs_do_email_tags( $subject, 0 );
 
 	$heading     = kbs_get_option( 'purchase_heading', __( 'Purchase Receipt', 'kb-support' ) );
-	$heading     = apply_filters( 'edd_purchase_heading', $heading, 0, array() );
+	$heading     = apply_filters( 'kbs_ticket_heading', $heading, 0, array() );
 
-	$attachments = apply_filters( 'edd_receipt_attachments', array(), 0, array() );
+	$attachments = apply_filters( 'kbs_ticket_attachments', array(), 0, array() );
 
 	$message     = kbs_do_email_tags( kbs_get_email_body_content( 0, array() ), 0 );
 
@@ -151,7 +151,7 @@ add_action( 'kbs_admin_ticket_notice', 'kbs_admin_ticket_notice', 10, 2 );
 
 /**
  * Retrieves the emails for which admin notifications are sent to (these can be
- * changed in the EDD Settings)
+ * changed in the KBS Settings)
  *
  * @since	0.1
  * @return	mixed

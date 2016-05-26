@@ -27,7 +27,7 @@ function kbs_add_options_link() {
 	$kbs_settings_page      = add_submenu_page( 'edit.php?post_type=kbs_ticket', __( 'KB Support Settings', 'kb-support' ), __( 'Settings', 'kb-support' ), 'manage_ticket_settings', 'kbs-settings', 'kbs_options_page' );
 
 } // kbs_add_options_link
-add_action( 'admin_menu', 'kbs_add_options_link', 10 );
+add_action( 'admin_menu', 'kbs_add_options_link', 9 );
 
 /**
  *  Determines whether the current admin page is a specific KBS admin page.
@@ -144,6 +144,30 @@ function kbs_is_admin_page( $passed_page = '', $passed_view = '' ) {
 					break;
 			}
 			break;
+		case 'kbs_form':
+			switch ( $passed_view ) {
+				case 'list-table':
+					if ( ( 'kbs_form' == $typenow || 'kbs_form' === $post_type ) && $pagenow == 'edit.php' ) {
+						$found = true;
+					}
+					break;
+				case 'edit':
+					if ( ( 'kbs_form' == $typenow || 'kbs_form' === $post_type ) && $pagenow == 'post.php' ) {
+						$found = true;
+					}
+					break;
+				case 'new':
+					if ( ( 'kbs_form' == $typenow || 'kbs_form' === $post_type ) && $pagenow == 'post-new.php' ) {
+						$found = true;
+					}
+					break;
+				default:
+					if ( ( 'kbs_form' == $typenow || 'kbs_form' === $post_type ) || 'kbs_form' === $post_type || ( 'post-new.php' == $pagenow && 'kbs_ticket' === $post_type ) ) {
+						$found = true;
+					}
+					break;
+			}
+			break;
 		case 'settings':
 			switch ( $passed_view ) {
 				case 'general':
@@ -171,7 +195,7 @@ function kbs_is_admin_page( $passed_page = '', $passed_view = '' ) {
 		default:
 			global $kbs_settings_page;
 			
-			$admin_pages = apply_filters( 'kbs_admin_pages', array( $edd_settings_page ) );
+			$admin_pages = apply_filters( 'kbs_admin_pages', array( $kbs_settings_page ) );
 			if ( 'kbs_ticket' == $typenow || 'index.php' == $pagenow || 'post-new.php' == $pagenow || 'post.php' == $pagenow ) {
 				$found = true;
 				if( 'kbs-upgrades' === $page ) {
