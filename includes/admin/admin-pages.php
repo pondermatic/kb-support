@@ -40,7 +40,7 @@ add_action( 'admin_menu', 'kbs_add_options_link', 10 );
  *
  *  @param	str		$page	Main page's slug
  *  @param	str		$view	Page view ( ex: `edit` or `delete` )
- *  @return	bool	True if KBS admin page we're looking for or an KBS page or if $page is empty, any KBS page
+ *  @return	bool	True if KBS admin page we're looking for or a KBS page or if $page is empty, any KBS page
  */
 function kbs_is_admin_page( $passed_page = '', $passed_view = '' ) {
 
@@ -166,6 +166,19 @@ function kbs_is_admin_page( $passed_page = '', $passed_view = '' ) {
 						$found = true;
 					}
 					break;
+			}
+			break;
+		default:
+			global $kbs_settings_page;
+			
+			$admin_pages = apply_filters( 'kbs_admin_pages', array( $edd_settings_page ) );
+			if ( 'kbs_ticket' == $typenow || 'index.php' == $pagenow || 'post-new.php' == $pagenow || 'post.php' == $pagenow ) {
+				$found = true;
+				if( 'kbs-upgrades' === $page ) {
+					$found = false;
+				}
+			} elseif ( in_array( $pagenow, $admin_pages ) ) {
+				$found = true;
 			}
 			break;
 	}

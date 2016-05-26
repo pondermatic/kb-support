@@ -56,7 +56,7 @@ function kbs_register_styles() {
 	}
 
 	// Use minified libraries if SCRIPT_DEBUG is turned off
-	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '';//'.min';
 
 	$file          = 'kbs' . $suffix . '.css';
 	$templates_dir = kbs_get_theme_template_dir_name();
@@ -114,7 +114,7 @@ function kbs_load_admin_scripts( $hook ) {
 	$css_dir = KBS_PLUGIN_URL . 'assets/css/';
 
 	// Use minified libraries if SCRIPT_DEBUG is turned off
-	$suffix  = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+	$suffix  = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '';//'.min';
 
 	$admin_deps = array();
 	if ( ! kbs_is_admin_page( $hook, 'edit' ) && ! kbs_is_admin_page( $hook, 'new' ) ) {

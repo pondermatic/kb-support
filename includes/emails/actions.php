@@ -2,11 +2,11 @@
 /**
  * Email Actions
  *
- * @package     EDD
+ * @package     KBS
  * @subpackage  Emails
- * @copyright   Copyright (c) 2015, Pippin Williamson
+ * @copyright   Copyright (c) 2016, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       1.0.8.2
+ * @since       0.1
  */
 
 // Exit if accessed directly

@@ -84,6 +84,8 @@ final class KB_Support {
 
 			self::$instance->includes();
 			self::$instance->roles      = new KBS_Roles();
+			self::$instance->emails     = new KBS_Emails();
+			self::$instance->email_tags = new KBS_Email_Template_Tags();
 
 		}
 
@@ -135,7 +137,7 @@ final class KB_Support {
 			define( 'KBS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 		}
 
-		if ( ! defined( 'KBS_PLUGIN_DIR' ) )	{
+		if ( ! defined( 'KBS_PLUGIN_URL' ) )	{
 			define( 'KBS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 		}
 		
@@ -173,6 +175,10 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/tickets/ticket-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/formatting.php';
 		require_once KBS_PLUGIN_DIR . 'includes/scripts.php';
+		require_once KBS_PLUGIN_DIR . 'includes/emails/class-kbs-emails.php';
+		require_once KBS_PLUGIN_DIR . 'includes/emails/class-kbs-email-tags.php';
+		require_once KBS_PLUGIN_DIR . 'includes/emails/functions.php';
+		require_once KBS_PLUGIN_DIR . 'includes/emails/template.php';
 
 		if( is_admin() )	{
 			require_once KBS_PLUGIN_DIR . '/includes/admin/admin-pages.php';

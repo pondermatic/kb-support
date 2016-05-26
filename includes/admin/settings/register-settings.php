@@ -220,14 +220,21 @@ function kbs_get_registered_settings() {
 		/** General Settings */
 		'general' => apply_filters( 'kbs_settings_general',
 			array(
-				'main' => array(
+				'pages' => array(
 					'page_settings' => array(
 						'id'   => 'page_settings',
 						'name' => '<h3>' . __( 'Page Settings', 'kb-support' ) . '</h3>',
 						'desc' => '',
-						'type' => 'header',
+						'type' => 'header'
+					),
+					'ticket_page'   => array(
+						'id'      => 'ticket_page',
+						'name'    => sprintf( __( '%s Page', 'kb-support' ), kbs_get_ticket_label_singular() ),
+						'desc'    => sprintf( __( 'This is the page where customers will submit their %s', 'kb-support' ), kbs_get_ticket_label_plural( true ) ),
+						'type'    => 'select',
+						'options' => kbs_get_pages()
 					)
-				),
+				)
 			)
 		),
 		/** SLA Settings */
@@ -269,7 +276,7 @@ function kbs_get_registered_settings() {
 						'name'    => __( 'Email Template', 'kb-support' ),
 						'desc'    => sprintf( __( 'Choose a template. Click "Save Changes" then "Preview %s Received" to see the new template.', 'kb-support' ), kbs_get_ticket_label_singular() ),
 						'type'    => 'select',
-						'options' => array( 'test' => 'Test' )//kbs_get_email_templates()
+						'options' => kbs_get_email_templates()
 					),
 					'email_logo' => array(
 						'id'   => 'email_logo',
@@ -337,11 +344,11 @@ function kbs_get_registered_settings() {
 						'name' => sprintf( __( '%s Notification Subject', 'kb-support' ), kbs_get_ticket_label_singular() ),
 						'desc' => sprintf( __( 'Enter the subject line for the %s notification email', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
 						'type' => 'text',
-						'std'  => sprintf( __( 'New %s received - Case #{ticket_id}', 'kb-support' ), kbs_get_ticket_label_singular( true ) ) . "\n\n" . '{ticket_details}'
+						'std'  => sprintf( __( 'New %s received - Case #{ticket_id}', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
 					),
 					'ticket_notification' => array(
 						'id'   => 'ticket_notification',
-						'name' => sprintf( __( '%s Notification', 'kb-support' ), kbs_get_ticket_label_singular() ),
+						'name' => sprintf( __( '%s Notification', 'kb-support' ), kbs_get_ticket_label_singular() ) . "\n\n" . '{ticket_details}',
 						'desc' => sprintf( __( 'Enter the text that is sent as %s received notification email after submission of a case. HTML is accepted.' ), kbs_get_ticket_label_singular( true ) ),
 						'type' => 'rich_editor',
 						'std'  => '',//kbs_get_default_ticket_notification_email()
@@ -362,12 +369,121 @@ function kbs_get_registered_settings() {
 				)
 			)
 		),
+		/** Styles Settings */
+		'styles' => apply_filters( 'kbs_settings_styles',
+			array(
+				'main' => array(
+					'style_settings' => array(
+						'id'   => 'style_settings',
+						'name' => '<h3>' . __( 'Style Settings', 'kb-support' ) . '</h3>',
+						'type' => 'header'
+					),
+					'disable_styles' => array(
+						'id'   => 'disable_styles',
+						'name' => __( 'Disable Styles', 'kb-support' ),
+						'desc' => __( 'Check this to disable all included styling of buttons, checkout fields, and all other elements.', 'kb-support' ),
+						'type' => 'checkbox'
+					),
+					'button_header' => array(
+						'id'   => 'button_header',
+						'name' => '<strong>' . __( 'Buttons', 'kb-support' ) . '</strong>',
+						'desc' => sprintf( __( 'Options for submit %s buttons', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+						'type' => 'header'
+					),
+					'button_style' => array(
+						'id'      => 'button_style',
+						'name'    => __( 'Default Button Style', 'kb-support' ),
+						'desc'    => __( 'Choose the style you want to use for the buttons.', 'kb-support' ),
+						'type'    => 'select',
+						'options' => kbs_get_button_styles()
+					),
+					'checkout_color' => array(
+						'id'      => 'checkout_color',
+						'name'    => __( 'Default Button Color', 'kb-support' ),
+						'desc'    => __( 'Choose the color you want to use for the buttons.', 'kb-support' ),
+						'type'    => 'color_select',
+						'options' => kbs_get_button_colors()
+					)
+				)
+			)
+		),
 		/** Extension Settings */
 		'extensions' => apply_filters( 'kbs_settings_extensions',
 			array()
 		),
+		/** License Settings */
 		'licenses' => apply_filters( 'kbs_settings_licenses',
 			array()
+		),
+		/** Misc Settings */
+		'misc' => apply_filters( 'kbs_settings_misc',
+			array(
+				'main' => array(
+					'misc_settings_header' => array(
+						'id'   => 'misc_settings_header',
+						'name' => '<h3>' . __( 'Misc Settings', 'kb-support' ) . '</h3>',
+						'type' => 'header'
+					),
+					'remove_on_uninstall' => array(
+						'id'      => 'remove_on_uninstall',
+						'name'    => __( 'Remove Data on Uninstall?', 'kb-support' ),
+						'desc'    => __( 'Check this box if you would like KBS to completely remove all of its data when the plugin is deleted.', 'kb-support' ),
+						'type'    => 'checkbox'
+					)
+				),
+				'submit' => array(
+					'submit_settings_header' => array(
+						'id'   => 'submit_settings_header',
+						'name' => '<h3>' . __( 'Submission Settings', 'kb-support' ) . '</h3>',
+						'type' => 'header'
+					),
+					'logged_in_only' => array(
+						'id'      => 'logged_in_only',
+						'name'    => __( 'Disable Guest Submittions?', 'kb-support' ),
+						'desc'    => sprintf( __( 'Require that users be logged in to submit %s.', 'kb-support' ), kbs_get_ticket_label_plural( true ) ),
+						'type'    => 'checkbox'
+					),
+					'show_register_form' => array(
+						'id'      => 'show_register_form',
+						'name'    => __( 'Show Register / Login Form?', 'kb-support' ),
+						'desc'    => __( 'Display the registration and login forms on the submission page for non-logged-in users.', 'kb-support' ),
+						'type'    => 'select',
+						'std'     => 'none',
+						'options' => array(
+							'both'         => __( 'Registration and Login Forms', 'kb-support' ),
+							'registration' => __( 'Registration Form Only', 'kb-support' ),
+							'login'        => __( 'Login Form Only', 'kb-support' ),
+							'none'         => __( 'None', 'kb-support' ),
+						)
+					)
+				),
+				'site_terms'     => array(
+					'terms_settings' => array(
+						'id'   => 'terms_settings',
+						'name' => '<h3>' . __( 'Agreement Settings', 'kb-support' ) . '</h3>',
+						'type' => 'header',
+					),
+					'show_agree_to_terms' => array(
+						'id'   => 'show_agree_to_terms',
+						'name' => __( 'Agree to Terms', 'kb-support' ),
+						'desc' => sprintf( __( 'Check this to show an agree to terms on the submission page that users must agree to before submitting their %s.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+						'type' => 'checkbox',
+					),
+					'agree_label' => array(
+						'id'   => 'agree_label',
+						'name' => __( 'Agree to Terms Label', 'kb-support' ),
+						'desc' => __( 'Label shown next to the agree to terms check box.', 'kb-support' ),
+						'type' => 'text',
+						'size' => 'regular',
+					),
+					'agree_text' => array(
+						'id'   => 'agree_text',
+						'name' => __( 'Agreement Text', 'kb-support' ),
+						'desc' => __( 'If Agree to Terms is checked, enter the agreement terms here.', 'kb-support' ),
+						'type' => 'rich_editor',
+					),
+				)
+			)
 		)
 	);
 
@@ -483,6 +599,7 @@ function kbs_get_settings_tabs() {
 	$tabs['general']  = __( 'General', 'kb-support' );
 	$tabs['sla']      = __( 'Service Levels', 'kb-support' );
 	$tabs['emails']   = __( 'Emails', 'kb-support' );
+	$tabs['styles']   = __( 'Styles', 'kb-support' );
 
 	if( ! empty( $settings['extensions'] ) ) {
 		$tabs['extensions'] = __( 'Extensions', 'kb-support' );
@@ -490,6 +607,8 @@ function kbs_get_settings_tabs() {
 	if( ! empty( $settings['licenses'] ) ) {
 		$tabs['licenses'] = __( 'Licenses', 'kb-support' );
 	}
+	
+	$tabs['misc']   = __( 'Misc', 'kb-support' );
 
 	return apply_filters( 'kbs_settings_tabs', $tabs );
 } // kbs_get_settings_tabs
@@ -531,7 +650,8 @@ function kbs_get_registered_settings_sections() {
 
 	$sections = array(
 		'general'    => apply_filters( 'kbs_settings_sections_general', array(
-			'main'                 => __( 'General Settings', 'kb-support' )
+			'main'                 => __( 'General Settings', 'kb-support' ),
+			'pages'                => __( 'Pages', 'kb-support' )
 		) ),
 		'sla'        => apply_filters( 'kbs_settings_sections_sla', array(
 			'main'                 => __( 'Service Levels', 'kb-support' )
@@ -539,12 +659,20 @@ function kbs_get_registered_settings_sections() {
 		'emails'     => apply_filters( 'kbs_settings_sections_emails', array(
 			'main'                 => __( 'Emails', 'kb-support' ),
 			'ticket_received'      => sprintf( __( '%s Received', 'kb-support' ), kbs_get_ticket_label_singular() ),
-			'ticket_notifications' => sprintf( __( 'New %s Received', 'kb-support' ), kbs_get_ticket_label_singular() )
+			'ticket_notifications' => sprintf( __( '%s Notifications', 'kb-support' ), kbs_get_ticket_label_singular() )
+		) ),
+		'styles'     => apply_filters( 'kbs_settings_sections_styles', array(
+			'main'                 => __( 'Styles', 'kb-support' )
 		) ),
 		'extensions' => apply_filters( 'kbs_settings_sections_extensions', array(
 			'main'                 => __( 'Main', 'kb-support' )
 		) ),
-		'licenses'   => apply_filters( 'kbs_settings_sections_licenses', array() )
+		'licenses'   => apply_filters( 'kbs_settings_sections_licenses', array() ),
+		'misc'       => apply_filters( 'kbs_settings_sections_misc', array(
+			'main'                 => __( 'Misc Settings', 'kb-support' ),
+			'submit'               => __( 'Submission Settings', 'kb-support' ),
+			'site_terms'           => __( 'Terms and Conditions', 'kb-support' )
+		) )
 	);
 
 	$sections = apply_filters( 'kbs_settings_sections', $sections );
@@ -937,9 +1065,9 @@ function kbs_upload_callback( $args ) {
 	global $kbs_options;
 
 	if ( isset( $kbs_options[ $args['id'] ] ) ) {
-		$value = $kbs_options[$args['id']];
+		$value = $kbs_options[ $args['id'] ];
 	} else {
-		$value = isset($args['std']) ? $args['std'] : '';
+		$value = isset( $args['std'] ) ? $args['std'] : '';
 	}
 
 	$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
@@ -1170,7 +1298,7 @@ function kbs_hook_callback( $args ) {
 } // kbs_hook_callback
 
 /**
- * Set manage_shop_settings as the cap required to save KBS settings pages
+ * Set manage_ticket_settings as the cap required to save KBS settings pages
  *
  * @since	0.1
  * @return	str		Capability required

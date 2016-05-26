@@ -2,11 +2,11 @@
 /**
  * Email Template
  *
- * @package     EDD
+ * @package     KBS
  * @subpackage  Emails
- * @copyright   Copyright (c) 2015, Pippin Williamson
+ * @copyright   Copyright (c) 2016, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       1.0
+ * @since       0.1
  */
 
 // Exit if accessed directly
@@ -16,44 +16,44 @@ if ( !defined( 'ABSPATH' ) ) exit;
  * Gets all the email templates that have been registerd. The list is extendable
  * and more templates can be added.
  *
- * As of 2.0, this is simply a wrapper to EDD_Email_Templates->get_templates()
+ * This is simply a wrapper to EDD_Email_Templates->get_templates()
  *
- * @since 1.0.8.2
- * @return array $templates All the registered email templates
+ * @since	0.1
+ * @return	arr		$templates	All the registered email templates
  */
-function edd_get_email_templates() {
-	$templates = new EDD_Emails;
+function kbs_get_email_templates() {
+	$templates = new KBS_Emails;
 	return $templates->get_templates();
-}
+} // kbs_get_email_templates
 
 /**
  * Email Template Tags
  *
- * @since 1.0
+ * @since	0.1
  *
- * @param string $message Message with the template tags
- * @param array $payment_data Payment Data
- * @param int $payment_id Payment ID
- * @param bool $admin_notice Whether or not this is a notification email
+ * @param	str		$message		Message with the template tags
+ * @param	arr		$ticket_data	Payment Data
+ * @param	int		$ticket_id		Ticket ID
+ * @param	bool	$admin_notice	Whether or not this is a notification email
  *
- * @return string $message Fully formatted message
+ * @return	str		$message		Fully formatted message
  */
-function edd_email_template_tags( $message, $payment_data, $payment_id, $admin_notice = false ) {
-	return edd_do_email_tags( $message, $payment_id );
-}
+function kbs_email_template_tags( $message, $ticket_data, $ticket_id, $admin_notice = false ) {
+	return kbs_do_email_tags( $message, $ticket_id );
+} // kbs_email_template_tags
 
 /**
  * Email Preview Template Tags
  *
- * @since 1.0
+ * @since	0.1
  * @param string $message Email message with template tags
  * @return string $message Fully formatted message
  */
-function edd_email_preview_template_tags( $message ) {
+function kbs_email_preview_template_tags( $message ) {
 	$download_list = '<ul>';
-	$download_list .= '<li>' . __( 'Sample Product Title', 'easy-digital-downloads' ) . '<br />';
+	$download_list .= '<li>' . __( 'Sample Product Title', 'kb-support' ) . '<br />';
 	$download_list .= '<div>';
-	$download_list .= '<a href="#">' . __( 'Sample Download File Name', 'easy-digital-downloads' ) . '</a> - <small>' . __( 'Optional notes about this download.', 'easy-digital-downloads' ) . '</small>';
+	$download_list .= '<a href="#">' . __( 'Sample Download File Name', 'kb-support' ) . '</a> - <small>' . __( 'Optional notes about this download.', 'kb-support' ) . '</small>';
 	$download_list .= '</div>';
 	$download_list .= '</li>';
 	$download_list .= '</ul>';
@@ -66,13 +66,13 @@ function edd_email_preview_template_tags( $message ) {
 
 	$receipt_id = strtolower( md5( uniqid() ) );
 
-	$notes = __( 'These are some sample notes added to a product.', 'easy-digital-downloads' );
+	$notes = __( 'These are some sample notes added to a product.', 'kb-support' );
 
 	$tax = edd_currency_filter( edd_format_amount( 1.00 ) );
 
 	$sub_total = edd_currency_filter( edd_format_amount( 9.50 ) );
 
-	$payment_id = rand(1, 100);
+	$ticket_id = rand(1, 100);
 
 	$user = wp_get_current_user();
 
@@ -89,100 +89,99 @@ function edd_email_preview_template_tags( $message ) {
 	$message = str_replace( '{payment_method}', $gateway, $message );
 	$message = str_replace( '{sitename}', get_bloginfo( 'name' ), $message );
 	$message = str_replace( '{product_notes}', $notes, $message );
-	$message = str_replace( '{payment_id}', $payment_id, $message );
-	$message = str_replace( '{receipt_link}', sprintf( __( '%1$sView it in your browser.%2$s', 'easy-digital-downloads' ), '<a href="' . esc_url( add_query_arg( array ( 'payment_key' => $receipt_id, 'edd_action' => 'view_receipt' ), home_url() ) ) . '">', '</a>' ), $message );
+	$message = str_replace( '{ticket_id}', $ticket_id, $message );
+	$message = str_replace( '{receipt_link}', sprintf( __( '%1$sView it in your browser.%2$s', 'kb-support' ), '<a href="' . esc_url( add_query_arg( array ( 'payment_key' => $receipt_id, 'edd_action' => 'view_receipt' ), home_url() ) ) . '">', '</a>' ), $message );
 
-	$message = apply_filters( 'edd_email_preview_template_tags', $message );
+	$message = apply_filters( 'kbs_email_preview_template_tags', $message );
 
-	return apply_filters( 'edd_email_template_wpautop', true ) ? wpautop( $message ) : $message;
-}
+	return apply_filters( 'kbs_email_template_wpautop', true ) ? wpautop( $message ) : $message;
+} // kbs_email_preview_template_tags
 
 /**
  * Email Template Preview
  *
- * @access private
- * @since 1.0.8.2
+ * @since	0.1
+ * @param
  */
-function edd_email_template_preview() {
-	if( ! current_user_can( 'manage_shop_settings' ) ) {
+function kbs_email_template_preview() {
+	if( ! current_user_can( 'manage_ticket_settings' ) ) {
 		return;
 	}
 
 	ob_start();
 	?>
-	<a href="<?php echo esc_url( add_query_arg( array( 'edd_action' => 'preview_email' ), home_url() ) ); ?>" class="button-secondary" target="_blank" title="<?php _e( 'Purchase Receipt Preview', 'easy-digital-downloads' ); ?> "><?php _e( 'Preview Purchase Receipt', 'easy-digital-downloads' ); ?></a>
-	<a href="<?php echo wp_nonce_url( add_query_arg( array( 'edd_action' => 'send_test_email' ) ), 'edd-test-email' ); ?>" class="button-secondary"><?php _e( 'Send Test Email', 'easy-digital-downloads' ); ?></a>
+	<a href="<?php echo esc_url( add_query_arg( array( 'kbs_action' => 'preview_email' ), home_url() ) ); ?>" class="button-secondary" target="_blank" title="<?php printf( __( '%s Received Preview', 'kb-support' ), kbs_get_ticket_label_singular() ); ?> "><?php printf( __( 'Preview %s Recieved', 'kb-support' ), kbs_get_ticket_label_singular() ); ?></a>
+	<a href="<?php echo wp_nonce_url( add_query_arg( array( 'kbs_action' => 'send_test_email' ) ), 'kbs-test-email' ); ?>" class="button-secondary"><?php _e( 'Send Test Email', 'kb-support' ); ?></a>
 	<?php
 	echo ob_get_clean();
-}
-add_action( 'edd_email_settings', 'edd_email_template_preview' );
+} // kbs_email_template_preview
+add_action( 'kbs_email_settings', 'kbs_email_template_preview' );
 
 /**
  * Displays the email preview
  *
- * @since 2.1
- * @return void
+ * @since	0.1
+ * @return	void
  */
-function edd_display_email_template_preview() {
+function kbs_display_email_template_preview() {
 
 	if( empty( $_GET['edd_action'] ) ) {
 		return;
 	}
 
-	if( 'preview_email' !== $_GET['edd_action'] ) {
+	if( 'preview_email' !== $_GET['kbs_action'] ) {
 		return;
 	}
 
-	if( ! current_user_can( 'manage_shop_settings' ) ) {
+	if( ! current_user_can( 'manage_ticket_settings' ) ) {
 		return;
 	}
 
 
-	EDD()->emails->heading = __( 'Purchase Receipt', 'easy-digital-downloads' );
+	KBS()->emails->heading = sprintf( __( '%s Received', 'kb-support' ), kbs_get_ticket_label_singular() );
 
-	echo EDD()->emails->build_email( edd_email_preview_template_tags( edd_get_email_body_content( 0, array() ) ) );
+	echo KBS()->emails->build_email( kbs_email_preview_template_tags( kbs_get_email_body_content( 0, array() ) ) );
 
 	exit;
 
-}
-add_action( 'template_redirect', 'edd_display_email_template_preview' );
+} // kbs_display_email_template_preview
+add_action( 'template_redirect', 'kbs_display_email_template_preview' );
 
 /**
  * Email Template Body
  *
- * @since 1.0.8.2
- * @param int $payment_id Payment ID
- * @param array $payment_data Payment Data
- * @return string $email_body Body of the email
+ * @since	0.1
+ * @param	int 	$ticket_id		Payment ID
+ * @param	arr		$ticket_data	Payment Data
+ * @return	str		$email_body		Body of the email
  */
-function edd_get_email_body_content( $payment_id = 0, $payment_data = array() ) {
-	$default_email_body = __( "Dear", "easy-digital-downloads" ) . " {name},\n\n";
-	$default_email_body .= __( "Thank you for your purchase. Please click on the link(s) below to download your files.", "easy-digital-downloads" ) . "\n\n";
-	$default_email_body .= "{download_list}\n\n";
+function kbs_get_email_body_content( $ticket_id = 0, $ticket_data = array() ) {
+	$default_email_body = __( "Dear", "kb-support" ) . " {name},\n\n";
+	$default_email_body .= sprintf( __( "Thank you for logging your %s.", "kb-support" ), kbs_get_ticket_label_singular( true ) ) . "\n\n";
+	$default_email_body .= "{ticket_detailst}\n\n";
 	$default_email_body .= "{sitename}";
 
-	$email = edd_get_option( 'purchase_receipt', false );
+	$email = kbs_get_option( 'ticket_received', false );
 	$email = $email ? stripslashes( $email ) : $default_email_body;
 
-	$email_body = apply_filters( 'edd_email_template_wpautop', true ) ? wpautop( $email ) : $email;
+	$email_body = apply_filters( 'kbs_email_template_wpautop', true ) ? wpautop( $email ) : $email;
 
-	$email_body = apply_filters( 'edd_purchase_receipt_' . EDD()->emails->get_template(), $email_body, $payment_id, $payment_data );
+	$email_body = apply_filters( 'kbs_ticket_received_' . KBS()->emails->get_template(), $email_body, $ticket_id, $ticket_data );
 
-	return apply_filters( 'edd_purchase_receipt', $email_body, $payment_id, $payment_data );
-}
+	return apply_filters( 'kbs_ticket_received', $email_body, $ticket_id, $ticket_data );
+} // kbs_get_email_body_content
 
 /**
- * Sale Notification Template Body
+ * Ticket Notification Template Body
  *
- * @since 1.7
- * @author Daniel J Griffiths
- * @param int $payment_id Payment ID
- * @param array $payment_data Payment Data
- * @return string $email_body Body of the email
+ * @since	0.1
+ * @param	int		$ticket_id		Ticket ID
+ * @param	arr		$ticket_data	Ticket Data
+ * @return	str		$email_body		Body of the email
  */
-function edd_get_sale_notification_body_content( $payment_id = 0, $payment_data = array() ) {
-	$user_info = maybe_unserialize( $payment_data['user_info'] );
-	$email = edd_get_payment_user_email( $payment_id );
+function kbs_get_ticket_notification_body_content( $ticket_id = 0, $ticket_data = array() ) {
+	$user_info = maybe_unserialize( $ticket_data['user_info'] );
+	//$email = edd_get_payment_user_email( $ticket_id );
 
 	if( isset( $user_info['id'] ) && $user_info['id'] > 0 ) {
 		$user_data = get_userdata( $user_info['id'] );
@@ -194,40 +193,40 @@ function edd_get_sale_notification_body_content( $payment_id = 0, $payment_data 
 	}
 
 	$download_list = '';
-	$downloads = maybe_unserialize( $payment_data['downloads'] );
+	$downloads = maybe_unserialize( $ticket_data['downloads'] );
 
 	if( is_array( $downloads ) ) {
 		foreach( $downloads as $download ) {
-			$id = isset( $payment_data['cart_details'] ) ? $download['id'] : $download;
+			$id = isset( $ticket_data['cart_details'] ) ? $download['id'] : $download;
 			$title = get_the_title( $id );
 			if( isset( $download['options'] ) ) {
 				if( isset( $download['options']['price_id'] ) ) {
-					$title .= ' - ' . edd_get_price_option_name( $id, $download['options']['price_id'], $payment_id );
+					$title .= ' - ' . edd_get_price_option_name( $id, $download['options']['price_id'], $ticket_id );
 				}
 			}
 			$download_list .= html_entity_decode( $title, ENT_COMPAT, 'UTF-8' ) . "\n";
 		}
 	}
 
-	$gateway = edd_get_gateway_admin_label( get_post_meta( $payment_id, '_edd_payment_gateway', true ) );
+	$gateway = edd_get_gateway_admin_label( get_post_meta( $ticket_id, '_edd_payment_gateway', true ) );
 
-	$default_email_body = __( 'Hello', 'easy-digital-downloads' ) . "\n\n" . sprintf( __( 'A %s purchase has been made', 'easy-digital-downloads' ), edd_get_label_plural() ) . ".\n\n";
-	$default_email_body .= sprintf( __( '%s sold:', 'easy-digital-downloads' ), edd_get_label_plural() ) . "\n\n";
+	$default_email_body = __( 'Hello', 'kb-support' ) . "\n\n" . sprintf( __( 'A %s purchase has been made', 'kb-support' ), edd_get_label_plural() ) . ".\n\n";
+	$default_email_body .= sprintf( __( '%s sold:', 'kb-support' ), edd_get_label_plural() ) . "\n\n";
 	$default_email_body .= $download_list . "\n\n";
-	$default_email_body .= __( 'Purchased by: ', 'easy-digital-downloads' ) . " " . html_entity_decode( $name, ENT_COMPAT, 'UTF-8' ) . "\n";
-	$default_email_body .= __( 'Amount: ', 'easy-digital-downloads' ) . " " . html_entity_decode( edd_currency_filter( edd_format_amount( edd_get_payment_amount( $payment_id ) ) ), ENT_COMPAT, 'UTF-8' ) . "\n";
-	$default_email_body .= __( 'Payment Method: ', 'easy-digital-downloads' ) . " " . $gateway . "\n\n";
-	$default_email_body .= __( 'Thank you', 'easy-digital-downloads' );
+	$default_email_body .= __( 'Purchased by: ', 'kb-support' ) . " " . html_entity_decode( $name, ENT_COMPAT, 'UTF-8' ) . "\n";
+	$default_email_body .= __( 'Amount: ', 'kb-support' ) . " " . html_entity_decode( edd_currency_filter( edd_format_amount( edd_get_payment_amount( $ticket_id ) ) ), ENT_COMPAT, 'UTF-8' ) . "\n";
+	$default_email_body .= __( 'Payment Method: ', 'kb-support' ) . " " . $gateway . "\n\n";
+	$default_email_body .= __( 'Thank you', 'kb-support' );
 
 	$email = edd_get_option( 'sale_notification', false );
 	$email = $email ? stripslashes( $email ) : $default_email_body;
 
-	//$email_body = edd_email_template_tags( $email, $payment_data, $payment_id, true );
-	$email_body = edd_do_email_tags( $email, $payment_id );
+	//$email_body = edd_email_template_tags( $email, $ticket_data, $ticket_id, true );
+	$email_body = edd_do_email_tags( $email, $ticket_id );
 
 	$email_body = apply_filters( 'edd_email_template_wpautop', true ) ? wpautop( $email_body ) : $email_body;
 
-	return apply_filters( 'edd_sale_notification', $email_body, $payment_id, $payment_data );
+	return apply_filters( 'edd_sale_notification', $email_body, $ticket_id, $ticket_data );
 }
 
 /**
@@ -242,7 +241,7 @@ function edd_get_sale_notification_body_content( $payment_id = 0, $payment_data 
  */
 function edd_render_receipt_in_browser() {
 	if ( ! isset( $_GET['payment_key'] ) )
-		wp_die( __( 'Missing purchase key.', 'easy-digital-downloads' ), __( 'Error', 'easy-digital-downloads' ) );
+		wp_die( __( 'Missing purchase key.', 'kb-support' ), __( 'Error', 'kb-support' ) );
 
 	$key = urlencode( $_GET['payment_key'] );
 
@@ -257,7 +256,7 @@ function edd_render_receipt_in_browser() {
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title><?php _e( 'Receipt', 'easy-digital-downloads' ); ?></title>
+		<title><?php _e( 'Receipt', 'kb-support' ); ?></title>
 		<meta charset="utf-8" />
 		<meta name="robots" content="noindex, nofollow" />
 		<?php wp_head(); ?>

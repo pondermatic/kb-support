@@ -111,7 +111,7 @@ function kbs_get_button_colors() {
 	);
 
 	return apply_filters( 'kbs_button_colors', $colors );
-} // kbs_button_colors
+} // kbs_get_button_colors
 
 /**
  * Get Button Styles
@@ -121,14 +121,14 @@ function kbs_get_button_colors() {
  * @since	0.1
  * @return	arr		$styles		Button styles
  */
-function kbs_button_styles() {
+function kbs_get_button_styles() {
 	$styles = array(
 		'button'	=> __( 'Button', 'kb-support' ),
 		'plain'     => __( 'Plain Text', 'kb-support' )
 	);
 
 	return apply_filters( 'kbs_button_styles', $styles );
-} // kbs_button_styles
+} // kbs_get_button_styles
 
 /**
  * Returns the path to the KBS templates directory
