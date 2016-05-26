@@ -114,9 +114,9 @@ function kbs_run_install() {
 	$roles->add_caps();
 
 	// Add a temporary option to note that KBS pages have been created
-	//set_transient( '_kbs_installed', $merged_options, 30 );
+	set_transient( '_kbs_installed', $merged_options, 30 );
 
-	if ( ! $current_version ) {
+	/*if ( ! $current_version ) {
 		require_once KBS_PLUGIN_DIR . 'includes/admin/upgrades/upgrade-functions.php';
 
 		// When new upgrade routines are added, mark them as complete on fresh install
@@ -125,7 +125,7 @@ function kbs_run_install() {
 		foreach ( $upgrade_routines as $upgrade ) {
 			kbs_set_upgrade_complete( $upgrade );
 		}
-	}
+	}*/
 
 	// Bail if activating from network, or bulk
 	if ( is_network_admin() || isset( $_GET['activate-multi'] ) ) {
