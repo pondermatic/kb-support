@@ -457,6 +457,44 @@ function kbs_get_registered_settings() {
 						)
 					)
 				),
+				'recaptcha'     => array(
+					'recaptcha_settings' => array(
+						'id'   => 'recaptcha_settings',
+						'name' => '<h3>' . __( 'Google reCaptcha Settings', 'kb-support' ) . '</h3>',
+						'type' => 'header'
+					),
+					'recaptcha_site_key' => array(
+						'id'   => 'recaptcha_site_key',
+						'name' => __( 'Site Key', 'kb-support' ),
+						'desc' => sprintf( __( 'Visit <a href="%s" target="_blank">Google reCaptcha</a> to register your site and obtain your site key.', 'kb-support' ), 'https://www.google.com/recaptcha/' ),
+						'type' => 'text'
+					),
+					'recaptcha_theme' => array(
+						'id'      => 'recaptcha_theme',
+						'name'    => __( 'reCaptcha Theme', 'kb-support' ),
+						'desc'    => __( 'Select your preferred color scheme.', 'kb-support' ),
+						'type'    => 'select',
+						'options' => array( 'dark' => __( 'Dark', 'kb-support' ), 'light' => __( 'Light', 'kb-support' ) ),
+						'std'     => 'light'
+					),
+					'recaptcha_type' => array(
+						'id'      => 'recaptcha_type',
+						'name'    => __( 'reCaptcha Type', 'kb-support' ),
+						'desc'    => __( 'Choose to render an audio reCaptcha or an image. Default is image.', 'kb-support' ),
+						'type'    => 'select',
+						'options' => array( 'audio' => __( 'Audio', 'kb-support' ), 'image' => __( 'Image', 'kb-support' ) ),
+						'std'     => 'image'
+					),
+					'recaptcha_size' => array(
+						'id'      => 'recaptcha_size',
+						'name'    => __( 'reCaptcha Size', 'kb-support' ),
+						'desc'    => __( 'Select your preferred size for the reCaptcha.', 'kb-support' ),
+						'type'    => 'select',
+						'options' => array( 'compact' => __( 'Compact', 'kb-support' ), 'normal' => __( 'Normal', 'kb-support' ) ),
+						'std'     => 'normal'
+					)
+					
+				),
 				'site_terms'     => array(
 					'terms_settings' => array(
 						'id'   => 'terms_settings',
@@ -671,6 +709,7 @@ function kbs_get_registered_settings_sections() {
 		'misc'       => apply_filters( 'kbs_settings_sections_misc', array(
 			'main'                 => __( 'Misc Settings', 'kb-support' ),
 			'submit'               => __( 'Submission Settings', 'kb-support' ),
+			'recaptcha'            => __( 'Google reCaptcha', 'kb-support' ),
 			'site_terms'           => __( 'Terms and Conditions', 'kb-support' )
 		) )
 	);
