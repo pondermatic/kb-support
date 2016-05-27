@@ -175,7 +175,7 @@ class KBS_Form {
 
 			$args = array(
 				'posts_per_page' => -1,
-				'post_type'      => 'kbs_form',
+				'post_type'      => 'kbs_form_field',
 				'post_parent'    => $this->ID,
 				'post_status'    => 'publish',
 				'orderby'        => 'menu_order',

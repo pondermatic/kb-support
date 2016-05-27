@@ -34,12 +34,16 @@ a.kbs-delete:hover { color: #f00; }
 #formfields .kbs_meta_table_wrap table select,
 #formfields .kbs_meta_table_wrap table textarea { margin: 4px 0; width: 100%; }
 #formfields .kbs_meta_table_wrap table .submit input { width: auto; }
-.kbs_repeatable_upload_wrapper .kbs_repeatable_upload_field_container { position: relative; }
+.kbs_repeatable_field_wrapper .kbs_repeatable_field_field_container { position: relative; }
 .kbs_remove_repeatable { margin: 8px 0 0 0; cursor: pointer; width: 10px; height: 10px; display: inline-block; text-indent: -9999px; overflow: hidden; }
 .kbs_remove_repeatable:active, .kbs_remove_repeatable:hover { background-position: -10px 0!important }
 .kbs_draghandle { display: block; width: 20px; height: 20px; background: url(../images/kbs-cross-hair.png); cursor: move; margin: 4px 0 0 0; }
-textarea#kbs-payment-note { width: 100%; height: 4em; margin: 0; }
-.kbs-price-field { width: 80px; }
-.kbs_repeatable_upload_wrapper .pricing select, .kbs_repeatable_product_wrapper .kbs-select { min-width: 100%; }
-#kbs_product_notes_field { width: 98%; margin: 0; height: 4em; }
 .kbs_repeatable_default_wrapper { text-align: center; width: 25px; }
+#formfields .kbs_meta_field_label_wrap p input,
+#formfields .kbs_meta_field_label_wrap p select,
+#formfields .kbs_meta_field_label_wrap p textarea { margin: 4px 0; width: 100%; }
+#formfields .kbs_meta_field_label_wrap p .submit input { width: auto; }
+#kbs_meta_field_select_options_wrap,
+#kbs_meta_field_option_selected_wrap,
+#kbs_meta_field_placeholder_wrap,
+#kbs_meta_field_hide_label_wrap	{ display: none; }

@@ -86,6 +86,7 @@ final class KB_Support {
 			self::$instance->roles      = new KBS_Roles();
 			self::$instance->emails     = new KBS_Emails();
 			self::$instance->email_tags = new KBS_Email_Template_Tags();
+			self::$instance->html       = new KBS_HTML_Elements();
 
 		}
 
@@ -177,6 +178,7 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/scripts.php';
 		require_once KBS_PLUGIN_DIR . 'includes/emails/class-kbs-emails.php';
 		require_once KBS_PLUGIN_DIR . 'includes/emails/class-kbs-email-tags.php';
+		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-html-elements.php';
 		require_once KBS_PLUGIN_DIR . 'includes/emails/functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/emails/template.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-form.php';

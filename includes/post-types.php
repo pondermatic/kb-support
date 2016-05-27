@@ -57,8 +57,8 @@ function kbs_setup_kbs_post_types() {
 
 	$ticket_args = array(
 		'labels'             => $ticket_labels,
-		'public'             => true,
-		'publicly_queryable' => true,
+		'public'             => false,
+		'publicly_queryable' => false,
 		'show_ui'            => true,
 		'show_in_menu'       => true,
 		'menu_icon'          => 'dashicons-tickets-alt',
@@ -128,7 +128,7 @@ function kbs_setup_kbs_post_types() {
 		'not_found'          => __( 'No Forms found', 'kb-support' ),
 		'not_found_in_trash' => __( 'No Forms found in Trash', 'kb-support' ),
 		'parent_item_colon'  => '',
-		'menu_name'          => __( '%2$s', 'kb-support' )
+		'menu_name'          => __( 'Forms', 'kb-support' )
 	);
 
 	$form_args = array(
@@ -145,8 +145,37 @@ function kbs_setup_kbs_post_types() {
 		'supports'           => apply_filters( 'kbs_form_supports', array( 'title' ) ),
 		'can_export'         => true
 	);
-
+	
 	register_post_type( 'kbs_form', $form_args );
+	
+	/** KB Form Field Type */
+	$field_labels = array(
+		'name'               => _x( 'Fields', 'kbs_form type general name', 'kb-support' ),
+		'singular_name'      => _x( 'Field', 'kbs_form type singular name', 'kb-support' ),
+		'add_new'            => __( 'New Field', 'kb-support' ),
+		'add_new_item'       => __( 'New Field', 'kb-support' ),
+		'edit_item'          => __( 'Edit Field', 'kb-support' ),
+		'new_item'           => __( 'New Field', 'kb-support' ),
+		'all_items'          => __( 'Fields', 'kb-support' ),
+		'view_item'          => __( 'View Field', 'kb-support' ),
+		'search_items'       => __( 'Search Fields', 'kb-support' ),
+		'not_found'          => __( 'No Fields found', 'kb-support' ),
+		'not_found_in_trash' => __( 'No Fields found in Trash', 'kb-support' ),
+		'parent_item_colon'  => '',
+		'menu_name'          => __( 'Fields', 'kb-support' )
+	);
+
+	$field_args = array(
+		'labels'             => $field_labels,
+		'public'             => false,
+		'rewrite'            => false,
+		'has_archive'        => false,
+		'hierarchical'       => false,
+		'supports'           => array(),
+		'can_export'         => true
+	);
+
+	register_post_type( 'kbs_form_field', $field_args );
 
 } // kbs_setup_kbs_post_types
 add_action( 'init', 'kbs_setup_kbs_post_types', 1 );
@@ -273,9 +302,10 @@ add_filter( 'enter_title_here', 'kbs_change_default_title' );
 function kbs_setup_custom_taxonomies() {
 
 	$ticket_slug     = defined( 'KBS_TICKET_SLUG' ) ? KBS_TICKET_SLUG : 'tickets';
+	$kb_slug         = defined( 'KBS_KB_SLUG' )     ? KBS_KB_SLUG     : 'kb';
 
-	/** Categories */
-	$category_labels = array(
+	/** Ticket Categories */
+	$ticket_category_labels = array(
 		'name'              => sprintf( _x( 'Categories', 'taxonomy general name', 'kb-support' ), kbs_get_ticket_label_singular() ),
 		'singular_name'     => sprintf( _x( 'Category', 'taxonomy singular name', 'kb-support' ), kbs_get_ticket_label_singular() ),
 		'search_items'      => sprintf( __( 'Search %s Categories', 'kb-support' ), kbs_get_ticket_label_singular() ),
@@ -289,20 +319,21 @@ function kbs_setup_custom_taxonomies() {
 		'menu_name'         => sprintf( __( 'Categories', 'kb-support' ), kbs_get_ticket_label_singular() )
 	);
 
-	$category_args = apply_filters( 'kbs_ticket_category_args', array(
+	$ticket_category_args = apply_filters( 'kbs_ticket_category_args', array(
 			'hierarchical' => true,
-			'labels'       => apply_filters('kbs_ticket_category_labels', $category_labels),
+			'labels'       => apply_filters('kbs_ticket_category_labels', $ticket_category_labels),
 			'show_ui'      => true,
 			'query_var'    => 'ticket_category',
 			'rewrite'      => array( 'slug' => $ticket_slug . '/category', 'with_front' => false, 'hierarchical' => true ),
 			'capabilities' => array( 'manage_terms' => 'manage_ticket_terms','edit_terms' => 'edit_ticket_terms','assign_terms' => 'assign_ticket_terms','delete_terms' => 'delete_ticket_terms' )
 		)
 	);
-	register_taxonomy( 'ticket_category', array( 'kbs_ticket' ), $category_args );
+
+	register_taxonomy( 'ticket_category', array( 'kbs_ticket' ), $ticket_category_args );
 	register_taxonomy_for_object_type( 'ticket_category', 'kbs_ticket' );
 
-	/** Tags */
-	$tag_labels = array(
+	/** Ticket Tags */
+	$ticket_tag_labels = array(
 		'name'                  => sprintf( _x( 'Tags', 'taxonomy general name', 'kb-support' ), kbs_get_ticket_label_singular() ),
 		'singular_name'         => sprintf( _x( 'Tag', 'taxonomy singular name', 'kb-support' ), kbs_get_ticket_label_singular() ),
 		'search_items'          => sprintf( __( 'Search %s Tags', 'kb-support' ), kbs_get_ticket_label_singular() ),
@@ -317,17 +348,76 @@ function kbs_setup_custom_taxonomies() {
 		'choose_from_most_used' => sprintf( __( 'Choose from most used %s tags', 'kb-support' ), kbs_get_ticket_label_singular() ),
 	);
 
-	$tag_args = apply_filters( 'kbs_ticket_tag_args', array(
+	$ticket_tag_args = apply_filters( 'kbs_ticket_tag_args', array(
 			'hierarchical' => false,
-			'labels'       => apply_filters( 'kbs_ticket_tag_labels', $tag_labels ),
+			'labels'       => apply_filters( 'kbs_ticket_tag_labels', $ticket_tag_labels ),
 			'show_ui'      => true,
 			'query_var'    => 'ticket_tag',
 			'rewrite'      => array( 'slug' => $ticket_slug . '/tag', 'with_front' => false, 'hierarchical' => true  ),
 			'capabilities' => array( 'manage_terms' => 'manage_ticket_terms','edit_terms' => 'edit_ticket_terms','assign_terms' => 'assign_ticket_terms','delete_terms' => 'delete_ticket_terms' )
 		)
 	);
-	register_taxonomy( 'ticket_tag', array( 'kbs_ticket' ), $tag_args );
+
+	register_taxonomy( 'ticket_tag', array( 'kbs_ticket' ), $ticket_tag_args );
 	register_taxonomy_for_object_type( 'ticket_tag', 'kbs_ticket' );
+
+	/** KB Categories */
+	$kb_category_labels = array(
+		'name'              => sprintf( _x( 'Categories', 'taxonomy general name', 'kb-support' ), kbs_get_ticket_label_singular() ),
+		'singular_name'     => sprintf( _x( 'Category', 'taxonomy singular name', 'kb-support' ), kbs_get_kb_label_singular() ),
+		'search_items'      => sprintf( __( 'Search %s Categories', 'kb-support' ), kbs_get_kb_label_singular() ),
+		'all_items'         => sprintf( __( 'All %s Categories', 'kb-support' ), kbs_get_kb_label_singular() ),
+		'parent_item'       => sprintf( __( 'Parent %s Category', 'kb-support' ), kbs_get_kb_label_singular() ),
+		'parent_item_colon' => sprintf( __( 'Parent %s Category:', 'kb-support' ), kbs_get_kb_label_singular() ),
+		'edit_item'         => sprintf( __( 'Edit %s Category', 'kb-support' ), kbs_get_kb_label_singular() ),
+		'update_item'       => sprintf( __( 'Update %s Category', 'kb-support' ), kbs_get_kb_label_singular() ),
+		'add_new_item'      => sprintf( __( 'Add New %s Category', 'kb-support' ), kbs_get_kb_label_singular() ),
+		'new_item_name'     => sprintf( __( 'New %s Category Name', 'kb-support' ), kbs_get_kb_label_singular() ),
+		'menu_name'         => sprintf( __( 'Categories', 'kb-support' ), kbs_get_kb_label_singular() )
+	);
+
+	$kb_category_args = apply_filters( 'kbs_ticket_category_args', array(
+			'hierarchical' => true,
+			'labels'       => apply_filters('kbs_ticket_category_labels', $kb_category_labels),
+			'show_ui'      => true,
+			'query_var'    => 'ticket_category',
+			'rewrite'      => array( 'slug' => $kb_slug . '/category', 'with_front' => false, 'hierarchical' => true ),
+			'capabilities' => array( 'manage_terms' => 'manage_ticket_terms','edit_terms' => 'edit_ticket_terms','assign_terms' => 'assign_ticket_terms','delete_terms' => 'delete_ticket_terms' )
+		)
+	);
+
+	register_taxonomy( 'kb_category', array( 'kbs_kb' ), $kb_category_args );
+	register_taxonomy_for_object_type( 'kb_category', 'kbs_kb' );
+
+	/** KB Tags */
+	$kb_tag_labels = array(
+		'name'                  => sprintf( _x( 'Tags', 'taxonomy general name', 'kb-support' ), kbs_get_kb_label_singular() ),
+		'singular_name'         => sprintf( _x( 'Tag', 'taxonomy singular name', 'kb-support' ), kbs_get_kb_label_singular() ),
+		'search_items'          => sprintf( __( 'Search %s Tags', 'kb-support' ), kbs_get_kb_label_singular() ),
+		'all_items'             => sprintf( __( 'All %s Tags', 'kb-support' ), kbs_get_kb_label_singular() ),
+		'parent_item'           => sprintf( __( 'Parent %s Tag', 'kb-support' ), kbs_get_kb_label_singular() ),
+		'parent_item_colon'     => sprintf( __( 'Parent %s Tag:', 'kb-support' ), kbs_get_kb_label_singular() ),
+		'edit_item'             => sprintf( __( 'Edit %s Tag', 'kb-support' ), kbs_get_kb_label_singular() ),
+		'update_item'           => sprintf( __( 'Update %s Tag', 'kb-support' ), kbs_get_kb_label_singular() ),
+		'add_new_item'          => sprintf( __( 'Add New %s Tag', 'kb-support' ), kbs_get_kb_label_singular() ),
+		'new_item_name'         => sprintf( __( 'New %s Tag Name', 'kb-support' ), kbs_get_kb_label_singular() ),
+		'menu_name'             => sprintf( __( 'Tags', 'kb-support' ), kbs_get_kb_label_singular() ),
+		'choose_from_most_used' => sprintf( __( 'Choose from most used %s tags', 'kb-support' ), kbs_get_kb_label_singular() ),
+	);
+
+	$kb_tag_args = apply_filters( 'kbs_ticket_tag_args', array(
+			'hierarchical' => false,
+			'labels'       => apply_filters( 'kbs_ticket_tag_labels', $kb_tag_labels ),
+			'show_ui'      => true,
+			'query_var'    => 'ticket_tag',
+			'rewrite'      => array( 'slug' => $kb_slug . '/tag', 'with_front' => false, 'hierarchical' => true  ),
+			'capabilities' => array( 'manage_terms' => 'manage_ticket_terms','edit_terms' => 'edit_ticket_terms','assign_terms' => 'assign_ticket_terms','delete_terms' => 'delete_ticket_terms' )
+		)
+	);
+
+	register_taxonomy( 'kb_tag', array( 'kbs_kb' ), $ticket_tag_args );
+	register_taxonomy_for_object_type( 'kb_tag', 'kbs_kb' );
+
 } // kbs_setup_custom_taxonomies
 add_action( 'init', 'kbs_setup_custom_taxonomies', 0 );
 
@@ -338,9 +428,12 @@ add_action( 'init', 'kbs_setup_custom_taxonomies', 0 );
  * @param	str		$taxonomy	The Taxonomy to get labels for
  * @return	arr		Associative array of labels (name = plural)
  */
-function kbs_get_ticket_taxonomy_labels( $taxonomy = 'ticket_category' ) {
+function kbs_get_taxonomy_labels( $taxonomy = 'ticket_category' ) {
 
-	$allowed_taxonomies = apply_filters( 'kbs_allowed_ticket_taxonomies', array( 'ticket_category', 'ticket_tag' ) );
+	$allowed_taxonomies = apply_filters(
+		'kbs_allowed_taxonomies',
+		array( 'ticket_category', 'ticket_tag', 'kb_category', 'kb_tag' )
+	);
 
 	if ( ! in_array( $taxonomy, $allowed_taxonomies ) ) {
 		return false;
@@ -359,9 +452,9 @@ function kbs_get_ticket_taxonomy_labels( $taxonomy = 'ticket_category' ) {
 		);
 	}
 
-	return apply_filters( 'kbs_get_ticket_taxonomy_labels', $labels, $taxonomy );
+	return apply_filters( 'kbs_get_taxonomy_labels', $labels, $taxonomy );
 
-} // kbs_get_ticket_taxonomy_labels
+} // kbs_get_taxonomy_labels
 
 /**
  * Registers Custom Post Statuses which are used by the Tickets.
