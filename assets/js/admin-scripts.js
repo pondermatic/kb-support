@@ -125,6 +125,7 @@ jQuery(document).ready(function ($) {
 
 		init : function() {
 			this.forms();
+			this.move();
 		},
 
 		forms : function() {
@@ -155,6 +156,12 @@ jQuery(document).ready(function ($) {
 					document.getElementById('kbs_meta_field_select_options_wrap').style.display = "none";
 				}
 				
+				if ( 'select' == kbs_selected_field || 'kb_category_dropdown' == kbs_selected_field || 'ticket_category_dropdown' == kbs_selected_field )	{
+					document.getElementById('kbs_meta_field_select_searchable_wrap').style.display = "block";
+				} else	{
+					document.getElementById('kbs_meta_field_select_searchable_wrap').style.display = "none";
+				}
+				
 				if ( 'checkbox' == kbs_selected_field )	{
 					document.getElementById('kbs_meta_field_option_selected_wrap').style.display = "block";
 				} else	{
@@ -170,10 +177,75 @@ jQuery(document).ready(function ($) {
 					document.getElementById('kbs_meta_field_label_class_wrap').style.display = "block";
 					document.getElementById('kbs_meta_field_input_class_wrap').style.display = "block";
 				}
-				
 
-			} );
+			});
 			
+			// Send Add New Field Requests
+			$( document.body ).on( 'click', '#kbs-add-form-field', function(event) {
+				
+				event.preventDefault();
+				
+				if ( $('#kbs_field_label').val().length < 1 )	{
+					alert( kbs_vars.field_label_missing );
+					return false;
+				}
+				if ( $('#kbs_field_type').val() == '-1' )	{
+					alert( kbs_vars.field_type_missing );
+					return false;
+				}
+
+				var return_url       = $('#form_return_url').val();			
+				var postData         = {
+					form_id          : kbs_vars.post_id,
+					label            : $('#kbs_field_label').val(),
+					type             : $('#kbs_field_type').val(),
+					required         : ( $('#kbs_field_required').is(':checked') ) ? $('#kbs_field_required').val() : 0,
+					label_class      : $('#kbs_field_label_class').val(),
+					input_class      : $('#kbs_field_input_class').val(),
+					select_options   : $('textarea#kbs_field_select_options').val(),
+					selected         : ( $('#kbs_field_option_selected').is(':checked') ) ? $('#kbs_field_option_selected').val() : 0,
+					chosen           : ( $('#kbs_field_select_chosen').is(':checked') ) ? $('#kbs_field_select_chosen').val() : 0,
+					placeholder      : $('#kbs_field_placeholder').val(),
+					hide_label       : ( $('#kbs_field_hide_label').is(':checked') ) ? $('#kbs_field_hide_label').val() : 0,
+					action           : 'kbs_add_form_field',
+				};
+				
+				$.ajax({
+					type: "POST",
+					dataType: "json",
+					data: postData,
+					url: ajaxurl,
+					beforeSend: function()	{
+						$("#kbs-field-add").addClass('kbs-hidden');
+						$("#kbs-loading").removeClass('kbs-hidden');
+					},
+					success: function (response) {
+						window.location.href = return_url + '&kbs-message=' + response.message;
+						return true;
+					}
+				}).fail(function (data) {
+					$("#kbs-field-add").removeClass('kbs-hidden');
+					$("#kbs-loading").addClass('kbs-hidden');
+					if ( window.console && window.console.log ) {
+						console.log( data );
+					}
+				});
+				
+			});
+			
+		},
+		
+		move : function() {
+
+			$(".kbs_sortable_table tbody").sortable({
+				handle: '.kbs_draghandle', items: '.kbs_sortable_row', opacity: 0.6, cursor: 'move', axis: 'y', update: function() {
+					var order = $(this).sortable('serialize') + '&action=kbs_order_form_fields';
+					$.post(ajaxurl, order, function(response)	{
+						// Success
+					});
+				}
+			});
+
 		}
 
 	}

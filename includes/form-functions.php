@@ -61,6 +61,21 @@ function kbs_get_fields( $form_id )	{
 } // kbs_get_fields
 
 /**
+ * Returns the field type in readable format.
+ *
+ * @since	0.1
+ * @param	str		$type	The type to return
+ * @return	str		The field type in readable format.
+ */
+function kbs_get_field_type( $type )	{
+	
+	$field_types = kbs_get_field_types();
+	
+	return $field_types[ $type ];
+	
+} // kbs_get_field_type
+
+/**
  * Returns all possible form fields types.
  *
  * @since	0.1
@@ -104,3 +119,26 @@ function kbs_get_field_types()	{
 	return $field_types;
 	
 } // kbs_get_field_types
+
+/**
+ * Output the icons for the field settings.
+ *
+ * @since	0.1
+ * @param	arr		$settings	The field ID.
+ * @return	str
+ */
+function kbs_display_field_setting_icons( $field_id )	{
+
+	$settings = get_post_meta( $field_id, '_kbs_form_settings', true );
+	$output   = array();
+	
+	if ( $settings )	{
+		if ( ! empty( $settings['type'] ) )	{
+			$output[] = '<i title="' . __( 'Required Field', 'kb-support' ) . '" class="fa fa-asterisk" aria-hidden="true"></i>';
+		}
+		if ( ! empty( $settings['required'] ) )	{
+			$output[] = '<i title="' . __( 'Required Field', 'kb-support' ) . '" class="fa fa-asterisk" aria-hidden="true"></i>';
+		}
+	}
+	
+} // kbs_display_field_setting_icons

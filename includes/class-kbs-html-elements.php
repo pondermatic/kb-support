@@ -168,6 +168,8 @@ class KBS_HTML_Elements {
 		);
 
 		$args = wp_parse_args( $args, $defaults );
+		
+		$args['id'] = ! empty( $args['id'] ) ? $args['id'] : $args['name'];
 
 		$data_elements = '';
 		foreach ( $args['data'] as $key => $value ) {
@@ -396,6 +398,8 @@ class KBS_HTML_Elements {
 		);
 
 		$args = wp_parse_args( $args, $defaults );
+		
+		$args['id'] = ! empty( $args['id'] ) ? $args['id'] : $args['name'];
 
 		$class = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $args['class'] ) ) );
 		$disabled = '';
@@ -509,8 +513,10 @@ class KBS_HTML_Elements {
 		);
 
 		$args = wp_parse_args( $args, $defaults );
+		
+		$args['id'] = ! empty( $args['id'] ) ? $args['id'] : $args['name'];
 
-		$output .= '<input type="hidden" name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['id'] )  . '" value="' . esc_attr( $args['value'] ) . '" />';
+		$output = '<input type="hidden" name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['id'] )  . '" value="' . esc_attr( $args['value'] ) . '" />';
 
 		return $output;
 	} // hidden

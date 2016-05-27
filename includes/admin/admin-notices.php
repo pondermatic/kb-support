@@ -22,6 +22,33 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 function kbs_admin_messages() {
 	global $kbs_options;
 
+	if( isset( $_GET['kbs-message'] ) && 'field_added' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-field-added',
+			__( 'Field was added.', 'kb-support' ),
+			'updated'
+		);
+	}
+	
+	if( isset( $_GET['kbs-message'] ) && 'field_add_fail' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-field-notadded',
+			__( 'Field added.', 'kb-support' ),
+			'error'
+		);
+	}
+	
+	if( isset( $_GET['kbs-message'] ) && 'field_deleted' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-field-delete',
+			__( 'Field deleted.', 'kb-support' ),
+			'updated'
+		);
+	}
+
 	settings_errors( 'kbs-notices' );
 }
 add_action( 'admin_notices', 'kbs_admin_messages' );

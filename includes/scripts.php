@@ -135,13 +135,18 @@ function kbs_load_admin_scripts( $hook ) {
 		'add_new_ticket'          => sprintf( __( 'Add New %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
 		'new_media_ui'            => apply_filters( 'kbs_use_35_media_ui', 1 ),
 		'type_to_search'          => sprintf( __( 'Type to search %s', 'kb-support' ), kbs_get_kb_label_plural() ),
-		'search_placeholder'      => sprintf( __( 'Type to search all %s', 'kb-support' ), kbs_get_kb_label_plural() )
+		'search_placeholder'      => sprintf( __( 'Type to search all %s', 'kb-support' ), kbs_get_kb_label_plural() ),
+		'field_label_missing'     => __( 'Enter a Label for your field.', 'kb-support' ),
+		'field_type_missing'      => __( 'Select the field Type', 'kb-support' )
 	));
 
 	if( function_exists( 'wp_enqueue_media' ) && version_compare( $wp_version, '3.5', '>=' ) ) {
 		// Call for new media manager
 		wp_enqueue_media();
 	}
+
+	wp_register_style( 'kbs-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css', array(), KBS_VERSION, 'all' ); 
+	wp_enqueue_style( 'kbs-font-awesome' );
 
 	wp_enqueue_script( 'jquery-ui-datepicker' );
 	wp_enqueue_script( 'jquery-ui-dialog' );

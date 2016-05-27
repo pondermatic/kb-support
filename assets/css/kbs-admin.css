@@ -12,6 +12,7 @@
 .kbs-wrap a { text-decoration: none; }
 a.kbs-delete { color: #a00; }
 a.kbs-delete:hover { color: #f00; }
+.kbs-loading
 
 /* General Settings Styles
 -------------------------------------------------------------- */
@@ -28,22 +29,23 @@ a.kbs-delete:hover { color: #f00; }
 -------------------------------------------------------------- */
 #postbox-container-1 .kbs_fields_name_label { width: 80px; }
 #postbox-container-1 .kbs_files_url_label { width: 80px; }
-.kbs_add_repeatable { display: inline-block; }
-.kbs_repeatable_row td { vertical-align: middle }
+.kbs_add { display: inline-block; }
+.kbs_sortable_row td { vertical-align: middle }
 #formfields .kbs_meta_table_wrap table input,
 #formfields .kbs_meta_table_wrap table select,
 #formfields .kbs_meta_table_wrap table textarea { margin: 4px 0; width: 100%; }
 #formfields .kbs_meta_table_wrap table .submit input { width: auto; }
-.kbs_repeatable_field_wrapper .kbs_repeatable_field_field_container { position: relative; }
-.kbs_remove_repeatable { margin: 8px 0 0 0; cursor: pointer; width: 10px; height: 10px; display: inline-block; text-indent: -9999px; overflow: hidden; }
-.kbs_remove_repeatable:active, .kbs_remove_repeatable:hover { background-position: -10px 0!important }
+.kbs_field_wrapper .kbs_field_field_container { position: relative; }
+.kbs_remove { margin: 8px 0 0 0; cursor: pointer; width: 10px; height: 10px; display: inline-block; text-indent: -9999px; overflow: hidden; }
+.kbs_remove:active, .kbs_remove:hover { background-position: -10px 0!important }
 .kbs_draghandle { display: block; width: 20px; height: 20px; background: url(../images/kbs-cross-hair.png); cursor: move; margin: 4px 0 0 0; }
-.kbs_repeatable_default_wrapper { text-align: center; width: 25px; }
+.kbs_default_wrapper { text-align: center; width: 25px; }
 #formfields .kbs_meta_field_label_wrap p input,
 #formfields .kbs_meta_field_label_wrap p select,
 #formfields .kbs_meta_field_label_wrap p textarea { margin: 4px 0; width: 100%; }
 #formfields .kbs_meta_field_label_wrap p .submit input { width: auto; }
 #kbs_meta_field_select_options_wrap,
 #kbs_meta_field_option_selected_wrap,
+#kbs_meta_field_select_searchable_wrap,
 #kbs_meta_field_placeholder_wrap,
 #kbs_meta_field_hide_label_wrap	{ display: none; }

@@ -119,3 +119,51 @@ function kbs_get_ajax_url() {
 
 	return apply_filters( 'kbs_ajax_url', $ajax_url );
 } // kbs_get_ajax_url
+
+/**
+ * Adds a new field to a form.
+ *
+ * @since	0.1
+ * @param
+ * @return	void
+ */
+function kbs_ajax_add_form_field()	{
+
+	if ( ! empty( $_POST['form_id'] ) )	{
+
+		$form = new KBS_Form( $_POST['form_id'] );
+		
+		$field_id = $form->add_field( $_POST );
+
+	}
+
+	if ( ! empty( $field_id ) )	{
+		$results['id']      = $field_id;
+		$results['message'] = 'field_added';
+	} else	{
+		$results['message'] = 'field_add_fail';
+	}
+	
+	echo json_encode( $results );
+
+	die();
+} // kbs_ajax_add_form_field
+add_action( 'wp_ajax_kbs_add_form_field', 'kbs_ajax_add_form_field' );
+
+/**
+ * Sets the order of the form fields.
+ *
+ * @since	0.1
+ * @param
+ * @return	void
+ */
+function kbs_ajax_order_form_fields()	{
+	
+	foreach( $_POST['fields'] as $order => $id )	{
+		wp_update_post( array(
+			'ID'			=> $id,
+			'menu_order'	=> $order++
+		) );
+	}
+}
+add_action( 'wp_ajax_kbs_order_form_fields', 'kbs_ajax_order_form_fields' );
