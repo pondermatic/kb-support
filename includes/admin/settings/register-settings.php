@@ -437,11 +437,19 @@ function kbs_get_registered_settings() {
 						'name' => '<h3>' . __( 'Submission Settings', 'kb-support' ) . '</h3>',
 						'type' => 'header'
 					),
+					'file_uploads' => array(
+						'id'      => 'file_uploads',
+						'name'    => __( 'Allow File Uploads', 'kb-support' ),
+						'desc'    => sprintf( __( 'Enable users to upload files to their %s.', 'kb-support' ), kbs_get_ticket_label_plural( true ) ),
+						'type'    => 'checkbox',
+						'std'     => '1'
+					),
 					'logged_in_only' => array(
 						'id'      => 'logged_in_only',
-						'name'    => __( 'Disable Guest Submittions?', 'kb-support' ),
+						'name'    => __( 'Disable Guest Submissions?', 'kb-support' ),
 						'desc'    => sprintf( __( 'Require that users be logged in to submit %s.', 'kb-support' ), kbs_get_ticket_label_plural( true ) ),
-						'type'    => 'checkbox'
+						'type'    => 'checkbox',
+						'std'     => '1'
 					),
 					'show_register_form' => array(
 						'id'      => 'show_register_form',

@@ -13,6 +13,31 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
+ * Checks if file uploads are enabled
+ *
+ * @since	1.0
+ * @return	bool	$ret	True if guest checkout is enabled, false otherwise
+ */
+function kbs_file_uploads_are_enabled() {
+	$ret = kbs_get_option( 'file_uploads', false );
+	return (bool) apply_filters( 'kbs_file_uploads', $ret );
+} // kbs_file_uploads_are_enabled
+
+/**
+ * Sets the enctype for file upload forms.
+ *
+ * @since	1.0
+ * @return	str
+ */
+function kbs_maybe_set_enctype() {
+	if ( kbs_file_uploads_are_enabled() )	{
+		$output = ' enctype="multipart/form-data"';
+		
+		echo apply_filters( 'kbs_maybe_set_enctype', $output );
+	}
+} // kbs_file_uploads_are_enabled
+
+/**
  * Checks if Guest checkout is enabled
  *
  * @since	1.0

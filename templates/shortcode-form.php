@@ -5,7 +5,7 @@
 global $kbs_form;
 ?>
 
-<form id="kbs_ticket_form" class="kbs_form" action="" method="post">
+<form<?php kbs_maybe_set_enctype(); ?> id="kbs_ticket_form" class="kbs_form" action="" method="post">
 	<?php do_action( 'kbs_ticket_form_top' ); ?>
 
 	<fieldset>
