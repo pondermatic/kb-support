@@ -56,3 +56,7 @@
 	max-width: 450px;
 	height: 250px;
 }
+#kbs_ticket_form input[type=checkbox] {
+	max-width: 10px;
+}
+#kbs_ticket_form input.kbs_datepicker { width: 180px; }

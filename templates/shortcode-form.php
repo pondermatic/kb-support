@@ -18,7 +18,7 @@ global $kbs_form;
         	<?php $settings = $kbs_form->get_field_settings( $field->ID ); ?>
             
             	<p>
-                	<?php if ( empty( $settings['hide_label'] ) ) : ?>
+                	<?php if ( empty( $settings['hide_label'] ) && 'recaptcha' != $settings['type'] ) : ?>
                         <label for="<?php echo $field->post_name; ?>"><?php esc_attr_e( get_the_title( $field->ID ) ); ?></label>
                     <?php endif; ?>
 

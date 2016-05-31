@@ -25,19 +25,17 @@ function kbs_load_scripts() {
 	$js_dir = KBS_PLUGIN_URL . 'assets/js/';
 
 	// Use minified libraries if SCRIPT_DEBUG is turned off
-	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '';//'.min';
 
-	// Load AJAX scripts, if enabled
-	if ( ! kbs_is_ajax_disabled() ) {
-		wp_register_script( 'kbs-ajax', $js_dir . 'kbs-ajax' . $suffix . '.js', array( 'jquery' ), KBS_VERSION );
-		wp_enqueue_script( 'kbs-ajax' );
+	// Load AJAX scripts
+	wp_register_script( 'kbs-ajax', $js_dir . 'kbs-ajax' . $suffix . '.js', array( 'jquery' ), KBS_VERSION );
+	wp_enqueue_script( 'kbs-ajax' );
 
-		wp_localize_script( 'kbs-ajax', 'kbs_scripts', apply_filters( 'kbs_ajax_script_vars', array(
-			'ajaxurl'                 => kbs_get_ajax_url(),
-			'permalinks'              => get_option( 'permalink_structure' ) ? '1' : '0'
-		) ) );
+	wp_localize_script( 'kbs-ajax', 'kbs_scripts', apply_filters( 'kbs_ajax_script_vars', array(
+		'ajaxurl'                 => kbs_get_ajax_url(),
+		'permalinks'              => get_option( 'permalink_structure' ) ? '1' : '0'
+	) ) );
 
-	}
 } // kbs_load_scripts
 add_action( 'wp_enqueue_scripts', 'kbs_load_scripts' );
 

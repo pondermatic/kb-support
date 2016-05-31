@@ -36,7 +36,6 @@ add_filter( 'manage_kbs_form_posts_columns' , 'kbs_set_kbs_form_post_columns' );
  * @param	int		$post_id		The ID of the post being saved.
  * @param	obj		$post			The WP_Post object of the post being saved.
  * @param	bool	$update			Whether an existing post if being updated or not.
- *
  * @return	void
  */
 function kbs_form_post_save( $post_id, $post, $update )	{	
@@ -56,3 +55,44 @@ function kbs_form_post_save( $post_id, $post, $update )	{
 	add_action( 'save_post_kbs_kb', 'kbs_kb_post_save', 10, 3 );
 }
 add_action( 'save_post_kbs_form', 'kbs_form_post_save', 10, 3 );
+
+/**
+ * Delete all form fields when a form is deleted.
+ *
+ * This function is fired just before the form is removed from the DB
+ * using the before_delete_post hook.
+ *
+ * @since	0.1
+ * @param	int		$form_id		The ID of the post being saved.
+ * @return	void
+ */
+function kbs_delete_all_form_fields( $form_id )	{
+
+	if ( 'kbs_form' != get_post_type( $form_id ) )	{
+		return;
+	}
+
+	/**
+	 * Fires immediately before deleting all form fields
+	 *
+	 * @since	0.1
+	 * @param	int	$form_id
+	 */
+	do_action( 'kbs_pre_delete_all_form_fields', $form_id );
+
+	$kbs_form = new KBS_Form( $form_id );
+
+	foreach( $kbs_form->fields as $field )	{
+		$kbs_form->delete_field( $field->ID );
+	}
+
+	/**
+	 * Fires immediately after deleting all form fields
+	 *
+	 * @since	0.1
+	 * @param	int	$form_id
+	 */
+	do_action( 'kbs_post_delete_all_form_fields', $form_id );
+
+} // kbs_delete_all_form_fields
+add_action( 'before_delete_post', 'kbs_delete_all_form_fields' );

@@ -426,6 +426,16 @@ function kbs_render_field_options_rows( $post_id )	{
 		</label></p>
     </div>
     
+    <div id="kbs_meta_field_select_multiple_wrap">
+    	<p><label for="kbs_field_select_multiple">
+			<?php echo KBS()->html->checkbox( array(
+				'name'        => 'kbs_field_select_multiple',
+				'current' => ! empty( $kbs_edit_field ) ? $kbs_edit_field->settings['select_multiple'] : null
+			) ); ?>
+			<strong><?php _e( 'Multiple Select?', 'kb-support' ); ?></strong></label>
+        </p>
+    </div>
+    
     <div id="kbs_meta_field_option_selected_wrap">
     	<p><label for="kbs_field_option_selected">
 			<?php echo KBS()->html->checkbox( array(

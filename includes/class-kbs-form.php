@@ -133,15 +133,16 @@ class KBS_Form {
 		do_action( 'kbs_pre_add_form_field', $data );
 		
 		$settings = array(
-			'type'           => $data['type'],
-			'required'       => ! empty( $data['required'] )       ? true                                     : false,
-			'label_class'    => ! empty( $data['label_class'] )    ? $data['label_class']                     : '',
-			'input_class'    => ! empty( $data['input_class'] )    ? $data['input_class']                     : '',
-			'select_options' => ! empty( $data['select_options'] ) ? explode( "\n", $data['select_options'] ) : '',
-			'selected'       => ! empty( $data['selected'] )       ? true                                     : false,
-			'chosen'         => ! empty( $data['chosen'] )         ? true                                     : false,
-			'placeholder'    => ! empty( $data['placeholder'] )    ? $data['placeholder']                     : '',
-			'hide_label'     => ! empty( $data['hide_label'] )     ? true                                     : false
+			'type'            => $data['type'],
+			'required'        => ! empty( $data['required'] )        ? true                                     : false,
+			'label_class'     => ! empty( $data['label_class'] )     ? $data['label_class']                     : '',
+			'input_class'     => ! empty( $data['input_class'] )     ? $data['input_class']                     : '',
+			'select_options'  => ! empty( $data['select_options'] )  ? explode( "\n", $data['select_options'] ) : '',
+			'select_multiple' => ! empty( $data['select_multiple'] ) ? true                                     : false,
+			'selected'        => ! empty( $data['selected'] )        ? true                                     : false,
+			'chosen'          => ! empty( $data['chosen'] )          ? true                                     : false,
+			'placeholder'     => ! empty( $data['placeholder'] )     ? $data['placeholder']                     : '',
+			'hide_label'      => ! empty( $data['hide_label'] )      ? true                                     : false
 		);
 		
 		$settings = apply_filters( 'kbs_new_form_field_settings', $settings );
@@ -182,15 +183,16 @@ class KBS_Form {
 		do_action( 'kbs_pre_save_form_field', $data );
 		
 		$settings = array(
-			'type'           => $data['type'],
-			'required'       => ! empty( $data['required'] )       ? true                                     : false,
-			'label_class'    => ! empty( $data['label_class'] )    ? $data['label_class']                     : '',
-			'input_class'    => ! empty( $data['input_class'] )    ? $data['input_class']                     : '',
-			'select_options' => ! empty( $data['select_options'] ) ? explode( "\n", $data['select_options'] ) : '',
-			'selected'       => ! empty( $data['selected'] )       ? true                                     : false,
-			'chosen'         => ! empty( $data['chosen'] )         ? true                                     : false,
-			'placeholder'    => ! empty( $data['placeholder'] )    ? $data['placeholder']                     : '',
-			'hide_label'     => ! empty( $data['hide_label'] )     ? true                                     : false
+			'type'            => $data['type'],
+			'required'        => ! empty( $data['required'] )        ? true                                     : false,
+			'label_class'     => ! empty( $data['label_class'] )     ? $data['label_class']                     : '',
+			'input_class'     => ! empty( $data['input_class'] )     ? $data['input_class']                     : '',
+			'select_options'  => ! empty( $data['select_options'] )  ? explode( "\n", $data['select_options'] ) : '',
+			'select_multiple' => ! empty( $data['select_multiple'] ) ? true                                     : false,
+			'selected'        => ! empty( $data['selected'] )        ? true                                     : false,
+			'chosen'          => ! empty( $data['chosen'] )          ? true                                     : false,
+			'placeholder'     => ! empty( $data['placeholder'] )     ? $data['placeholder']                     : '',
+			'hide_label'      => ! empty( $data['hide_label'] )      ? true                                     : false
 		);
 		
 		$args = array(

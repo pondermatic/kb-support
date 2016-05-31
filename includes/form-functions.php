@@ -154,7 +154,6 @@ function kbs_get_field_types()	{
 		'select'                      => __( 'Select List', 'kb-support' ),
 		'text'                        => __( 'Text Field', 'kb-support' ),
 		'textarea'                    => __( 'Textarea', 'kb-support' ),
-		'time'                        => __( 'Time Field', 'kb-support' ),
 		'ticket_category_dropdown'    => sprintf( __( '%s Select List', 'kb-support' ), kbs_get_ticket_label_singular() ),
 		'url'                         => __( 'URL Field', 'kb-support' ),		
 	);
@@ -208,7 +207,7 @@ function kbs_display_field_setting_icons( $field_id )	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
 	}
-error_log( var_export($output, true ) );
+
 	return implode( "\t", $output );
 
 } // kbs_display_field_setting_icons
@@ -242,7 +241,9 @@ function kbs_display_form( $form_id = 0 ) {
 } // kbs_display_form
 
 /**
- * Display a form text input field
+ * Display a form text input field.
+ *
+ * This function is also the callback for email and URL fields.
  *
  * @since	0.1
  * @param	obj			$field		Field post object
@@ -250,16 +251,32 @@ function kbs_display_form( $form_id = 0 ) {
  * @param	str			$type		The type of text field
  * @return	str			$type input field
  */
-function kbs_display_form_text_field( $field, $settings, $type='text' )	{
+function kbs_display_form_text_field( $field, $settings )	{
 	
+	$type        = ! empty( $settings['type'] )        ? $settings['type']                                             : 'text';
 	$placeholder = ! empty( $settings['placeholder'] ) ? ' placeholder="' . esc_attr( $settings['placeholder'] ) . '"' : '';
-	$class       = ! empty( $settings['input_class'] ) ? ' class="' . esc_attr( $settings['input_class'] ) . '"'       : '';
-	$required    = ! empty( $settings['required'] )    ? ' ' . ' required'                                             : '';
-	
+	$class       = ! empty( $settings['input_class'] ) ? esc_attr( $settings['input_class'] )                          : '';
+	$required    = ! empty( $settings['required'] )    ? ' required'                                                   : '';
+
+	if ( $type == 'date_field' )	{
+		if( empty( $class ) ) {
+			$class = 'kbs_datepicker';
+		} elseif( ! strpos( $class, 'kbs_datepicker' ) ) {
+			$class .= ' kbs_datepicker';
+		}
+		$type = 'text';
+		
+		wp_enqueue_script( 'jquery-ui-datepicker' );
+		wp_register_style( 'jquery-ui-css', KBS_PLUGIN_URL . 'assets/css/jquery-ui-fresh.min.css' );
+		wp_enqueue_style( 'jquery-ui-css' );
+	}
+
+	$class = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $class ) ) );
+
 	$output = sprintf( '<input type="%1$s" name="%2$s" id="%2$s"%3$s%4$s%5$s />',
 		esc_attr( $type ),
 		esc_attr( $field->post_name ),
-		esc_attr( $class ),
+		! empty( $class ) ? ' class="' . $class . '"' : '',
 		$placeholder,
 		$required
 	);
@@ -270,32 +287,10 @@ function kbs_display_form_text_field( $field, $settings, $type='text' )	{
 	
 } // kbs_display_form_text_field
 add_action( 'kbs_form_display_text_field', 'kbs_display_form_text_field', 10, 2 );
-
-/**
- * Display a form email input field
- *
- * @since	0.1
- * @param	obj			$field		Field post object
- * @param	arr			$settings	Field settings
- * @return	str			Email input field
- */
-function kbs_display_form_email_field( $field, $settings )	{
-	kbs_display_form_text_field( $field, $settings, 'email' );
-} // kbs_display_form_text_field
-add_action( 'kbs_form_display_email_field', 'kbs_display_form_email_field', 10, 2 );
-
-/**
- * Display a form url input field
- *
- * @since	0.1
- * @param	obj			$field		Field post object
- * @param	arr			$settings	Field settings
- * @return	str			URL input field
- */
-function kbs_display_form_url_field( $field, $settings )	{
-	kbs_display_form_text_field( $field, $settings, 'url' );
-} // kbs_display_form_url_field
-add_action( 'kbs_form_display_url_field', 'kbs_display_form_url_field', 10, 2 );
+add_action( 'kbs_form_display_date_field_field', 'kbs_display_form_text_field', 10, 2 );
+add_action( 'kbs_form_display_email_field', 'kbs_display_form_text_field', 10, 2 );
+add_action( 'kbs_form_display_number_field', 'kbs_display_form_text_field', 10, 2 );
+add_action( 'kbs_form_display_url_field', 'kbs_display_form_text_field', 10, 2 );
 
 /**
  * Display a form textrea field
@@ -324,3 +319,144 @@ function kbs_display_form_textarea_field( $field, $settings )	{
 	
 } // kbs_display_form_textarea_field
 add_action( 'kbs_form_display_textarea_field', 'kbs_display_form_textarea_field', 10, 2 );
+
+/**
+ * Display a form select field
+ *
+ * @since	0.1
+ * @param	obj			$field		Field post object
+ * @param	arr			$settings	Field settings
+ * @return	str			Field
+ */
+function kbs_display_form_select_field( $field, $settings )	{
+	
+	$class       = ! empty( $settings['input_class'] )     ? esc_attr( $settings['input_class'] )                          : '';
+	$multiple    = ! empty( $settings['select_multiple'] ) ? ' ' . ' multiple'                                             : false;
+	$required    = ! empty( $settings['required'] )        ? ' ' . ' required'                                             : '';
+
+	if ( ! empty( $settings['chosen'] ) )	{
+		$class .= 'kbs-select-chosen';
+	}
+
+	$class   = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $class ) ) );
+	$options = $settings['select_options'];
+
+	$output = sprintf( '<select name="%1$s" id="%1$s"%3$s%4$s>',
+		esc_attr( $field->post_name ),
+		' class="' . $class . '"',
+		$multiple,
+		$required
+	);
+
+	if ( ! empty( $options ) )	{
+		foreach( $options as $option )	{
+			$output .= '<option value="' . esc_attr( $option ) . '">' . esc_html( $option ) . '</option>';
+		}
+	}
+
+	$output .= '</select>';
+	
+	$output = apply_filters( 'kbs_display_form_select_field', $output, $field, $settings );
+	
+	echo $output;
+	
+} // kbs_display_form_textarea_field
+add_action( 'kbs_form_display_select_field', 'kbs_display_form_select_field', 10, 2 );
+
+/**
+ * Display a form checkbox field
+ *
+ * @since	0.1
+ * @param	obj			$field		Field post object
+ * @param	arr			$settings	Field settings
+ * @return	str			Field
+ */
+function kbs_display_form_checkbox_field( $field, $settings )	{
+	
+	$class       = ! empty( $settings['input_class'] ) ? ' class="' . esc_attr( $settings['input_class'] ) . '"' : '';
+	$checked     = ! empty( $settings['selected'] )        ? ' ' . ' checked'                                    : '';
+	$required    = ! empty( $settings['required'] )        ? ' ' . ' required'                                   : '';
+
+	$output = sprintf( '<input type="checkbox" name="%1$s" id="%1$s"%2$s%3$s%4$s />',
+		esc_attr( $field->post_name ),
+		$class,
+		$checked,
+		$required
+	);
+	
+	$output = apply_filters( 'kbs_display_form_checkbox_field', $output, $field, $settings );
+	
+	echo $output;
+	
+} // kbs_display_form_textarea_field
+add_action( 'kbs_form_display_checkbox_field', 'kbs_display_form_checkbox_field', 10, 2 );
+
+/**
+ * Display a form checkbox list field
+ *
+ * @since	0.1
+ * @param	obj			$field		Field post object
+ * @param	arr			$settings	Field settings
+ * @return	str			Field
+ */
+function kbs_display_form_checkbox_list_field( $field, $settings )	{
+	
+	$class       = ! empty( $settings['input_class'] ) ? ' class="' . esc_attr( $settings['input_class'] ) . '"' : '';
+
+	$options = $settings['select_options'];
+
+	if ( empty ( $options ) )	{
+		return;
+	}
+
+	foreach ( $options as $option )	{
+		$output[] = sprintf( '<input type="checkbox" name="%1$s[]" id="%2$s"%3$s value="%4$s" /> %5$s',
+			esc_attr( $field->post_name ),
+			esc_attr( kbs_sanitize_key( $option ) ),
+			$class,
+			esc_attr( $option ),
+			'<label for="' . esc_attr( kbs_sanitize_key( $option ) ) . '">' . esc_attr( $option ) . '</label>'
+		);
+		
+	}
+
+	$output = apply_filters( 'kbs_display_form_checkbox_field', $output, $field, $settings );
+	
+	echo implode( '<br />', $output );
+
+} // kbs_display_form_textarea_field
+add_action( 'kbs_form_display_checkbox_list_field', 'kbs_display_form_checkbox_list_field', 10, 2 );
+
+/**
+ * Display a form recaptcha field
+ *
+ * @since	0.1
+ * @param	obj			$field		Field post object
+ * @param	arr			$settings	Field settings
+ * @return	str			Field
+ */
+function kbs_display_form_recaptcha_field( $field, $settings )	{
+
+	$site_key = kbs_get_option( 'recaptcha_site_key', false );
+	
+	if ( ! $site_key )	{
+		return;
+	}
+
+	wp_register_script( 'google-recaptcha', '//www.google.com/recaptcha/api.js"', '', KBS_VERSION, true );
+	wp_enqueue_script( 'google-recaptcha' );
+
+	$output  = sprintf( '<div class="g-recaptcha" data-sitekey="%1$s" data-theme="%2$s" data-type="%3$s" data-size="%4$s"></div>',
+		$site_key,
+		kbs_get_option( 'recaptcha_theme' ),
+		kbs_get_option( 'recaptcha_type' ),
+		kbs_get_option( 'recaptcha_size' )
+	);
+	$output .= sprintf( '<input type="hidden" name="%1$s" id="%1$s" value="" required />', esc_attr( $field->post_name ) );
+
+	$output = apply_filters( 'kbs_display_form_recaptcha_field', $output, $field, $settings );
+	
+	echo $output;
+
+} // kbs_display_form_textarea_field
+add_action( 'kbs_form_display_recaptcha_field', 'kbs_display_form_recaptcha_field', 10, 2 );
