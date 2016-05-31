@@ -30,7 +30,7 @@ function kbs_admin_messages() {
 			'updated'
 		);
 	}
-	
+
 	if( isset( $_GET['kbs-message'] ) && 'field_add_fail' == $_GET['kbs-message'] )	{
 		add_settings_error(
 			'kbs-notices',
@@ -40,6 +40,24 @@ function kbs_admin_messages() {
 		);
 	}
 	
+	if( isset( $_GET['kbs-message'] ) && 'field_saved' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-field-saved',
+			__( 'Field updated.', 'kb-support' ),
+			'updated'
+		);
+	}
+
+	if( isset( $_GET['kbs-message'] ) && 'field_save_fail' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-field-notsaved',
+			__( 'Field not saved.', 'kb-support' ),
+			'error'
+		);
+	}
+
 	if( isset( $_GET['kbs-message'] ) && 'field_deleted' == $_GET['kbs-message'] )	{
 		add_settings_error(
 			'kbs-notices',
@@ -47,6 +65,23 @@ function kbs_admin_messages() {
 			__( 'Field deleted.', 'kb-support' ),
 			'updated'
 		);
+	}
+	
+	if( isset( $_GET['kbs-message'] ) && 'field_delete_fail' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-field-notdeleted',
+			__( 'Field not deleted.', 'kb-support' ),
+			'error'
+		);
+	}
+
+	if( isset( $_GET['kbs-message'], $_GET['field_id'] ) && 'editing_field' == $_GET['kbs-message'] )	{
+		echo '<div class="notice notice-info">';
+		echo '<p><strong>' .
+				sprintf( __( 'Editing: %s.', 'kb-support' ), get_the_title( $_GET['field_id'] ) ) .
+			'</strong></p>';
+		echo '</div>';
 	}
 
 	settings_errors( 'kbs-notices' );

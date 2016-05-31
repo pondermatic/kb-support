@@ -188,12 +188,14 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/shortcodes.php';
 
 		if( is_admin() )	{
+			require_once KBS_PLUGIN_DIR . 'includes/admin/admin-actions.php';
 			require_once KBS_PLUGIN_DIR . '/includes/admin/admin-pages.php';
 			require_once KBS_PLUGIN_DIR . '/includes/admin/admin-notices.php';
 			require_once KBS_PLUGIN_DIR . '/includes/admin/tickets/tickets.php';
 			require_once KBS_PLUGIN_DIR . '/includes/admin/kb/kb.php';
 			require_once KBS_PLUGIN_DIR . '/includes/admin/forms/forms.php';
 			require_once KBS_PLUGIN_DIR . '/includes/admin/forms/metaboxes.php';
+			require_once KBS_PLUGIN_DIR . '/includes/admin/forms/form-actions.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/settings/display-settings.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/settings/contextual-help.php';
 		} else	{

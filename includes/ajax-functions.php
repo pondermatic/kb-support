@@ -151,6 +151,34 @@ function kbs_ajax_add_form_field()	{
 add_action( 'wp_ajax_kbs_add_form_field', 'kbs_ajax_add_form_field' );
 
 /**
+ * Updates a fieldm.
+ *
+ * @since	0.1
+ * @param
+ * @return	void
+ */
+function kbs_ajax_save_form_field()	{
+
+	if ( ! empty( $_POST['field_id'] ) )	{
+		$form = new KBS_Form( $_POST['form_id'] );
+		$field_id = $form->save_field( $_POST );
+
+	}
+
+	if ( ! empty( $field_id ) )	{
+		$results['id']      = $field_id;
+		$results['message'] = 'field_saved';
+	} else	{
+		$results['message'] = 'field_save_fail';
+	}
+	
+	echo json_encode( $results );
+
+	die();
+} // kbs_ajax_save_form_field
+add_action( 'wp_ajax_kbs_save_form_field', 'kbs_ajax_save_form_field' );
+
+/**
  * Sets the order of the form fields.
  *
  * @since	0.1

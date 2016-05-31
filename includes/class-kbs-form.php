@@ -156,6 +156,8 @@ class KBS_Form {
 			'meta_input'   => array( '_kbs_field_settings' => $settings )
 		);
 		
+		$args = apply_filters( 'kbs_post_add_form_field_args', $args );
+		
 		$field_id = wp_insert_post( $args );
 		
 		do_action( 'kbs_post_add_form_field', $data );
@@ -163,6 +165,51 @@ class KBS_Form {
 		return $field_id;
 		
 	} // add_field
+	
+	/**
+	 * Saves a form field.
+	 *
+	 * @since	0.1
+	 * @param	arr		$data	Field data.
+	 * @return	mixed.
+	 */
+	public function save_field( $data )	{
+		
+		if ( ! isset( $data['field_id'], $data['label'], $data['type'] ) )	{
+			return false;
+		}
+
+		do_action( 'kbs_pre_save_form_field', $data );
+		
+		$settings = array(
+			'type'           => $data['type'],
+			'required'       => ! empty( $data['required'] )       ? true                                     : false,
+			'label_class'    => ! empty( $data['label_class'] )    ? $data['label_class']                     : '',
+			'input_class'    => ! empty( $data['input_class'] )    ? $data['input_class']                     : '',
+			'select_options' => ! empty( $data['select_options'] ) ? explode( "\n", $data['select_options'] ) : '',
+			'selected'       => ! empty( $data['selected'] )       ? true                                     : false,
+			'chosen'         => ! empty( $data['chosen'] )         ? true                                     : false,
+			'placeholder'    => ! empty( $data['placeholder'] )    ? $data['placeholder']                     : '',
+			'hide_label'     => ! empty( $data['hide_label'] )     ? true                                     : false
+		);
+		
+		$args = array(
+			'ID'           => $data['field_id'],
+			'post_title'   => $data['label'],
+			'post_name'    => $data['label'],
+			'post_content' => '',
+			'meta_input'   => array( '_kbs_field_settings' => $settings )
+		);
+		
+		$args = apply_filters( 'kbs_post_save_form_field_args', $args );
+		
+		$field_id = wp_update_post( $args );
+		
+		do_action( 'kbs_post_save_form_field', $data );
+		
+		return $field_id;
+		
+	} // save_field
 	
 	/**
 	 * Retrieve the form fields.
@@ -183,7 +230,7 @@ class KBS_Form {
 				'order'          => 'ASC'
 			);
 			
-			$args = apply_filters( 'kbs_get_form_fields', $args );
+			$args = apply_filters( 'kbs_get_fields', $args );
 			
 			$this->fields = get_posts( $args );
 
@@ -225,7 +272,7 @@ class KBS_Form {
 	} // get_next_order
 		
 	/*
-	 * Get the field config
+	 * Get the field settings
 	 *
 	 * @param	int		$field_id		The post ID of the field
 	 * @return	arr		$field_settings	Array of field meta data
@@ -234,19 +281,72 @@ class KBS_Form {
 		
 		$field_settings = get_post_meta( $field_id, '_kbs_field_settings', true );
 		
-		return $field_settings;
+		return apply_filters( 'kbs_field_settings', $field_settings, $field_id );
 		
 	} // get_field_settings
 	
 	/**
-	 * Deletes a form or a form field.
+	 * Deletes a form.
+	 *
+	 * @since	0.1
+	 * @param	int		$form_id	The form post ID.
+	 * @return	mixed	Field post object if successful, otherwise false.
+	 */
+	public function delete_form( $form_id )	{
+
+		if ( 'kbs_form' != get_post_type( $form_id ) )	{
+			return false;
+		}
+
+		do_action( 'kbs_pre_delete_form', $form_id );
+		
+		foreach ( $this->fields as $field )	{
+			$this->delete_field( $field->ID );
+		}
+
+		$result = wp_delete_post( $form_id, true );
+
+		do_action( 'kbs_post_delete_form', $form_id, $result );
+
+		return $result;
+	} // delete_form
+	
+	/**
+	 * Deletes a field.
 	 *
 	 * @since	0.1
 	 * @param	int		$field_id	The field post ID.
 	 * @return	mixed	Field post object if successful, otherwise false.
 	 */
-	public function delete( $field_id )	{
-		return wp_delete_post( $field_id, true );
-	} // delete
+	public function delete_field( $field_id )	{
+
+		if ( 'kbs_form_field' != get_post_type( $field_id ) )	{
+			return false;
+		}
+
+		do_action( 'kbs_pre_delete_field', $field_id );
+
+		$result = wp_delete_post( $form_id, true );
+
+		do_action( 'kbs_post_delete_field', $field_id );
+
+		return $result;
+	} // delete_field
+	
+	/**
+	 * Displays a field.
+	 *
+	 * @since	0.1
+	 * @param	obj		$field		The field post object.
+	 * @param	arr		$settings	The field settings.
+	 * @return	str		The field.
+	 */
+	public function display_field( $field, $settings )	{
+		/*
+		 * Output the field
+		 * @since	0.1
+		 */
+		do_action( 'kbs_form_display_' . $settings['type'] . '_field', $field, $settings );
+	} // display_field
 
 } // MDJM_DCF_Form

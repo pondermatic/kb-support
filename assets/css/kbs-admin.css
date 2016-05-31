@@ -5,14 +5,14 @@
  * @subpackage  Admin CSS
  * @copyright   Copyright (c) 2016, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
-*/
+ */
 
 .kbs-hidden { display: none; }
 .kbs-clearfix:after { display: block; visibility: hidden; content: "."; text-indent: -9999px; height: 0; }
 .kbs-wrap a { text-decoration: none; }
 a.kbs-delete { color: #a00; }
 a.kbs-delete:hover { color: #f00; }
-.kbs-loading
+.kbs_loader { display: block; width: 20px; height: 20px; background: url(../images/loading.png); background-repeat: no-repeat; margin: 4px 0 0 0; }
 
 /* General Settings Styles
 -------------------------------------------------------------- */
@@ -47,5 +47,5 @@ a.kbs-delete:hover { color: #f00; }
 #kbs_meta_field_select_options_wrap,
 #kbs_meta_field_option_selected_wrap,
 #kbs_meta_field_select_searchable_wrap,
-#kbs_meta_field_placeholder_wrap,
+/*#kbs_meta_field_placeholder_wrap,*/
 #kbs_meta_field_hide_label_wrap	{ display: none; }

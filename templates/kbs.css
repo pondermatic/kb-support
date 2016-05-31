@@ -8,7 +8,11 @@
 */
 @charset "UTF-8";
 
-/* =Registration / login Form
+/* =General
+-------------------------------------------------------------- */
+.kbs_hidden	{ display: none; }
+
+/* =Registration / Login Form
 -------------------------------------------------------------- */
 #kbs_register_form fieldset legend,
 #kbs_login_form fieldset legend	{
@@ -32,4 +36,23 @@
 .kbs_form input.kbs-input.required,
 .kbs_form select.kbs-select.required {
 	color: #000;
+}
+
+/* =Submission Form
+-------------------------------------------------------------- */
+#kbs_ticket_form fieldset legend	{
+	padding-left: 1.5px;
+	padding-right: 1.5px;
+	font-weight: bold;
+}
+
+#kbs_ticket_form input,
+#kbs_ticket_form label {
+	display: inline-block;
+	width: 200px;
+}
+#kbs_ticket_form textarea {
+	display: inline-block;
+	max-width: 450px;
+	height: 250px;
 }

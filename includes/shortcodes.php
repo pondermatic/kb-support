@@ -52,3 +52,22 @@ function kbs_register_form_shortcode( $atts, $content = null ) {
 	return kbs_register_form( $redirect );
 } // kbs_register_form_shortcode
 add_shortcode( 'kbs_register', 'kbs_register_form_shortcode' );
+
+/**
+ * Ticket Form Shortcode
+ *
+ * Shows a registration form allowing users to users to register for the site.
+ *
+ * @since	0.1
+ * @param	arr		$atts		Shortcode attributes
+ * @param	str		$content
+ * @return	str
+ */
+function kbs_submit_form_shortcode( $atts, $content = null ) {
+	extract( shortcode_atts( array(
+			'form' => 0,
+		), $atts, 'kbs_submit' )
+	);
+	return kbs_display_form( $form );
+} // kbs_submit_form_shortcode
+add_shortcode( 'kbs_submit', 'kbs_submit_form_shortcode' );
