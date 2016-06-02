@@ -151,7 +151,7 @@ function kbs_ajax_add_form_field()	{
 add_action( 'wp_ajax_kbs_add_form_field', 'kbs_ajax_add_form_field' );
 
 /**
- * Updates a fieldm.
+ * Updates a field.
  *
  * @since	0.1
  * @param

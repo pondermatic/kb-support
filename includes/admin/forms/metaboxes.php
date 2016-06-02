@@ -279,6 +279,36 @@ function kbs_render_field_type_row( $post_id, $args )	{
 add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_type_row', 15, 2 );
 
 /**
+ * Render the row for selecting the mapping.
+ *
+ * @since	0.1
+ * @param	int		$post_id	The form post ID.
+ * @param	arr		$args		Function arguments
+ * @return	str
+ */
+function kbs_render_field_mapping_row( $post_id, $args )	{
+	global $kbs_edit_field;
+
+	?>
+	<div id="kbs_meta_field_mapping_wrap">
+		<p><strong><?php _e( 'Maps to', 'kb-support' ); ?></strong><br />
+		<label for="kbs_field_type">
+			<?php echo KBS()->html->select( array(
+				'name'             => 'kbs_field_mapping',
+				'selected'         => ! empty( $kbs_edit_field->settings['mapping'] ) ? $kbs_edit_field->settings['mapping'] : 0,
+				'class'            => 'kbs_field_mapping',
+				'show_option_all'  => false,
+				'show_option_none' =>'',
+				'options'          => kbs_get_available_mappings( $post_id )
+			) ); ?>
+		</label></p>
+	</div>
+	<?php
+
+} // kbs_render_field_mapping_row
+add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_mapping_row', 20, 2 );
+
+/**
  * Render the row for setting as required.
  *
  * @since	0.1
@@ -295,14 +325,14 @@ function kbs_render_field_required_row( $post_id, $args )	{
 		<p><label for="kbs_field_required">
 			<?php echo KBS()->html->checkbox( array(
 				'name'    => 'kbs_field_required',
-				'current' => ! empty( $kbs_edit_field ) ? $kbs_edit_field->settings['required'] : null
+				'current' => ! empty( $kbs_edit_field->settings['required'] ) ? $kbs_edit_field->settings['required'] : null
 			) ); ?>
 			<strong><?php _e( 'Required?', 'kb-support' ); ?></strong></label></p>
 	</div>
 	<?php
 
 } // kbs_render_field_required_row
-add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_required_row', 20, 2 );
+add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_required_row', 25, 2 );
 
 /**
  * Render the row for entering the label class.
@@ -321,7 +351,7 @@ function kbs_render_field_label_class_row( $post_id, $args )	{
 		<label for="kbs_field_label_class">
 			<?php echo KBS()->html->text( array(
 				'name'  => 'kbs_field_label_class',
-				'value' => ! empty( $kbs_edit_field ) ? $kbs_edit_field->settings['label_class'] : null,
+				'value' => ! empty( $kbs_edit_field->settings['label_class'] ) ? $kbs_edit_field->settings['label_class'] : null,
 				'class' => 'kbs_input'
 			) ); ?>
 		</label></p>
@@ -329,7 +359,7 @@ function kbs_render_field_label_class_row( $post_id, $args )	{
 	<?php
 
 } // kbs_render_field_label_row
-add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_label_class_row', 25, 2 );
+add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_label_class_row', 30, 2 );
 
 /**
  * Render the row for entering the input class.
@@ -348,7 +378,7 @@ function kbs_render_field_input_class_row( $post_id, $args )	{
 		<label for="kbs_field_input_class">
 			<?php echo KBS()->html->text( array(
 				'name'  => 'kbs_field_input_class',
-				'value' => ! empty( $kbs_edit_field ) ? $kbs_edit_field->settings['input_class'] : null,
+				'value' => ! empty( $kbs_edit_field->settings['input_class'] ) ? $kbs_edit_field->settings['input_class'] : null,
 				'class' => 'kbs_input'
 			) ); ?>
 		</label></p>
@@ -356,7 +386,7 @@ function kbs_render_field_input_class_row( $post_id, $args )	{
 	<?php
 
 } // kbs_render_field_label_row
-add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_input_class_row', 30, 2 );
+add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_input_class_row', 35, 2 );
 
 /**
  * Render the row for adding the new field.
@@ -419,7 +449,7 @@ function kbs_render_field_options_rows( $post_id )	{
 		<label for="kbs_field_select_options">
 			<?php echo KBS()->html->textarea( array(
 				'name'        => 'kbs_field_select_options',
-				'value'       => ! empty( $kbs_edit_field ) ? implode( "\n", $kbs_edit_field->settings['select_options'] ) : null,
+				'value'       => ! empty( $kbs_edit_field->settings['select_options'] ) ? implode( "\n", $kbs_edit_field->settings['select_options'] ) : null,
 				'placeholder' => __( 'One entry per line', 'kb-support' ),
 				'class'       => 'kbs_input'
 			) ); ?>
@@ -430,7 +460,7 @@ function kbs_render_field_options_rows( $post_id )	{
     	<p><label for="kbs_field_select_multiple">
 			<?php echo KBS()->html->checkbox( array(
 				'name'        => 'kbs_field_select_multiple',
-				'current' => ! empty( $kbs_edit_field ) ? $kbs_edit_field->settings['select_multiple'] : null
+				'current' => ! empty( $kbs_edit_field->settings['select_multiple'] ) ? $kbs_edit_field->settings['select_multiple'] : null
 			) ); ?>
 			<strong><?php _e( 'Multiple Select?', 'kb-support' ); ?></strong></label>
         </p>
@@ -440,7 +470,7 @@ function kbs_render_field_options_rows( $post_id )	{
     	<p><label for="kbs_field_option_selected">
 			<?php echo KBS()->html->checkbox( array(
 				'name' => 'kbs_field_option_selected',
-				'current' => ! empty( $kbs_edit_field ) ? $kbs_edit_field->settings['selected'] : null
+				'current' => ! empty( $kbs_edit_field->settings['selected'] ) ? $kbs_edit_field->settings['selected'] : null
 			) ); ?>
 			<strong><?php _e( 'Initially Selected?', 'kb-support' ); ?></strong></label>
         </p>
@@ -450,18 +480,18 @@ function kbs_render_field_options_rows( $post_id )	{
     	<p><label for="kbs_field_select_chosen">
 			<?php echo KBS()->html->checkbox( array(
 				'name' => 'kbs_field_select_chosen',
-				'current' => ! empty( $kbs_edit_field ) ? $kbs_edit_field->settings['chosen'] : null
+				'current' => ! empty( $kbs_edit_field->settings['chosen'] ) ? $kbs_edit_field->settings['chosen'] : null
 			) ); ?>
 			<strong><?php _e( 'Searchable?', 'kb-support' ); ?></strong></label>
         </p>
     </div>
     
-    <div id="kbs_meta_field_repeatable_wrap">
+    <div id="kbs_meta_field_maxfiles_wrap">
 		<p><strong><?php _e( 'Maximum Files', 'kb-support' ); ?></strong><br />
-        <label for="kbs_field_repeatable">
+        <label for="kbs_field_maxfiles">
 			<?php echo KBS()->html->number( array(
-				'name'  => 'kbs_field_repeatable',
-				'value' => ! empty( $kbs_edit_field ) ? $kbs_edit_field->settings['repeatable'] : null,
+				'name'  => 'kbs_field_maxfiles',
+				'value' => ! empty( $kbs_edit_field->settings['maxfiles'] ) ? $kbs_edit_field->settings['maxfiles'] : null,
 				'class' => 'small-text kbs_input',
 				'min'   => 1,
 				'max'   => kbs_get_option( 'file_uploads' )
@@ -474,7 +504,7 @@ function kbs_render_field_options_rows( $post_id )	{
 		<label for="kbs_field_placeholder">
 			<?php echo KBS()->html->text( array(
 				'name'  => 'kbs_field_placeholder',
-				'value' => ! empty( $kbs_edit_field ) ? $kbs_edit_field->settings['placeholder'] : null,
+				'value' => ! empty( $kbs_edit_field->settings['placeholder'] ) ? $kbs_edit_field->settings['placeholder'] : null,
 				'class' => 'kbs_input'
 			) ); ?>
 		</label></p>
@@ -484,7 +514,7 @@ function kbs_render_field_options_rows( $post_id )	{
 		<p><label for="kbs_field_hide_label">
 			<?php echo KBS()->html->checkbox( array(
 				'name' => 'kbs_field_hide_label',
-				'current' => ! empty( $kbs_edit_field ) ? $kbs_edit_field->settings['hide_label'] : null
+				'current' => ! empty( $kbs_edit_field->settings['hide_label'] ) ? $kbs_edit_field->settings['hide_label'] : null
 			) ); ?>
 			<strong><?php _e( 'Hide Label?', 'kb-support' ); ?></strong></label>
         </p>

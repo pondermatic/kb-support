@@ -182,6 +182,58 @@ function kbs_get_field_types()	{
 } // kbs_get_field_types
 
 /**
+ * Returns all possible form fields types.
+ *
+ * @since	0.1
+ * @param
+ * @return	arr
+ */
+function kbs_get_mappings()	{
+	
+	$mappings = array(
+		''             => __( 'None', 'kb-support' ),
+		'post_title'   => __( 'Ticket Title', 'kb-support' ),
+		'post_content' => __( 'Ticket Content', 'kb-support' )
+	);
+	
+	/**
+	 * Filter the field mappings to allow for custom mappings to be added.
+	 *
+	 * @since	0.1
+	 * @param	$field_types
+	 */
+	$mappings = apply_filters( 'kbs_mappings', $mappings );
+	
+	asort( $mappings );
+	
+	return $mappings;
+	
+} // kbs_get_mappings
+
+/**
+ * Returns all available mappings.
+ *
+ * @since	0.1
+ * @param	int	form_id		Form post ID.
+ * @return	arr
+ */
+function kbs_get_available_mappings( $form_id )	{
+	
+	$kbs_form = new KBS_Form( $form_id );
+	
+	$mappings = kbs_get_mappings();
+
+	foreach( $mappings as $key => $value )	{
+		if ( $kbs_form->has_mapping( $key ) )	{
+			unset( $mappings[ $key ] );
+		}
+	}
+
+	return $mappings;
+	
+} // kbs_get_available_mappings
+
+/**
  * Output the icons for the field settings.
  *
  * @since	0.1
@@ -191,6 +243,7 @@ function kbs_get_field_types()	{
 function kbs_display_field_setting_icons( $field_id )	{
 
 	$settings = kbs_get_field_settings( $field_id );
+	$mappings = kbs_get_mappings();
 	$output   = array();
 	
 	if ( $settings )	{
@@ -211,7 +264,15 @@ function kbs_display_field_setting_icons( $field_id )	{
 		} else	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
+		
+		if ( ! empty( $settings['mapping'] ) )	{
+			$output[] = '<i title="' . sprintf( __( 'Maps to %s', 'kb-support' ), stripslashes( $mappings[ $settings['mapping'] ] ) ) . '" class="fa fa-map-marker" aria-hidden="true"></i>';
+		} else	{
+			$output[] = '&nbsp;&nbsp;&nbsp;';
+		}
 	}
+
+	$output = apply_filters( 'kbs_field_setting_icons', $output, $field_id );
 
 	return implode( "\t", $output );
 
@@ -244,6 +305,20 @@ function kbs_display_form( $form_id = 0 ) {
 
 	return apply_filters( 'kbs_submit_form', ob_get_clean() );
 } // kbs_display_form
+
+/**
+ * Process form submissions.
+ *
+ * @since	1.0
+ * @param	arr		$data	$_POST super global
+ * @return	void
+ */
+function kbs_process_ticket_form()	{
+	
+	
+	
+} // kbs_process_ticket_form
+add_action( 'kbs_submit_ticket', 'kbs_process_ticket_form' );
 
 /**
  * Display a form text input field.
@@ -345,7 +420,7 @@ function kbs_display_form_select_field( $field, $settings )	{
 	$class   = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $class ) ) );
 	$options = $settings['select_options'];
 
-	$output = sprintf( '<select name="%1$s" id="%1$s"%3$s%4$s>',
+	$output = sprintf( '<select name="%1$s" id="%1$s"%2$s%3$s%4$s>',
 		esc_attr( $field->post_name ),
 		' class="' . $class . '"',
 		$multiple,

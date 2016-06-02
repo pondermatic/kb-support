@@ -134,13 +134,14 @@ class KBS_Form {
 		
 		$settings = array(
 			'type'            => $data['type'],
+			'mapping'         => ! empty( $data['mapping'] )         ? $data['mapping']                         : '',
 			'required'        => ! empty( $data['required'] )        ? true                                     : false,
 			'label_class'     => ! empty( $data['label_class'] )     ? $data['label_class']                     : '',
 			'input_class'     => ! empty( $data['input_class'] )     ? $data['input_class']                     : '',
 			'select_options'  => ! empty( $data['select_options'] )  ? explode( "\n", $data['select_options'] ) : '',
 			'select_multiple' => ! empty( $data['select_multiple'] ) ? true                                     : false,
 			'selected'        => ! empty( $data['selected'] )        ? true                                     : false,
-			'repeatable'      => ! empty( $data['repeatable'] )      ? true                                     : false,
+			'maxfiles'        => ! empty( $data['maxfiles'] )        ? $data['maxfiles']                        : false,
 			'chosen'          => ! empty( $data['chosen'] )          ? true                                     : false,
 			'placeholder'     => ! empty( $data['placeholder'] )     ? $data['placeholder']                     : '',
 			'hide_label'      => ! empty( $data['hide_label'] )      ? true                                     : false
@@ -185,13 +186,14 @@ class KBS_Form {
 		
 		$settings = array(
 			'type'            => $data['type'],
+			'mapping'         => ! empty( $data['mapping'] )         ? $data['mapping']                         : '',
 			'required'        => ! empty( $data['required'] )        ? true                                     : false,
 			'label_class'     => ! empty( $data['label_class'] )     ? $data['label_class']                     : '',
 			'input_class'     => ! empty( $data['input_class'] )     ? $data['input_class']                     : '',
 			'select_options'  => ! empty( $data['select_options'] )  ? explode( "\n", $data['select_options'] ) : '',
 			'select_multiple' => ! empty( $data['select_multiple'] ) ? true                                     : false,
 			'selected'        => ! empty( $data['selected'] )        ? true                                     : false,
-			'repeatable'      => ! empty( $data['repeatable'] )      ? true                                     : false,
+			'maxfiles'        => ! empty( $data['maxfiles'] )        ? $data['maxfiles']                        : false,
 			'chosen'          => ! empty( $data['chosen'] )          ? true                                     : false,
 			'placeholder'     => ! empty( $data['placeholder'] )     ? $data['placeholder']                     : '',
 			'hide_label'      => ! empty( $data['hide_label'] )      ? true                                     : false
@@ -214,7 +216,26 @@ class KBS_Form {
 		return $field_id;
 		
 	} // save_field
-	
+
+	/**
+	 * Determine if a mapping is in use.
+	 *
+	 * @since	0.1
+	 * @param	str		The mapping to check.
+	 * @return	str
+	 */
+	public function has_mapping( $mapping )	{
+		foreach( $this->fields as $field )	{
+			$settings = $this->get_field_settings( $field->ID );
+			
+			if ( ! empty( $settings ) && ! empty( $settings['mapping'] ) && $settings['mapping'] == $mapping )	{
+				return true;
+			}
+		}
+		
+		return false;
+	} // has_mapping
+
 	/**
 	 * Retrieve the form fields.
 	 *

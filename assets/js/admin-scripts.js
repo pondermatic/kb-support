@@ -181,9 +181,9 @@ jQuery(document).ready(function ($) {
 				}
 				
 				if ( 'file_upload' == kbs_selected_field )	{
-					document.getElementById('kbs_meta_field_repeatable_wrap').style.display = "block";
+					document.getElementById('kbs_meta_field_maxfiles_wrap').style.display = "block";
 				} else	{
-					document.getElementById('kbs_meta_field_repeatable_wrap').style.display = "none";
+					document.getElementById('kbs_meta_field_maxfiles_wrap').style.display = "none";
 				}
 				
 				if ( 'recaptcha' == kbs_selected_field )	{
@@ -194,6 +194,12 @@ jQuery(document).ready(function ($) {
 					document.getElementById('kbs_meta_field_required_wrap').style.display = "block";
 					document.getElementById('kbs_meta_field_label_class_wrap').style.display = "block";
 					document.getElementById('kbs_meta_field_input_class_wrap').style.display = "block";
+				}
+
+				if ( 'text' == kbs_selected_field || 'textarea' == kbs_selected_field )	{
+					document.getElementById('kbs_meta_field_mapping_wrap').style.display = "block";
+				} else	{
+					document.getElementById('kbs_meta_field_mapping_wrap').style.display = "none";
 				}
 
 			});
@@ -217,13 +223,14 @@ jQuery(document).ready(function ($) {
 					form_id          : kbs_vars.post_id,
 					label            : $('#kbs_field_label').val(),
 					type             : $('#kbs_field_type').val(),
+					mapping          : $('#kbs_field_mapping').val(),
 					required         : ( $('#kbs_field_required').is(':checked') )        ? $('#kbs_field_required').val()        : 0,
 					label_class      : $('#kbs_field_label_class').val(),
 					input_class      : $('#kbs_field_input_class').val(),
 					select_options   : $('textarea#kbs_field_select_options').val(),
 					select_multiple  : ( $('#kbs_field_select_multiple').is(':checked') ) ? $('#kbs_field_select_multiple').val() : 0,
 					selected         : ( $('#kbs_field_option_selected').is(':checked') ) ? $('#kbs_field_option_selected').val() : 0,
-					repeatable       : $('#kbs_field_repeatable').val(),
+					maxfiles         : $('#kbs_field_maxfiles').val(),
 					chosen           : ( $('#kbs_field_select_chosen').is(':checked') )   ? $('#kbs_field_select_chosen').val()   : 0,
 					placeholder      : $('#kbs_field_placeholder').val(),
 					hide_label       : ( $('#kbs_field_hide_label').is(':checked') )      ? $('#kbs_field_hide_label').val()      : 0,
@@ -273,13 +280,14 @@ jQuery(document).ready(function ($) {
 					field_id         : $('#kbs_edit_field').val(), 
 					label            : $('#kbs_field_label').val(),
 					type             : $('#kbs_field_type').val(),
+					mapping          : $('#kbs_field_mapping').val(),
 					required         : ( $('#kbs_field_required').is(':checked') ) ? $('#kbs_field_required').val() : 0,
 					label_class      : $('#kbs_field_label_class').val(),
 					input_class      : $('#kbs_field_input_class').val(),
 					select_options   : $('textarea#kbs_field_select_options').val(),
 					select_multiple  : ( $('#kbs_field_select_multiple').is(':checked') ) ? $('#kbs_field_select_multiple').val() : 0,
 					selected         : ( $('#kbs_field_option_selected').is(':checked') ) ? $('#kbs_field_option_selected').val() : 0,
-					repeatable       : $('#kbs_field_repeatable').val(),
+					maxfiles         : $('#kbs_field_maxfiles').val(),
 					chosen           : ( $('#kbs_field_select_chosen').is(':checked') )   ? $('#kbs_field_select_chosen').val()   : 0,
 					placeholder      : $('#kbs_field_placeholder').val(),
 					hide_label       : ( $('#kbs_field_hide_label').is(':checked') )      ? $('#kbs_field_hide_label').val()      : 0,
