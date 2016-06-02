@@ -146,6 +146,7 @@ function kbs_get_field_types()	{
 		'checkbox_list'               => __( 'Checkbox List', 'kb-support' ),
 		'date_field'                  => __( 'Date Field', 'kb-support' ),
 		'email'                       => __( 'Email Field', 'kb-support' ),
+		'file_upload'                 => __( 'File Upload', 'kb-support' ),
 		'hidden'                      => __( 'Hidden Field', 'kb-support' ),
 		'kb_category_dropdown'        => sprintf( __( '%s Select List', 'kb-support' ), kbs_get_kb_label_singular() ),
 		'number'                      => __( 'Number Field', 'kb-support' ),
@@ -157,6 +158,10 @@ function kbs_get_field_types()	{
 		'ticket_category_dropdown'    => sprintf( __( '%s Select List', 'kb-support' ), kbs_get_ticket_label_singular() ),
 		'url'                         => __( 'URL Field', 'kb-support' ),		
 	);
+	
+	if ( kbs_get_option( 'file_uploads', 0 ) < 1 )	{
+		unset( $field_types['file_uploads'] );
+	}
 	
 	if ( ! kbs_get_option( 'recaptcha_site_key', false ) )	{
 		unset( $field_types['recaptcha'] );
@@ -248,7 +253,6 @@ function kbs_display_form( $form_id = 0 ) {
  * @since	0.1
  * @param	obj			$field		Field post object
  * @param	arr			$settings	Field settings
- * @param	str			$type		The type of text field
  * @return	str			$type input field
  */
 function kbs_display_form_text_field( $field, $settings )	{
@@ -330,9 +334,9 @@ add_action( 'kbs_form_display_textarea_field', 'kbs_display_form_textarea_field'
  */
 function kbs_display_form_select_field( $field, $settings )	{
 	
-	$class       = ! empty( $settings['input_class'] )     ? esc_attr( $settings['input_class'] )                          : '';
-	$multiple    = ! empty( $settings['select_multiple'] ) ? ' ' . ' multiple'                                             : false;
-	$required    = ! empty( $settings['required'] )        ? ' ' . ' required'                                             : '';
+	$class       = ! empty( $settings['input_class'] )     ? esc_attr( $settings['input_class'] ) : '';
+	$multiple    = ! empty( $settings['select_multiple'] ) ? ' ' . ' multiple'                    : false;
+	$required    = ! empty( $settings['required'] )        ? ' ' . ' required'                    : '';
 
 	if ( ! empty( $settings['chosen'] ) )	{
 		$class .= 'kbs-select-chosen';
@@ -460,3 +464,33 @@ function kbs_display_form_recaptcha_field( $field, $settings )	{
 
 } // kbs_display_form_textarea_field
 add_action( 'kbs_form_display_recaptcha_field', 'kbs_display_form_recaptcha_field', 10, 2 );
+
+/**
+ * Display a form file upload field.
+ *
+ * @since	0.1
+ * @param	obj			$field		Field post object
+ * @param	arr			$settings	Field settings
+ * @return	str			$type input field
+ */
+function kbs_display_form_file_upload_field( $field, $settings )	{
+	
+	$placeholder = ! empty( $settings['placeholder'] )  ? ' placeholder="' . esc_attr( $settings['placeholder'] ) . '"' : '';
+	$class       = ! empty( $settings['input_class'] )  ? esc_attr( $settings['input_class'] )                          : '';
+	$multiple    = kbs_get_option( 'file_uploads' ) > 1 ? ' multiple'                                                   : '';
+
+	$class = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $class ) ) );
+
+	$output = sprintf( '<input type="file" name="%1$s" id="%1$s"%2$s%3$s%4$s />',
+		esc_attr( $field->post_name ),
+		! empty( $class ) ? ' class="' . $class . '"' : '',
+		$placeholder,
+		$multiple
+	);
+	
+	$output = apply_filters( 'kbs_display_form_file_upload_field', $output, $field, $settings );
+	
+	echo $output;
+	
+} // kbs_display_form_file_upload_field
+add_action( 'kbs_form_display_file_upload_field', 'kbs_display_form_file_upload_field', 10, 2 );

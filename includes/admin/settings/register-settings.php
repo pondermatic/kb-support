@@ -440,9 +440,11 @@ function kbs_get_registered_settings() {
 					'file_uploads' => array(
 						'id'      => 'file_uploads',
 						'name'    => __( 'Allow File Uploads', 'kb-support' ),
-						'desc'    => sprintf( __( 'Enable users to upload files to their %s.', 'kb-support' ), kbs_get_ticket_label_plural( true ) ),
-						'type'    => 'checkbox',
-						'std'     => '1'
+						'desc'    => sprintf( __( 'Maximum number of files that can be attached during %s creation or response.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+						'type'    => 'number',
+						'size'    => 'small',
+						'max'     => '10',
+						'std'     => '0'
 					),
 					'logged_in_only' => array(
 						'id'      => 'logged_in_only',

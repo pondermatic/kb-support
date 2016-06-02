@@ -48,5 +48,6 @@ a.kbs-delete:hover { color: #f00; }
 #kbs_meta_field_select_multiple_wrap,
 #kbs_meta_field_option_selected_wrap,
 #kbs_meta_field_select_searchable_wrap,
-/*#kbs_meta_field_placeholder_wrap,*/
+#kbs_meta_field_repeatable_wrap,
+#kbs_meta_field_placeholder_wrap,
 #kbs_meta_field_hide_label_wrap	{ display: none; }

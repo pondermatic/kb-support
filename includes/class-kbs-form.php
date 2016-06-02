@@ -140,6 +140,7 @@ class KBS_Form {
 			'select_options'  => ! empty( $data['select_options'] )  ? explode( "\n", $data['select_options'] ) : '',
 			'select_multiple' => ! empty( $data['select_multiple'] ) ? true                                     : false,
 			'selected'        => ! empty( $data['selected'] )        ? true                                     : false,
+			'repeatable'      => ! empty( $data['repeatable'] )      ? true                                     : false,
 			'chosen'          => ! empty( $data['chosen'] )          ? true                                     : false,
 			'placeholder'     => ! empty( $data['placeholder'] )     ? $data['placeholder']                     : '',
 			'hide_label'      => ! empty( $data['hide_label'] )      ? true                                     : false
@@ -190,6 +191,7 @@ class KBS_Form {
 			'select_options'  => ! empty( $data['select_options'] )  ? explode( "\n", $data['select_options'] ) : '',
 			'select_multiple' => ! empty( $data['select_multiple'] ) ? true                                     : false,
 			'selected'        => ! empty( $data['selected'] )        ? true                                     : false,
+			'repeatable'      => ! empty( $data['repeatable'] )      ? true                                     : false,
 			'chosen'          => ! empty( $data['chosen'] )          ? true                                     : false,
 			'placeholder'     => ! empty( $data['placeholder'] )     ? $data['placeholder']                     : '',
 			'hide_label'      => ! empty( $data['hide_label'] )      ? true                                     : false

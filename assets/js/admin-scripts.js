@@ -174,10 +174,16 @@ jQuery(document).ready(function ($) {
 					document.getElementById('kbs_meta_field_option_selected_wrap').style.display = "none";
 				}
 				
-				if ( 'checkbox' == kbs_selected_field )	{
+				if ( 'checkbox' == kbs_selected_field || 'file_upload' == kbs_selected_field )	{
 					document.getElementById('kbs_meta_field_required_wrap').style.display = "none";
 				} else	{
 					document.getElementById('kbs_meta_field_required_wrap').style.display = "block";
+				}
+				
+				if ( 'file_upload' == kbs_selected_field )	{
+					document.getElementById('kbs_meta_field_repeatable_wrap').style.display = "block";
+				} else	{
+					document.getElementById('kbs_meta_field_repeatable_wrap').style.display = "none";
 				}
 				
 				if ( 'recaptcha' == kbs_selected_field )	{
@@ -217,6 +223,7 @@ jQuery(document).ready(function ($) {
 					select_options   : $('textarea#kbs_field_select_options').val(),
 					select_multiple  : ( $('#kbs_field_select_multiple').is(':checked') ) ? $('#kbs_field_select_multiple').val() : 0,
 					selected         : ( $('#kbs_field_option_selected').is(':checked') ) ? $('#kbs_field_option_selected').val() : 0,
+					repeatable       : $('#kbs_field_repeatable').val(),
 					chosen           : ( $('#kbs_field_select_chosen').is(':checked') )   ? $('#kbs_field_select_chosen').val()   : 0,
 					placeholder      : $('#kbs_field_placeholder').val(),
 					hide_label       : ( $('#kbs_field_hide_label').is(':checked') )      ? $('#kbs_field_hide_label').val()      : 0,
@@ -272,6 +279,7 @@ jQuery(document).ready(function ($) {
 					select_options   : $('textarea#kbs_field_select_options').val(),
 					select_multiple  : ( $('#kbs_field_select_multiple').is(':checked') ) ? $('#kbs_field_select_multiple').val() : 0,
 					selected         : ( $('#kbs_field_option_selected').is(':checked') ) ? $('#kbs_field_option_selected').val() : 0,
+					repeatable       : $('#kbs_field_repeatable').val(),
 					chosen           : ( $('#kbs_field_select_chosen').is(':checked') )   ? $('#kbs_field_select_chosen').val()   : 0,
 					placeholder      : $('#kbs_field_placeholder').val(),
 					hide_label       : ( $('#kbs_field_hide_label').is(':checked') )      ? $('#kbs_field_hide_label').val()      : 0,

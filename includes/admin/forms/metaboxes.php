@@ -456,6 +456,19 @@ function kbs_render_field_options_rows( $post_id )	{
         </p>
     </div>
     
+    <div id="kbs_meta_field_repeatable_wrap">
+		<p><strong><?php _e( 'Maximum Files', 'kb-support' ); ?></strong><br />
+        <label for="kbs_field_repeatable">
+			<?php echo KBS()->html->number( array(
+				'name'  => 'kbs_field_repeatable',
+				'value' => ! empty( $kbs_edit_field ) ? $kbs_edit_field->settings['repeatable'] : null,
+				'class' => 'small-text kbs_input',
+				'min'   => 1,
+				'max'   => kbs_get_option( 'file_uploads' )
+			) ); ?>
+		</label></p>
+	</div>
+    
     <div id="kbs_meta_field_placeholder_wrap">
     	<p><strong><?php _e( 'Placeholder', 'kb-support' ); ?></strong><br />
 		<label for="kbs_field_placeholder">

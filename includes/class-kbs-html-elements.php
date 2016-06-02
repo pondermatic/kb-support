@@ -497,6 +497,70 @@ class KBS_HTML_Elements {
 	} // textarea
 	
 	/**
+	 * Renders an HTML Number field
+	 *
+	 * @since	0.1
+	 *
+	 * @param	arr		$args	Arguments for the text field
+	 * @return	str		Text field
+	 */
+	public function number( $args = array() ) {
+
+		$defaults = array(
+			'id'           => '',
+			'name'         => isset( $name )  ? $name  : 'text',
+			'value'        => isset( $value ) ? $value : null,
+			'label'        => isset( $label ) ? $label : null,
+			'desc'         => isset( $desc )  ? $desc  : null,
+			'placeholder'  => '',
+			'class'        => 'small-text',
+			'min'          => '',
+			'max'          => '',
+			'disabled'     => false,
+			'autocomplete' => '',
+			'data'         => false
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+		
+		$args['id'] = ! empty( $args['id'] ) ? $args['id'] : $args['name'];
+
+		$class = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $args['class'] ) ) );
+		$disabled = '';
+		if( $args['disabled'] ) {
+			$disabled = ' disabled="disabled"';
+		}
+
+		$data = '';
+		if ( ! empty( $args['data'] ) ) {
+			foreach ( $args['data'] as $key => $value ) {
+				$data .= 'data-' . kbs_sanitize_key( $key ) . '="' . esc_attr( $value ) . '" ';
+			}
+		}
+		
+		$min = ! empty( $args['min'] ) ? ' min="' . $args['min'] . '"' : '';
+		$max = ! empty( $args['max'] ) ? ' max="' . $args['max'] . '"' : '';
+		
+		if ( $max > 5 )	{
+			$max = 5;
+		}
+
+		$output = '<span id="kbs-' . kbs_sanitize_key( $args['name'] ) . '-wrap">';
+
+			$output .= '<label class="kbs-label" for="' . kbs_sanitize_key( $args['id'] ) . '">' . esc_html( $args['label'] ) . '</label>';
+
+			if ( ! empty( $args['desc'] ) ) {
+				$output .= '<span class="kbs-description">' . esc_html( $args['desc'] ) . '</span>';
+			}
+
+			$output .= '<input type="number" name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['id'] )  . '" autocomplete="' . esc_attr( $args['autocomplete'] )  . '" value="' . esc_attr( $args['value'] ) . '" placeholder="' . esc_attr( $args['placeholder'] ) . '" class="' . $class . '" ' . $data . '' . $min . '' . $max . '' . $disabled . '/>';
+
+		$output .= '</span>';
+
+		return $output;
+	} // number
+	
+	/**
 	 * Renders an HTML Hidden field
 	 *
 	 * @since	0.1
