@@ -272,7 +272,7 @@ function kbs_change_default_title( $title ) {
 	 // If a frontend plugin uses this filter (check extensions before changing this function)
 	 if ( ! is_admin() ) {
 		$label = kbs_get_ticket_label_singular();
-		$title = sprintf( __( 'Enter %s name here', 'kb-support' ), $label );
+		$title = sprintf( __( 'Enter %s title here', 'kb-support' ), $label );
 		return $title;
 	 }
 
@@ -280,10 +280,10 @@ function kbs_change_default_title( $title ) {
 
 	 if ( 'kbs_ticket' == $screen->post_type ) {
 		$label = kbs_get_ticket_label_singular();
-		$title = sprintf( __( 'Enter %s name here', 'kb-support' ), $label );
+		$title = sprintf( __( 'Enter %s title here', 'kb-support' ), $label );
 	 } elseif ( 'kbs_kb' == $screen->post_type ) {
 		$label = kbs_get_kb_label_singular();
-		$title = sprintf( __( 'Enter %s name here', 'kb-support' ), $label );
+		$title = sprintf( __( 'Enter %s title here', 'kb-support' ), $label );
 	 } elseif ( 'kbs_form' == $screen->post_type )	{
 		$title = __( 'Enter form name here', 'kb-support' ); 
 	 }

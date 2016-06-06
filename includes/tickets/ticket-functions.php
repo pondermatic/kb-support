@@ -131,6 +131,7 @@ function kbs_add_ticket_from_form( $form_id, $data )	{
 	$fields      = $kbs_form->fields;
 	$args        = array();
 	$meta        = array();
+	$meta_data   = array();
 	$attachments = array();
 
 	foreach( $fields as $field )	{
@@ -150,6 +151,19 @@ function kbs_add_ticket_from_form( $form_id, $data )	{
 			$args[ $settings['mapping'] ] = $data[ $field->post_name ];
 		} else	{
 			$meta[ $field->post_name ] = array( $field->post_title, strip_tags( addslashes( $data[ $field->post_name ] ) ) );
+			
+			$meta_data[] = '<strong>' . $field->post_title . '</strong><br />' . $data[ $field->post_name ];
+		}
+	}
+	
+	if ( ! empty( $meta ) )	{
+		$meta_content  = '<p><strong>' . __( 'Form Data Submitted', 'kb-support' ) . '</strong></p>';
+		$meta_content .= '<p> ' . implode( '<br />', $meta_data ) . '</p>';
+		
+		if ( ! empty( $args['post_content'] ) )	{
+			$args['post_content'] = $args['post_content'] . $meta_content;
+		} else	{
+			$args['post_content'] = $meta_content;
 		}
 	}
 

@@ -184,7 +184,7 @@ function kbs_ticket_metabox_sla_row( $ticket_id )	{
 	
 	global $kbs_ticket, $kbs_ticket_update;
 	
-	if ( ! kbs_get_option( 'sla_tracking' ) )	{
+	if ( ! kbs_get_option( 'sla_tracking' ) || ! $kbs_ticket_update )	{
 		return;
 	}
 	
@@ -232,9 +232,8 @@ function kbs_ticket_metabox_details_row( $ticket_id )	{
 	
 	?>
 	<div id="kbs-original-ticket-wrap" class="kbs_ticket_wrap">
-        <p><textarea id="post_content" name="post_content" class="kbs_textarea" readonly="readonly"><?php echo $kbs_ticket->post_content; ?></textarea></p>
+        <p><?php echo $kbs_ticket->get_content(); ?></p>
     </div>
-
     <?php
 		
 } // kbs_ticket_metabox_details_row

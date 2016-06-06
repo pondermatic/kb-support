@@ -193,6 +193,19 @@ class KBS_Ticket {
 	} // get_ID
 	
 	/**
+	 * Retrieve the ticket content
+	 *
+	 * @since	1.0
+	 * @return	int
+	 */
+	public function get_content() {
+		$content = apply_filters( 'the_content', $this->post_content );
+		$content = str_replace( ']]>', ']]&gt;', $content );
+		
+		return apply_filters( 'kbs_ticket_content', $content );
+	} // get_content
+	
+	/**
 	 * Retrieve the ticket data
 	 *
 	 * @since	1.0
