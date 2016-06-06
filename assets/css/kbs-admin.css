@@ -59,7 +59,7 @@ a.kbs-delete:hover { color: #f00; }
 /* Side Metaboxes */
 #kbs-ticket-actions label {
 	display: inline-block;
-	width: 50px;
+	width: 60px;
 }
 #kbs-ticket-actions a {
 	display: inline-block;

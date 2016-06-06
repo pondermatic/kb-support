@@ -138,59 +138,41 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
             
             </div><!-- #minor-publishing-actions -->
             <div id="kbs-ticket-actions">
-            <p class="dashicons-before dashicons-post-status">&nbsp;&nbsp;<label for="post_status"><?php _e('Status:') ?></label>
-                <?php echo KBS()->html->ticket_status_dropdown( 'post_status', $kbs_ticket->post_status ); ?></p>
-                <p class="dashicons-before dashicons-businessman"></span>&nbsp;&nbsp;<label for="kbs_agent"><?php _e( 'Agent:', 'kb-support' ); ?></label>
-                <?php wp_dropdown_users( array(
-                    'name'     => 'kbs_agent',
-                    'role__in' => array( 'support_manager', 'support_agent' ),
-					'selected' => ( ! empty( $kbs_ticket->agent ) ? $kbs_ticket->agent : get_current_user_id() )
-                ) ); ?></p>
-
-            <p><a class="kbs-delete"><?php printf( __( 'Delete %s', 'kb-support' ), kbs_get_ticket_label_singular() ); ?></a>
-            <?php 
-            submit_button( 
-                sprintf( '%s %s',
-                    empty( $kbs_ticket_update ) ? __( 'Add', 'kb-support' ) : __( 'Update', 'kb-support' ),
-                    kbs_get_ticket_label_singular()
-                ),
-                'primary',
-                'save',
-                false,
-                array( 'id' => 'save-post' )
-            ); ?>
-        </p>
+                <p class="dashicons-before dashicons-post-status">&nbsp;&nbsp;<label for="post_status"><?php _e( 'Status:' ); ?></label>
+                    <?php echo KBS()->html->ticket_status_dropdown( 'post_status', $kbs_ticket->post_status ); ?></p>
+                    <p class="dashicons-before dashicons-businessman"></span>&nbsp;&nbsp;<label for="kbs_agent"><?php _e( 'Agent:', 'kb-support' ); ?></label>
+                    <?php wp_dropdown_users( array(
+                        'name'     => 'kbs_agent',
+                        'role__in' => array( 'support_manager', 'support_agent' ),
+                        'selected' => ( ! empty( $kbs_ticket->agent ) ? $kbs_ticket->agent : get_current_user_id() )
+                    ) ); ?></p>
+                    
+                <?php do_action( 'kbs_ticket_metabox_after_agent', $ticket_id ); ?>
+    
+                <p><a class="kbs-delete"><?php printf( __( 'Delete %s', 'kb-support' ), kbs_get_ticket_label_singular() ); ?></a>
+                <?php
+                
+                submit_button( 
+                    sprintf( '%s %s',
+                        empty( $kbs_ticket_update ) ? __( 'Add', 'kb-support' ) : __( 'Update', 'kb-support' ),
+                        kbs_get_ticket_label_singular()
+                    ),
+                    'primary',
+                    'save',
+                    false,
+                    array( 'id' => 'save-post' )
+                ); ?>
+                </p>
             </div><!-- #kbs-ticket-actions -->
         </div><!-- #minor-publishing -->
     </div><!-- #submitpost -->
     <?php
-	/*
-	?>
-    <div id="minor-publishing">
-	<div id="kbs-save-button" class="kbs_default_side_wrapper">
-        <?php /*submit_button( 
-            sprintf( '%s %s',
-                empty( $kbs_ticket_update ) ? __( 'Add', 'kb-support' ) : __( 'Update', 'kb-support' ),
-                kbs_get_ticket_label_singular()
-            ),
-            'primary',
-            'save',
-            true,
-            array( 'id' => 'save-post' ) ); ?>
-    </div>
-
-	<div id="kbs-delete-post" class="kbs_default_side_wrapper">
-        <p><?php printf( '<a class="kbs-delete" href="%s">' . __( 'Delete %s', 'kb-support' ) . '</a>',
-            get_delete_post_link( $ticket_id ),
-            kbs_get_ticket_label_singular()
-        ); ?></p>
-    </div>*/
 	
 } // kbs_ticket_metabox_save_row
 add_action( 'kbs_ticket_status_fields', 'kbs_ticket_metabox_save_row', 10, 100 );
 
 /**
- * Display the ticket log details.
+ * Output the SLA data for the ticket.
  *
  * @since	1.0
  * @global	obj		$kbs_ticket			KBS_Ticket class object
@@ -198,19 +180,33 @@ add_action( 'kbs_ticket_status_fields', 'kbs_ticket_metabox_save_row', 10, 100 )
  * @param	int		$ticket_id			The ticket post ID.
  * @return	str
  */
-function kbs_ticket_metabox_log_data_row( $ticket_id )	{
-
+function kbs_ticket_metabox_sla_row( $ticket_id )	{
+	
 	global $kbs_ticket, $kbs_ticket_update;
 	
-	?>
-	<div id="kbs-ticket-log-data-wrap" class="kbs_ticket_wrap">
-        <p></p>
-    </div>
-
-    <?php
+	if ( ! kbs_get_option( 'sla_tracking' ) )	{
+		return;
+	}
 	
-} // kbs_ticket_metabox_details_row
-add_action( 'kbs_ticket_detail_fields', 'kbs_ticket_metabox_log_data_row', 10, 100 );
+	if ( $kbs_ticket_update )	{
+		$respond = $kbs_ticket->get_target_respond();
+		$resolve = $kbs_ticket->get_target_resolve();
+	} else	{
+		$respond = date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( kbs_calculate_sla_target_response() ) );
+		$resolve = date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( kbs_calculate_sla_target_resolution() ) );
+	}
+	
+	?>
+    
+    <p>&nbsp;<i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;&nbsp;<label><?php _e( 'Respond:', 'kb-support' ); ?></label>
+    	&nbsp;<input type="text" value="<?php echo $respond; ?>" /></p>
+        
+    <p>&nbsp;<i class="fa fa-bullseye" aria-hidden="true"></i>&nbsp;&nbsp;<label><?php _e( 'Resolve:', 'kb-support' ); ?></label>
+    	&nbsp;<input type="text" value="<?php echo $resolve; ?>" /></p>
+    
+    <?php
+} // kbs_ticket_metabox_sla_row
+add_action( 'kbs_ticket_metabox_after_agent', 'kbs_ticket_metabox_sla_row', 10 );
 
 /**
  * Display the original ticket details row.
@@ -233,4 +229,4 @@ function kbs_ticket_metabox_details_row( $ticket_id )	{
     <?php
 	
 } // kbs_ticket_metabox_details_row
-add_action( 'kbs_ticket_detail_fields', 'kbs_ticket_metabox_details_row', 20, 100 );
+add_action( 'kbs_ticket_detail_fields', 'kbs_ticket_metabox_details_row', 20 );

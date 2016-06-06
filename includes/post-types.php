@@ -68,7 +68,7 @@ function kbs_setup_kbs_post_types() {
 		'map_meta_cap'       => true,
 		'has_archive'        => $ticket_archives,
 		'hierarchical'       => false,
-		'supports'           => apply_filters( 'kbs_ticket_supports', array( 'title', 'editor', 'revisions', 'author' ) )
+		'supports'           => apply_filters( 'kbs_ticket_supports', array( 'title', 'editor' ) )
 	);
 
 	register_post_type( 'kbs_ticket', apply_filters( 'kbs_ticket_post_type_args', $ticket_args ) );
