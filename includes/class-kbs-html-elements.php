@@ -8,7 +8,7 @@
  * @subpackage  Classes/HTML
  * @copyright   Copyright (c) 2016, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       0.1
+ * @since       1.0
  */
 
 // Exit if accessed directly
@@ -17,15 +17,43 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * KBS_HTML_Elements Class
  *
- * @since	0.1
+ * @since	1.0
  */
 class KBS_HTML_Elements {
+
+	/**
+	 * Renders an HTML Dropdown of all the Ticket Post Statuses
+	 *
+	 * @access	public
+	 * @since	1.0
+	 * @param	str		$name		Name attribute of the dropdown
+	 * @param	str		$selected	Status to select automatically
+	 * @return	str		$output		Status dropdown
+	 */
+	public function ticket_status_dropdown( $name = 'post_status', $selected = 0 ) {
+		$ticket_statuses = kbs_get_post_statuses( 'labels' );
+		$options    = array();
+		
+		foreach ( $ticket_statuses as $ticket_status ) {
+			$options[ $ticket_status->name ] = esc_html( $ticket_status->label );
+		}
+
+		$output = $this->select( array(
+			'name'             => $name,
+			'selected'         => $selected,
+			'options'          => $options,
+			'show_option_all'  => '',
+			'show_option_none' => false
+		) );
+
+		return $output;
+	} // ticket_status_dropdown
 
 	/**
 	 * Renders an HTML Dropdown of all the Ticket Categories
 	 *
 	 * @access	public
-	 * @since	0.1
+	 * @since	1.0
 	 * @param	str		$name		Name attribute of the dropdown
 	 * @param	int		$selected	Category to select automatically
 	 * @return	str		$output		Category dropdown
@@ -54,7 +82,7 @@ class KBS_HTML_Elements {
 	 * Renders an HTML Dropdown of all the KB Categories
 	 *
 	 * @access	public
-	 * @since	0.1
+	 * @since	1.0
 	 * @param	str		$name		Name attribute of the dropdown
 	 * @param	int		$selected	Category to select automatically
 	 * @return	str		$output		Category dropdown
@@ -83,7 +111,7 @@ class KBS_HTML_Elements {
 	 * Renders an HTML Dropdown of years
 	 *
 	 * @access	public
-	 * @since	0.1
+	 * @since	1.0
 	 * @param	str		$name			Name attribute of the dropdown
 	 * @param	int		$selected		Year to select automatically
 	 * @param	int		$years_before	Number of years before the current year the dropdown should start with
@@ -117,7 +145,7 @@ class KBS_HTML_Elements {
 	 * Renders an HTML Dropdown of months
 	 *
 	 * @access	public
-	 * @since	0.1
+	 * @since	1.0
 	 * @param	str		$name		Name attribute of the dropdown
 	 * @param	int		$selected	Month to select automatically
 	 * @return	str		$output		Month dropdown
@@ -146,7 +174,7 @@ class KBS_HTML_Elements {
 	/**
 	 * Renders an HTML Dropdown
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 *
 	 * @param	arr		$args
 	 *
@@ -193,7 +221,7 @@ class KBS_HTML_Elements {
 		}
 
 		$class  = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $args['class'] ) ) );
-		$output = '<select name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( kbs_sanitize_key( str_replace( '-', '_', $args['id'] ) ) ) . '" class="kbs-select ' . $class . '"' . $multiple . ' data-placeholder="' . $placeholder . '"'. $data_elements . '>';
+		$output = '<select name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( kbs_sanitize_key( str_replace( '-', '_', $args['id'] ) ) ) . '" class="kbs-select ' . $class . '"' . $multiple . ' data-placeholder="' . $placeholder . '"'. $data_elements . '>' . "\r\n";
 
 		if ( $args['show_option_all'] ) {
 			if( $args['multiple'] ) {
@@ -201,7 +229,7 @@ class KBS_HTML_Elements {
 			} else {
 				$selected = selected( $args['selected'], 0, false );
 			}
-			$output .= '<option value="all"' . $selected . '>' . esc_html( $args['show_option_all'] ) . '</option>';
+			$output .= '<option value="all"' . $selected . '>' . esc_html( $args['show_option_all'] ) . '</option>' . "\r\n";
 		}
 
 		if ( ! empty( $args['options'] ) ) {
@@ -212,7 +240,7 @@ class KBS_HTML_Elements {
 				} else {
 					$selected = selected( $args['selected'], -1, false );
 				}
-				$output .= '<option value="-1"' . $selected . '>' . esc_html( $args['show_option_none'] ) . '</option>';
+				$output .= '<option value="-1"' . $selected . '>' . esc_html( $args['show_option_none'] ) . '</option>' . "\r\n";
 			}
 
 			foreach( $args['options'] as $key => $option ) {
@@ -223,11 +251,11 @@ class KBS_HTML_Elements {
 					$selected = selected( $args['selected'], $key, false );
 				}
 
-				$output .= '<option value="' . esc_attr( $key ) . '"' . $selected . '>' . esc_html( $option ) . '</option>';
+				$output .= '<option value="' . esc_attr( $key ) . '"' . $selected . '>' . esc_html( $option ) . '</option>' . "\r\n";
 			}
 		}
 
-		$output .= '</select>';
+		$output .= '</select>' . "\r\n";
 
 		return $output;
 	} // select
@@ -235,7 +263,7 @@ class KBS_HTML_Elements {
 	/**
 	 * Renders an HTML Checkbox
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 *
 	 * @param	arr		$args
 	 *
@@ -270,7 +298,7 @@ class KBS_HTML_Elements {
 	/**
 	 * Renders an HTML Checkbox List
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 *
 	 * @param	arr		$args
 	 *
@@ -324,7 +352,7 @@ class KBS_HTML_Elements {
 	/**
 	 * Renders HTML Radio Buttons
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 *
 	 * @param	arr		$args
 	 *
@@ -377,7 +405,7 @@ class KBS_HTML_Elements {
 	/**
 	 * Renders an HTML Text field
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 *
 	 * @param	arr		$args	Arguments for the text field
 	 * @return	str		Text field
@@ -432,7 +460,7 @@ class KBS_HTML_Elements {
 	/**
 	 * Renders a date picker
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 *
 	 * @param	arr		$args	Arguments for the text field
 	 * @return	str		Datepicker field
@@ -451,7 +479,7 @@ class KBS_HTML_Elements {
 	/**
 	 * Renders an HTML textarea
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 *
 	 * @param	arr		$args	Arguments for the textarea
 	 * @return	srt		textarea
@@ -499,7 +527,7 @@ class KBS_HTML_Elements {
 	/**
 	 * Renders an HTML Number field
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 *
 	 * @param	arr		$args	Arguments for the text field
 	 * @return	str		Text field
@@ -563,7 +591,7 @@ class KBS_HTML_Elements {
 	/**
 	 * Renders an HTML Hidden field
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 *
 	 * @param	arr		$args	Arguments for the text field
 	 * @return	str		Hidden field
@@ -588,7 +616,7 @@ class KBS_HTML_Elements {
 	/**
 	 * Renders an ajax user search field
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 *
 	 * @param	arr		$args
 	 * @return	str		Text field with ajax search

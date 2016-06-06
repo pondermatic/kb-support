@@ -30,7 +30,8 @@ global $kbs_form;
 		<?php do_action( 'kbs_ticket_form_before_submit' ); ?>
 
 		<p>
-			<input type="hidden" name="kbs_honeypot" value="" />
+			<input type="hidden" name="kbs_form_id" value="<?php echo $kbs_form->ID; ?>" />
+            <input type="hidden" name="kbs_honeypot" value="" />
 			<input type="hidden" name="kbs_action" value="submit_ticket" />
 			<input class="button" name="kbs_ticket_submit" type="submit" value="<?php printf( esc_attr__( 'Submit %s', 'kb-support' ), kbs_get_ticket_label_singular() ); ?>" />
 		</p>

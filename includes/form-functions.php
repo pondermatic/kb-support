@@ -152,6 +152,7 @@ function kbs_get_field_types()	{
 		'number'                      => __( 'Number Field', 'kb-support' ),
 		'radio'                       => __( 'Radio Buttons', 'kb-support' ),
 		'recaptcha'                   => __( 'Google reCaptcha', 'kb-support' ),
+		'rich_editor'                 => __( 'Rich Text Editor', 'kb-support' ),
 		'select'                      => __( 'Select List', 'kb-support' ),
 		'text'                        => __( 'Text Field', 'kb-support' ),
 		'textarea'                    => __( 'Textarea', 'kb-support' ),
@@ -307,18 +308,39 @@ function kbs_display_form( $form_id = 0 ) {
 } // kbs_display_form
 
 /**
- * Process form submissions.
+ * Process ticket form submissions.
  *
  * @since	1.0
  * @param	arr		$data	$_POST super global
  * @return	void
  */
-function kbs_process_ticket_form()	{
-	
-	
-	
+function kbs_process_ticket_submission( $data )	{
+
+	kbs_do_honeypot_check( $data );
+
+	$form_id = ! empty( $data['kbs_form_id'] ) ? $data['kbs_form_id'] : '';
+
+	$posted = array();
+	$ignore = apply_filters( 'kbs_ignore_ticket_fields', 
+		array( 'kbs_form_id', 'kbs_action', 'kbs_redirect', 'kbs_honeypot', 'kbs_ticket_submit' )
+	);
+
+	foreach ( $data as $key => $value ) {
+		if( ! in_array( $key, $ignore ) ) {
+			if( is_string( $value ) || is_int( $value ) )	{
+				$posted[ $key ] = $value;
+
+			}
+			elseif( is_array( $value ) )	{
+				$posted[ $key ] = array_map( 'absint', $value );
+			}
+		}
+	}
+
+	kbs_add_ticket_from_form( $form_id, $posted );
+
 } // kbs_process_ticket_form
-add_action( 'kbs_submit_ticket', 'kbs_process_ticket_form' );
+add_action( 'kbs_submit_ticket', 'kbs_process_ticket_submission' );
 
 /**
  * Display a form text input field.
@@ -385,12 +407,33 @@ function kbs_display_form_textarea_field( $field, $settings )	{
 	$class       = ! empty( $settings['input_class'] ) ? ' class="' . esc_attr( $settings['input_class'] ) . '"'       : '';
 	$required    = ! empty( $settings['required'] )    ? ' ' . ' required'                                             : '';
 	
-	$output = sprintf( '<textarea name="%1$s" id="%1$s"%2$s%3$s%4$s></textarea>',
-		esc_attr( $field->post_name ),
-		$class,
-		$placeholder,
-		$required
-	);
+	if ( $settings['type'] == 'rich_editor' )	{
+		$wp_settings  = apply_filters( 'kbs_rich_editor_settings', array(
+			'wpautop'       => true,
+			'media_buttons' => false,
+			'textarea_name' => esc_attr( $field->post_name ),
+			'textarea_rows' => get_option( 'default_post_edit_rows', 10 ),
+			'tabindex'      => '',
+			'editor_css'    => '',
+			'editor_class'  => $settings['input_class'],
+			'teeny'         => true,
+			'dfw'           => false,
+			'tinymce'       => true,
+			'quicktags'     => false
+		) );
+
+		$output = wp_editor( '', esc_attr( $field->post_name ), $wp_settings );
+
+	} else	{
+	
+		$output = sprintf( '<textarea name="%1$s" id="%1$s"%2$s%3$s%4$s></textarea>',
+			esc_attr( $field->post_name ),
+			$class,
+			$placeholder,
+			$required
+		);
+		
+	}
 	
 	$output = apply_filters( 'kbs_display_form_textarea_field', $output, $field, $settings );
 	
@@ -398,6 +441,7 @@ function kbs_display_form_textarea_field( $field, $settings )	{
 	
 } // kbs_display_form_textarea_field
 add_action( 'kbs_form_display_textarea_field', 'kbs_display_form_textarea_field', 10, 2 );
+add_action( 'kbs_form_display_rich_editor_field', 'kbs_display_form_textarea_field', 10, 2 );
 
 /**
  * Display a form select field
@@ -549,14 +593,18 @@ add_action( 'kbs_form_display_recaptcha_field', 'kbs_display_form_recaptcha_fiel
  * @return	str			$type input field
  */
 function kbs_display_form_file_upload_field( $field, $settings )	{
-	
+
+	if ( ! kbs_file_uploads_are_enabled() )	{
+		return;
+	}
+
 	$placeholder = ! empty( $settings['placeholder'] )  ? ' placeholder="' . esc_attr( $settings['placeholder'] ) . '"' : '';
 	$class       = ! empty( $settings['input_class'] )  ? esc_attr( $settings['input_class'] )                          : '';
 	$multiple    = kbs_get_option( 'file_uploads' ) > 1 ? ' multiple'                                                   : '';
 
 	$class = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $class ) ) );
 
-	$output = sprintf( '<input type="file" name="%1$s" id="%1$s"%2$s%3$s%4$s />',
+	$output = sprintf( '<input type="file" name="%1$s[]" id="%1$s"%2$s%3$s%4$s />',
 		esc_attr( $field->post_name ),
 		! empty( $class ) ? ' class="' . $class . '"' : '',
 		$placeholder,

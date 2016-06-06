@@ -258,6 +258,24 @@ function kbs_get_registered_settings() {
 						'type'    => 'select',
 						'options' => kbs_get_response_time_options(),
 						'std'     => '4 hours'
+					),
+					'sla_resolve_time' => array(
+						'id'      => 'sla_resolve_time',
+						'name'    => __( 'Target Resolution Time', 'kb-support' ),
+						'type'    => 'select',
+						'options' => apply_filters( 'kbs_target_resolve_time', array(
+							'1 day'    => __( '1 Day', 'kb-support' ),
+							'2 days'   => __( '2 Days', 'kb-support' ),
+							'3 days'   => __( '3 Days', 'kb-support' ),
+							'4 days'   => __( '4 Days', 'kb-support' ),
+							'5 days'   => __( '5 Days', 'kb-support' ),
+							'6 days'   => __( '6 Days', 'kb-support' ),
+							'1 week'   => __( '1 Week', 'kb-support' ),
+							'2 weeks'  => __( '2 Weeks', 'kb-support' ),
+							'3 weeks'  => __( '3 Weeks', 'kb-support' ),
+							'4 weeks'  => __( '4 Weeks', 'kb-support' )
+						) ),
+						'std'     => '2 days'
 					)
 				)
 			)

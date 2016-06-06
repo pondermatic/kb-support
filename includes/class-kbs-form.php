@@ -152,6 +152,7 @@ class KBS_Form {
 		$args = array(
 			'post_type'    => 'kbs_form_field',
 			'post_title'   => $data['label'],
+			'post_name'    => 'kbs-' . sanitize_title( $data['label'] ),
 			'post_content' => '',
 			'post_status'  => 'publish',
 			'post_parent'  => $data['form_id'],
@@ -202,7 +203,7 @@ class KBS_Form {
 		$args = array(
 			'ID'           => $data['field_id'],
 			'post_title'   => $data['label'],
-			'post_name'    => $data['label'],
+			'post_name'    => 'kbs-' . sanitize_title( $data['label'] ),
 			'post_content' => '',
 			'meta_input'   => array( '_kbs_field_settings' => $settings )
 		);

@@ -36,7 +36,7 @@ add_action( 'init', 'kbs_get_actions' );
  * @return	void
 */
 function kbs_post_actions() {
-	if ( isset( $_POST['kbs_action'] ) ) {
+	if ( isset( $_POST['kbs_action'] ) ) {	
 		do_action( 'kbs_' . $_POST['kbs_action'], $_POST );
 	}
 } // kbs_post_actions

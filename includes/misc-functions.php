@@ -6,7 +6,7 @@
  * @subpackage  Functions
  * @copyright   Copyright (c) 2016, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       0.1
+ * @since       1.0
  */
 
 // Exit if accessed directly
@@ -19,9 +19,69 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * @return	bool	$ret	True if guest checkout is enabled, false otherwise
  */
 function kbs_file_uploads_are_enabled() {
-	$ret = kbs_get_option( 'file_uploads', false );
-	return (bool) apply_filters( 'kbs_file_uploads', $ret );
+	$return = false;
+
+	if( kbs_get_option( 'file_uploads', false ) )	{
+		$return = true;
+	}
+	
+	return (bool) apply_filters( 'kbs_file_uploads', $return );
 } // kbs_file_uploads_are_enabled
+
+/**
+ * Set Upload Directory
+ *
+ * Sets the upload dir to kbs.
+ *
+ * @since	1.0
+ * @return	arr		Upload directory information.
+ */
+function kbs_set_upload_dir( $upload ) {
+
+	// Override the year / month being based on the post publication date, if year/month organization is enabled
+	if ( get_option( 'uploads_use_yearmonth_folders' ) )	{
+
+		$time             = current_time( 'mysql' );
+		$y                = substr( $time, 0, 4 );
+		$m                = substr( $time, 5, 2 );
+		$upload['subdir'] = "/$y/$m";
+
+	}
+
+	$upload['subdir'] = '/kbs' . $upload['subdir'];
+	$upload['path']   = $upload['basedir'] . $upload['subdir'];
+	$upload['url']    = $upload['baseurl'] . $upload['subdir'];
+	
+	return apply_filters( 'kbs_set_upload_dir', $upload );
+
+} // kbs_set_upload_dir
+
+/**
+ * Change Tickets Upload Directory.
+ *
+ * This function works by hooking on the WordPress Media Uploader
+ * and moving the uploading files that are used for KBS to a kbs
+ * directory under wp-content/uploads/ therefore,
+ * the new directory is wp-content/uploads/kbs/{year}/{month}.
+ *
+ * @since	1.0
+ * @global	$pagenow
+ * @return	void
+ */
+function kbs_change_downloads_upload_dir() {
+
+	global $pagenow;
+
+	if ( ! empty( $_REQUEST['post_id'] ) && ( 'async-upload.php' == $pagenow || 'media-upload.php' == $pagenow ) )	{
+
+		if ( 'kbs_ticket' == get_post_type( $_REQUEST['post_id'] ) ) {
+			add_filter( 'upload_dir', 'kbs_set_upload_dir' );
+		}
+
+	}
+
+} // kbs_change_downloads_upload_dir
+add_action( 'admin_init', 'kbs_change_downloads_upload_dir', 999 );
 
 /**
  * Sets the enctype for file upload forms.
@@ -36,6 +96,14 @@ function kbs_maybe_set_enctype() {
 		echo apply_filters( 'kbs_maybe_set_enctype', $output );
 	}
 } // kbs_file_uploads_are_enabled
+
+/**
+ * Retrieves allowed file types
+ *
+ *
+ *
+ *
+ */
 
 /**
  * Checks if Guest checkout is enabled
@@ -64,7 +132,7 @@ function kbs_logged_in_only() {
  *
  * Returns the IP address of the current visitor
  *
- * @since	0.1
+ * @since	1.0
  * @return	str		$ip		User's IP address
  */
 function kbs_get_ip() {
@@ -88,7 +156,7 @@ function kbs_get_ip() {
  *
  * Takes a month number and returns the name three letter name of it.
  *
- * @since	0.1
+ * @since	1.0
  *
  * @param	int		$n
  * @return	str		Short month name
@@ -102,7 +170,7 @@ function kbs_month_num_to_name( $n ) {
 /**
  * Get the current page URL
  *
- * @since	0.1
+ * @since	1.0
  * @param	bool	$nocache	If we should bust cache on the returned URL
  * @return	str		$page_url	Current page URL
  */
@@ -136,7 +204,7 @@ function kbs_get_current_page_url() {
 /**
  * Retrieve timezone
  *
- * @since	0.1
+ * @since	1.0
  * @return	str		$timezone	The timezone ID
  */
 function kbs_get_timezone_id() {
@@ -168,3 +236,18 @@ function kbs_get_timezone_id() {
 	// fallback
 	return 'UTC';
 } // kbs_get_timezone_id
+
+/**
+ * Validate the form honeypot to protect against bots.
+ *
+ * @since	1.0
+ * @param	arr		$data	Form post data
+ * @return	void
+ */
+function kbs_do_honeypot_check( $data )	{
+	if ( ! empty( $data['kbs_honeypot'] ) )	{
+		wp_die( __( "Ha! I don't think so little honey bee. No bots allowed in this Honey Pot!", 'kb-support' ) );
+	}
+	
+	return;
+} // kbs_do_honeypot_check

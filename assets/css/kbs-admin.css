@@ -31,19 +31,19 @@ a.kbs-delete:hover { color: #f00; }
 #postbox-container-1 .kbs_files_url_label { width: 80px; }
 .kbs_add { display: inline-block; }
 .kbs_sortable_row td { vertical-align: middle }
-#formfields .kbs_meta_table_wrap table input,
-#formfields .kbs_meta_table_wrap table select,
-#formfields .kbs_meta_table_wrap table textarea { margin: 4px 0; width: 100%; }
-#formfields .kbs_meta_table_wrap table .submit input { width: auto; }
+#kbs_formfields .kbs_meta_table_wrap table input,
+#kbs_formfields .kbs_meta_table_wrap table select,
+#kbs_formfields .kbs_meta_table_wrap table textarea { margin: 4px 0; width: 100%; }
+#kbs_formfields .kbs_meta_table_wrap table .submit input { width: auto; }
 .kbs_field_wrapper .kbs_field_field_container { position: relative; }
 .kbs_remove { margin: 8px 0 0 0; cursor: pointer; width: 10px; height: 10px; display: inline-block; text-indent: -9999px; overflow: hidden; }
 .kbs_remove:active, .kbs_remove:hover { background-position: -10px 0!important }
 .kbs_draghandle { display: block; width: 20px; height: 20px; background: url(../images/kbs-cross-hair.png); cursor: move; margin: 4px 0 0 0; }
 .kbs_default_wrapper { text-align: center; width: 25px; }
-#formfields .kbs_meta_field_label_wrap p input,
-#formfields .kbs_meta_field_label_wrap p select,
-#formfields .kbs_meta_field_label_wrap p textarea { margin: 4px 0; width: 100%; }
-#formfields .kbs_meta_field_label_wrap p .submit input { width: auto; }
+#kbs_formfields .kbs_meta_field_label_wrap p input,
+#kbs_formfields .kbs_meta_field_label_wrap p select,
+#kbs_formfields .kbs_meta_field_label_wrap p textarea { margin: 4px 0; width: 100%; }
+#kbs_formfields .kbs_meta_field_label_wrap p .submit input { width: auto; }
 #kbs_meta_field_mapping_wrap,
 #kbs_meta_field_select_options_wrap,
 #kbs_meta_field_select_multiple_wrap,
@@ -52,3 +52,27 @@ a.kbs-delete:hover { color: #f00; }
 #kbs_meta_field_maxfiles_wrap,
 #kbs_meta_field_placeholder_wrap,
 #kbs_meta_field_hide_label_wrap	{ display: none; }
+
+
+.kbs_ticket_wrap p textarea	{ margin: 4px 0; width: 100%; min-height: 200px; height: auto; }
+
+/* Side Metaboxes */
+#kbs-ticket-actions label {
+	display: inline-block;
+	width: 50px;
+}
+#kbs-ticket-actions a {
+	display: inline-block;
+	width: 100px;
+}
+#kbs-ticket-actions input[type=submit] {
+	float: right;
+	width: auto;
+}
+#kbs-ticket-actions input,
+#kbs-ticket-actions select {
+	width: 150px;
+}
+
+.kbs_default_side_wrapper { width: 100px; }
+#kbs-delete-post { padding-top: 3px; }

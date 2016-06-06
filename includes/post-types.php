@@ -321,7 +321,7 @@ function kbs_setup_custom_taxonomies() {
 
 	$ticket_category_args = apply_filters( 'kbs_ticket_category_args', array(
 			'hierarchical' => true,
-			'labels'       => apply_filters('kbs_ticket_category_labels', $ticket_category_labels),
+			'labels'       => apply_filters( 'kbs_ticket_category_labels', $ticket_category_labels),
 			'show_ui'      => true,
 			'query_var'    => 'ticket_category',
 			'rewrite'      => array( 'slug' => $ticket_slug . '/category', 'with_front' => false, 'hierarchical' => true ),
@@ -378,7 +378,7 @@ function kbs_setup_custom_taxonomies() {
 
 	$kb_category_args = apply_filters( 'kbs_ticket_category_args', array(
 			'hierarchical' => true,
-			'labels'       => apply_filters('kbs_ticket_category_labels', $kb_category_labels),
+			'labels'       => apply_filters( 'kbs_ticket_category_labels', $kb_category_labels),
 			'show_ui'      => true,
 			'query_var'    => 'ticket_category',
 			'rewrite'      => array( 'slug' => $kb_slug . '/category', 'with_front' => false, 'hierarchical' => true ),
@@ -472,7 +472,8 @@ function kbs_register_post_type_statuses() {
 		'exclude_from_search'       => false,
 		'show_in_admin_all_list'    => true,
 		'show_in_admin_status_list' => true,
-		'label_count'               => _n_noop( 'Unassigned <span class="count">(%s)</span>', 'Unassigned <span class="count">(%s)</span>', 'kb-support' )
+		'label_count'               => _n_noop( 'Unassigned <span class="count">(%s)</span>', 'Unassigned <span class="count">(%s)</span>', 'kb-support' ),
+		'kb-support'                => true
 	) );
 	register_post_status( 'assigned', array(
 		'label'                     => sprintf( _x( 'Assigned', 'Assigned %s', 'kb-support' ), kbs_get_ticket_label_plural() ),
@@ -480,15 +481,17 @@ function kbs_register_post_type_statuses() {
 		'exclude_from_search'       => false,
 		'show_in_admin_all_list'    => true,
 		'show_in_admin_status_list' => true,
-		'label_count'               => _n_noop( 'Assigned <span class="count">(%s)</span>', 'Assigned <span class="count">(%s)</span>', 'kb-support' )
+		'label_count'               => _n_noop( 'Assigned <span class="count">(%s)</span>', 'Assigned <span class="count">(%s)</span>', 'kb-support' ),
+		'kb-support'                => true
 	)  );
 	register_post_status( 'hold', array(
-		'label'                     =>  sprintf( _x( '%s On Hold', '%s on Hold', 'kb-support' ), kbs_get_ticket_label_plural() ),
+		'label'                     =>  sprintf( _x( '%s On Hold', '%s on Hold', 'kb-support' ), kbs_get_ticket_label_singular() ),
 		'public'                    => true,
 		'exclude_from_search'       => false,
 		'show_in_admin_all_list'    => true,
 		'show_in_admin_status_list' => true,
-		'label_count'               => _n_noop( 'Revoked <span class="count">(%s)</span>', 'Revoked <span class="count">(%s)</span>', 'kb-support' )
+		'label_count'               => _n_noop( 'Revoked <span class="count">(%s)</span>', 'Revoked <span class="count">(%s)</span>', 'kb-support' ),
+		'kb-support'                => true
 	)  );
 	register_post_status( 'closed', array(
 		'label'                     => sprintf( _x( 'Closed', 'Closed %s', 'kb-support' ), kbs_get_ticket_label_plural() ),
@@ -496,11 +499,26 @@ function kbs_register_post_type_statuses() {
 		'exclude_from_search'       => false,
 		'show_in_admin_all_list'    => true,
 		'show_in_admin_status_list' => true,
-		'label_count'               => _n_noop( 'Closed <span class="count">(%s)</span>', 'Closed <span class="count">(%s)</span>', 'kb-support' )
+		'label_count'               => _n_noop( 'Closed <span class="count">(%s)</span>', 'Closed <span class="count">(%s)</span>', 'kb-support' ),
+		'kb-support'                => true
 	)  );
 
 } // kbs_register_post_type_statuses
 add_action( 'init', 'kbs_register_post_type_statuses', 2 );
+
+/**
+ * Retrieve all KB Support Custom Ticket post statuses.
+ *
+ * @since	1.0
+ * @uses	get_post_stati()
+ * @param	str		$output		The type of output to return, either 'names' or 'objects'. Default 'names'.
+ * @return	arr|obj		
+ */
+function kbs_get_post_statuses( $output = 'names' )	{
+	$kbs_post_statuses = get_post_stati( array( 'kb-support' => true ), $output );
+	
+	return $kbs_post_statuses;
+} // kbs_get_post_statuses
 
 /**
  * Updated Messages

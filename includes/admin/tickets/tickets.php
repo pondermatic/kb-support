@@ -21,14 +21,16 @@ function kbs_set_kbs_ticket_post_columns( $columns ) {
 	$columns = array(
         'cb'               => '<input type="checkbox" />',
         'id'               => '#',
-		'date'             => __( 'Date', 'kb-support' ),
+		'dates'            => __( 'Date', 'kb-support' ),
 		'title'            => __( 'Title', 'kb-support' ),
         'author'           => __( 'Customer', 'kb-support' ),
-		'status'           => __( 'Status', 'kb-support' ),
 		'categories'       => __( 'Category', 'kb-support' ),
-        'agent'            => __( 'Agent', 'kb-support' ),
-		'priority'         => __( 'Priority', 'kb-support' )
+        'agent'            => __( 'Agent', 'kb-support' )
     );
+	
+	if ( kbs_get_option( 'sla_tracking' ) )	{
+		$columns['sla'] = __( 'SLA Status', 'kbs-support' );
+	}
 	
 	return apply_filters( 'kbs_ticket_post_columns', $columns );
 	
@@ -45,24 +47,25 @@ add_filter( 'manage_kbs_ticket_posts_columns' , 'kbs_set_kbs_ticket_post_columns
  */
 function kbs_set_kbs_ticket_column_data( $column_name, $post_id ) {
 
+	$kbs_ticket = new KBS_Ticket( $post_id );
+
 	switch ( $column_name ) {
 		case 'id':
-			$output = '<a href="' . get_edit_post_link( $post_id ) . '">#' . $post_id . '</a>';
-			$output .= '<br />';
-			$output .= $post->post_status;
-			echo apply_filters( 'kb_tickets_post_column_id', $output, $post_id );
+			echo kb_tickets_post_column_id( $post_id, $kbs_ticket );
+			break;
+
+		case 'dates':
+			echo kb_tickets_post_column_date( $post_id, $kbs_ticket );
 			break;
 
 		case 'agent':
-			echo $output = '';
-			echo apply_filters( 'kb_tickets_post_column_agent', $output, $post_id );
-			break;
-
-		case 'priority':
-			echo $output = '';
-			echo apply_filters( 'kb_tickets_post_column_priority', $output, $post_id );
+			echo kb_tickets_post_column_agent( $post_id, $kbs_ticket );
 			break;
 			
+		case 'sla':
+			echo kb_tickets_post_column_sla( $post_id, $kbs_ticket );
+			break;
+
 		default:
 			echo __( 'No callback found for post column', 'kb-support' );
 			break;
@@ -70,6 +73,86 @@ function kbs_set_kbs_ticket_column_data( $column_name, $post_id ) {
 
 }
 add_action( 'manage_kbs_ticket_posts_custom_column' , 'kbs_set_kbs_ticket_column_data', 10, 2 );
+
+/**
+ * Output the ID row.
+ *
+ * @since	1.0
+ * @param	int	$ticket_id	The ticket ID
+ * @param	obj	$kbs_ticket	The ticket WP_Post object
+ * @return	str
+ */
+function kb_tickets_post_column_id( $ticket_id, $kbs_ticket )	{
+	do_action( 'kb_pre_tickets_column_id', $kbs_ticket );
+
+	$output = '<a href="' . get_edit_post_link( $ticket_id ) . '">#' . $ticket_id . '</a>';
+	$output .= '<br />';
+	$output .= get_post_status_object( $kbs_ticket->post_status )->label;
+
+	do_action( 'kb_post_tickets_column_id', $kbs_ticket );
+
+	return apply_filters( 'kb_tickets_post_column_id', $output, $ticket_id );
+} // kb_tickets_post_column_id
+
+/**
+ * Output the Date row.
+ *
+ * @since	1.0
+ * @param	int	$ticket_id	The ticket ID
+ * @param	obj	$kbs_ticket	The ticket WP_Post object
+ * @return	str
+ */
+function kb_tickets_post_column_date( $ticket_id, $kbs_ticket )	{
+	do_action( 'kb_pre_tickets_column_date', $kbs_ticket );
+
+	$output  = date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $kbs_ticket->post_date ) );
+	$output .= '<br />';
+	$output .= date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $kbs_ticket->post_modified ) );
+
+	do_action( 'kb_post_tickets_column_date', $kbs_ticket );
+
+	return apply_filters( 'kb_tickets_post_column_date', $output, $ticket_id );
+} // kb_tickets_post_column_date
+
+/**
+ * Output the Agent row.
+ *
+ * @since	1.0
+ * @param	int	$ticket_id	The ticket ID
+ * @param	obj	$kbs_ticket	The ticket WP_Post object
+ * @return	str
+ */
+function kb_tickets_post_column_agent( $ticket_id, $kbs_ticket )	{
+	do_action( 'kb_pre_tickets_column_agent', $kbs_ticket );
+
+	$output = sprintf( '<a href="%s">%s</a>',
+		get_edit_user_link( $kbs_ticket->agent ),
+		get_userdata( $kbs_ticket->agent )->display_name
+	);
+
+	do_action( 'kb_post_tickets_column_agent', $kbs_ticket );
+
+	return apply_filters( 'kb_tickets_post_column_agent', $output, $ticket_id );
+} // kb_tickets_post_column_agent
+
+/**
+ * Output the SLA Status row.
+ *
+ * @since	1.0
+ * @param	int	$ticket_id	The ticket ID
+ * @param	obj	$kbs_ticket	The ticket WP_Post object
+ * @return	str
+ */
+function kb_tickets_post_column_sla( $ticket_id, $kbs_ticket )	{
+	do_action( 'kb_pre_tickets_column_sla', $kbs_ticket );
+
+	$output  = $kbs_ticket->get_target_respond() . '<br />';
+	$output .= $kbs_ticket->get_target_resolve();
+
+	do_action( 'kb_post_tickets_column_sla', $kbs_ticket );
+
+	return apply_filters( 'kb_tickets_post_column_sla', $output, $ticket_id );
+} // kb_tickets_post_column_sla
 
 /**
  * Save the KBS Ticket custom posts

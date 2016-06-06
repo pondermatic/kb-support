@@ -196,7 +196,7 @@ jQuery(document).ready(function ($) {
 					document.getElementById('kbs_meta_field_input_class_wrap').style.display = "block";
 				}
 
-				if ( 'text' == kbs_selected_field || 'textarea' == kbs_selected_field )	{
+				if ( 'text' == kbs_selected_field || 'textarea' == kbs_selected_field || 'rich_editor' == kbs_selected_field )	{
 					document.getElementById('kbs_meta_field_mapping_wrap').style.display = "block";
 				} else	{
 					document.getElementById('kbs_meta_field_mapping_wrap').style.display = "none";

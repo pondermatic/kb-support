@@ -24,16 +24,57 @@ class KBS_Ticket {
 	 * @since	1.0
 	 */
 	public $ID = 0;
-		
+	
+	/**
+	 * The ticket data
+	 *
+	 * @since	1.0
+	 */
+	public $data = array();
+	
+	/**
+	 * The agent assigned to the ticket
+	 *
+	 * @since	1.0
+	 */
+	public $agent = 0;
+
+	/**
+	 * Declare the default properities in WP_Post as we can't extend it
+	 * Anything we've delcared above has been removed.
+	 */
+	public $post_author = 0;
+	public $post_date = '0000-00-00 00:00:00';
+	public $post_date_gmt = '0000-00-00 00:00:00';
+	public $post_content = '';
+	public $post_title = '';
+	public $post_excerpt = '';
+	public $post_status = 'unassigned';
+	public $comment_status = 'closed';
+	public $ping_status = 'closed';
+	public $post_password = '';
+	public $post_name = '';
+	public $to_ping = '';
+	public $pinged = '';
+	public $post_modified = '0000-00-00 00:00:00';
+	public $post_modified_gmt = '0000-00-00 00:00:00';
+	public $post_content_filtered = '';
+	public $post_parent = 0;
+	public $guid = '';
+	public $menu_order = 0;
+	public $post_mime_type = '';
+	public $comment_count = 0;
+	public $filter;
+	
 	/**
 	 * Get things going
 	 *
 	 * @since	1.0
 	 */
-	public function __construct( $_id = false, $_args = array() ) {
+	public function __construct( $_id = false ) {
 		$ticket = WP_Post::get_instance( $_id );
 				
-		return $this->setup_ticket( $ticket, $_args );
+		return $this->setup_ticket( $ticket );
 				
 	} // __construct
 	
@@ -41,11 +82,11 @@ class KBS_Ticket {
 	 * Given the ticket data, let's set the variables
 	 *
 	 * @since	1.0
-	 * @param 	obj		$form	The Ticket post object
+	 * @param 	obj		$ticket	The Ticket post object
 	 * @param	arr		$args	Arguments passed to the class on instantiation
 	 * @return	bool			If the setup was successful or not
 	 */
-	private function setup_ticket( $ticket, $args ) {
+	private function setup_ticket( $ticket ) {
 		
 		if( ! is_object( $ticket ) ) {
 			return false;
@@ -66,8 +107,12 @@ class KBS_Ticket {
 					break;
 			}
 		}
-
-		$this->get_fields();
+		
+		$this->get_data();
+		
+		if ( $this->data )	{
+			$this->get_agent();
+		}
 										
 		return true;
 
@@ -83,7 +128,7 @@ class KBS_Ticket {
 		if( method_exists( $this, 'get_' . $key ) ) {
 			return call_user_func( array( $this, 'get_' . $key ) );
 		} else {
-			return new WP_Error( 'kbs-form-invalid-property', sprintf( __( "Can't get property %s", 'kb-support' ), $key ) );
+			return new WP_Error( 'kbs-ticket-invalid-property', sprintf( __( "Can't get property %s", 'kb-support' ), $key ) );
 		}
 	} // __get
 
@@ -105,28 +150,23 @@ class KBS_Ticket {
 
 		$defaults = array(
 			'post_type'    => 'kbs_ticket',
-			'post_author'  => 1,
+			'post_author'  => is_user_logged_in() ? get_current_user_id() : 1,
 			'post_content' => '',
-			'post_status'  => 'mdjm-enquiry',
+			'post_status'  => 'unassigned',
 			'post_title'   => sprintf( __( 'New %s', 'kb-support' ), kbs_get_ticket_label_singular() )
 		);
 		
 		$default_meta = array(
-			'_mdjm_event_date'               => date( 'Y-m-d' ),
-			'_mdjm_event_dj'                 => ! mdjm_get_option( 'employer' ) ? 1 : 0,
-			'_mdjm_event_playlist_access'    => mdjm_generate_playlist_guest_code(),
-			'_mdjm_event_playlist'           => mdjm_get_option( 'enable_playlists' ) ? 'Y' : 'N',
-			'_mdjm_event_contract'           => mdjm_get_default_event_contract(),
-			'_mdjm_event_cost'               => 0,
-			'_mdjm_event_deposit'            => 0,
-			'_mdjm_event_deposit_status'     => __( 'Due', 'kb-support' ),
-			'_mdjm_event_balance_status'     => __( 'Due', 'kb-support' ),
-			'mdjm_event_type'                => mdjm_get_option( 'event_type_default' ),
-			'mdjm_enquiry_source'            => mdjm_get_option( 'enquiry_source_default' )
+			'__agent'              => is_admin() ? get_current_user_id() : 1,
+			'__target_sla_respond' => kbs_calculate_sla_target_response(),
+			'__target_sla_resolve' => kbs_calculate_sla_target_resolution(),
+			'__source'             => 1
 		);
 
 		$data = wp_parse_args( $data, $defaults );
 		$meta = wp_parse_args( $meta, $default_meta );
+		
+		$data['meta_input'] = array( '_ticket_data' => $meta );
 
 		do_action( 'kbs_pre_create_ticket', $data, $meta );		
 
@@ -134,58 +174,11 @@ class KBS_Ticket {
 
 		$ticket = WP_Post::get_instance( $id );
 
-		if ( $ticket )	{
-			
-			if ( ! empty( $meta['mdjm_event_type'] ) )	{
-				mdjm_set_event_type( $event->ID, $meta['mdjm_event_type'] );
-				$meta['_mdjm_event_name'] = get_term( $meta['mdjm_event_type'], 'event-types' )->name;
-				$meta['_mdjm_event_name'] = apply_filters( 'mdjm_event_name', $meta['_mdjm_event_name'], $id );
-			}
-			
-			if ( ! empty( $meta['mdjm_enquiry_source'] ) )	{
-				mdjm_set_enquiry_source( $event->ID, $meta['mdjm_enquiry_source'] );
-			}
-						
-			if ( ! empty( $meta['_mdjm_event_start'] ) && ! empty( $meta['_mdjm_event_finish'] ) )	{
-				
-				if( date( 'H', strtotime( $meta['_mdjm_event_finish'] ) ) > date( 'H', strtotime( $meta['_mdjm_event_start'] ) ) )	{
-					$meta['_mdjm_event_end_date'] = $meta['_mdjm_event_date'];
-				} else	{
-					$meta['_mdjm_event_end_date'] = date( 'Y-m-d', strtotime( '+1 day', strtotime( $meta['_mdjm_event_date'] ) ) );
-				}
-			}
-			
-			if ( ! empty( $meta['_mdjm_event_package'] ) )	{
-				$meta['_mdjm_event_cost'] += mdjm_get_package_cost( $meta['_mdjm_event_package'] );
-			}
-			
-			if ( ! empty( $meta['_mdjm_event_addons'] ) )	{
-				foreach( $meta['_mdjm_event_addons'] as $addon )	{
-					$meta['_mdjm_event_cost'] += mdjm_get_addon_cost( $addon );
-				}
-			}
-			
-			if ( empty( $meta['_mdjm_event_deposit'] ) )	{
-				$meta['_mdjm_event_deposit'] = mdjm_calculate_deposit( $meta['_mdjm_event_cost'] );
-			}
-			
-			mdjm_update_event_meta( $event->ID, $meta );
-			
-			wp_update_post(
-				array(
-					'ID'         => $id,
-					'post_title' => mdjm_get_event_contract_id( $id ),
-					'post_name'  => mdjm_get_event_contract_id( $id )
-				)
-			);
-			
-		}
-
 		do_action( 'kbs_post_create_ticket', $id, $data );
 		
 		add_action( 'save_post_kbs_ticket', 'kbs_ticket_post_save', 10, 3 );
 
-		return $this->setup_event( $ticket );
+		return $this->setup_ticket( $ticket );
 
 	} // create
 
@@ -198,5 +191,77 @@ class KBS_Ticket {
 	public function get_ID() {
 		return $this->ID;
 	} // get_ID
+	
+	/**
+	 * Retrieve the ticket data
+	 *
+	 * @since	1.0
+	 * @return	int
+	 */
+	public function get_data() {
+		if ( empty( $this->data ) )	{
+			$this->data = get_post_meta( $this->ID, '_ticket_data', true );
+		}
+		
+		return apply_filters( 'kbs_ticket_data', $this->data );
+	} // get_data
+	
+	/**
+	 * Retrieve the assigned agent ID.
+	 *
+	 * @since	1.0
+	 * @return	int
+	 */
+	public function get_agent()	{	
+		if ( empty( $this->agent ) )	{
+			$this->agent = $this->data['__agent'];
+		}
+		
+		return apply_filters( 'kbs_get_agent', $this->agent );
+	} // get_agent
+	
+	/**
+	 * Retrieve the target response time.
+	 *
+	 * @since	1.0
+	 * @return	int
+	 */
+	public function get_target_respond() {
+		$respond = date_i18n( get_option( 'time_format' ) . ' ' . get_option( 'date_format' ), strtotime( $this->data['__target_sla_respond'] ) );
+
+		return apply_filters( 'kbs_get_target_respond', $respond );
+	} // get_target_respond
+	
+	/**
+	 * Retrieve the target resolution time.
+	 *
+	 * @since	1.0
+	 * @return	int
+	 */
+	public function get_target_resolve() {
+		$resolve = date_i18n( get_option( 'time_format' ) . ' ' . get_option( 'date_format' ), strtotime( $this->data['__target_sla_resolve'] ) );
+
+		return apply_filters( 'kbs_get_target_resolve', $resolve );
+	} // get_target_resolve
+	
+	/**
+	 * Retrieve the source used for logging the ticket.
+	 *
+	 * @since	1.0
+	 * @return	str
+	 */
+	public function get_source() {
+		$sources = kbs_get_ticket_log_sources();
+		
+		$ticket_source = $this->data['__source'];
+		
+		if ( array_key_exists( $ticket_source, $sources ) )	{
+			$return = $sources[ $ticket_source ];
+		} else	{
+			$return = __( 'Source could not be found', 'kb-support' );
+		}
+		
+		return apply_filters( 'kbs_get_source', $return );
+	} // get_source
 
 } // KBS_Ticket
