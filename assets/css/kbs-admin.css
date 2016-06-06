@@ -25,6 +25,13 @@ a.kbs-delete:hover { color: #f00; }
 .kbs_ticket_page_kbs-settings .form-table tr > th > h3
 { font-size: 1.2em; font-weight: 600; margin: 0 auto; }
 
+/* SLA Styles
+-------------------------------------------------------------- */
+.kbs_sla_status::before { content: "\f227"; }
+.kbs_sla_status { color: #46b450; }
+.kbs_sla_status_warn { color: #ffba00; }
+.kbs_sla_status_over { color: #dc3232; }
+
 /* Metabox Styles
 -------------------------------------------------------------- */
 #postbox-container-1 .kbs_fields_name_label { width: 80px; }

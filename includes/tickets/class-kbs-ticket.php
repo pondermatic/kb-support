@@ -221,6 +221,22 @@ class KBS_Ticket {
 	} // get_agent
 	
 	/**
+	 * Retrieve the source used for logging the ticket.
+	 *
+	 * @since	1.0
+	 * @return	obj|bool
+	 */
+	public function get_files() {
+		$files = kbs_ticket_has_files( $this->ID );
+
+		if ( ! $files )	{
+			return false;
+		}
+		
+		return $files;
+	} // get_files
+	
+	/**
 	 * Retrieve the target response time.
 	 *
 	 * @since	1.0
@@ -243,6 +259,31 @@ class KBS_Ticket {
 
 		return apply_filters( 'kbs_get_target_resolve', $resolve );
 	} // get_target_resolve
+	
+	/**
+	 * Retrieve the target resolution time.
+	 *
+	 * @since	1.0
+	 * @param	str	$target		'respond' or 'resolve'
+	 * @return	int
+	 */
+	public function get_sla_remain( $target = 'respond' ) {
+		$now = current_time( 'timestamp' );
+
+		if ( $target == 'resolve' )	{
+			$end = strtotime( $this->get_target_resolve() );
+		} else	{
+			$end = strtotime( $this->get_target_respond() );
+		}
+		
+		$diff = human_time_diff( $end, $now );
+		
+		if ( $now > $end )	{
+			$diff .= ' ' . __( 'ago', 'kb-support' );
+		}
+
+		return apply_filters( 'kbs_get_sla_remain', $diff );
+	} // get_sla_remain
 	
 	/**
 	 * Retrieve the source used for logging the ticket.

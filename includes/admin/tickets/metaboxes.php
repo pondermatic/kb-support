@@ -188,21 +188,30 @@ function kbs_ticket_metabox_sla_row( $ticket_id )	{
 		return;
 	}
 	
+	$sla_respond_class  = '';
+	$sla_resolve_class  = '';
+	$sla_respond_remain = '';
+	$sla_resolve_remain = '';
+	
 	if ( $kbs_ticket_update )	{
-		$respond = $kbs_ticket->get_target_respond();
-		$resolve = $kbs_ticket->get_target_resolve();
+		$respond            = $kbs_ticket->get_target_respond();
+		$resolve            = $kbs_ticket->get_target_resolve();
+		$sla_respond_class  = kbs_sla_has_passed( $kbs_ticket->ID ) ? '_over' : '';
+		$sla_resolve_class  = kbs_sla_has_passed( $kbs_ticket->ID, 'resolve' ) ? '_over' : '';
+		$sla_respond_remain = ' ' . $kbs_ticket->get_sla_remain();
+		$sla_resolve_remain = ' ' . $kbs_ticket->get_sla_remain( 'resolve' );
 	} else	{
 		$respond = date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( kbs_calculate_sla_target_response() ) );
 		$resolve = date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( kbs_calculate_sla_target_resolution() ) );
 	}
 	
 	?>
-    
-    <p>&nbsp;<i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;&nbsp;<label><?php _e( 'Respond:', 'kb-support' ); ?></label>
-    	&nbsp;<input type="text" value="<?php echo $respond; ?>" /></p>
+    <p><strong><?php _e( 'SLA Status', 'kb-support' ); ?></strong></p>
+    <p>&nbsp;<i class="fa fa-dot-circle-o fa-lg" aria-hidden="true"></i>&nbsp;&nbsp;<label><?php _e( 'Respond:', 'kb-support' ); ?></label>
+    	&nbsp;<span class="dashicons dashicons-flag kbs_sla_status<?php echo $sla_respond_class; ?>" title="<?php echo $respond; ?>"></span><?php echo $sla_respond_remain; ?></p>
         
-    <p>&nbsp;<i class="fa fa-bullseye" aria-hidden="true"></i>&nbsp;&nbsp;<label><?php _e( 'Resolve:', 'kb-support' ); ?></label>
-    	&nbsp;<input type="text" value="<?php echo $resolve; ?>" /></p>
+    <p>&nbsp;<i class="fa fa-clock-o fa-lg" aria-hidden="true"></i>&nbsp;&nbsp;<label><?php _e( 'Resolve:', 'kb-support' ); ?></label>
+    	&nbsp;<span class="dashicons dashicons-flag kbs_sla_status<?php echo $sla_resolve_class; ?>" title="<?php echo $resolve; ?>"></span><?php echo $sla_resolve_remain; ?></p>
     
     <?php
 } // kbs_ticket_metabox_sla_row
@@ -227,6 +236,46 @@ function kbs_ticket_metabox_details_row( $ticket_id )	{
     </div>
 
     <?php
-	
+		
 } // kbs_ticket_metabox_details_row
 add_action( 'kbs_ticket_detail_fields', 'kbs_ticket_metabox_details_row', 20 );
+
+/**
+ * Display the ticket files row.
+ *
+ * @since	1.0
+ * @global	obj		$kbs_ticket			KBS_Ticket class object
+ * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
+ * @param	int		$ticket_id			The ticket post ID.
+ * @return	str
+ */
+function kbs_ticket_metabox_files_row( $ticket_id )	{
+
+	global $kbs_ticket, $kbs_ticket_update;
+	
+	if ( ! kbs_get_option( 'file_uploads' ) )	{
+		return;
+	}
+
+	if ( $kbs_ticket_update )	{
+
+		$files = $kbs_ticket->get_files();
+		
+		if ( ! $files )	{
+			return;
+		}
+
+		?>
+		<div id="kbs-original-ticket-files-wrap" class="kbs_ticket_files_wrap">
+        	<p><strong><?php _e( 'Attached Files', 'kb-support' ); ?></strong></p>
+			<?php foreach( $files as $file ) : ?>
+                <p><a href="<?php echo wp_get_attachment_url( $file->ID ); ?>" target="_blank"><?php echo basename( get_attached_file( $file->ID ) ); ?></a></p>
+            <?php endforeach; ?>
+		</div>
+	
+		<?php
+
+	}
+		
+} // kbs_ticket_metabox_details_row
+add_action( 'kbs_ticket_detail_fields', 'kbs_ticket_metabox_files_row', 30 );

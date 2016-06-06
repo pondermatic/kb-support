@@ -162,36 +162,6 @@ function kbs_add_ticket_from_form( $form_id, $data )	{
 } // kbs_add_ticket_from_form
 
 /**
- * Attach files to a ticket.
- *
- * @since	1.0
- * @param	arr	$attachment	$_FILES
- * @param	int	$ticket_id		The ticket ID
- * @return	int	The attachment ID.
- */
-function kbs_attach_file_to_ticket( $attachment, $ticket_id )	{
-
-	if ( ! kbs_file_uploads_are_enabled() )	{
-		return false;
-	}
-
-	add_filter( 'upload_dir', 'kbs_set_upload_dir' );
-
-	if ( $_FILES[ $attachment ]['error'] !== UPLOAD_ERR_OK )	{
-		return false;
-	}
- 
-	require_once ABSPATH . 'wp-admin/includes/image.php';
-	require_once ABSPATH . 'wp-admin/includes/file.php';
-	require_once ABSPATH . 'wp-admin/includes/media.php';
- 
-	$attach_id = media_handle_upload( $attachment, $ticket_id );
- 
-	return $attach_id;
-
-} // kbs_attach_file_to_ticket
-
-/**
  * Retrieve the assigned agent.
  *
  * @since	1.0
@@ -203,32 +173,6 @@ function kbs_get_agent( $ticket_id )	{
 	
 	return $kbs_ticket->agent;
 } // kbs_get_agent
-
-/**
- * Retrieve the target SLA response time.
- *
- * @since	1.0
- * @param	int	$ticket_id		The ticket ID
- * @return	str	The target response date/time.
- */
-function kbs_get_target_respond( $ticket_id )	{
-	$kbs_ticket = new KBS_Ticket( $ticket_id );
-	
-	return $kbs_ticket->get_target_respond();
-} // kbs_get_target_respond
-
-/**
- * Retrieve the target SLA resolve time.
- *
- * @since	1.0
- * @param	int	$ticket_id		The ticket ID
- * @return	str	The target resolve date/time.
- */
-function kbs_get_target_resolve( $ticket_id )	{
-	$kbs_ticket = new KBS_Ticket( $ticket_id );
-	
-	return $kbs_ticket->get_target_resolve();
-} // kbs_get_target_resolve
 
 /**
  * Retrieve the source used for logging the ticket.
