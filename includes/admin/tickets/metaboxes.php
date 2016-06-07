@@ -33,7 +33,7 @@ add_action( 'admin_head', 'kbs_ticket_remove_meta_boxes' );
 /**
  * Define and add the metaboxes for the kbs_ticket post type.
  *
- * @since	0.1
+ * @since	1.0
  * @param
  * @return
  */
@@ -64,8 +64,18 @@ function kbs_ticket_add_meta_boxes( $post )	{
 	if ( $kbs_ticket_update )	{
 		add_meta_box(
 			'kbs-ticket-metabox-ticket-details',
-			sprintf( __( '%1$s Details', 'kb-support' ), kbs_get_ticket_label_singular() ),
+			sprintf( __( 'Original %1$s', 'kb-support' ), kbs_get_ticket_label_singular() ),
 			'kbs_ticket_metabox_details_callback',
+			'kbs_ticket',
+			'normal',
+			'high',
+			array()
+		);
+		
+		add_meta_box(
+			'kbs-ticket-metabox-ticket-reply',
+			sprintf( __( 'Reply to %1$s', 'kb-support' ), kbs_get_ticket_label_singular() ),
+			'kbs_ticket_metabox_reply_callback',
 			'kbs_ticket',
 			'normal',
 			'high',
@@ -79,7 +89,7 @@ add_action( 'add_meta_boxes_kbs_ticket', 'kbs_ticket_add_meta_boxes' );
 /**
  * The callback function for the save metabox.
  *
- * @since	0.1
+ * @since	1.0
  * @global	obj		$post				WP_Post object
  * @global	obj		$kbs_ticket			KBS_Ticket class object
  * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new
@@ -91,16 +101,16 @@ function kbs_ticket_metabox_save_callback()	{
 
 	/*
 	 * Output the items for the save metabox
-	 * @since	0.1
+	 * @since	1.0
 	 * @param	int	$post_id	The Ticket post ID
 	 */
 	do_action( 'kbs_ticket_status_fields', $post->ID );
 } // kbs_ticket_metabox_save_callback
 
 /**
- * The callback function for the save metabox.
+ * The callback function for the original ticket details metabox.
  *
- * @since	0.1
+ * @since	1.0
  * @global	obj		$post				WP_Post object
  * @global	obj		$kbs_ticket			KBS_Ticket class object
  * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new
@@ -112,11 +122,32 @@ function kbs_ticket_metabox_details_callback()	{
 
 	/*
 	 * Output the items for the details metabox
-	 * @since	0.1
+	 * @since	1.0
 	 * @param	int	$post_id	The Ticket post ID
 	 */
 	do_action( 'kbs_ticket_detail_fields', $post->ID );
 } // kbs_ticket_metabox_details_callback
+
+/**
+ * The callback function for the ticket reply metabox.
+ *
+ * @since	1.0
+ * @global	obj		$post				WP_Post object
+ * @global	obj		$kbs_ticket			KBS_Ticket class object
+ * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new
+ * @param
+ * @return
+ */
+function kbs_ticket_metabox_reply_callback()	{
+	global $post, $kbs_ticket, $kbs_ticket_update;
+
+	/*
+	 * Output the items for the details metabox
+	 * @since	1.0
+	 * @param	int	$post_id	The Ticket post ID
+	 */
+	do_action( 'kbs_ticket_reply_fields', $post->ID );
+} // kbs_ticket_metabox_reply_callback
 
 /**
  * Display the save ticket metabox row.
@@ -278,3 +309,35 @@ function kbs_ticket_metabox_files_row( $ticket_id )	{
 		
 } // kbs_ticket_metabox_details_row
 add_action( 'kbs_ticket_detail_fields', 'kbs_ticket_metabox_files_row', 30 );
+
+/**
+ * Display the ticket reply row.
+ *
+ * @since	1.0
+ * @global	obj		$kbs_ticket			KBS_Ticket class object
+ * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
+ * @param	int		$ticket_id			The ticket post ID.
+ * @return	str
+ */
+function kbs_ticket_metabox_reply_row( $ticket_id )	{
+
+	global $kbs_ticket, $kbs_ticket_update;
+	
+	if ( ! kbs_get_option( 'file_uploads' ) )	{
+		return;
+	}
+
+	if ( 'closed' == $kbs_ticket->post_status )	{
+		sprintf( __( 'This %1$s is currently closed. <a href="%2$s">Re-open %1$s.</a>', 'kb-support' ),  kbs_get_ticket_label_singular(), add_query_arg( 'kbs-action', 're-open-ticket', get_edit_post_link( $ticket_id ) ) );
+	} else	{
+		$settings = apply_filters( 'kbs_ticket_reply_mce_settings', array(
+			'textarea_rows'    => 5,
+			'drag_drop_upload' => true,
+			'quicktags'        => false
+		) );
+
+		wp_editor( '', 'kbs_ticket_reply', $settings );
+	}
+		
+} // kbs_ticket_metabox_details_row
+add_action( 'kbs_ticket_reply_fields', 'kbs_ticket_metabox_reply_row', 10 );

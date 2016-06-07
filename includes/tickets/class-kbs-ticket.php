@@ -232,7 +232,24 @@ class KBS_Ticket {
 		
 		return apply_filters( 'kbs_get_agent', $this->agent );
 	} // get_agent
-	
+
+	/**
+	 * Retrieve the ticket replies
+	 *
+	 * @since	1.0
+	 * @return	arr
+	 */
+	public function get_replies() {
+		$replies = get_posts( array(
+			'post_type'      => $this->post_type,
+			'post_parent'    => $this->ID,
+			'post_status'    => 'publish',
+			'posts_per_page' => -1
+		) );
+		
+		return apply_filters( 'kbs_ticket_replies', $replies );
+	} // get_replies
+
 	/**
 	 * Retrieve the source used for logging the ticket.
 	 *

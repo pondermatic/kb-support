@@ -200,3 +200,46 @@ function kbs_get_ticket_source( $ticket_id )	{
 	
 	return $kbs_ticket->get_source();
 } // kbs_get_ticket_source
+
+/**
+ * Retrieve the ticket replies.
+ *
+ * @since	1.0
+ * @param	int	$ticket_id		The ticket ID
+ * @return	arr	Array of ticket reply post objects.
+ */
+function kbs_get_ticket_replies( $ticket_id )	{
+	$kbs_ticket = new KBS_Ticket( $ticket_id );
+	
+	return $kbs_ticket->get_replies;
+} // kbs_get_ticket_replies
+
+/**
+ * Re-open a closed ticket.
+ *
+ * @since	1.0
+ * @param	arr	$data		$_GET super global.
+ * @return	void.
+ */
+function kbs_reopen_ticket( $data )	{
+	
+	
+	if ( 'closed' == get_post_status( $data['post'] ) )	{
+		$update = wp_update_post( array(
+			'ID'          => $data['post'],
+			'post_status' => 'assigned'
+		) );
+		
+		if ( $update )	{
+			$message = 'ticket_reopened';
+		}
+	}
+	
+	if ( ! isset( $message ) )	{
+		$message = 'ticket_not_closed';
+	}
+	
+	wp_redirect( add_query_arg( 'kbs-message', $message ) );
+	
+} // kbs_reopen_ticket
+add_action( 'kbs-re-open-ticket', 'kbs_reopen_ticket' );
