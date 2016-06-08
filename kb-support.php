@@ -176,6 +176,7 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/tickets/class-kbs-ticket.php';
 		require_once KBS_PLUGIN_DIR . '/includes/admin/tickets/tickets.php';
 		require_once KBS_PLUGIN_DIR . '/includes/admin/tickets/metaboxes.php';
+		require_once KBS_PLUGIN_DIR . 'includes/tickets/ticket-actions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/tickets/ticket-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/files.php';
 		require_once KBS_PLUGIN_DIR . 'includes/formatting.php';

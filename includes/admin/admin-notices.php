@@ -22,6 +22,33 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 function kbs_admin_messages() {
 	global $kbs_options;
 
+	if( isset( $_GET['kbs-message'] ) && 'nonce_fail' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-nonce-fail',
+			__( 'Security verification failed.', 'kb-support' ),
+			'error'
+		);
+	}
+	
+	if( isset( $_GET['kbs-message'] ) && 'ticket_reopened' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-ticket-reopened',
+			sprintf( __( '%s reopened.', 'kb-support' ), kbs_get_ticket_label_singular() ),
+			'updated'
+		);
+	}
+	
+	if( isset( $_GET['kbs-message'] ) && 'ticket_not_closed' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-ticket-not-closed',
+			sprintf( __( 'The %s cannot be re-opened. It is not closed.', 'kb-support' ), kbs_get_ticket_label_singular() ),
+			'error'
+		);
+	}
+	
 	if( isset( $_GET['kbs-message'] ) && 'field_added' == $_GET['kbs-message'] )	{
 		add_settings_error(
 			'kbs-notices',

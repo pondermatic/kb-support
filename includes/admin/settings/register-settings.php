@@ -237,10 +237,59 @@ function kbs_get_registered_settings() {
 				)
 			)
 		),
-		/** SLA Settings */
-		'sla' => apply_filters( 'kbs_settings_sla',
+		/** Ticket Settings */
+		'tickets' => apply_filters( 'kbs_settings_sla',
 			array(
-				'main' => array(
+				'main'   => array(
+					'ticket_settings_header' => array(
+						'id'   => 'ticket_settings_header',
+						'name' => '<h3>' . sprintf( __( '%s Settings', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</h3>',
+						'type' => 'header'
+					),
+					'auto_assign_agent' => array(
+						'id'      => 'auto_assign_agent',
+						'name'    => __( 'Auto Assign on Access?', 'kb-support' ),
+						'desc'    => sprintf( __( 'If enabled, unassigned %s will be auto assigned to an agent when they access the %s.', 'kb-support' ), kbs_get_ticket_label_plural( true ), kbs_get_ticket_label_singular( true ) ),
+						'type'    => 'checkbox'
+					)
+				),
+				'submit' => array(
+					'submit_settings_header' => array(
+						'id'   => 'submit_settings_header',
+						'name' => '<h3>' . __( 'Submission Settings', 'kb-support' ) . '</h3>',
+						'type' => 'header'
+					),
+					'file_uploads' => array(
+						'id'      => 'file_uploads',
+						'name'    => __( 'Allow File Uploads', 'kb-support' ),
+						'desc'    => sprintf( __( 'Maximum number of files that can be attached during %s creation or response.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+						'type'    => 'number',
+						'size'    => 'small',
+						'max'     => '10',
+						'std'     => '0'
+					),
+					'logged_in_only' => array(
+						'id'      => 'logged_in_only',
+						'name'    => __( 'Disable Guest Submissions?', 'kb-support' ),
+						'desc'    => sprintf( __( 'Require that users be logged in to submit %s.', 'kb-support' ), kbs_get_ticket_label_plural( true ) ),
+						'type'    => 'checkbox',
+						'std'     => '1'
+					),
+					'show_register_form' => array(
+						'id'      => 'show_register_form',
+						'name'    => __( 'Show Register / Login Form?', 'kb-support' ),
+						'desc'    => __( 'Display the registration and login forms on the submission page for non-logged-in users.', 'kb-support' ),
+						'type'    => 'select',
+						'std'     => 'none',
+						'options' => array(
+							'both'         => __( 'Registration and Login Forms', 'kb-support' ),
+							'registration' => __( 'Registration Form Only', 'kb-support' ),
+							'login'        => __( 'Login Form Only', 'kb-support' ),
+							'none'         => __( 'None', 'kb-support' ),
+						)
+					)
+				),
+				'sla' => array(
 					'sla_settings_header' => array(
 						'id'   => 'sla_settings_header',
 						'name' => '<h3>' . __( 'SLA Settings', 'kb-support' ) . '</h3>',
@@ -449,42 +498,6 @@ function kbs_get_registered_settings() {
 						'type'    => 'checkbox'
 					)
 				),
-				'submit' => array(
-					'submit_settings_header' => array(
-						'id'   => 'submit_settings_header',
-						'name' => '<h3>' . __( 'Submission Settings', 'kb-support' ) . '</h3>',
-						'type' => 'header'
-					),
-					'file_uploads' => array(
-						'id'      => 'file_uploads',
-						'name'    => __( 'Allow File Uploads', 'kb-support' ),
-						'desc'    => sprintf( __( 'Maximum number of files that can be attached during %s creation or response.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
-						'type'    => 'number',
-						'size'    => 'small',
-						'max'     => '10',
-						'std'     => '0'
-					),
-					'logged_in_only' => array(
-						'id'      => 'logged_in_only',
-						'name'    => __( 'Disable Guest Submissions?', 'kb-support' ),
-						'desc'    => sprintf( __( 'Require that users be logged in to submit %s.', 'kb-support' ), kbs_get_ticket_label_plural( true ) ),
-						'type'    => 'checkbox',
-						'std'     => '1'
-					),
-					'show_register_form' => array(
-						'id'      => 'show_register_form',
-						'name'    => __( 'Show Register / Login Form?', 'kb-support' ),
-						'desc'    => __( 'Display the registration and login forms on the submission page for non-logged-in users.', 'kb-support' ),
-						'type'    => 'select',
-						'std'     => 'none',
-						'options' => array(
-							'both'         => __( 'Registration and Login Forms', 'kb-support' ),
-							'registration' => __( 'Registration Form Only', 'kb-support' ),
-							'login'        => __( 'Login Form Only', 'kb-support' ),
-							'none'         => __( 'None', 'kb-support' ),
-						)
-					)
-				),
 				'recaptcha'     => array(
 					'recaptcha_settings' => array(
 						'id'   => 'recaptcha_settings',
@@ -663,7 +676,7 @@ function kbs_get_settings_tabs() {
 
 	$tabs             = array();
 	$tabs['general']  = __( 'General', 'kb-support' );
-	$tabs['sla']      = __( 'Service Levels', 'kb-support' );
+	$tabs['tickets']  = sprintf( __( '%s', 'kb-support' ), kbs_get_ticket_label_plural() );
 	$tabs['emails']   = __( 'Emails', 'kb-support' );
 	$tabs['styles']   = __( 'Styles', 'kb-support' );
 
@@ -719,8 +732,10 @@ function kbs_get_registered_settings_sections() {
 			'main'                 => __( 'General Settings', 'kb-support' ),
 			'pages'                => __( 'Pages', 'kb-support' )
 		) ),
-		'sla'        => apply_filters( 'kbs_settings_sections_sla', array(
-			'main'                 => __( 'Service Levels', 'kb-support' )
+		'tickets'        => apply_filters( 'kbs_settings_sections_tickets', array(
+			'main'                 => sprintf( __( 'General %s Settings', 'kb-support' ), kbs_get_ticket_label_singular() ),
+			'submit'               => __( 'Submission Settings', 'kb-support' ),
+			'sla'                  => __( 'Service Levels', 'kb-support' )
 		) ),
 		'emails'     => apply_filters( 'kbs_settings_sections_emails', array(
 			'main'                 => __( 'Emails', 'kb-support' ),
@@ -736,7 +751,6 @@ function kbs_get_registered_settings_sections() {
 		'licenses'   => apply_filters( 'kbs_settings_sections_licenses', array() ),
 		'misc'       => apply_filters( 'kbs_settings_sections_misc', array(
 			'main'                 => __( 'Misc Settings', 'kb-support' ),
-			'submit'               => __( 'Submission Settings', 'kb-support' ),
 			'recaptcha'            => __( 'Google reCaptcha', 'kb-support' ),
 			'site_terms'           => __( 'Terms and Conditions', 'kb-support' )
 		) )

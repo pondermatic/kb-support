@@ -132,6 +132,7 @@ function kbs_load_admin_scripts( $hook ) {
 		'kbs_version'             => KBS_VERSION,
 		'add_new_ticket'          => sprintf( __( 'Add New %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
 		'new_media_ui'            => apply_filters( 'kbs_use_35_media_ui', 1 ),
+		'no_ticket_reply_content' => __( 'There is no content in your reply', 'kb-support' ),
 		'type_to_search'          => sprintf( __( 'Type to search %s', 'kb-support' ), kbs_get_kb_label_plural() ),
 		'search_placeholder'      => sprintf( __( 'Type to search all %s', 'kb-support' ), kbs_get_kb_label_plural() ),
 		'field_label_missing'     => __( 'Enter a Label for your field.', 'kb-support' ),

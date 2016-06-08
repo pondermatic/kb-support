@@ -322,13 +322,12 @@ add_action( 'kbs_ticket_detail_fields', 'kbs_ticket_metabox_files_row', 30 );
 function kbs_ticket_metabox_reply_row( $ticket_id )	{
 
 	global $kbs_ticket, $kbs_ticket_update;
-	
-	if ( ! kbs_get_option( 'file_uploads' ) )	{
-		return;
-	}
 
 	if ( 'closed' == $kbs_ticket->post_status )	{
-		sprintf( __( 'This %1$s is currently closed. <a href="%2$s">Re-open %1$s.</a>', 'kb-support' ),  kbs_get_ticket_label_singular(), add_query_arg( 'kbs-action', 're-open-ticket', get_edit_post_link( $ticket_id ) ) );
+		printf( __( 'This %1$s is currently closed. <a href="%2$s">Re-open %1$s.</a>', 'kb-support' ),
+			kbs_get_ticket_label_singular(),
+			wp_nonce_url( add_query_arg( 'kbs-action', 're-open-ticket', get_edit_post_link( $ticket_id ) ), 'kbs-reopen-ticket', 'kbs-ticket-nonce' )
+		);
 	} else	{
 		$settings = apply_filters( 'kbs_ticket_reply_mce_settings', array(
 			'textarea_rows'    => 5,
@@ -337,6 +336,21 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 		) );
 
 		wp_editor( '', 'kbs_ticket_reply', $settings );
+
+		/*
+		 * Fires immediately before the reply buttons are output
+		 * @since	1.0
+		 * @param	int	$post_id	The Ticket post ID
+		 */
+		do_action( 'kbs_ticket_before_reply_buttons', $ticket_id );
+
+		?>
+        <div id="kbs-ticket-reply-container">
+            <div class="kbs-reply"><a id="kbs-reply-close" class="button button-primary"><?php _e( 'Reply and Close', 'kb-support' ); ?></a></div>
+            <div class="kbs-reply"><a id="kbs-reply-update" class="button button-secondary"><?php _e( 'Reply', 'kb-support' ); ?></a></div>
+        </div>
+        <span id="kbs-loading" class="kbs-loader kbs-hidden"><img src="<?php echo KBS_PLUGIN_URL . 'assets/images/loading.gif'; ?>" /></span>
+        <?php
 	}
 		
 } // kbs_ticket_metabox_details_row

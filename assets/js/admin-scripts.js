@@ -119,6 +119,59 @@ jQuery(document).ready(function ($) {
 	KBS_Settings.init();
 	
 	/**
+	 * Tickets screen JS
+	 */
+	var KBS_Tickets = {
+		init : function() {
+			this.save();
+		},
+		
+		save : function() {
+			// Send Add New Field Requests
+			$( document.body ).on( 'click', '#kbs-reply-close, #kbs-reply-update', function(event) {
+				
+				event.preventDefault();
+
+				if ( $('#kbs_ticket_reply').val().length < 1 )	{
+					alert( kbs_vars.no_ticket_reply_content );
+					return false;
+				}
+
+				var postData         = {
+					ticket_id        : kbs_vars.post_id,
+					close_ticket     : ( event.target.id == 'kbs-reply-close' ? 1 : 0 ),
+					action           : 'kbs_reply_to_ticket'
+				};
+
+				$.ajax({
+					type: "POST",
+					dataType: "json",
+					data: postData,
+					url: ajaxurl,
+					beforeSend: function()	{
+						$("input").prop('disabled', true);
+						$("#kbs-ticket-reply-container").addClass('kbs-hidden');
+						$("#kbs-loading").removeClass('kbs-hidden');
+					},
+					success: function (response) {
+						window.location.href = return_url + '&kbs-message=' + response.message;
+						return true;
+					}
+				}).fail(function (data) {
+					$("input").prop('disabled', false);
+					$("#kbs-ticket-reply-container").removeClass('kbs-hidden');
+					$("#kbs-loading").addClass('kbs-hidden');
+					if ( window.console && window.console.log ) {
+						console.log( data );
+					}
+				});
+
+			});
+		}
+	}
+	KBS_Tickets.init();
+	
+	/**
 	 * Forms screen JS
 	 */
 	var KBS_Forms = {

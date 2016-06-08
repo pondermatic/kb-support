@@ -176,6 +176,75 @@ function kbs_add_ticket_from_form( $form_id, $data )	{
 } // kbs_add_ticket_from_form
 
 /**
+ * Retrieve the ticket meta.
+ *
+ * @since	1.0
+ * @param	int	$ticket_id		The ticket ID
+ * @param	str	$key			The individual key to retrieve
+ * @return	arr	The ticket meta.
+ */
+function kbs_get_ticket_meta( $ticket_id, $key='' )	{
+	$meta = get_post_meta( $post_id, '_ticket_data', true );
+
+	if ( ! empty( $key ) )	{
+		if ( isset( $meta[ $key ] ) )	{
+			$return = apply_filters( 'kbs_ticket_meta_single', $meta[ $key ], $ticket_id, $key );
+		} else	{
+			$return = apply_filters( 'kbs_ticket_meta_single', false, $ticket_id, $key );
+		}
+	} else	{
+		$return = apply_filters( 'kbs_ticket_meta', $meta );
+	}
+
+	return $return;
+} // kbs_get_ticket_meta
+
+/**
+ * Update the ticket meta.
+ *
+ * @since	1.0
+ * @param	int	$ticket_id		The ticket ID
+ * @param	arr	$data			The ticket meta data to update. $key => $value.
+ * @return	arr	The ticket meta.
+ */
+function kbs_update_ticket_meta( $ticket_id, $data )	{
+	$meta         = kbs_get_ticket_meta( $ticket_id );
+	$current_meta = $meta;
+
+	foreach ( $data as $key => $value )	{
+		
+		if( is_array( $value ) )	{
+			$meta[ $key ] = array_map( 'absint', $value );
+		} else	{
+			$meta[ $key ] = $value;
+		}
+		
+	}
+
+	/**
+	 * Fires immediately before updating ticket meta
+	 *
+	 * @since	1.0
+	 * @param	int	$ticket_id		The ticket ID
+	 * @param	arr	$meta			The updated meta data.
+	 * @param	arr	$current_meta	The existing meta data.
+	 */
+	do_action( 'kbs_pre_ticket_meta_update', $ticket_id, $meta, $current_meta );
+
+	update_post_meta( $ticket_id, '_ticket_data', $meta );
+
+	/**
+	 * Fires immediately after updating ticket meta
+	 *
+	 * @since	1.0
+	 * @param	int	$ticket_id		The ticket ID
+	 * @param	arr	$meta			The updated meta data.
+	 */
+	do_action( 'kbs_post_ticket_meta_update', $ticket_id, $meta );
+
+} // kbs_update_ticket_meta
+
+/**
  * Retrieve the assigned agent.
  *
  * @since	1.0
@@ -187,6 +256,42 @@ function kbs_get_agent( $ticket_id )	{
 	
 	return $kbs_ticket->agent;
 } // kbs_get_agent
+
+/**
+ * Assigns an agent to the ticket.
+ *
+ * @since	1.0
+ * @param	int	$ticket_id	The ticket ID to update.
+ * @param	int	$user_id	The agent user ID. If not set, use current user.
+ * @return	mixed.
+ */
+function kbs_assign_agent( $ticket_id, $user_id = 0 )	{
+	if ( empty( $user_id ) )	{
+		$user_id = get_current_user_id();
+	}
+	
+	/**
+	 * Fires immediately before assigning an agent
+	 *
+	 * @since	1.0
+	 * @param	int	$ticket_id		The ticket ID
+	 * @param	int	$user_id		The user ID
+	 */
+	do_action( 'kbs_pre_assign_agent', $ticket_id, $user_id );
+
+	$return = kbs_update_ticket_meta( $ticket_id, array( '__agent' => $user_id ) );
+
+	/**
+	 * Fires immediately after assigning an agent
+	 *
+	 * @since	1.0
+	 * @param	int	$ticket_id		The ticket ID
+	 * @param	int	$user_id		The user ID
+	 */
+	do_action( 'kbs_post_assign_agent', $ticket_id, $user_id );
+
+	return $return;
+} // kbs_assign_agent
 
 /**
  * Retrieve the source used for logging the ticket.
@@ -222,24 +327,34 @@ function kbs_get_ticket_replies( $ticket_id )	{
  * @return	void.
  */
 function kbs_reopen_ticket( $data )	{
+
+	if( ! isset( $data['kbs-ticket-nonce'] ) || ! wp_verify_nonce( $data[ 'kbs-ticket-nonce' ], 'kbs-reopen-ticket' ) )	{
+		$message = 'nonce_fail';
+	} else	{
+		remove_action( 'save_post_kbs_ticket', 'kbs_ticket_post_save', 10, 3 );
 	
-	
-	if ( 'closed' == get_post_status( $data['post'] ) )	{
-		$update = wp_update_post( array(
-			'ID'          => $data['post'],
-			'post_status' => 'assigned'
-		) );
-		
-		if ( $update )	{
-			$message = 'ticket_reopened';
+		if ( 'closed' == get_post_status( $data['post'] ) )	{
+			$update = wp_update_post( array(
+				'ID'          => $data['post'],
+				'post_status' => 'assigned'
+			) );
+			
+			if ( $update )	{
+				$message = 'ticket_reopened';
+			}
 		}
+		
+		if ( ! isset( $message ) )	{
+			$message = 'ticket_not_closed';
+		}
+		
 	}
 	
-	if ( ! isset( $message ) )	{
-		$message = 'ticket_not_closed';
-	}
+	$url = remove_query_arg( array( 'kbs-action', 'kbs-message', 'kbs-ticket-nonce' ) );
 	
-	wp_redirect( add_query_arg( 'kbs-message', $message ) );
-	
+	wp_redirect( add_query_arg( 'kbs-message', $message, $url ) );
+
+	die();
+
 } // kbs_reopen_ticket
 add_action( 'kbs-re-open-ticket', 'kbs_reopen_ticket' );
