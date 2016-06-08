@@ -15,12 +15,71 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
- * 
+ * Retrieve users by role.
  *
- *
- *
- *
+ * @since	1.0
+ * @param	str	$role	Name of the role to retrieve.
+ * @return	mixed
  */
+function kbs_get_users_by_role( $role = array( 'support_agent', 'support_manager' ) )	{
+	global $wpdb;
+
+	$field = $wpdb->prefix.'capabilities';
+
+	$meta_query = array();
+
+	foreach( $role as $_role )	{
+		$meta_query[] = array(
+			'key'     => $field,
+			'value'   => '"' . $_role . '"',
+			'compare' => 'LIKE'
+		);
+	}
+	
+	$user_query = new WP_User_Query( array(
+		'orderby'    => 'display_name',
+		'meta_query' => array(
+			'relation' => 'OR',
+			array(
+				$meta_query
+			)
+		)
+	) );
+	
+	$users = $user_query->get_results();
+	
+	return $users;
+} // kbs_get_users_by_role
+
+/**
+ * Retrieve all customers.
+ *
+ * @since	1.0
+ * @param
+ * @return	mixed
+ */
+function kbs_get_customers()	{
+	$role  = array( 'support_customer' );
+
+	$users = kbs_get_users_by_role( $role );
+	
+	return $users;
+} // kbs_get_customers
+
+/**
+ * Retrieve all agents.
+ *
+ * @since	1.0
+ * @param
+ * @return	mixed
+ */
+function kbs_get_agents()	{
+	$role  = array( 'support_agent', 'support_manager' );
+
+	$users = kbs_get_users_by_role( $role );
+	
+	return $users;
+} // kbs_get_agents
 
 /**
  * Validate a potential username

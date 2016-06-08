@@ -13,6 +13,19 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
+ * Retrieve a ticket.
+ *
+ * @since	1.0
+ * @param	int	$ticket_id	The ticket ID.
+ * @return	@see get_post()
+ */
+function kbs_get_ticket( $ticket_id )	{
+	$ticket = new KBS_Ticket( $ticket_id );
+
+	return apply_filters( 'kbs_get_ticket', $ticket, $ticket_id );
+} // kbs_get_ticket
+
+/**
  * Retrieve the possible sources for logging a ticket.
  *
  * Custom sources can be added by hooking the `kbs_ticket_log_sources` filter.
@@ -184,7 +197,7 @@ function kbs_add_ticket_from_form( $form_id, $data )	{
  * @return	arr	The ticket meta.
  */
 function kbs_get_ticket_meta( $ticket_id, $key='' )	{
-	$meta = get_post_meta( $post_id, '_ticket_data', true );
+	$meta = get_post_meta( $ticket_id, '_ticket_data', true );
 
 	if ( ! empty( $key ) )	{
 		if ( isset( $meta[ $key ] ) )	{

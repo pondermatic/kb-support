@@ -31,7 +31,7 @@ class KBS_HTML_Elements {
 	 * @return	str		$output		Status dropdown
 	 */
 	public function ticket_status_dropdown( $name = 'post_status', $selected = 0 ) {
-		$ticket_statuses = kbs_get_post_statuses( 'labels' );
+		$ticket_statuses = kbs_get_post_statuses( 'labels', true );
 		$options    = array();
 		
 		foreach ( $ticket_statuses as $ticket_status ) {
@@ -170,6 +170,70 @@ class KBS_HTML_Elements {
 
 		return $output;
 	} // month_dropdown
+
+	/**
+	 * Renders an HTML Dropdown of customers
+	 *
+	 * @access	public
+	 * @since	1.0
+	 * @param	str		$name		Name attribute of the dropdown
+	 * @param	int		$selected	Customer to select automatically
+	 * @return	str		$output		Customer dropdown
+	 */
+	public function customer_dropdown( $name = 'post_author', $selected = 0 ) {
+		$options  = array();
+		$selected = empty( $selected ) ? 0 : $selected;
+
+		$customers = kbs_get_customers();
+		
+		if ( $customers )	{
+			foreach( $customers as $customer )	{
+				$options[ $customer->ID ] = $customer->display_name;
+			}
+		}
+
+		$output = $this->select( array(
+			'name'             => $name,
+			'selected'         => $selected,
+			'options'          => $options,
+			'show_option_all'  => __( 'Select a Customer', 'kb-support' ),
+			'show_option_none' => false
+		) );
+
+		return $output;
+	} // customer_dropdown
+	
+	/**
+	 * Renders an HTML Dropdown of agents
+	 *
+	 * @access	public
+	 * @since	1.0
+	 * @param	str		$name		Name attribute of the dropdown
+	 * @param	int		$selected	Agent to select automatically
+	 * @return	str		$output		Agent dropdown
+	 */
+	public function agent_dropdown( $name = 'kbs_agent', $selected = 0 ) {
+		$options  = array();
+		$selected = empty( $selected ) ? 0 : $selected;
+
+		$agents = kbs_get_agents();
+		
+		if ( $agents )	{
+			foreach( $agents as $agent )	{
+				$options[ $agent->ID ] = $agent->display_name;
+			}
+		}
+
+		$output = $this->select( array(
+			'name'             => $name,
+			'selected'         => $selected,
+			'options'          => $options,
+			'show_option_all'  => __( 'Select an Agent', 'kb-support' ),
+			'show_option_none' => false
+		) );
+
+		return $output;
+	} // agent_dropdown
 
 	/**
 	 * Renders an HTML Dropdown

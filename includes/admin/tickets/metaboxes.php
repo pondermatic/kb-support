@@ -171,12 +171,12 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
             <div id="kbs-ticket-actions">
                 <p class="dashicons-before dashicons-post-status">&nbsp;&nbsp;<label for="post_status"><?php _e( 'Status:' ); ?></label>
                     <?php echo KBS()->html->ticket_status_dropdown( 'post_status', $kbs_ticket->post_status ); ?></p>
+
+                    <p class="dashicons-before dashicons-admin-users"></span>&nbsp;&nbsp;<label for="post_author"><?php _e( 'Customer:', 'kb-support' ); ?></label>
+                    <?php echo KBS()->html->customer_dropdown( 'post_author', $kbs_ticket->post_author ); ?></p>
+                    
                     <p class="dashicons-before dashicons-businessman"></span>&nbsp;&nbsp;<label for="kbs_agent"><?php _e( 'Agent:', 'kb-support' ); ?></label>
-                    <?php wp_dropdown_users( array(
-                        'name'     => 'kbs_agent',
-                        'role__in' => array( 'support_manager', 'support_agent' ),
-                        'selected' => ( ! empty( $kbs_ticket->agent ) ? $kbs_ticket->agent : get_current_user_id() )
-                    ) ); ?></p>
+                    <?php echo KBS()->html->agent_dropdown( 'kbs_agent', ( ! empty( $kbs_ticket->agent ) ? $kbs_ticket->agent : get_current_user_id() ) ); ?></p>
                     
                 <?php do_action( 'kbs_ticket_metabox_after_agent', $ticket_id ); ?>
     
@@ -200,7 +200,7 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
     <?php
 	
 } // kbs_ticket_metabox_save_row
-add_action( 'kbs_ticket_status_fields', 'kbs_ticket_metabox_save_row', 10, 100 );
+add_action( 'kbs_ticket_status_fields', 'kbs_ticket_metabox_save_row', 10 );
 
 /**
  * Output the SLA data for the ticket.
@@ -247,6 +247,28 @@ function kbs_ticket_metabox_sla_row( $ticket_id )	{
     <?php
 } // kbs_ticket_metabox_sla_row
 add_action( 'kbs_ticket_metabox_after_agent', 'kbs_ticket_metabox_sla_row', 10 );
+
+/**
+ * Display the customer details row.
+ *
+ * @since	1.0
+ * @global	obj		$kbs_ticket			KBS_Ticket class object
+ * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
+ * @param	int		$ticket_id			The ticket post ID.
+ * @return	str
+ */
+function kbs_ticket_metabox_customer_row( $ticket_id )	{
+
+	global $kbs_ticket, $kbs_ticket_update;
+	
+	?>
+	<div id="kbs-original-ticket-wrap" class="kbs_ticket_wrap">
+        <p><?php echo $kbs_ticket->get_content(); ?></p>
+    </div>
+    <?php
+		
+} // kbs_ticket_metabox_customer_row
+add_action( 'kbs_ticket_detail_fields', 'kbs_ticket_metabox_customer_row', 10 );
 
 /**
  * Display the original ticket details row.

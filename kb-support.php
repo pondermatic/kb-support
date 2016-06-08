@@ -190,6 +190,7 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/form-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/misc-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/login-register.php';
+		require_once KBS_PLUGIN_DIR . 'includes/user-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/shortcodes.php';
 		require_once KBS_PLUGIN_DIR . 'includes/sla.php';
 

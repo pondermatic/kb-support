@@ -49,7 +49,7 @@ class KBS_Ticket {
 	public $post_content = '';
 	public $post_title = '';
 	public $post_excerpt = '';
-	public $post_status = 'unassigned';
+	public $post_status = 'open';
 	public $comment_status = 'closed';
 	public $ping_status = 'closed';
 	public $post_password = '';
@@ -152,12 +152,12 @@ class KBS_Ticket {
 			'post_type'    => 'kbs_ticket',
 			'post_author'  => is_user_logged_in() ? get_current_user_id() : 1,
 			'post_content' => '',
-			'post_status'  => 'unassigned',
+			'post_status'  => 'new',
 			'post_title'   => sprintf( __( 'New %s', 'kb-support' ), kbs_get_ticket_label_singular() )
 		);
 		
 		$default_meta = array(
-			'__agent'              => is_admin() ? get_current_user_id() : 1,
+			'__agent'              => 0,
 			'__target_sla_respond' => kbs_calculate_sla_target_response(),
 			'__target_sla_resolve' => kbs_calculate_sla_target_resolution(),
 			'__source'             => 1

@@ -466,42 +466,46 @@ function kbs_get_taxonomy_labels( $taxonomy = 'ticket_category' ) {
 function kbs_register_post_type_statuses() {
 
 	// Ticket Statuses
-	register_post_status( 'unassigned', array(
-		'label'                     => sprintf( _x( 'Unassigned', 'Unassigned %s', 'kb-support' ), kbs_get_ticket_label_plural() ),
+	register_post_status( 'new', apply_filters( 'kbs_register_post_status_new', array(
+		'label'                     => sprintf( _x( 'New', 'New %s', 'kb-support' ), kbs_get_ticket_label_plural() ),
 		'public'                    => true,
 		'exclude_from_search'       => false,
 		'show_in_admin_all_list'    => true,
 		'show_in_admin_status_list' => true,
-		'label_count'               => _n_noop( 'Unassigned <span class="count">(%s)</span>', 'Unassigned <span class="count">(%s)</span>', 'kb-support' ),
-		'kb-support'                => true
-	) );
-	register_post_status( 'assigned', array(
-		'label'                     => sprintf( _x( 'Assigned', 'Assigned %s', 'kb-support' ), kbs_get_ticket_label_plural() ),
+		'label_count'               => _n_noop( 'New <span class="count">(%s)</span>', 'New <span class="count">(%s)</span>', 'kb-support' ),
+		'kb-support'                => true,
+		'kbs_select_allowed'        => false
+	) ) );
+	register_post_status( 'open', apply_filters( 'kbs_register_post_status_open', array(
+		'label'                     => sprintf( _x( 'Open', 'Open %s', 'kb-support' ), kbs_get_ticket_label_plural() ),
 		'public'                    => true,
 		'exclude_from_search'       => false,
 		'show_in_admin_all_list'    => true,
 		'show_in_admin_status_list' => true,
-		'label_count'               => _n_noop( 'Assigned <span class="count">(%s)</span>', 'Assigned <span class="count">(%s)</span>', 'kb-support' ),
-		'kb-support'                => true
-	)  );
-	register_post_status( 'hold', array(
-		'label'                     =>  sprintf( _x( '%s On Hold', '%s on Hold', 'kb-support' ), kbs_get_ticket_label_singular() ),
+		'label_count'               => _n_noop( 'Open <span class="count">(%s)</span>', 'Open <span class="count">(%s)</span>', 'kb-support' ),
+		'kb-support'                => true,
+		'kbs_select_allowed'        => true
+	) ) );
+	register_post_status( 'hold', apply_filters( 'kbs_register_post_status_hold', array(
+		'label'                     =>  sprintf( _x( 'On Hold', '%s on Hold', 'kb-support' ), kbs_get_ticket_label_plural() ),
 		'public'                    => true,
 		'exclude_from_search'       => false,
 		'show_in_admin_all_list'    => true,
 		'show_in_admin_status_list' => true,
-		'label_count'               => _n_noop( 'Revoked <span class="count">(%s)</span>', 'Revoked <span class="count">(%s)</span>', 'kb-support' ),
-		'kb-support'                => true
-	)  );
-	register_post_status( 'closed', array(
+		'label_count'               => _n_noop( 'On Hold <span class="count">(%s)</span>', 'On Hold <span class="count">(%s)</span>', 'kb-support' ),
+		'kb-support'                => true,
+		'kbs_select_allowed'        => true
+	) ) );
+	register_post_status( 'closed', apply_filters( 'kbs_register_post_status_closed', array(
 		'label'                     => sprintf( _x( 'Closed', 'Closed %s', 'kb-support' ), kbs_get_ticket_label_plural() ),
 		'public'                    => true,
 		'exclude_from_search'       => false,
 		'show_in_admin_all_list'    => true,
 		'show_in_admin_status_list' => true,
 		'label_count'               => _n_noop( 'Closed <span class="count">(%s)</span>', 'Closed <span class="count">(%s)</span>', 'kb-support' ),
-		'kb-support'                => true
-	)  );
+		'kb-support'                => true,
+		'kbs_select_allowed'        => true
+	) ) );
 
 } // kbs_register_post_type_statuses
 add_action( 'init', 'kbs_register_post_type_statuses', 2 );
@@ -511,11 +515,18 @@ add_action( 'init', 'kbs_register_post_type_statuses', 2 );
  *
  * @since	1.0
  * @uses	get_post_stati()
- * @param	str		$output		The type of output to return, either 'names' or 'objects'. Default 'names'.
+ * @param	str		$output			The type of output to return, either 'names' or 'objects'. Default 'names'.
+ * @param	bool	$allowed_only	If true, only statuses with the kbs_select_allowed true value are returned. False for all.
  * @return	arr|obj		
  */
-function kbs_get_post_statuses( $output = 'names' )	{
-	$kbs_post_statuses = get_post_stati( array( 'kb-support' => true ), $output );
+function kbs_get_post_statuses( $output = 'names', $allowed_only = false )	{
+	$args['kb-support'] = true;
+	
+	if ( ! empty( $allowed_only ) )	{
+		$args['kbs_select_allowed'] = true;
+	}
+	
+	$kbs_post_statuses = get_post_stati( $args, $output );
 	
 	return $kbs_post_statuses;
 } // kbs_get_post_statuses

@@ -14,19 +14,24 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Assigns the currently logged in agent to the ticket if the current
- * status is unassigned.
+ * is unassigned.
  *
  * @since	1.0
  * @param
  * @return	void
  */
-function kbs_ticket_auto_assign_agent_action()	{
-	global $post;
+function kbs_auto_assign_agent_to_ticket_action()	{
 	
-	if ( 'kbs_ticket' != get_post_type( $post->ID ) || 'unassigned' != get_post_status( $post->ID ) || ! kbs_get_option( 'auto_assign_agent', false ) )	{
+	if ( ! isset( $_GET['post'] ) || ! kbs_get_option( 'auto_assign_agent', false ) )	{
+		return;
+	}
+	
+	$kbs_ticket = new KBS_Ticket( $_GET['post'] );
+	
+	if ( 'new' != $kbs_ticket->post_status || ! empty( $kbs_ticket->agent ) )	{
 		return;
 	}
 
-	kbs_assign_agent( $post->ID );
+	kbs_assign_agent( $kbs_ticket->ID );
 } // kbs_ticket_auto_assign_agent_action
-add_action( 'load-post.php', 'kbs_ticket_auto_assign_agent_action' );
+add_action( 'load-post.php', 'kbs_auto_assign_agent_to_ticket_action' );
