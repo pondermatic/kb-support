@@ -60,7 +60,7 @@ a.kbs-delete:hover { color: #f00; }
 #kbs_meta_field_placeholder_wrap,
 #kbs_meta_field_hide_label_wrap	{ display: none; }
 
-.kbs_ticket_wrap p textarea	{ margin: 4px 0; width: 100%; min-height: 200px; height: auto; }
+#kbs-ticket-content-container.kbs_ticket_wrap p	{ margin: 4px 0; width: 100%; height: auto; }
 #kbs-ticket-reply-container { width: 100%; height: 20px; padding-top: 20px; padding-bottom: 20px; }
 .kbs-reply { float: left; padding-right: 20px; }
 

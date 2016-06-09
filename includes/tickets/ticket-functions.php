@@ -189,6 +189,66 @@ function kbs_add_ticket_from_form( $form_id, $data )	{
 } // kbs_add_ticket_from_form
 
 /**
+ * Update the status of a ticket.
+ *
+ * @since	1.0
+ * @param	$ticket_id	The ticket ID
+ * @param	$status		The status to be set for the ticket.
+ * @return	mixed.
+ */
+function kbs_set_ticket_status( $ticket_id, $status='open' )	{
+	if ( 'kbs_ticket' != get_post_type( $ticket_id ) )	{
+		return false;
+	}
+
+	remove_action( 'save_post_kbs_ticket', 'kbs_ticket_post_save', 10, 3 );
+
+	/**
+	 * Fires immediately before updating the ticket status.
+	 * @since	1.0
+	 * @param	int	$ticket_id
+	 * @param	str	$status		The new ticket status to be assigned.
+	 */
+	do_action( 'kbs_pre_update_ticket_status', $ticket_id, $status );
+
+	/**
+	 * Fires pre update but is more granular as can be hooked for specific status'
+	 * @since	1.0
+	 * @param	@see do_action( 'kbs_pre_update_ticket_status' )
+	 */
+	do_action( 'kbs_pre_update_ticket_status_' . $status, $ticket_id, $status );
+
+	$old_status = get_post_status( $ticket_id );
+
+	$update = wp_update_post(
+		array( 
+			'ID'          => $ticket_id,
+			'post_status' => $status
+		)
+	);
+	
+	/**
+	 * Fires immediately after updating the ticket status.
+	 * @since	1.0
+	 * @param	int	$ticket_id
+	 * @param	str	$old_status	The ticket status prior to being updated.
+	 * @param	str	$status		The new ticket status that was assigned.
+	 */
+	do_action( 'kbs_post_update_ticket_status', $ticket_id, $old_status, $status );
+
+	/**
+	 * Fires post update but is more granular as can be hooked for specific status'
+	 * @since	1.0
+	 * @param	@see do_action( 'kbs_post_update_ticket_status' )
+	 */
+	do_action( 'kbs_post_update_ticket_status_' . $status, $ticket_id, $old_status, $status );
+
+	add_action( 'save_post_kbs_ticket', 'kbs_ticket_post_save', 10, 3 );
+
+	return $update;
+} // kbs_set_ticket_status
+
+/**
  * Retrieve the ticket meta.
  *
  * @since	1.0
@@ -349,7 +409,7 @@ function kbs_reopen_ticket( $data )	{
 		if ( 'closed' == get_post_status( $data['post'] ) )	{
 			$update = wp_update_post( array(
 				'ID'          => $data['post'],
-				'post_status' => 'assigned'
+				'post_status' => 'open'
 			) );
 			
 			if ( $update )	{
@@ -371,3 +431,20 @@ function kbs_reopen_ticket( $data )	{
 
 } // kbs_reopen_ticket
 add_action( 'kbs-re-open-ticket', 'kbs_reopen_ticket' );
+
+/**
+ * Update the ticket status to open if the status is currently new.
+ *
+ * This function is called from the `kbs_post_assign_agent` hook which is fired
+ * after an agent is assigned to a ticket.
+ *
+ * @since	1.0
+ * @param	int		$ticket_id	The Ticket ID
+ * @return	void.
+ */
+function kbs_ticket_status_from_new_to_open( $ticket_id )	{
+	if ( 'new' == get_post_status( $ticket_id ) )	{
+		kbs_set_ticket_status( $ticket_id, 'open' );
+	}
+}
+add_action( 'kbs_post_assign_agent', 'kbs_ticket_status_from_new_to_open' );

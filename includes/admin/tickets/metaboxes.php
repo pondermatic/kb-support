@@ -65,7 +65,7 @@ function kbs_ticket_add_meta_boxes( $post )	{
 		add_meta_box(
 			'kbs-ticket-metabox-ticket-details',
 			sprintf( __( 'Original %1$s', 'kb-support' ), kbs_get_ticket_label_singular() ),
-			'kbs_ticket_metabox_details_callback',
+			'kbs_ticket_metabox_data_callback',
 			'kbs_ticket',
 			'normal',
 			'high',
@@ -117,7 +117,7 @@ function kbs_ticket_metabox_save_callback()	{
  * @param
  * @return
  */
-function kbs_ticket_metabox_details_callback()	{
+function kbs_ticket_metabox_data_callback()	{
 	global $post, $kbs_ticket, $kbs_ticket_update;
 
 	/*
@@ -125,8 +125,8 @@ function kbs_ticket_metabox_details_callback()	{
 	 * @since	1.0
 	 * @param	int	$post_id	The Ticket post ID
 	 */
-	do_action( 'kbs_ticket_detail_fields', $post->ID );
-} // kbs_ticket_metabox_details_callback
+	do_action( 'kbs_ticket_data_fields', $post->ID );
+} // kbs_ticket_metabox_data_callback
 
 /**
  * The callback function for the ticket reply metabox.
@@ -262,13 +262,13 @@ function kbs_ticket_metabox_customer_row( $ticket_id )	{
 	global $kbs_ticket, $kbs_ticket_update;
 	
 	?>
-	<div id="kbs-original-ticket-wrap" class="kbs_ticket_wrap">
-        <p><?php echo $kbs_ticket->get_content(); ?></p>
+	<div id="kbs-ticket-customer-container" class="kbs_ticket_wrap">
+        <p><?php printf( __( 'Received', 'kb-support' ) ); ?></p>
     </div>
     <?php
 		
 } // kbs_ticket_metabox_customer_row
-add_action( 'kbs_ticket_detail_fields', 'kbs_ticket_metabox_customer_row', 10 );
+add_action( 'kbs_ticket_data_fields', 'kbs_ticket_metabox_customer_row', 10 );
 
 /**
  * Display the original ticket details row.
@@ -279,18 +279,19 @@ add_action( 'kbs_ticket_detail_fields', 'kbs_ticket_metabox_customer_row', 10 );
  * @param	int		$ticket_id			The ticket post ID.
  * @return	str
  */
-function kbs_ticket_metabox_details_row( $ticket_id )	{
+function kbs_ticket_metabox_content_row( $ticket_id )	{
 
 	global $kbs_ticket, $kbs_ticket_update;
 	
 	?>
-	<div id="kbs-original-ticket-wrap" class="kbs_ticket_wrap">
+	<div id="kbs-ticket-content-container" class="kbs_ticket_wrap">
+    	<p><strong><?php printf( __( '%s Content', 'kb-support' ), kbs_get_ticket_label_singular() ); ?></strong></p>
         <p><?php echo $kbs_ticket->get_content(); ?></p>
     </div>
     <?php
 		
 } // kbs_ticket_metabox_details_row
-add_action( 'kbs_ticket_detail_fields', 'kbs_ticket_metabox_details_row', 20 );
+add_action( 'kbs_ticket_data_fields', 'kbs_ticket_metabox_content_row', 20 );
 
 /**
  * Display the ticket files row.

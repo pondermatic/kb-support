@@ -24,26 +24,9 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 function kbs_get_users_by_role( $role = array( 'support_agent', 'support_manager' ) )	{
 	global $wpdb;
 
-	$field = $wpdb->prefix.'capabilities';
-
-	$meta_query = array();
-
-	foreach( $role as $_role )	{
-		$meta_query[] = array(
-			'key'     => $field,
-			'value'   => '"' . $_role . '"',
-			'compare' => 'LIKE'
-		);
-	}
-	
 	$user_query = new WP_User_Query( array(
 		'orderby'    => 'display_name',
-		'meta_query' => array(
-			'relation' => 'OR',
-			array(
-				$meta_query
-			)
-		)
+		'role__in' => $role
 	) );
 	
 	$users = $user_query->get_results();
@@ -75,6 +58,10 @@ function kbs_get_customers()	{
  */
 function kbs_get_agents()	{
 	$role  = array( 'support_agent', 'support_manager' );
+
+	if ( kbs_get_option( 'admin_agents', false ) )	{
+		$role[] = 'administrator';
+	}
 
 	$users = kbs_get_users_by_role( $role );
 	

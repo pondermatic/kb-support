@@ -249,8 +249,15 @@ function kbs_get_registered_settings() {
 					'auto_assign_agent' => array(
 						'id'      => 'auto_assign_agent',
 						'name'    => __( 'Auto Assign on Access?', 'kb-support' ),
-						'desc'    => sprintf( __( 'If enabled, unassigned %s will be auto assigned to an agent when they access the %s.', 'kb-support' ), kbs_get_ticket_label_plural( true ), kbs_get_ticket_label_singular( true ) ),
+						'desc'    => sprintf( __( 'If enabled, unassigned %1$s will be auto assigned to an agent when they access the %2$s. The %2$s status will also update to <code>open</code> if currently <code>new</code>', 'kb-support' ), kbs_get_ticket_label_plural( true ), kbs_get_ticket_label_singular( true ) ),
 						'type'    => 'checkbox'
+					),
+					'admin_agents' => array(
+						'id'      => 'admin_agents',
+						'name'    => __( 'Administrators are Agents?', 'kb-support' ),
+						'desc'    => __( 'If enabled, users with the <code>Administrator</code> role will also be Support Agents.', 'kb-support' ),
+						'type'    => 'checkbox',
+						'std'     => '1'
 					)
 				),
 				'submit' => array(
