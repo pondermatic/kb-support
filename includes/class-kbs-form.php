@@ -112,7 +112,7 @@ class KBS_Form {
 	 */
 	public function get_shortcode() {
 
-		$shortcode = '[kbs_form id="' . $this->ID . '"]';
+		$shortcode = '[kbs_submit form="' . $this->ID . '"]';
 
 		return $shortcode;
 	} // get_shortcode
@@ -345,7 +345,6 @@ class KBS_Form {
 	 * @return	mixed	Field post object if successful, otherwise false.
 	 */
 	public function delete_field( $field_id )	{
-
 		if ( 'kbs_form_field' != get_post_type( $field_id ) )	{
 			return false;
 		}
@@ -382,12 +381,10 @@ class KBS_Form {
 	 * @return	int		Submission count.
 	 */
 	public function get_submission_count()	{
-		$submissions = 0;
+		$submissions = get_post_meta( $this->ID, '_submission_count', true );
 
-		$count = get_post_meta( $this->ID, '_submission_count', true );
-
-		if ( $count )	{
-			$submissions = $count;
+		if ( ! $submissions )	{
+			$submissions = 0;
 		}
 
 		return $submissions;

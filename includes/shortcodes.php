@@ -57,7 +57,7 @@ add_shortcode( 'kbs_register', 'kbs_register_form_shortcode' );
 /**
  * Ticket Form Shortcode
  *
- * Shows a registration form allowing users to users to register for the site.
+ * Displays the ticket submission form
  *
  * @since	0.1
  * @param	arr		$atts		Shortcode attributes

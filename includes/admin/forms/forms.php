@@ -21,6 +21,7 @@ function kbs_set_kbs_form_post_columns( $columns ) {
 	$columns = array(
         'cb'          => '<input type="checkbox" />',
 		'title'       => __( 'Name', 'kb-support' ),
+		'shortcode'   => __( 'Shortcode', 'kb-support' ),
 		'author'      => __( 'Author', 'kb-support' ),
 		'fields'      => __( 'Field Count', 'kb-support' ),
 		'submissions' => __( 'Submissions', 'kb-support' ),
@@ -46,6 +47,10 @@ function kbs_set_kbs_form_column_data( $column_name, $post_id ) {
 	switch ( $column_name ) {
 		case 'fields':
 			echo count( $kbs_form->get_fields() );
+			break;
+
+		case 'shortcode':
+			echo '<code>' . $kbs_form->get_shortcode() . '</code>';
 			break;
 
 		case 'submissions':
