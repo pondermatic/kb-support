@@ -4,7 +4,7 @@
  *
  * @package		KBS
  * @subpackage	Posts/Forms
- * @since		0.1
+ * @since		1.0
  */
 
 // Exit if accessed directly
@@ -14,46 +14,46 @@ if ( ! defined( 'ABSPATH' ) )
 /**
  * KBS_Form Class
  *
- * @since	0.1
+ * @since	1.0
  */
 class KBS_Form {
-	
+
 	/**
 	 * The form ID
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 */
 	public $ID = 0;
-		
+
 	/**
 	 * The form fields
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 */
 	private $fields;
-		
+
 	/**
 	 * Get things going
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 */
 	public function __construct( $_id = false, $_args = array() ) {
 		$form = WP_Post::get_instance( $_id );
-				
+
 		return $this->setup_form( $form, $_args );
-				
+
 	} // __construct
-	
+
 	/**
 	 * Given the form data, let's set the variables
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 * @param 	obj		$form	The Form post object
 	 * @param	arr		$args	Arguments passed to the class on instantiation
 	 * @return	bool			If the setup was successful or not
 	 */
 	private function setup_form( $form, $args ) {
-		
+
 		if( ! is_object( $form ) ) {
 			return false;
 		}
@@ -65,7 +65,7 @@ class KBS_Form {
 		if( 'kbs_form' !== $form->post_type ) {
 			return false;
 		}
-		
+
 		foreach ( $form as $key => $value ) {
 			switch ( $key ) {
 				default:
@@ -75,7 +75,7 @@ class KBS_Form {
 		}
 
 		$this->get_fields();
-										
+
 		return true;
 
 	} // setup_form
@@ -83,10 +83,10 @@ class KBS_Form {
 	/**
 	 * Magic __get function to dispatch a call to retrieve a private property
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 */
 	public function __get( $key ) {
-		
+
 		if( method_exists( $this, 'get_' . $key ) ) {
 			return call_user_func( array( $this, 'get_' . $key ) );
 		} else {
@@ -97,7 +97,7 @@ class KBS_Form {
 	/**
 	 * Retrieve the ID
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 * @return	int
 	 */
 	public function get_ID() {
@@ -107,31 +107,31 @@ class KBS_Form {
 	/**
 	 * Retrieve the form shortcode.
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 * @return	str
 	 */
 	public function get_shortcode() {
-		
+
 		$shortcode = '[kbs_form id="' . $this->ID . '"]';
-		
+
 		return $shortcode;
 	} // get_shortcode
 
 	/**
 	 * Adds a form field.
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 * @param	arr		$data	Field data.
 	 * @return	mixed.
 	 */
 	public function add_field( $data )	{
-		
+
 		if ( ! isset( $data['form_id'], $data['label'], $data['type'] ) )	{
 			return false;
 		}
 
 		do_action( 'kbs_pre_add_form_field', $data );
-		
+
 		$settings = array(
 			'type'            => $data['type'],
 			'mapping'         => ! empty( $data['mapping'] )         ? $data['mapping']                         : '',
@@ -146,9 +146,9 @@ class KBS_Form {
 			'placeholder'     => ! empty( $data['placeholder'] )     ? $data['placeholder']                     : '',
 			'hide_label'      => ! empty( $data['hide_label'] )      ? true                                     : false
 		);
-		
+
 		$settings = apply_filters( 'kbs_new_form_field_settings', $settings );
-		
+
 		$args = array(
 			'post_type'    => 'kbs_form_field',
 			'post_title'   => $data['label'],
@@ -159,32 +159,32 @@ class KBS_Form {
 			'menu_order'   => isset( $data['menu_order'] ) ? $data['menu_order'] : $this->get_next_order(),
 			'meta_input'   => array( '_kbs_field_settings' => $settings )
 		);
-		
+
 		$args = apply_filters( 'kbs_post_add_form_field_args', $args );
-		
+
 		$field_id = wp_insert_post( $args );
-		
+
 		do_action( 'kbs_post_add_form_field', $data );
-		
+
 		return $field_id;
-		
+
 	} // add_field
-	
+
 	/**
 	 * Saves a form field.
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 * @param	arr		$data	Field data.
 	 * @return	mixed.
 	 */
 	public function save_field( $data )	{
-		
+
 		if ( ! isset( $data['field_id'], $data['label'], $data['type'] ) )	{
 			return false;
 		}
 
 		do_action( 'kbs_pre_save_form_field', $data );
-		
+
 		$settings = array(
 			'type'            => $data['type'],
 			'mapping'         => ! empty( $data['mapping'] )         ? $data['mapping']                         : '',
@@ -199,7 +199,7 @@ class KBS_Form {
 			'placeholder'     => ! empty( $data['placeholder'] )     ? $data['placeholder']                     : '',
 			'hide_label'      => ! empty( $data['hide_label'] )      ? true                                     : false
 		);
-		
+
 		$args = array(
 			'ID'           => $data['field_id'],
 			'post_title'   => $data['label'],
@@ -207,21 +207,21 @@ class KBS_Form {
 			'post_content' => '',
 			'meta_input'   => array( '_kbs_field_settings' => $settings )
 		);
-		
+
 		$args = apply_filters( 'kbs_post_save_form_field_args', $args );
-		
+
 		$field_id = wp_update_post( $args );
-		
+
 		do_action( 'kbs_post_save_form_field', $data );
-		
+
 		return $field_id;
-		
+
 	} // save_field
 
 	/**
 	 * Determine if a mapping is in use.
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 * @param	str		The mapping to check.
 	 * @return	str
 	 */
@@ -233,19 +233,19 @@ class KBS_Form {
 				return true;
 			}
 		}
-		
+
 		return false;
 	} // has_mapping
 
 	/**
 	 * Retrieve the form fields.
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 * @return	obj
 	 */
 	public function get_fields() {
-		
-		if( ! isset( $this->fields ) )	{
+
+		if ( ! isset( $this->fields ) )	{
 
 			$args = array(
 				'posts_per_page' => -1,
@@ -255,16 +255,16 @@ class KBS_Form {
 				'orderby'        => 'menu_order',
 				'order'          => 'ASC'
 			);
-			
+
 			$args = apply_filters( 'kbs_get_fields', $args );
-			
+
 			$this->fields = get_posts( $args );
 
 		}
-		
+
 		return $this->fields;
 	} // get_fields
-	
+
 	/*
 	 * Get the next positional order for the field.
 	 *
@@ -272,7 +272,7 @@ class KBS_Form {
 	 * @return	int		Field position.
 	 */
 	public function get_next_order()	{
-		
+
 		$args = array(
 			'posts_per_page' => 1,
 			'post_type'      => 'kbs_form_field',
@@ -281,11 +281,11 @@ class KBS_Form {
 			'orderby'        => 'menu_order',
 			'order'          => 'DESC'
 		);
-		
+
 		$order = 1;
-		
+
 		$fields = get_posts( $args );
-		
+
 		if ( $fields )	{
 			if ( ! empty( $fields[0]->menu_order ) )	{
 				$order = $fields[0]->menu_order;
@@ -294,9 +294,9 @@ class KBS_Form {
 		}
 
 		return (int) $order;
-		
+
 	} // get_next_order
-		
+
 	/*
 	 * Get the field settings
 	 *
@@ -304,17 +304,17 @@ class KBS_Form {
 	 * @return	arr		$field_settings	Array of field meta data
 	 */
 	public function get_field_settings( $field_id )	{
-		
+
 		$field_settings = get_post_meta( $field_id, '_kbs_field_settings', true );
-		
+
 		return apply_filters( 'kbs_field_settings', $field_settings, $field_id );
-		
+
 	} // get_field_settings
-	
+
 	/**
 	 * Deletes a form.
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 * @param	int		$form_id	The form post ID.
 	 * @return	mixed	Field post object if successful, otherwise false.
 	 */
@@ -325,7 +325,7 @@ class KBS_Form {
 		}
 
 		do_action( 'kbs_pre_delete_form', $form_id );
-		
+
 		foreach ( $this->fields as $field )	{
 			$this->delete_field( $field->ID );
 		}
@@ -336,11 +336,11 @@ class KBS_Form {
 
 		return $result;
 	} // delete_form
-	
+
 	/**
 	 * Deletes a field.
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 * @param	int		$field_id	The field post ID.
 	 * @return	mixed	Field post object if successful, otherwise false.
 	 */
@@ -358,11 +358,11 @@ class KBS_Form {
 
 		return $result;
 	} // delete_field
-	
+
 	/**
 	 * Displays a field.
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 * @param	obj		$field		The field post object.
 	 * @param	arr		$settings	The field settings.
 	 * @return	str		The field.
@@ -370,9 +370,40 @@ class KBS_Form {
 	public function display_field( $field, $settings )	{
 		/*
 		 * Output the field
-		 * @since	0.1
+		 * @since	1.0
 		 */
 		do_action( 'kbs_form_display_' . $settings['type'] . '_field', $field, $settings );
 	} // display_field
+
+	/**
+	 * Get the submission count.
+	 *
+	 * @since	1.0
+	 * @return	int		Submission count.
+	 */
+	public function get_submission_count()	{
+		$submissions = 0;
+
+		$count = get_post_meta( $this->ID, '_submission_count', true );
+
+		if ( $count )	{
+			$submissions = $count;
+		}
+
+		return $submissions;
+	} // get_submission_count
+
+	/**
+	 * Increment the submission count.
+	 *
+	 * @since	1.0
+	 * @return	void.
+	 */
+	public function increment_submissions()	{
+		$submissions = $this->get_submission_count();
+		$submissions++;
+
+		update_post_meta( $this->ID, '_submission_count', $submissions );
+	} // get_submission_count
 
 } // MDJM_DCF_Form

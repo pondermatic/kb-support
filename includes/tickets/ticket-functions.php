@@ -124,7 +124,7 @@ function kbs_add_ticket( $data, $meta, $attachments = array() )	{
 	 * @param	arr		$data		Post data. See wo_insert_post.
 	 * @param	arr		$meta		Meta data.
 	 */
-	do_action( 'kbs_post_add_ticket', $ticket->ID, $data, $meta );
+	do_action( 'kbs_post_add_ticket', $ticket->ID );
 
 	return $ticket->ID;
 
@@ -179,6 +179,8 @@ function kbs_add_ticket_from_form( $form_id, $data )	{
 			$args['post_content'] = $meta_content;
 		}
 	}
+
+	$kbs_form->increment_submissions();
 
 	$args        = apply_filters( 'kbs_add_ticket_from_form_args', $args );
 	$meta        = apply_filters( 'kbs_add_ticket_from_form_meta', $meta );

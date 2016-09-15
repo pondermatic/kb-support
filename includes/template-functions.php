@@ -10,7 +10,25 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) )
+	exit;
+
+/**
+ * Display front end notices.
+ *
+ * @since	1.0
+ * @return	str
+ */
+function kbs_notices()	{
+
+	if( ! isset( $_GET, $_GET['kbs_notice'] ) )	{
+		return;
+	}
+
+	echo kbs_display_notice( $_GET['kbs_notice'] );
+
+} // kbs_display_notice
+add_action( 'kbs_notices', 'kbs_notices' );
 
 /**
  * Before Ticket Content

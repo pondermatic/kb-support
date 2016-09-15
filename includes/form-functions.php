@@ -318,12 +318,13 @@ function kbs_process_ticket_submission( $data )	{
 
 	kbs_do_honeypot_check( $data );
 
-	$form_id = ! empty( $data['kbs_form_id'] ) ? $data['kbs_form_id'] : '';
+	$form_id  = ! empty( $data['kbs_form_id'] ) ? $data['kbs_form_id'] : '';
+	$redirect = ! empty( $data['redirect'] )    ? $data['redirect']    : '';
 
 	$posted = array();
-	$ignore = apply_filters( 'kbs_ignore_ticket_fields', 
-		array( 'kbs_form_id', 'kbs_action', 'kbs_redirect', 'kbs_honeypot', 'kbs_ticket_submit' )
-	);
+	$ignore = apply_filters( 'kbs_ignore_ticket_fields', array(
+		'kbs_form_id', 'kbs_action', 'kbs_redirect', 'kbs_honeypot', 'kbs_ticket_submit'
+	) );
 
 	foreach ( $data as $key => $value ) {
 		if( ! in_array( $key, $ignore ) ) {
@@ -337,7 +338,18 @@ function kbs_process_ticket_submission( $data )	{
 		}
 	}
 
-	kbs_add_ticket_from_form( $form_id, $posted );
+	if ( kbs_add_ticket_from_form( $form_id, $posted ) )	{
+		$message = 'ticket_submitted';
+	} else	{
+		$message = 'ticket_failed';
+	}
+
+	wp_redirect( add_query_arg(
+		array( 'kbs_notice' => $message ),
+		$redirect
+	) );
+
+	die();
 
 } // kbs_process_ticket_form
 add_action( 'kbs_submit_ticket', 'kbs_process_ticket_submission' );

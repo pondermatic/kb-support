@@ -60,6 +60,7 @@ function kbs_email_ticket_received( $ticket_id, $admin_notice = true ) {
 		do_action( 'kbs_admin_ticket_notice', $ticket_id, $ticket_data );
 	}
 } // kbs_email_ticket_received
+add_action( 'kbs_post_add_ticket', 'kbs_email_ticket_received' );
 
 /**
  * Email the ticket received confirmation to the admin accounts for testing.

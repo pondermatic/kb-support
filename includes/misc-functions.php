@@ -251,3 +251,51 @@ function kbs_do_honeypot_check( $data )	{
 	
 	return;
 } // kbs_do_honeypot_check
+
+/**
+ * Display a Notice.
+ *
+ * @since	1.0
+ * @param	str		$m		The notice message key.
+ * @return	str		The HTML string for the notice
+ */
+function kbs_display_notice( $m )	{	
+	$notices = kbs_get_notices( $m );
+
+	if ( $notices )	{
+		return '<div class="kbs_alert kbs_alert_' . $notices['class'] . '">' . $notices['notice'] . '</div>';
+	}
+} // kbs_display_notice
+
+/**
+ * Front end notices.
+ *
+ * @since	1.0
+ * @param	str		$notice		The message key to display.
+ * @return	str		Notice.
+ */
+function kbs_get_notices( $notice = false )	{
+	$notices = array(
+		'ticket_submitted' => array(
+			'class'  => 'success',
+			'notice' => __( "Your support request has been successfully received. We'll be in touch as soon as possible.", 'kb-support' )
+		),
+		'ticket_failed'    => array(
+			'class'  => 'error',
+			'notice' => __( 'There was an error submitting your support request. Please try again', 'kb-support' )
+		)
+	);
+
+	$notices = apply_filters( 'kbs_get_notices', $notices );
+
+	if ( $notice )	{
+		if ( ! array_key_exists( $notice, $notices ) )	{
+			return false;
+		}
+
+		return $notices[ $notice ];
+	}
+
+	return $notices;
+
+} // kbs_get_notices
