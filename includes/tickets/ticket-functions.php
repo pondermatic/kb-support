@@ -139,7 +139,7 @@ function kbs_add_ticket( $data, $meta, $attachments = array() )	{
  * @return	mixed	Ticket ID on success, false on failure.
  */
 function kbs_add_ticket_from_form( $form_id, $data )	{
-	
+
 	$kbs_form    = new KBS_Form( $form_id );
 	$fields      = $kbs_form->fields;
 	$args        = array();
@@ -164,15 +164,15 @@ function kbs_add_ticket_from_form( $form_id, $data )	{
 			$args[ $settings['mapping'] ] = $data[ $field->post_name ];
 		} else	{
 			$meta[ $field->post_name ] = array( $field->post_title, strip_tags( addslashes( $data[ $field->post_name ] ) ) );
-			
+		
 			$meta_data[] = '<strong>' . $field->post_title . '</strong><br />' . $data[ $field->post_name ];
 		}
 	}
-	
+
 	if ( ! empty( $meta ) )	{
 		$meta_content  = '<p><strong>' . __( 'Form Data Submitted', 'kb-support' ) . '</strong></p>';
 		$meta_content .= '<p> ' . implode( '<br />', $meta_data ) . '</p>';
-		
+	
 		if ( ! empty( $args['post_content'] ) )	{
 			$args['post_content'] = $args['post_content'] . $meta_content;
 		} else	{
@@ -187,7 +187,7 @@ function kbs_add_ticket_from_form( $form_id, $data )	{
 	$attachments = apply_filters( 'kbs_add_ticket_from_form_attachments', $attachments );
 
 	return kbs_add_ticket( $args, $meta, $attachments );
-	
+
 } // kbs_add_ticket_from_form
 
 /**

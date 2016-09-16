@@ -127,6 +127,16 @@ function kbs_load_admin_scripts( $hook ) {
 	wp_register_script( 'kbs-admin-scripts', $js_dir . 'admin-scripts' . $suffix . '.js', $admin_deps, KBS_VERSION, false );
 	wp_enqueue_script( 'kbs-admin-scripts' );
 
+	$editing_field_type = false;
+
+	if ( isset( $_GET['kbs-action'] ) && 'edit_form_field' == $_GET['kbs-action'] )	{
+		$field_settings = kbs_get_field_settings( $_GET['field_id'] );
+
+		if ( $field_settings )	{
+			$editing_field_type = $field_settings['type'];
+		}
+	}
+
 	wp_localize_script( 'kbs-admin-scripts', 'kbs_vars', array(
 		'post_id'                 => isset( $post->ID ) ? $post->ID : null,
 		'kbs_version'             => KBS_VERSION,
@@ -135,11 +145,12 @@ function kbs_load_admin_scripts( $hook ) {
 		'no_ticket_reply_content' => __( 'There is no content in your reply', 'kb-support' ),
 		'type_to_search'          => sprintf( __( 'Type to search %s', 'kb-support' ), kbs_get_kb_label_plural() ),
 		'search_placeholder'      => sprintf( __( 'Type to search all %s', 'kb-support' ), kbs_get_kb_label_plural() ),
+		'editing_field_type'      => $editing_field_type,
 		'field_label_missing'     => __( 'Enter a Label for your field.', 'kb-support' ),
 		'field_type_missing'      => __( 'Select the field Type', 'kb-support' )
-	));
+	) );
 
-	if( function_exists( 'wp_enqueue_media' ) && version_compare( $wp_version, '3.5', '>=' ) ) {
+	if ( function_exists( 'wp_enqueue_media' ) && version_compare( $wp_version, '3.5', '>=' ) ) {
 		// Call for new media manager
 		wp_enqueue_media();
 	}

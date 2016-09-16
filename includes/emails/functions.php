@@ -148,7 +148,7 @@ function kbs_admin_email_notice( $ticket_id = 0, $ticket_data = array() ) {
 	$emails->send( kbs_get_admin_notice_emails(), $subject, $message, $attachments );
 
 } // kbs_admin_ticket_notice
-add_action( 'kbs_admin_ticket_notice', 'kbs_admin_ticket_notice', 10, 2 );
+//add_action( 'kbs_admin_ticket_notice', 'kbs_admin_email_notice', 10, 2 );
 
 /**
  * Retrieves the emails for which admin notifications are sent to (these can be

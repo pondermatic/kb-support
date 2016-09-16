@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
- * Define and add the metaboxes for the mdjm-event post type.
+ * Define and add the metaboxes for the kbs_form post type.
  * Apply the `mdjm_event_add_metaboxes` filter to allow for filtering of metaboxes and settings.
  * Uses function_exists to verify the callback function exists.
  *
