@@ -303,6 +303,7 @@ jQuery(document).ready(function ($) {
 					selected         : ( $('#kbs_field_option_selected').is(':checked') ) ? $('#kbs_field_option_selected').val() : 0,
 					maxfiles         : $('#kbs_field_maxfiles').val(),
 					chosen           : ( $('#kbs_field_select_chosen').is(':checked') )   ? $('#kbs_field_select_chosen').val()   : 0,
+					description      : $('#kbs_field_description').val(),
 					placeholder      : $('#kbs_field_placeholder').val(),
 					hide_label       : ( $('#kbs_field_hide_label').is(':checked') )      ? $('#kbs_field_hide_label').val()      : 0,
 					action           : 'kbs_add_form_field',
@@ -361,6 +362,7 @@ jQuery(document).ready(function ($) {
 					maxfiles         : $('#kbs_field_maxfiles').val(),
 					chosen           : ( $('#kbs_field_select_chosen').is(':checked') )   ? $('#kbs_field_select_chosen').val()   : 0,
 					placeholder      : $('#kbs_field_placeholder').val(),
+					description      : $('#kbs_field_description').val(),
 					hide_label       : ( $('#kbs_field_hide_label').is(':checked') )      ? $('#kbs_field_hide_label').val()      : 0,
 					action           : 'kbs_save_form_field',
 				};

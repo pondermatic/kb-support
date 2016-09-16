@@ -42,11 +42,12 @@ function kbs_get_users_by_role( $role = array( 'support_agent', 'support_manager
  * @return	mixed
  */
 function kbs_get_customers()	{
-	$role  = array( 'support_customer' );
+	$role = array( 'support_customer' );
+	$role = apply_filters( 'kbs_customer_roles', $role );
 
-	$users = kbs_get_users_by_role( $role );
+	$customers = kbs_get_users_by_role( $role );
 	
-	return $users;
+	return apply_filters( 'kbs_customers', $customers );
 } // kbs_get_customers
 
 /**

@@ -45,6 +45,72 @@ function kbs_get_form( $form_id )	{
 } // kbs_get_form
 
 /**
+ * Whether or not a form has the mandatory email field.
+ *
+ * @since	1.0
+ * @param	int		$form_id	Form ID.
+ * @param	str		$field		The type of field to check.
+ * @return	bool	True if the email field exists for the form.
+ */
+function kbs_form_has_default_field( $form_id, $field )	{
+	$fields = get_posts( array(
+		'status'      => 'publish',
+		'post_type'   => 'kbs_form_field',
+		'post_parent' => $form_id,
+		'numberposts' => 1,
+		'fields'      => 'ids',
+		'meta_key'    => '_default_field',
+		'meta_value'  => $field
+	) );
+
+	if ( $fields )	{
+		return true;
+	}
+
+	return false;
+} // kbs_form_has_default_field
+
+/**
+ * Adds the email field to a form if needed.
+ *
+ * @since	1.0
+ * @param	int		$field_id	The form ID
+ */
+function kbs_add_email_field_to_form( $form_id )	{
+
+	if ( ! kbs_form_has_default_field( $form_id, 'email' ) )	{
+
+		$form = new KBS_Form( $form_id );
+
+		$data = array(
+			'form_id'         => $form_id,
+			'type'            => 'email',
+			'mapping'         => '',
+			'required'        => true,
+			'label'           => __( 'Email Address', 'kb-support' ),
+			'label_class'     => '',
+			'input_class'     => '',
+			'select_options'  => '',
+			'select_multiple' => false,
+			'selected'        => false,
+			'maxfiles'        => false,
+			'chosen'          => false,
+			'placeholder'     => '',
+			'hide_label'      => false
+		);
+
+		$field_id = $form->add_field( $data );
+
+		if ( $field_id )	{
+			add_post_meta( $field_id, '_default_field', $data['type'] );
+		}
+
+	}
+
+} // kbs_add_email_field_to_form
+add_action( 'kbs_kb_before_save', 'kbs_add_email_field_to_form', 5 );
+
+/**
  * Retrieve all form fields.
  *
  * @since	0.1
@@ -84,6 +150,23 @@ function kbs_get_field( $field_id )	{
 } // kbs_get_field
 
 /**
+ * Whether or not a field can be deleted from a form.
+ *
+ * @since	1.0
+ * @param	int		$field_id	The ID of the field to delete.
+ * @return	bool	True if a field can be deleted, otherwise false.
+ */
+function kbs_can_delete_field( $field_id )	{
+	$no_delete = get_post_meta( $field_id, '_default_field', true );
+
+	if ( $no_delete )	{
+		return false;
+	}
+
+	return true;
+} // kbs_can_delete_field
+
+/**
  * Delete a form field.
  *
  * @since	0.1
@@ -91,7 +174,11 @@ function kbs_get_field( $field_id )	{
  * @return	obj		WP_Query Object.
  */
 function kbs_delete_field( $field_id )	{
-	
+
+	if ( ! kbs_can_delete_field( $field_id ) )	{
+		return false;
+	}
+
 	do_action( 'kbs_pre_delete_field', $field_id );
 	
 	$result = wp_delete_post( $field_id );	

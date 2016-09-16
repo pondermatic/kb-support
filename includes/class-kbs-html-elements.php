@@ -176,28 +176,68 @@ class KBS_HTML_Elements {
 	 *
 	 * @access	public
 	 * @since	1.0
-	 * @param	str		$name		Name attribute of the dropdown
-	 * @param	int		$selected	Customer to select automatically
-	 * @return	str		$output		Customer dropdown
+	 * @param	arr		$args
+	 * @return	str		Customer dropdown
 	 */
-	public function customer_dropdown( $name = 'post_author', $selected = 0 ) {
-		$options  = array();
-		$selected = empty( $selected ) ? 0 : $selected;
+	public function customer_dropdown( $args = array() ) {
 
-		$customers = kbs_get_customers();
-		
-		if ( $customers )	{
-			foreach( $customers as $customer )	{
-				$options[ $customer->ID ] = $customer->display_name;
+		$defaults = array(
+			'name'        => 'customers',
+			'id'          => 'customers',
+			'class'       => '',
+			'multiple'    => false,
+			'selected'    => 0,
+			'chosen'      => true,
+			'placeholder' => __( 'Select a Customer', 'kb-support' ),
+			'number'      => 30,
+			'data'        => array( 'search-type' => 'customer' ),
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
+		$customers = KBS()->customers->get_customers( array(
+			'number' => $args['number']
+		) );
+
+		$options  = array();
+
+		if ( $customers ) {
+			$options[0] = __( 'No customer attached', 'kb-support' );
+
+			foreach ( $customers as $customer ) {
+				$options[ absint( $customer->id ) ] = esc_html( $customer->name . ' (' . $customer->email . ')' );
 			}
+		} else {
+			$options[0] = __( 'No customers found', 'kb-support' );
+		}
+
+		if ( ! empty( $args['selected'] ) ) {
+
+			// If a selected customer has been specified, we need to ensure it's in the initial list of customers displayed
+
+			if ( ! array_key_exists( $args['selected'], $options ) ) {
+
+				$customer = new KBS_Customer( $args['selected'] );
+
+				if ( $customer ) {
+					$options[ absint( $args['selected'] ) ] = esc_html( $customer->name . ' (' . $customer->email . ')' );
+				}
+
+			}
+
 		}
 
 		$output = $this->select( array(
-			'name'             => $name,
-			'selected'         => $selected,
+			'name'             => $args['name'],
+			'selected'         => $args['selected'],
+			'id'               => $args['id'],
+			'class'            => $args['class'] . ' edd-customer-select',
 			'options'          => $options,
-			'show_option_all'  => __( 'Select a Customer', 'kb-support' ),
-			'show_option_none' => false
+			'multiple'         => $args['multiple'],
+			'chosen'           => $args['chosen'],
+			'show_option_all'  => false,
+			'show_option_none' => false,
+			'data'             => $args['data']
 		) );
 
 		return $output;

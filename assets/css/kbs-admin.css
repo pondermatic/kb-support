@@ -38,6 +38,7 @@ a.kbs-delete:hover { color: #f00; }
 #postbox-container-1 .kbs_files_url_label { width: 80px; }
 .kbs_add { display: inline-block; }
 .kbs_sortable_row td { vertical-align: middle }
+#kbs_formfields .description { margin: 2px 0 5px; color: #666; font-size: 13px; font-style: italic; }
 #kbs_formfields .kbs_meta_table_wrap table input,
 #kbs_formfields .kbs_meta_table_wrap table select,
 #kbs_formfields .kbs_meta_table_wrap table textarea { margin: 4px 0; width: 100%; }

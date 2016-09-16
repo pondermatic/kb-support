@@ -203,7 +203,12 @@ function kbs_render_form_field_row( $field, $form )	{
         'class' => 'kbs_sortable_index'
     ) ); ?>
     
-    <td><?php echo $field->post_title; ?></td>
+    <td><?php echo $field->post_title; ?>
+		<?php if ( ! empty( $settings['description'] ) ) : ?>
+        	<br />
+            <span class="description"><?php echo esc_html( $settings['description'] ); ?></span>
+        <?php endif; ?>
+    </td>
     
     <td><?php echo kbs_get_field_type( $settings['type'] ); ?></td>
     
@@ -211,7 +216,10 @@ function kbs_render_form_field_row( $field, $form )	{
     
     <td>
     	<a href="<?php echo $edit; ?>" class="button button-primary button-small"><?php _e( 'Edit', 'kb-support' ); ?></a>
-        <a href="<?php echo $delete; ?>" class="button button-secondary button-small"><?php _e( 'Delete', 'kb-support' ); ?></a>
+
+        <?php if ( kbs_can_delete_field( $field->ID ) ) : ?>
+	        <a href="<?php echo $delete; ?>" class="button button-secondary button-small"><?php _e( 'Delete', 'kb-support' ); ?></a>
+        <?php endif; ?>
     </td>
     
     <?php
@@ -249,6 +257,36 @@ function kbs_render_field_label_row( $post_id, $args )	{
 add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_label_row', 10, 2 );
 
 /**
+ * Render the row for entering the description.
+ *
+ * @since	0.1
+ * @param	int		$post_id	The form post ID.
+ * @param	arr		$args		Function arguments
+ * @return	str
+ */
+function kbs_render_field_description_row( $post_id, $args )	{
+	global $kbs_edit_field;
+
+	kbs_maybe_editing_field();
+
+	?>
+    
+	<div id="kbs_meta_field_description_wrap">
+		<p><strong><?php _e( 'Description', 'kb-support' ); ?></strong><br />
+		<label for="kbs_field_description">
+			<?php echo KBS()->html->text( array(
+				'name'  => 'kbs_field_description',
+				'value' => ! empty( $kbs_edit_field ) ? $kbs_edit_field->settings['description'] : null,
+				'class' => 'kbs_input'
+			) ); ?>
+		</label></p>
+	</div>
+	<?php
+
+} // kbs_render_field_label_row
+add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_description_row', 15, 2 );
+
+/**
  * Render the row for selecting the type.
  *
  * @since	0.1
@@ -276,7 +314,7 @@ function kbs_render_field_type_row( $post_id, $args )	{
 	<?php
 
 } // kbs_render_field_label_row
-add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_type_row', 15, 2 );
+add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_type_row', 20, 2 );
 
 /**
  * Render the row for selecting the mapping.
@@ -306,7 +344,7 @@ function kbs_render_field_mapping_row( $post_id, $args )	{
 	<?php
 
 } // kbs_render_field_mapping_row
-add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_mapping_row', 20, 2 );
+add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_mapping_row', 25, 2 );
 
 /**
  * Render the row for setting as required.
@@ -319,20 +357,34 @@ add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_mapping_row', 20, 2 
 function kbs_render_field_required_row( $post_id, $args )	{
 	global $kbs_edit_field;
 
+	$required = false;
+
+	$default = get_post_meta( $kbs_edit_field, '_default_field', true );
+
+	if ( 'email' == $default )	{
+		$required = true;
+	}
+
 	do_action( 'kbs_form_mb_field_options', $post_id, $args );
-	?>
-	<div id="kbs_meta_field_required_wrap">
-		<p><label for="kbs_field_required">
-			<?php echo KBS()->html->checkbox( array(
-				'name'    => 'kbs_field_required',
-				'current' => ! empty( $kbs_edit_field->settings['required'] ) ? $kbs_edit_field->settings['required'] : null
-			) ); ?>
-			<strong><?php _e( 'Required?', 'kb-support' ); ?></strong></label></p>
-	</div>
-	<?php
+
+	if ( false !== $required ) : ?>
+        <div id="kbs_meta_field_required_wrap">
+            <p><label for="kbs_field_required">
+                <?php echo KBS()->html->checkbox( array(
+                    'name'    => 'kbs_field_required',
+                    'current' => ! empty( $kbs_edit_field->settings['required'] ) ? $kbs_edit_field->settings['required'] : null
+                ) ); ?>
+                <strong><?php _e( 'Required?', 'kb-support' ); ?></strong></label></p>
+        </div>
+    <?php else : ?>
+    	<?php echo KBS()->html->hidden( array(
+			'name'  => 'kbs_field_required',
+			'value' => '1'
+		) );
+    endif;
 
 } // kbs_render_field_required_row
-add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_required_row', 25, 2 );
+add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_required_row', 30, 2 );
 
 /**
  * Render the row for entering the label class.
@@ -359,7 +411,7 @@ function kbs_render_field_label_class_row( $post_id, $args )	{
 	<?php
 
 } // kbs_render_field_label_row
-add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_label_class_row', 30, 2 );
+add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_label_class_row', 35, 2 );
 
 /**
  * Render the row for entering the input class.
@@ -386,7 +438,7 @@ function kbs_render_field_input_class_row( $post_id, $args )	{
 	<?php
 
 } // kbs_render_field_label_row
-add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_input_class_row', 35, 2 );
+add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_input_class_row', 40, 2 );
 
 /**
  * Render the row for adding the new field.
@@ -398,6 +450,10 @@ add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_input_class_row', 35
  */
 function kbs_render_field_add_field_btn_row( $post_id, $args )	{
 	global $kbs_edit_field;
+
+	$cancel = remove_query_arg( array(
+		'edit_field', 'delete_field', 'kbs-message', 'kbs-action-nonce'
+	), wp_get_referer() );
 
 	?>
 	<div id="kbs_meta_field_add_form_btn_wrap">
@@ -420,7 +476,7 @@ function kbs_render_field_add_field_btn_row( $post_id, $args )	{
 			) ); ?>
             <span id="kbs-field-save">
                 <a id="kbs-save-form-field" class="button-primary kbs_save" style="margin: 6px 0 10px;"><?php _e( 'Edit', 'kb-support' ); ?></a>
-                <a href="<?php echo wp_get_referer(); ?>" id="kbs-cancel" class="button-secondary kbs_cancel" style="margin: 6px 15px 10px;"><?php _e( 'Cancel', 'kb-support' ); ?></a>
+                <a href="<?php echo $cancel; ?>" id="kbs-cancel" class="button-secondary kbs_cancel" style="margin: 6px 15px 10px;"><?php _e( 'Cancel', 'kb-support' ); ?></a>
             </span>
 
         <?php endif; ?>

@@ -170,8 +170,7 @@ class KBS_Ticket {
 
 		do_action( 'kbs_pre_create_ticket', $data, $meta );		
 
-		$id	= wp_insert_post( $data, true );
-
+		$id	 = wp_insert_post( $data, true );
 		$ticket = WP_Post::get_instance( $id );
 
 		do_action( 'kbs_post_create_ticket', $id, $data );

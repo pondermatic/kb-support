@@ -3,7 +3,7 @@
  * Plugin Name: KB Support
  * Plugin URI: http://TBA
  * Description: All in one Support desk and knowledge base. Easy to use, easy to manage, loved by customers
- * Version: 0.1
+ * Version: 1.0
  * Date: 06 May 2016
  * Author: Mike Howard <mike@mikesplaugins.co.uk>
  * Author URI: http://mikesplugins.co.uk
@@ -29,7 +29,7 @@
  * @package		KBS
  * @category	Core
  * @author		Mike Howard
- * @version		0.1
+ * @version		1.0
  */
 
 // Exit if accessed directly.
@@ -46,7 +46,7 @@ final class KB_Support {
 
 	/**
 	 * @var		KB_Support The one true KB_Support
-	 * @since	0.1
+	 * @since	1.0
 	 */
 	private static $instance;
 	
@@ -54,17 +54,57 @@ final class KB_Support {
 	 * KBS Roles Object.
 	 *
 	 * @var		obj		KBS_Roles
-	 * @since	0.1
+	 * @since	1.0
 	 */
 	public $roles;
-	
+
+	/**
+	 * KBS Emails.
+	 *
+	 * @var		obj		KBS_Emails
+	 * @since	1.0
+	 */
+	public $emails;
+
+	/**
+	 * KBS Email Tags.
+	 *
+	 * @var		obj		KBS_Email_Template_Tags
+	 * @since	1.0
+	 */
+	public $email_tags;
+
+	/**
+	 * KBS HTML Elements.
+	 *
+	 * @var		obj		KBS_HTML_Elements
+	 * @since	1.0
+	 */
+	public $html;
+
+	/**
+	 * KBS Customers.
+	 *
+	 * @var		obj		KBS_DB_Customers
+	 * @since	1.0
+	 */
+	public $customers;
+
+	/**
+	 * KBS Customer Meta.
+	 *
+	 * @var		obj		KBS_DB_Customer_Meta
+	 * @since	1.0
+	 */
+	public $customer_meta;
+
 	/**
 	 * Main KB_Support Instance.
 	 *
 	 * Insures that only one instance of KB_Support exists in memory at any one
 	 * time. Also prevents needing to define globals all over the place.
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 * @static
 	 * @static	var		arr		$instance
 	 * @uses	KB_Support::setup_constants()	Setup the constants needed.
@@ -83,10 +123,12 @@ final class KB_Support {
 			add_action( 'plugins_loaded', array( self::$instance, 'load_textdomain' ) );
 
 			self::$instance->includes();
-			self::$instance->roles      = new KBS_Roles();
-			self::$instance->emails     = new KBS_Emails();
-			self::$instance->email_tags = new KBS_Email_Template_Tags();
-			self::$instance->html       = new KBS_HTML_Elements();
+			self::$instance->roles         = new KBS_Roles();
+			self::$instance->emails        = new KBS_Emails();
+			self::$instance->email_tags    = new KBS_Email_Template_Tags();
+			self::$instance->html          = new KBS_HTML_Elements();
+			self::$instance->customers     = new KBS_DB_Customers();
+			self::$instance->customer_meta = new KBS_DB_Customer_Meta();
 
 		}
 
@@ -100,38 +142,38 @@ final class KB_Support {
 	 * The whole idea of the singleton design pattern is that there is a single
 	 * object therefore, we don't want the object to be cloned.
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 * @access	protected
 	 * @return	void
 	 */
 	public function __clone() {
 		// Cloning instances of the class is forbidden.
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'kb-support' ), '0.1' );
+		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'kb-support' ), '1.0' );
 	} // __clone
 
 	/**
 	 * Disable unserializing of the class.
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 * @access	protected
 	 * @return	void
 	 */
 	public function __wakeup() {
 		// Unserializing instances of the class is forbidden.
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'kb-support' ), '0.1' );
+		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'kb-support' ), '1.0' );
 	} // __wakeup
 	
 	/**
 	 * Setup plugin constants.
 	 *
 	 * @access	private
-	 * @since	0.1
+	 * @since	1.0
 	 * @return	void
 	 */
 	private function setup_constants()	{
 
 		if ( ! defined( 'KBS_VERSION' ) )	{
-			define( 'KBS_VERSION', '0.1' );
+			define( 'KBS_VERSION', '1.0' );
 		}
 
 		if ( ! defined( 'KBS_PLUGIN_DIR' ) )	{
@@ -152,7 +194,7 @@ final class KB_Support {
 	 * Include required files.
 	 *
 	 * @access	private
-	 * @since	0.1
+	 * @since	1.0
 	 * @return	void
 	 */
 	private function includes()	{
@@ -171,6 +213,7 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/ajax-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/template-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/post-types.php';
+		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-db.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-roles.php';
 		require_once KBS_PLUGIN_DIR . 'includes/kb/kb-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/tickets/class-kbs-ticket.php';
@@ -190,7 +233,10 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/form-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/misc-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/login-register.php';
+		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-customer.php';
 		require_once KBS_PLUGIN_DIR . 'includes/user-functions.php';
+		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-db-customers.php';
+		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-db-customer-meta.php';
 		require_once KBS_PLUGIN_DIR . 'includes/shortcodes.php';
 		require_once KBS_PLUGIN_DIR . 'includes/sla.php';
 
@@ -216,7 +262,7 @@ final class KB_Support {
 	 * Load the text domain for translations.
 	 *
 	 * @access	private
-	 * @since	0.1
+	 * @since	1.0
 	 * @return	void
 	 */
 	public function load_textdomain()	{
@@ -243,7 +289,7 @@ endif;
  *
  * Example: <?php $kbs = KBS(); ?>
  *
- * @since	0.1
+ * @since	1.0
  * @return	obj		KB_Support	The one true KB_Support Instance.
  */
 function KBS()	{

@@ -134,17 +134,18 @@ class KBS_Form {
 
 		$settings = array(
 			'type'            => $data['type'],
-			'mapping'         => ! empty( $data['mapping'] )         ? $data['mapping']                         : '',
-			'required'        => ! empty( $data['required'] )        ? true                                     : false,
-			'label_class'     => ! empty( $data['label_class'] )     ? $data['label_class']                     : '',
-			'input_class'     => ! empty( $data['input_class'] )     ? $data['input_class']                     : '',
-			'select_options'  => ! empty( $data['select_options'] )  ? explode( "\n", $data['select_options'] ) : '',
-			'select_multiple' => ! empty( $data['select_multiple'] ) ? true                                     : false,
-			'selected'        => ! empty( $data['selected'] )        ? true                                     : false,
-			'maxfiles'        => ! empty( $data['maxfiles'] )        ? $data['maxfiles']                        : false,
-			'chosen'          => ! empty( $data['chosen'] )          ? true                                     : false,
-			'placeholder'     => ! empty( $data['placeholder'] )     ? $data['placeholder']                     : '',
-			'hide_label'      => ! empty( $data['hide_label'] )      ? true                                     : false
+			'mapping'         => ! empty( $data['mapping'] )         ? $data['mapping']                            : '',
+			'required'        => ! empty( $data['required'] )        ? true                                        : false,
+			'label_class'     => ! empty( $data['label_class'] )     ? $data['label_class']                        : '',
+			'input_class'     => ! empty( $data['input_class'] )     ? $data['input_class']                        : '',
+			'select_options'  => ! empty( $data['select_options'] )  ? explode( "\n", $data['select_options'] )    : '',
+			'select_multiple' => ! empty( $data['select_multiple'] ) ? true                                        : false,
+			'selected'        => ! empty( $data['selected'] )        ? true                                        : false,
+			'maxfiles'        => ! empty( $data['maxfiles'] )        ? $data['maxfiles']                           : false,
+			'chosen'          => ! empty( $data['chosen'] )          ? true                                        : false,
+			'description'     => ! empty( $data['description'] )     ? sanitize_text_field( $data['description'] ) : '',
+			'placeholder'     => ! empty( $data['placeholder'] )     ? sanitize_text_field( $data['placeholder'] ) : '',
+			'hide_label'      => ! empty( $data['hide_label'] )      ? true                                        : false
 		);
 
 		$settings = apply_filters( 'kbs_new_form_field_settings', $settings );
@@ -187,17 +188,18 @@ class KBS_Form {
 
 		$settings = array(
 			'type'            => $data['type'],
-			'mapping'         => ! empty( $data['mapping'] )         ? $data['mapping']                         : '',
-			'required'        => ! empty( $data['required'] )        ? true                                     : false,
-			'label_class'     => ! empty( $data['label_class'] )     ? $data['label_class']                     : '',
-			'input_class'     => ! empty( $data['input_class'] )     ? $data['input_class']                     : '',
-			'select_options'  => ! empty( $data['select_options'] )  ? explode( "\n", $data['select_options'] ) : '',
-			'select_multiple' => ! empty( $data['select_multiple'] ) ? true                                     : false,
-			'selected'        => ! empty( $data['selected'] )        ? true                                     : false,
-			'maxfiles'        => ! empty( $data['maxfiles'] )        ? $data['maxfiles']                        : false,
-			'chosen'          => ! empty( $data['chosen'] )          ? true                                     : false,
-			'placeholder'     => ! empty( $data['placeholder'] )     ? $data['placeholder']                     : '',
-			'hide_label'      => ! empty( $data['hide_label'] )      ? true                                     : false
+			'mapping'         => ! empty( $data['mapping'] )         ? $data['mapping']                            : '',
+			'required'        => ! empty( $data['required'] )        ? true                                        : false,
+			'label_class'     => ! empty( $data['label_class'] )     ? $data['label_class']                        : '',
+			'input_class'     => ! empty( $data['input_class'] )     ? $data['input_class']                        : '',
+			'select_options'  => ! empty( $data['select_options'] )  ? explode( "\n", $data['select_options'] )    : '',
+			'select_multiple' => ! empty( $data['select_multiple'] ) ? true                                        : false,
+			'selected'        => ! empty( $data['selected'] )        ? true                                        : false,
+			'maxfiles'        => ! empty( $data['maxfiles'] )        ? $data['maxfiles']                           : false,
+			'chosen'          => ! empty( $data['chosen'] )          ? true                                        : false,
+			'description'     => ! empty( $data['description'] )     ? sanitize_text_field( $data['description'] ) : '',
+			'placeholder'     => ! empty( $data['placeholder'] )     ? sanitize_text_field( $data['placeholder'] ) : '',
+			'hide_label'      => ! empty( $data['hide_label'] )      ? true                                        : false
 		);
 
 		$args = array(
@@ -346,6 +348,10 @@ class KBS_Form {
 	 */
 	public function delete_field( $field_id )	{
 		if ( 'kbs_form_field' != get_post_type( $field_id ) )	{
+			return false;
+		}
+
+		if ( ! kbs_can_delete_field( $field_id ) )	{
 			return false;
 		}
 

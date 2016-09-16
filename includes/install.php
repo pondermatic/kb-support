@@ -10,7 +10,8 @@
 */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) )
+	exit;
 
 /**
  * Install
@@ -112,6 +113,10 @@ function kbs_run_install() {
 	$roles = new KBS_Roles;
 	$roles->add_roles();
 	$roles->add_caps();
+
+	// Create the customer databases
+	@KBS()->customers->create_table();
+	@KBS()->customer_meta->create_table();
 
 	// Add a temporary option to note that KBS pages have been created
 	set_transient( '_kbs_installed', $merged_options, 30 );
