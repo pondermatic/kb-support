@@ -142,10 +142,10 @@ function kbs_display_meta_box_form_fields( $post_id )	{
             <tfoot>
                 <tr>
                     <th style="width: 20px"></th>
-                    <th style="width: 20%"><?php _e( 'Field Label', 'kb-support' ); ?></th>
+                    <th style="width: 30%"><?php _e( 'Field Label', 'kb-support' ); ?></th>
                     <th style="width: 20%"><?php _e( 'Type', 'kb-support' ); ?></th>
                     <th style="width: 30%" class="settings"><?php _e( 'Settings', 'kb-support' ); ?></th>
-                    <th style="width: 25%"><?php _e( 'Actions', 'kb-support' ); ?></th>
+                    <th style="width: 20%"><?php _e( 'Actions', 'kb-support' ); ?></th>
                     <?php do_action( 'kbs_form_field_table_foot', $post_id ); ?>
                 </tr>
             </tfoot>
@@ -367,7 +367,7 @@ function kbs_render_field_required_row( $post_id, $args )	{
 
 	do_action( 'kbs_form_mb_field_options', $post_id, $args );
 
-	if ( false !== $required ) : ?>
+	if ( empty( $required ) ) : ?>
         <div id="kbs_meta_field_required_wrap">
             <p><label for="kbs_field_required">
                 <?php echo KBS()->html->checkbox( array(

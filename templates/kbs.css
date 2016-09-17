@@ -53,6 +53,69 @@
 -------------------------------------------------------------- */
 .kbs_hidden	{ display: none; }
 
+.kbs_clearfix:after {
+	display: block;
+	visibility: hidden;
+	float: none;
+	clear: both;
+	text-indent: -9999px;
+	content: ".";
+}
+
+/* =Loader
+-------------------------------------------------------------- */
+.kbs-icon-spinner:before {
+	content: "\71";
+}
+
+.kbs-icon-spin {
+	display: inline-block;
+	-moz-animation: kbs-icon-spin 2s infinite linear;
+	-o-animation: kbs-icon-spin 2s infinite linear;
+	-webkit-animation: kbs-icon-spin 2s infinite linear;
+	animation: kbs-icon-spin 2s infinite linear;
+}
+@-moz-keyframes kbs-icon-spin {
+	0% {
+		-moz-transform: rotate(0deg)
+	}
+	100% {
+		-moz-transform: rotate(359deg)
+	}
+}
+@-webkit-keyframes kbs-icon-spin {
+	0% {
+		-webkit-transform: rotate(0deg)
+	}
+	100% {
+		-webkit-transform: rotate(359deg)
+	}
+}
+@-o-keyframes kbs-icon-spin {
+	0% {
+		-o-transform: rotate(0deg)
+	}
+	100% {
+		-o-transform: rotate(359deg)
+	}
+}
+@-ms-keyframes kbs-icon-spin {
+	0% {
+		-ms-transform: rotate(0deg)
+	}
+	100% {
+		-ms-transform: rotate(359deg)
+	}
+}
+@keyframes kbs-icon-spin {
+	0% {
+		transform: rotate(0deg)
+	}
+	100% {
+		transform: rotate(359deg)
+	}
+}
+
 /* =Registration / Login Form
 -------------------------------------------------------------- */
 #kbs_register_form fieldset legend,
@@ -81,26 +144,81 @@
 
 /* =Submission Form
 -------------------------------------------------------------- */
-#kbs_ticket_form fieldset legend	{
+#kbs_ticket_wrap span.kbs-description {
+	color: #666;
+	font-size: 80%;
+	display: block;
+	margin: 0 0 5px;
+	font-style: italic;
+}
+
+#kbs_ticket_wrap input.mdjm-input,
+#kbs_ticket_form_wrap input.kbs-input	{
+	display: inline-block;
+	width: 70%;
+}
+
+#kbs_ticket_wrap fieldset legend	{
 	padding-left: 1.5px;
 	padding-right: 1.5px;
 	font-weight: bold;
 }
 
-#kbs_ticket_form input,
-#kbs_ticket_form label {
-	display: inline-block;
-	width: 200px;
+#kbs_ticket_form_wrap fieldset fieldset {
+	margin: 0;
+	border: none;
+	padding: 0;
 }
-#kbs_ticket_form textarea {
-	display: inline-block;
-	max-width: 450px;
-	height: 250px;
+
+#kbs_ticket_form_wrap input.kbs-input.error	{
+	border-color: #c4554e;
 }
-#kbs_ticket_form input[type=checkbox] {
-	max-width: 10px;
+
+#kbs_ticket_form_wrap fieldset {
+	border: 1px solid #eee;
+	padding: 1.387em;
+	margin: 0 0 21px;
 }
-#kbs_ticket_form input.kbs_datepicker { width: 180px; }
-#kbs_ticket_form input[type=file] {
-	min-width: 450px;
+#kbs_ticket_form_wrap {
+	padding: 0;
+	border: none;
+}
+
+#kbs_ticket_form_wrap label {
+	font-weight: bold;
+	display: block;
+	position: relative;
+	line-height: 100%;
+	font-size: 95%;
+	margin: 0 0 5px;
+}
+
+#kbs_ticket_form_wrap label:after {
+	display: block;
+	visibility: hidden;
+	float: none;
+	clear: both;
+	height: 0;
+	text-indent: -9999px;
+	content: ".";
+}
+
+#kbs_ticket_form_wrap span.kbs-required-indicator {
+	color: #b94a48;
+	display: inline;
+}
+
+.kbs_ticket_ajax {
+	margin: 0 8px 0 4px;
+	position: relative;
+	top: 2px;
+	background: none;
+	border: none;
+	padding: 0;
+}
+
+#kbs_ticket_submit .kbs_ticket_ajax {
+	display: none;
+	position: relative;
+	left: -35px;
 }

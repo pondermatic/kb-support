@@ -33,7 +33,10 @@ function kbs_load_scripts() {
 
 	wp_localize_script( 'kbs-ajax', 'kbs_scripts', apply_filters( 'kbs_ajax_script_vars', array(
 		'ajaxurl'                 => kbs_get_ajax_url(),
-		'permalinks'              => get_option( 'permalink_structure' ) ? '1' : '0'
+		'permalinks'              => get_option( 'permalink_structure' ) ? '1' : '0',
+		'submit_ticket_loading'   => __( 'Please Wait...', 'kb-support' ),
+		'submit_ticket'           => kbs_get_form_submit_label(),
+		'honeypot_fail'           => __( 'Honeypot validation error', 'kb-support' )
 	) ) );
 
 } // kbs_load_scripts

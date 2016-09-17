@@ -151,7 +151,7 @@ function kbs_add_ticket_from_form( $form_id, $data )	{
 
 		$settings = $kbs_form->get_field_settings( $field->ID );
 
-		if ( 'file_upload' == $settings['type'] )	{
+		if ( 'file_upload' == $settings['type'] && ! empty( $_FILES[ $field->post_name ] ) )	{
 			$attachments = $_FILES[ $field->post_name ];
 			continue;
 		}

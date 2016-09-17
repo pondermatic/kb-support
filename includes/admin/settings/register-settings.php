@@ -294,7 +294,14 @@ function kbs_get_registered_settings() {
 							'login'        => __( 'Login Form Only', 'kb-support' ),
 							'none'         => __( 'None', 'kb-support' ),
 						)
-					)
+					),
+					'form_submit_label' => array(
+						'id'   => 'form_submit_label',
+						'name' => __( 'Submit Label', 'kb-support' ),
+						'desc' => __( 'The label for the ticket form submit button.', 'kb-support' ),
+						'type' => 'text',
+						'std'  => sprintf( __( 'Submit %s', 'kb-support' ), kbs_get_ticket_label_singular() )
+					),
 				),
 				'sla' => array(
 					'sla_settings_header' => array(

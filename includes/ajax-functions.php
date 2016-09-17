@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Check if AJAX works as expected
  *
- * @since	0.1
+ * @since	1.0
  * @return	bool	True if AJAX works, false otherwise
  */
 function kbs_test_ajax_works() {
@@ -92,7 +92,7 @@ function kbs_test_ajax_works() {
 /**
  * Checks whether AJAX is disabled.
  *
- * @since	0.1
+ * @since	1.0
  * @return	bool	True when KBS AJAX is disabled, false otherwise.
  */
 function kbs_is_ajax_disabled() {
@@ -104,8 +104,8 @@ function kbs_is_ajax_disabled() {
 /**
  * Get AJAX URL
  *
- * @since	0.1
- * @return	0.1		URL to the AJAX file to call during AJAX requests.
+ * @since	1.0
+ * @return	str		URL to the AJAX file to call during AJAX requests.
 */
 function kbs_get_ajax_url() {
 	$scheme = defined( 'FORCE_SSL_ADMIN' ) && FORCE_SSL_ADMIN ? 'https' : 'admin';
@@ -123,8 +123,7 @@ function kbs_get_ajax_url() {
 /**
  * Adds a new field to a form.
  *
- * @since	0.1
- * @param
+ * @since	1.0
  * @return	void
  */
 function kbs_ajax_add_form_field()	{
@@ -153,8 +152,7 @@ add_action( 'wp_ajax_kbs_add_form_field', 'kbs_ajax_add_form_field' );
 /**
  * Updates a field.
  *
- * @since	0.1
- * @param
+ * @since	1.0
  * @return	void
  */
 function kbs_ajax_save_form_field()	{
@@ -181,8 +179,7 @@ add_action( 'wp_ajax_kbs_save_form_field', 'kbs_ajax_save_form_field' );
 /**
  * Sets the order of the form fields.
  *
- * @since	0.1
- * @param
+ * @since	1.0
  * @return	void
  */
 function kbs_ajax_order_form_fields()	{
@@ -195,3 +192,25 @@ function kbs_ajax_order_form_fields()	{
 	}
 }
 add_action( 'wp_ajax_kbs_order_form_fields', 'kbs_ajax_order_form_fields' );
+
+/**
+ * Validate a ticket submission form.
+ *
+ * @since	1.0
+ * @return	void
+ */
+function kbs_ajax_validate_form_submission()	{
+	$form   = new KBS_Form( $_POST['kbs_form_id'] );
+wp_send_json( array( 'error' => print_r( $_POST, true ) ) );
+	foreach ( $form->get_fields() as $field )	{
+		$settings = $form->get_field_settings( $field->ID );
+		if ( ! empty( $settings['required'] ) && empty( $_POST[ $field->post_name ] ) )	{
+			wp_send_json( array( 'error' => get_the_title( $field->ID ) . __( ' is a required field.', 'kb-support' ) ) );
+		}
+	}
+
+	wp_send_json_success();
+
+} // kbs_ajax_validate_form_submission
+add_action( 'wp_ajax_kbs_validate_ticket_form', 'kbs_ajax_validate_form_submission' );
+add_action( 'wp_ajax_nopriv_kbs_validate_ticket_form', 'kbs_ajax_validate_form_submission' );

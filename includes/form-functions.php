@@ -383,7 +383,7 @@ function kbs_display_form( $form_id = 0 ) {
 
 	$kbs_form = new KBS_Form( $form_id );
 
-	if ( ! $form_id ) {
+	if ( ! $kbs_form ) {
 		return __( 'Submission form not found', 'kb-support' );
 	}
 
@@ -442,6 +442,16 @@ function kbs_process_ticket_submission( $data )	{
 add_action( 'kbs_submit_ticket', 'kbs_process_ticket_submission' );
 
 /**
+ * The form submit button label.
+ *
+ * @since	1.0
+ * @return	str		The label for the form submit button.
+ */
+function kbs_get_form_submit_label()	{
+	return kbs_get_option( 'form_submit_label' );
+} // kbs_get_form_submit_label
+
+/**
  * Display a form text input field.
  *
  * This function is also the callback for email and URL fields.
@@ -452,7 +462,7 @@ add_action( 'kbs_submit_ticket', 'kbs_process_ticket_submission' );
  * @return	str			$type input field
  */
 function kbs_display_form_text_field( $field, $settings )	{
-	
+
 	$type        = ! empty( $settings['type'] )        ? $settings['type']                                             : 'text';
 	$placeholder = ! empty( $settings['placeholder'] ) ? ' placeholder="' . esc_attr( $settings['placeholder'] ) . '"' : '';
 	$class       = ! empty( $settings['input_class'] ) ? esc_attr( $settings['input_class'] )                          : '';
@@ -473,18 +483,24 @@ function kbs_display_form_text_field( $field, $settings )	{
 
 	$class = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $class ) ) );
 
-	$output = sprintf( '<input type="%1$s" name="%2$s" id="%2$s"%3$s%4$s%5$s />',
+	do_action( 'kbs_before_form_field', $field, $settings );
+	do_action( 'kbs_before_form_' . $settings['type'] . '_field', $field, $settings );
+
+	$output = sprintf( '<input type="%1$s" name="%2$s" id="%2$s" class="kbs-input %3$s" %4$s%5$s />',
 		esc_attr( $type ),
 		esc_attr( $field->post_name ),
-		! empty( $class ) ? ' class="' . $class . '"' : '',
+		! empty( $class ) ? $class : '',
 		$placeholder,
 		$required
 	);
-	
-	$output = apply_filters( 'kbs_display_form_' . $type . '_field', $output, $field, $settings );
-	
+
+	$output = apply_filters( 'kbs_display_form_' . $settings['type'] . '_field', $output, $field, $settings );
+
 	echo $output;
-	
+
+	do_action( 'kbs_after_form_field', $field, $settings );
+	do_action( 'kbs_after_form_' . $type . '_field', $field, $settings );
+
 } // kbs_display_form_text_field
 add_action( 'kbs_form_display_text_field', 'kbs_display_form_text_field', 10, 2 );
 add_action( 'kbs_form_display_date_field_field', 'kbs_display_form_text_field', 10, 2 );
@@ -501,11 +517,14 @@ add_action( 'kbs_form_display_url_field', 'kbs_display_form_text_field', 10, 2 )
  * @return	str			Field
  */
 function kbs_display_form_textarea_field( $field, $settings )	{
-	
+
 	$placeholder = ! empty( $settings['placeholder'] ) ? ' placeholder="' . esc_attr( $settings['placeholder'] ) . '"' : '';
 	$class       = ! empty( $settings['input_class'] ) ? ' class="' . esc_attr( $settings['input_class'] ) . '"'       : '';
 	$required    = ! empty( $settings['required'] )    ? ' ' . ' required'                                             : '';
-	
+
+	do_action( 'kbs_before_form_field', $field, $settings );
+	do_action( 'kbs_before_form_' . $settings['type'] . '_field', $field, $settings );
+
 	if ( $settings['type'] == 'rich_editor' )	{
 		$wp_settings  = apply_filters( 'kbs_rich_editor_settings', array(
 			'wpautop'       => true,
@@ -524,20 +543,23 @@ function kbs_display_form_textarea_field( $field, $settings )	{
 		$output = wp_editor( '', esc_attr( $field->post_name ), $wp_settings );
 
 	} else	{
-	
+
 		$output = sprintf( '<textarea name="%1$s" id="%1$s"%2$s%3$s%4$s></textarea>',
 			esc_attr( $field->post_name ),
 			$class,
 			$placeholder,
 			$required
 		);
-		
+
 	}
-	
+
 	$output = apply_filters( 'kbs_display_form_textarea_field', $output, $field, $settings );
-	
+
 	echo $output;
-	
+
+	do_action( 'kbs_after_form_field', $field, $settings );
+	do_action( 'kbs_after_form_' . $settings['type'] . '_field', $field, $settings );
+
 } // kbs_display_form_textarea_field
 add_action( 'kbs_form_display_textarea_field', 'kbs_display_form_textarea_field', 10, 2 );
 add_action( 'kbs_form_display_rich_editor_field', 'kbs_display_form_textarea_field', 10, 2 );
@@ -551,7 +573,7 @@ add_action( 'kbs_form_display_rich_editor_field', 'kbs_display_form_textarea_fie
  * @return	str			Field
  */
 function kbs_display_form_select_field( $field, $settings )	{
-	
+
 	$class       = ! empty( $settings['input_class'] )     ? esc_attr( $settings['input_class'] ) : '';
 	$multiple    = ! empty( $settings['select_multiple'] ) ? ' ' . ' multiple'                    : false;
 	$required    = ! empty( $settings['required'] )        ? ' ' . ' required'                    : '';
@@ -563,9 +585,12 @@ function kbs_display_form_select_field( $field, $settings )	{
 	$class   = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $class ) ) );
 	$options = $settings['select_options'];
 
+	do_action( 'kbs_before_form_field', $field, $settings );
+	do_action( 'kbs_before_form_' . $settings['type'] . '_field', $field, $settings );
+
 	$output = sprintf( '<select name="%1$s" id="%1$s"%2$s%3$s%4$s>',
 		esc_attr( $field->post_name ),
-		' class="' . $class . '"',
+		' class="' . $class . ' kbs-input"',
 		$multiple,
 		$required
 	);
@@ -577,11 +602,14 @@ function kbs_display_form_select_field( $field, $settings )	{
 	}
 
 	$output .= '</select>';
-	
+
 	$output = apply_filters( 'kbs_display_form_select_field', $output, $field, $settings );
-	
+
 	echo $output;
-	
+
+	do_action( 'kbs_after_form_field', $field, $settings );
+	do_action( 'kbs_after_form_' . $settings['type'] . '_field', $field, $settings );
+
 } // kbs_display_form_textarea_field
 add_action( 'kbs_form_display_select_field', 'kbs_display_form_select_field', 10, 2 );
 
@@ -594,10 +622,13 @@ add_action( 'kbs_form_display_select_field', 'kbs_display_form_select_field', 10
  * @return	str			Field
  */
 function kbs_display_form_checkbox_field( $field, $settings )	{
-	
+
 	$class       = ! empty( $settings['input_class'] ) ? ' class="' . esc_attr( $settings['input_class'] ) . '"' : '';
 	$checked     = ! empty( $settings['selected'] )        ? ' ' . ' checked'                                    : '';
 	$required    = ! empty( $settings['required'] )        ? ' ' . ' required'                                   : '';
+
+	do_action( 'kbs_before_form_field', $field, $settings );
+	do_action( 'kbs_before_form_' . $settings['type'] . '_field', $field, $settings );
 
 	$output = sprintf( '<input type="checkbox" name="%1$s" id="%1$s"%2$s%3$s%4$s />',
 		esc_attr( $field->post_name ),
@@ -605,11 +636,14 @@ function kbs_display_form_checkbox_field( $field, $settings )	{
 		$checked,
 		$required
 	);
-	
+
 	$output = apply_filters( 'kbs_display_form_checkbox_field', $output, $field, $settings );
-	
+
 	echo $output;
-	
+
+	do_action( 'kbs_after_form_field', $field, $settings );
+	do_action( 'kbs_after_form_' . $settings['type'] . '_field', $field, $settings );
+
 } // kbs_display_form_textarea_field
 add_action( 'kbs_form_display_checkbox_field', 'kbs_display_form_checkbox_field', 10, 2 );
 
@@ -622,14 +656,16 @@ add_action( 'kbs_form_display_checkbox_field', 'kbs_display_form_checkbox_field'
  * @return	str			Field
  */
 function kbs_display_form_checkbox_list_field( $field, $settings )	{
-	
-	$class       = ! empty( $settings['input_class'] ) ? ' class="' . esc_attr( $settings['input_class'] ) . '"' : '';
 
+	$class   = ! empty( $settings['input_class'] ) ? ' class="' . esc_attr( $settings['input_class'] ) . '"' : '';
 	$options = $settings['select_options'];
 
 	if ( empty ( $options ) )	{
 		return;
 	}
+
+	do_action( 'kbs_before_form_field', $field, $settings );
+	do_action( 'kbs_before_form_' . $settings['type'] . '_field', $field, $settings );
 
 	foreach ( $options as $option )	{
 		$output[] = sprintf( '<input type="checkbox" name="%1$s[]" id="%2$s"%3$s value="%4$s" /> %5$s',
@@ -643,8 +679,11 @@ function kbs_display_form_checkbox_list_field( $field, $settings )	{
 	}
 
 	$output = apply_filters( 'kbs_display_form_checkbox_field', $output, $field, $settings );
-	
+
 	echo implode( '<br />', $output );
+
+	do_action( 'kbs_after_form_field', $field, $settings );
+	do_action( 'kbs_after_form_' . $settings['type'] . '_field', $field, $settings );
 
 } // kbs_display_form_textarea_field
 add_action( 'kbs_form_display_checkbox_list_field', 'kbs_display_form_checkbox_list_field', 10, 2 );
@@ -660,13 +699,16 @@ add_action( 'kbs_form_display_checkbox_list_field', 'kbs_display_form_checkbox_l
 function kbs_display_form_recaptcha_field( $field, $settings )	{
 
 	$site_key = kbs_get_option( 'recaptcha_site_key', false );
-	
+
 	if ( ! $site_key )	{
 		return;
 	}
 
 	wp_register_script( 'google-recaptcha', '//www.google.com/recaptcha/api.js"', '', KBS_VERSION, true );
 	wp_enqueue_script( 'google-recaptcha' );
+
+	do_action( 'kbs_before_form_field', $field, $settings );
+	do_action( 'kbs_before_form_' . $settings['type'] . '_field', $field, $settings );
 
 	$output  = sprintf( '<div class="g-recaptcha" data-sitekey="%1$s" data-theme="%2$s" data-type="%3$s" data-size="%4$s"></div>',
 		$site_key,
@@ -677,8 +719,11 @@ function kbs_display_form_recaptcha_field( $field, $settings )	{
 	$output .= sprintf( '<input type="hidden" name="%1$s" id="%1$s" value="" required />', esc_attr( $field->post_name ) );
 
 	$output = apply_filters( 'kbs_display_form_recaptcha_field', $output, $field, $settings );
-	
+
 	echo $output;
+
+	do_action( 'kbs_after_form_field', $field, $settings );
+	do_action( 'kbs_after_form_' . $settings['type'] . '_field', $field, $settings );
 
 } // kbs_display_form_textarea_field
 add_action( 'kbs_form_display_recaptcha_field', 'kbs_display_form_recaptcha_field', 10, 2 );
@@ -703,16 +748,37 @@ function kbs_display_form_file_upload_field( $field, $settings )	{
 
 	$class = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $class ) ) );
 
+	do_action( 'kbs_before_form_field', $field, $settings );
+	do_action( 'kbs_before_form_' . $settings['type'] . '_field', $field, $settings );
+
 	$output = sprintf( '<input type="file" name="%1$s[]" id="%1$s"%2$s%3$s%4$s />',
 		esc_attr( $field->post_name ),
-		! empty( $class ) ? ' class="' . $class . '"' : '',
+		! empty( $class ) ? ' class="' . $class . ' kbs-input"' : '',
 		$placeholder,
 		$multiple
 	);
-	
+
 	$output = apply_filters( 'kbs_display_form_file_upload_field', $output, $field, $settings );
-	
+
 	echo $output;
-	
+
+	do_action( 'kbs_after_form_field', $field, $settings );
+	do_action( 'kbs_after_form_' . $settings['type'] . '_field', $field, $settings );
+
 } // kbs_display_form_file_upload_field
 add_action( 'kbs_form_display_file_upload_field', 'kbs_display_form_file_upload_field', 10, 2 );
+
+/**
+ * Output a fields description.
+ *
+ * @since	1.0
+ * @param	obj		$field		Field post object
+ * @param	arr		$settings	Field settings
+ * @return	str		The field description.
+ */
+function kbs_display_form_field_description( $field, $settings )	{
+	if ( ! empty( $settings['description'] ) ) : ?>
+    	<span class="kbs-description"><?php esc_html_e( $settings['description'] ); ?></span>
+    <?php endif;
+} // kbs_display_form_field_description
+add_action( 'kbs_after_form_field', 'kbs_display_form_field_description', 10, 2 );
