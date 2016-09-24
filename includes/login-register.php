@@ -6,7 +6,7 @@
  * @subpackage  Functions/Login
  * @copyright   Copyright (c) 2016, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       0.1
+ * @since       1.0
  */
 
 // Exit if accessed directly
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Login Form
  *
- * @since	0.1
+ * @since	1.0
  * @global	$post
  * @param	str		$redirect	Redirect page URL
  * @return	str		Login form
@@ -39,7 +39,7 @@ function kbs_login_form( $redirect = '' ) {
 /**
  * Registration Form
  *
- * @since	0.1
+ * @since	1.0
  * @global	$post
  * @param	str		$redirect	Redirect page URL
  * @return	str		Login form
@@ -65,7 +65,7 @@ function kbs_register_form( $redirect = '' ) {
 /**
  * Process Login Form
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$data	Data sent from the login form
  * @return void
  */
@@ -110,7 +110,7 @@ add_action( 'kbs_user_login', 'kbs_process_login_form' );
 /**
  * Log User In
  *
- * @since	0.1
+ * @since	1.0
  * @param	int		$user_id	User ID
  * @param	str		$user_login Username
  * @param	str		$user_pass	Password
@@ -133,35 +133,35 @@ function kbs_log_user_in( $user_id, $user_login, $user_pass ) {
 /**
  * Process Register Form
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$data	Data sent from the register form
  * @return	void
 */
 function kbs_process_register_form( $data ) {
 
-	if( is_user_logged_in() ) {
+	if ( is_user_logged_in() ) {
 		return;
 	}
 
-	if( empty( $_POST['kbs_register_submit'] ) ) {
+	if ( empty( $_POST['kbs_register_submit'] ) ) {
 		return;
 	}
 
 	do_action( 'kbs_pre_process_register_form' );
 
-	if( empty( $data['kbs_user_login'] ) ) {
+	if ( empty( $data['kbs_user_login'] ) ) {
 		$message = 'empty_username';
-	} elseif( username_exists( $data['kbs_user_login'] ) ) {
+	} elseif ( username_exists( $data['kbs_user_login'] ) ) {
 		$message = 'username_unavailable';
-	} elseif( ! validate_username( $data['kbs_user_login'] ) ) {
+	} elseif ( ! validate_username( $data['kbs_user_login'] ) ) {
 		$message = 'username_invalid';
-	} elseif( email_exists( $data['kbs_user_email'] ) ) {
+	} elseif ( email_exists( $data['kbs_user_email'] ) ) {
 		$message = 'email_unavailable';
-	} elseif( empty( $data['kbs_user_email'] ) || ! is_email( $data['kbs_user_email'] ) ) {
+	} elseif ( empty( $data['kbs_user_email'] ) || ! is_email( $data['kbs_user_email'] ) ) {
 		$message = 'email_invalid';
-	} elseif( empty( $_POST['kbs_user_pass'] ) ) {
+	} elseif ( empty( $_POST['kbs_user_pass'] ) ) {
 		$message = 'empty_password';
-	} elseif( ( ! empty( $_POST['kbs_user_pass'] ) && empty( $_POST['kbs_user_pass2'] ) ) || ( $_POST['kbs_user_pass'] !== $_POST['kbs_user_pass2'] ) ) {
+	} elseif ( ( ! empty( $_POST['kbs_user_pass'] ) && empty( $_POST['kbs_user_pass2'] ) ) || ( $_POST['kbs_user_pass'] !== $_POST['kbs_user_pass2'] ) ) {
 		$message = 'password_mismatch';
 	} else	{
 		
@@ -190,3 +190,13 @@ function kbs_process_register_form( $data ) {
 
 } // kbs_process_register_form
 add_action( 'kbs_user_register', 'kbs_process_register_form' );
+
+/**
+ * Whether or not a user needs to be logged in before submitting a ticket.
+ *
+ * @since	1.0
+ * @return	true|false
+ */
+function kbs_user_must_be_logged_in()	{
+	return kbs_get_option( 'logged_in_only' );
+} // kbs_user_must_be_logged_in
