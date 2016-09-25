@@ -132,7 +132,15 @@ jQuery(document).ready(function ($) {
 				
 				event.preventDefault();
 
-				if ( $('#kbs_ticket_reply').val().length < 1 )	{
+				var responseContent;
+
+				if ( $("#wp-kbs_ticket_reply-wrap").hasClass("tmce-active") )	{
+					responseContent = tinyMCE.activeEditor.getContent();
+				} else	{
+					responseContent = $('#kbs_ticket_reply').val();
+				}
+
+				if ( responseContent.length < 1 )	{
 					alert( kbs_vars.no_ticket_reply_content );
 					return false;
 				}
