@@ -31,16 +31,16 @@ jQuery(document).ready(function ($) {
 
 		var ticketContent;
 
-		if ( $("#wp-kbs_ticket_reply-wrap").hasClass("tmce-active") )	{
+		var tinymceActive = (typeof tinyMCE != 'undefined') && tinyMCE.activeEditor && ! tinyMCE.activeEditor.isHidden();
+
+		if (tinymceActive) {
 			ticketContent = tinyMCE.activeEditor.getContent();
-		} else	{
-			ticketContent = $('#kbs_ticket_reply').val();
 		}
 
 		$.ajax({
 			type       : 'POST',
 			dataType   : 'json',
-			data       : ticketData,
+			data       : ticketData + '&' + $.param({tinymce.editors[0].id: ticketContent}),
 			url        : kbs_scripts.ajaxurl,
 			success    : function (response) {
 				if ( '' != response.error )	{

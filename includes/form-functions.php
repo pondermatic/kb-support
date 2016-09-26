@@ -587,7 +587,7 @@ add_action( 'kbs_form_display_url_field', 'kbs_display_form_text_field', 10, 2 )
 function kbs_display_form_textarea_field( $field, $settings )	{
 
 	$placeholder = ! empty( $settings['placeholder'] ) ? ' placeholder="' . esc_attr( $settings['placeholder'] ) . '"' : '';
-	$class       = ! empty( $settings['input_class'] ) ? ' class="' . esc_attr( $settings['input_class'] ) . '"'       : '';
+	$class       = ! empty( $settings['input_class'] ) ? esc_attr( $settings['input_class'] )                          : '';
 	$required    = ! empty( $settings['required'] )    ? ' ' . ' required'                                             : '';
 
 	do_action( 'kbs_before_form_field', $field, $settings );

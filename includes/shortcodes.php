@@ -71,6 +71,7 @@ function kbs_submit_form_shortcode( $atts ) {
 			'form' => 0,
 		), $atts, 'kbs_submit' )
 	);
+
 	return kbs_display_form( $form );
 } // kbs_submit_form_shortcode
 add_shortcode( 'kbs_submit', 'kbs_submit_form_shortcode' );
