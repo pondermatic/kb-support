@@ -6,16 +6,17 @@
  * @subpackage  Functions/Forms
  * @copyright   Copyright (c) 2016, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       0.1
+ * @since       1.0
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) )
+	exit;
 
 /**
  * Retrieve all forms.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments. See $defaults / WP_Query.
  * @return	obj		WP_Query Object
  */
@@ -32,7 +33,7 @@ function kbs_get_forms()	{
 /**
  * Retrieve a form.
  *
- * @since	0.1
+ * @since	1.0
  * @param	int		$form_id	Post ID.
  * @return	obj		WP_Post
  */
@@ -71,49 +72,113 @@ function kbs_form_has_default_field( $form_id, $field )	{
 } // kbs_form_has_default_field
 
 /**
+ * Default form fields
+ *
+ * @since	1.0
+ * @return	arr
+ */
+function kbs_form_default_fields()	{
+	$default_fields = array(
+		'first_name' => array(
+			'type'            => 'text',
+			'mapping'         => 'customer_first',
+			'required'        => true,
+			'label'           => __( 'First Name', 'kb-support' ),
+			'show_logged_in'  => false,
+			'menu_order'      => '0'
+		),
+		'last_name'  => array(
+			'type'            => 'text',
+			'mapping'         => 'customer_last',
+			'required'        => true,
+			'label'           => __( 'Last Name', 'kb-support' ),
+			'show_logged_in'  => false,
+			'menu_order'      => '1'
+		), 
+		'email'      => array(
+			'type'            => 'email',
+			'mapping'         => 'customer_email',
+			'required'        => true,
+			'label'           => __( 'Email Address', 'kb-support' ),
+			'show_logged_in'  => false,
+			'menu_order'      => '2'
+		),
+		'text'      => array(
+			'type'            => 'text',
+			'mapping'         => 'post_title',
+			'required'        => true,
+			'label'           => __( 'Subject', 'kb-support' ),
+			'show_logged_in'  => true,
+			'menu_order'      => '3'
+		),
+		'rich_editor'      => array(
+			'type'            => 'rich_editor',
+			'mapping'         => 'post_content',
+			'required'        => true,
+			'label'           => __( 'Description', 'kb-support' ),
+			'show_logged_in'  => true,
+			'menu_order'      => '4'
+		)
+	);
+
+	$default_fields = apply_filters( 'kbs_form_default_fields', $default_fields );
+
+	return $default_fields;
+} // kbs_form_default_fields
+
+/**
  * Adds the email field to a form if needed.
  *
  * @since	1.0
  * @param	int		$field_id	The form ID
  */
-function kbs_add_email_field_to_form( $form_id )	{
+function kbs_add_default_fields_to_form( $form_id )	{
 
-	if ( ! kbs_form_has_default_field( $form_id, 'email' ) )	{
+	$default_fields = kbs_form_default_fields();
 
-		$form = new KBS_Form( $form_id );
-
-		$data = array(
-			'form_id'         => $form_id,
-			'type'            => 'email',
-			'mapping'         => '',
-			'required'        => true,
-			'label'           => __( 'Email Address', 'kb-support' ),
-			'label_class'     => '',
-			'input_class'     => '',
-			'select_options'  => '',
-			'select_multiple' => false,
-			'selected'        => false,
-			'maxfiles'        => false,
-			'chosen'          => false,
-			'placeholder'     => '',
-			'hide_label'      => false
-		);
-
-		$field_id = $form->add_field( $data );
-
-		if ( $field_id )	{
-			add_post_meta( $field_id, '_default_field', $data['type'] );
+	foreach( $default_fields as $field => $field_data )	{
+		
+		if ( ! kbs_form_has_default_field( $form_id, $field ) )	{
+	
+			$form = new KBS_Form( $form_id );
+	
+			$data = array(
+				'form_id'         => $form_id,
+				'type'            => $field_data['type'],
+				'mapping'         => $field_data['mapping'],
+				'required'        => $field_data['required'],
+				'label'           => $field_data['label'],
+				'label_class'     => '',
+				'input_class'     => '',
+				'select_options'  => '',
+				'select_multiple' => false,
+				'selected'        => false,
+				'maxfiles'        => false,
+				'chosen'          => false,
+				'placeholder'     => '',
+				'description'     => '',
+				'hide_label'      => false,
+				'show_logged_in'  => $field_data['show_logged_in'],
+				'menu_order'      => $field_data['menu_order']
+			);
+	
+			$field_id = $form->add_field( $data );
+	
+			if ( $field_id )	{
+				add_post_meta( $field_id, '_default_field', $data['type'] );
+			}
+	
 		}
 
 	}
 
-} // kbs_add_email_field_to_form
-add_action( 'kbs_kb_before_save', 'kbs_add_email_field_to_form', 5 );
+} // kbs_add_default_fields_to_form
+add_action( 'kbs_kb_before_save', 'kbs_add_default_fields_to_form', 5 );
 
 /**
  * Retrieve all form fields.
  *
- * @since	0.1
+ * @since	1.0
  * @param	int		$form_id	Post ID.
  * @param	arr		$args		Arguments. See $defaults / WP_Query.
  * @return	obj		WP_Query Object.
@@ -131,7 +196,7 @@ function kbs_get_fields( $form_id )	{
  *
  * Also retrieves settings into $field->settings.
  *
- * @since	0.1
+ * @since	1.0
  * @param	int		$field_id	Post ID.
  * @return	obj		WP_Query Object.
  */
@@ -169,7 +234,7 @@ function kbs_can_delete_field( $field_id )	{
 /**
  * Delete a form field.
  *
- * @since	0.1
+ * @since	1.0
  * @param	int		$field_id	Post ID.
  * @return	obj		WP_Query Object.
  */
@@ -192,7 +257,7 @@ function kbs_delete_field( $field_id )	{
 /**
  * Returns the field type in readable format.
  *
- * @since	0.1
+ * @since	1.0
  * @param	str		$type	The type to return
  * @return	str		The field type in readable format.
  */
@@ -207,7 +272,7 @@ function kbs_get_field_type( $type )	{
 /**
  * Returns the field settings.
  *
- * @since	0.1
+ * @since	1.0
  * @param	str		$field_id	The post ID.
  * @return	arr		The field settings.
  */
@@ -222,7 +287,7 @@ function kbs_get_field_settings( $field_id )	{
 /**
  * Returns all possible form fields types.
  *
- * @since	0.1
+ * @since	1.0
  * @param
  * @return	arr
  */
@@ -258,7 +323,7 @@ function kbs_get_field_types()	{
 	/**
 	 * Filter the field types to allow for custom fields to be added.
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 * @param	$field_types
 	 */
 	$field_types = apply_filters( 'kbs_field_types', $field_types );
@@ -272,22 +337,25 @@ function kbs_get_field_types()	{
 /**
  * Returns all possible form fields types.
  *
- * @since	0.1
+ * @since	1.0
  * @param
  * @return	arr
  */
 function kbs_get_mappings()	{
 	
 	$mappings = array(
-		''             => __( 'None', 'kb-support' ),
-		'post_title'   => __( 'Ticket Title', 'kb-support' ),
-		'post_content' => __( 'Ticket Content', 'kb-support' )
+		''               => __( 'None', 'kb-support' ),
+		'customer_first' => __( 'Customer First Name', 'kb-support' ),
+		'customer_last'  => __( 'Customer Last Name', 'kb-support' ),
+		'customer_email' => __( 'Customer Email', 'kb-support' ),
+		'post_title'     => __( 'Ticket Title', 'kb-support' ),
+		'post_content'   => __( 'Ticket Content', 'kb-support' )
 	);
 	
 	/**
 	 * Filter the field mappings to allow for custom mappings to be added.
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 * @param	$field_types
 	 */
 	$mappings = apply_filters( 'kbs_mappings', $mappings );
@@ -301,7 +369,7 @@ function kbs_get_mappings()	{
 /**
  * Returns all available mappings.
  *
- * @since	0.1
+ * @since	1.0
  * @param	int	form_id		Form post ID.
  * @return	arr
  */
@@ -324,7 +392,7 @@ function kbs_get_available_mappings( $form_id )	{
 /**
  * Output the icons for the field settings.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$settings	The field ID.
  * @return	str
  */
@@ -369,7 +437,7 @@ function kbs_display_field_setting_icons( $field_id )	{
 /**
  * Display Form
  *
- * @since	0.1
+ * @since	1.0
  * @global	$kbs_form
  * @param	str			$form_id	Form post ID
  * @return	str			Form
@@ -448,7 +516,7 @@ add_action( 'kbs_submit_ticket', 'kbs_process_ticket_submission' );
  * @return	str		The label for the form submit button.
  */
 function kbs_get_form_submit_label()	{
-	return kbs_get_option( 'form_submit_label' );
+	return kbs_get_option( 'form_submit_label', sprintf( __( 'Submit %s', 'kb-support' ), kbs_get_ticket_label_singular() ) );
 } // kbs_get_form_submit_label
 
 /**
@@ -456,7 +524,7 @@ function kbs_get_form_submit_label()	{
  *
  * This function is also the callback for email and URL fields.
  *
- * @since	0.1
+ * @since	1.0
  * @param	obj			$field		Field post object
  * @param	arr			$settings	Field settings
  * @return	str			$type input field
@@ -511,7 +579,7 @@ add_action( 'kbs_form_display_url_field', 'kbs_display_form_text_field', 10, 2 )
 /**
  * Display a form textrea field
  *
- * @since	0.1
+ * @since	1.0
  * @param	obj			$field		Field post object
  * @param	arr			$settings	Field settings
  * @return	str			Field
@@ -567,7 +635,7 @@ add_action( 'kbs_form_display_rich_editor_field', 'kbs_display_form_textarea_fie
 /**
  * Display a form select field
  *
- * @since	0.1
+ * @since	1.0
  * @param	obj			$field		Field post object
  * @param	arr			$settings	Field settings
  * @return	str			Field
@@ -616,7 +684,7 @@ add_action( 'kbs_form_display_select_field', 'kbs_display_form_select_field', 10
 /**
  * Display a form checkbox field
  *
- * @since	0.1
+ * @since	1.0
  * @param	obj			$field		Field post object
  * @param	arr			$settings	Field settings
  * @return	str			Field
@@ -650,7 +718,7 @@ add_action( 'kbs_form_display_checkbox_field', 'kbs_display_form_checkbox_field'
 /**
  * Display a form checkbox list field
  *
- * @since	0.1
+ * @since	1.0
  * @param	obj			$field		Field post object
  * @param	arr			$settings	Field settings
  * @return	str			Field
@@ -691,7 +759,7 @@ add_action( 'kbs_form_display_checkbox_list_field', 'kbs_display_form_checkbox_l
 /**
  * Display a form recaptcha field
  *
- * @since	0.1
+ * @since	1.0
  * @param	obj			$field		Field post object
  * @param	arr			$settings	Field settings
  * @return	str			Field
@@ -731,7 +799,7 @@ add_action( 'kbs_form_display_recaptcha_field', 'kbs_display_form_recaptcha_fiel
 /**
  * Display a form file upload field.
  *
- * @since	0.1
+ * @since	1.0
  * @param	obj			$field		Field post object
  * @param	arr			$settings	Field settings
  * @return	str			$type input field
