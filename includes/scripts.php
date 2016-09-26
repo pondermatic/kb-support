@@ -6,18 +6,19 @@
  * @subpackage  Functions
  * @copyright   Copyright (c) 2016, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       0.1
+ * @since       1.0
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) )
+	exit;
 
 /**
  * Load Scripts
  *
  * Enqueues the required scripts.
  *
- * @since	0.1
+ * @since	1.0
  * @return	void
  */
 function kbs_load_scripts() {
@@ -33,6 +34,7 @@ function kbs_load_scripts() {
 
 	wp_localize_script( 'kbs-ajax', 'kbs_scripts', apply_filters( 'kbs_ajax_script_vars', array(
 		'ajaxurl'                 => kbs_get_ajax_url(),
+		'ajax_loader'             => KBS_PLUGIN_URL . 'assets/images/loading.gif',
 		'permalinks'              => get_option( 'permalink_structure' ) ? '1' : '0',
 		'submit_ticket_loading'   => __( 'Please Wait...', 'kb-support' ),
 		'submit_ticket'           => kbs_get_form_submit_label(),
@@ -47,7 +49,7 @@ add_action( 'wp_enqueue_scripts', 'kbs_load_scripts' );
  *
  * Checks the styles option and hooks the required filter.
  *
- * @since	0.1
+ * @since	1.0
  * @return	void
  */
 function kbs_register_styles() {
@@ -101,7 +103,7 @@ add_action( 'wp_enqueue_scripts', 'kbs_register_styles' );
  *
  * Enqueues the required admin scripts.
  *
- * @since	0.1
+ * @since	1.0
  * @global	$post
  * @param	str		$hook	Page hook
  * @return	void

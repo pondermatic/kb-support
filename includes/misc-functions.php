@@ -276,6 +276,10 @@ function kbs_display_notice( $m )	{
  */
 function kbs_get_notices( $notice = false )	{
 	$notices = array(
+		'need_login'       => array(
+			'class'  => 'info',
+			'notice' => sprintf( __( 'You must be logged in to create a support %s', 'kb-support' ), kbs_get_ticket_label_singular() )
+		),
 		'ticket_submitted' => array(
 			'class'  => 'success',
 			'notice' => __( "Your support request has been successfully received. We'll be in touch as soon as possible.", 'kb-support' )

@@ -33,6 +33,13 @@ class KBS_Form {
 	private $fields;
 
 	/**
+	 * The mapped form fields.
+	 *
+	 * @since	1.0
+	 */
+	public $mapped_fields;
+
+	/**
 	 * Get things going
 	 *
 	 * @since	1.0
@@ -75,6 +82,7 @@ class KBS_Form {
 		}
 
 		$this->get_fields();
+		$this->get_built_in();
 
 		return true;
 
@@ -145,7 +153,8 @@ class KBS_Form {
 			'chosen'          => ! empty( $data['chosen'] )          ? true                                        : false,
 			'description'     => ! empty( $data['description'] )     ? sanitize_text_field( $data['description'] ) : '',
 			'placeholder'     => ! empty( $data['placeholder'] )     ? sanitize_text_field( $data['placeholder'] ) : '',
-			'hide_label'      => ! empty( $data['hide_label'] )      ? true                                        : false
+			'hide_label'      => ! empty( $data['hide_label'] )      ? true                                        : false,
+			'show_logged_in'  => ! empty( $data['show_logged_in'] )  ? true                                        : false
 		);
 
 		$settings = apply_filters( 'kbs_new_form_field_settings', $settings );
@@ -199,7 +208,8 @@ class KBS_Form {
 			'chosen'          => ! empty( $data['chosen'] )          ? true                                        : false,
 			'description'     => ! empty( $data['description'] )     ? sanitize_text_field( $data['description'] ) : '',
 			'placeholder'     => ! empty( $data['placeholder'] )     ? sanitize_text_field( $data['placeholder'] ) : '',
-			'hide_label'      => ! empty( $data['hide_label'] )      ? true                                        : false
+			'hide_label'      => ! empty( $data['hide_label'] )      ? true                                        : false,
+			'show_logged_in'  => ! empty( $data['show_logged_in'] )  ? true                                        : false
 		);
 
 		$args = array(
@@ -266,6 +276,30 @@ class KBS_Form {
 
 		return $this->fields;
 	} // get_fields
+
+	/**
+	 * Sets the built-in fields.
+	 *
+	 * @since	1.0
+	 * @return	void
+	 */
+	function mapped_fields()	{
+		if ( ! isset( $this->fields ) )	{
+			return;
+		}
+
+		$this->mapped_fields = array();
+
+		$mappings = kbs_get_mappings();
+
+		foreach( $this->fields as $field )	{
+			$settings = $this->get_field_settings( $field->ID );
+			if ( array_key_exists( $settings['mapping'], $mappings ) )	{
+				$this->mapped_fields[ $settings['mapping'] ] = $field->post_name;
+			}
+		}
+
+	} // mapped_fields
 
 	/*
 	 * Get the next positional order for the field.

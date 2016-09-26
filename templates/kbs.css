@@ -152,7 +152,7 @@
 	font-style: italic;
 }
 
-#kbs_ticket_wrap input.mdjm-input,
+#kbs_ticket_wrap input.kbs-input,
 #kbs_ticket_form_wrap input.kbs-input	{
 	display: inline-block;
 	width: 70%;
@@ -170,7 +170,7 @@
 	padding: 0;
 }
 
-#kbs_ticket_form_wrap input.kbs-input.error	{
+#kbs_ticket_form_wrap input.error	{
 	border-color: #c4554e;
 }
 

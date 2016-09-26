@@ -6,7 +6,7 @@
  * @subpackage  Functions/Install
  * @copyright   Copyright (c) 2016, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       0.1
+ * @since       1.0
 */
 
 // Exit if accessed directly
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) )
  * pages. After successful install, the user is redirected to the KBS Welcome
  * screen.
  *
- * @since	0.1
+ * @since	1.0
  * @global	$wpdb
  * @global	$kbs_options
  * @global	$wp_version
@@ -54,7 +54,7 @@ register_activation_hook( KBS_PLUGIN_FILE, 'kbs_install' );
 /**
  * Run the KBS Install process
  *
- * @since	0.1
+ * @since	1.0
  * @return	void
  */
 function kbs_run_install() {
@@ -87,17 +87,20 @@ function kbs_run_install() {
 
 			// Check for backwards compatibility
 			$tab_sections = kbs_get_settings_tab_sections( $tab );
-			if( ! is_array( $tab_sections ) || ! array_key_exists( $section, $tab_sections ) ) {
+			if ( ! is_array( $tab_sections ) || ! array_key_exists( $section, $tab_sections ) ) {
 				$section = 'main';
 				$settings = $sections;
 			}
 
 			foreach ( $settings as $option ) {
-
-				if( 'checkbox' == $option['type'] && ! empty( $option['std'] ) ) {
-					$options[ $option['id'] ] = '1';
+				if ( ! empty( $option['std'] ) ) {
+					if ( 'checkbox' == $option['type'] )	{
+						$options[ $option['id'] ] = '1';
+					} else	{
+						$options[ $option['id'] ] = $option['std'];
+					}
+					
 				}
-
 			}
 		}
 
@@ -144,7 +147,7 @@ function kbs_run_install() {
 /**
  * When a new Blog is created in multisite, see if KBS is network activated, and run the installer
  *
- * @since	0.1
+ * @since	1.0
  * @param	int		$blog_id	The Blog ID created
  * @param	int		$user_id	The User ID set as the admin
  * @param	str		$domain		The URL
@@ -172,7 +175,7 @@ add_action( 'wpmu_new_blog', 'kbs_new_blog_created', 10, 6 );
  * Runs just after plugin installation and exposes the
  * kbs_after_install hook.
  *
- * @since	0.1
+ * @since	1.0
  * @return	void
  */
 function kbs_after_install() {
@@ -197,7 +200,7 @@ add_action( 'admin_init', 'kbs_after_install' );
  *
  * Roles do not get created when KBS is network activation so we need to create them during admin_init
  *
- * @since	0.1
+ * @since	1.0
  * @return	void
  */
 function kbs_install_roles_on_network() {

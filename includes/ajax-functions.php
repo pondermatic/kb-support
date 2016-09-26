@@ -143,9 +143,8 @@ function kbs_ajax_add_form_field()	{
 		$results['message'] = 'field_add_fail';
 	}
 	
-	echo json_encode( $results );
+	wp_send_json( $results );
 
-	die();
 } // kbs_ajax_add_form_field
 add_action( 'wp_ajax_kbs_add_form_field', 'kbs_ajax_add_form_field' );
 
@@ -170,9 +169,8 @@ function kbs_ajax_save_form_field()	{
 		$results['message'] = 'field_save_fail';
 	}
 	
-	echo json_encode( $results );
+	wp_send_json( $results );
 
-	die();
 } // kbs_ajax_save_form_field
 add_action( 'wp_ajax_kbs_save_form_field', 'kbs_ajax_save_form_field' );
 
@@ -205,7 +203,10 @@ function kbs_ajax_validate_form_submission()	{
 	foreach ( $form->get_fields() as $field )	{
 		$settings = $form->get_field_settings( $field->ID );
 		if ( ! empty( $settings['required'] ) && empty( $_POST[ $field->post_name ] ) )	{
-			wp_send_json( array( 'error' => get_the_title( $field->ID ) . __( ' is a required field.', 'kb-support' ) ) );
+			wp_send_json( array(
+				'error' => get_the_title( $field->ID ) . __( ' is a required field.', 'kb-support' ),
+				'field' => $field->post_name
+			) );
 		}
 	}
 

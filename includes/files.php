@@ -10,14 +10,15 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) )
+	exit;
 
 /**
  * Attach files to a ticket.
  *
  * @since	1.0
  * @param	arr	$attachment	$_FILES
- * @param	int	$ticket_id		The ticket ID
+ * @param	int	$ticket_id	The ticket ID
  * @return	int	The attachment ID.
  */
 function kbs_attach_file_to_ticket( $attachment, $ticket_id )	{

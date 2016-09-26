@@ -1,7 +1,8 @@
 var kbs_scripts;
 jQuery(document).ready(function ($) {
 
-	// Date picker
+	/* = Datepicker
+	====================================================================================== */
 	var kbs_datepicker = $( '.kbs_datepicker' );
 	if ( kbs_datepicker.length > 0 ) {
 		var dateFormat = 'mm/dd/yy';
@@ -10,6 +11,8 @@ jQuery(document).ready(function ($) {
 		} );
 	}
 
+	/* = Ticket form validation and submission
+	====================================================================================== */
 	$(document).on('click', '#kbs_ticket_form #kbs_ticket_submit', function(e) {
 		var kbsTicketForm = document.getElementById('kbs_ticket_form');
 
@@ -20,26 +23,37 @@ jQuery(document).ready(function ($) {
 		e.preventDefault();
 		$(this).val(kbs_scripts.submit_ticket_loading);
 		$(this).prop("disabled", true);
-		$(this).after('<span class="kbs_ticket_ajax"><i class="kbs-icon-spinner kbs-icon-spin"></i></span>');
+		$(this).after(' <span id="kbs-loading" class="kbs-loader kbs-hidden"><img src="' + kbs_scripts.ajax_loader + '" /></span>');
+		$('input').removeClass("error");
 
-		var $form    = $("#kbs_ticket_form");
-		var postData = $("#kbs_ticket_form").serialize();
+		var $form      = $("#kbs_ticket_form");
+		var ticketData = $("#kbs_ticket_form").serialize();
+
+		var ticketContent;
+
+		if ( $("#wp-kbs_ticket_reply-wrap").hasClass("tmce-active") )	{
+			ticketContent = tinyMCE.activeEditor.getContent();
+		} else	{
+			ticketContent = $('#kbs_ticket_reply').val();
+		}
 
 		$.ajax({
 			type       : 'POST',
 			dataType   : 'json',
-			data       : postData,
+			data       : ticketData,
 			url        : kbs_scripts.ajaxurl,
 			success    : function (response) {
 				if ( '' != response.error )	{
 					$form.find('.kbs_alert').show("fast");
 					$form.find('.kbs_alert').html(response.error);
+					$form.find('#' + response.field).addClass("error");
+					$form.find('#' + response.field).focus();
 					$('#kbs_ticket_submit').prop("disabled", false);
+					$('#kbs-loading').remove();
 					$('#kbs_ticket_submit').val(kbs_scripts.submit_ticket);
 				} else	{
 					$form.append( '<input type="hidden" name="kbs_action" value="submit_ticket" />' );
-					//$form.get(0).submit();
-					alert('submit');
+					$form.get(0).submit();
 				}
 			}
 		}).fail(function (data) {

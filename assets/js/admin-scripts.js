@@ -262,6 +262,7 @@ jQuery(document).ready(function ($) {
 					}
 	
 					if ( 'text'          == kbs_selected_field
+						|| 'email'       == kbs_selected_field
 						|| 'textarea'    == kbs_selected_field
 						|| 'rich_editor' == kbs_selected_field )	{
 						$('#kbs_meta_field_mapping_wrap').show();
