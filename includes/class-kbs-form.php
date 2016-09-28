@@ -82,7 +82,7 @@ class KBS_Form {
 		}
 
 		$this->get_fields();
-		$this->get_built_in();
+		$this->mapped_fields();
 
 		return true;
 
@@ -152,6 +152,7 @@ class KBS_Form {
 			'maxfiles'        => ! empty( $data['maxfiles'] )        ? $data['maxfiles']                           : false,
 			'chosen'          => ! empty( $data['chosen'] )          ? true                                        : false,
 			'description'     => ! empty( $data['description'] )     ? sanitize_text_field( $data['description'] ) : '',
+			'description_pos' => ! empty( $data['description_pos'] ) ? $data['description_pos']                    : 'label',
 			'placeholder'     => ! empty( $data['placeholder'] )     ? sanitize_text_field( $data['placeholder'] ) : '',
 			'hide_label'      => ! empty( $data['hide_label'] )      ? true                                        : false,
 			'show_logged_in'  => ! empty( $data['show_logged_in'] )  ? true                                        : false
@@ -207,6 +208,7 @@ class KBS_Form {
 			'maxfiles'        => ! empty( $data['maxfiles'] )        ? $data['maxfiles']                           : false,
 			'chosen'          => ! empty( $data['chosen'] )          ? true                                        : false,
 			'description'     => ! empty( $data['description'] )     ? sanitize_text_field( $data['description'] ) : '',
+			'description_pos' => ! empty( $data['description_pos'] ) ? $data['description_pos']                    : 'label',
 			'placeholder'     => ! empty( $data['placeholder'] )     ? sanitize_text_field( $data['placeholder'] ) : '',
 			'hide_label'      => ! empty( $data['hide_label'] )      ? true                                        : false,
 			'show_logged_in'  => ! empty( $data['show_logged_in'] )  ? true                                        : false
@@ -363,7 +365,7 @@ class KBS_Form {
 		do_action( 'kbs_pre_delete_form', $form_id );
 
 		foreach ( $this->fields as $field )	{
-			$this->delete_field( $field->ID );
+			$this->delete_field( $field->ID, true );
 		}
 
 		$result = wp_delete_post( $form_id, true );
@@ -378,14 +380,15 @@ class KBS_Form {
 	 *
 	 * @since	1.0
 	 * @param	int		$field_id	The field post ID.
+	 * @param	bool	$force		Whether or not to force deletion of a default field.
 	 * @return	mixed	Field post object if successful, otherwise false.
 	 */
-	public function delete_field( $field_id )	{
+	public function delete_field( $field_id, $force = false )	{
 		if ( 'kbs_form_field' != get_post_type( $field_id ) )	{
 			return false;
 		}
 
-		if ( ! kbs_can_delete_field( $field_id ) )	{
+		if ( ! $force && ! kbs_can_delete_field( $field_id ) )	{
 			return false;
 		}
 

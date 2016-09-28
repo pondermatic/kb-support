@@ -29,7 +29,7 @@ function kbs_set_kbs_form_post_columns( $columns ) {
 	
 	return apply_filters( 'kbs_form_post_columns', $columns );
 	
-} // kbs_set_kbs_kb_post_columns
+} // kbs_set_kbs_form_post_columns
 add_filter( 'manage_kbs_form_posts_columns' , 'kbs_set_kbs_form_post_columns' );
 
 /**
@@ -73,18 +73,18 @@ add_action( 'manage_kbs_form_posts_custom_column' , 'kbs_set_kbs_form_column_dat
 function kbs_form_post_save( $post_id, $post, $update )	{	
 
 	// Remove the save post action to avoid loops
-	remove_action( 'save_post_kbs_kb', 'kbs_kb_post_save', 10, 3 );
+	remove_action( 'save_post_kbs_form', 'kbs_form_post_save', 10, 3 );
 
 	// Fire the before save action but only if this is not a new article creation (i.e $post->post_status == 'draft')
 	if ( $update === true )	{
-		do_action( 'kbs_kb_before_save', $post_id, $post, $update );
+		do_action( 'kbs_form_before_save', $post_id, $post, $update );
 	}
 
 	// Fire the after save action
-	do_action( 'kbs_kb_after_save', $post_id, $post, $update );
+	do_action( 'kbs_form_after_save', $post_id, $post, $update );
 
 	// Re-add the save post action
-	add_action( 'save_post_kbs_kb', 'kbs_kb_post_save', 10, 3 );
+	add_action( 'save_post_kbs_form', 'kbs_form_post_save', 10, 3 );
 } // kbs_form_post_save
 add_action( 'save_post_kbs_form', 'kbs_form_post_save', 10, 3 );
 
@@ -128,3 +128,21 @@ function kbs_delete_all_form_fields( $form_id )	{
 
 } // kbs_delete_all_form_fields
 add_action( 'before_delete_post', 'kbs_delete_all_form_fields' );
+
+/**
+ * Insert the shortcode after the form title.
+ *
+ * @since	1.0
+ * @param	obj		$post		The WP_Post object.
+ * @return	str
+ */
+function kbs_form_edit_form_after_title()	{
+	global $post;
+
+	if ( 'kbs_form' == get_post_type() ) : ?>
+    	<?php $kbs_form = new KBS_Form( $post->ID ); ?>
+		<input type="text" readonly="readonly" size="25" onclick="this.focus(); this.select()" id="kbs-form-shortcode" name="kbs_form_shortcode" value='<?php echo $kbs_form->get_shortcode(); ?>' title="<?php _e( 'To copy the shortcode, click here then press Ctrl + C (PC) or Cmd + C (Mac).', 'kb-support' ); ?>" />
+	<?php endif;
+
+} // kbs_form_edit_form_after_title
+add_action( 'edit_form_top', 'kbs_form_edit_form_after_title' );

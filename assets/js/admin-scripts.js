@@ -313,6 +313,7 @@ jQuery(document).ready(function ($) {
 					maxfiles         : $('#kbs_field_maxfiles').val(),
 					chosen           : ( $('#kbs_field_select_chosen').is(':checked') )   ? $('#kbs_field_select_chosen').val()   : 0,
 					description      : $('#kbs_field_description').val(),
+					description_pos  : $('input[name=kbs_field_description_pos]').filter(':checked').val(),
 					placeholder      : $('#kbs_field_placeholder').val(),
 					hide_label       : ( $('#kbs_field_hide_label').is(':checked') )      ? $('#kbs_field_hide_label').val()      : 0,
 					action           : 'kbs_add_form_field',
@@ -341,7 +342,7 @@ jQuery(document).ready(function ($) {
 				
 			});
 			
-			// Send Add New Field Requests
+			// Send Edit Field Requests
 			$( document.body ).on( 'click', '#kbs-save-form-field', function(event) {
 				
 				event.preventDefault();
@@ -372,6 +373,7 @@ jQuery(document).ready(function ($) {
 					chosen           : ( $('#kbs_field_select_chosen').is(':checked') )   ? $('#kbs_field_select_chosen').val()   : 0,
 					placeholder      : $('#kbs_field_placeholder').val(),
 					description      : $('#kbs_field_description').val(),
+					description_pos  : $('input[name=kbs_field_description_pos]').filter(':checked').val(),
 					hide_label       : ( $('#kbs_field_hide_label').is(':checked') )      ? $('#kbs_field_hide_label').val()      : 0,
 					action           : 'kbs_save_form_field',
 				};

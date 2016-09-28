@@ -28,9 +28,15 @@ global $kbs_form;
                                         <span class="kbs-required-indicator">*</span>
                                     <?php endif; ?>
                                 </label>
+                                <?php if ( ! empty( $settings['description'] ) && 'label' == $settings['description_pos'] ) : ?>
+                                	<?php kbs_display_form_field_description( $field, $settings ); ?>
+                                <?php endif; ?>
                             <?php endif; ?>
         
                             <?php $kbs_form->display_field( $field, $settings ); ?>
+                            <?php if ( ! empty( $settings['description'] ) && 'field' == $settings['description_pos'] ) : ?>
+                                	<?php kbs_display_form_field_description( $field, $settings ); ?>
+                                <?php endif; ?>
                         </p>
 
                 <?php endforeach; ?>

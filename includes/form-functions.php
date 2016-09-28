@@ -79,7 +79,7 @@ function kbs_form_has_default_field( $form_id, $field )	{
  */
 function kbs_form_default_fields()	{
 	$default_fields = array(
-		'first_name' => array(
+		'first_name'  => array(
 			'type'            => 'text',
 			'mapping'         => 'customer_first',
 			'required'        => true,
@@ -87,7 +87,7 @@ function kbs_form_default_fields()	{
 			'show_logged_in'  => false,
 			'menu_order'      => '0'
 		),
-		'last_name'  => array(
+		'last_name'   => array(
 			'type'            => 'text',
 			'mapping'         => 'customer_last',
 			'required'        => true,
@@ -95,7 +95,7 @@ function kbs_form_default_fields()	{
 			'show_logged_in'  => false,
 			'menu_order'      => '1'
 		), 
-		'email'      => array(
+		'email'       => array(
 			'type'            => 'email',
 			'mapping'         => 'customer_email',
 			'required'        => true,
@@ -103,7 +103,7 @@ function kbs_form_default_fields()	{
 			'show_logged_in'  => false,
 			'menu_order'      => '2'
 		),
-		'text'      => array(
+		'subject'     => array(
 			'type'            => 'text',
 			'mapping'         => 'post_title',
 			'required'        => true,
@@ -111,7 +111,7 @@ function kbs_form_default_fields()	{
 			'show_logged_in'  => true,
 			'menu_order'      => '3'
 		),
-		'rich_editor'      => array(
+		'rich_editor' => array(
 			'type'            => 'rich_editor',
 			'mapping'         => 'post_content',
 			'required'        => true,
@@ -127,7 +127,7 @@ function kbs_form_default_fields()	{
 } // kbs_form_default_fields
 
 /**
- * Adds the email field to a form if needed.
+ * Adds the default fields to a form if needed.
  *
  * @since	1.0
  * @param	int		$field_id	The form ID
@@ -165,7 +165,7 @@ function kbs_add_default_fields_to_form( $form_id )	{
 			$field_id = $form->add_field( $data );
 	
 			if ( $field_id )	{
-				add_post_meta( $field_id, '_default_field', $data['type'] );
+				add_post_meta( $field_id, '_default_field', $field );
 			}
 	
 		}
@@ -173,7 +173,7 @@ function kbs_add_default_fields_to_form( $form_id )	{
 	}
 
 } // kbs_add_default_fields_to_form
-add_action( 'kbs_kb_before_save', 'kbs_add_default_fields_to_form', 5 );
+add_action( 'kbs_form_before_save', 'kbs_add_default_fields_to_form', 5 );
 
 /**
  * Retrieve all form fields.
@@ -236,11 +236,12 @@ function kbs_can_delete_field( $field_id )	{
  *
  * @since	1.0
  * @param	int		$field_id	Post ID.
+ * @param	bool	$force		Whether or not to force deletion of a default field.
  * @return	obj		WP_Query Object.
  */
-function kbs_delete_field( $field_id )	{
+function kbs_delete_field( $field_id, $force = false )	{
 
-	if ( ! kbs_can_delete_field( $field_id ) )	{
+	if ( ! $force && ! kbs_can_delete_field( $field_id ) )	{
 		return false;
 	}
 
@@ -338,11 +339,11 @@ function kbs_get_field_types()	{
  * Returns all possible form fields types.
  *
  * @since	1.0
- * @param
+ * @param	str		$mapping	The mapping to retrieve.
  * @return	arr
  */
-function kbs_get_mappings()	{
-	
+function kbs_get_mappings( $mapping = null )	{
+
 	$mappings = array(
 		''               => __( 'None', 'kb-support' ),
 		'customer_first' => __( 'Customer First Name', 'kb-support' ),
@@ -351,7 +352,7 @@ function kbs_get_mappings()	{
 		'post_title'     => __( 'Ticket Title', 'kb-support' ),
 		'post_content'   => __( 'Ticket Content', 'kb-support' )
 	);
-	
+
 	/**
 	 * Filter the field mappings to allow for custom mappings to be added.
 	 *
@@ -359,11 +360,15 @@ function kbs_get_mappings()	{
 	 * @param	$field_types
 	 */
 	$mappings = apply_filters( 'kbs_mappings', $mappings );
-	
+
 	asort( $mappings );
-	
+
+	if ( isset( $mapping ) && array_key_exists( $mapping, $mappings ) )	{
+		return $mappings[ $mapping ];
+	}
+
 	return $mappings;
-	
+
 } // kbs_get_mappings
 
 /**
@@ -849,4 +854,4 @@ function kbs_display_form_field_description( $field, $settings )	{
     	<span class="kbs-description"><?php esc_html_e( $settings['description'] ); ?></span>
     <?php endif;
 } // kbs_display_form_field_description
-add_action( 'kbs_after_form_field', 'kbs_display_form_field_description', 10, 2 );
+//add_action( 'kbs_after_form_field', 'kbs_display_form_field_description', 10, 2 );

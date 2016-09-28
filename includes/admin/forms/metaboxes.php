@@ -269,6 +269,13 @@ function kbs_render_field_description_row( $post_id, $args )	{
 
 	kbs_maybe_editing_field();
 
+	$checked_label = empty( $kbs_edit_field->settings['description_pos'] ) || 'label' == $kbs_edit_field->settings['description_pos'] ? ' checked="checked"' : '';
+
+	$checked_field = '';
+	if ( ! empty( $kbs_edit_field->settings['description_pos'] ) && 'field' == $kbs_edit_field->settings['description_pos'] )	{
+		$checked_field = ' checked="checked"';
+	}
+
 	?>
     
 	<div id="kbs_meta_field_description_wrap">
@@ -279,7 +286,10 @@ function kbs_render_field_description_row( $post_id, $args )	{
 				'value' => ! empty( $kbs_edit_field ) ? $kbs_edit_field->settings['description'] : null,
 				'class' => 'kbs_input'
 			) ); ?>
-		</label></p>
+		</label><br />
+		<input type="radio" name="kbs_field_description_pos" value="label"<?php echo $checked_label; ?>><span class="description"><?php _e( 'After Label', 'kb-support' ); ?></span>
+        &nbsp;&nbsp;&nbsp;
+        <input type="radio" name="kbs_field_description_pos" value="field"<?php echo $checked_field; ?>><span class="description"><?php _e( 'After Field', 'kb-support' ); ?></span></p>
 	</div>
 	<?php
 
@@ -327,6 +337,12 @@ add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_type_row', 20, 2 );
 function kbs_render_field_mapping_row( $post_id, $args )	{
 	global $kbs_edit_field;
 
+	$options = kbs_get_available_mappings( $post_id );
+
+	if ( ! empty( $kbs_edit_field->settings['mapping'] ) )	{
+		$options[ $kbs_edit_field->settings['mapping'] ] = kbs_get_mappings( $kbs_edit_field->settings['mapping'] );
+	}
+
 	?>
 	<div id="kbs_meta_field_mapping_wrap">
 		<p><strong><?php _e( 'Maps to', 'kb-support' ); ?></strong><br />
@@ -337,7 +353,7 @@ function kbs_render_field_mapping_row( $post_id, $args )	{
 				'class'            => 'kbs_field_mapping',
 				'show_option_all'  => false,
 				'show_option_none' =>'',
-				'options'          => kbs_get_available_mappings( $post_id )
+				'options'          => $options
 			) ); ?>
 		</label></p>
 	</div>
