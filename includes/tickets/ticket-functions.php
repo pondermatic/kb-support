@@ -253,9 +253,7 @@ function kbs_get_ticket_log_sources()	{
  * Adds a new ticket.
  *
  * @since	1.0
- * @param	arr		$data			Post arguments.
- * @param	arr		$meta			Post meta.
- * @param	str|arr	$attachments	File attachments.
+ * @param	arr		$ticket_data	Ticket data.
  * @return	mixed	Ticket ID on success, false on failure.
  */
 function kbs_add_ticket( $ticket_data )	{
@@ -264,16 +262,17 @@ function kbs_add_ticket( $ticket_data )	{
 		$ticket_data['attachments'] = array( $ticket_data['attachments'] );
 	}
 
-	$data        = apply_filters( 'kbs_add_ticket_data', $data );
-	$meta        = apply_filters( 'kbs_add_ticket_meta', $meta );
-	$attachments = apply_filters( 'kbs_add_ticket_attachments', $attachments );
+	$ticket_data = apply_filters( 'kbs_add_ticket_data', $ticket_data );
+	$attachments = apply_filters( 'kbs_add_ticket_attachments', $ticket_data['attachments'] );
 
 	$ticket = new KBS_Ticket();
 
-	$ticket->status         = ! empty( $ticket_data['status'] ) ? $ticket_data['status'] : 'new';
-	$ticket->agent          = $ticket_data['agent'];
+	$ticket->status         = ! empty( $ticket_data['status'] )          ? $ticket_data['status']          : 'new';
+	$ticket->ticket_title   = $ticket_data['post_title'];
+	$ticket->ticket_content = $ticket_data['post_content'];
+	$ticket->agent          = ! empty( $ticket_data['agent'] )           ? $ticket_data['agent']           : '';
 	$ticket->user_info      = $ticket_data['user_info'];
-	$ticket->user_id        = $ticket_data['user_info']['id'];
+	$ticket->user_id        = ! empty( $ticket_data['user_info']['id'] ) ? $ticket_data['user_info']['id'] : '';
 	$ticket->email          = $ticket_data['user_email'];
 	$ticket->first_name     = $ticket_data['user_info']['first_name'];
 	$ticket->last_name      = $ticket_data['user_info']['last_name'];
@@ -287,6 +286,8 @@ function kbs_add_ticket( $ticket_data )	{
 		$ticket->date = $ticket_data['post_date'];
 	}
 
+	do_action( 'kbs_before_add_ticket', $ticket->ID, $ticket_data );
+
 	$ticket->save();
 
 	do_action( 'kbs_add_ticket', $ticket->ID, $ticket_data );
@@ -298,60 +299,6 @@ function kbs_add_ticket( $ticket_data )	{
 	// Return false if no ticket was inserted
 	return false;
 
-	/**
-	 * Runs immediately before adding a new ticket to the database.
-	 *
-	 * @since	1.0
-	 * @param	int		$form_id	The ID of the form submitting the data.
-	 * @param	arr		$data		Post data. See wp_insert_post.
-	 * @param	arr		$meta		Meta data.
-	 */
-	do_action( 'kbs_pre_add_ticket', $data, $meta );
-
-	$ticket->create( $data, $meta );
-	
-	if ( empty( $ticket ) )	{
-		return false;
-	}
-
-	if ( ! empty( $attachments ) )	{
-
-		foreach( $attachments['name'] as $key => $value )	{
-
-			if ( $attachments['name'][ $key ] )	{ 
-
-				$attachment = array( 
-					'name'     => $attachments['name'][ $key ],
-					'type'     => $attachments['type'][ $key ], 
-					'tmp_name' => $attachments['tmp_name'][ $key ], 
-					'error'    => $attachments['error'][ $key ],
-					'size'     => $attachments['size'][ $key ]
-				);
-
-				$_FILES = array( 'kbs_ticket_attachments' => $attachment );
- 
-				foreach( $_FILES as $attachment => $array )	{				
-					kbs_attach_file_to_ticket( $attachment, $ticket->ID ); 
-				}
-
-			} 
-
-		} 
-
-	}
-
-	/**
-	 * Runs immediately after successfully adding a new ticket to the database.
-	 *
-	 * @since	1.0
-	 * @param	int		$ticket->ID	The ID of the form submitting the data.
-	 * @param	arr		$data		Post data. See wp_insert_post.
-	 * @param	arr		$meta		Meta data.
-	 */
-	do_action( 'kbs_post_add_ticket', $ticket->ID );
-
-	return $ticket->ID;
-
 } // kbs_add_ticket
 
 /**
@@ -359,58 +306,76 @@ function kbs_add_ticket( $ticket_data )	{
  *
  * @since	1.0
  * @param	int		$form_id	Form ID
- * @param	arr		$data		Array of ticket data.
+ * @param	arr		$form_data	Array of ticket data.
  * @return	mixed	Ticket ID on success, false on failure.
  */
-function kbs_add_ticket_from_form( $form_id, $data )	{
+function kbs_add_ticket_from_form( $form_id, $form_data )	{
 
 	$kbs_form    = new KBS_Form( $form_id );
 	$fields      = $kbs_form->fields;
-	$args        = array();
-	$meta        = array();
-	$meta_data   = array();
-	$attachments = array();
+	$data        = array();
+
+	$ticket_data = array(
+		'user_info'   => array(),
+		'attachments' => array()
+	);
 
 	foreach( $fields as $field )	{
 
 		$settings = $kbs_form->get_field_settings( $field->ID );
 
 		if ( 'file_upload' == $settings['type'] && ! empty( $_FILES[ $field->post_name ] ) )	{
-			$attachments = $_FILES[ $field->post_name ];
+			$ticket_data['attachments'] = $_FILES[ $field->post_name ];
 			continue;
 		}
 
-		if ( empty( $data[ $field->post_name ] ) )	{
+		if ( empty( $form_data[ $field->post_name ] ) )	{
 			continue;
 		}
 
 		if ( ! empty( $settings['mapping'] ) )	{
-			$args[ $settings['mapping'] ] = $data[ $field->post_name ];
+
+			if ( 'customer_first' == $settings['mapping'] )	{
+				$ticket_data['user_info']['first_name'] = ucfirst( sanitize_text_field( $form_data[ $field->post_name ] ) );
+			} elseif ( 'customer_last' == $settings['mapping'] )	{
+				$ticket_data['user_info']['last_name'] = ucfirst( sanitize_text_field( $form_data[ $field->post_name ] ) );
+			} elseif ( 'customer_email' == $settings['mapping'] )	{
+				$ticket_data['user_info']['email'] = strtolower( $form_data[ $field->post_name ] );
+				$ticket_data['user_email']         = $ticket_data['user_info']['email'];
+			} else	{
+				$ticket_data[ $settings['mapping'] ] = $form_data[ $field->post_name ];
+			}
+
 		} else	{
-			$meta[ $field->post_name ] = array( $field->post_title, strip_tags( addslashes( $data[ $field->post_name ] ) ) );
+
+			$ticket_data[ $field->post_name ] = array( $field->post_title, strip_tags( addslashes( $form_data[ $field->post_name ] ) ) );
 		
-			$meta_data[] = '<strong>' . $field->post_title . '</strong><br />' . $data[ $field->post_name ];
+			$data[] = '<strong>' . $field->post_title . '</strong><br />' . $form_data[ $field->post_name ];
+
 		}
 	}
 
-	if ( ! empty( $meta ) )	{
-		$meta_content  = '<p><strong>' . __( 'Form Data Submitted', 'kb-support' ) . '</strong></p>';
-		$meta_content .= '<p> ' . implode( '<br />', $meta_data ) . '</p>';
+	if ( ! empty( $data ) )	{
+		$ticket_content  = '<p><strong>' . __( 'Form Data Submitted', 'kb-support' ) . '</strong></p>';
+		$ticket_content .= '<p> ' . implode( '<br />', $data ) . '</p>';
 	
-		if ( ! empty( $args['post_content'] ) )	{
-			$args['post_content'] = $args['post_content'] . $meta_content;
+		if ( ! empty( $ticket_data['post_content'] ) )	{
+			$ticket_data['post_content'] = $ticket_data['post_content'] . $ticket_content;
 		} else	{
-			$args['post_content'] = $meta_content;
+			$ticket_data['post_content'] = $ticket_content;
 		}
 	}
 
-	$kbs_form->increment_submissions();
+	$ticket_data = apply_filters( 'kbs_add_ticket_from_form_data', $ticket_data );
 
-	$args        = apply_filters( 'kbs_add_ticket_from_form_args', $args );
-	$meta        = apply_filters( 'kbs_add_ticket_from_form_meta', $meta );
-	$attachments = apply_filters( 'kbs_add_ticket_from_form_attachments', $attachments );
+	$ticket_id = kbs_add_ticket( $ticket_data );
 
-	return kbs_add_ticket( $args, $meta, $attachments );
+	if ( $ticket_id )	{
+		$kbs_form->increment_submissions();
+		return $ticket_id;
+	}
+
+	return false;
 
 } // kbs_add_ticket_from_form
 

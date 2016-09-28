@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  */
 function kbs_auto_assign_agent_to_ticket_action()	{
 	
-	if ( ! isset( $_GET['post'] ) || ! kbs_get_option( 'auto_assign_agent', false ) )	{
+	if ( ! isset( $_GET['post'] ) || 'kbs_ticket' != get_post_type( $_GET['post'] ) || ! kbs_get_option( 'auto_assign_agent', false ) )	{
 		return;
 	}
 	

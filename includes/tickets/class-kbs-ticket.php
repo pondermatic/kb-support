@@ -24,7 +24,8 @@ class KBS_Ticket {
 	 * @since	1.0
 	 * @var		int
 	 */
-	public $ID = 0;
+	public $ID     = 0;
+	protected $_ID = 0;
 
 	/**
 	 * Identify if the ticket is a new one or existing.
@@ -561,7 +562,12 @@ class KBS_Ticket {
 				$new_meta[ 'user_info' ] = array_replace_recursive( $new_meta[ 'user_info' ], $this->ticket_meta[ 'user_info' ] );
 			}
 
-			$meta        = $this->get_meta();
+			$meta = $this->get_meta();
+
+			if ( empty( $meta ) )	{
+				$meta = array();
+			}
+
 			$merged_meta = array_merge( $meta, $new_meta );
 
 			// Only save the ticket meta if it's changed
@@ -735,7 +741,7 @@ class KBS_Ticket {
 			return false;
 		}
 
-		if ( $meta_key == 'key' || $meta_key == 'date' ) {
+		if ( $meta_key == 'date' ) {
 
 			$current_meta = $this->get_meta();
 			$current_meta[ $meta_key ] = $meta_value;
@@ -749,7 +755,7 @@ class KBS_Ticket {
 			update_post_meta( $this->ID, '_kbs_ticket_user_email', $meta_value );
 
 			$current_meta = $this->get_meta();
-			$current_meta['user_info']['email']  = $meta_value;
+			$current_meta['user_info']['email'] = $meta_value;
 
 			$meta_key     = '_ticket_data';
 			$meta_value   = $current_meta;
@@ -871,7 +877,7 @@ class KBS_Ticket {
 	 */
 	public function setup_agent_id()	{	
 		if ( empty( $this->agent ) )	{
-			$this->agent = $this->data['__agent'];
+			$this->agent = $this->ticket_meta['__agent'];
 		}
 		
 		return apply_filters( 'kbs_get_agent', $this->agent );
