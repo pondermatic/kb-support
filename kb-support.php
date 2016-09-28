@@ -214,8 +214,11 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/template-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/post-types.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-db.php';
+		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-stats.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-roles.php';
 		require_once KBS_PLUGIN_DIR . 'includes/kb/kb-functions.php';
+		require_once KBS_PLUGIN_DIR . 'includes/tickets/class-kbs-ticket-stats.php';
+		require_once KBS_PLUGIN_DIR . 'includes/tickets/class-kbs-tickets-query.php';
 		require_once KBS_PLUGIN_DIR . 'includes/tickets/class-kbs-ticket.php';
 		require_once KBS_PLUGIN_DIR . 'includes/admin/tickets/tickets.php';
 		require_once KBS_PLUGIN_DIR . 'includes/admin/tickets/metaboxes.php';

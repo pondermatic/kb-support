@@ -105,9 +105,9 @@ function kb_tickets_post_column_id( $ticket_id, $kbs_ticket )	{
 function kb_tickets_post_column_date( $ticket_id, $kbs_ticket )	{
 	do_action( 'kb_pre_tickets_column_date', $kbs_ticket );
 
-	$output  = date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $kbs_ticket->post_date ) );
+	$output  = date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $kbs_ticket->date ) );
 	$output .= '<br />';
-	$output .= date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $kbs_ticket->post_modified ) );
+	$output .= date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $kbs_ticket->modified_date ) );
 
 	do_action( 'kb_post_tickets_column_date', $kbs_ticket );
 

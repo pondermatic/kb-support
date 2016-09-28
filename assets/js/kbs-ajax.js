@@ -35,15 +35,16 @@ jQuery(document).ready(function ($) {
 
 		if (tinymceActive) {
 			ticketContent = tinyMCE.activeEditor.getContent();
+			ticketData[tinymce.editors[0].id] = ticketContent;
 		}
 
 		$.ajax({
 			type       : 'POST',
 			dataType   : 'json',
-			data       : ticketData + '&' + $.param({tinymce.editors[0].id: ticketContent}),
+			data       : ticketData,
 			url        : kbs_scripts.ajaxurl,
 			success    : function (response) {
-				if ( '' != response.error )	{
+				if ( response.error )	{
 					$form.find('.kbs_alert').show("fast");
 					$form.find('.kbs_alert').html(response.error);
 					$form.find('#' + response.field).addClass("error");

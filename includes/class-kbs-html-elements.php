@@ -231,7 +231,7 @@ class KBS_HTML_Elements {
 			'name'             => $args['name'],
 			'selected'         => $args['selected'],
 			'id'               => $args['id'],
-			'class'            => $args['class'] . ' edd-customer-select',
+			'class'            => $args['class'] . ' kbs-customer-select',
 			'options'          => $options,
 			'multiple'         => $args['multiple'],
 			'chosen'           => $args['chosen'],

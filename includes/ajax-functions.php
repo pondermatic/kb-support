@@ -199,10 +199,7 @@ add_action( 'wp_ajax_kbs_order_form_fields', 'kbs_ajax_order_form_fields' );
  */
 function kbs_ajax_validate_form_submission()	{
 	$form   = new KBS_Form( $_POST['kbs_form_id'] );
-wp_send_json( array(
-				'error' => var_export( $_POST, true ),
-				'field' => $field->post_name
-			) );
+
 	foreach ( $form->get_fields() as $field )	{
 		$settings = $form->get_field_settings( $field->ID );
 		if ( ! empty( $settings['required'] ) && empty( $_POST[ $field->post_name ] ) )	{
@@ -213,7 +210,7 @@ wp_send_json( array(
 		}
 	}
 
-	wp_send_json_success();
+	wp_send_json_success( array( 'error' => false ) );
 
 } // kbs_ajax_validate_form_submission
 add_action( 'wp_ajax_kbs_validate_ticket_form', 'kbs_ajax_validate_form_submission' );

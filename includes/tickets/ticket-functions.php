@@ -10,7 +10,31 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) )
+	exit;
+
+/**
+ * Get Tickets
+ *
+ * Retrieve tickets from the database.
+ *
+ * This is a simple wrapper for KBS_Tickets_Query.
+ *
+ * @since	1.0
+ * @param	arr		$args		Arguments passed to get tickets
+ * @return	obj		$payments	Tickets retrieved from the database
+ */
+function kbs_get_tickets( $args = array() ) {
+
+	// Fallback to post objects to ensure backwards compatibility
+	if( ! isset( $args['output'] ) ) {
+		$args['output'] = 'posts';
+	}
+
+	$args    = apply_filters( 'kbs_get_tickets_args', $args );
+	$tickets = new KBS_Tickets_Query( $args );
+	return $tickets->get_tickets();
+} // kbs_get_tickets
 
 /**
  * Retrieve a ticket.
@@ -26,12 +50,184 @@ function kbs_get_ticket( $ticket_id )	{
 } // kbs_get_ticket
 
 /**
+ * Count Tickets
+ *
+ * Returns the total number of tickets.
+ *
+ * @since	1.0
+ * @param	arr	$args	List of arguments to base the ticket count on
+ * @return	arr	$count	Number of tickets sorted by ticket date
+ */
+function kbs_count_tickets( $args = array() ) {
+
+	global $wpdb;
+
+	$defaults = array(
+		'agent'      => null,
+		'user'       => null,
+		'customer'   => null,
+		's'          => null,
+		'start-date' => null,
+		'end-date'   => null
+	);
+
+	$args = wp_parse_args( $args, $defaults );
+
+	$select = "SELECT p.post_status,count( * ) AS num_posts";
+	$join = '';
+	$where = "WHERE p.post_type = 'kbs_ticket'";
+
+	// Count tickets for a search
+	if( ! empty( $args['s'] ) ) {
+
+		if ( is_email( $args['s'] ) || strlen( $args['s'] ) == 32 ) {
+
+			if( is_email( $args['s'] ) )	{
+				$field = '_kbs_ticket_client';
+			}
+
+			$join = "LEFT JOIN $wpdb->postmeta m ON (p.ID = m.post_id)";
+			$where .= $wpdb->prepare( "
+				AND m.meta_key = %s
+				AND m.meta_value = %s",
+				$field,
+				$args['s']
+			);
+
+		} elseif ( is_numeric( $args['s'] ) ) {
+
+			$join = "LEFT JOIN $wpdb->postmeta m ON (p.ID = m.post_id)";
+			$where .= $wpdb->prepare( "
+				AND m.meta_key = '_mdjm_event_client'
+				AND m.meta_value = %d",
+				$args['s']
+			);
+
+		} else {
+			$search = $wpdb->esc_like( $args['s'] );
+			$search = '%' . $search . '%';
+
+			$where .= $wpdb->prepare( "AND ((p.post_title LIKE %s) OR (p.post_content LIKE %s))", $search, $search );
+		}
+
+	}
+
+	// Limit ticket count by received date
+	if ( ! empty( $args['start-date'] ) && false !== strpos( $args['start-date'], '-' ) ) {
+
+		$date_parts = explode( '-', $args['start-date'] );
+		$year       = ! empty( $date_parts[0] ) && is_numeric( $date_parts[0] ) ? $date_parts[0] : 0;
+		$month      = ! empty( $date_parts[1] ) && is_numeric( $date_parts[1] ) ? $date_parts[1] : 0;
+		$day        = ! empty( $date_parts[2] ) && is_numeric( $date_parts[2] ) ? $date_parts[2] : 0;
+
+		$is_date    = checkdate( $month, $day, $year );
+		if ( false !== $is_date ) {
+
+			$date   = new DateTime( $args['start-date'] );
+			$where .= $wpdb->prepare( " AND p.post_date >= '%s'", $date->format( 'Y-m-d' ) );
+
+		}
+
+		// Fixes an issue with the tickets list table counts when no end date is specified (partly with stats class)
+		if ( empty( $args['end-date'] ) ) {
+			$args['end-date'] = $args['start-date'];
+		}
+
+	}
+
+	if ( ! empty ( $args['end-date'] ) && false !== strpos( $args['end-date'], '-' ) ) {
+
+		$date_parts = explode( '-', $args['end-date'] );
+		$year       = ! empty( $date_parts[0] ) && is_numeric( $date_parts[0] ) ? $date_parts[0] : 0;
+		$month      = ! empty( $date_parts[1] ) && is_numeric( $date_parts[1] ) ? $date_parts[1] : 0;
+		$day        = ! empty( $date_parts[2] ) && is_numeric( $date_parts[2] ) ? $date_parts[2] : 0;
+
+		$is_date    = checkdate( $month, $day, $year );
+		if ( false !== $is_date ) {
+
+			$date   = new DateTime( $args['end-date'] );
+			$where .= $wpdb->prepare( " AND p.post_date <= '%s'", $date->format( 'Y-m-d' ) );
+
+		}
+
+	}
+
+	$where = apply_filters( 'kbs_count_tickets_where', $where );
+	$join  = apply_filters( 'kbs_count_tickets_join', $join );
+
+	$query = "$select
+		FROM $wpdb->posts p
+		$join
+		$where
+		GROUP BY p.post_status
+	";
+
+	$cache_key = md5( $query );
+
+	$count = wp_cache_get( $cache_key, 'counts' );
+
+	if ( false !== $count ) {
+		return $count;
+	}
+
+	$count = $wpdb->get_results( $query, ARRAY_A );
+	$stats    = array();
+	$total    = 0;
+	$statuses = kbs_get_ticket_status_keys();
+
+	foreach ( $statuses as $state ) {
+		$stats[ $state ] = 0;
+	}
+
+	foreach ( (array) $count as $row ) {
+		if ( ! in_array( $row['post_status'], $statuses ) )	{
+			continue;
+		}
+		$stats[ $row['post_status'] ] = $row['num_posts'];
+	}
+
+	$stats = (object) $stats;
+	wp_cache_set( $cache_key, $stats, 'counts' );
+
+	return $stats;
+} // kbs_count_tickets
+
+/**
+ * Retrieve all ticket statuses.
+ *
+ * @since	1.0
+ * @return	arr
+ */
+function kbs_get_ticket_statuses()	{
+	$ticket_statuses = kbs_get_post_statuses( 'labels', true );
+	$statuses        = array();
+	
+	foreach ( $ticket_statuses as $ticket_status ) {
+		$statuses[ $ticket_status->name ] = esc_html( $ticket_status->label );
+	}
+
+	return $statuses;
+} // kbs_get_ticket_statuses
+
+/**
+ * Retrieves keys for all available ticket statuses.
+ *
+ * @since	1.0
+ * @return	arr		$ticket_status	All available ticket statuses
+ */
+function kbs_get_ticket_status_keys() {
+	$statuses = array_keys( kbs_get_ticket_statuses() );
+	asort( $statuses );
+
+	return array_values( $statuses );
+} // kbs_get_ticket_status_keys
+
+/**
  * Retrieve the possible sources for logging a ticket.
  *
  * Custom sources can be added by hooking the `kbs_ticket_log_sources` filter.
  *
  * @since	1.0
- * @param
  * @return	arr	Array of $key => value sources for logging a ticket.
  */
 function kbs_get_ticket_log_sources()	{
@@ -62,10 +258,10 @@ function kbs_get_ticket_log_sources()	{
  * @param	str|arr	$attachments	File attachments.
  * @return	mixed	Ticket ID on success, false on failure.
  */
-function kbs_add_ticket( $data, $meta, $attachments = array() )	{
+function kbs_add_ticket( $ticket_data )	{
 
-	if ( ! empty( $attachments ) && ! is_array( $attachments ) )	{
-		$attachments = array( $attachments );
+	if ( ! empty( $ticket_data['attachments'] ) && ! is_array( $ticket_data['attachments'] ) )	{
+		$ticket_data['attachments'] = array( $ticket_data['attachments'] );
 	}
 
 	$data        = apply_filters( 'kbs_add_ticket_data', $data );
@@ -74,12 +270,40 @@ function kbs_add_ticket( $data, $meta, $attachments = array() )	{
 
 	$ticket = new KBS_Ticket();
 
+	$ticket->status         = ! empty( $ticket_data['status'] ) ? $ticket_data['status'] : 'new';
+	$ticket->agent          = $ticket_data['agent'];
+	$ticket->user_info      = $ticket_data['user_info'];
+	$ticket->user_id        = $ticket_data['user_info']['id'];
+	$ticket->email          = $ticket_data['user_email'];
+	$ticket->first_name     = $ticket_data['user_info']['first_name'];
+	$ticket->last_name      = $ticket_data['user_info']['last_name'];
+	$ticket->email          = $ticket_data['user_info']['email'];
+	$ticket->ip             = kbs_get_ip();
+	$ticket->sla            = '';
+	$ticket->source         = '';
+	$ticket->new_files      = $ticket_data['attachments'];
+
+	if ( isset( $ticket_data['post_date'] ) ) {
+		$ticket->date = $ticket_data['post_date'];
+	}
+
+	$ticket->save();
+
+	do_action( 'kbs_add_ticket', $ticket->ID, $ticket_data );
+
+	if ( ! empty( $ticket->ID ) ) {
+		return $ticket->ID;
+	}
+
+	// Return false if no ticket was inserted
+	return false;
+
 	/**
 	 * Runs immediately before adding a new ticket to the database.
 	 *
 	 * @since	1.0
 	 * @param	int		$form_id	The ID of the form submitting the data.
-	 * @param	arr		$data		Post data. See wo_insert_post.
+	 * @param	arr		$data		Post data. See wp_insert_post.
 	 * @param	arr		$meta		Meta data.
 	 */
 	do_action( 'kbs_pre_add_ticket', $data, $meta );
@@ -121,7 +345,7 @@ function kbs_add_ticket( $data, $meta, $attachments = array() )	{
 	 *
 	 * @since	1.0
 	 * @param	int		$ticket->ID	The ID of the form submitting the data.
-	 * @param	arr		$data		Post data. See wo_insert_post.
+	 * @param	arr		$data		Post data. See wp_insert_post.
 	 * @param	arr		$meta		Meta data.
 	 */
 	do_action( 'kbs_post_add_ticket', $ticket->ID );
@@ -382,19 +606,6 @@ function kbs_get_ticket_source( $ticket_id )	{
 } // kbs_get_ticket_source
 
 /**
- * Retrieve the ticket replies.
- *
- * @since	1.0
- * @param	int	$ticket_id		The ticket ID
- * @return	arr	Array of ticket reply post objects.
- */
-function kbs_get_ticket_replies( $ticket_id )	{
-	$kbs_ticket = new KBS_Ticket( $ticket_id );
-	
-	return $kbs_ticket->get_replies;
-} // kbs_get_ticket_replies
-
-/**
  * Re-open a closed ticket.
  *
  * @since	1.0
@@ -450,3 +661,28 @@ function kbs_ticket_status_from_new_to_open( $ticket_id )	{
 	}
 }
 add_action( 'kbs_post_assign_agent', 'kbs_ticket_status_from_new_to_open' );
+
+/**
+ * Ticket reply functions.
+ *
+ * @since	1.0
+ */
+
+/**
+ * Retrieve the IDs of all ticket replies.
+ *
+ * @since	1.0
+ * @param	int		$ticket_id		The Ticket ID.
+ * @param	arr		$args			See @get_children
+ * @return	obj|false
+ */
+function kbs_get_ticket_replies( $ticket_id = 0, $args = array() )	{
+	if ( empty( $ticket_id ) )	{
+		return false;
+	}
+
+	$defaults = array(
+		''
+	);
+
+} // kbs_get_ticket_replies

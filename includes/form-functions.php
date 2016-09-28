@@ -854,4 +854,3 @@ function kbs_display_form_field_description( $field, $settings )	{
     	<span class="kbs-description"><?php esc_html_e( $settings['description'] ); ?></span>
     <?php endif;
 } // kbs_display_form_field_description
-//add_action( 'kbs_after_form_field', 'kbs_display_form_field_description', 10, 2 );

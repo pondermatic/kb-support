@@ -173,7 +173,7 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
                     <?php echo KBS()->html->ticket_status_dropdown( 'post_status', $kbs_ticket->post_status ); ?></p>
 
                     <p class="dashicons-before dashicons-admin-users"></span>&nbsp;&nbsp;<label for="post_author"><?php _e( 'Customer:', 'kb-support' ); ?></label>
-                    <?php echo KBS()->html->customer_dropdown( 'post_author', $kbs_ticket->post_author ); ?></p>
+                    <?php echo KBS()->html->customer_dropdown( 'post_author', $kbs_ticket->customer_id ); ?></p>
                     
                     <p class="dashicons-before dashicons-businessman"></span>&nbsp;&nbsp;<label for="kbs_agent"><?php _e( 'Agent:', 'kb-support' ); ?></label>
                     <?php echo KBS()->html->agent_dropdown( 'kbs_agent', ( ! empty( $kbs_ticket->agent ) ? $kbs_ticket->agent : get_current_user_id() ) ); ?></p>
