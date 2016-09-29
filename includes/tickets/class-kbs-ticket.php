@@ -358,6 +358,9 @@ class KBS_Ticket {
 		$this->first_name      = $this->user_info['first_name'];
 		$this->last_name       = $this->user_info['last_name'];
 
+		// SLA
+		$this->sla             = $this->setup_sla();
+
 		// Extensions can hook here to add items to this object
 		do_action( 'kbs_setup_ticket', $this, $ticket_id );
 								
@@ -398,14 +401,14 @@ class KBS_Ticket {
 			'files'        => $this->new_files
 		);
 
-		$args = array(
-			'post_title'    => $this->ticket_title,
+		$args = apply_filters( 'kbs_insert_ticket_args', array(
 			'post_status'   => $this->status,
+			'post_title'    => $this->ticket_title,
+			'post_content'  => $this->ticket_content,
 			'post_type'     => 'kbs_ticket',
 			'post_date'     => ! empty( $this->date ) ? $this->date : null,
 			'post_date_gmt' => ! empty( $this->date ) ? get_gmt_from_date( $this->date ) : null
-		);
-		$args = apply_filters( 'kbs_insert_ticket_args', $ticket_data );
+		), $ticket_data );
 
 		// Create a blank ticket
 		$ticket_id = wp_insert_post( $args );
@@ -449,14 +452,16 @@ class KBS_Ticket {
 			$this->pending['customer_id'] = $this->customer_id;
 			$customer->attach_ticket( $this->ID );
 
+			if ( ! empty( $this->new_files ) )	{
+				$this->pending['files'] = $this->new_files;
+			}
+
+			$this->pending['sla'] = $this->sla;
+
 			$this->ticket_meta = apply_filters( 'kbs_ticket_meta', $this->ticket_meta, $ticket_data );
 
 			$this->update_meta( '_ticket_data', $this->ticket_meta );
 			$this->new = true;
-		}
-
-		if ( ! empty( $this->new_files ) )	{
-			$this->pending['files'] = $this->new_files;
 		}
 
 		return $this->ID;
@@ -531,12 +536,34 @@ class KBS_Ticket {
 						wp_update_post( $args );
 						break;
 
+					case 'ticket_title':
+						$args = array(
+							'ID'         => $this->ID,
+							'post_title' => $this->ticket_title
+						);
+
+						wp_update_post( $args );
+						break;
+
+					case 'ticket_content':
+						$args = array(
+							'ID'           => $this->ID,
+							'post_content' => $this->ticket_content
+						);
+
+						wp_update_post( $args );
+						break;
+
 					case 'resolved_date':
 						$this->update_meta( '_kbs_resolved_date', $this->resolved_date );
 						break;
 
 					case 'files':
-						$this->attach_files();
+						$this->files = $this->attach_files();
+						break;
+
+					case 'sla':
+						$this->update_meta( '_kbs_sla', $value );
 						break;
 
 					default:
@@ -555,6 +582,9 @@ class KBS_Ticket {
 				'source'        => $this->source,
 				'sla'           => $this->sla,
 				'user_info'     => is_array( $this->user_info ) ? $this->user_info : array(),
+				'user_ip'       => $this->ip,
+				'resolved'      => $this->resolved_date,
+				'files'         => $this->files
 			);
 
 			// Do some merging of user_info before we merge it all
@@ -838,7 +868,7 @@ class KBS_Ticket {
 				$_FILES = array( 'kbs_ticket_attachments' => $attachment );
 
 				foreach( $_FILES as $attachment => $array )	{
-					$file_id = kbs_attach_file_to_ticket( $attachment, $ticket->ID );
+					$file_id = kbs_attach_file_to_ticket( $attachment, $this->ID );
 
 					if ( $file_id )	{
 						$file_ids[] = $file_id;
@@ -876,8 +906,8 @@ class KBS_Ticket {
 	 * @return	int
 	 */
 	public function setup_agent_id()	{	
-		if ( empty( $this->agent ) )	{
-			$this->agent = $this->ticket_meta['__agent'];
+		if ( ! empty( $this->ticket_meta['agent'] ) )	{
+			$this->agent = $this->ticket_meta['agent'];
 		}
 		
 		return apply_filters( 'kbs_get_agent', $this->agent );
@@ -1012,6 +1042,20 @@ class KBS_Ticket {
 	} // setup_ip
 
 	/**
+	 * Setup the SLA data for the ticket
+	 *
+	 * @since	1.0
+	 * @return	arr|bool	The sla data for the ticket
+	 */
+	private function setup_sla() {
+		if ( empty( $this->ticket_meta['sla'] ) )	{
+			return false;
+		}
+
+		return $this->ticket_meta['sla'];
+	} // setup_sla
+
+	/**
 	 * Retrieve the ticket replies
 	 *
 	 * @since	1.0
@@ -1019,7 +1063,7 @@ class KBS_Ticket {
 	 */
 	public function get_replies() {
 		$replies = get_posts( array(
-			'post_type'      => $this->post_type,
+			'post_type'      => 'kbs_ticket',
 			'post_parent'    => $this->ID,
 			'post_status'    => 'publish',
 			'posts_per_page' => -1
@@ -1051,7 +1095,11 @@ class KBS_Ticket {
 	 * @return	int
 	 */
 	public function get_target_respond() {
-		$respond = date_i18n( get_option( 'time_format' ) . ' ' . get_option( 'date_format' ), strtotime( $this->data['__target_sla_respond'] ) );
+		if ( empty( $this->ticket_meta['sla'] ) )	{
+			return;
+		}
+
+		$respond = date_i18n( get_option( 'time_format' ) . ' ' . get_option( 'date_format' ), strtotime( $this->ticket_meta['sla']['target_respond'] ) );
 
 		return apply_filters( 'kbs_get_target_respond', $respond );
 	} // get_target_respond
@@ -1063,7 +1111,11 @@ class KBS_Ticket {
 	 * @return	int
 	 */
 	public function get_target_resolve() {
-		$resolve = date_i18n( get_option( 'time_format' ) . ' ' . get_option( 'date_format' ), strtotime( $this->data['__target_sla_resolve'] ) );
+		if ( empty( $this->ticket_meta['sla'] ) )	{
+			return;
+		}
+
+		$resolve = date_i18n( get_option( 'time_format' ) . ' ' . get_option( 'date_format' ), strtotime( $this->ticket_meta['sla']['target_resolve'] ) );
 
 		return apply_filters( 'kbs_get_target_resolve', $resolve );
 	} // get_target_resolve
@@ -1102,7 +1154,7 @@ class KBS_Ticket {
 	public function get_source() {
 		$sources = kbs_get_ticket_log_sources();
 		
-		$ticket_source = $this->data['__source'];
+		$ticket_source = $this->ticket_meta['source'];
 		
 		if ( array_key_exists( $ticket_source, $sources ) )	{
 			$return = $sources[ $ticket_source ];
@@ -1112,5 +1164,21 @@ class KBS_Ticket {
 		
 		return apply_filters( 'kbs_get_source', $return );
 	} // get_source
+
+	/**
+	 * Add a note to a ticket.
+	 *
+	 * @since	1.0
+	 * @param	str		$note	The note to add
+	 * @return	void
+	 */
+	public function add_note( $note = false ) {
+		// Return if no note specified
+		if( ! $note ) {
+			return false;
+		}
+
+		kbs_ticket_insert_note( $this->ID, $note );
+	}
 
 } // KBS_Ticket

@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) )
  *
  * @since	1.0
  * @param	arr		$args		Arguments passed to get tickets
- * @return	obj		$payments	Tickets retrieved from the database
+ * @return	obj		$tickets	Tickets retrieved from the database
  */
 function kbs_get_tickets( $args = array() ) {
 
@@ -278,7 +278,10 @@ function kbs_add_ticket( $ticket_data )	{
 	$ticket->last_name      = $ticket_data['user_info']['last_name'];
 	$ticket->email          = $ticket_data['user_info']['email'];
 	$ticket->ip             = kbs_get_ip();
-	$ticket->sla            = '';
+	$ticket->sla            = array(
+		'target_respond' => kbs_calculate_sla_target_response(),
+		'target_resolve' => kbs_calculate_sla_target_resolution()
+	);
 	$ticket->source         = '';
 	$ticket->new_files      = $ticket_data['attachments'];
 
@@ -543,7 +546,7 @@ function kbs_assign_agent( $ticket_id, $user_id = 0 )	{
 	 */
 	do_action( 'kbs_pre_assign_agent', $ticket_id, $user_id );
 
-	$return = kbs_update_ticket_meta( $ticket_id, array( '__agent' => $user_id ) );
+	$return = kbs_update_ticket_meta( $ticket_id, array( 'agent' => $user_id ) );
 
 	/**
 	 * Fires immediately after assigning an agent
@@ -651,3 +654,231 @@ function kbs_get_ticket_replies( $ticket_id = 0, $args = array() )	{
 	);
 
 } // kbs_get_ticket_replies
+
+/**
+ * Retrieve all notes attached to a ticket.
+ *
+ * @since	1.0
+ * @param	int		$ticket_id	The ticket ID to retrieve notes for
+ * @param	str		$search		Search for notes that contain a search term
+ * @return	arr		$notes		Ticket Notes
+ */
+function kbs_ticket_get_notes( $ticket_id = 0, $search = '' ) {
+
+	if ( empty( $ticket_id ) && empty( $search ) ) {
+		return false;
+	}
+
+	remove_action( 'pre_get_comments', 'kbs_ticket_hide_notes', 10 );
+
+	$notes = get_comments( array( 'post_id' => $ticket_id, 'order' => 'ASC', 'search' => $search ) );
+
+	add_action( 'pre_get_comments', 'kbs_ticket_hide_notes', 10 );
+
+	return $notes;
+
+} // kbs_ticket_get_notes
+
+/**
+ * Add a note to a ticket.
+ *
+ * @since	1.0
+ * @param	int		$ticket_id	The ticket ID to store a note for
+ * @param	str		$note		The note to store
+ * @return	int		The new note ID
+ */
+function kbs_ticket_insert_note( $ticket_id = 0, $note = '' ) {
+
+	if ( empty( $ticket_id ) )	{
+		return false;
+	}
+
+	do_action( 'kbs_pre_insert_ticket_note', $ticket_id, $note );
+
+	$note_id = wp_insert_comment( wp_filter_comment( array(
+		'comment_post_ID'      => $ticket_id,
+		'comment_content'      => $note,
+		'user_id'              => is_admin() ? get_current_user_id() : 0,
+		'comment_date'         => current_time( 'mysql' ),
+		'comment_date_gmt'     => current_time( 'mysql', 1 ),
+		'comment_approved'     => 1,
+		'comment_parent'       => 0,
+		'comment_author'       => '',
+		'comment_author_IP'    => '',
+		'comment_author_url'   => '',
+		'comment_author_email' => '',
+		'comment_type'         => 'kbs_ticket_note'
+
+	) ) );
+
+	do_action( 'kbs_insert_ticket_note', $note_id, $ticket_id, $note );
+
+	return $note_id;
+} // kbs_ticket_insert_note
+
+/**
+ * Deletes a ticket note.
+ *
+ * @since	1.0
+ * @param	int		$comment_id		The comment ID to delete
+ * @param	int		$ticket_id		The ticket ID the note is connected to
+ * @return	bool	True on success, false otherwise
+ */
+function kbs_ticket_delete_note( $comment_id = 0, $ticket_id = 0 ) {
+	if( empty( $comment_id ) )
+		return false;
+
+	do_action( 'kbs_pre_delete_ticket_note', $comment_id, $ticket_id );
+	$ret = wp_delete_comment( $comment_id, true );
+	do_action( 'kbs_post_delete_ticket_note', $comment_id, $ticket_id );
+
+	return $ret;
+} // kbs_ticket_delete_note
+
+/**
+ * Gets the ticket note HTML.
+ *
+ * @since	1.0
+ * @param	obj|int	$note		The comment object or ID
+ * @param	int		$ticket_id	The ticket ID the note is connected to
+ * @return	str
+ */
+function kbs_ticket_get_note_html( $note, $ticket_id = 0 ) {
+
+	if( is_numeric( $note ) ) {
+		$note = get_comment( $note );
+	}
+
+	if ( ! empty( $note->user_id ) ) {
+		$user = get_userdata( $note->user_id );
+		$user = $user->display_name;
+	} else {
+		$user = __( 'KBS Bot', 'kb-support' );
+	}
+
+	$date_format = get_option( 'date_format' ) . ', ' . get_option( 'time_format' );
+
+	$delete_note_url = wp_nonce_url( add_query_arg( array(
+		'kbs-action' => 'delete_ticket_note',
+		'note_id'    => $note->comment_ID,
+		'ticket_id'  => $ticket_id
+	) ), 'kbs_delete_ticket_note_' . $note->comment_ID );
+
+	$note_html = '<div class="kbs-ticket-note" id="kbs-ticket-note-' . $note->comment_ID . '">';
+		$note_html .='<p>';
+			$note_html .= '<strong>' . $user . '</strong>&nbsp;&ndash;&nbsp;' . date_i18n( $date_format, strtotime( $note->comment_date ) ) . '<br/>';
+			$note_html .= $note->comment_content;
+			$note_html .= '&nbsp;&ndash;&nbsp;<a href="' . esc_url( $delete_note_url ) . '" class="kbs-delete-ticket-note" data-note-id="' . absint( $note->comment_ID ) . '" data-ticket-id="' . absint( $ticket_id ) . '">' . __( 'Delete', 'kb-support' ) . '</a>';
+		$note_html .= '</p>';
+	$note_html .= '</div>';
+
+	return $note_html;
+
+} // kbs_ticket_get_note_html
+
+/**
+ * Exclude notes (comments) on kbs_ticket post type from showing in Recent
+ * Comments widgets.
+ *
+ * @since	1.0
+ * @param	obj		$query	WordPress Comment Query Object
+ * @return	void
+ */
+function kbs_ticket_hide_notes( $query ) {
+	global $wp_version;
+
+	if ( version_compare( floatval( $wp_version ), '4.1', '>=' ) ) {
+
+		$types = isset( $query->query_vars['type__not_in'] ) ? $query->query_vars['type__not_in'] : array();
+
+		if( ! is_array( $types ) ) {
+			$types = array( $types );
+		}
+
+		$types[] = 'kbs_ticket_note';
+		$query->query_vars['type__not_in'] = $types;
+
+	}
+} // kbs_ticket_hide_notes
+add_action( 'pre_get_comments', 'kbs_ticket_hide_notes', 10 );
+
+/**
+ * Exclude notes (comments) on kbs_ticket post type from showing in comment feeds.
+ *
+ * @since	1.0
+ * @param	arr		$where
+ * @param	obj		$wp_comment_query	WordPress Comment Query Object
+ * @return	arr		$where
+ */
+function kbs_ticket_hide_notes_from_feeds( $where, $wp_comment_query ) {
+    global $wpdb;
+
+	$where .= $wpdb->prepare( " AND comment_type != %s", 'kbs_ticket_note' );
+	return $where;
+} // kbs_ticket_hide_notes_from_feeds
+add_filter( 'comment_feed_where', 'kbs_ticket_hide_notes_from_feeds', 10, 2 );
+
+
+/**
+ * Remove KBS Comments from the wp_count_comments function
+ *
+ * @since	1.0
+ * @param	arr 	$stats		(empty from core filter)
+ * @param	int		$post_id	Post ID
+ * @return	arr		Array of comment counts
+*/
+function kbs_ticket_remove_notes_from_comment_counts( $stats, $post_id ) {
+	global $wpdb, $pagenow;
+
+	if( 'index.php' != $pagenow ) {
+		return $stats;
+	}
+
+	$post_id = (int) $post_id;
+
+	if ( apply_filters( 'kbs_count_ticket_notes_in_comments', false ) )	{
+		return $stats;
+	}
+
+	$stats = wp_cache_get( "comments-{$post_id}", 'counts' );
+
+	if ( false !== $stats )	{
+		return $stats;
+	}
+
+	$where = 'WHERE comment_type != "kbs_ticket_note"';
+
+	if ( $post_id > 0 )	{
+		$where .= $wpdb->prepare( " AND comment_post_ID = %d", $post_id );
+	}
+
+	$count = $wpdb->get_results( "SELECT comment_approved, COUNT( * ) AS num_comments FROM {$wpdb->comments} {$where} GROUP BY comment_approved", ARRAY_A );
+
+	$total = 0;
+	$approved = array( '0' => 'moderated', '1' => 'approved', 'spam' => 'spam', 'trash' => 'trash', 'post-trashed' => 'post-trashed' );
+
+	foreach ( (array) $count as $row ) {
+		// Don't count post-trashed toward totals
+		if ( 'post-trashed' != $row['comment_approved'] && 'trash' != $row['comment_approved'] )	{
+			$total += $row['num_comments'];
+		}
+
+		if ( isset( $approved [$row['comment_approved'] ] ) )	{
+			$stats[ $approved[ $row['comment_approved'] ] ] = $row['num_comments'];
+		}
+	}
+
+	$stats['total_comments'] = $total;
+
+	foreach ( $approved as $key ) {
+		if ( empty($stats[$key]) )	{
+			$stats[$key] = 0;
+		}
+	}
+
+	$stats = (object) $stats;
+	wp_cache_set( "comments-{$post_id}", $stats, 'counts' );
+
+	return $stats;
+} // kbs_ticket_remove_notes_from_comment_counts
+add_filter( 'wp_count_comments', 'kbs_ticket_remove_notes_from_comment_counts', 10, 2 );

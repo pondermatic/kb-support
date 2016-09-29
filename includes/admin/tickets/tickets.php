@@ -23,7 +23,7 @@ function kbs_set_kbs_ticket_post_columns( $columns ) {
         'id'               => '#',
 		'dates'            => __( 'Date', 'kb-support' ),
 		'title'            => __( 'Title', 'kb-support' ),
-        'author'           => __( 'Customer', 'kb-support' ),
+        'customer'         => __( 'Customer', 'kb-support' ),
 		'categories'       => __( 'Category', 'kb-support' ),
         'agent'            => __( 'Agent', 'kb-support' )
     );
@@ -56,6 +56,10 @@ function kbs_set_kbs_ticket_column_data( $column_name, $post_id ) {
 
 		case 'dates':
 			echo kb_tickets_post_column_date( $post_id, $kbs_ticket );
+			break;
+
+		case 'customer':
+			echo kb_tickets_post_column_customer( $post_id, $kbs_ticket );
 			break;
 
 		case 'agent':
@@ -115,6 +119,32 @@ function kb_tickets_post_column_date( $ticket_id, $kbs_ticket )	{
 } // kb_tickets_post_column_date
 
 /**
+ * Output the Customer row.
+ *
+ * @since	1.0
+ * @param	int	$ticket_id	The ticket ID
+ * @param	obj	$kbs_ticket	The ticket WP_Post object
+ * @return	str
+ */
+function kb_tickets_post_column_customer( $ticket_id, $kbs_ticket )	{
+	do_action( 'kb_pre_tickets_column_customer', $kbs_ticket );
+
+	if ( ! empty( $kbs_ticket->customer_id ) )	{
+
+		$customer = new KBS_Customer( $kbs_ticket->customer_id );
+
+		$output = $customer->name;
+
+	} else	{
+		$output = __( 'No Customer Assigned', 'kb-support' );
+	}
+
+	do_action( 'kb_post_tickets_column_customer', $kbs_ticket );
+
+	return apply_filters( 'kb_tickets_post_column_customer', $output, $ticket_id );
+} // kb_tickets_post_column_customer
+
+/**
  * Output the Agent row.
  *
  * @since	1.0
@@ -169,6 +199,34 @@ function kb_tickets_post_column_sla( $ticket_id, $kbs_ticket )	{
  * @return	void
  */
 function kbs_ticket_post_save( $post_id, $post, $update )	{	
+
+	if ( ! isset( $_POST['kbs_ticket_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['kbs_ticket_meta_box_nonce'], 'kbs_form' ) ) {
+		return;
+	}
+	
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )	{
+		return;
+	}
+
+	if ( isset( $post->post_type ) && 'revision' == $post->post_type ) {
+		return;
+	}
+
+	// The default fields that get saved
+	$fields = mdjm_packages_metabox_fields();
+
+	foreach ( $fields as $field )	{
+
+		if ( ! empty( $_POST[ $field ] ) ) {
+			$new_value = apply_filters( 'mdjm_package_metabox_save_' . $field, $_POST[ $field ] );
+			update_post_meta( $post_id, $field, $new_value );
+		} else {
+			delete_post_meta( $post_id, $field );
+		}
+
+	}
+
+	do_action( 'mdjm_save_package', $post_id, $post );
 
 	// Remove the save post action to avoid loops
 	remove_action( 'save_post_kbs_ticket', 'kbs_ticket_post_save', 10, 3 );

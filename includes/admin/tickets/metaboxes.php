@@ -8,7 +8,25 @@
  */
 
 // Exit if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) )
+	exit;
+
+/**
+ * Returns default KBS Ticket meta fields.
+ *
+ * @since	1.4
+ * @return	arr		$fields		Array of fields.
+ */
+function mdjm_packages_metabox_fields() {
+
+	$fields = array(
+			'kbs_customer',
+			'kbs_agent'
+		);
+
+	return apply_filters( 'kbs_ticket_metabox_fields_save', $fields );
+
+} // mdjm_packages_metabox_fields
 
 /**
  * Remove unwanted metaboxes to for the kbs_ticket post type.
@@ -81,6 +99,16 @@ function kbs_ticket_add_meta_boxes( $post )	{
 			'high',
 			array()
 		);
+
+		add_meta_box(
+			'kbs-ticket-metabox-ticket-private',
+			__( 'Private Notes', 'kb-support' ),
+			'kbs_ticket_metabox_notes_callback',
+			'kbs_ticket',
+			'normal',
+			'high',
+			array()
+		);
 	}
 	
 } // kbs_ticket_add_meta_boxes
@@ -98,6 +126,8 @@ add_action( 'add_meta_boxes_kbs_ticket', 'kbs_ticket_add_meta_boxes' );
  */
 function kbs_ticket_metabox_save_callback()	{
 	global $post, $kbs_ticket, $kbs_ticket_update;
+
+	wp_nonce_field( 'kbs_ticket', 'kbs_ticket_meta_box_nonce' );
 
 	/*
 	 * Output the items for the save metabox
@@ -142,12 +172,33 @@ function kbs_ticket_metabox_reply_callback()	{
 	global $post, $kbs_ticket, $kbs_ticket_update;
 
 	/*
-	 * Output the items for the details metabox
+	 * Output the items for the ticket reply metabox
 	 * @since	1.0
 	 * @param	int	$post_id	The Ticket post ID
 	 */
 	do_action( 'kbs_ticket_reply_fields', $post->ID );
 } // kbs_ticket_metabox_reply_callback
+
+/**
+ * The callback function for the private notes metabox.
+ *
+ * @since	1.0
+ * @global	obj		$post				WP_Post object
+ * @global	obj		$kbs_ticket			KBS_Ticket class object
+ * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new
+ * @param
+ * @return
+ */
+function kbs_ticket_metabox_notes_callback()	{
+	global $post, $kbs_ticket, $kbs_ticket_update;
+
+	/*
+	 * Output the items for the pruvate notes metabox
+	 * @since	1.0
+	 * @param	int	$post_id	The Ticket post ID
+	 */
+	do_action( 'kbs_ticket_notes_fields', $post->ID );
+} // kbs_ticket_metabox_notes_callback
 
 /**
  * Display the save ticket metabox row.
@@ -172,8 +223,11 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
                 <p class="dashicons-before dashicons-post-status">&nbsp;&nbsp;<label for="post_status"><?php _e( 'Status:' ); ?></label>
                     <?php echo KBS()->html->ticket_status_dropdown( 'post_status', $kbs_ticket->post_status ); ?></p>
 
-                    <p class="dashicons-before dashicons-admin-users"></span>&nbsp;&nbsp;<label for="post_author"><?php _e( 'Customer:', 'kb-support' ); ?></label>
-                    <?php echo KBS()->html->customer_dropdown( 'post_author', $kbs_ticket->customer_id ); ?></p>
+                    <p class="dashicons-before dashicons-admin-users"></span>&nbsp;&nbsp;<label for="kbs_customer"><?php _e( 'Customer:', 'kb-support' ); ?></label>
+                    <?php echo KBS()->html->customer_dropdown( array(
+						'name'     => 'kbs_customer',
+						'selected' => $kbs_ticket->customer_id
+					) ); ?></p>
                     
                     <p class="dashicons-before dashicons-businessman"></span>&nbsp;&nbsp;<label for="kbs_agent"><?php _e( 'Agent:', 'kb-support' ); ?></label>
                     <?php echo KBS()->html->agent_dropdown( 'kbs_agent', ( ! empty( $kbs_ticket->agent ) ? $kbs_ticket->agent : get_current_user_id() ) ); ?></p>
@@ -225,8 +279,8 @@ function kbs_ticket_metabox_sla_row( $ticket_id )	{
 	$sla_resolve_remain = '';
 	
 	if ( $kbs_ticket_update )	{
-		$respond            = $kbs_ticket->get_target_respond();
-		$resolve            = $kbs_ticket->get_target_resolve();
+		$respond            = $kbs_ticket->ticket_meta['sla']['target_respond'];
+		$resolve            = $kbs_ticket->ticket_meta['sla']['target_resolve'];
 		$sla_respond_class  = kbs_sla_has_passed( $kbs_ticket->ID ) ? '_over' : '';
 		$sla_resolve_class  = kbs_sla_has_passed( $kbs_ticket->ID, 'resolve' ) ? '_over' : '';
 		$sla_respond_remain = ' ' . $kbs_ticket->get_sla_remain();
@@ -249,28 +303,6 @@ function kbs_ticket_metabox_sla_row( $ticket_id )	{
 add_action( 'kbs_ticket_metabox_after_agent', 'kbs_ticket_metabox_sla_row', 10 );
 
 /**
- * Display the customer details row.
- *
- * @since	1.0
- * @global	obj		$kbs_ticket			KBS_Ticket class object
- * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
- * @param	int		$ticket_id			The ticket post ID.
- * @return	str
- */
-function kbs_ticket_metabox_customer_row( $ticket_id )	{
-
-	global $kbs_ticket, $kbs_ticket_update;
-	
-	?>
-	<div id="kbs-ticket-customer-container" class="kbs_ticket_wrap">
-        <p><?php printf( __( 'Received', 'kb-support' ) ); ?></p>
-    </div>
-    <?php
-		
-} // kbs_ticket_metabox_customer_row
-add_action( 'kbs_ticket_data_fields', 'kbs_ticket_metabox_customer_row', 10 );
-
-/**
  * Display the original ticket details row.
  *
  * @since	1.0
@@ -291,7 +323,7 @@ function kbs_ticket_metabox_content_row( $ticket_id )	{
     <?php
 		
 } // kbs_ticket_metabox_details_row
-add_action( 'kbs_ticket_data_fields', 'kbs_ticket_metabox_content_row', 20 );
+add_action( 'kbs_ticket_data_fields', 'kbs_ticket_metabox_content_row', 10 );
 
 /**
  * Display the ticket files row.
@@ -305,33 +337,26 @@ add_action( 'kbs_ticket_data_fields', 'kbs_ticket_metabox_content_row', 20 );
 function kbs_ticket_metabox_files_row( $ticket_id )	{
 
 	global $kbs_ticket, $kbs_ticket_update;
-	
+
 	if ( ! kbs_get_option( 'file_uploads' ) )	{
 		return;
 	}
 
-	if ( $kbs_ticket_update )	{
+	?>
 
-		$files = $kbs_ticket->get_files();
+	<?php if ( $kbs_ticket_update && ! empty( $kbs_ticket->files ) ) : ?>
 		
-		if ( ! $files )	{
-			return;
-		}
-
-		?>
 		<div id="kbs-original-ticket-files-wrap" class="kbs_ticket_files_wrap">
         	<p><strong><?php _e( 'Attached Files', 'kb-support' ); ?></strong></p>
-			<?php foreach( $files as $file ) : ?>
+			<?php foreach( $kbs_ticket->files as $file ) : ?>
                 <p><a href="<?php echo wp_get_attachment_url( $file->ID ); ?>" target="_blank"><?php echo basename( get_attached_file( $file->ID ) ); ?></a></p>
             <?php endforeach; ?>
 		</div>
 	
-		<?php
-
-	}
+	<?php endif;
 		
 } // kbs_ticket_metabox_details_row
-add_action( 'kbs_ticket_detail_fields', 'kbs_ticket_metabox_files_row', 30 );
+add_action( 'kbs_ticket_data_fields', 'kbs_ticket_metabox_files_row', 20 );
 
 /**
  * Display the ticket reply row.
@@ -378,3 +403,68 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 		
 } // kbs_ticket_metabox_details_row
 add_action( 'kbs_ticket_reply_fields', 'kbs_ticket_metabox_reply_row', 10 );
+
+/**
+ * Display the ticket add note row.
+ *
+ * @since	1.0
+ * @global	obj		$kbs_ticket			KBS_Ticket class object
+ * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
+ * @param	int		$ticket_id			The ticket post ID.
+ * @return	str
+ */
+function kbs_ticket_metabox_add_note_row( $ticket_id )	{
+
+	global $kbs_ticket, $kbs_ticket_update; ?>
+
+	<div id="kbs-ticket-add-note-container">
+        <?php echo KBS()->html->textarea( array(
+			'name'  => 'kbs_new_note',
+			'label' => __( 'Add New Note', 'kb-support' ),
+			'desc'  => __( 'Notes are only visible to support workers', 'kb-support' ),
+			'class' => 'large-text',
+			'rows'  => 5
+		) );
+        /*
+         * Fires immediately before the add note button is output.
+         * @since	1.0
+         * @param	int	$post_id	The Ticket post ID
+         */
+        do_action( 'kbs_ticket_before_add_note_button', $ticket_id ); ?>
+
+		<div class="kbs-add-note"><a id="kbs-add-note" class="button button-secondary"><?php _e( 'Add Note', 'kb-support' ); ?></a></div>
+	</div>
+	<span id="kbs-loading" class="kbs-loader kbs-hidden"><img src="<?php echo KBS_PLUGIN_URL . 'assets/images/loading.gif'; ?>" /></span>
+	<?php
+		
+} // kbs_ticket_metabox_add_note_row
+add_action( 'kbs_ticket_notes_fields', 'kbs_ticket_metabox_add_note_row', 10 );
+
+/**
+ * Display the ticket add note row.
+ *
+ * @since	1.0
+ * @global	obj		$kbs_ticket			KBS_Ticket class object
+ * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
+ * @param	int		$ticket_id			The ticket post ID.
+ * @return	str
+ */
+function kbs_ticket_metabox_notes_row( $ticket_id )	{
+
+	global $kbs_ticket, $kbs_ticket_update;
+
+	$notes = kbs_ticket_get_notes( $ticket_id ); ?>
+
+	<?php if ( ! empty( $notes ) ) : ?>
+    	<div id="kbs-ticket-notes-container">
+            <div id="kbs-accordion">
+                <?php foreach( $notes as $note ) : ?>
+                        <h3>Test</h3>
+                        <div>This is a test</div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+	<?php endif;
+
+} // kbs_ticket_metabox_notes_row
+add_action( 'kbs_ticket_notes_fields', 'kbs_ticket_metabox_notes_row', 20 );

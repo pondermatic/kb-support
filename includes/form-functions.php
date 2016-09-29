@@ -854,3 +854,21 @@ function kbs_display_form_field_description( $field, $settings )	{
     	<span class="kbs-description"><?php esc_html_e( $settings['description'] ); ?></span>
     <?php endif;
 } // kbs_display_form_field_description
+
+/**
+ * Output the hidden form fields.
+ *
+ * @since	1.0
+ * @param	$form_id	The ID of the form on display.
+ * @return	str
+ */
+function kbs_render_hidden_form_fields( $form_id )	{
+	ob_start(); ?>
+
+	<input type="hidden" name="kbs_form_id" value="<?php echo $form_id; ?>" />
+	<input type="hidden" name="kbs_honeypot" id="kbs_honeypot" value="" />
+	<input type="hidden" name="redirect" value="<?php echo kbs_get_current_page_url(); ?>" />
+	<input type="hidden" name="action" value="kbs_validate_ticket_form" />
+
+    <?php echo ob_get_clean();
+} // kbs_render_hidden_form_fields

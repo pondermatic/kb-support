@@ -1,5 +1,9 @@
 jQuery(document).ready(function ($) {
 
+	$( "#kbs-accordion" ).accordion({
+		collapsible: true
+	});
+
 	/**
 	 * Settings screen JS
 	 */
@@ -123,32 +127,34 @@ jQuery(document).ready(function ($) {
 	 */
 	var KBS_Tickets = {
 		init : function() {
-			this.save();
+			this.reply();
 		},
 		
-		save : function() {
-			// Send Add New Field Requests
+		reply : function() {
+			// Reply to ticket Requests
 			$( document.body ).on( 'click', '#kbs-reply-close, #kbs-reply-update', function(event) {
 				
 				event.preventDefault();
 
-				var responseContent;
+				var ticketResponse = '';
+				var tinymceActive  = (typeof tinyMCE != 'undefined') && tinyMCE.activeEditor && ! tinyMCE.activeEditor.isHidden();
 
-				if ( $("#wp-kbs_ticket_reply-wrap").hasClass("tmce-active") )	{
-					responseContent = tinyMCE.activeEditor.getContent();
-				} else	{
-					responseContent = $('#kbs_ticket_reply').val();
+				if (tinymceActive) {
+					tinyMCE.triggerSave();
 				}
 
-				if ( responseContent.length < 1 )	{
+				if ( $('#kbs_ticket_reply' ).val().length === 0 )	{
 					alert( kbs_vars.no_ticket_reply_content );
 					return false;
 				}
 
+				ticketResponse = $('#kbs_ticket_reply' ).val();
+
 				var postData         = {
-					ticket_id        : kbs_vars.post_id,
-					close_ticket     : ( event.target.id == 'kbs-reply-close' ? 1 : 0 ),
-					action           : 'kbs_reply_to_ticket'
+					ticket_id    : kbs_vars.post_id,
+					response     : ticketResponse,
+					close_ticket : ( event.target.id == 'kbs-reply-close' ? 1 : 0 ),
+					action       : 'kbs_reply_to_ticket'
 				};
 
 				$.ajax({

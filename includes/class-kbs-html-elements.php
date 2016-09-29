@@ -183,7 +183,7 @@ class KBS_HTML_Elements {
 
 		$defaults = array(
 			'name'        => 'customers',
-			'id'          => 'customers',
+			'id'          => '',
 			'class'       => '',
 			'multiple'    => false,
 			'selected'    => 0,
@@ -596,7 +596,9 @@ class KBS_HTML_Elements {
 			'placeholder' => null,
 			'desc'        => null,
 			'class'       => 'large-text',
-			'disabled'    => false
+			'disabled'    => false,
+			'rows'        => null,
+			'cols'        => null
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -613,14 +615,24 @@ class KBS_HTML_Elements {
 			$placeholder = ' placeholder="' . esc_attr( $args['placeholder'] ) . '"';
 		}
 
+		$rows = '';
+		if ( ! empty( $args['rows'] ) )	{
+			$rows = ' rows="' . $args['rows'] . '"';
+		}
+
+		$cols = '';
+		if ( ! empty( $args['cols'] ) )	{
+			$rows = ' cols="' . $args['cols'] . '"';
+		}
+
 		$output = '<span id="kbs-' . kbs_sanitize_key( $args['name'] ) . '-wrap">';
 
 			$output .= '<label class="kbs-label" for="' . kbs_sanitize_key( $args['name'] ) . '">' . esc_html( $args['label'] ) . '</label>';
 
-			$output .= '<textarea name="' . esc_attr( $args['name'] ) . '" id="' . kbs_sanitize_key( $args['name'] ) . '" class="' . $class . '"' . $disabled . $placeholder . '>' . esc_attr( $args['value'] ) . '</textarea>';
+			$output .= '<textarea name="' . esc_attr( $args['name'] ) . '" id="' . kbs_sanitize_key( $args['name'] ) . '" class="' . $class . '"' . $rows . $cols . $disabled . $placeholder . '>' . esc_attr( $args['value'] ) . '</textarea>';
 
 			if ( ! empty( $args['desc'] ) ) {
-				$output .= '<span class="kbs-description">' . esc_html( $args['desc'] ) . '</span>';
+				$output .= '<span class="description">' . esc_html( $args['desc'] ) . '</span>';
 			}
 
 		$output .= '</span>';

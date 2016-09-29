@@ -26,17 +26,14 @@ jQuery(document).ready(function ($) {
 		$(this).after(' <span id="kbs-loading" class="kbs-loader kbs-hidden"><img src="' + kbs_scripts.ajax_loader + '" /></span>');
 		$('input').removeClass("error");
 
-		var $form      = $("#kbs_ticket_form");
-		var ticketData = $("#kbs_ticket_form").serialize();
-
-		var ticketContent;
-
 		var tinymceActive = (typeof tinyMCE != 'undefined') && tinyMCE.activeEditor && ! tinyMCE.activeEditor.isHidden();
 
 		if (tinymceActive) {
-			ticketContent = tinyMCE.activeEditor.getContent();
-			ticketData[tinymce.editors[0].id] = ticketContent;
+			tinyMCE.triggerSave();
 		}
+
+		var $form      = $("#kbs_ticket_form");
+		var ticketData = $("#kbs_ticket_form").serialize();
 
 		$.ajax({
 			type       : 'POST',

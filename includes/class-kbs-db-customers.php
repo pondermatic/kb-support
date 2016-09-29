@@ -54,7 +54,6 @@ class KBS_DB_Customers extends KBS_DB  {
 			'email'        => '%s',
 			'ticket_ids'   => '%s',
 			'ticket_count' => '%d',
-			'notes'        => '%s',
 			'date_created' => '%s',
 		);
 	} // get_columns
@@ -72,7 +71,6 @@ class KBS_DB_Customers extends KBS_DB  {
 			'name'           => '',
 			'ticket_ids'     => '',
 			'purchase_count' => 0,
-			'notes'          => '',
 			'date_created'   => date( 'Y-m-d H:i:s' ),
 		);
 	} // get_column_defaults

@@ -83,4 +83,3 @@ function kbs_validate_username( $username ) {
 
 	return (bool) apply_filters( 'kbs_validate_username', $valid, $username );
 } // kbs_validate_username
-

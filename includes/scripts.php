@@ -177,5 +177,13 @@ function kbs_load_admin_scripts( $hook ) {
 	wp_register_style( 'kbs-admin', $css_dir . 'kbs-admin' . $suffix . '.css', KBS_VERSION );
 	wp_enqueue_style( 'kbs-admin' );
 
+	if ( 'post.php' == $hook || 'post-new.php' == $hook )	{
+
+		if ( isset( $_GET['post'] ) && 'kbs_ticket' == get_post_type( $_GET['post'] ) )	{
+			wp_enqueue_script( 'jquery-ui-accordion' );
+		}
+		
+	}
+
 } // kbs_load_admin_scripts
 add_action( 'admin_enqueue_scripts', 'kbs_load_admin_scripts', 100 );

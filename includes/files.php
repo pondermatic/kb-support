@@ -56,7 +56,8 @@ function kbs_ticket_has_files( $ticket_id )	{
 		array(
 			'post_type'      => 'attachment',
 			'posts_per_page' => -1,
-			'post_parent'    => $ticket_id
+			'post_parent'    => $ticket_id,
+			'post_status'    => array( 'inherit' )
 		)
 	);
 	

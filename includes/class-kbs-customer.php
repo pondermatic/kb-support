@@ -77,13 +77,6 @@ class KBS_Customer {
 	public $user_id;
 
 	/**
-	 * Customer Notes
-	 *
-	 * @since  1.0
-	 */
-	public $notes;
-
-	/**
 	 * The Database Abstraction
 	 *
 	 * @since  1.0
@@ -138,10 +131,6 @@ class KBS_Customer {
 		foreach ( $customer as $key => $value ) {
 
 			switch ( $key ) {
-
-				case 'notes':
-					$this->$key = $this->get_notes();
-					break;
 
 				default:
 					$this->$key = $value;
@@ -439,9 +428,10 @@ class KBS_Customer {
 	 *
 	 * @since	1.0
 	 * @param	int		$ticket_id		The ticket ID to attach to the customer
+	 * @param	bool	$update_stats	Whether or not to update customer stats
 	 * @return	bool	If the attachment was successfuly
 	 */
-	public function attach_ticket( $ticket_id = 0 ) {
+	public function attach_ticket( $ticket_id = 0, $update_stats = true ) {
 
 		if( empty( $ticket_id ) ) {
 			return false;
@@ -472,9 +462,11 @@ class KBS_Customer {
 		$ticket_added = $this->update( array( 'ticket_ids' => $new_ticket_ids ) );
 
 		if ( $ticket_added ) {
-
 			$this->ticket_ids = $new_ticket_ids;
 
+			if ( $update_stats ) {
+				$this->increase_ticket_count();
+			}
 		}
 
 		do_action( 'kbs_customer_post_attach_ticket', $ticket_added, $ticket->ID, $this->id );
@@ -523,6 +515,7 @@ class KBS_Customer {
 		if ( $ticket_removed ) {
 
 			$this->ticket_ids = $new_ticket_ids;
+			$this->decrease_ticket_count();
 
 		}
 
