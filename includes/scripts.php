@@ -144,10 +144,13 @@ function kbs_load_admin_scripts( $hook ) {
 
 	wp_localize_script( 'kbs-admin-scripts', 'kbs_vars', array(
 		'post_id'                 => isset( $post->ID ) ? $post->ID : null,
+		'post_type'               => isset( $_GET['post'] ) ? get_post_type( $_GET['post'] ) : false,
 		'kbs_version'             => KBS_VERSION,
 		'add_new_ticket'          => sprintf( __( 'Add New %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
 		'new_media_ui'            => apply_filters( 'kbs_use_35_media_ui', 1 ),
 		'no_ticket_reply_content' => __( 'There is no content in your reply', 'kb-support' ),
+		'ticket_confirm_close'    => __( 'Are you sure you wish to close this ticket? Click OK to close, or Cancel to return.', 'kb-support' ),
+		'ticket_reply_failed'     => sprintf( __( 'Could not add %s Reply', 'kb-support' ), kbs_get_ticket_label_singular() ),
 		'type_to_search'          => sprintf( __( 'Type to search %s', 'kb-support' ), kbs_get_kb_label_plural() ),
 		'search_placeholder'      => sprintf( __( 'Type to search all %s', 'kb-support' ), kbs_get_kb_label_plural() ),
 		'editing_field_type'      => $editing_field_type,

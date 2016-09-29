@@ -155,7 +155,7 @@ class KBS_Form {
 			'description_pos' => ! empty( $data['description_pos'] ) ? $data['description_pos']                    : 'label',
 			'placeholder'     => ! empty( $data['placeholder'] )     ? sanitize_text_field( $data['placeholder'] ) : '',
 			'hide_label'      => ! empty( $data['hide_label'] )      ? true                                        : false,
-			'show_logged_in'  => ! empty( $data['show_logged_in'] )  ? true                                        : false
+			'show_logged_in'  => ! empty( $data['show_logged_in'] )  ? $data['show_logged_in']                     : true
 		);
 
 		$settings = apply_filters( 'kbs_new_form_field_settings', $settings );
@@ -211,7 +211,7 @@ class KBS_Form {
 			'description_pos' => ! empty( $data['description_pos'] ) ? $data['description_pos']                    : 'label',
 			'placeholder'     => ! empty( $data['placeholder'] )     ? sanitize_text_field( $data['placeholder'] ) : '',
 			'hide_label'      => ! empty( $data['hide_label'] )      ? true                                        : false,
-			'show_logged_in'  => ! empty( $data['show_logged_in'] )  ? true                                        : false
+			'show_logged_in'  => ! empty( $data['show_logged_in'] )  ? $data['show_logged_in']                     : true
 		);
 
 		$args = array(

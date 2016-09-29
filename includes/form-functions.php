@@ -468,6 +468,31 @@ function kbs_display_form( $form_id = 0 ) {
 } // kbs_display_form
 
 /**
+ * Form submission error messages.
+ *
+ * @since	1.0
+ * @param	int		$field_id	The field ID.
+ * @param	str		$error		The type of error.
+ * @return	void
+ */
+function kbs_form_submission_errors( $field_id, $error )	{
+
+	$errors = array(
+		'required'      => get_the_title( $field_id ) . __( ' is a required field.', 'kb-support' ),
+		'invalid_email' => get_the_title( $field_id ) . __( ' requires a valid email address.', 'kb-support' )
+	);
+
+	$errors = apply_filters( 'kbs_form_submission_errors', $errors );
+
+	if ( ! array_key_exists( $error, $errors ) )	{
+		return get_the_title( $field_id ) . __( ' contains an error.', 'kb-support' );
+	}
+
+	return $errors[ $error ];
+
+} // kbs_form_submission_errors
+
+/**
  * Process ticket form submissions.
  *
  * @since	1.0
@@ -539,7 +564,7 @@ function kbs_display_form_text_field( $field, $settings )	{
 	$type        = ! empty( $settings['type'] )        ? $settings['type']                                             : 'text';
 	$placeholder = ! empty( $settings['placeholder'] ) ? ' placeholder="' . esc_attr( $settings['placeholder'] ) . '"' : '';
 	$class       = ! empty( $settings['input_class'] ) ? esc_attr( $settings['input_class'] )                          : '';
-	$required    = ! empty( $settings['required'] )    ? ' required'                                                   : '';
+	$required    = '';//! empty( $settings['required'] )    ? ' required'                                                   : '';
 
 	if ( $type == 'date_field' )	{
 		if( empty( $class ) ) {
@@ -555,14 +580,33 @@ function kbs_display_form_text_field( $field, $settings )	{
 	}
 
 	$class = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $class ) ) );
+	$value = '';
+
+	if ( ! empty( $settings['mapping'] ) && is_user_logged_in() )	{
+		$user_id = get_current_user_id();
+
+		if ( 'customer_first' == $settings['mapping'] )	{
+			$value = ' value="' . get_userdata( $user_id )->first_name . '"';
+		}
+
+		if ( 'customer_last' == $settings['mapping'] )	{
+			$value = ' value="' . get_userdata( $user_id )->last_name . '"';
+		}
+
+		if ( 'customer_email' == $settings['mapping'] )	{
+			$value = ' value="' . get_userdata( $user_id )->user_email . '"';
+		}
+
+	}
 
 	do_action( 'kbs_before_form_field', $field, $settings );
 	do_action( 'kbs_before_form_' . $settings['type'] . '_field', $field, $settings );
 
-	$output = sprintf( '<input type="%1$s" name="%2$s" id="%2$s" class="kbs-input %3$s" %4$s%5$s />',
+	$output = sprintf( '<input type="%1$s" name="%2$s" id="%2$s" class="kbs-input %3$s"%4$s%5$s%6$s />',
 		esc_attr( $type ),
 		esc_attr( $field->post_name ),
 		! empty( $class ) ? $class : '',
+		$value,
 		$placeholder,
 		$required
 	);

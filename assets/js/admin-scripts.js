@@ -1,8 +1,11 @@
+var kbs_vars;
 jQuery(document).ready(function ($) {
 
-	$( "#kbs-accordion" ).accordion({
-		collapsible: true
-	});
+	if ( kbs_vars.post_type && 'kbs_ticket' == kbs_vars.post_type )	{
+		$( "#kbs-accordion" ).accordion({
+			collapsible: true
+		});
+	}
 
 	/**
 	 * Settings screen JS
@@ -143,17 +146,25 @@ jQuery(document).ready(function ($) {
 					tinyMCE.triggerSave();
 				}
 
-				if ( $('#kbs_ticket_reply' ).val().length === 0 )	{
+				ticketResponse = $('#kbs_ticket_reply' ).val();
+
+				if ( ticketResponse.length === 0 )	{
 					alert( kbs_vars.no_ticket_reply_content );
 					return false;
 				}
 
-				ticketResponse = $('#kbs_ticket_reply' ).val();
+				if ( 'kbs-reply-close' == event.target.id )	{
+					var confirmClose = confirm( kbs_vars.ticket_confirm_close );
+
+					if (confirmClose == false) {
+						return;
+					}
+				}
 
 				var postData         = {
 					ticket_id    : kbs_vars.post_id,
 					response     : ticketResponse,
-					close_ticket : ( event.target.id == 'kbs-reply-close' ? 1 : 0 ),
+					close_ticket : ( 'kbs-reply-close' == event.target.id ? 1 : 0 ),
 					action       : 'kbs_reply_to_ticket'
 				};
 

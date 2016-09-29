@@ -73,6 +73,40 @@ function kbs_setup_kbs_post_types() {
 
 	register_post_type( 'kbs_ticket', apply_filters( 'kbs_ticket_post_type_args', $ticket_args ) );
 
+	/** kbs_ticket_reply Post Type */
+	$ticket_reply_labels =  apply_filters( 'kbs_ticket_reply_labels', array(
+		'name'                  => _x( '%1$s Reply', 'kbs_ticket post type name', 'kb-support' ),
+		'singular_name'         => _x( 'Reply', 'singular kbs_ticket post type name', 'kb-support' ),
+		'add_new'               => __( 'Add Reply', 'kb-support' ),
+		'add_new_item'          => __( 'Add New Reply', 'kb-support' ),
+		'edit_item'             => __( 'Edit Reply', 'kb-support' ),
+		'new_item'              => __( 'New Reply', 'kb-support' ),
+		'all_items'             => __( 'Replies', 'kb-support' ),
+		'view_item'             => __( 'View Reply', 'kb-support' ),
+		'search_items'          => __( 'Search Replies', 'kb-support' ),
+		'not_found'             => __( 'No Replies found', 'kb-support' ),
+		'not_found_in_trash'    => __( 'No Replies found in Trash', 'kb-support' )
+	) );
+
+	foreach ( $ticket_labels as $key => $value ) {
+		$ticket_labels[ $key ] = sprintf( $value, kbs_get_ticket_label_singular(), kbs_get_ticket_label_plural() );
+	}
+
+	$ticket_reply_args = array(
+		'labels'             => $ticket_reply_labels,
+		'public'             => false,
+		'show_ui'            => true,
+		'show_in_menu'       => false,
+		'rewrite'            => false,
+		'capability_type'    => 'ticket',
+		'map_meta_cap'       => true,
+		'has_archive'        => false,
+		'hierarchical'       => false,
+		'supports'           => apply_filters( 'kbs_ticket_reply_supports', array() ),
+		'can_export'         => true
+	);
+
+	register_post_type( 'kbs_ticket_reply', apply_filters( 'kbs_ticket_reply_post_type_args', $ticket_reply_args ) );
 
 	/** KB Post Type */
 	$kb_labels = array(

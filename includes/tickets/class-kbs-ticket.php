@@ -555,7 +555,7 @@ class KBS_Ticket {
 						break;
 
 					case 'resolved_date':
-						$this->update_meta( '_kbs_resolved_date', $this->resolved_date );
+						$this->update_meta( '_kbs_ticket_resolved_date', $this->resolved_date );
 						break;
 
 					case 'files':
@@ -563,7 +563,7 @@ class KBS_Ticket {
 						break;
 
 					case 'sla':
-						$this->update_meta( '_kbs_sla', $value );
+						$this->update_meta( '_kbs_ticket_sla', $value );
 						break;
 
 					default:
@@ -1174,11 +1174,51 @@ class KBS_Ticket {
 	 */
 	public function add_note( $note = false ) {
 		// Return if no note specified
-		if( ! $note ) {
+		if ( empty( $note ) ) {
 			return false;
 		}
 
 		kbs_ticket_insert_note( $this->ID, $note );
 	}
+
+	/**
+	 * Add a reply to a ticket.
+	 *
+	 * @since	1.0
+	 * @param	arr			$reply_data	The reply data
+	 * @return	int|false	The reply ID on success, or false on failure
+	 */
+	public function add_reply( $reply_data = array() ) {
+		// Return if no reply data
+		if ( empty( $reply_data ) )	{
+			return false;
+		}
+
+		do_action( 'kbs_pre_reply_to_ticket', $reply_data, $this );
+
+		$args = array(
+			'post_type'    => 'kbs_ticket_reply',
+			'post_status'  => 'publish',
+			'post_author'  => $reply_data['user_id'],
+			'post_content' => $reply_data['response']
+		);
+
+		if ( $reply_data['close'] )	{
+			$args['meta_input'] = array(
+				'_kbs_ticket_resolution' => true
+			);
+		}
+
+		$reply_id = wp_insert_post( $args );
+
+		if ( empty( $reply_id ) )	{
+			return false;
+		}
+
+		do_action( 'kbs_reply_to_ticket', $reply_id, $reply_data, $this );
+
+		return $reply_id;
+
+	} // add_reply
 
 } // KBS_Ticket

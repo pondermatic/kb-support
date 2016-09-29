@@ -12,14 +12,14 @@ global $kbs_form;
         <form<?php kbs_maybe_set_enctype(); ?> id="kbs_ticket_form" class="kbs_form" action="" method="post">
     		<div class="kbs_alert kbs_alert_error kbs_hidden"></div>
             <?php do_action( 'kbs_ticket_form_top' ); ?>
-    
+
             <fieldset id="kbs_ticket_form_fields">
                 <legend><?php esc_attr_e( get_the_title( $kbs_form->ID ) ); ?></legend>
-        
+
                 <?php foreach( $kbs_form->fields as $field ) : ?>
-                
+
                     <?php $settings = $kbs_form->get_field_settings( $field->ID ); ?>
-                    
+
                         <p class="kbs-<?php echo $field->post_name; ?>">
                             <?php if ( empty( $settings['hide_label'] ) && 'recaptcha' != $settings['type'] ) : ?>
 
@@ -37,7 +37,7 @@ global $kbs_form;
                                 <?php endif; ?>
 
                             <?php endif; ?>
-        
+
                             <?php $kbs_form->display_field( $field, $settings ); ?>
 
                             <?php if ( ! empty( $settings['description'] ) && 'field' == $settings['description_pos'] ) : ?>

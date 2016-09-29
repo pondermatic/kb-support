@@ -121,6 +121,35 @@ function kbs_get_ajax_url() {
 } // kbs_get_ajax_url
 
 /**
+ * Reply to a ticket.
+ *
+ * @since	1.0
+ * @return	void
+ */
+function kbs_ajax_reply_to_ticket()	{
+
+	$ticket = new KBS_Ticket( $_POST['ticket_id'] );
+
+	$reply_data = array(
+		'user_id'  => get_current_user_id(),
+		'response' => $_POST['response'],
+		'close'    => $_POST['close_ticket']
+	);
+
+	$error = false;
+
+	if ( ! $ticket->add_reply( $reply_data ) )	{
+		wp_send_json( array(
+			'error' => 'ticket_reply_failed'
+		) );
+	}
+
+	wp_send_json_success( array( 'error' => $error ) );
+
+} // kbs_ajax_reply_to_ticket
+add_action( 'wp_ajax_kbs_reply_to_ticket', 'kbs_ajax_reply_to_ticket' );
+
+/**
  * Adds a new field to a form.
  *
  * @since	1.0
@@ -198,19 +227,38 @@ add_action( 'wp_ajax_kbs_order_form_fields', 'kbs_ajax_order_form_fields' );
  * @return	void
  */
 function kbs_ajax_validate_form_submission()	{
-	$form   = new KBS_Form( $_POST['kbs_form_id'] );
+
+	$form  = new KBS_Form( $_POST['kbs_form_id'] );
+	$error = false;
 
 	foreach ( $form->get_fields() as $field )	{
+
 		$settings = $form->get_field_settings( $field->ID );
+
 		if ( ! empty( $settings['required'] ) && empty( $_POST[ $field->post_name ] ) )	{
+
+			$error = kbs_form_submission_errors( $field->ID, 'required' );
+			$field = $field->post_name;
+
+		} elseif ( 'email' == $settings['type'] || 'customer_email' == $settings['mapping'] )	{
+
+			if ( ! is_email( $_POST[ $field->post_name ] ) )	{
+				$error = kbs_form_submission_errors( $field->ID, 'invalid_email' );
+				$field = $field->post_name;
+			}
+
+		}
+
+		if ( $error )	{
 			wp_send_json( array(
-				'error' => get_the_title( $field->ID ) . __( ' is a required field.', 'kb-support' ),
-				'field' => $field->post_name
+				'error' => $error,
+				'field' => $field
 			) );
 		}
+
 	}
 
-	wp_send_json_success( array( 'error' => false ) );
+	wp_send_json_success( array( 'error' => $error ) );
 
 } // kbs_ajax_validate_form_submission
 add_action( 'wp_ajax_kbs_validate_ticket_form', 'kbs_ajax_validate_form_submission' );
