@@ -309,7 +309,7 @@ function kbs_get_field_types()	{
 		'select'                      => __( 'Select List', 'kb-support' ),
 		'text'                        => __( 'Text Field', 'kb-support' ),
 		'textarea'                    => __( 'Textarea', 'kb-support' ),
-		'ticket_category_dropdown'    => sprintf( __( '%s Select List', 'kb-support' ), kbs_get_ticket_label_singular() ),
+		'ticket_category_dropdown'    => sprintf( __( '%s Categories', 'kb-support' ), kbs_get_ticket_label_singular() ),
 		'url'                         => __( 'URL Field', 'kb-support' ),		
 	);
 	
@@ -700,7 +700,7 @@ function kbs_display_form_select_field( $field, $settings )	{
 	}
 
 	$class   = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $class ) ) );
-	$options = $settings['select_options'];
+	$options = apply_filters( 'kbs_form_select_field_options', $settings['select_options'] );
 
 	do_action( 'kbs_before_form_field', $field, $settings );
 	do_action( 'kbs_before_form_' . $settings['type'] . '_field', $field, $settings );
@@ -727,8 +727,25 @@ function kbs_display_form_select_field( $field, $settings )	{
 	do_action( 'kbs_after_form_field', $field, $settings );
 	do_action( 'kbs_after_form_' . $settings['type'] . '_field', $field, $settings );
 
-} // kbs_display_form_textarea_field
+} // kbs_display_form_select_field
 add_action( 'kbs_form_display_select_field', 'kbs_display_form_select_field', 10, 2 );
+
+/**
+ * Display a ticket category select field.
+ *
+ * @since	1.0
+ * @param	obj			$field		Field post object
+ * @param	arr			$settings	Field settings
+ * @return	str			Field
+ */
+function kbs_display_form_ticket_category_field( $field, $settings )	{
+
+	add_filter( 'kbs_form_select_field_options', 'kbs_get_ticket_category_options' );
+	kbs_display_form_select_field( $field, $settings );
+	remove_filter('kbs_form_select_field_options', 'kbs_get_ticket_category_options' );
+
+} // kbs_display_form_ticket_category_field
+add_action( 'kbs_form_display_ticket_category_dropdown_field', 'kbs_display_form_ticket_category_field', 10, 2 );
 
 /**
  * Display a form checkbox field

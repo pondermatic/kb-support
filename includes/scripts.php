@@ -145,6 +145,7 @@ function kbs_load_admin_scripts( $hook ) {
 	wp_localize_script( 'kbs-admin-scripts', 'kbs_vars', array(
 		'post_id'                 => isset( $post->ID ) ? $post->ID : null,
 		'post_type'               => isset( $_GET['post'] ) ? get_post_type( $_GET['post'] ) : false,
+		'current_url'             => kbs_get_current_page_url(),
 		'kbs_version'             => KBS_VERSION,
 		'add_new_ticket'          => sprintf( __( 'Add New %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
 		'new_media_ui'            => apply_filters( 'kbs_use_35_media_ui', 1 ),

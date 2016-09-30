@@ -367,6 +367,37 @@ add_action( 'kbs_ticket_data_fields', 'kbs_ticket_metabox_files_row', 20 );
  * @param	int		$ticket_id			The ticket post ID.
  * @return	str
  */
+function kbs_ticket_metabox_replies_row( $ticket_id )	{
+
+	global $kbs_ticket, $kbs_ticket_update;
+
+	$replies = kbs_get_ticket_replies( $ticket_id );
+
+	if ( $replies ) : ?>
+    	<div id="kbs-ticket-reply-container">
+            <div id="kbs-replies" class="kbs_accordion">
+				<?php foreach( $replies as $reply ) : ?>
+                    <h3><?php echo $reply->post_date; ?></h3>
+                     <div>
+                        <?php echo $reply->post_content; ?>
+                    </div>
+                <?php endforeach; ?>
+        	</div>
+        </div>
+	<?php endif;
+
+} // kbs_ticket_metabox_replies_row
+add_action( 'kbs_ticket_reply_fields', 'kbs_ticket_metabox_replies_row', 10 );
+
+/**
+ * Display the ticket reply row.
+ *
+ * @since	1.0
+ * @global	obj		$kbs_ticket			KBS_Ticket class object
+ * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
+ * @param	int		$ticket_id			The ticket post ID.
+ * @return	str
+ */
 function kbs_ticket_metabox_reply_row( $ticket_id )	{
 
 	global $kbs_ticket, $kbs_ticket_update;
@@ -402,7 +433,7 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 	}
 		
 } // kbs_ticket_metabox_details_row
-add_action( 'kbs_ticket_reply_fields', 'kbs_ticket_metabox_reply_row', 10 );
+add_action( 'kbs_ticket_reply_fields', 'kbs_ticket_metabox_reply_row', 20 );
 
 /**
  * Display the ticket add note row.
@@ -455,13 +486,13 @@ function kbs_ticket_metabox_notes_row( $ticket_id )	{
 
 	$notes = kbs_ticket_get_notes( $ticket_id ); ?>
 
-	<?php if ( ! empty( $notes ) ) : ?>
+	<?php if ( empty( $notes ) ) : ?>
     	<div id="kbs-ticket-notes-container">
-            <div id="kbs-accordion">
-                <?php foreach( $notes as $note ) : ?>
-                        <h3>Test</h3>
-                        <div>This is a test</div>
-                <?php endforeach; ?>
+            <div id="kbs-notes-history" class="kbs_accordion">
+                <?php //foreach( $notes as $note ) : ?>
+                    <h3>Test</h3>
+                    <div>This is a test</div>
+                <?php //endforeach; ?>
             </div>
         </div>
 	<?php endif;

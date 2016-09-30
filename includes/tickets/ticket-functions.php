@@ -50,6 +50,49 @@ function kbs_get_ticket( $ticket_id )	{
 } // kbs_get_ticket
 
 /**
+ * Retrieve ticket categories.
+ *
+ * @since	1.0
+ * @param	arr		$args	See $defaults.
+ * @return	obj		All ticket categories.
+ */
+function kbs_get_ticket_categories( $args = array() )	{
+	$defaults = array(
+		'taxonomy'      => 'ticket_category',
+		'hide_empty'    => false,
+		'orderby'       => 'name',
+		'order'         => 'ASC'
+	);
+	
+	$args = wp_parse_args( $args, $defaults );
+	
+	$event_types = get_categories( $args );
+	
+	return apply_filters( 'kbs_get_ticket_categories', $event_types, $args );
+} // kbs_get_ticket_categories
+
+/**
+ * Ticket category options.
+ *
+ * @since	1.0
+ * @return	arr		Array of ticket category options.
+ */
+function kbs_get_ticket_category_options()	{
+	$options    = array();
+	$categories = kbs_get_ticket_categories();
+
+	if ( $categories )	{
+		foreach( $categories as $category )	{
+			$options[ $category->term_id ] = $category->name;
+		}
+	}
+
+	$options = apply_filters( 'kbs_ticket_category_options', $options );
+
+	return $options;
+} // kbs_get_ticket_category_options
+
+/**
  * Count Tickets
  *
  * Returns the total number of tickets.
@@ -631,12 +674,6 @@ function kbs_ticket_status_from_new_to_open( $ticket_id )	{
 add_action( 'kbs_post_assign_agent', 'kbs_ticket_status_from_new_to_open' );
 
 /**
- * Ticket reply functions.
- *
- * @since	1.0
- */
-
-/**
  * Retrieve the IDs of all ticket replies.
  *
  * @since	1.0
@@ -644,14 +681,18 @@ add_action( 'kbs_post_assign_agent', 'kbs_ticket_status_from_new_to_open' );
  * @param	arr		$args			See @get_children
  * @return	obj|false
  */
-function kbs_get_ticket_replies( $ticket_id = 0, $args = array() )	{
+function kbs_get_ticket_replies( $ticket_id = 0 )	{
 	if ( empty( $ticket_id ) )	{
 		return false;
 	}
 
-	$defaults = array(
-		''
+	$args = array(
+		'post_type'   => 'kbs_ticket_reply',
+		'post_parent' => $ticket_id,
+		'numberposts' => -1
 	);
+
+	return get_posts( $args );
 
 } // kbs_get_ticket_replies
 

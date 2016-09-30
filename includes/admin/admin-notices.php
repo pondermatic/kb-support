@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 function kbs_admin_messages() {
 	global $kbs_options;
 
-	if( isset( $_GET['kbs-message'] ) && 'nonce_fail' == $_GET['kbs-message'] )	{
+	if ( isset( $_GET['kbs-message'] ) && 'nonce_fail' == $_GET['kbs-message'] )	{
 		add_settings_error(
 			'kbs-notices',
 			'kbs-nonce-fail',
@@ -30,8 +30,8 @@ function kbs_admin_messages() {
 			'error'
 		);
 	}
-	
-	if( isset( $_GET['kbs-message'] ) && 'ticket_reopened' == $_GET['kbs-message'] )	{
+
+	if ( isset( $_GET['kbs-message'] ) && 'ticket_reopened' == $_GET['kbs-message'] )	{
 		add_settings_error(
 			'kbs-notices',
 			'kbs-ticket-reopened',
@@ -39,8 +39,8 @@ function kbs_admin_messages() {
 			'updated'
 		);
 	}
-	
-	if( isset( $_GET['kbs-message'] ) && 'ticket_not_closed' == $_GET['kbs-message'] )	{
+
+	if ( isset( $_GET['kbs-message'] ) && 'ticket_not_closed' == $_GET['kbs-message'] )	{
 		add_settings_error(
 			'kbs-notices',
 			'kbs-ticket-not-closed',
@@ -48,8 +48,31 @@ function kbs_admin_messages() {
 			'error'
 		);
 	}
-	
-	if( isset( $_GET['kbs-message'] ) && 'field_added' == $_GET['kbs-message'] )	{
+
+	if ( isset( $_GET['kbs-message'] ) && 'ticket_reply_added' == $_GET['kbs-message'] )	{
+		$closed = '';
+		if ( isset( $_GET['post'] ) && 'kbs_ticket' == get_post_type( $_GET['post'] ) && 'closed' == get_post_status( $_GET['post'] ) )	{
+			$closed = sprintf( __( ' and the %1$s was closed', 'kb-support' ), kbs_get_ticket_label_singular() );
+		}
+
+		add_settings_error(
+			'kbs-notices',
+			'kbs-ticket-reply-added',
+			sprintf( __( 'The reply was successfully added to the %s%s.', 'kb-support' ), kbs_get_ticket_label_singular(), $closed ),
+			'error'
+		);
+	}
+
+	if ( isset( $_GET['kbs-message'] ) && 'ticket_reply_failed' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-ticket-reply-failed',
+			sprintf( __( 'The reply could not be added to the %s.', 'kb-support' ), kbs_get_ticket_label_singular() ),
+			'error'
+		);
+	}
+
+	if ( isset( $_GET['kbs-message'] ) && 'field_added' == $_GET['kbs-message'] )	{
 		add_settings_error(
 			'kbs-notices',
 			'kbs-field-added',
@@ -58,7 +81,7 @@ function kbs_admin_messages() {
 		);
 	}
 
-	if( isset( $_GET['kbs-message'] ) && 'field_add_fail' == $_GET['kbs-message'] )	{
+	if ( isset( $_GET['kbs-message'] ) && 'field_add_fail' == $_GET['kbs-message'] )	{
 		add_settings_error(
 			'kbs-notices',
 			'kbs-field-notadded',
@@ -66,8 +89,8 @@ function kbs_admin_messages() {
 			'error'
 		);
 	}
-	
-	if( isset( $_GET['kbs-message'] ) && 'field_saved' == $_GET['kbs-message'] )	{
+
+	if ( isset( $_GET['kbs-message'] ) && 'field_saved' == $_GET['kbs-message'] )	{
 		add_settings_error(
 			'kbs-notices',
 			'kbs-field-saved',
@@ -76,7 +99,7 @@ function kbs_admin_messages() {
 		);
 	}
 
-	if( isset( $_GET['kbs-message'] ) && 'field_save_fail' == $_GET['kbs-message'] )	{
+	if ( isset( $_GET['kbs-message'] ) && 'field_save_fail' == $_GET['kbs-message'] )	{
 		add_settings_error(
 			'kbs-notices',
 			'kbs-field-notsaved',
@@ -85,7 +108,7 @@ function kbs_admin_messages() {
 		);
 	}
 
-	if( isset( $_GET['kbs-message'] ) && 'field_deleted' == $_GET['kbs-message'] )	{
+	if ( isset( $_GET['kbs-message'] ) && 'field_deleted' == $_GET['kbs-message'] )	{
 		add_settings_error(
 			'kbs-notices',
 			'kbs-field-delete',
@@ -93,8 +116,8 @@ function kbs_admin_messages() {
 			'updated'
 		);
 	}
-	
-	if( isset( $_GET['kbs-message'] ) && 'field_delete_fail' == $_GET['kbs-message'] )	{
+
+	if ( isset( $_GET['kbs-message'] ) && 'field_delete_fail' == $_GET['kbs-message'] )	{
 		add_settings_error(
 			'kbs-notices',
 			'kbs-field-notdeleted',
@@ -103,7 +126,7 @@ function kbs_admin_messages() {
 		);
 	}
 
-	if( isset( $_GET['kbs-message'], $_GET['field_id'] ) && 'editing_field' == $_GET['kbs-message'] )	{
+	if ( isset( $_GET['kbs-message'], $_GET['field_id'] ) && 'editing_field' == $_GET['kbs-message'] )	{
 		echo '<div class="notice notice-info">';
 		echo '<p><strong>' .
 				sprintf( __( 'Editing: %s.', 'kb-support' ), get_the_title( $_GET['field_id'] ) ) .

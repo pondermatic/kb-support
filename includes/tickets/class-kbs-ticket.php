@@ -60,6 +60,14 @@ class KBS_Ticket {
 	private $ticket_meta = array();
 
 	/**
+	 * The Unique Ticket Key
+	 *
+	 * @since	1.0
+	 * @var		str
+	 */
+	protected $key = '';
+
+	/**
 	 * Array of user information
 	 *
 	 * @since	1.0
@@ -361,6 +369,8 @@ class KBS_Ticket {
 		// SLA
 		$this->sla             = $this->setup_sla();
 
+		$this->key             = $this->setup_ticket_key();
+
 		// Extensions can hook here to add items to this object
 		do_action( 'kbs_setup_ticket', $this, $ticket_id );
 								
@@ -383,6 +393,12 @@ class KBS_Ticket {
 		if ( empty( $this->ip ) ) {
 			$this->ip = kbs_get_ip();
 			$this->pending['ip'] = $this->ip;
+		}
+
+		if ( empty( $this->key ) ) {
+			$auth_key  = defined( 'AUTH_KEY' ) ? AUTH_KEY : '';
+			$this->key = strtolower( md5( $this->email . date( 'Y-m-d H:i:s' ) . $auth_key . uniqid( 'kbs', true ) ) );  // Unique key
+			$this->pending['key'] = $this->key;
 		}
 
 		$ticket_data = array(
@@ -524,6 +540,10 @@ class KBS_Ticket {
 
 					case 'email':
 						$this->update_meta( '_kbs_ticket_user_email', $this->email );
+						break;
+
+					case 'key':
+						$this->update_meta( '_kbs_ticket_key', $this->key );
 						break;
 
 					case 'date':
@@ -771,7 +791,7 @@ class KBS_Ticket {
 			return false;
 		}
 
-		if ( $meta_key == 'date' ) {
+		if ( 'key' == $meta_key || 'date' == $meta_key ) {
 
 			$current_meta = $this->get_meta();
 			$current_meta[ $meta_key ] = $meta_value;
@@ -1042,6 +1062,18 @@ class KBS_Ticket {
 	} // setup_ip
 
 	/**
+	 * Setup the ticket key.
+	 *
+	 * @since	1.0
+	 * @return	str		The Ticket Key
+	 */
+	private function setup_ticket_key() {
+		$key = $this->get_meta( '_kbs_ticket_key', true );
+
+		return $key;
+	} // setup_ticket_key
+
+	/**
 	 * Setup the SLA data for the ticket
 	 *
 	 * @since	1.0
@@ -1199,14 +1231,17 @@ class KBS_Ticket {
 		$args = array(
 			'post_type'    => 'kbs_ticket_reply',
 			'post_status'  => 'publish',
-			'post_author'  => $reply_data['user_id'],
-			'post_content' => $reply_data['response']
+			'post_content' => $reply_data['response'],
+			'post_parent'  => $reply_data['ticket_id'],
+			'meta_input'   => array(
+				'_kbs_reply_customer_id' => $reply_data['customer_id'],
+				'_kbs_reply_agent'       => $reply_data['agent'],
+				'_kbs_ticket_key'        => $reply_data['key']
+			)
 		);
 
 		if ( $reply_data['close'] )	{
-			$args['meta_input'] = array(
-				'_kbs_ticket_resolution' => true
-			);
+			$args['meta_input']['_kbs_reply_resolution'] = true;
 		}
 
 		$reply_id = wp_insert_post( $args );

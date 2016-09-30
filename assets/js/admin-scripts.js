@@ -2,9 +2,21 @@ var kbs_vars;
 jQuery(document).ready(function ($) {
 
 	if ( kbs_vars.post_type && 'kbs_ticket' == kbs_vars.post_type )	{
-		$( "#kbs-accordion" ).accordion({
+		var icons = {
+		  header: "ui-icon-circle-arrow-e",
+		  activeHeader: "ui-icon-circle-arrow-s"
+		};
+		$( ".kbs_accordion" ).accordion({
+			icons: icons,
 			collapsible: true
 		});
+		$( "#toggle" ).button().on( "click", function() {
+		if ( $( ".kbs_accordion" ).accordion( "option", "icons" ) ) {
+			$( ".kbs_accordion" ).accordion( "option", "icons", null );
+		} else {
+			$( ".kbs_accordion" ).accordion( "option", "icons", icons );
+		}
+    });
 	}
 
 	/**
@@ -179,8 +191,12 @@ jQuery(document).ready(function ($) {
 						$("#kbs-loading").removeClass('kbs-hidden');
 					},
 					success: function (response) {
-						window.location.href = return_url + '&kbs-message=' + response.message;
-						return true;
+						if (response.error)	{
+							window.location.href = kbs_vars.current_url + '&kbs-message=' + response.message;
+						} else	{
+							window.location.href = kbs_vars.current_url + '&kbs-message=' + response.message;
+							return true;
+						}
 					}
 				}).fail(function (data) {
 					$("input").prop('disabled', false);

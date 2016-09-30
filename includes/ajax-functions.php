@@ -131,20 +131,22 @@ function kbs_ajax_reply_to_ticket()	{
 	$ticket = new KBS_Ticket( $_POST['ticket_id'] );
 
 	$reply_data = array(
-		'user_id'  => get_current_user_id(),
-		'response' => $_POST['response'],
-		'close'    => $_POST['close_ticket']
+		'ticket_id'   => $_POST['ticket_id'],
+		'response'    => $_POST['response'],
+		'close'       => $_POST['close_ticket'],
+		'customer_id' => $ticket->customer_id,
+		'agent'       => $ticket->agent,
+		'key'         => $ticket->key
 	);
-
-	$error = false;
 
 	if ( ! $ticket->add_reply( $reply_data ) )	{
 		wp_send_json( array(
-			'error' => 'ticket_reply_failed'
+			'error'   => true,
+			'message' => 'ticket_reply_failed'
 		) );
 	}
 
-	wp_send_json_success( array( 'error' => $error ) );
+	wp_send_json_success( array( 'error' => false, 'message' => 'ticket_reply_added' ) );
 
 } // kbs_ajax_reply_to_ticket
 add_action( 'wp_ajax_kbs_reply_to_ticket', 'kbs_ajax_reply_to_ticket' );

@@ -88,8 +88,8 @@ function kbs_setup_kbs_post_types() {
 		'not_found_in_trash'    => __( 'No Replies found in Trash', 'kb-support' )
 	) );
 
-	foreach ( $ticket_labels as $key => $value ) {
-		$ticket_labels[ $key ] = sprintf( $value, kbs_get_ticket_label_singular(), kbs_get_ticket_label_plural() );
+	foreach ( $ticket_reply_labels as $key => $value ) {
+		$ticket_reply_labels[ $key ] = sprintf( $value, kbs_get_ticket_label_singular(), kbs_get_ticket_label_plural() );
 	}
 
 	$ticket_reply_args = array(
