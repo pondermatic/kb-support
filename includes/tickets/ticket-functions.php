@@ -560,6 +560,45 @@ function kbs_update_ticket_meta( $ticket_id, $data )	{
 } // kbs_update_ticket_meta
 
 /**
+ * Retrieve the URL for a ticket.
+ *
+ * @since	1.0
+ * @param	int		$ticket_id	The ticket ID.
+ * @param	bool	$admin		True to retrieve the admin URL, false for front end.
+ * @param	bool	$key		Whether to use the ticket key (for non logged in users) Front end only.
+ * @return	str		The ticket URL
+ */
+function kbs_get_ticket_url( $ticket_id, $admin = false, $key = false )	{
+	$scheme = null;
+	
+	if ( $admin )	{
+
+		$scheme = defined( 'FORCE_SSL_ADMIN' ) && FORCE_SSL_ADMIN ? 'https' : 'admin';
+		$url    = add_query_arg( array(
+			'post'   => $ticket_id,
+			'action' => 'edit'
+		), admin_url( 'post.php', $scheme ) );
+
+	} else	{
+
+		if ( $key )	{
+			$args = array( 'ticket_key' => kbs_get_ticket_key( $ticket_id ) );
+		} else	{
+			$args = array( 'ticket_id' => $ticket_id );
+		}
+
+		$url     = add_query_arg( array(
+		
+		), site_url( '' ) );
+
+		$url = apply_filters( 'kbs_ticket_url', $url, $ticket_id );
+
+	}
+
+	return $url;
+} // kbs_get_ticket_url
+
+/**
  * Retrieve the assigned agent.
  *
  * @since	1.0
@@ -571,6 +610,19 @@ function kbs_get_agent( $ticket_id )	{
 	
 	return $kbs_ticket->agent;
 } // kbs_get_agent
+
+/**
+ * Retrieve the unique ticket key.
+ *
+ * @since	1.0
+ * @param	int		$ticket_id	The ticket ID
+ * @return	str		The ticket key
+ */
+function kbs_get_ticket_key( $ticket_id )	{
+	$ticket = new KBS_Ticket( $ticket_id );
+
+	return $ticket->key;
+} // kbs_get_ticket_key
 
 /**
  * Assigns an agent to the ticket.
@@ -679,27 +731,63 @@ function kbs_ticket_status_from_new_to_open( $ticket_id )	{
 add_action( 'kbs_post_assign_agent', 'kbs_ticket_status_from_new_to_open' );
 
 /**
- * Retrieve the IDs of all ticket replies.
+ * Retrieve all ticket replies for the ticket.
  *
  * @since	1.0
  * @param	int		$ticket_id		The Ticket ID.
  * @param	arr		$args			See @get_children
  * @return	obj|false
  */
-function kbs_get_ticket_replies( $ticket_id = 0 )	{
+function kbs_get_ticket_replies( $ticket_id = 0, $args = array() )	{
 	if ( empty( $ticket_id ) )	{
 		return false;
 	}
 
-	$args = array(
+	$defaults = array(
 		'post_type'   => 'kbs_ticket_reply',
 		'post_parent' => $ticket_id,
 		'numberposts' => -1
 	);
 
-	return get_posts( $args );
+	$args = wp_parse_args( $args, $defaults );
 
+	return get_posts( $args );
 } // kbs_get_ticket_replies
+
+/**
+ * Gets the ticket reply HTML.
+ *
+ * @since	1.0
+ * @param	obj|int	$reply		The reply object or ID
+ * @param	int		$ticket_id	The ticket ID the reply is connected to
+ * @return	str
+ */
+function kbs_ticket_get_reply_html( $reply, $ticket_id = 0 ) {
+
+	if ( is_numeric( $reply ) ) {
+		$reply = get_post( $reply );
+	}
+
+	if ( ! empty( $reply->post_author ) ) {
+		$user = get_userdata( $reply->post_author );
+		$user = $user->display_name;
+	} else {
+		$user = '';
+	}
+
+	$date_format = get_option( 'date_format' ) . ', ' . get_option( 'time_format' );
+
+	$reply_html  ='<h3>';
+		$reply_html .= $user . '&nbsp;&ndash;&nbsp;' . date_i18n( $date_format, strtotime( $reply->post_date ) );
+	$reply_html .= '</h3>';
+
+	$reply_html .= '<div>';
+		$reply_html .= wpautop( $reply->post_content );
+	$reply_html .= '</div>';
+
+	return $reply_html;
+
+} // kbs_ticket_get_reply_html
 
 /**
  * Retrieve all notes attached to a ticket.
@@ -717,7 +805,7 @@ function kbs_ticket_get_notes( $ticket_id = 0, $search = '' ) {
 
 	remove_action( 'pre_get_comments', 'kbs_ticket_hide_notes', 10 );
 
-	$notes = get_comments( array( 'post_id' => $ticket_id, 'order' => 'ASC', 'search' => $search ) );
+	$notes = get_comments( array( 'post_id' => $ticket_id, 'search' => $search ) );
 
 	add_action( 'pre_get_comments', 'kbs_ticket_hide_notes', 10 );
 
@@ -775,10 +863,10 @@ function kbs_ticket_delete_note( $comment_id = 0, $ticket_id = 0 ) {
 		return false;
 
 	do_action( 'kbs_pre_delete_ticket_note', $comment_id, $ticket_id );
-	$ret = wp_delete_comment( $comment_id, true );
+	$result = wp_delete_comment( $comment_id, true );
 	do_action( 'kbs_post_delete_ticket_note', $comment_id, $ticket_id );
 
-	return $ret;
+	return $result;
 } // kbs_ticket_delete_note
 
 /**
@@ -791,7 +879,7 @@ function kbs_ticket_delete_note( $comment_id = 0, $ticket_id = 0 ) {
  */
 function kbs_ticket_get_note_html( $note, $ticket_id = 0 ) {
 
-	if( is_numeric( $note ) ) {
+	if ( is_numeric( $note ) ) {
 		$note = get_comment( $note );
 	}
 
@@ -808,14 +896,15 @@ function kbs_ticket_get_note_html( $note, $ticket_id = 0 ) {
 		'kbs-action' => 'delete_ticket_note',
 		'note_id'    => $note->comment_ID,
 		'ticket_id'  => $ticket_id
-	) ), 'kbs_delete_ticket_note_' . $note->comment_ID );
+	), admin_url() ), 'kbs_delete_ticket_note_' . $note->comment_ID, 'kbs_note_nonce' );
 
-	$note_html = '<div class="kbs-ticket-note" id="kbs-ticket-note-' . $note->comment_ID . '">';
-		$note_html .='<p>';
-			$note_html .= '<strong>' . $user . '</strong>&nbsp;&ndash;&nbsp;' . date_i18n( $date_format, strtotime( $note->comment_date ) ) . '<br/>';
-			$note_html .= $note->comment_content;
-			$note_html .= '&nbsp;&ndash;&nbsp;<a href="' . esc_url( $delete_note_url ) . '" class="kbs-delete-ticket-note" data-note-id="' . absint( $note->comment_ID ) . '" data-ticket-id="' . absint( $ticket_id ) . '">' . __( 'Delete', 'kb-support' ) . '</a>';
-		$note_html .= '</p>';
+	$note_html  ='<h3>';
+		$note_html .= date_i18n( $date_format, strtotime( $note->comment_date ) ) . '&nbsp;&ndash;&nbsp;' . $user;
+	$note_html .= '</h3>';
+
+	$note_html .= '<div>';
+		$note_html .= '<p class="kbs-delete"><a href="' . esc_url( $delete_note_url ) . '" class="kbs-delete">' . __( 'Delete', 'kb-support' ) . '</a></p>';
+		$note_html .= wpautop( $note->comment_content );
 	$note_html .= '</div>';
 
 	return $note_html;

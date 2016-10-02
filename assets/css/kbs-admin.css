@@ -91,7 +91,14 @@ a.kbs-delete:hover { color: #f00; }
 
 /* Accordion Styles
 -------------------------------------------------------------- */
-#kbs-notes-history.kbs_accordion h3	{
+#kbs-notes-history.kbs_notes_accordion h3,
+#kbs-replies-history.kbs_replies_accordion h3	{
 	font-size: 12px;
 	font-style: italic;
+}
+
+#kbs-notes-history.kbs_notes_accordion p.kbs-delete,
+#kbs-replies-history.kbs_replies_accordion p.kbs-delete	{
+	font-size: 12px;
+	text-align: right;
 }

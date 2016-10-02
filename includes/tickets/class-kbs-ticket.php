@@ -1221,7 +1221,7 @@ class KBS_Ticket {
 	 *
 	 * @since	1.0
 	 * @param	str		$note	The note to add
-	 * @return	void
+	 * @return	int		The ID of the note added
 	 */
 	public function add_note( $note = false ) {
 		// Return if no note specified
@@ -1229,8 +1229,24 @@ class KBS_Ticket {
 			return false;
 		}
 
-		kbs_ticket_insert_note( $this->ID, $note );
-	}
+		return kbs_ticket_insert_note( $this->ID, $note );
+	} // add_note
+
+	/**
+	 * Delete a note from a ticket.
+	 *
+	 * @since	1.0
+	 * @param	int		$note_id	The ID of the note to delete
+	 * @return	bool	True if deleted, or false
+	 */
+	public function delete_note( $note_id = 0 ) {
+		// Return if no note specified
+		if ( empty( $note_id ) ) {
+			return false;
+		}
+
+		return kbs_ticket_delete_note( $note_id, $this->ID );
+	} // delete_note
 
 	/**
 	 * Add a reply to a ticket.
@@ -1252,6 +1268,7 @@ class KBS_Ticket {
 			'post_status'  => 'publish',
 			'post_content' => $reply_data['response'],
 			'post_parent'  => $reply_data['ticket_id'],
+			'post_author'  => get_current_user_id(),
 			'meta_input'   => array(
 				'_kbs_reply_customer_id' => $reply_data['customer_id'],
 				'_kbs_reply_agent'       => $reply_data['agent'],
@@ -1274,5 +1291,25 @@ class KBS_Ticket {
 		return $reply_id;
 
 	} // add_reply
+
+	public function show_form_data()	{
+		if ( empty( $this->form_data ) )	{
+			return;
+		}
+
+		$ignore = kbs_form_ignore_fields();
+
+		$output = '<h2>' . sprintf( __( 'Form: %s', 'kb-support' ), get_the_title( $this->form_data['id'] ) ) . '</h2>';
+		foreach( $this->form_data['data'] as $field => $value )	{
+			if ( ! in_array( $field, $ignore ) )	{
+				if ( is_array( $value ) )	{
+					$value = implode( ', ', $value );
+				}
+				$output .= '<p><strong>' . $field . '</strong>: ' . $value;
+			}
+		}
+
+		return apply_filters( 'kbs_show_form_data', $output );
+	} // show_form_data
 
 } // KBS_Ticket

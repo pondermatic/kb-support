@@ -396,6 +396,24 @@ function kbs_get_available_mappings( $form_id )	{
 } // kbs_get_available_mappings
 
 /**
+ * Fields that are ignored during form submission.
+ *
+ * @since	1.0
+ * @return	arr		Array of fields that should be ignored.
+ */
+function kbs_form_ignore_fields()	{
+	$ignore = array(
+		'kbs_form_id',
+		'kbs_action',
+		'kbs_redirect',
+		'kbs_honeypot',
+		'kbs_ticket_submit'
+	);
+
+	return apply_filters( 'kbs_ignore_ticket_fields', $ignore );
+} // kbs_form_ignore_fields
+
+/**
  * Output the icons for the field settings.
  *
  * @since	1.0
@@ -509,9 +527,7 @@ function kbs_process_ticket_submission( $data )	{
 	$redirect = ! empty( $data['redirect'] )    ? $data['redirect']    : '';
 
 	$posted = array();
-	$ignore = apply_filters( 'kbs_ignore_ticket_fields', array(
-		'kbs_form_id', 'kbs_action', 'kbs_redirect', 'kbs_honeypot', 'kbs_ticket_submit'
-	) );
+	$ignore = kbs_form_ignore_fields();
 
 	foreach ( $data as $key => $value )	{
 		if ( ! in_array( $key, $ignore ) )	{

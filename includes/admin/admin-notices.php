@@ -58,8 +58,8 @@ function kbs_admin_messages() {
 		add_settings_error(
 			'kbs-notices',
 			'kbs-ticket-reply-added',
-			sprintf( __( 'The reply was successfully added to the %s%s.', 'kb-support' ), kbs_get_ticket_label_singular(), $closed ),
-			'error'
+			sprintf( __( 'The reply was successfully added%s.', 'kb-support' ), $closed ),
+			'updated'
 		);
 	}
 
@@ -67,7 +67,25 @@ function kbs_admin_messages() {
 		add_settings_error(
 			'kbs-notices',
 			'kbs-ticket-reply-failed',
-			sprintf( __( 'The reply could not be added to the %s.', 'kb-support' ), kbs_get_ticket_label_singular() ),
+			__( 'The reply could not be added.', 'kb-support' ),
+			'error'
+		);
+	}
+
+	if ( isset( $_GET['kbs-message'] ) && 'note_deleted' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-ticket-note-deleted',
+			__( 'The note was deleted.', 'kb-support' ),
+			'updated'
+		);
+	}
+
+	if ( isset( $_GET['kbs-message'] ) && 'note_not_deleted' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-ticket-note-not-deleted',
+			__( 'The note could not be deleted.', 'kb-support' ),
 			'error'
 		);
 	}

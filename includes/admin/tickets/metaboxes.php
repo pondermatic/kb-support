@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) )
  * @since	1.4
  * @return	arr		$fields		Array of fields.
  */
-function mdjm_packages_metabox_fields() {
+function kbs_ticket_metabox_fields() {
 
 	$fields = array(
 			'kbs_customer',
@@ -26,7 +26,7 @@ function mdjm_packages_metabox_fields() {
 
 	return apply_filters( 'kbs_ticket_metabox_fields_save', $fields );
 
-} // mdjm_packages_metabox_fields
+} // kbs_ticket_metabox_fields
 
 /**
  * Remove unwanted metaboxes to for the kbs_ticket post type.
@@ -39,6 +39,7 @@ function kbs_ticket_remove_meta_boxes()	{
 	$metaboxes = apply_filters( 'kbs_ticket_remove_metaboxes',
 		array(
 			array( 'submitdiv', 'kbs_ticket', 'side' ),
+			array( 'comments', 'kbs_ticket', 'normal' )
 		)
 	);
 	
@@ -226,7 +227,8 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
                 <p class="dashicons-before dashicons-admin-users"></span>&nbsp;&nbsp;<label for="kbs_customer"><?php _e( 'Customer:', 'kb-support' ); ?></label>
                 <?php echo KBS()->html->customer_dropdown( array(
                     'name'     => 'kbs_customer',
-                    'selected' => $kbs_ticket->customer_id
+                    'selected' => $kbs_ticket->customer_id,
+					'chosen'   => false
                 ) ); ?></p>
                     
                 <p class="dashicons-before dashicons-businessman"></span>&nbsp;&nbsp;<label for="kbs_agent"><?php _e( 'Agent:', 'kb-support' ); ?></label>
@@ -319,16 +321,45 @@ add_action( 'kbs_ticket_metabox_after_agent', 'kbs_ticket_metabox_sla_row', 10 )
 function kbs_ticket_metabox_content_row( $ticket_id )	{
 
 	global $kbs_ticket, $kbs_ticket_update;
-	
+
 	?>
 	<div id="kbs-ticket-content-container" class="kbs_ticket_wrap">
-    	<p><strong><?php printf( __( '%s Content', 'kb-support' ), kbs_get_ticket_label_singular() ); ?></strong></p>
         <p><?php echo $kbs_ticket->get_content(); ?></p>
+        <?php if ( ! empty( $kbs_ticket->ticket_meta['form_data'] ) ) : ?>
+        	<p><<a href="#TB_inline?width=600&height=550&inlineId=terms-conditions" title="Terms &amp; Conditions for Add-ons" class="thickbox">View license terms</a>.</p>
+        <?php endif; ?>
     </div>
     <?php
 		
 } // kbs_ticket_metabox_details_row
 add_action( 'kbs_ticket_data_fields', 'kbs_ticket_metabox_content_row', 10 );
+
+/**
+ * Display the ticket form submission details row.
+ *
+ * @since	1.0
+ * @global	obj		$kbs_ticket			KBS_Ticket class object
+ * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
+ * @param	int		$ticket_id			The ticket post ID.
+ * @return	str
+ */
+function kbs_ticket_metabox_form_data_row( $ticket_id )	{
+
+	global $kbs_ticket, $kbs_ticket_update; ?>
+
+	<?php if ( ! empty( $kbs_ticket->form_data ) ) : ?>
+
+        <div id="kbs-ticket-form-data-container" class="kbs_ticket_wrap">
+                <p><a href="#TB_inline?width=600&height=550&inlineId=kbs-ticket-form-data" title="<?php _e( 'Submitted Form Data', 'kb-support' ); ?>" class="thickbox"><?php _e( 'View Form Submission Data', 'kb-support' ); ?></a>.</p>
+        </div>
+
+    <?php endif; ?>
+
+    <div id="kbs-ticket-form-data"><?php echo $kbs_ticket->show_form_data(); ?></div>
+    <?php
+		
+} // kbs_ticket_metabox_form_data_row
+add_action( 'kbs_ticket_data_fields', 'kbs_ticket_metabox_form_data_row', 20 );
 
 /**
  * Display the ticket files row.
@@ -361,7 +392,7 @@ function kbs_ticket_metabox_files_row( $ticket_id )	{
 	<?php endif;
 		
 } // kbs_ticket_metabox_details_row
-add_action( 'kbs_ticket_data_fields', 'kbs_ticket_metabox_files_row', 20 );
+add_action( 'kbs_ticket_data_fields', 'kbs_ticket_metabox_files_row', 30 );
 
 /**
  * Display the ticket reply row.
@@ -376,20 +407,10 @@ function kbs_ticket_metabox_replies_row( $ticket_id )	{
 
 	global $kbs_ticket, $kbs_ticket_update;
 
-	$replies = kbs_get_ticket_replies( $ticket_id );
-
-	if ( $replies ) : ?>
-    	<div id="kbs-ticket-reply-container">
-            <div id="kbs-replies" class="kbs_accordion">
-				<?php foreach( $replies as $reply ) : ?>
-                    <h3><?php echo $reply->post_date; ?></h3>
-                     <div>
-                        <?php echo $reply->post_content; ?>
-                    </div>
-                <?php endforeach; ?>
-        	</div>
-        </div>
-	<?php endif;
+	?>
+    <div id="kbs-replies-loader"></div>
+    <div id="kbs-replies-history" class="kbs_replies_accordion"></div>
+	<?php
 
 } // kbs_ticket_metabox_replies_row
 add_action( 'kbs_ticket_reply_fields', 'kbs_ticket_metabox_replies_row', 10 );
@@ -417,10 +438,15 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 			'textarea_rows'    => 5,
 			'drag_drop_upload' => true,
 			'quicktags'        => false
-		) );
+		) ); ?>
 
-		wp_editor( '', 'kbs_ticket_reply', $settings );
+		<div id="kbs-ticket-reply-wrap">
+        	<p><label for="kbs_ticket_reply"><strong><?php _e( 'Add a New Reply', 'kb-support' ); ?></strong></label><br />
+				<?php wp_editor( '', 'kbs_ticket_reply', $settings ); ?>
+            </p>
+        </div>
 
+		<?php
 		/*
 		 * Fires immediately before the reply buttons are output
 		 * @since	1.0
@@ -433,7 +459,7 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
             <div class="kbs-reply"><a id="kbs-reply-update" class="button button-primary"><?php _e( 'Reply', 'kb-support' ); ?></a></div>
             <div class="kbs-reply"><a id="kbs-reply-close" class="button button-secondary"><?php _e( 'Reply and Close', 'kb-support' ); ?></a></div>
         </div>
-        <span id="kbs-loading" class="kbs-loader kbs-hidden"><img src="<?php echo KBS_PLUGIN_URL . 'assets/images/loading.gif'; ?>" /></span>
+        <div id="kbs-new-reply-loader"></div>
         <?php
 	}
 		
@@ -453,20 +479,10 @@ function kbs_ticket_metabox_notes_row( $ticket_id )	{
 
 	global $kbs_ticket, $kbs_ticket_update;
 
-	$notes = kbs_ticket_get_notes( $ticket_id ); ?>
-
-	<?php if ( empty( $notes ) ) : ?>
-    	<div id="kbs-ticket-notes-container">
-            <div id="kbs-notes-history" class="kbs_accordion">
-                <?php //foreach( $notes as $note ) : ?>
-                    <h3>Mike Howard | 23:30 Sunday 2nd October 2016</h3>
-                    <div>This is a test</div>
-                    <h3>Test 2</h3>
-                    <div>This is another test</div>
-                <?php //endforeach; ?>
-            </div>
-        </div>
-	<?php endif;
+	?>
+    <div id="kbs-notes-loader"></div>
+    <div id="kbs-notes-history" class="kbs_notes_accordion"></div>
+	<?php
 
 } // kbs_ticket_metabox_notes_row
 add_action( 'kbs_ticket_notes_fields', 'kbs_ticket_metabox_notes_row', 10 );
@@ -488,6 +504,7 @@ function kbs_ticket_metabox_add_note_row( $ticket_id )	{
     	<p><label for="kbs_new_note"><strong><?php _e( 'Add a New Note', 'kb-support' ); ?></strong></label><br />
 			<?php echo KBS()->html->textarea( array(
                 'name'  => 'kbs_new_note',
+				'id'    => 'kbs_new_note',
                 'desc'  => __( 'Notes are only visible to support workers', 'kb-support' ),
                 'class' => 'large-text',
                 'rows'  => 5
@@ -502,8 +519,8 @@ function kbs_ticket_metabox_add_note_row( $ticket_id )	{
         do_action( 'kbs_ticket_before_add_note_button', $ticket_id ); ?>
 
 		<div class="kbs-add-note"><a id="kbs-add-note" class="button button-secondary"><?php _e( 'Add Note', 'kb-support' ); ?></a></div>
+        <div id="kbs-new-note-loader"></div>
 	</div>
-	<span id="kbs-loading" class="kbs-loader kbs-hidden"><img src="<?php echo KBS_PLUGIN_URL . 'assets/images/loading.gif'; ?>" /></span>
 	<?php
 		
 } // kbs_ticket_metabox_add_note_row

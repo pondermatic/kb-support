@@ -98,8 +98,7 @@ function kbs_test_ajax_works() {
 function kbs_is_ajax_disabled() {
 	$retval = ! kbs_get_option( 'enable_ajax_ticket' );
 	return apply_filters( 'kbs_is_ajax_disabled', $retval );
-}
-
+} // kbs_is_ajax_disabled
 
 /**
  * Get AJAX URL
@@ -126,7 +125,7 @@ function kbs_get_ajax_url() {
  * @since	1.0
  * @return	void
  */
-function kbs_ajax_reply_to_ticket()	{
+function kbs_ajax_insert_ticket_reply()	{
 
 	$ticket = new KBS_Ticket( $_POST['ticket_id'] );
 
@@ -139,17 +138,81 @@ function kbs_ajax_reply_to_ticket()	{
 		'key'         => $ticket->key
 	);
 
-	if ( ! $ticket->add_reply( $reply_data ) )	{
-		wp_send_json( array(
-			'error'   => true,
-			'message' => 'ticket_reply_failed'
-		) );
-	}
+	$reply_id = $ticket->add_reply( $reply_data );
 
-	wp_send_json_success( array( 'error' => false, 'message' => 'ticket_reply_added' ) );
+	wp_send_json( array( 'reply_id' => $reply_id ) );
 
 } // kbs_ajax_reply_to_ticket
-add_action( 'wp_ajax_kbs_reply_to_ticket', 'kbs_ajax_reply_to_ticket' );
+add_action( 'wp_ajax_kbs_insert_ticket_reply', 'kbs_ajax_insert_ticket_reply' );
+
+/**
+ * Display replies for ticket post metabox.
+ *
+ * @since	1.0
+ * @return	str
+ */
+function kbs_ajax_display_ticket_replies()	{
+	$output = '';
+
+	if ( ! empty( $_POST['kbs_reply_id'] ) )	{
+		$output .= kbs_ticket_get_reply_html( $_POST['kbs_reply_id'], $_POST['kbs_ticket_id'] );
+	} else	{
+
+		$replies  = kbs_get_ticket_replies( $_POST['kbs_ticket_id'] );
+	
+		if ( ! empty( $replies ) )	{
+			foreach( $replies as $reply )	{
+				$output .= kbs_ticket_get_reply_html( $reply, $_POST['kbs_ticket_id'] );
+			}
+		}
+
+	}
+
+	echo $output;
+	die();
+} // kbs_ajax_display_ticket_replies
+add_action( 'wp_ajax_kbs_display_ticket_replies', 'kbs_ajax_display_ticket_replies' );
+
+/**
+ * Adds a note to a ticket.
+ *
+ * @since	1.0
+ * @return	void
+ */
+function kbs_ajax_ticket_insert_note()	{
+	$note_id = kbs_ticket_insert_note( $_POST['ticket_id'], $_POST['note_content'] );
+
+	wp_send_json( array( 'note_id' => $note_id ) );
+} // kbs_ajax_ticket_insert_note
+add_action( 'wp_ajax_kbs_insert_ticket_note', 'kbs_ajax_ticket_insert_note' );
+
+/**
+ * Display notes for ticket post metabox.
+ *
+ * @since	1.0
+ * @return	str
+ */
+function kbs_ajax_display_ticket_notes()	{
+	$output = '';
+
+	if ( ! empty( $_POST['kbs_note_id'] ) )	{
+		$output .= kbs_ticket_get_note_html( $_POST['kbs_note_id'], $_POST['kbs_ticket_id'] );
+	} else	{
+
+		$notes  = kbs_ticket_get_notes( $_POST['kbs_ticket_id'] );
+	
+		if ( ! empty( $notes ) )	{
+			foreach( $notes as $note )	{
+				$output .= kbs_ticket_get_note_html( $note, $_POST['kbs_ticket_id'] );
+			}
+		}
+
+	}
+
+	echo $output;
+	die();
+} // kbs_ajax_display_ticket_notes
+add_action( 'wp_ajax_kbs_display_ticket_notes', 'kbs_ajax_display_ticket_notes' );
 
 /**
  * Adds a new field to a form.

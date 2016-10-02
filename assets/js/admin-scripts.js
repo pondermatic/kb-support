@@ -1,6 +1,15 @@
 var kbs_vars;
 jQuery(document).ready(function ($) {
 
+	// Setup datepicker
+	var kbs_datepicker = $('.kbs_datepicker');
+	if ( kbs_datepicker.length > 0 ) {
+		var dateFormat = 'mm/dd/yy';
+		kbs_datepicker.datepicker({
+			dateFormat: dateFormat
+		});
+	}
+
 	// Setup Chosen menus
 	$('.kbs_select_chosen').chosen({
 		inherit_select_classes: true
@@ -12,7 +21,7 @@ jQuery(document).ready(function ($) {
 			header: "ui-icon-circle-arrow-e",
 			activeHeader: "ui-icon-circle-arrow-s"
 		};
-		$( ".kbs_accordion" ).accordion({
+		$( ".kbs_accordion, .kbs_notes_accordion, .kbs_replies_accordion" ).accordion({
 			active: false,
 			collapsible: true,
 			icons:icons
@@ -143,6 +152,7 @@ jQuery(document).ready(function ($) {
 	var KBS_Tickets = {
 		init : function() {
 			this.reply();
+			this.notes();
 		},
 		
 		reply : function() {
@@ -151,6 +161,7 @@ jQuery(document).ready(function ($) {
 				
 				event.preventDefault();
 
+				var ticket_id      = kbs_vars.post_id;
 				var ticketResponse = '';
 				var tinymceActive  = (typeof tinyMCE != 'undefined') && tinyMCE.activeEditor && ! tinyMCE.activeEditor.isHidden();
 
@@ -174,10 +185,10 @@ jQuery(document).ready(function ($) {
 				}
 
 				var postData         = {
-					ticket_id    : kbs_vars.post_id,
+					ticket_id    : ticket_id,
 					response     : ticketResponse,
 					close_ticket : ( 'kbs-reply-close' == event.target.id ? 1 : 0 ),
-					action       : 'kbs_reply_to_ticket'
+					action       : 'kbs_insert_ticket_reply'
 				};
 
 				$.ajax({
@@ -186,28 +197,79 @@ jQuery(document).ready(function ($) {
 					data: postData,
 					url: ajaxurl,
 					beforeSend: function()	{
-						$("input").prop('disabled', true);
-						$("#kbs-ticket-reply-container").addClass('kbs-hidden');
-						$("#kbs-loading").removeClass('kbs-hidden');
+						$('.kbs-reply').hide();
+						$('#kbs-new-reply-loader').html('<img src="' + kbs_vars.ajax_loader + '" />');
 					},
 					success: function (response) {
-						if (response.error)	{
-							window.location.href = kbs_vars.current_url + '&kbs-message=' + response.message;
-						} else	{
-							window.location.href = kbs_vars.current_url + '&kbs-message=' + response.message;
+						if (response.reply_id)	{
+							kbs_load_ticket_replies(ticket_id, response.reply_id)
+							window.location.href = kbs_vars.admin_url + '?kbs-action=ticket_reply_added&ticket_id=' + ticket_id;
 							return true;
+						} else	{
+							alert(kbs_vars.reply_not_added);
 						}
+						$('#kbs-new-reply-loader').html('');
+						$('.kbs-reply').show();
 					}
 				}).fail(function (data) {
-					$("input").prop('disabled', false);
-					$("#kbs-ticket-reply-container").removeClass('kbs-hidden');
-					$("#kbs-loading").addClass('kbs-hidden');
 					if ( window.console && window.console.log ) {
 						console.log( data );
 					}
 				});
 
 			});
+		},
+		notes : function() {
+			// Add a new ticket note
+			$( document.body ).on( 'click', '#kbs-add-note', function() {
+				var note_content = $('#kbs_new_note').val();
+				var ticket_id    = kbs_vars.post_id;
+
+				if ( note_content.length < 1 )	{
+					alert(kbs_vars.no_note_content);
+					return;
+				}
+
+				var postData         = {
+					ticket_id    : ticket_id,
+					note_content : note_content,
+					action       : 'kbs_insert_ticket_note'
+				};
+
+				$.ajax({
+					type: "POST",
+					dataType: "json",
+					data: postData,
+					url: ajaxurl,
+					beforeSend: function()	{
+						$('#kbs-add-note').hide();
+						$('#kbs-new-note-loader').html('<img src="' + kbs_vars.ajax_loader + '" />');
+					},
+					success: function (response) {
+						if (response.note_id)	{
+							kbs_load_ticket_notes(ticket_id, response.note_id)
+							$('#kbs_new_note').val('');
+						} else	{
+							alert(kbs_vars.note_not_added);
+						}
+						$('#kbs-new-note-loader').html('');
+						$('#kbs-add-note').show();
+					}
+				}).fail(function (data) {
+					if ( window.console && window.console.log ) {
+						console.log( data );
+					}
+				});
+
+			});
+
+			// Auto load ticket replies and notes
+			if( kbs_vars.editing_ticket == '1' ) {
+				setTimeout( function() {
+					kbs_load_ticket_replies( kbs_vars.post_id, 0 );
+					kbs_load_ticket_notes( kbs_vars.post_id, 0 );
+				}, 200);
+			}
 		}
 	}
 	KBS_Tickets.init();
@@ -456,13 +518,30 @@ jQuery(document).ready(function ($) {
 	}
 	KBS_Forms.init();
 
-	// Date picker
-	var kbs_datepicker = $( '.kbs_datepicker' );
-	if ( kbs_datepicker.length > 0 ) {
-		var dateFormat = 'mm/dd/yy';
-		kbs_datepicker.datepicker( {
-			dateFormat: dateFormat
-		} );
-	}
-
 });
+
+// Retrieve ticket replies
+function kbs_load_ticket_replies( ticket_id, reply_id )	{
+	jQuery('#kbs-replies-loader').html('<img src="' + kbs_vars.ajax_loader + '" />');
+
+	jQuery.post(ajaxurl, { action: 'kbs_display_ticket_replies', kbs_ticket_id: ticket_id, kbs_reply_id: reply_id },
+		function(response)	{
+			jQuery('.kbs_replies_accordion').prepend(response);
+			jQuery('.kbs_replies_accordion').accordion("refresh");
+			jQuery('#kbs-replies-loader').html('');
+		}
+	);
+}
+
+// Retrieve ticket notes
+function kbs_load_ticket_notes( ticket_id, note_id )	{
+	jQuery('#kbs-notes-loader').html('<img src="' + kbs_vars.ajax_loader + '" />');
+
+	jQuery.post(ajaxurl, { action: 'kbs_display_ticket_notes', kbs_ticket_id: ticket_id, kbs_note_id: note_id },
+		function(response)	{
+			jQuery('.kbs_notes_accordion').prepend(response);
+			jQuery('.kbs_notes_accordion').accordion("refresh");
+			jQuery('#kbs-notes-loader').html('');
+		}
+	);
+}
