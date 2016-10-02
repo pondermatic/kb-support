@@ -18,12 +18,17 @@ global $kbs_form;
 
                 <?php foreach( $kbs_form->fields as $field ) : ?>
 
-                    <?php $settings = $kbs_form->get_field_settings( $field->ID ); ?>
+					<?php $label_class = ''; ?>
+                    <?php $settings    = $kbs_form->get_field_settings( $field->ID ); ?>
 
                         <p class="kbs-<?php echo $field->post_name; ?>">
                             <?php if ( empty( $settings['hide_label'] ) && 'recaptcha' != $settings['type'] ) : ?>
+                            	<?php if ( ! empty( $settings['label_class'] ) ) : ?>
+                                	<?php $label_class = ' class="' . sanitize_html_class( $settings['label_class'] ) . '"'; ?>
+                                <?php endif; ?>
 
-                                <label for="<?php echo $field->post_name; ?>">
+                                <label for="<?php echo $field->post_name; ?>"<?php echo $label_class; ?>>
+
 									<?php esc_attr_e( get_the_title( $field->ID ) ); ?>
 
                                     <?php if ( $settings['required'] ) : ?>
@@ -49,10 +54,12 @@ global $kbs_form;
 
         		<?php do_action( 'kbs_ticket_form_after_fields' ); ?>
             </fieldset>
-            <?php do_action( 'kbs_ticket_form_before_submit' ); ?>
+
             <fieldset id="kbs_ticket_form_submit">
+            	<?php do_action( 'kbs_ticket_form_before_submit' ); ?>
             	<?php kbs_render_hidden_form_fields( $kbs_form->ID ); ?>
                 <input class="button" name="kbs_ticket_submit" id="kbs_ticket_submit" type="submit" value="<?php esc_attr_e( kbs_get_form_submit_label() ); ?>" />
+                <?php do_action( 'kbs_ticket_form_after_submit' ); ?>
             </fieldset>
         	<?php do_action( 'kbs_ticket_form_bottom' ); ?>
         </form>

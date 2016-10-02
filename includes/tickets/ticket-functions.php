@@ -83,7 +83,7 @@ function kbs_get_ticket_category_options()	{
 
 	if ( $categories )	{
 		foreach( $categories as $category )	{
-			$options[ $category->term_id ] = $category->name;
+			$options[ absint( $category->term_id ) ] = $category->name;
 		}
 	}
 
@@ -327,6 +327,7 @@ function kbs_add_ticket( $ticket_data )	{
 	);
 	$ticket->source         = '';
 	$ticket->new_files      = $ticket_data['attachments'];
+	$ticket->form_data      = ! empty( $ticket_data['form_data'] ) ? $ticket_data['form_data'] : '';
 
 	if ( isset( $ticket_data['post_date'] ) ) {
 		$ticket->date = $ticket_data['post_date'];
@@ -363,7 +364,11 @@ function kbs_add_ticket_from_form( $form_id, $form_data )	{
 
 	$ticket_data = array(
 		'user_info'   => array(),
-		'attachments' => array()
+		'attachments' => array(),
+		'form_data'   => array(
+			'id'   => $form_id,
+			'data' => $form_data
+		)
 	);
 
 	foreach( $fields as $field )	{
@@ -412,7 +417,7 @@ function kbs_add_ticket_from_form( $form_id, $form_data )	{
 		}
 	}
 
-	$ticket_data = apply_filters( 'kbs_add_ticket_from_form_data', $ticket_data );
+	$ticket_data = apply_filters( 'kbs_add_ticket_from_form_data', $ticket_data, $form_id, $form_data );
 
 	$ticket_id = kbs_add_ticket( $ticket_data );
 

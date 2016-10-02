@@ -27,7 +27,7 @@ function kbs_add_options_link() {
 	$kbs_settings_page      = add_submenu_page( 'edit.php?post_type=kbs_ticket', __( 'KB Support Settings', 'kb-support' ), __( 'Settings', 'kb-support' ), 'manage_ticket_settings', 'kbs-settings', 'kbs_options_page' );
 
 } // kbs_add_options_link
-add_action( 'admin_menu', 'kbs_add_options_link', 9 );
+add_action( 'admin_menu', 'kbs_add_options_link', 20 );
 
 /**
  *  Determines whether the current admin page is a specific KBS admin page.

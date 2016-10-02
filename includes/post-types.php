@@ -156,13 +156,13 @@ function kbs_setup_kbs_post_types() {
 		'add_new_item'       => __( 'New Form', 'kb-support' ),
 		'edit_item'          => __( 'Edit Form', 'kb-support' ),
 		'new_item'           => __( 'New Form', 'kb-support' ),
-		'all_items'          => __( 'Forms', 'kb-support' ),
+		'all_items'          => __( 'Submission Forms', 'kb-support' ),
 		'view_item'          => __( 'View Form', 'kb-support' ),
 		'search_items'       => __( 'Search Forms', 'kb-support' ),
 		'not_found'          => __( 'No Forms found', 'kb-support' ),
 		'not_found_in_trash' => __( 'No Forms found in Trash', 'kb-support' ),
 		'parent_item_colon'  => '',
-		'menu_name'          => __( 'Forms', 'kb-support' )
+		'menu_name'          => __( 'Submission Forms', 'kb-support' )
 	);
 
 	$form_args = array(

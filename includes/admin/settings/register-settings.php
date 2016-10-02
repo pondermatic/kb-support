@@ -8,18 +8,19 @@
  * @subpackage  Admin/Settings
  * @copyright   Copyright (c) 2016, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       0.1
+ * @since       1.0
 */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) )
+	exit;
 
 /**
  * Get an option
  *
  * Looks to see if the specified setting exists, returns default if not
  *
- * @since	0.1
+ * @since	1.0
  * @return	mixed
  */
 function kbs_get_option( $key = '', $default = false ) {
@@ -36,7 +37,7 @@ function kbs_get_option( $key = '', $default = false ) {
  * Warning: Passing in an empty, false or null string value will remove
  *          the key from the kbs_options array.
  *
- * @since	0.1
+ * @since	1.0
  * @param	str				$key	The Key to update
  * @param	str|bool|int	$value	The value to set the key to
  * @return	bool			True if updated, false if not.
@@ -78,7 +79,7 @@ function kbs_update_option( $key = '', $value = false ) {
  *
  * Removes a kbs setting value in both the db and the global variable.
  *
- * @since	0.1
+ * @since	1.0
  * @param	str		$key	The Key to delete.
  * @return	bool	True if updated, false if not.
  */
@@ -115,7 +116,7 @@ function kbs_delete_option( $key = '' ) {
  *
  * Retrieves all plugin settings.
  *
- * @since	0.1
+ * @since	1.0
  * @return	arr		KBS settings.
  */
 function kbs_get_settings() {
@@ -135,7 +136,7 @@ function kbs_get_settings() {
 /**
  * Add all settings sections and fields.
  *
- * @since	0.1
+ * @since	1.0
  * @return	void
 */
 function kbs_register_settings() {
@@ -207,7 +208,7 @@ add_action( 'admin_init', 'kbs_register_settings' );
 /**
  * Retrieve the array of plugin settings.
  *
- * @since	0.1
+ * @since	1.0
  * @return	arr
 */
 function kbs_get_registered_settings() {
@@ -561,6 +562,7 @@ function kbs_get_registered_settings() {
 						'name' => __( 'Agree to Terms', 'kb-support' ),
 						'desc' => sprintf( __( 'Check this to show an agree to terms on the submission page that users must agree to before submitting their %s.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
 						'type' => 'checkbox',
+						'std'  => false
 					),
 					'agree_label' => array(
 						'id'   => 'agree_label',
@@ -568,13 +570,24 @@ function kbs_get_registered_settings() {
 						'desc' => __( 'Label shown next to the agree to terms check box.', 'kb-support' ),
 						'type' => 'text',
 						'size' => 'regular',
+						'std'  => __( 'I have read and agree to the terms and conditions', 'kb-support' )
+					),
+					'agree_heading' => array(
+						'id'   => 'agree_heading',
+						'name' => __( 'Terms Heading', 'kb-support' ),
+						'desc' => __( 'Heading for the agree to terms thickbox.', 'kb-support' ),
+						'type' => 'text',
+						'size' => 'regular',
+						'std'  => sprintf(
+							__( 'Terms and Conditions for Support %s', 'kb-support' ), kbs_get_ticket_label_plural()
+						)
 					),
 					'agree_text' => array(
 						'id'   => 'agree_text',
 						'name' => __( 'Agreement Text', 'kb-support' ),
 						'desc' => __( 'If Agree to Terms is checked, enter the agreement terms here.', 'kb-support' ),
-						'type' => 'rich_editor',
-					),
+						'type' => 'rich_editor'
+					)
 				)
 			)
 		)
@@ -589,7 +602,7 @@ function kbs_get_registered_settings() {
  * Adds a settings error (for the updated message)
  * At some point this will validate input.
  *
- * @since	0.1
+ * @since	1.0
  *
  * @param	arr	$input	The value inputted in the field.
  *
@@ -669,7 +682,7 @@ function kbs_settings_sanitize( $input = array() ) {
 /**
  * Sanitize text fields
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$input	The field value
  * @return	str		$input	Sanitizied value
  */
@@ -681,7 +694,7 @@ add_filter( 'kbs_settings_sanitize_text', 'kbs_sanitize_text_field' );
 /**
  * Retrieve settings tabs
  *
- * @since	0.1
+ * @since	1.0
  * @return	arr		$tabs
  */
 function kbs_get_settings_tabs() {
@@ -709,7 +722,7 @@ function kbs_get_settings_tabs() {
 /**
  * Retrieve settings tabs
  *
- * @since	0.1
+ * @since	1.0
  * @return	arr		$section
  */
 function kbs_get_settings_tab_sections( $tab = false ) {
@@ -730,7 +743,7 @@ function kbs_get_settings_tab_sections( $tab = false ) {
  * Get the settings sections for each tab
  * Uses a static to avoid running the filters on every request to this function
  *
- * @since	0.1
+ * @since	1.0
  * @return	arr		Array of tabs and sections
  */
 function kbs_get_registered_settings_sections() {
@@ -780,7 +793,7 @@ function kbs_get_registered_settings_sections() {
  *
  * On large sites this can be expensive, so only load if on the settings page or $force is set to true
  *
- * @since	0.1
+ * @since	1.0
  * @param	bool	$force			Force the pages to be loaded even if not on settings
  * @return	arr		$pages_options	An array of the pages
  */
@@ -807,7 +820,7 @@ function kbs_get_pages( $force = false ) {
  *
  * Renders the header.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @return	void
  */
@@ -820,7 +833,7 @@ function kbs_header_callback( $args ) {
  *
  * Renders checkboxes.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @global	$kbs_options	Array of all the KBS Options
  * @return	void
@@ -846,7 +859,7 @@ function kbs_checkbox_callback( $args ) {
  *
  * Renders multiple checkboxes.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @global	$kbs_options	Array of all the KBS Options
  * @return	void
@@ -869,7 +882,7 @@ function kbs_multicheck_callback( $args ) {
  *
  * Renders radio boxes.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @global	$kbs_options	Array of all the KBS Options
  * @return	void
@@ -897,7 +910,7 @@ function kbs_radio_callback( $args ) {
  *
  * Renders text fields.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @global	$kbs_options	Array of all the KBS Options
  * @return	void
@@ -932,7 +945,7 @@ function kbs_text_callback( $args ) {
  *
  * Renders number fields.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @global	$kbs_options	Array of all the KBS Options
  * @return	void
@@ -970,7 +983,7 @@ function kbs_number_callback( $args ) {
  *
  * Renders textarea fields.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @global	$kbs_options	Array of all the KBS Options
  * @return	void
@@ -995,7 +1008,7 @@ function kbs_textarea_callback( $args ) {
  *
  * Renders password fields.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @global	$kbs_options	Array of all the KBS Options
  * @return	void
@@ -1021,7 +1034,7 @@ function kbs_password_callback( $args ) {
  *
  * If a function is missing for settings callbacks alert the user.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @return	void
  */
@@ -1037,7 +1050,7 @@ function kbs_missing_callback($args) {
  *
  * Renders select fields.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @global	$kbs_options	Array of all the KBS Options
  * @return	void
@@ -1081,7 +1094,7 @@ function kbs_select_callback($args) {
  *
  * Renders color select fields.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @global	$kbs_options Array of all the KBS Options
  * @return	void
@@ -1113,7 +1126,7 @@ function kbs_color_select_callback( $args ) {
  *
  * Renders rich editor fields.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @global	$kbs_options	Array of all the KBS Options
  * @global	$wp_version		WordPress Version
@@ -1151,7 +1164,7 @@ function kbs_rich_editor_callback( $args ) {
  *
  * Renders upload fields.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @global	$kbs_options	Array of all the KBS Options
  * @return	void
@@ -1179,7 +1192,7 @@ function kbs_upload_callback( $args ) {
  *
  * Renders color picker fields.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @global	$kbs_options	Array of all the KBS Options
  * @return	void
@@ -1206,7 +1219,7 @@ function kbs_color_callback( $args ) {
  *
  * Renders descriptive text onto the settings field.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @return	void
  */
@@ -1217,7 +1230,7 @@ function kbs_descriptive_text_callback( $args ) {
 /**
  * Registers the license field callback for Software Licensing
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @global	$kbs_options	Array of all the KBS options
  * @return void
@@ -1384,7 +1397,7 @@ if ( ! function_exists( 'kbs_license_key_callback' ) ) {
  *
  * Adds a do_action() hook in place of the field
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @return	void
  */
@@ -1395,7 +1408,7 @@ function kbs_hook_callback( $args ) {
 /**
  * Set manage_ticket_settings as the cap required to save KBS settings pages
  *
- * @since	0.1
+ * @since	1.0
  * @return	str		Capability required
  */
 function kbs_set_settings_cap() {
@@ -1406,7 +1419,7 @@ add_filter( 'option_page_capability_kbs_settings', 'kbs_set_settings_cap' );
 /**
  * Returns a select list for target response time option.
  *
- * @since	0.1
+ * @since	1.0
  * @param
  * @return	str		Array of selectable options for target response times.
  */
@@ -1420,7 +1433,7 @@ function kbs_get_response_time_options()	{
 		'5 hours'   => __( '5 Hours', 'mobile-dj-manager' ),
 		'6 hours'   => __( '6 Hours', 'mobile-dj-manager' ),
 		'7 hours'   => __( '7 Hours', 'mobile-dj-manager' ),
-		'1 day'     => __( '1 Day', 'mobile-dj-manager' ),
+		'8 hours'   => __( '7 Hours', 'mobile-dj-manager' ),
 		'1 day'     => __( '1 Day', 'mobile-dj-manager' ),
 		'2 days'    => __( '2 Days', 'mobile-dj-manager' ),
 		'3 days'    => __( '3 Days', 'mobile-dj-manager' ),

@@ -68,6 +68,14 @@ class KBS_Ticket {
 	protected $key = '';
 
 	/**
+	 * The front end form data.
+	 *
+	 * @since	1.0
+	 * @var		arr
+	 */
+	protected $form_data = array();
+
+	/**
 	 * Array of user information
 	 *
 	 * @since	1.0
@@ -401,6 +409,10 @@ class KBS_Ticket {
 			$this->pending['key'] = $this->key;
 		}
 
+		if ( ! empty( $this->form_data ) )	{
+			$this->pending['form_data'] = $this->form_data;
+		}
+
 		$ticket_data = array(
 			'date'         => $this->date,
 			'agent'        => $this->agent,
@@ -414,7 +426,8 @@ class KBS_Ticket {
 			'sla'          => $this->sla,
 			'status'       => $this->status,
 			'source'       => $this->source,
-			'files'        => $this->new_files
+			'files'        => $this->new_files,
+			'form_data'    => $this->form_data
 		);
 
 		$args = apply_filters( 'kbs_insert_ticket_args', array(
@@ -546,6 +559,12 @@ class KBS_Ticket {
 						$this->update_meta( '_kbs_ticket_key', $this->key );
 						break;
 
+					case 'form_data':
+						foreach( $this->form_data as $form_key => $form_value )	{
+							$this->update_meta( '_kbs_ticket_form_' . $form_key, $form_value );
+						}
+						break;
+
 					case 'date':
 						$args = array(
 							'ID'        => $this->ID,
@@ -583,7 +602,7 @@ class KBS_Ticket {
 						break;
 
 					case 'sla':
-						$this->update_meta( '_kbs_ticket_sla', $value );
+						$this->update_meta( '_kbs_ticket_sla', $this->sla );
 						break;
 
 					default:

@@ -593,7 +593,7 @@ function kbs_render_field_options_rows( $post_id )	{
 	</div>
     <?php
 } // kbs_render_field_options_rows
-add_action( 'kbs_form_mb_field_options', 'kbs_render_field_options_rows' );
+add_action( 'kbs_form_mb_field_options', 'kbs_render_field_options_rows', 10, 1 );
 
 /**
  * Determines if a field is being edited.

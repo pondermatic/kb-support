@@ -295,22 +295,23 @@ function kbs_get_field_settings( $field_id )	{
 function kbs_get_field_types()	{
 	
 	$field_types = array(
-		'checkbox'                    => __( 'Checkbox', 'kb-support' ),
-		'checkbox_list'               => __( 'Checkbox List', 'kb-support' ),
-		'date_field'                  => __( 'Date Field', 'kb-support' ),
-		'email'                       => __( 'Email Field', 'kb-support' ),
-		'file_upload'                 => __( 'File Upload', 'kb-support' ),
-		'hidden'                      => __( 'Hidden Field', 'kb-support' ),
-		'kb_category_dropdown'        => sprintf( __( '%s Select List', 'kb-support' ), kbs_get_kb_label_singular() ),
-		'number'                      => __( 'Number Field', 'kb-support' ),
-		'radio'                       => __( 'Radio Buttons', 'kb-support' ),
-		'recaptcha'                   => __( 'Google reCaptcha', 'kb-support' ),
-		'rich_editor'                 => __( 'Rich Text Editor', 'kb-support' ),
-		'select'                      => __( 'Select List', 'kb-support' ),
-		'text'                        => __( 'Text Field', 'kb-support' ),
-		'textarea'                    => __( 'Textarea', 'kb-support' ),
-		'ticket_category_dropdown'    => sprintf( __( '%s Categories', 'kb-support' ), kbs_get_ticket_label_singular() ),
-		'url'                         => __( 'URL Field', 'kb-support' ),		
+		'checkbox'                 => __( 'Checkbox', 'kb-support' ),
+		'checkbox_list'            => __( 'Checkbox List', 'kb-support' ),
+		'date_field'               => __( 'Date Field', 'kb-support' ),
+		'email'                    => __( 'Email Field', 'kb-support' ),
+		'file_upload'              => __( 'File Upload', 'kb-support' ),
+		'hidden'                   => __( 'Hidden Field', 'kb-support' ),
+		'kb_category_dropdown'     => sprintf( __( '%s Select List', 'kb-support' ), kbs_get_kb_label_singular() ),
+		'number'                   => __( 'Number Field', 'kb-support' ),
+		'radio'                    => __( 'Radio Buttons', 'kb-support' ),
+		'recaptcha'                => __( 'Google reCaptcha', 'kb-support' ),
+		'rich_editor'              => __( 'Rich Text Editor', 'kb-support' ),
+		'select'                   => __( 'Select List', 'kb-support' ),
+		'terms_agree'              => __( 'Terms Agreement', 'kb-support' ),
+		'text'                     => __( 'Text Field', 'kb-support' ),
+		'textarea'                 => __( 'Textarea', 'kb-support' ),
+		'ticket_category_dropdown' => sprintf( __( '%s Categories', 'kb-support' ), kbs_get_ticket_label_singular() ),
+		'url'                      => __( 'URL Field', 'kb-support' ),		
 	);
 	
 	if ( kbs_get_option( 'file_uploads', 0 ) < 1 )	{
@@ -478,8 +479,9 @@ function kbs_display_form( $form_id = 0 ) {
 function kbs_form_submission_errors( $field_id, $error )	{
 
 	$errors = array(
-		'required'      => get_the_title( $field_id ) . __( ' is a required field.', 'kb-support' ),
-		'invalid_email' => get_the_title( $field_id ) . __( ' requires a valid email address.', 'kb-support' )
+		'required'       => get_the_title( $field_id ) . __( ' is a required field.', 'kb-support' ),
+		'invalid_email'  => get_the_title( $field_id ) . __( ' requires a valid email address.', 'kb-support' ),
+		'agree_to_terms' => __( 'You must agree to the terms and conditions', 'kb-support' )
 	);
 
 	$errors = apply_filters( 'kbs_form_submission_errors', $errors );
@@ -511,15 +513,16 @@ function kbs_process_ticket_submission( $data )	{
 		'kbs_form_id', 'kbs_action', 'kbs_redirect', 'kbs_honeypot', 'kbs_ticket_submit'
 	) );
 
-	foreach ( $data as $key => $value ) {
-		if( ! in_array( $key, $ignore ) ) {
-			if( is_string( $value ) || is_int( $value ) )	{
+	foreach ( $data as $key => $value )	{
+		if ( ! in_array( $key, $ignore ) )	{
+
+			if ( is_string( $value ) || is_int( $value ) )	{
 				$posted[ $key ] = $value;
 
-			}
-			elseif( is_array( $value ) )	{
+			} elseif( is_array( $value ) )	{
 				$posted[ $key ] = array_map( 'absint', $value );
 			}
+
 		}
 	}
 
@@ -691,16 +694,21 @@ add_action( 'kbs_form_display_rich_editor_field', 'kbs_display_form_textarea_fie
  */
 function kbs_display_form_select_field( $field, $settings )	{
 
-	$class       = ! empty( $settings['input_class'] )     ? esc_attr( $settings['input_class'] ) : '';
-	$multiple    = ! empty( $settings['select_multiple'] ) ? ' ' . ' multiple'                    : false;
-	$required    = ! empty( $settings['required'] )        ? ' ' . ' required'                    : '';
+	$class    = ! empty( $settings['input_class'] )     ? esc_attr( $settings['input_class'] ) : '';
+	$multiple = ! empty( $settings['select_multiple'] ) ? ' ' . ' multiple'                    : false;
+	$required = ! empty( $settings['required'] )        ? ' ' . ' required'                    : '';
+	$options  = array();
 
 	if ( ! empty( $settings['chosen'] ) )	{
 		$class .= 'kbs-select-chosen';
 	}
 
+	if ( ! empty( $settings['placeholder'] ) )	{
+		$options['0'] = esc_html( $settings['placeholder'] );
+	}
+
 	$class   = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $class ) ) );
-	$options = apply_filters( 'kbs_form_select_field_options', $settings['select_options'] );
+	$options = apply_filters( 'kbs_form_select_field_options', $settings['select_options'], $settings );
 
 	do_action( 'kbs_before_form_field', $field, $settings );
 	do_action( 'kbs_before_form_' . $settings['type'] . '_field', $field, $settings );
@@ -713,8 +721,8 @@ function kbs_display_form_select_field( $field, $settings )	{
 	);
 
 	if ( ! empty( $options ) )	{
-		foreach( $options as $option )	{
-			$output .= '<option value="' . esc_attr( $option ) . '">' . esc_html( $option ) . '</option>';
+		foreach( $options as $key => $value )	{
+			$output .= '<option value="' . esc_attr( $key ) . '">' . esc_html( $value ) . '</option>';
 		}
 	}
 
@@ -780,6 +788,55 @@ function kbs_display_form_checkbox_field( $field, $settings )	{
 
 } // kbs_display_form_textarea_field
 add_action( 'kbs_form_display_checkbox_field', 'kbs_display_form_checkbox_field', 10, 2 );
+
+/**
+ * Render the agree to terms checkbox.
+ *
+ * @since	1.0
+ * @return	str
+ */
+function kbs_render_agree_to_terms_field()	{
+	$agree_to_terms = kbs_get_option( 'show_agree_to_terms', false );
+	$agree_text     = kbs_get_option( 'agree_text', false );
+	$label          = kbs_get_option( 'agree_label', false );
+	$terms_heading  = kbs_get_option( 'agree_heading', sprintf(
+		__( 'Terms and Conditions for Support %s', 'kb-support' ), kbs_get_ticket_label_plural()
+	) );
+
+	if ( ! $agree_to_terms || ! $agree_text || ! $label )	{
+    	return;
+	}
+
+	$label_class = '';
+	$input_class = '';
+
+	$args = apply_filters( 'kbs_agree_to_terms_args', array(
+		'label_class' => '',
+		'input_class' => ''
+	) );
+
+	if ( ! empty( $args['label_class'] ) )	{
+		$label_class = ' ' . sanitize_html_class( $args['label_class'] );
+	}
+
+	if ( ! empty( $args['input_class'] ) )	{
+		$input_class = ' class="' . sanitize_html_class( $args['input_class'] ) . '"';
+	}
+
+	ob_start(); ?>
+
+	<p><input type="checkbox" name="kbs_agree_terms" id="kbs-agree-terms"<?php echo $input_class; ?> value="1" /> <a href="#TB_inline?width=600&height=550&inlineId=kbs-ticket-terms-conditions" title="<?php esc_attr_e( $terms_heading, 'kb-support' ); ?>" class="thickbox"<?php echo $label_class; ?>><?php esc_attr_e( $label, 'kb-support' ); ?></a></p>
+
+	<div id="kbs-ticket-terms-conditions" class="kbs_hidden">
+		<?php do_action( 'kbs_before_terms' ); ?>
+		<?php echo wpautop( stripslashes( $agree_text ) ); ?>
+		<?php do_action( 'kbs_after_terms' ); ?>
+    </div>
+
+	<?php echo ob_get_clean();
+
+} // kbs_render_agree_to_terms_field
+add_action( 'kbs_ticket_form_after_fields', 'kbs_render_agree_to_terms_field', 999 );
 
 /**
  * Display a form checkbox list field
@@ -924,12 +981,20 @@ function kbs_display_form_field_description( $field, $settings )	{
  * @return	str
  */
 function kbs_render_hidden_form_fields( $form_id )	{
+	$hidden_fields = array(
+		'kbs_form_id'  => $form_id,
+		'kbs_honeypot' => '',
+		'redirect'     => kbs_get_current_page_url(),
+		'action'       => 'kbs_validate_ticket_form'
+	);
+
+	$hidden_fields = apply_filters( 'kbs_form_hidden_fields', $hidden_fields, $form_id );
+
 	ob_start(); ?>
 
-	<input type="hidden" name="kbs_form_id" value="<?php echo $form_id; ?>" />
-	<input type="hidden" name="kbs_honeypot" id="kbs_honeypot" value="" />
-	<input type="hidden" name="redirect" value="<?php echo kbs_get_current_page_url(); ?>" />
-	<input type="hidden" name="action" value="kbs_validate_ticket_form" />
+	<?php foreach( $hidden_fields as $key => $value ) : ?>
+    	<input type="hidden" name="<?php echo $key; ?>" value="<?php echo $value; ?>" />
+    <?php endforeach; ?>
 
     <?php echo ob_get_clean();
 } // kbs_render_hidden_form_fields

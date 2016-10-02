@@ -14,6 +14,9 @@ a.kbs-delete { color: #a00; }
 a.kbs-delete:hover { color: #f00; }
 .kbs_loader { display: block; width: 20px; height: 20px; background: url(../images/loading.png); background-repeat: no-repeat; margin: 4px 0 0 0; }
 
+.kbs_select_chosen { min-width: 200px; margin: 4px; padding-bottom: 5px; }
+.kbs_select_chosen label { padding-right: 3px; }
+
 /* General Settings Styles
 -------------------------------------------------------------- */
 .kbs_ticket_page_kbs-settings .form-table label { color: #666; font-size: 14px; font-style: italic; margin: 4px 0 0; }
@@ -85,3 +88,10 @@ a.kbs-delete:hover { color: #f00; }
 
 .kbs_default_side_wrapper { width: 100px; }
 #kbs-delete-post { padding-top: 3px; }
+
+/* Accordion Styles
+-------------------------------------------------------------- */
+#kbs-notes-history.kbs_accordion h3	{
+	font-size: 12px;
+	font-style: italic;
+}

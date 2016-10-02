@@ -223,30 +223,35 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
                 <p class="dashicons-before dashicons-post-status">&nbsp;&nbsp;<label for="post_status"><?php _e( 'Status:' ); ?></label>
                     <?php echo KBS()->html->ticket_status_dropdown( 'post_status', $kbs_ticket->post_status ); ?></p>
 
-                    <p class="dashicons-before dashicons-admin-users"></span>&nbsp;&nbsp;<label for="kbs_customer"><?php _e( 'Customer:', 'kb-support' ); ?></label>
-                    <?php echo KBS()->html->customer_dropdown( array(
-						'name'     => 'kbs_customer',
-						'selected' => $kbs_ticket->customer_id
-					) ); ?></p>
+                <p class="dashicons-before dashicons-admin-users"></span>&nbsp;&nbsp;<label for="kbs_customer"><?php _e( 'Customer:', 'kb-support' ); ?></label>
+                <?php echo KBS()->html->customer_dropdown( array(
+                    'name'     => 'kbs_customer',
+                    'selected' => $kbs_ticket->customer_id
+                ) ); ?></p>
                     
-                    <p class="dashicons-before dashicons-businessman"></span>&nbsp;&nbsp;<label for="kbs_agent"><?php _e( 'Agent:', 'kb-support' ); ?></label>
-                    <?php echo KBS()->html->agent_dropdown( 'kbs_agent', ( ! empty( $kbs_ticket->agent ) ? $kbs_ticket->agent : get_current_user_id() ) ); ?></p>
+                <p class="dashicons-before dashicons-businessman"></span>&nbsp;&nbsp;<label for="kbs_agent"><?php _e( 'Agent:', 'kb-support' ); ?></label>
+                <?php echo KBS()->html->agent_dropdown( 'kbs_agent', ( ! empty( $kbs_ticket->agent ) ? $kbs_ticket->agent : get_current_user_id() ) ); ?></p>
                     
                 <?php do_action( 'kbs_ticket_metabox_after_agent', $ticket_id ); ?>
-    
-                <p><a class="kbs-delete"><?php printf( __( 'Delete %s', 'kb-support' ), kbs_get_ticket_label_singular() ); ?></a>
-                <?php
-                
-                submit_button( 
-                    sprintf( '%s %s',
-                        empty( $kbs_ticket_update ) ? __( 'Add', 'kb-support' ) : __( 'Update', 'kb-support' ),
-                        kbs_get_ticket_label_singular()
-                    ),
-                    'primary',
-                    'save',
-                    false,
-                    array( 'id' => 'save-post' )
-                ); ?>
+
+				<?php if ( ! EMPTY_TRASH_DAYS )	: ?>
+					<?php $delete_text = sprintf( __( 'Delete %s Permanently', 'kb-support' ), kbs_get_ticket_label_singular() ); ?>
+				<?php else : ?>
+					<?php $delete_text = __( 'Move to Trash', 'kb-support' ); ?>
+				<?php endif; ?>
+
+                <p><a class="submitdelete deletion" href="<?php echo get_delete_post_link( $kbs_ticket->ID ); ?>"><?php echo $delete_text; ?></a>
+
+					<?php submit_button( 
+                        sprintf( '%s %s',
+                            empty( $kbs_ticket_update ) ? __( 'Add', 'kb-support' ) : __( 'Update', 'kb-support' ),
+                            kbs_get_ticket_label_singular()
+                        ),
+                        'primary',
+                        'save',
+                        false,
+                        array( 'id' => 'save-post' )
+                    ); ?>
                 </p>
             </div><!-- #kbs-ticket-actions -->
         </div><!-- #minor-publishing -->
@@ -425,8 +430,8 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 
 		?>
         <div id="kbs-ticket-reply-container">
-            <div class="kbs-reply"><a id="kbs-reply-close" class="button button-primary"><?php _e( 'Reply and Close', 'kb-support' ); ?></a></div>
-            <div class="kbs-reply"><a id="kbs-reply-update" class="button button-secondary"><?php _e( 'Reply', 'kb-support' ); ?></a></div>
+            <div class="kbs-reply"><a id="kbs-reply-update" class="button button-primary"><?php _e( 'Reply', 'kb-support' ); ?></a></div>
+            <div class="kbs-reply"><a id="kbs-reply-close" class="button button-secondary"><?php _e( 'Reply and Close', 'kb-support' ); ?></a></div>
         </div>
         <span id="kbs-loading" class="kbs-loader kbs-hidden"><img src="<?php echo KBS_PLUGIN_URL . 'assets/images/loading.gif'; ?>" /></span>
         <?php
@@ -434,42 +439,6 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 		
 } // kbs_ticket_metabox_details_row
 add_action( 'kbs_ticket_reply_fields', 'kbs_ticket_metabox_reply_row', 20 );
-
-/**
- * Display the ticket add note row.
- *
- * @since	1.0
- * @global	obj		$kbs_ticket			KBS_Ticket class object
- * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
- * @param	int		$ticket_id			The ticket post ID.
- * @return	str
- */
-function kbs_ticket_metabox_add_note_row( $ticket_id )	{
-
-	global $kbs_ticket, $kbs_ticket_update; ?>
-
-	<div id="kbs-ticket-add-note-container">
-        <?php echo KBS()->html->textarea( array(
-			'name'  => 'kbs_new_note',
-			'label' => __( 'Add New Note', 'kb-support' ),
-			'desc'  => __( 'Notes are only visible to support workers', 'kb-support' ),
-			'class' => 'large-text',
-			'rows'  => 5
-		) );
-        /*
-         * Fires immediately before the add note button is output.
-         * @since	1.0
-         * @param	int	$post_id	The Ticket post ID
-         */
-        do_action( 'kbs_ticket_before_add_note_button', $ticket_id ); ?>
-
-		<div class="kbs-add-note"><a id="kbs-add-note" class="button button-secondary"><?php _e( 'Add Note', 'kb-support' ); ?></a></div>
-	</div>
-	<span id="kbs-loading" class="kbs-loader kbs-hidden"><img src="<?php echo KBS_PLUGIN_URL . 'assets/images/loading.gif'; ?>" /></span>
-	<?php
-		
-} // kbs_ticket_metabox_add_note_row
-add_action( 'kbs_ticket_notes_fields', 'kbs_ticket_metabox_add_note_row', 10 );
 
 /**
  * Display the ticket add note row.
@@ -490,12 +459,52 @@ function kbs_ticket_metabox_notes_row( $ticket_id )	{
     	<div id="kbs-ticket-notes-container">
             <div id="kbs-notes-history" class="kbs_accordion">
                 <?php //foreach( $notes as $note ) : ?>
-                    <h3>Test</h3>
+                    <h3>Mike Howard | 23:30 Sunday 2nd October 2016</h3>
                     <div>This is a test</div>
+                    <h3>Test 2</h3>
+                    <div>This is another test</div>
                 <?php //endforeach; ?>
             </div>
         </div>
 	<?php endif;
 
 } // kbs_ticket_metabox_notes_row
-add_action( 'kbs_ticket_notes_fields', 'kbs_ticket_metabox_notes_row', 20 );
+add_action( 'kbs_ticket_notes_fields', 'kbs_ticket_metabox_notes_row', 10 );
+
+/**
+ * Display the ticket add note row.
+ *
+ * @since	1.0
+ * @global	obj		$kbs_ticket			KBS_Ticket class object
+ * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
+ * @param	int		$ticket_id			The ticket post ID.
+ * @return	str
+ */
+function kbs_ticket_metabox_add_note_row( $ticket_id )	{
+
+	global $kbs_ticket, $kbs_ticket_update; ?>
+
+	<div id="kbs-ticket-add-note-container">
+    	<p><label for="kbs_new_note"><strong><?php _e( 'Add a New Note', 'kb-support' ); ?></strong></label><br />
+			<?php echo KBS()->html->textarea( array(
+                'name'  => 'kbs_new_note',
+                'desc'  => __( 'Notes are only visible to support workers', 'kb-support' ),
+                'class' => 'large-text',
+                'rows'  => 5
+            ) ); ?>
+        </p>
+        <?php
+        /*
+         * Fires immediately before the add note button is output.
+         * @since	1.0
+         * @param	int	$post_id	The Ticket post ID
+         */
+        do_action( 'kbs_ticket_before_add_note_button', $ticket_id ); ?>
+
+		<div class="kbs-add-note"><a id="kbs-add-note" class="button button-secondary"><?php _e( 'Add Note', 'kb-support' ); ?></a></div>
+	</div>
+	<span id="kbs-loading" class="kbs-loader kbs-hidden"><img src="<?php echo KBS_PLUGIN_URL . 'assets/images/loading.gif'; ?>" /></span>
+	<?php
+		
+} // kbs_ticket_metabox_add_note_row
+add_action( 'kbs_ticket_notes_fields', 'kbs_ticket_metabox_add_note_row', 20 );

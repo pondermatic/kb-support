@@ -1,22 +1,22 @@
 var kbs_vars;
 jQuery(document).ready(function ($) {
 
+	// Setup Chosen menus
+	$('.kbs_select_chosen').chosen({
+		inherit_select_classes: true
+	});
+
+	// Setup Accordions
 	if ( kbs_vars.post_type && 'kbs_ticket' == kbs_vars.post_type )	{
 		var icons = {
-		  header: "ui-icon-circle-arrow-e",
-		  activeHeader: "ui-icon-circle-arrow-s"
+			header: "ui-icon-circle-arrow-e",
+			activeHeader: "ui-icon-circle-arrow-s"
 		};
 		$( ".kbs_accordion" ).accordion({
-			icons: icons,
-			collapsible: true
+			active: false,
+			collapsible: true,
+			icons:icons
 		});
-		$( "#toggle" ).button().on( "click", function() {
-		if ( $( ".kbs_accordion" ).accordion( "option", "icons" ) ) {
-			$( ".kbs_accordion" ).accordion( "option", "icons", null );
-		} else {
-			$( ".kbs_accordion" ).accordion( "option", "icons", icons );
-		}
-    });
 	}
 
 	/**
@@ -225,84 +225,85 @@ jQuery(document).ready(function ($) {
 		forms : function() {
 
 			var toggleFieldOptions = function(kbs_selected_field)	{
-					if ( 'text'          == kbs_selected_field
-						 || 'date_field' == kbs_selected_field
-						 || 'email'      == kbs_selected_field
-						 || 'number'     == kbs_selected_field
-						 || 'textarea'   == kbs_selected_field
-						 || 'url'        == kbs_selected_field
-					)	{
-							 
-						$('#kbs_meta_field_placeholder_wrap').show();
-						$('#kbs_meta_field_hide_label_wrap').show();
-					} else	{
-						$('#kbs_meta_field_placeholder_wrap').hide();
-						$('#kbs_meta_field_hide_label_wrap').hide();
-					}
-					
-					if ( 'select'          == kbs_selected_field
-						|| 'checkbox_list' == kbs_selected_field
-						|| 'radio'         == kbs_selected_field
-					)	{
-						$('#kbs_meta_field_select_options_wrap').show();
-					} else	{
-						$('#kbs_meta_field_select_options_wrap').hide();
-					}
-					
-					if ( 'select' == kbs_selected_field )	{
-						$('#kbs_meta_field_select_multiple_wrap').show();
-					} else	{
-						$('#kbs_meta_field_select_multiple_wrap').hide();
-					}
-					
-					if ( 'select' == kbs_selected_field
-						|| 'kb_category_dropdown'     == kbs_selected_field
-						|| 'ticket_category_dropdown' == kbs_selected_field
-					)	{
-						$('#kbs_meta_field_select_searchable_wrap').show();
-					} else	{
-						$('#kbs_meta_field_select_searchable_wrap').hide();
-					}
-					
-					if ( 'checkbox' == kbs_selected_field )	{
-						$('#kbs_meta_field_option_selected_wrap').show();
-					} else	{
-						$('#kbs_meta_field_option_selected_wrap').hide();
-					}
-					
-					if ( 'checkbox'      == kbs_selected_field
-						|| 'file_upload' == kbs_selected_field
-					)	{
-						$('#kbs_meta_field_required_wrap').hide();
-					} else	{
-						$('#kbs_meta_field_required_wrap').show();
-					}
-					
-					if ( 'file_upload' == kbs_selected_field )	{
-						$('#kbs_meta_field_maxfiles_wrap').show();
-					} else	{
-						$('#kbs_meta_field_maxfiles_wrap').hide();
-					}
-					
-					if ( 'recaptcha' == kbs_selected_field )	{
-						$('#kbs_meta_field_required_wrap').hide();
-						$('#kbs_meta_field_label_class_wrap').hide();
-						$('#kbs_meta_field_input_class_wrap').hide();
-					} else	{
-						$('#kbs_meta_field_required_wrap').show();
-						$('#kbs_meta_field_label_class_wrap').show();
-						$('#kbs_meta_field_input_class_wrap').show();
-					}
-	
-					if ( 'text'          == kbs_selected_field
-						|| 'email'       == kbs_selected_field
-						|| 'textarea'    == kbs_selected_field
-						|| 'rich_editor' == kbs_selected_field )	{
-						$('#kbs_meta_field_mapping_wrap').show();
-					} else	{
-						$('#kbs_meta_field_mapping_wrap').hide();
-					}
+				if ( 'text'          == kbs_selected_field
+					 || 'date_field' == kbs_selected_field
+					 || 'email'      == kbs_selected_field
+					 || 'number'     == kbs_selected_field
+					 || 'select'     == kbs_selected_field
+					 || 'textarea'   == kbs_selected_field
+					 || 'url'        == kbs_selected_field
+				)	{
+						 
+					$('#kbs_meta_field_placeholder_wrap').show();
+					$('#kbs_meta_field_hide_label_wrap').show();
+				} else	{
+					$('#kbs_meta_field_placeholder_wrap').hide();
+					$('#kbs_meta_field_hide_label_wrap').hide();
 				}
+				
+				if ( 'select'          == kbs_selected_field
+					|| 'checkbox_list' == kbs_selected_field
+					|| 'radio'         == kbs_selected_field
+				)	{
+					$('#kbs_meta_field_select_options_wrap').show();
+				} else	{
+					$('#kbs_meta_field_select_options_wrap').hide();
+				}
+				
+				if ( 'select' == kbs_selected_field )	{
+					$('#kbs_meta_field_select_multiple_wrap').show();
+				} else	{
+					$('#kbs_meta_field_select_multiple_wrap').hide();
+				}
+				
+				if ( 'select' == kbs_selected_field
+					|| 'kb_category_dropdown'     == kbs_selected_field
+					|| 'ticket_category_dropdown' == kbs_selected_field
+				)	{
+					$('#kbs_meta_field_select_searchable_wrap').show();
+				} else	{
+					$('#kbs_meta_field_select_searchable_wrap').hide();
+				}
+				
+				if ( 'checkbox' == kbs_selected_field )	{
+					$('#kbs_meta_field_option_selected_wrap').show();
+				} else	{
+					$('#kbs_meta_field_option_selected_wrap').hide();
+				}
+				
+				if ( 'checkbox'      == kbs_selected_field
+					|| 'file_upload' == kbs_selected_field
+				)	{
+					$('#kbs_meta_field_required_wrap').hide();
+				} else	{
+					$('#kbs_meta_field_required_wrap').show();
+				}
+				
+				if ( 'file_upload' == kbs_selected_field )	{
+					$('#kbs_meta_field_maxfiles_wrap').show();
+				} else	{
+					$('#kbs_meta_field_maxfiles_wrap').hide();
+				}
+				
+				if ( 'recaptcha' == kbs_selected_field )	{
+					$('#kbs_meta_field_required_wrap').hide();
+					$('#kbs_meta_field_label_class_wrap').hide();
+					$('#kbs_meta_field_input_class_wrap').hide();
+				} else	{
+					$('#kbs_meta_field_required_wrap').show();
+					$('#kbs_meta_field_label_class_wrap').show();
+					$('#kbs_meta_field_input_class_wrap').show();
+				}
+
+				if ( 'text'          == kbs_selected_field
+					|| 'email'       == kbs_selected_field
+					|| 'textarea'    == kbs_selected_field
+					|| 'rich_editor' == kbs_selected_field )	{
+					$('#kbs_meta_field_mapping_wrap').show();
+				} else	{
+					$('#kbs_meta_field_mapping_wrap').hide();
+				}
+			}
 
 			// Preload field options when editing
 			if ( kbs_vars.editing_field_type )	{
@@ -334,6 +335,7 @@ jQuery(document).ready(function ($) {
 				var return_url       = $('#form_return_url').val();			
 				var postData         = {
 					form_id          : kbs_vars.post_id,
+					form_data        : $("#post").serialize(),
 					label            : $('#kbs_field_label').val(),
 					type             : $('#kbs_field_type').val(),
 					mapping          : $('#kbs_field_mapping').val(),
@@ -392,6 +394,7 @@ jQuery(document).ready(function ($) {
 				var return_url       = $('#form_return_url').val();			
 				var postData         = {
 					form_id          : kbs_vars.post_id,
+					form_data        : $("#post").serialize(),
 					field_id         : $('#kbs_edit_field').val(), 
 					label            : $('#kbs_field_label').val(),
 					type             : $('#kbs_field_type').val(),

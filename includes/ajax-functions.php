@@ -160,11 +160,8 @@ add_action( 'wp_ajax_kbs_reply_to_ticket', 'kbs_ajax_reply_to_ticket' );
 function kbs_ajax_add_form_field()	{
 
 	if ( ! empty( $_POST['form_id'] ) )	{
-
-		$form = new KBS_Form( $_POST['form_id'] );
-		
+		$form     = new KBS_Form( $_POST['form_id'] );
 		$field_id = $form->add_field( $_POST );
-
 	}
 
 	if ( ! empty( $field_id ) )	{
@@ -188,9 +185,8 @@ add_action( 'wp_ajax_kbs_add_form_field', 'kbs_ajax_add_form_field' );
 function kbs_ajax_save_form_field()	{
 
 	if ( ! empty( $_POST['field_id'] ) )	{
-		$form = new KBS_Form( $_POST['form_id'] );
+		$form     = new KBS_Form( $_POST['form_id'] );
 		$field_id = $form->save_field( $_POST );
-
 	}
 
 	if ( ! empty( $field_id ) )	{
@@ -230,8 +226,9 @@ add_action( 'wp_ajax_kbs_order_form_fields', 'kbs_ajax_order_form_fields' );
  */
 function kbs_ajax_validate_form_submission()	{
 
-	$form  = new KBS_Form( $_POST['kbs_form_id'] );
-	$error = false;
+	$form           = new KBS_Form( $_POST['kbs_form_id'] );
+	$error          = false;
+	$agree_to_terms = kbs_get_option( 'show_agree_to_terms', false );
 
 	foreach ( $form->get_fields() as $field )	{
 
@@ -258,6 +255,13 @@ function kbs_ajax_validate_form_submission()	{
 			) );
 		}
 
+	}
+
+	if ( $agree_to_terms && empty( $_POST['kbs_agree_terms'] ) )	{
+		wp_send_json( array(
+			'error' => kbs_form_submission_errors( 0, 'agree_to_terms' ),
+			'field' => 'kbs_agree_terms'
+		) );
 	}
 
 	wp_send_json_success( array( 'error' => $error ) );

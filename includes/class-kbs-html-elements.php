@@ -12,7 +12,8 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) )
+	exit;
 
 /**
  * KBS_HTML_Elements Class
@@ -296,7 +297,7 @@ class KBS_HTML_Elements {
 			'multiple'         => false,
 			'show_option_all'  => _x( 'All', 'all dropdown items', 'kb-support' ),
 			'show_option_none' => _x( 'None', 'no dropdown items', 'kb-support' ),
-			'data'             => array(),
+			'data'             => array()
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -308,27 +309,29 @@ class KBS_HTML_Elements {
 			$data_elements .= ' data-' . esc_attr( $key ) . '="' . esc_attr( $value ) . '"';
 		}
 
-		if( $args['multiple'] ) {
-			$multiple = ' MULTIPLE';
+		if ( $args['multiple'] ) {
+			$multiple   = ' MULTIPLE';
+			$name_array = '[]';
 		} else {
-			$multiple = '';
+			$multiple   = '';
+			$name_array = '';
 		}
 
-		if( $args['chosen'] ) {
-			$args['class'] .= ' kbs-select-chosen';
+		if ( $args['chosen'] ) {
+			$args['class'] .= ' kbs_select_chosen';
 		}
 
-		if( $args['placeholder'] ) {
+		if ( $args['placeholder'] ) {
 			$placeholder = $args['placeholder'];
 		} else {
 			$placeholder = '';
 		}
 
 		$class  = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $args['class'] ) ) );
-		$output = '<select name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( kbs_sanitize_key( str_replace( '-', '_', $args['id'] ) ) ) . '" class="kbs-select ' . $class . '"' . $multiple . ' data-placeholder="' . $placeholder . '"'. $data_elements . '>' . "\r\n";
+		$output = '<select name="' . esc_attr( $args['name'] ) . $name_array . '" id="' . esc_attr( kbs_sanitize_key( str_replace( '-', '_', $args['id'] ) ) ) . '" class="kbs-select ' . $class . '"' . $multiple . ' data-placeholder="' . $placeholder . '"'. $data_elements . '>' . "\r\n";
 
 		if ( $args['show_option_all'] ) {
-			if( $args['multiple'] ) {
+			if ( $args['multiple'] ) {
 				$selected = selected( true, in_array( 0, $args['selected'] ), false );
 			} else {
 				$selected = selected( $args['selected'], 0, false );
@@ -349,8 +352,8 @@ class KBS_HTML_Elements {
 
 			foreach( $args['options'] as $key => $option ) {
 
-				if( $args['multiple'] && is_array( $args['selected'] ) ) {
-					$selected = selected( true, in_array( $key, $args['selected'], true ), false );
+				if ( $args['multiple'] && is_array( $args['selected'] ) ) {
+					$selected = selected( true, in_array( $key, $args['selected'] ), false );
 				} else {
 					$selected = selected( $args['selected'], $key, false );
 				}
