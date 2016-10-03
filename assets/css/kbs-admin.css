@@ -65,6 +65,11 @@ a.kbs-delete:hover { color: #f00; }
 #kbs_meta_field_hide_label_wrap	{ display: none; }
 
 #kbs-ticket-content-container.kbs_ticket_wrap p	{ margin: 4px 0; width: 100%; height: auto; }
+a.kbs_ticket_form_data	{
+	font-size: 12px;
+	text-align: right;
+}
+
 #kbs-ticket-reply-container { width: 100%; height: 20px; padding-top: 20px; padding-bottom: 20px; }
 .kbs-reply { float: left; padding-right: 20px; }
 

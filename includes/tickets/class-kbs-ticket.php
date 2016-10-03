@@ -378,6 +378,7 @@ class KBS_Ticket {
 		$this->sla             = $this->setup_sla();
 
 		$this->key             = $this->setup_ticket_key();
+		$this->form_data       = $this->setup_form_data();
 
 		// Extensions can hook here to add items to this object
 		do_action( 'kbs_setup_ticket', $this, $ticket_id );
@@ -1107,6 +1108,27 @@ class KBS_Ticket {
 	} // setup_sla
 
 	/**
+	 * Setup the ticket form data.
+	 *
+	 * @since	1.0
+	 * @return	str		The Ticket Form Data
+	 */
+	private function setup_form_data() {
+		$form_data = array();
+		$id        = $this->get_meta( '_kbs_ticket_form_id', true );
+		$data      = $this->get_meta( '_kbs_ticket_form_data', true );
+
+		if ( $id && $data )	{
+			$form_data = array(
+				'id'   => $this->get_meta( '_kbs_ticket_form_id', true ),
+				'data' => $this->get_meta( '_kbs_ticket_form_data', true )
+			);
+		}
+
+		return $form_data;
+	} // setup_form_data
+
+	/**
 	 * Retrieve the ticket replies
 	 *
 	 * @since	1.0
@@ -1297,16 +1319,24 @@ class KBS_Ticket {
 			return;
 		}
 
+		$form = new KBS_Form( $this->form_data['id'] );
+
 		$ignore = kbs_form_ignore_fields();
 
 		$output = '<h2>' . sprintf( __( 'Form: %s', 'kb-support' ), get_the_title( $this->form_data['id'] ) ) . '</h2>';
 		foreach( $this->form_data['data'] as $field => $value )	{
-			if ( ! in_array( $field, $ignore ) )	{
-				if ( is_array( $value ) )	{
-					$value = implode( ', ', $value );
-				}
-				$output .= '<p><strong>' . $field . '</strong>: ' . $value;
+
+			$form_field = kbs_get_field_by( 'name', $field );
+
+			if ( empty( $form_field ) )	{
+				continue;
 			}
+
+			$settings = $form->get_field_settings( $form_field->ID );
+
+			$value = apply_filters( 'kbs_show_form_data', $value, $form_field->ID, $settings );
+
+			$output .= '<p><strong>' . get_the_title( $form_field->ID ) . '</strong>: ' . $value;
 		}
 
 		return apply_filters( 'kbs_show_form_data', $output );

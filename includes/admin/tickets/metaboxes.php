@@ -350,12 +350,12 @@ function kbs_ticket_metabox_form_data_row( $ticket_id )	{
 	<?php if ( ! empty( $kbs_ticket->form_data ) ) : ?>
 
         <div id="kbs-ticket-form-data-container" class="kbs_ticket_wrap">
-                <p><a href="#TB_inline?width=600&height=550&inlineId=kbs-ticket-form-data" title="<?php _e( 'Submitted Form Data', 'kb-support' ); ?>" class="thickbox"><?php _e( 'View Form Submission Data', 'kb-support' ); ?></a>.</p>
+                <p><a href="#TB_inline?width=600&height=550&inlineId=kbs-ticket-form-data" title="<?php _e( 'Submitted Form Data', 'kb-support' ); ?>" class="thickbox kbs_ticket_form_data"><?php _e( 'View Form Submission Data', 'kb-support' ); ?></a></p>
         </div>
 
     <?php endif; ?>
 
-    <div id="kbs-ticket-form-data"><?php echo $kbs_ticket->show_form_data(); ?></div>
+    <div id="kbs-ticket-form-data" class="kbs-hidden"><?php echo $kbs_ticket->show_form_data(); ?></div>
     <?php
 		
 } // kbs_ticket_metabox_form_data_row

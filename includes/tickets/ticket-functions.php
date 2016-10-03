@@ -406,17 +406,6 @@ function kbs_add_ticket_from_form( $form_id, $form_data )	{
 		}
 	}
 
-	if ( ! empty( $data ) )	{
-		$ticket_content  = '<p><strong>' . __( 'Form Data Submitted', 'kb-support' ) . '</strong></p>';
-		$ticket_content .= '<p> ' . implode( '<br />', $data ) . '</p>';
-	
-		if ( ! empty( $ticket_data['post_content'] ) )	{
-			$ticket_data['post_content'] = $ticket_data['post_content'] . $ticket_content;
-		} else	{
-			$ticket_data['post_content'] = $ticket_content;
-		}
-	}
-
 	$ticket_data = apply_filters( 'kbs_add_ticket_from_form_data', $ticket_data, $form_id, $form_data );
 
 	$ticket_id = kbs_add_ticket( $ticket_data );
@@ -998,7 +987,7 @@ function kbs_ticket_remove_notes_from_comment_counts( $stats, $post_id ) {
 			$total += $row['num_comments'];
 		}
 
-		if ( isset( $approved [$row['comment_approved'] ] ) )	{
+		if ( isset( $approved[ $row['comment_approved'] ] ) )	{
 			$stats[ $approved[ $row['comment_approved'] ] ] = $row['num_comments'];
 		}
 	}
@@ -1006,8 +995,8 @@ function kbs_ticket_remove_notes_from_comment_counts( $stats, $post_id ) {
 	$stats['total_comments'] = $total;
 
 	foreach ( $approved as $key ) {
-		if ( empty($stats[$key]) )	{
-			$stats[$key] = 0;
+		if ( empty($stats[ $key ] ) )	{
+			$stats[ $key ] = 0;
 		}
 	}
 

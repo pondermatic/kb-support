@@ -215,6 +215,56 @@ function kbs_get_field( $field_id )	{
 } // kbs_get_field
 
 /**
+ * Retrieve a form field by a given field.
+ *
+ * @since	1.0
+ * @param	str		$field	The field to retrieve the form field with
+ * @param	mixed	$value	The value for field
+ * @return	mixed
+ */
+function kbs_get_field_by( $field = '', $value = '' ) {
+
+	if( empty( $field ) || empty( $value ) ) {
+		return false;
+	}
+
+	switch( strtolower( $field ) ) {
+
+		case 'id':
+			$form_field = kbs_get_field( $value );
+
+			if ( 'kbs_form_field' != get_post_type( $form_field ) ) {
+				return false;
+			}
+			break;
+
+		case 'slug':
+		case 'name':
+			$form_field = get_posts( array(
+				'post_type'      => 'kbs_form_field',
+				'name'           => $value,
+				'posts_per_page' => 1,
+				'post_status'    => 'any'
+			) );
+
+			if ( $form_field ) {
+				$form_field = $form_field[0];
+			}
+
+			break;
+
+		default:
+			return false;
+	}
+
+	if ( $form_field ) {
+		return $form_field;
+	}
+
+	return false;
+} // kbs_get_field_by
+
+/**
  * Whether or not a field can be deleted from a form.
  *
  * @since	1.0
