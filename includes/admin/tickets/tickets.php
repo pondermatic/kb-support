@@ -213,12 +213,12 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
 	}
 
 	// The default fields that get saved
-	$fields = mdjm_packages_metabox_fields();
+	$fields = kbs_ticket_metabox_fields();
 
 	foreach ( $fields as $field )	{
 
 		if ( ! empty( $_POST[ $field ] ) ) {
-			$new_value = apply_filters( 'mdjm_package_metabox_save_' . $field, $_POST[ $field ] );
+			$new_value = apply_filters( 'kbs_ticket_metabox_save_' . $field, $_POST[ $field ] );
 			update_post_meta( $post_id, $field, $new_value );
 		} else {
 			delete_post_meta( $post_id, $field );
@@ -226,7 +226,7 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
 
 	}
 
-	do_action( 'mdjm_save_package', $post_id, $post );
+	do_action( 'kbs_save_ticket', $post_id, $post );
 
 	// Remove the save post action to avoid loops
 	remove_action( 'save_post_kbs_ticket', 'kbs_ticket_post_save', 10, 3 );

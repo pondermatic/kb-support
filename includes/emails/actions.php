@@ -6,16 +6,17 @@
  * @subpackage  Emails
  * @copyright   Copyright (c) 2016, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       0.1
+ * @since       1.0
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) )
+	exit;
 
 /**
  * Triggers Ticket Received email to be sent after the ticket status is updated
  *
- * @since	0.1
+ * @since	1.0
  * @param	int		$ticket_id	Ticket ID
  * @return	void
  */
@@ -25,15 +26,14 @@ function kbs_trigger_ticket_received( $ticket_id ) {
 		return;
 	}
 
-	// Send email with ticket details
 	kbs_email_ticket_received( $ticket_id );
-}
-add_action( 'kbs_ticket_logged', 'kbs_trigger_ticket_received', 999, 1 );
+} // kbs_trigger_ticket_received
+add_action( 'kbs_add_ticket', 'kbs_trigger_ticket_received', 999, 1 );
 
 /**
  * Trigger the sending of a Test Email
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$data	Parameters sent from Settings page
  * @return	void
  */

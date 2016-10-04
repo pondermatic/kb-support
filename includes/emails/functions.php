@@ -8,7 +8,7 @@
  * @subpackage  Emails
  * @copyright   Copyright (c) 2016, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       0.1
+ * @since       1.0
  */
 
 // Exit if accessed directly
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Email the ticket details to the customer.
  *
- * @since	0.1
+ * @since	1.0
  * @param	int		$ticket_id		Ticket ID
  * @param	bool	$admin_notice	Whether to send the admin email notification or not (default: true)
  * @return	void
@@ -50,7 +50,6 @@ function kbs_email_ticket_received( $ticket_id, $admin_notice = true ) {
 	$emails->__set( 'from_email', $from_email );
 	$emails->__set( 'heading', $heading );
 
-
 	$headers = apply_filters( 'kbs_ticket_headers', $emails->get_headers(), $ticket_id, $ticket_data );
 	$emails->__set( 'headers', $headers );
 
@@ -65,7 +64,7 @@ add_action( 'kbs_post_add_ticket', 'kbs_email_ticket_received' );
 /**
  * Email the ticket received confirmation to the admin accounts for testing.
  *
- * @since	0.1
+ * @since	1.0
  * @return	void
  */
 function kbs_email_test_ticket_received() {
@@ -102,7 +101,7 @@ function kbs_email_test_ticket_received() {
 /**
  * Sends the Admin Ticket Notification Email
  *
- * @since	0.1
+ * @since	1.0
  * @param	int		$ticket_id		Ticket ID (default: 0)
  * @param	arr		$ticket_data	Ticket Meta and Data
  * @return	void
@@ -154,7 +153,7 @@ function kbs_admin_email_notice( $ticket_id = 0, $ticket_data = array() ) {
  * Retrieves the emails for which admin notifications are sent to (these can be
  * changed in the KBS Settings)
  *
- * @since	0.1
+ * @since	1.0
  * @return	mixed
  */
 function kbs_get_admin_notice_emails() {
@@ -183,7 +182,7 @@ function kbs_admin_notices_disabled( $ticket_id = 0 ) {
  *
  * Returns the stored email text if available, the standard email text if not
  *
- * @since	0.1
+ * @since	1.0
  * @param
  * @return	str		$message
  */
@@ -201,7 +200,7 @@ function kbs_get_default_sale_notification_email() {
 /**
  * Get various correctly formatted names used in emails
  *
- * @since	0.1
+ * @since	1.0
  * @param	$user_info
  *
  * @return	arr		$email_names
