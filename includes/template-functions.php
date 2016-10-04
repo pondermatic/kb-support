@@ -70,15 +70,113 @@ add_filter( 'the_content', 'kbs_before_ticket_content' );
 function kbs_after_ticket_content( $content ) {
 	global $post;
 
-	if ( $post && $post->post_type == 'kbs_ticket' && is_singular( 'kbs_ticket' ) && is_main_query() && !post_password_required() ) {
+	if ( $post && $post->post_type == 'kbs_ticket' && is_singular( 'kbs_ticket' ) && is_main_query() && ! post_password_required() ) {
 		ob_start();
 		do_action( 'kbs_after_ticket_content', $post->ID );
 		$content .= ob_get_clean();
 	}
 
 	return $content;
-}
+} // kbs_after_ticket_content
 add_filter( 'the_content', 'kbs_after_ticket_content' );
+
+/**
+ * Before KB Article Content
+ *
+ * Adds an action to the beginning of kb article post content that can be hooked to
+ * by other functions.
+ *
+ * @since	0.1
+ * @global	$post
+ *
+ * @param	str		$content	The the_content field of the kb article object
+ * @return	str		The content with any additional data attached
+ */
+function kbs_before_kb_article_content( $content ) {
+	global $post;
+
+	if ( $post && $post->post_type == 'kbs_kb' && is_singular( 'kbs_kb' ) && is_main_query() && ! post_password_required() ) {
+		ob_start();
+		do_action( 'kbs_before_kb_article_content', $post->ID );
+		$content = ob_get_clean() . $content;
+	}
+
+	return $content;
+} // kbs_before_kb_article_content
+add_filter( 'the_content', 'kbs_before_kb_article_content' );
+
+/**
+ * After KB Article Content
+ *
+ * Adds an action to the end of kb article post content that can be hooked to by
+ * other functions.
+ *
+ * @since	1.0
+ * @global	$post
+ *
+ * @param	str		$content	The the_content field of the kb article object
+ * @return	str		The content with any additional data attached
+ */
+function kbs_after_kb_article_content( $content ) {
+	global $post;
+
+	if ( $post && 'kbs_kb' == $post->post_type && is_singular( 'kbs_kb' ) && is_main_query() && ! post_password_required() ) {
+		ob_start();
+		do_action( 'kbs_after_kb_article_content', $post->ID );
+		$content .= ob_get_clean();
+	}
+
+	return $content;
+} // kbs_after_kb_article_content
+add_filter( 'the_content', 'kbs_after_kb_article_content', 100 );
+
+/**
+ * After KB Article Content for restricted content.
+ *
+ * Remove content if it should be restricted.
+ *
+ * @since	1.0
+ * @global	$post
+ *
+ * @param	str		$content	The the_content field of the kb article object
+ * @return	str		The content with any additional data attached
+ */
+function kbs_restrict_kb_article_content( $content ) {
+	global $post;
+
+	if ( $post && 'kbs_kb' == $post->post_type )	{
+
+		if ( ! kbs_user_can_view_article( $post ) )	{
+
+			// Remove comments
+			add_filter( 'comments_open', '__return_false');
+			add_filter( 'get_comments_number', '__return_false');
+
+			if ( is_archive() )	{
+				$content = kbs_article_restricted_content_action();
+				$action = 'archive';
+			} else	{
+				$content = kbs_article_restricted_content_action();
+				$action = 'single';
+			}
+
+			/**
+			 * Allow plugins to hook into the actions taken when content is restricted.
+			 *
+			 * @param	obj		$post	The KB Article post object
+			 * @since	1.0
+			 */
+			do_action( 'kbs_resctricted_kb_article_' . $action, $post );
+
+		}
+
+	}
+
+	if ( ! isset( $action ) || ! has_action( 'kbs_resctricted_kb_article_' . $action ) )	{
+		return $content;
+	}
+} // kbs_restrict_kb_article_content
+add_filter( 'the_content', 'kbs_restrict_kb_article_content', 999 );
 
 /**
  * Get Button Colors

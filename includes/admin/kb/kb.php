@@ -79,7 +79,7 @@ function kbs_kb_post_save( $post_id, $post, $update )	{
 	remove_action( 'save_post_kbs_kb', 'kbs_kb_post_save', 10, 3 );
 
 	// Fire the before save action but only if this is not a new article creation (i.e $post->post_status == 'draft')
-	if( $update === true )	{
+	if ( $update === true )	{
 		do_action( 'kbs_kb_before_save', $post_id, $post, $update );
 	}
 

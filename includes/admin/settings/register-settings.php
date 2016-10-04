@@ -239,7 +239,7 @@ function kbs_get_registered_settings() {
 			)
 		),
 		/** Ticket Settings */
-		'tickets' => apply_filters( 'kbs_settings_sla',
+		'tickets' => apply_filters( 'kbs_ticket_settings',
 			array(
 				'main'   => array(
 					'ticket_settings_header' => array(
@@ -341,6 +341,25 @@ function kbs_get_registered_settings() {
 						) ),
 						'std'     => '2 days'
 					)
+				)
+			)
+		),
+		/** KB Settings */
+		'kb_articles' => apply_filters( 'kbs_article_settings',
+			array(
+				'main'   => array(
+					'kb_settings_header' => array(
+						'id'   => 'kb_settings_header',
+						'name' => '<h3>' . sprintf( __( '%s Settings', 'kb-support' ), kbs_get_kb_label_singular() ) . '</h3>',
+						'type' => 'header'
+					),
+					'kb_logged_in' => array(
+						'id'      => 'kb_logged_in',
+						'name'    => __( 'Logged in Users Only', 'kb-support' ),
+						'desc'    => sprintf( __( 'Select to make %s available to logged in users only by default.', 'kb-support' ), kbs_get_kb_label_plural() ),
+						'type'    => 'checkbox',
+						'std'     => '0'
+					),
 				)
 			)
 		),
@@ -701,16 +720,17 @@ function kbs_get_settings_tabs() {
 
 	$settings = kbs_get_registered_settings();
 
-	$tabs             = array();
-	$tabs['general']  = __( 'General', 'kb-support' );
-	$tabs['tickets']  = sprintf( __( '%s', 'kb-support' ), kbs_get_ticket_label_plural() );
-	$tabs['emails']   = __( 'Emails', 'kb-support' );
-	$tabs['styles']   = __( 'Styles', 'kb-support' );
+	$tabs                 = array();
+	$tabs['general']      = __( 'General', 'kb-support' );
+	$tabs['tickets']      = sprintf( __( '%s', 'kb-support' ), kbs_get_ticket_label_plural() );
+	$tabs['kb_articles']  = sprintf( __( '%s', 'kb-support' ), kbs_get_kb_label_plural() );
+	$tabs['emails']       = __( 'Emails', 'kb-support' );
+	$tabs['styles']       = __( 'Styles', 'kb-support' );
 
-	if( ! empty( $settings['extensions'] ) ) {
+	if ( ! empty( $settings['extensions'] ) ) {
 		$tabs['extensions'] = __( 'Extensions', 'kb-support' );
 	}
-	if( ! empty( $settings['licenses'] ) ) {
+	if ( ! empty( $settings['licenses'] ) ) {
 		$tabs['licenses'] = __( 'Licenses', 'kb-support' );
 	}
 	
@@ -763,6 +783,9 @@ function kbs_get_registered_settings_sections() {
 			'main'                 => sprintf( __( 'General %s Settings', 'kb-support' ), kbs_get_ticket_label_singular() ),
 			'submit'               => __( 'Submission Settings', 'kb-support' ),
 			'sla'                  => __( 'Service Levels', 'kb-support' )
+		) ),
+		'kb_articles'        => apply_filters( 'kbs_settings_sections_kb_articles', array(
+			'main'                 => sprintf( __( 'General %s Settings', 'kb-support' ), kbs_get_kb_label_singular() )
 		) ),
 		'emails'     => apply_filters( 'kbs_settings_sections_emails', array(
 			'main'                 => __( 'Emails', 'kb-support' ),
