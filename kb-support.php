@@ -220,8 +220,6 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/tickets/class-kbs-ticket-stats.php';
 		require_once KBS_PLUGIN_DIR . 'includes/tickets/class-kbs-tickets-query.php';
 		require_once KBS_PLUGIN_DIR . 'includes/tickets/class-kbs-ticket.php';
-		require_once KBS_PLUGIN_DIR . 'includes/admin/tickets/tickets.php';
-		require_once KBS_PLUGIN_DIR . 'includes/admin/tickets/metaboxes.php';
 		require_once KBS_PLUGIN_DIR . 'includes/tickets/ticket-actions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/tickets/ticket-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/files.php';
@@ -247,14 +245,14 @@ final class KB_Support {
 			require_once KBS_PLUGIN_DIR . 'includes/admin/admin-actions.php';
 			require_once KBS_PLUGIN_DIR . '/includes/admin/admin-pages.php';
 			require_once KBS_PLUGIN_DIR . '/includes/admin/admin-notices.php';
+			require_once KBS_PLUGIN_DIR . 'includes/admin/tickets/tickets.php';
+			require_once KBS_PLUGIN_DIR . 'includes/admin/tickets/metaboxes.php';
 			require_once KBS_PLUGIN_DIR . '/includes/admin/kb/kb.php';
 			require_once KBS_PLUGIN_DIR . '/includes/admin/forms/forms.php';
 			require_once KBS_PLUGIN_DIR . '/includes/admin/forms/metaboxes.php';
 			require_once KBS_PLUGIN_DIR . '/includes/admin/forms/form-actions.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/settings/display-settings.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/settings/contextual-help.php';
-		} else	{
-			
 		}
 
 		require_once KBS_PLUGIN_DIR . 'includes/install.php';

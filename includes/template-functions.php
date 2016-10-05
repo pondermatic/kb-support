@@ -153,10 +153,10 @@ function kbs_restrict_kb_article_content( $content ) {
 			add_filter( 'get_comments_number', '__return_false');
 
 			if ( is_archive() )	{
-				$content = kbs_article_restricted_content_action();
+				$content = kbs_article_content_is_restricted();
 				$action = 'archive';
 			} else	{
-				$content = kbs_article_restricted_content_action();
+				$content = kbs_article_content_is_restricted();
 				$action = 'single';
 			}
 

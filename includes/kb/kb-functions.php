@@ -48,17 +48,19 @@ function kbs_user_can_view_article( $kb_article, $user_id = 0 )	{
  * @since	1.0
  * @return	str		Message displayed when content is restricted
  */
-function kbs_article_restricted_content_action( $post = null )	{
+function kbs_article_content_is_restricted( $post = null )	{
 	global $post;
 
 	if ( is_archive() )	{
-		$content = apply_filters( 'kbs_restrict_kb_article_archive_message', __( 'This content is restricted', 'kb-support' ) );
+		$notice  = kbs_get_notices( 'article_restricted' );
+		$content = $notice['notice'];
 	} else	{
-		$content = apply_filters( 'kbs_restrict_kb_article_single_message', kbs_login_form() );
+		$content = kbs_display_notice( 'article_restricted_login' );
+		$content .= kbs_login_form();
 	}
 
 	return $content;
-} // kbs_article_restricted_content_action
+} // kbs_article_content_is_restricted
 
 /**
  * Retrieve the total view count for a KB Article.

@@ -274,9 +274,9 @@ function kbs_display_notice( $m )	{
  * @param	str		$notice		The message key to display.
  * @return	str		Notice.
  */
-function kbs_get_notices( $notice = false )	{
+function kbs_get_notices( $notice = '' )	{
 	$notices = array(
-		'need_login'       => array(
+		'need_login' => array(
 			'class'  => 'info',
 			'notice' => sprintf( __( 'You must be logged in to create a support %s', 'kb-support' ), kbs_get_ticket_label_singular() )
 		),
@@ -284,15 +284,23 @@ function kbs_get_notices( $notice = false )	{
 			'class'  => 'success',
 			'notice' => __( "Your support request has been successfully received. We'll be in touch as soon as possible.", 'kb-support' )
 		),
-		'ticket_failed'    => array(
+		'ticket_failed' => array(
 			'class'  => 'error',
 			'notice' => __( 'There was an error submitting your support request. Please try again', 'kb-support' )
+		),
+		'article_restricted' => array(
+			'class'  => 'info',
+			'notice' => sprintf( __( 'Access to this %s is restricted.', 'kb-support' ), kbs_get_kb_label_singular() )
+		),
+		'article_restricted_login' => array(
+			'class'  => 'info',
+			'notice' => sprintf( __( 'Access to this %s is restricted. Login to continue.', 'kb-support' ), kbs_get_kb_label_singular() )
 		)
 	);
 
 	$notices = apply_filters( 'kbs_get_notices', $notices );
 
-	if ( $notice )	{
+	if ( ! empty( $notice ) )	{
 		if ( ! array_key_exists( $notice, $notices ) )	{
 			return false;
 		}
