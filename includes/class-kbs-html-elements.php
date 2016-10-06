@@ -371,10 +371,8 @@ class KBS_HTML_Elements {
 	 * Renders an HTML Checkbox
 	 *
 	 * @since	1.0
-	 *
 	 * @param	arr		$args
-	 *
-	 * @return	string
+	 * @return	str
 	 */
 	public function checkbox( $args = array() ) {
 		$defaults = array(
@@ -397,7 +395,7 @@ class KBS_HTML_Elements {
 			$options .= ' readonly';
 		}
 
-		$output = '<input type="checkbox"' . $options . ' name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['name'] ) . '" class="' . $class . ' ' . esc_attr( $args['name'] ) . '" ' . checked( 1, $args['current'], false ) . ' />';
+		$output = '<input type="checkbox"' . $options . ' name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['name'] ) . '" class="' . $class . ' ' . esc_attr( $args['name'] ) . '" value="1"' . checked( 1, $args['current'], false ) . ' />';
 
 		return $output;
 	} // checkbox
