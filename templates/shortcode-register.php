@@ -3,7 +3,7 @@
  * This template is used to display the registration form with [kbs_register]
  */
 global $kbs_register_redirect; ?>
-
+<?php do_action( 'kbs_notices' ); ?>
 <form id="kbs_register_form" class="kbs_form" action="" method="post">
 	<?php do_action( 'kbs_register_form_fields_top' ); ?>
 
