@@ -128,7 +128,7 @@ add_action( 'add_meta_boxes_kbs_ticket', 'kbs_ticket_add_meta_boxes' );
 function kbs_ticket_metabox_save_callback()	{
 	global $post, $kbs_ticket, $kbs_ticket_update;
 
-	wp_nonce_field( 'kbs_ticket', 'kbs_ticket_meta_box_nonce' );
+	wp_nonce_field( 'kbs_ticket_meta_save', 'kbs_ticket_meta_box_nonce' );
 
 	/*
 	 * Output the items for the save metabox
