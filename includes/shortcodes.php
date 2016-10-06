@@ -63,7 +63,7 @@ add_shortcode( 'kbs_register', 'kbs_register_form_shortcode' );
  */
 function kbs_submit_form_shortcode( $atts ) {
 
-	if ( kbs_user_must_be_logged_in() && ! is_user_logged_in() )	{
+	if ( ! kbs_user_can_submit() )	{
 		ob_start();
 		echo kbs_display_notice( 'need_login' );
 
@@ -81,7 +81,7 @@ function kbs_submit_form_shortcode( $atts ) {
 	}
 
 	extract( shortcode_atts( array(
-			'form' => 0,
+		'form' => 0,
 		), $atts, 'kbs_submit' )
 	);
 

@@ -293,7 +293,7 @@ function kbs_ajax_validate_form_submission()	{
 	$error          = false;
 	$agree_to_terms = kbs_get_option( 'show_agree_to_terms', false );
 
-	if ( kbs_user_must_be_logged_in() && ! is_user_logged_in() )	{
+	if ( ! kbs_user_can_submit() )	{
 		wp_send_json( array(
 			'error' => kbs_get_notices( 'need_login', true ),
 			'field' => 'kbs_empty_field'

@@ -179,6 +179,30 @@ function kbs_restrict_kb_article_content( $content ) {
 add_filter( 'the_content', 'kbs_restrict_kb_article_content', 999 );
 
 /**
+ * Increment the post view count for articles when accessed.
+ *
+ * @since	1.0
+ * @return	void
+ */
+function kbs_article_maybe_increment_views()	{
+	if ( is_admin() && ! ( defined( 'DOING_AJAX' ) && DOING_AJAX ) )	{
+		return;
+	}
+
+	if ( 'kbs_kb' != get_post_type() || ! is_singular( 'kbs_kb' ) )	{
+		return;
+	}
+
+	if ( ! kbs_user_can_view_article( get_the_ID() ) )	{
+		return;
+	}
+
+	kbs_increment_article_view_count( get_the_ID() );
+
+} // kbs_article_maybe_increment_views
+add_action( 'wp', 'kbs_article_maybe_increment_views' );
+
+/**
  * Get Button Colors
  *
  * Returns an array of button colors.

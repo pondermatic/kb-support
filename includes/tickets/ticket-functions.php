@@ -337,9 +337,8 @@ function kbs_add_ticket( $ticket_data )	{
 
 	$ticket->save();
 
-	do_action( 'kbs_add_ticket', $ticket->ID, $ticket_data );
-
 	if ( ! empty( $ticket->ID ) ) {
+		do_action( 'kbs_add_ticket', $ticket->ID, $ticket_data );
 		return $ticket->ID;
 	}
 

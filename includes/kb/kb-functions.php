@@ -18,14 +18,13 @@ if ( ! defined( 'ABSPATH' ) )
  *
  * Retrieve KB Articles from the database.
  *
- * This is a simple wrapper for KBS_Articles_Query.
+ * This is a simple wrapper for KBS_KB_Articles_Query.
  *
  * @since	1.0
  * @param	arr		$args		Arguments passed to get_articles
  * @return	obj		$articles	Articles retrieved from the database
  */
 function kbs_get_articles( $args = array() ) {
-
 	// Fallback to post objects to ensure backwards compatibility
 	if( ! isset( $args['output'] ) ) {
 		$args['output'] = 'posts';
@@ -35,6 +34,130 @@ function kbs_get_articles( $args = array() ) {
 	$articles = new KBS_KB_Articles_Query( $args );
 	return $articles->get_articles();
 } // kbs_get_articles
+
+/**
+ * Count Articles
+ *
+ * Returns the total number of articles.
+ *
+ * @since	1.0
+ * @param	arr	$args	List of arguments to base the article count on
+ * @return	arr	$count	Number of articles sorted by article date
+ */
+function kbs_count_articles( $args = array() ) {
+
+	global $wpdb;
+
+	$defaults = array(
+		'agent'      => null,
+		'author'     => null,
+		'restricted' => null,
+		's'          => null,
+		'start-date' => null,
+		'end-date'   => null
+	);
+
+	$args = wp_parse_args( $args, $defaults );
+
+	$select = "SELECT p.post_status,count( * ) AS num_posts";
+	$join = '';
+	$where = "WHERE p.post_type = 'kbs_kb'";
+
+	// Count articles for a search
+	if( ! empty( $args['s'] ) ) {
+
+		$search = $wpdb->esc_like( $args['s'] );
+		$search = '%' . $search . '%';
+
+		$where .= $wpdb->prepare( "AND ((p.post_title LIKE %s) OR (p.post_content LIKE %s))", $search, $search );
+
+	}
+
+	// Limit article count by author
+	if ( ! empty( $args['author'] ) )	{
+		$where .= $wpdb->prepare( " AND p.post_author = '%s'", $args['author'] );
+	}
+
+	// Limit article count by received date
+	if ( ! empty( $args['start-date'] ) && false !== strpos( $args['start-date'], '-' ) ) {
+
+		$date_parts = explode( '-', $args['start-date'] );
+		$year       = ! empty( $date_parts[0] ) && is_numeric( $date_parts[0] ) ? $date_parts[0] : 0;
+		$month      = ! empty( $date_parts[1] ) && is_numeric( $date_parts[1] ) ? $date_parts[1] : 0;
+		$day        = ! empty( $date_parts[2] ) && is_numeric( $date_parts[2] ) ? $date_parts[2] : 0;
+
+		$is_date    = checkdate( $month, $day, $year );
+		if ( false !== $is_date ) {
+
+			$date   = new DateTime( $args['start-date'] );
+			$where .= $wpdb->prepare( " AND p.post_date >= '%s'", $date->format( 'Y-m-d' ) );
+
+		}
+
+		// Fixes an issue with the articles list table counts when no end date is specified (partly with stats class)
+		if ( empty( $args['end-date'] ) ) {
+			$args['end-date'] = $args['start-date'];
+		}
+
+	}
+
+	if ( ! empty ( $args['end-date'] ) && false !== strpos( $args['end-date'], '-' ) ) {
+
+		$date_parts = explode( '-', $args['end-date'] );
+		$year       = ! empty( $date_parts[0] ) && is_numeric( $date_parts[0] ) ? $date_parts[0] : 0;
+		$month      = ! empty( $date_parts[1] ) && is_numeric( $date_parts[1] ) ? $date_parts[1] : 0;
+		$day        = ! empty( $date_parts[2] ) && is_numeric( $date_parts[2] ) ? $date_parts[2] : 0;
+
+		$is_date    = checkdate( $month, $day, $year );
+		if ( false !== $is_date ) {
+
+			$date   = new DateTime( $args['end-date'] );
+			$where .= $wpdb->prepare( " AND p.post_date <= '%s'", $date->format( 'Y-m-d' ) );
+
+		}
+
+	}
+
+	$where = apply_filters( 'kbs_count_articles_where', $where );
+	$join  = apply_filters( 'kbs_count_articles_join', $join );
+
+	$query = "
+		$select
+		FROM $wpdb->posts p
+		$join
+		$where
+		GROUP BY p.post_status
+	";
+
+	$cache_key = md5( $query );
+
+	$count = wp_cache_get( $cache_key, 'counts' );
+
+	if ( false !== $count ) {
+		return $count;
+	}
+
+	$count = $wpdb->get_results( $query, ARRAY_A );
+	$stats    = array();
+	$total    = 0;
+	$statuses = get_post_stati();
+
+	foreach ( $statuses as $state ) {
+		$stats[ $state ] = 0;
+	}
+
+	foreach ( (array) $count as $row ) {
+		if ( ! in_array( $row['post_status'], $statuses ) )	{
+			continue;
+		}
+		$stats[ $row['post_status'] ] = $row['num_posts'];
+	}
+
+	$stats = (object) $stats;
+	wp_cache_set( $cache_key, $stats, 'counts' );
+
+	return $stats;
+} // kbs_count_articles
 
 /**
  * Get Hidden KB Article IDs
@@ -57,6 +180,26 @@ function kbs_get_restricted_articles()	{
 } // kbs_get_restricted_articles
 
 /**
+ * Whether or not the article is restricted.
+ *
+ * @since	1.0
+ * @param	int		$post_id	The post ID
+ * @return	bool	True if restricted
+ */
+function kbs_article_is_restricted( $post_id = 0 )	{
+	global $post;
+
+	if ( empty( $post_id ) && ! empty( $post ) )	{
+		$post_id = $post->ID;
+	}
+
+	$restricted = get_post_meta( $post_id, '_kbs_kb_logged_in_only', true );
+	$restricted = apply_filters( 'kbs_article_is_restricted', $restricted, $post_id );
+
+	return $restricted;
+} // kbs_article_is_restricted
+
+/**
  * Whether or not a user can view a KB Article.
  *
  * @since	1.0
@@ -71,9 +214,7 @@ function kbs_user_can_view_article( $kb_article, $user_id = 0 )	{
 
 	$can_view = true;
 
-	$logged_in_only = get_post_meta( $kb_article->ID, '_kbs_kb_logged_in_only', true );
-
-	if ( $logged_in_only && ! is_user_logged_in() )	{
+	if ( kbs_article_is_restricted( $kb_article->ID ) && ! is_user_logged_in() )	{
 		$can_view = false;
 	}
 
@@ -109,8 +250,7 @@ function kbs_article_content_is_restricted( $post = null )	{
  * Hides restricted posts.
  *
  * @since	1.0
- * @param
- *
+ * @return	void
  */
 function kbs_kb_hide_restricted_articles( $query )	{
 
@@ -145,7 +285,7 @@ function kbs_get_article_view_count( $article_id )	{
 	
 	(int)$view_count;
 	
-	return $view_count;
+	return apply_filters( 'kbs_article_view_count', $view_count );
 } // kbs_get_article_view_count
 
 /**
@@ -153,12 +293,16 @@ function kbs_get_article_view_count( $article_id )	{
  *
  * @since	1.0
  * @param	int		$article_id		Post ID
- * @return	int
+ * @return	bool
  */
 function kbs_increment_article_view_count( $article_id )	{
 	$view_count = kbs_get_article_view_count( $article_id );
-	
-	return update_post_meta( $article_id, '_kb_article_views', $view_count++ );
+
+	if ( ! $view_count )	{
+		$view_count = 0;
+	}
+
+	$view_count++;
+
+	return update_post_meta( $article_id, '_kb_article_views', $view_count );
 } // kbs_get_article_view_count
-
-

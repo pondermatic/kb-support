@@ -26,6 +26,7 @@ function kbs_set_kbs_kb_post_columns( $columns ) {
         'tags'             => __( 'Tags', 'kb-support' ),
 		'author'           => __( 'Author', 'kb-support' ),
 		'views'            => __( 'Views', 'kb-support' ),
+		'visibility'       => __( 'Visibility', 'kb-support' ),
 		'linked'           => sprintf( __( 'Linked %s', 'kb-support' ), kbs_get_ticket_label_plural() )
     );
 	
@@ -46,8 +47,13 @@ function kbs_set_kbs_kb_column_data( $column_name, $post_id ) {
 
 	switch ( $column_name ) {
 		case 'views':
-			echo $output = '';
-			echo apply_filters( 'kb_articles_post_column_views', $output, $post_id );
+			echo kbs_get_article_view_count( $post_id );
+			break;
+
+		case 'visibility':
+			if ( kbs_article_is_restricted( $post_id ) )	{
+				echo '<span class="padlock" title="' . __( 'This is a restricted article', 'kb-support' ) . '"></span>';
+			}
 			break;
 
 		case 'linked':

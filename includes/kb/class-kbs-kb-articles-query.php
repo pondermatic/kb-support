@@ -58,6 +58,7 @@ class KBS_KB_Articles_Query extends KBS_Stats {
 			'post_type'        => array( 'kbs_kb' ),
 			'start_date'       => false,
 			'end_date'         => false,
+			'author'           => null,
 			'restricted'       => null,
 			'number'           => 20,
 			'page'             => null,
@@ -117,6 +118,7 @@ class KBS_KB_Articles_Query extends KBS_Stats {
 		add_action( 'kbs_pre_get_articles',  array( $this, 'per_page'   ) );
 		add_action( 'kbs_pre_get_articles',  array( $this, 'page'       ) );
 		add_action( 'kbs_pre_get_articles',  array( $this, 'restricted' ) );
+		add_action( 'kbs_pre_get_articles',  array( $this, 'author'     ) );
 		add_action( 'kbs_pre_get_articles',  array( $this, 'search'     ) );
 	} // init
 
@@ -275,9 +277,12 @@ class KBS_KB_Articles_Query extends KBS_Stats {
 	 */
 	public function orderby() {
 		switch ( $this->args['orderby'] ) {
+			case 'views':
+				$this->__set( 'orderby', 'meta_value_num' );
+				break;
 			default :
 				$this->__set( 'orderby', $this->args['orderby'] );
-			break;
+				break;
 		}
 	} // orderby
 
@@ -303,6 +308,21 @@ class KBS_KB_Articles_Query extends KBS_Stats {
 		$this->__set( 'meta_query', $query );
 		$this->__unset( 'restricted' );
 	} // restricted
+
+	/**
+	 * Restricted
+	 *
+	 * @access	public
+	 * @since	1.0
+	 * @return	void
+	 */
+	public function author() {
+		if ( ! isset ( $this->args['author'] ) ) {
+			return;
+		}
+
+		$this->__unset( 'author' );
+	} // author
 
 	/**
 	 * Search

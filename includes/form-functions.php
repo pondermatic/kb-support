@@ -14,6 +14,32 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Whether or not a user can submit a form.
+ *
+ * @since	1.0
+ * @param	int|obj	$form		The form ID or object.
+ * @return	bool	True if the user can submit, otherwise false
+ */
+function kbs_user_can_submit( $form = 0 )	{
+	if ( is_int( $form ) )	{
+		$form = get_post( $form );
+	}
+
+	$can_submit = true;
+
+	if ( kbs_user_must_be_logged_in() && ! is_user_logged_in() )	{
+		$can_submit = false;
+	}
+
+	/**
+	 * Allow plugins to filter the response.
+	 *
+	 * @since	1.0
+	 */
+	return apply_filters( 'kbs_user_can_submit', $can_submit, $form );
+} // kbs_user_can_submit
+
+/**
  * Retrieve all forms.
  *
  * @since	1.0

@@ -28,6 +28,14 @@ a.kbs-delete:hover { color: #f00; }
 .kbs_ticket_page_kbs-settings .form-table tr > th > h3
 { font-size: 1.2em; font-weight: 600; margin: 0 auto; }
 
+span.padlock:before {
+	content: '\f160';
+	display: inline-block;
+	-webkit-font-smoothing: antialiased;
+	font: normal 20px/1 'dashicons';
+	vertical-align: middle;
+}
+
 /* SLA Styles
 -------------------------------------------------------------- */
 .kbs_sla_status::before { content: "\f227"; }
