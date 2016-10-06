@@ -14,6 +14,49 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Get KB Articles
+ *
+ * Retrieve KB Articles from the database.
+ *
+ * This is a simple wrapper for KBS_Articles_Query.
+ *
+ * @since	1.0
+ * @param	arr		$args		Arguments passed to get_articles
+ * @return	obj		$articles	Articles retrieved from the database
+ */
+function kbs_get_articles( $args = array() ) {
+
+	// Fallback to post objects to ensure backwards compatibility
+	if( ! isset( $args['output'] ) ) {
+		$args['output'] = 'posts';
+	}
+
+	$args     = apply_filters( 'kbs_get_articles_args', $args );
+	$articles = new KBS_KB_Articles_Query( $args );
+	return $articles->get_articles();
+} // kbs_get_articles
+
+/**
+ * Get Hidden KB Article IDs
+ *
+ * Retrieve Hidden KB Articles from the database.
+ *
+ * This is a simple wrapper for KBS_Articles_Query.
+ *
+ * @since	1.0
+ * @param	arr		$args		Arguments passed to get_articles
+ * @return	arr		Array of article IDs retrieved from the database
+ */
+function kbs_get_restricted_articles()	{
+	$args = array(
+		'restricted' => true,
+		'fields'     => 'ids'
+	);
+
+	return kbs_get_articles( $args );
+} // kbs_get_restricted_articles
+
+/**
  * Whether or not a user can view a KB Article.
  *
  * @since	1.0
@@ -28,7 +71,7 @@ function kbs_user_can_view_article( $kb_article, $user_id = 0 )	{
 
 	$can_view = true;
 
-	$logged_in_only = kbs_get_option( 'kb_logged_in', false );
+	$logged_in_only = get_post_meta( $kb_article->ID, '_kbs_kb_logged_in_only', true );
 
 	if ( $logged_in_only && ! is_user_logged_in() )	{
 		$can_view = false;
@@ -52,8 +95,8 @@ function kbs_article_content_is_restricted( $post = null )	{
 	global $post;
 
 	if ( is_archive() )	{
-		$notice  = kbs_get_notices( 'article_restricted' );
-		$content = $notice['notice'];
+		$notice  = kbs_get_notices( 'article_restricted', true );
+		$content = $notice;
 	} else	{
 		$content = kbs_display_notice( 'article_restricted_login' );
 		$content .= kbs_login_form();
@@ -61,6 +104,30 @@ function kbs_article_content_is_restricted( $post = null )	{
 
 	return $content;
 } // kbs_article_content_is_restricted
+
+/**
+ * Hides restricted posts.
+ *
+ * @since	1.0
+ * @param
+ *
+ */
+function kbs_kb_hide_restricted_articles( $query )	{
+
+	if ( is_admin() || ! is_post_type_archive( 'kbs_kb' ) || ! $query->is_main_query() )	{
+		return;
+	}
+
+	if ( ! kbs_get_option( 'kb_hide_restricted', false ) )	{
+		return;
+	}
+
+	$hidden_ids = kbs_get_restricted_articles();
+
+	$query->set( 'post__not_in', $hidden_ids );
+
+} // kbs_kb_hide_restricted_articles
+add_action( 'pre_get_posts', 'kbs_kb_hide_restricted_articles' );
 
 /**
  * Retrieve the total view count for a KB Article.
