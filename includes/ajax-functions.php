@@ -293,6 +293,13 @@ function kbs_ajax_validate_form_submission()	{
 	$error          = false;
 	$agree_to_terms = kbs_get_option( 'show_agree_to_terms', false );
 
+	if ( kbs_user_must_be_logged_in() && ! is_user_logged_in() )	{
+		wp_send_json( array(
+			'error' => kbs_get_notices( 'need_login', true ),
+			'field' => 'kbs_empty_field'
+		) );
+	}
+
 	foreach ( $form->get_fields() as $field )	{
 
 		$settings = $form->get_field_settings( $field->ID );
@@ -326,6 +333,13 @@ function kbs_ajax_validate_form_submission()	{
 			'field' => 'kbs_agree_terms'
 		) );
 	}
+
+	/**
+	 * Allow plugins to perform additional validation.
+	 *
+	 * @since	1.0
+	 */
+	do_action( 'kbs_validate_form_submission', $form );
 
 	wp_send_json_success( array( 'error' => $error ) );
 
