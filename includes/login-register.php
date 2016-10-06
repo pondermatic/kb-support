@@ -24,7 +24,11 @@ function kbs_login_form( $redirect = '' ) {
 	global $kbs_login_redirect;
 
 	if ( empty( $redirect ) ) {
-		$redirect = kbs_get_current_page_url();
+		if ( ! empty( $_GET['kbs_redirect'] ) )	{
+			$redirect = $_GET['kbs_redirect'];
+		} else	{
+			$redirect = kbs_get_current_page_url();
+		}
 	}
 
 	$kbs_login_redirect = $redirect;
@@ -48,7 +52,11 @@ function kbs_register_form( $redirect = '' ) {
 	global $kbs_register_redirect;
 
 	if ( empty( $redirect ) ) {
-		$redirect = kbs_get_current_page_url();
+		if ( ! empty( $_GET['kbs_redirect'] ) )	{
+			$redirect = $_GET['kbs_redirect'];
+		} else	{
+			$redirect = kbs_get_current_page_url();
+		}
 	}
 
 	$kbs_register_redirect = $redirect;
@@ -84,18 +92,21 @@ function kbs_process_login_form( $data ) {
 			if ( wp_check_password( $data['kbs_user_pass'], $user_data->user_pass, $user_data->ID ) ) {
 				kbs_log_user_in( $user_data->ID, $data['kbs_user_login'], $data['kbs_user_pass'] );
 			} else {
-				$message = 'password_incorrect';
+				$error = 'password_incorrect';
 			}
 
 		} else {
 
-			$message = 'username_incorrect';
+			$error = 'username_incorrect';
 
 		}
 
-		if ( ! empty( $message ) )	{
-			$url = remove_query_arg( 'message' );
-			wp_redirect( add_query_arg( 'message', $message, $url ) );
+		if ( ! empty( $error ) )	{
+			$url = remove_query_arg( 'kbs_notice', 'kbs_redirect' );
+			wp_redirect( add_query_arg( array(
+				'kbs_notice'   => $error,
+				'kbs_redirect' => $data['kbs_redirect']
+			), $url ) );
 			die();
 		}
 
@@ -150,28 +161,29 @@ function kbs_process_register_form( $data ) {
 	do_action( 'kbs_pre_process_register_form' );
 
 	if ( empty( $data['kbs_user_login'] ) ) {
-		$message = 'empty_username';
+		$error = 'empty_username';
 	} elseif ( username_exists( $data['kbs_user_login'] ) ) {
-		$message = 'username_unavailable';
+		$error = 'username_unavailable';
 	} elseif ( ! validate_username( $data['kbs_user_login'] ) ) {
-		$message = 'username_invalid';
+		$error = 'username_invalid';
 	} elseif ( email_exists( $data['kbs_user_email'] ) ) {
-		$message = 'email_unavailable';
+		$error = 'email_unavailable';
 	} elseif ( empty( $data['kbs_user_email'] ) || ! is_email( $data['kbs_user_email'] ) ) {
-		$message = 'email_invalid';
+		$error = 'email_invalid';
 	} elseif ( empty( $_POST['kbs_user_pass'] ) ) {
-		$message = 'empty_password';
+		$error = 'empty_password';
 	} elseif ( ( ! empty( $_POST['kbs_user_pass'] ) && empty( $_POST['kbs_user_pass2'] ) ) || ( $_POST['kbs_user_pass'] !== $_POST['kbs_user_pass2'] ) ) {
-		$message = 'password_mismatch';
-	} else	{
-		
+		$error = 'password_mismatch';
 	}
 
 	do_action( 'kbs_process_register_form' );
 
-	if ( ! empty( $message ) )	{
-		$url = remove_query_arg( 'message' );
-		wp_redirect( add_query_arg( 'message', $message, $url ) );
+	if ( ! empty( $error ) )	{
+		$url = remove_query_arg( array( 'kbs_notice', 'kbs_redirect' ) );
+		wp_redirect( add_query_arg( array(
+			'kbs_notice'   => $error,
+			'kbs_redirect' => $data['kbs_redirect']
+		), $url ) );
 		die();
 	}
 
@@ -185,11 +197,60 @@ function kbs_process_register_form( $data ) {
 		'role'            => get_option( 'default_role' )
 	) );
 
-	wp_redirect( $redirect );
+	wp_safe_redirect( $redirect );
 	die();
 
 } // kbs_process_register_form
 add_action( 'kbs_user_register', 'kbs_process_register_form' );
+
+/**
+ * Register And Login New User.
+ *
+ * @param	arr		$user_data	Data from registration form.
+ * @since	1.0
+ * @return	int
+ */
+function kbs_register_and_login_new_user( $user_data = array() ) {
+	$return = remove_query_arg( 'kbs_notice' );
+
+	if ( empty( $user_data ) )	{
+		wp_safe_redirect( add_query_arg( array(
+			'kbs_notice' => 'missing_registration_data'
+		), $return ) );
+	}
+
+	$user_args = apply_filters( 'kbs_insert_user_args', array(
+		'user_login'      => isset( $user_data['user_login'] ) ? $user_data['user_login'] : '',
+		'user_pass'       => isset( $user_data['user_pass'] )  ? $user_data['user_pass']  : '',
+		'user_email'      => isset( $user_data['user_email'] ) ? $user_data['user_email'] : '',
+		'first_name'      => isset( $user_data['user_first'] ) ? $user_data['user_first'] : '',
+		'last_name'       => isset( $user_data['user_last'] )  ? $user_data['user_last']  : '',
+		'user_registered' => date( 'Y-m-d H:i:s' ),
+		'role'            => get_option( 'default_role' )
+	), $user_data );
+
+	// Insert new user
+	$user_id = wp_insert_user( $user_args );
+
+	// Validate inserted user
+	if ( is_wp_error( $user_id ) )	{
+		wp_safe_redirect( wp_add_query_arg( array(
+			'kbs_notice' => 'could_not_register'
+		), $return ) );
+	}
+
+	// Allow themes and plugins to filter the user data
+	$user_data = apply_filters( 'kbs_insert_user_data', $user_data, $user_args );
+
+	// Allow themes and plugins to hook
+	do_action( 'kbs_insert_user', $user_id, $user_data );
+
+	// Login new user
+	kbs_log_user_in( $user_id, $user_data['user_login'], $user_data['user_pass'] );
+
+	// Return user id
+	return $user_id;
+} // kbs_register_and_login_new_user
 
 /**
  * Whether or not a user needs to be logged in before submitting a ticket.
