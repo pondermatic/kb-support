@@ -184,7 +184,7 @@ class KBS_Tickets_Query extends KBS_Stats {
 
 		$this->setup_dates( $this->args['start_date'], $this->args['end_date'] );
 
-		add_filter( 'posts_where', array( $this, 'tickets_where' ) );
+		add_filter( 'posts_where', array( $this, 'posts_where' ) );
 	} // date_filter_pre
 
 	/**
@@ -200,7 +200,7 @@ class KBS_Tickets_Query extends KBS_Stats {
 			return;
 		}
 
-		remove_filter( 'posts_where', array( $this, 'tickets_where' ) );
+		remove_filter( 'posts_where', array( $this, 'posts_where' ) );
 	} // date_filter_post
 
 	/**
@@ -416,4 +416,4 @@ class KBS_Tickets_Query extends KBS_Stats {
 		$this->__set( 'meta_query', $query );
 	} // agent
 
-} // MDJM_Events_Query
+} // MDJM_Tickets_Query
