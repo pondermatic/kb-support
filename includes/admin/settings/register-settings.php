@@ -360,6 +360,13 @@ function kbs_get_registered_settings() {
 						'type'    => 'checkbox',
 						'std'     => '0'
 					),
+					'kb_hide_restricted' => array(
+						'id'      => 'kb_hide_restricted',
+						'name'    => sprintf( __( 'Hide Restricted %s', 'kb-support' ), kbs_get_kb_label_plural() ),
+						'desc'    => sprintf( __( 'Select to hide restricted %s when a user is not permitted to view', 'kb-support' ), kbs_get_kb_label_plural() ),
+						'type'    => 'checkbox',
+						'std'     => '0'
+					)
 				)
 			)
 		),
