@@ -135,7 +135,6 @@ jQuery(document).ready(function ($) {
 					file_frame.open();
 				});
 
-
 				// WP 3.5+ uploader
 				var file_frame;
 				window.formfield = '';
