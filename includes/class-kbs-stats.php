@@ -494,13 +494,13 @@ class KBS_Stats {
 	} // count_where
 
 	/**
-	 * Modifies the WHERE flag for ticket queries
+	 * Modifies the WHERE flag for KBS post queries
 	 *
 	 * @access	public
 	 * @since	1.0
 	 * @return	string
 	 */
-	public function tickets_where( $where = '' ) {
+	public function posts_where( $where = '' ) {
 
 		global $wpdb;
 
@@ -537,4 +537,4 @@ class KBS_Stats {
 		return $where;
 	}
 
-} // tickets_where
+} // posts_where
