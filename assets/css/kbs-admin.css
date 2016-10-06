@@ -74,20 +74,25 @@ a.kbs_ticket_form_data	{
 .kbs-reply { float: left; padding-right: 20px; }
 
 /* Side Metaboxes */
-#kbs-ticket-actions label {
+#kbs-ticket-actions label
+#kbs-kb-options label {
 	display: inline-block;
 	width: 60px;
 }
-#kbs-ticket-actions a {
+#kbs-ticket-actions a,
+#kbs-kb-options a {
 	display: inline-block;
 	width: 100px;
 }
-#kbs-ticket-actions input[type=submit] {
+#kbs-ticket-actions input[type=submit],
+#kbs-kb-options input[type=submit] {
 	float: right;
 	width: auto;
 }
 #kbs-ticket-actions input,
-#kbs-ticket-actions select {
+#kbs-ticket-actions select
+#kbs-kb-options input,
+#kbs-kb-options select {
 	width: 150px;
 }
 
