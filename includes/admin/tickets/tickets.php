@@ -200,7 +200,7 @@ function kb_tickets_post_column_sla( $ticket_id, $kbs_ticket )	{
  */
 function kbs_ticket_post_save( $post_id, $post, $update )	{	
 
-	if ( ! isset( $_POST['kbs_ticket_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['kbs_ticket_meta_box_nonce'], 'kbs_form' ) ) {
+	if ( ! isset( $_POST['kbs_ticket_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['kbs_ticket_meta_box_nonce'], 'kbs_ticket_meta_save' ) ) {
 		return;
 	}
 	
