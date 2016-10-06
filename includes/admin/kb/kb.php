@@ -78,9 +78,37 @@ function kbs_kb_post_save( $post_id, $post, $update )	{
 	// Remove the save post action to avoid loops
 	remove_action( 'save_post_kbs_kb', 'kbs_kb_post_save', 10, 3 );
 
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )	{
+		return;
+	}
+
+	if ( isset( $post->post_type ) && 'revision' == $post->post_type ) {
+		return;
+	}
+
+	$url = remove_query_arg( 'kbs-message' );
+
+	if (
+		! isset( $_POST['kbs_kb_meta_box_nonce'] )
+		|| ! wp_verify_nonce( $_POST['kbs_kb_meta_box_nonce'], 'kbs_kb_meta_save' )
+	)	{
+		return;
+	}
+
 	// Fire the before save action but only if this is not a new article creation (i.e $post->post_status == 'draft')
 	if ( $update === true )	{
 		do_action( 'kbs_kb_before_save', $post_id, $post, $update );
+	}
+
+	$fields = kbs_kb_metabox_fields();
+
+	foreach( $fields as $field )	{
+		if ( ! empty( $_POST[ $field ] ) ) {
+			$new_value = apply_filters( 'kbs_kb_metabox_save_' . $field, $_POST[ $field ] );
+			update_post_meta( $post_id, $field, $new_value );
+		} else {
+			delete_post_meta( $post_id, $field );
+		}
 	}
 
 	// Fire the after save action
