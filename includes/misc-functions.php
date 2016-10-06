@@ -271,14 +271,59 @@ function kbs_display_notice( $m )	{
  * Front end notices.
  *
  * @since	1.0
- * @param	str		$notice		The message key to display.
- * @return	str		Notice.
+ * @param	str		$notice			The message key to display.
+ * @param	bool	$notice_only	True to only return the message string, false to return class/notice array.
+ * @return	arr|str	Notice.
  */
-function kbs_get_notices( $notice = '' )	{
+function kbs_get_notices( $notice = '', $notice_only = false )	{
 	$notices = array(
 		'need_login' => array(
 			'class'  => 'info',
-			'notice' => sprintf( __( 'You must be logged in to create a support %s', 'kb-support' ), kbs_get_ticket_label_singular() )
+			'notice' => sprintf( __( 'You must be logged in to create a support %s.', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
+		),
+		'username_incorrect' => array(
+			'class'  => 'error',
+			'notice' => __( 'The username was not recognised.', 'kb-support' )
+		),
+		'password_incorrect' => array(
+			'class'  => 'error',
+			'notice' => __( 'An incorrect password was entered.', 'kb-support' )
+		),
+		'missing_registration_data' => array(
+			'class'  => 'error',
+			'notice' => __( 'All registration fields are mandatory.', 'kb-support' )
+		),
+		'could_not_register' => array(
+			'class'  => 'error',
+			'notice' => __( 'Unable to register your user account.', 'kb-support' )
+		),
+		'empty_username' => array(
+			'class'  => 'error',
+			'notice' => __( 'Please enter a username.', 'kb-support' )
+		),
+		'username_unavailable' => array(
+			'class'  => 'error',
+			'notice' => __( 'Your chosen username is unavailable.', 'kb-support' )
+		),
+		'username_invalid' => array(
+			'class'  => 'error',
+			'notice' => __( 'You entered an invalid username.', 'kb-support' )
+		),
+		'email_unavailable' => array(
+			'class'  => 'error',
+			'notice' => __( 'The email address you entered is already registered.', 'kb-support' )
+		),
+		'email_invalid' => array(
+			'class'  => 'error',
+			'notice' => __( 'You entered an invalid email address.', 'kb-support' )
+		),
+		'empty_password' => array(
+			'class'  => 'error',
+			'notice' => __( 'Please enter a password.', 'kb-support' )
+		),
+		'password_mismatch' => array(
+			'class'  => 'error',
+			'notice' => __( 'Passwords do not match.', 'kb-support' )
 		),
 		'ticket_submitted' => array(
 			'class'  => 'success',
@@ -305,7 +350,11 @@ function kbs_get_notices( $notice = '' )	{
 			return false;
 		}
 
-		return $notices[ $notice ];
+		if ( ! $notice_only )	{
+			return $notices[ $notice ];
+		} else	{
+			return $notices[ $notice ]['notice'];
+		}
 	}
 
 	return $notices;
