@@ -64,7 +64,20 @@ add_shortcode( 'kbs_register', 'kbs_register_form_shortcode' );
 function kbs_submit_form_shortcode( $atts ) {
 
 	if ( kbs_user_must_be_logged_in() && ! is_user_logged_in() )	{
-		return kbs_login_form( kbs_get_current_page_url() );
+		ob_start();
+		echo kbs_display_notice( 'need_login' );
+
+		$register_login = kbs_get_option( 'show_register_form', 'none' );
+
+		if ( 'both' == $register_login || 'login' == $register_login )	{
+			echo kbs_login_form( kbs_get_current_page_url() );
+		}
+
+		if ( 'both' == $register_login || 'registration' == $register_login )	{
+			echo kbs_register_form( kbs_get_current_page_url() );
+		}
+
+		return ob_get_clean();
 	}
 
 	extract( shortcode_atts( array(
