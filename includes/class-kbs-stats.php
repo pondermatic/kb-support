@@ -72,7 +72,6 @@ class KBS_Stats {
 	 */
 	public function __construct() {}
 
-
 	/**
 	 * Get the predefined date periods permitted
 	 *
@@ -82,16 +81,16 @@ class KBS_Stats {
 	 */
 	public function get_predefined_dates() {
 		$predefined = array(
-			'today'        => __( 'Today',        'easy-digital-downloads' ),
-			'yesterday'    => __( 'Yesterday',    'easy-digital-downloads' ),
-			'this_week'    => __( 'This Week',    'easy-digital-downloads' ),
-			'last_week'    => __( 'Last Week',    'easy-digital-downloads' ),
-			'this_month'   => __( 'This Month',   'easy-digital-downloads' ),
-			'last_month'   => __( 'Last Month',   'easy-digital-downloads' ),
-			'this_quarter' => __( 'This Quarter', 'easy-digital-downloads' ),
-			'last_quarter' => __( 'Last Quarter',  'easy-digital-downloads' ),
-			'this_year'    => __( 'This Year',    'easy-digital-downloads' ),
-			'last_year'    => __( 'Last Year',    'easy-digital-downloads' )
+			'today'        => __( 'Today',        'kb-support' ),
+			'yesterday'    => __( 'Yesterday',    'kb-support' ),
+			'this_week'    => __( 'This Week',    'kb-support' ),
+			'last_week'    => __( 'Last Week',    'kb-support' ),
+			'this_month'   => __( 'This Month',   'kb-support' ),
+			'last_month'   => __( 'Last Month',   'kb-support' ),
+			'this_quarter' => __( 'This Quarter', 'kb-support' ),
+			'last_quarter' => __( 'Last Quarter', 'kb-support' ),
+			'this_year'    => __( 'This Year',    'kb-support' ),
+			'last_year'    => __( 'Last Year',    'kb-support' )
 		);
 		return apply_filters( 'kbs_stats_predefined_dates', $predefined );
 	} // get_predefined_dates
@@ -436,7 +435,7 @@ class KBS_Stats {
 
 		} else {
 
-			return new WP_Error( 'invalid_date', __( 'Improper date provided.', 'easy-digital-downloads' ) );
+			return new WP_Error( 'invalid_date', __( 'Improper date provided.', 'kb-support' ) );
 
 		}
 

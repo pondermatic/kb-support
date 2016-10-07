@@ -997,7 +997,7 @@ class KBS_Ticket {
 	private function setup_email() {
 		$email = $this->get_meta( '_kbs_ticket_user_email', true );
 
-		if( empty( $email ) ) {
+		if ( empty( $email ) ) {
 			$email = KBS()->customers->get_column( 'email', $this->customer_id );
 		}
 

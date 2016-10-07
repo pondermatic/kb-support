@@ -25,7 +25,8 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function kbs_email_ticket_received( $ticket_id, $admin_notice = true ) {
 
-	$ticket_data = kbs_get_ticket_meta( $ticket_id );
+	$ticket       = new KBS_Ticket( $ticket_id );
+	$ticket_data  = $ticket->get_meta();
 
 	$from_name    = kbs_get_option( 'from_name', wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) );
 	$from_name    = apply_filters( 'kbs_ticket_from_name', $from_name, $ticket_id, $ticket_data );
@@ -33,7 +34,7 @@ function kbs_email_ticket_received( $ticket_id, $admin_notice = true ) {
 	$from_email   = kbs_get_option( 'from_email', get_bloginfo( 'admin_email' ) );
 	$from_email   = apply_filters( 'kbs_ticket_from_address', $from_email, $ticket_id, $ticket_data );
 
-	$to_email     = '';//kbs_get_ticket_user_email( $ticket_id );
+	$to_email     = $ticket->email;
 
 	$subject      = kbs_get_option( 'ticket_subject', sprintf( __( 'Support %s Details', 'kb-support' ), kbs_get_ticket_label_singular() ) );
 	$subject      = apply_filters( 'kbs_ticket_subject', wp_strip_all_tags( $subject ), $ticket_id );
@@ -69,17 +70,19 @@ function kbs_email_ticket_received( $ticket_id, $admin_notice = true ) {
  */
 function kbs_email_test_ticket_received() {
 
+	$single = kbs_get_ticket_label_singular();
+
 	$from_name   = kbs_get_option( 'from_name', wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) );
 	$from_name   = apply_filters( 'kbs_ticket_from_name', $from_name, 0, array() );
 
 	$from_email  = kbs_get_option( 'from_email', get_bloginfo( 'admin_email' ) );
 	$from_email  = apply_filters( 'kbs_test_ticket_from_address', $from_email, 0, array() );
 
-	$subject     = kbs_get_option( 'ticket_subject', __( 'Purchase Receipt', 'kb-support' ) );
+	$subject     = kbs_get_option( 'ticket_subject', sprintf( __( 'Support %s Submitted', 'kb-support' ), $single ) );
 	$subject     = apply_filters( 'kbs_ticket_subject', wp_strip_all_tags( $subject ), 0 );
 	$subject     = kbs_do_email_tags( $subject, 0 );
 
-	$heading     = kbs_get_option( 'purchase_heading', __( 'Purchase Receipt', 'kb-support' ) );
+	$heading     = kbs_get_option( 'ticket_heading', sprintf( __( 'Support %s Details', 'kb-support' ), $single ) );
 	$heading     = apply_filters( 'kbs_ticket_heading', $heading, 0, array() );
 
 	$attachments = apply_filters( 'kbs_ticket_attachments', array(), 0, array() );
@@ -110,19 +113,15 @@ function kbs_admin_email_notice( $ticket_id = 0, $ticket_data = array() ) {
 
 	$ticket_id = absint( $ticket_id );
 
-	if( empty( $ticket_id ) ) {
+	if ( empty( $ticket_id ) ) {
 		return;
 	}
 
-	/*if( ! kbs_get_payment_by( 'id', $ticket_id ) ) {
-		return;
-	}*/
-
 	$from_name   = kbs_get_option( 'from_name', wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) );
-	$from_name   = apply_filters( 'kbs_ticket_from_name', $from_name, $ticket_id, $ticket_data );
+	$from_name   = apply_filters( 'kbs_notification_ticket_from_name', $from_name, $ticket_id, $ticket_data );
 
 	$from_email  = kbs_get_option( 'from_email', get_bloginfo( 'admin_email' ) );
-	$from_email  = apply_filters( 'kbs_admin_ticket_from_address', $from_email, $ticket_id, $ticket_data );
+	$from_email  = apply_filters( 'kbs_notification_ticket_from_address', $from_email, $ticket_id, $ticket_data );
 
 	$subject     = kbs_get_option( 'ticket_notification_subject', sprintf( __( 'New %1Ss logged - Case #%1$s', 'kb-support' ), kbs_get_ticket_label_singular(), $ticket_id ) );
 	$subject     = apply_filters( 'kbs_admin_ticket_notification_subject', wp_strip_all_tags( $subject ), $ticket_id );
@@ -146,8 +145,8 @@ function kbs_admin_email_notice( $ticket_id = 0, $ticket_data = array() ) {
 
 	$emails->send( kbs_get_admin_notice_emails(), $subject, $message, $attachments );
 
-} // kbs_admin_ticket_notice
-//add_action( 'kbs_admin_ticket_notice', 'kbs_admin_email_notice', 10, 2 );
+} // kbs_admin_email_notice
+add_action( 'kbs_admin_ticket_notice', 'kbs_admin_email_notice', 10, 2 );
 
 /**
  * Retrieves the emails for which admin notifications are sent to (these can be
@@ -167,7 +166,7 @@ function kbs_get_admin_notice_emails() {
 /**
  * Checks whether admin ticket notices are disabled
  *
- * @since 1.5.2
+ * @since	1.0
  *
  * @param	int		$ticket_id
  * @return	mixed

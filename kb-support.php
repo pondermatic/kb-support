@@ -226,11 +226,12 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/files.php';
 		require_once KBS_PLUGIN_DIR . 'includes/formatting.php';
 		require_once KBS_PLUGIN_DIR . 'includes/scripts.php';
+		require_once KBS_PLUGIN_DIR . 'includes/emails/email-actions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/emails/class-kbs-emails.php';
 		require_once KBS_PLUGIN_DIR . 'includes/emails/class-kbs-email-tags.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-html-elements.php';
-		require_once KBS_PLUGIN_DIR . 'includes/emails/functions.php';
-		require_once KBS_PLUGIN_DIR . 'includes/emails/template.php';
+		require_once KBS_PLUGIN_DIR . 'includes/emails/email-functions.php';
+		require_once KBS_PLUGIN_DIR . 'includes/emails/email-template.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-form.php';
 		require_once KBS_PLUGIN_DIR . 'includes/form-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/misc-functions.php';

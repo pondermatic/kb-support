@@ -70,7 +70,7 @@ class KBS_DB_Customers extends KBS_DB  {
 			'email'          => '',
 			'name'           => '',
 			'ticket_ids'     => '',
-			'purchase_count' => 0,
+			'ticket_count'   => 0,
 			'date_created'   => date( 'Y-m-d H:i:s' ),
 		);
 	} // get_column_defaults
@@ -89,23 +89,23 @@ class KBS_DB_Customers extends KBS_DB  {
 
 		$args = wp_parse_args( $data, $defaults );
 
-		if( empty( $args['email'] ) ) {
+		if ( empty( $args['email'] ) ) {
 			return false;
 		}
 
-		if( ! empty( $args['ticket_ids'] ) && is_array( $args['ticket_ids'] ) ) {
+		if ( ! empty( $args['ticket_ids'] ) && is_array( $args['ticket_ids'] ) ) {
 			$args['ticket_ids'] = implode( ',', array_unique( array_values( $args['ticket_ids'] ) ) );
 		}
 
 		$customer = $this->get_customer_by( 'email', $args['email'] );
 
-		if( $customer ) {
+		if ( $customer ) {
 			// update an existing customer
 
 			// Update the ticket IDs attached to the customer
-			if( ! empty( $args['ticket_ids'] ) ) {
+			if ( ! empty( $args['ticket_ids'] ) ) {
 
-				if( empty( $customer->ticket_ids ) ) {
+				if ( empty( $customer->ticket_ids ) ) {
 
 					$customer->ticket_ids = $args['ticket_ids'];
 
@@ -138,7 +138,7 @@ class KBS_DB_Customers extends KBS_DB  {
 	 * Delete a customer
 	 *
 	 * NOTE: This should not be called directly as it does not make necessary changes to
-	 * the payment meta and logs. Use kbs_customer_delete() instead
+	 * the ticket meta and logs. Use kbs_customer_delete() instead
 	 *
 	 * @access	public
 	 * @since	1.0
@@ -242,7 +242,7 @@ class KBS_DB_Customers extends KBS_DB  {
 	} // increment_stats
 
 	/**
-	 * Decreases customer purchase stats
+	 * Decreases customer ticket stats
 	 *
 	 * @access	public
 	 * @since	1.0
@@ -255,7 +255,7 @@ class KBS_DB_Customers extends KBS_DB  {
 			return false;
 		}
 
-		$decreased_count = $customer->decrease_purchase_count();
+		$decreased_count = $customer->decrease_ticket_count();
 
 		return ( $decreased_count && $decreased_value ) ? true : false;
 

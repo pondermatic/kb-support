@@ -213,6 +213,9 @@ add_action( 'admin_init', 'kbs_register_settings' );
 */
 function kbs_get_registered_settings() {
 
+	$single = kbs_get_ticket_label_singular();
+	$plural = kbs_get_ticket_label_plural();
+
 	/**
 	 * 'Whitelisted' KBS settings, filters are provided for each settings
 	 * section to allow extensions and other plugins to add their own settings.
@@ -230,8 +233,8 @@ function kbs_get_registered_settings() {
 					),
 					'ticket_page'   => array(
 						'id'      => 'ticket_page',
-						'name'    => sprintf( __( '%s Page', 'kb-support' ), kbs_get_ticket_label_singular() ),
-						'desc'    => sprintf( __( 'This is the page where customers will submit their %s', 'kb-support' ), kbs_get_ticket_label_plural( true ) ),
+						'name'    => sprintf( __( '%s Page', 'kb-support' ), $single ),
+						'desc'    => sprintf( __( 'This is the page where customers will submit their %s', 'kb-support' ), strtolower( $plural ) ),
 						'type'    => 'select',
 						'options' => kbs_get_pages()
 					)
@@ -244,13 +247,27 @@ function kbs_get_registered_settings() {
 				'main'   => array(
 					'ticket_settings_header' => array(
 						'id'   => 'ticket_settings_header',
-						'name' => '<h3>' . sprintf( __( '%s Settings', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</h3>',
+						'name' => '<h3>' . sprintf( __( '%s Settings', 'kb-support' ), $single ) . '</h3>',
 						'type' => 'header'
+					),
+					'ticket_prefix' => array(
+						'id'      => 'ticket_prefix',
+						'name'    => sprintf( __( "Prefix for %s ID's", 'kb-support' ), $single ),
+						'desc'    => '',
+						'type'    => 'text',
+						'size'    => 'small'
+					),
+					'ticket_suffix' => array(
+						'id'      => 'ticket_suffix',
+						'name'    => sprintf( __( "Suffix for %s ID's", 'kb-support' ), $single ),
+						'desc'    => '',
+						'type'    => 'text',
+						'size'    => 'small'
 					),
 					'auto_assign_agent' => array(
 						'id'      => 'auto_assign_agent',
 						'name'    => __( 'Auto Assign on Access?', 'kb-support' ),
-						'desc'    => sprintf( __( 'If enabled, unassigned %1$s will be auto assigned to an agent when they access the %2$s. The %2$s status will also update to <code>open</code> if currently <code>new</code>', 'kb-support' ), kbs_get_ticket_label_plural( true ), kbs_get_ticket_label_singular( true ) ),
+						'desc'    => sprintf( __( 'If enabled, unassigned %1$s will be auto assigned to an agent when they access the %2$s. The %2$s status will also update to <code>open</code> if currently <code>new</code>', 'kb-support' ), strtolower( $plural ), strtolower( $single ) ),
 						'type'    => 'checkbox'
 					),
 					'admin_agents' => array(
@@ -270,7 +287,7 @@ function kbs_get_registered_settings() {
 					'file_uploads' => array(
 						'id'      => 'file_uploads',
 						'name'    => __( 'Allow File Uploads', 'kb-support' ),
-						'desc'    => sprintf( __( 'Maximum number of files that can be attached during %s creation or response.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+						'desc'    => sprintf( __( 'Maximum number of files that can be attached during %s creation or response.', 'kb-support' ), strtolower( $single ) ),
 						'type'    => 'number',
 						'size'    => 'small',
 						'max'     => '10',
@@ -279,7 +296,7 @@ function kbs_get_registered_settings() {
 					'logged_in_only' => array(
 						'id'      => 'logged_in_only',
 						'name'    => __( 'Disable Guest Submissions?', 'kb-support' ),
-						'desc'    => sprintf( __( 'Require that users be logged in to submit %s.', 'kb-support' ), kbs_get_ticket_label_plural( true ) ),
+						'desc'    => sprintf( __( 'Require that users be logged in to submit %s.', 'kb-support' ), strtolower( $plural ) ),
 						'type'    => 'checkbox',
 						'std'     => '1'
 					),
@@ -301,7 +318,7 @@ function kbs_get_registered_settings() {
 						'name' => __( 'Submit Label', 'kb-support' ),
 						'desc' => __( 'The label for the ticket form submit button.', 'kb-support' ),
 						'type' => 'text',
-						'std'  => sprintf( __( 'Submit %s', 'kb-support' ), kbs_get_ticket_label_singular() )
+						'std'  => sprintf( __( 'Submit %s', 'kb-support' ), $single )
 					),
 				),
 				'sla' => array(
@@ -382,14 +399,14 @@ function kbs_get_registered_settings() {
 					'email_template' => array(
 						'id'      => 'email_template',
 						'name'    => __( 'Email Template', 'kb-support' ),
-						'desc'    => sprintf( __( 'Choose a template. Click "Save Changes" then "Preview %s Received" to see the new template.', 'kb-support' ), kbs_get_ticket_label_singular() ),
+						'desc'    => sprintf( __( 'Choose a template. Click "Save Changes" then "Preview %s Received" to see the new template.', 'kb-support' ), $single ),
 						'type'    => 'select',
 						'options' => kbs_get_email_templates()
 					),
 					'email_logo' => array(
 						'id'   => 'email_logo',
 						'name' => __( 'Logo', 'kb-support' ),
-						'desc' => sprintf( __( 'Upload or choose a logo to be displayed at the top of the %s received emails. Displayed on HTML emails only.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+						'desc' => sprintf( __( 'Upload or choose a logo to be displayed at the top of the %s received emails. Displayed on HTML emails only.', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'upload'
 					),
 					'email_settings' => array(
@@ -399,44 +416,44 @@ function kbs_get_registered_settings() {
 						'type' => 'hook'
 					)
 				),
-				'ticket_received' => array(
-					'ticket_received_settings' => array(
-						'id'   => 'ticket_received_settings',
-						'name' => '<h3>' . sprintf( __( '%s Received', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</h3>',
+				'ticket_logged' => array(
+					'ticket_logged_settings' => array(
+						'id'   => 'ticket_logged_settings',
+						'name' => '<h3>' . sprintf( __( '%s Received', 'kb-support' ), $single ) . '</h3>',
 						'type' => 'header'
 					),
 					'from_name' => array(
 						'id'   => 'from_name',
 						'name' => __( 'From Name', 'kb-support' ),
-						'desc' => sprintf( __( 'The name %s received emails are said to come from. This should probably be your site name.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+						'desc' => sprintf( __( 'The name %s received emails are said to come from. This should probably be your site name.', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'text',
 						'std'  => get_bloginfo( 'name' )
 					),
 					'from_email' => array(
 						'id'   => 'from_email',
 						'name' => __( 'From Email', 'kb-support' ),
-						'desc' => sprintf( __( 'Email to send %s received email from. This will act as the "from" and "reply-to" address.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+						'desc' => sprintf( __( 'Email to send %s received email from. This will act as the "from" and "reply-to" address.', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'text',
 						'std'  => get_bloginfo( 'admin_email' )
 					),
-					'received_subject' => array(
-						'id'   => 'received_subject',
-						'name' => __( 'Received Email Subject', 'kb-support' ),
-						'desc' => sprintf( __( 'Enter the subject line for the %s received email', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+					'ticket_subject' => array(
+						'id'   => 'ticket_subject',
+						'name' => __( 'Email Subject', 'kb-support' ),
+						'desc' => sprintf( __( 'Enter the subject line for the %s logged email', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'text',
-						'std'  => sprintf( __( '%s Recieved', 'kb-support' ), kbs_get_ticket_label_singular() )
+						'std'  => sprintf( __( '%s Recieved', 'kb-support' ), $single )
 					),
-					'received_heading' => array(
-						'id'   => 'received_heading',
-						'name' => __( 'Received Email Heading', 'kb-support' ),
-						'desc' => sprintf( __( 'Enter the heading for the %s received email', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+					'ticket_heading' => array(
+						'id'   => 'ticket_heading',
+						'name' => __( 'Email Heading', 'kb-support' ),
+						'desc' => sprintf( __( 'Enter the heading for the %s logged email', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'text',
-						'std'  => sprintf( __( '%s Recieved', 'kb-support' ), kbs_get_ticket_label_singular() )
+						'std'  => sprintf( __( 'Support %s Details', 'kb-support' ), $single )
 					),
-					'received_content' => array(
-						'id'   => 'received_content',
-						'name' => sprintf( __( '%s Received', 'kb-support' ), kbs_get_ticket_label_singular() ),
-						'desc' => sprintf( __( 'Enter the text that is sent as a %1$s received email to users after submission of a %1$s. HTML is accepted.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+					'ticket_content' => array(
+						'id'   => 'ticket_content',
+						'name' => __( 'Content', 'kb-support' ),
+						'desc' => sprintf( __( 'Enter the text that is sent as a %1$s received email to users after submission of a %1$s. HTML is accepted.', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'rich_editor',
 						'std'  => __( "Dear", "kb-support" ) . " {name},\n\n" . __( "Thank you for logging your support ticket. Details of your ticket are displayed below.", "kb-support" ) . "\n\n" . '{ticket_details}'
 					),
@@ -444,34 +461,34 @@ function kbs_get_registered_settings() {
 				'ticket_notifications' => array(
 					'ticket_notification_settings' => array(
 						'id'   => 'ticket_notification_settings',
-						'name' => '<h3>' . sprintf( __( '%s Notifications', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</h3>',
+						'name' => '<h3>' . sprintf( __( '%s Notifications', 'kb-support' ), $single ) . '</h3>',
 						'type' => 'header'
 					),
 					'ticket_notification_subject' => array(
 						'id'   => 'ticket_notification_subject',
-						'name' => sprintf( __( '%s Notification Subject', 'kb-support' ), kbs_get_ticket_label_singular() ),
-						'desc' => sprintf( __( 'Enter the subject line for the %s notification email', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+						'name' => sprintf( __( '%s Notification Subject', 'kb-support' ), $single ),
+						'desc' => sprintf( __( 'Enter the subject line for the %s notification email', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'text',
-						'std'  => sprintf( __( 'New %s received - Case #{ticket_id}', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
+						'std'  => sprintf( __( 'New %s received - Case #{ticket_id}', 'kb-support' ), strtolower( $single ) )
 					),
 					'ticket_notification' => array(
 						'id'   => 'ticket_notification',
-						'name' => sprintf( __( '%s Notification', 'kb-support' ), kbs_get_ticket_label_singular() ) . "\n\n" . '{ticket_details}',
-						'desc' => sprintf( __( 'Enter the text that is sent as %s received notification email after submission of a case. HTML is accepted.' ), kbs_get_ticket_label_singular( true ) ),
+						'name' => sprintf( __( '%s Notification', 'kb-support' ), $single ) . "\n\n" . '{ticket_details}',
+						'desc' => sprintf( __( 'Enter the text that is sent as %s received notification email after submission of a case. HTML is accepted.' ), strtolower( $single ) ),
 						'type' => 'rich_editor',
 						'std'  => '',//kbs_get_default_ticket_notification_email()
 					),
 					'admin_notice_emails' => array(
 						'id'   => 'admin_notice_emails',
-						'name' => sprintf( __( '%s Notification Emails', 'kb-support' ), kbs_get_ticket_label_singular() ),
-						'desc' => sprintf( __( 'Enter the email address(es) that should receive a notification anytime a %s is logged, one per line', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+						'name' => sprintf( __( '%s Notification Emails', 'kb-support' ), $single ),
+						'desc' => sprintf( __( 'Enter the email address(es) that should receive a notification anytime a %s is logged, one per line', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'textarea',
 						'std'  => get_bloginfo( 'admin_email' )
 					),
 					'disable_admin_notices' => array(
 						'id'   => 'disable_admin_notices',
 						'name' => __( 'Disable Admin Notifications', 'kb-support' ),
-						'desc' => sprintf( __( 'Check this box if you do not want to receive %s notification emails.', 'kb-support' ), kbs_get_ticket_label_singular() ),
+						'desc' => sprintf( __( 'Check this box if you do not want to receive %s notification emails.', 'kb-support' ), $single ),
 						'type' => 'checkbox'
 					)
 				)
@@ -495,7 +512,7 @@ function kbs_get_registered_settings() {
 					'button_header' => array(
 						'id'   => 'button_header',
 						'name' => '<strong>' . __( 'Buttons', 'kb-support' ) . '</strong>',
-						'desc' => sprintf( __( 'Options for submit %s buttons', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+						'desc' => sprintf( __( 'Options for submit %s buttons', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'header'
 					),
 					'button_style' => array(
@@ -586,7 +603,7 @@ function kbs_get_registered_settings() {
 					'show_agree_to_terms' => array(
 						'id'   => 'show_agree_to_terms',
 						'name' => __( 'Agree to Terms', 'kb-support' ),
-						'desc' => sprintf( __( 'Check this to show an agree to terms on the submission page that users must agree to before submitting their %s.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+						'desc' => sprintf( __( 'Check this to show an agree to terms on the submission page that users must agree to before submitting their %s.', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'checkbox',
 						'std'  => false
 					),
@@ -605,7 +622,7 @@ function kbs_get_registered_settings() {
 						'type' => 'text',
 						'size' => 'regular',
 						'std'  => sprintf(
-							__( 'Terms and Conditions for Support %s', 'kb-support' ), kbs_get_ticket_label_plural()
+							__( 'Terms and Conditions for Support %s', 'kb-support' ), $plural
 						)
 					),
 					'agree_text' => array(
@@ -796,7 +813,7 @@ function kbs_get_registered_settings_sections() {
 		) ),
 		'emails'     => apply_filters( 'kbs_settings_sections_emails', array(
 			'main'                 => __( 'Emails', 'kb-support' ),
-			'ticket_received'      => sprintf( __( '%s Received', 'kb-support' ), kbs_get_ticket_label_singular() ),
+			'ticket_logged'      => sprintf( __( '%s Logged', 'kb-support' ), kbs_get_ticket_label_singular() ),
 			'ticket_notifications' => sprintf( __( '%s Notifications', 'kb-support' ), kbs_get_ticket_label_singular() )
 		) ),
 		'styles'     => apply_filters( 'kbs_settings_sections_styles', array(

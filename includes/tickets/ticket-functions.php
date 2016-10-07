@@ -548,6 +548,28 @@ function kbs_update_ticket_meta( $ticket_id, $data )	{
 } // kbs_update_ticket_meta
 
 /**
+ * Retrieve the ticket ID.
+ *
+ * @since	1.0
+ * @param	int|obj		$ticket		Post object, or ID.
+ * @return	str			The ticket ID with prefix and suffix
+ */
+function kbs_get_ticket_id( $ticket )	{
+	if ( is_int( $ticket ) )	{
+		$ticket_id = $ticket;
+	} else	{
+		$ticket_id = $ticket->ID;
+	}
+
+	$prefix = kbs_get_option( 'ticket_prefix', '' );
+	$suffix = kbs_get_option( 'ticket_suffix', '' );
+
+	$ticket_id = $prefix . $ticket_id . $suffix;
+
+	return apply_filters( 'kbs_ticket_id', $ticket_id );
+} // kbs_get_ticket_id
+
+/**
  * Retrieve the URL for a ticket.
  *
  * @since	1.0

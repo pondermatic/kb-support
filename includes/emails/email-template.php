@@ -32,7 +32,7 @@ function kbs_get_email_templates() {
  * @since	0.1
  *
  * @param	str		$message		Message with the template tags
- * @param	arr		$ticket_data	Payment Data
+ * @param	arr		$ticket_data	Ticket Data
  * @param	int		$ticket_id		Ticket ID
  * @param	bool	$admin_notice	Whether or not this is a notification email
  *
@@ -66,7 +66,7 @@ function kbs_email_template_preview() {
 
 	ob_start();
 	?>
-	<a href="<?php echo esc_url( add_query_arg( array( 'kbs_action' => 'preview_email' ), home_url() ) ); ?>" class="button-secondary" target="_blank" title="<?php printf( __( '%s Received Preview', 'kb-support' ), kbs_get_ticket_label_singular() ); ?> "><?php printf( __( 'Preview %s Recieved', 'kb-support' ), kbs_get_ticket_label_singular() ); ?></a>
+	<a href="<?php echo esc_url( add_query_arg( array( 'kbs_action' => 'preview_email' ), home_url() ) ); ?>" class="button-secondary" target="_blank" title="<?php printf( __( '%s Logged Preview', 'kb-support' ), kbs_get_ticket_label_singular() ); ?> "><?php printf( __( 'Preview %s Logged', 'kb-support' ), kbs_get_ticket_label_singular() ); ?></a>
 	<a href="<?php echo wp_nonce_url( add_query_arg( array( 'kbs_action' => 'send_test_email' ) ), 'kbs-test-email' ); ?>" class="button-secondary"><?php _e( 'Send Test Email', 'kb-support' ); ?></a>
 	<?php
 	echo ob_get_clean();
@@ -107,24 +107,24 @@ add_action( 'template_redirect', 'kbs_display_email_template_preview' );
  * Email Template Body
  *
  * @since	0.1
- * @param	int 	$ticket_id		Payment ID
- * @param	arr		$ticket_data	Payment Data
+ * @param	int 	$ticket_id		Ticket ID
+ * @param	arr		$ticket_data	Ticket Data
  * @return	str		$email_body		Body of the email
  */
 function kbs_get_email_body_content( $ticket_id = 0, $ticket_data = array() ) {
 	$default_email_body = __( "Dear", "kb-support" ) . " {name},\n\n";
 	$default_email_body .= sprintf( __( "Thank you for logging your %s.", "kb-support" ), kbs_get_ticket_label_singular( true ) ) . "\n\n";
-	$default_email_body .= "{ticket_detailst}\n\n";
+	$default_email_body .= "{ticket_details}\n\n";
 	$default_email_body .= "{sitename}";
 
-	$email = kbs_get_option( 'ticket_received', false );
+	$email = kbs_get_option( 'ticket_content', false );
 	$email = $email ? stripslashes( $email ) : $default_email_body;
 
 	$email_body = apply_filters( 'kbs_email_template_wpautop', true ) ? wpautop( $email ) : $email;
 
-	$email_body = apply_filters( 'kbs_ticket_received_' . KBS()->emails->get_template(), $email_body, $ticket_id, $ticket_data );
+	$email_body = apply_filters( 'kbs_ticket_content_' . KBS()->emails->get_template(), $email_body, $ticket_id, $ticket_data );
 
-	return apply_filters( 'kbs_ticket_received', $email_body, $ticket_id, $ticket_data );
+	return apply_filters( 'kbs_ticket_content', $email_body, $ticket_id, $ticket_data );
 } // kbs_get_email_body_content
 
 /**
@@ -138,10 +138,10 @@ function kbs_get_email_body_content( $ticket_id = 0, $ticket_data = array() ) {
 function kbs_get_ticket_notification_body_content( $ticket_id = 0, $ticket_data = array() ) {
 	$user_info = maybe_unserialize( $ticket_data['user_info'] );
 
-	if( isset( $user_info['id'] ) && $user_info['id'] > 0 ) {
+	if ( isset( $user_info['id'] ) && $user_info['id'] > 0 ) {
 		$user_data = get_userdata( $user_info['id'] );
 		$name = $user_data->display_name;
-	} elseif( isset( $user_info['first_name'] ) && isset( $user_info['last_name'] ) ) {
+	} elseif ( isset( $user_info['first_name'] ) && isset( $user_info['last_name'] ) ) {
 		$name = $user_info['first_name'] . ' ' . $user_info['last_name'];
 	} else {
 		$name = $email;

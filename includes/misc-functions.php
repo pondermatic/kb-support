@@ -98,14 +98,6 @@ function kbs_maybe_set_enctype() {
 } // kbs_file_uploads_are_enabled
 
 /**
- * Retrieves allowed file types
- *
- *
- *
- *
- */
-
-/**
  * Checks if Guest checkout is enabled
  *
  * @since	1.0
@@ -117,7 +109,7 @@ function kbs_no_guest_checkout() {
 } // kbs_no_guest_checkout
 
 /**
- * Checks if users can only purchase downloads when logged in
+ * Checks if users can only submit tickets when logged in
  *
  * @since	1.0
  * @return	bool	$ret	Whether or not the logged_in_only setting is set

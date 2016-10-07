@@ -159,7 +159,7 @@ class KBS_Customer {
 	 */
 	public function __get( $key ) {
 
-		if( method_exists( $this, 'get_' . $key ) ) {
+		if ( method_exists( $this, 'get_' . $key ) ) {
 
 			return call_user_func( array( $this, 'get_' . $key ) );
 
@@ -254,7 +254,7 @@ class KBS_Customer {
 		if ( $this->db->update( $this->id, $data ) ) {
 
 			$customer = $this->db->get_customer_by( 'id', $this->id );
-			$this->setup_customer( $customer);
+			$this->setup_customer( $customer );
 
 			$updated = true;
 		}
@@ -574,7 +574,7 @@ class KBS_Customer {
 
 		do_action( 'kbs_customer_pre_decrease_ticket_count', $count, $this->id );
 
-		if ( $this->update( array( 'purchase_count' => $new_total ) ) ) {
+		if ( $this->update( array( 'ticket_count' => $new_total ) ) ) {
 			$this->ticket_count = $new_total;
 		}
 
