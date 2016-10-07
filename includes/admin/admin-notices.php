@@ -152,6 +152,24 @@ function kbs_admin_messages() {
 		echo '</div>';
 	}
 
+	if ( isset( $_GET['kbs-message'] ) && 'customer_list_permission' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-ticket-customer-list-permission',
+			__( 'You do not have permission to view the customer list.', 'kb-support' ),
+			'error'
+		);
+	}
+
+	if ( isset( $_GET['kbs-message'] ) && 'invalid_customer_id' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-ticket-invalid-customer-id',
+			__( 'An invalid customer ID was provided.', 'kb-support' ),
+			'error'
+		);
+	}
+
 	settings_errors( 'kbs-notices' );
 }
 add_action( 'admin_notices', 'kbs_admin_messages' );

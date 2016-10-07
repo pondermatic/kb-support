@@ -22,6 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  */
 function kbs_options_page() {
 
+	if ( ! current_user_can( 'manage_ticket_settings' ) )	{
+		wp_die(
+			'<h1>' . __( 'Cheatin&#8217; uh?' ) . '</h1>' .
+			'<p>'  . __( 'You do not have permission to access this page.', 'kb-support' ) . '</p>',
+			403
+		);
+	}
+
 	$settings_tabs = kbs_get_settings_tabs();
 	$settings_tabs = empty( $settings_tabs) ? array() : $settings_tabs;
 	$active_tab    = isset( $_GET['tab'] ) && array_key_exists( $_GET['tab'], $settings_tabs ) ? $_GET['tab'] : 'general';

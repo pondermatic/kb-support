@@ -51,6 +51,16 @@ function kbs_get_customers()	{
 } // kbs_get_customers
 
 /**
+ * Counts the total number of customers.
+ *
+ * @since	1.0
+ * @return	int		The total number of customers.
+ */
+function kbs_count_total_customers( $args = array() ) {
+	return KBS()->customers->count( $args );
+} // kbs_count_total_customers
+
+/**
  * Retrieve all agents.
  *
  * @since	1.0

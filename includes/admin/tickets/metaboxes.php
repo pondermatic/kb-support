@@ -222,17 +222,20 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
             </div><!-- #minor-publishing-actions -->
             <div id="kbs-ticket-actions">
                 <p class="dashicons-before dashicons-post-status">&nbsp;&nbsp;<label for="post_status"><?php _e( 'Status:' ); ?></label>
-                    <?php echo KBS()->html->ticket_status_dropdown( 'post_status', $kbs_ticket->post_status ); ?></p>
+                    <?php echo KBS()->html->ticket_status_dropdown( 'post_status', $kbs_ticket->post_status ); ?>
+                </p>
 
                 <p class="dashicons-before dashicons-admin-users"></span>&nbsp;&nbsp;<label for="kbs_customer"><?php _e( 'Customer:', 'kb-support' ); ?></label>
-                <?php echo KBS()->html->customer_dropdown( array(
-                    'name'     => 'kbs_customer',
-                    'selected' => $kbs_ticket->customer_id,
-					'chosen'   => false
-                ) ); ?></p>
+					<?php echo KBS()->html->customer_dropdown( array(
+                        'name'     => 'kbs_customer',
+                        'selected' => $kbs_ticket->customer_id,
+                        'chosen'   => false
+                    ) ); ?>
+                </p>
                     
                 <p class="dashicons-before dashicons-businessman"></span>&nbsp;&nbsp;<label for="kbs_agent"><?php _e( 'Agent:', 'kb-support' ); ?></label>
-                <?php echo KBS()->html->agent_dropdown( 'kbs_agent', ( ! empty( $kbs_ticket->agent ) ? $kbs_ticket->agent : get_current_user_id() ) ); ?></p>
+					<?php echo KBS()->html->agent_dropdown( 'kbs_agent', ( ! empty( $kbs_ticket->agent ) ? $kbs_ticket->agent : get_current_user_id() ) ); ?>
+                </p>
                     
                 <?php do_action( 'kbs_ticket_metabox_after_agent', $ticket_id ); ?>
 
