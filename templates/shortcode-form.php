@@ -16,6 +16,13 @@ global $kbs_form;
             <fieldset id="kbs_ticket_form_fields">
                 <legend><?php esc_attr_e( get_the_title( $kbs_form->ID ) ); ?></legend>
 
+				<?php if( is_ssl() ) : ?>
+                    <div id="kbs_secure_site_wrapper">
+                        <span class="padlock"></span>
+                        <span><?php _e( 'This form is secured and encrypted via SSL', 'kb-support' ); ?></span>
+                    </div>
+                <?php endif; ?>
+
                 <?php foreach( $kbs_form->fields as $field ) : ?>
 
 					<?php $label_class = ''; ?>
