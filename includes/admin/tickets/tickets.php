@@ -89,7 +89,7 @@ add_action( 'manage_kbs_ticket_posts_custom_column' , 'kbs_set_kbs_ticket_column
 function kb_tickets_post_column_id( $ticket_id, $kbs_ticket )	{
 	do_action( 'kb_pre_tickets_column_id', $kbs_ticket );
 
-	$output = '<a href="' . get_edit_post_link( $ticket_id ) . '">#' . $ticket_id . '</a>';
+	$output = '<a href="' . get_edit_post_link( $ticket_id ) . '">' . kbs_get_ticket_id( $ticket_id ) . '</a>';
 	$output .= '<br />';
 	$output .= get_post_status_object( $kbs_ticket->post_status )->label;
 
