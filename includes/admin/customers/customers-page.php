@@ -22,9 +22,10 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	void
 */
 function kbs_customers_page() {
-	$default_views = kbs_customer_views();
+	$default_views  = kbs_customer_views();
 	$requested_view = isset( $_GET['view'] ) ? sanitize_text_field( $_GET['view'] ) : 'customers';
-	if ( array_key_exists( $requested_view, $default_views ) && function_exists( $default_views[$requested_view] ) ) {
+
+	if ( array_key_exists( $requested_view, $default_views ) && function_exists( $default_views[ $requested_view ] ) ) {
 		kbs_render_customer_view( $requested_view, $default_views );
 	} else {
 		kbs_customers_list();
