@@ -249,6 +249,8 @@ function kbs_get_ticket_statuses()	{
 		$statuses[ $ticket_status->name ] = esc_html( $ticket_status->label );
 	}
 
+	$statuses = apply_filters( 'kbs_ticket_statuses', $statuses );
+
 	return $statuses;
 } // kbs_get_ticket_statuses
 
@@ -264,6 +266,37 @@ function kbs_get_ticket_status_keys() {
 
 	return array_values( $statuses );
 } // kbs_get_ticket_status_keys
+
+/**
+ * Retrieves keys for active ticket statuses.
+ *
+ * @since	1.0
+ * @return	arr		Active ticket statuses
+ */
+function kbs_get_active_ticket_status_keys()	{
+	$statuses = kbs_get_ticket_status_keys();
+	$inactive = kbs_get_inactive_ticket_statuses();
+
+	foreach( $inactive as $status )	{
+		if ( in_array( $status, $statuses ) )	{
+			unset( $statuses[ $status ] );
+		}
+	}
+
+	return $statuses;
+} // kbs_get_active_ticket_status_keys
+
+/**
+ * Retrieve inactive ticket statuses.
+ *
+ * @since	1.0
+ * @return	arr		Array of inactive ticket statuses
+ */
+function kbs_get_inactive_ticket_statuses()	{
+	$inactive = array( 'closed' );
+
+	return apply_filters( 'kbs_inactive_ticket_statuses', $inactive );
+} // kbs_get_inactive_ticket_statuses
 
 /**
  * Retrieve the possible sources for logging a ticket.
