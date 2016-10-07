@@ -40,6 +40,58 @@ function kbs_user_can_submit( $form = 0 )	{
 } // kbs_user_can_submit
 
 /**
+ * Determine if the current page is a ticket submission page.
+ *
+ * @since	1.0
+ * @return	bool	True if submission page, or false.
+ */
+function kbs_is_submission_form()	{
+	$is_submission = is_page( kbs_get_option( 'submission_page' ) );
+
+	if ( ! $is_submission )	{
+		global $post;
+		$is_submission = has_shortcode( $post->post_content, 'kbs_submit' );
+	}
+
+	return apply_filters( 'kbs_is_submission_form', $is_submission );
+} // kbs_is_submission_form
+
+/**
+ * Determines if secure ticket submission pages are enforced.
+ *
+ * @since	1.0
+ * @return	bool	True if enforce SSL is enabled, false otherwise
+ */
+function kbs_is_ssl_enforced() {
+	$ssl_enforced = kbs_get_option( 'enforce_ssl', false );
+	return (bool) apply_filters( 'kbs_is_ssl_enforced', $ssl_enforced );
+} // kbs_is_ssl_enforced
+
+/**
+ * Handle redirections for SSL enforced ticket submissions.
+ *
+ * @since	1.0
+ * @return	void
+ */
+function kbs_enforced_form_ssl_redirect_handler() {
+	$submission_form = kbs_is_submission_form();
+
+	if ( ! kbs_is_ssl_enforced() || ! $submission_form || is_admin() || is_ssl() ) {
+		return;
+	}
+
+	if ( $submission_form && false !== strpos( kbs_get_current_page_url(), 'https://' ) ) {
+		return;
+	}
+
+	$uri = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+
+	wp_safe_redirect( $uri );
+	exit;
+} // kbs_enforced_form_ssl_redirect_handler
+add_action( 'template_redirect', 'kbs_enforced_form_ssl_redirect_handler' );
+
+/**
  * Retrieve all forms.
  *
  * @since	1.0

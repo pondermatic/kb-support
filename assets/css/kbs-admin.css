@@ -82,7 +82,7 @@ a.kbs_ticket_form_data	{
 .kbs-reply { float: left; padding-right: 20px; }
 
 /* Side Metaboxes */
-#kbs-ticket-actions label
+#kbs-ticket-actions label,
 #kbs-kb-options label {
 	display: inline-block;
 	width: 60px;

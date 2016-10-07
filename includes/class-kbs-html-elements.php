@@ -206,7 +206,7 @@ class KBS_HTML_Elements {
 			$options[0] = __( 'No customer attached', 'kb-support' );
 
 			foreach ( $customers as $customer ) {
-				$options[ absint( $customer->id ) ] = esc_html( $customer->name . ' (' . $customer->email . ')' );
+				$options[ absint( $customer->id ) ] = esc_html( $customer->name );
 			}
 		} else {
 			$options[0] = __( 'No customers found', 'kb-support' );
@@ -221,7 +221,7 @@ class KBS_HTML_Elements {
 				$customer = new KBS_Customer( $args['selected'] );
 
 				if ( $customer ) {
-					$options[ absint( $args['selected'] ) ] = esc_html( $customer->name . ' (' . $customer->email . ')' );
+					$options[ absint( $args['selected'] ) ] = esc_html( $customer->name );
 				}
 
 			}

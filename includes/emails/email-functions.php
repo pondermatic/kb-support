@@ -141,7 +141,7 @@ function kbs_admin_email_notice( $ticket_id = 0, $ticket_data = array() ) {
 	$emails->__set( 'from_name', $from_name );
 	$emails->__set( 'from_email', $from_email );
 	$emails->__set( 'headers', $headers );
-	$emails->__set( 'heading', __( 'New Sale!', 'kb-support' ) );
+	$emails->__set( 'heading', sprintf( __( 'New %s Received', 'kb-support' ), kbs_get_ticket_label_singular() ) );
 
 	$emails->send( kbs_get_admin_notice_emails(), $subject, $message, $attachments );
 

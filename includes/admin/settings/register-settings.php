@@ -231,8 +231,8 @@ function kbs_get_registered_settings() {
 						'desc' => '',
 						'type' => 'header'
 					),
-					'ticket_page'   => array(
-						'id'      => 'ticket_page',
+					'submission_page'   => array(
+						'id'      => 'submission_page',
 						'name'    => sprintf( __( '%s Page', 'kb-support' ), $single ),
 						'desc'    => sprintf( __( 'This is the page where customers will submit their %s', 'kb-support' ), strtolower( $plural ) ),
 						'type'    => 'select',
@@ -292,6 +292,12 @@ function kbs_get_registered_settings() {
 						'size'    => 'small',
 						'max'     => '10',
 						'std'     => '0'
+					),
+					'enforce_ssl' => array(
+						'id'   => 'enforce_ssl',
+						'name' => __( 'Enforce SSL for Submissions?', 'kb-support' ),
+						'desc' => __( 'Check this to force users to be redirected to the secure ticket submission page. You must have an SSL certificate installed to use this option.', 'kb-support' ),
+						'type' => 'checkbox',
 					),
 					'logged_in_only' => array(
 						'id'      => 'logged_in_only',
