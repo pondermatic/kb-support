@@ -346,3 +346,113 @@ function kbs_ajax_validate_form_submission()	{
 } // kbs_ajax_validate_form_submission
 add_action( 'wp_ajax_kbs_validate_ticket_form', 'kbs_ajax_validate_form_submission' );
 add_action( 'wp_ajax_nopriv_kbs_validate_ticket_form', 'kbs_ajax_validate_form_submission' );
+
+/**
+ * Adds a new customer.
+ *
+ * @since	1.0
+ * @return	void
+ */
+function kbs_ajax_add_customer()	{
+
+	if ( empty( $_POST['customer_name'] ) )	{
+		wp_send_json( array(
+			'error'   => true,
+			'message' => __( 'Please enter a customer name.', 'kb-support' )
+		) );
+	}
+
+	if ( ! is_email( $_POST['customer_email'] ) )	{
+		wp_send_json( array(
+			'error'   => true,
+			'message' => __( 'Invalid email address.', 'kb-support' )
+		) );
+	}
+
+	// If a WP user exists with this email, link the customer account
+	$user_id   = 0;
+	$user_data = get_user_by( 'email', $_POST['customer_email'] );
+	if ( ! empty( $user_data ) )	{
+		$user_id = $user_data->ID;
+	}
+
+	$customer      = new stdClass;
+	$customer_data = array(
+		'name'    => strip_tags( stripslashes( $_POST['customer_name'] ) ),
+		'email'   => $_POST['customer_email'],
+		'user_id' => $user_id
+	);
+
+	$customer_data = apply_filters( 'kbs_add_customer_info', $customer_data );
+	$customer_data = array_map( 'sanitize_text_field', $customer_data );
+
+	$customer = new KBS_Customer( $customer_data['email'] );
+
+	if ( ! empty( $customer->id ) ) {
+		wp_send_json( array(
+			'error'   => true,
+			'message' => sprintf(
+				__( 'Customer email address already exists for customer #%s &ndash; %s.', 'kb-support' ), $customer->id, $customer->name )
+		) );
+	}
+
+	$customer->create( $customer_data );
+
+	if ( empty( $customer->id ) )	{
+		wp_send_json( array(
+			'error'    => true,
+			'message'  => __( 'Could not create customer.', 'kb-support' )
+		) );
+	}
+
+	wp_send_json( array(
+		'error'       => false,
+		'redirect' => admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-customers&view=userdata&id=' . $customer->id . '&kbs-message=customer_created' )
+	) );
+
+} // kbs_ajax_add_customer
+add_action( 'wp_ajax_kbs_add_customer', 'kbs_ajax_add_customer' );
+
+/**
+ * Searches for users via ajax and returns a list of results.
+ *
+ * @since	1.0
+ * @return	void
+ */
+function kbs_ajax_search_users()	{
+
+	if( current_user_can( 'manage_ticket_settings' ) ) {
+
+		$search_query = trim( $_POST['user_name'] );
+		$exclude      = trim( $_POST['exclude'] );
+
+		$get_users_args = array(
+			'number' => 9999,
+			'search' => $search_query . '*'
+		);
+
+		if ( ! empty( $exclude ) ) {
+			$exclude_array = explode( ',', $exclude );
+			$get_users_args['exclude'] = $exclude_array;
+		}
+
+		$get_users_args = apply_filters( 'kbs_search_users_args', $get_users_args );
+
+		$found_users = apply_filters( 'kbs_ajax_found_users', get_users( $get_users_args ), $search_query );
+
+		$user_list = '<ul>';
+		if( $found_users ) {
+			foreach( $found_users as $user ) {
+				$user_list .= '<li><a href="#" data-userid="' . esc_attr( $user->ID ) . '" data-login="' . esc_attr( $user->user_login ) . '">' . esc_html( $user->user_login ) . '</a></li>';
+			}
+		} else {
+			$user_list .= '<li>' . __( 'No users found', 'kb-support' ) . '</li>';
+		}
+		$user_list .= '</ul>';
+
+		echo json_encode( array( 'results' => $user_list ) );
+
+	}
+	die();
+} // kbs_ajax_search_users
+add_action( 'wp_ajax_kbs_search_users', 'kbs_ajax_search_users' );

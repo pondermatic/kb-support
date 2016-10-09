@@ -152,10 +152,19 @@ function kbs_admin_messages() {
 		echo '</div>';
 	}
 
+	if ( isset( $_GET['kbs-message'] ) && 'customer_created' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-customer-added',
+			__( 'Customer added successfully.', 'kb-support' ),
+			'updated'
+		);
+	}
+
 	if ( isset( $_GET['kbs-message'] ) && 'customer_list_permission' == $_GET['kbs-message'] )	{
 		add_settings_error(
 			'kbs-notices',
-			'kbs-ticket-customer-list-permission',
+			'kbs-customer-list-permission',
 			__( 'You do not have permission to view the customer list.', 'kb-support' ),
 			'error'
 		);
@@ -164,8 +173,107 @@ function kbs_admin_messages() {
 	if ( isset( $_GET['kbs-message'] ) && 'invalid_customer_id' == $_GET['kbs-message'] )	{
 		add_settings_error(
 			'kbs-notices',
-			'kbs-ticket-invalid-customer-id',
+			'kbs-invalid-customer-id',
 			__( 'An invalid customer ID was provided.', 'kb-support' ),
+			'error'
+		);
+	}
+
+	if ( isset( $_GET['kbs-message'] ) && 'email_added' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-customer-email-added',
+			__( 'Email address added.', 'kb-support' ),
+			'updated'
+		);
+	}
+
+	if ( isset( $_GET['kbs-message'] ) && 'email_removed' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-customer-email-removed',
+			__( 'Email address removed.', 'kb-support' ),
+			'updated'
+		);
+	}
+
+	if ( isset( $_GET['kbs-message'] ) && 'email_remove_failed' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-customer-email-remove-failed',
+			__( 'Email address could not be removed.', 'kb-support' ),
+			'error'
+		);
+	}
+
+	if ( isset( $_GET['kbs-message'] ) && 'primary_email_updated' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-customer-email-primary-updated',
+			__( 'Primary email address updated.', 'kb-support' ),
+			'updated'
+		);
+	}
+
+	if ( isset( $_GET['kbs-message'] ) && 'primary_email_failed' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-customer-email-primary-remove-failed',
+			__( 'Primary email address could not be updated.', 'kb-support' ),
+			'error'
+		);
+	}
+
+	if ( isset( $_GET['kbs-message'] ) && 'customer_delete_no_confirm' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-customer-delete-no-confirm',
+			__( 'Please confirm you wish to delete this customer.', 'kb-support' ),
+			'error'
+		);
+	}
+
+	if ( isset( $_GET['kbs-message'] ) && 'customer_deleted' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-customer-deleted',
+			__( 'Customer deleted.', 'kb-support' ),
+			'updated'
+		);
+	}
+
+	if ( isset( $_GET['kbs-message'] ) && 'kbs_customer_delete_failed' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-customer-deleted-failed',
+			__( 'Could not delete customer.', 'kb-support' ),
+			'error'
+		);
+	}
+
+	if ( isset( $_GET['kbs-message'] ) && 'kbs_customer_delete_invalid_id' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-customer-delete-invalid-id',
+			__( 'A customer with the specified ID could not be found.', 'kb-support' ),
+			'error'
+		);
+	}
+
+	if ( isset( $_GET['kbs-message'] ) && 'disconnect_user' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-customer-disconnect-user',
+			__( 'Customer disconnected from user ID.', 'kb-support' ),
+			'updated'
+		);
+	}
+
+	if ( isset( $_GET['kbs-message'] ) && 'disconnect_user_fail' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-customer-disconnect-user-failed',
+			__( 'Could not disconnect customer from user ID.', 'kb-support' ),
 			'error'
 		);
 	}

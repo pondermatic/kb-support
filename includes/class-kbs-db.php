@@ -7,6 +7,8 @@ if ( ! defined( 'ABSPATH' ) )
 /**
  * KBS_DB base class
  *
+ * Largely taken from Easy Digital Downloads.
+ *
  * @package     KBS
  * @subpackage  Classes/KBS_DB
  * @copyright   Copyright (c) 2016, Mike Howard
@@ -174,11 +176,11 @@ abstract class KBS_DB {
 		// Row ID must be positive integer
 		$row_id = absint( $row_id );
 
-		if( empty( $row_id ) ) {
+		if ( empty( $row_id ) ) {
 			return false;
 		}
 
-		if( empty( $where ) ) {
+		if ( empty( $where ) ) {
 			$where = $this->primary_key;
 		}
 

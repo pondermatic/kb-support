@@ -4,6 +4,8 @@
  *
  * This class is for interacting with the customers' database table
  *
+ * Largely taken from Easy Digital Downloads.
+ *
  * @package     KBS
  * @subpackage  Classes/DB Customers
  * @copyright   Copyright (c) 2016, Mike Howard
@@ -54,6 +56,7 @@ class KBS_DB_Customers extends KBS_DB  {
 			'email'        => '%s',
 			'ticket_ids'   => '%s',
 			'ticket_count' => '%d',
+			'notes'        => '%s',
 			'date_created' => '%s',
 		);
 	} // get_columns
@@ -71,6 +74,7 @@ class KBS_DB_Customers extends KBS_DB  {
 			'name'           => '',
 			'ticket_ids'     => '',
 			'ticket_count'   => 0,
+			'notes'          => '',
 			'date_created'   => date( 'Y-m-d H:i:s' ),
 		);
 	} // get_column_defaults
@@ -88,9 +92,18 @@ class KBS_DB_Customers extends KBS_DB  {
 		);
 
 		$args = wp_parse_args( $data, $defaults );
+		$meta = array();
 
 		if ( empty( $args['email'] ) ) {
 			return false;
+		}
+
+		// Check for data that needs to be stored as meta.
+		foreach ( $args as $key => $value )	{
+			if ( ! array_key_exists( $key, $this->get_columns() ) )	{
+				$meta[ $key ] = $value;
+				unset( $args[ $key ] );
+			}
 		}
 
 		if ( ! empty( $args['ticket_ids'] ) && is_array( $args['ticket_ids'] ) ) {
@@ -122,13 +135,27 @@ class KBS_DB_Customers extends KBS_DB  {
 
 			}
 
-			$this->update( $customer->id, $args );
+			if ( $this->update( $customer->id, $args ) )	{
+
+				foreach( $meta as $key => $value )	{
+					KBS()->customer_meta->update_meta( $customer->id, $key, $value );
+				}
+
+			}
 
 			return $customer->id;
 
 		} else {
 
-			return $this->insert( $args, 'customer' );
+			$return = $this->insert( $args, 'customer' );
+
+			if ( $return )	{
+				foreach( $meta as $key => $value )	{
+					KBS()->customer_meta->update_meta( $return, $key, $value );
+				}
+			}
+
+			return $return;
 
 		}
 
@@ -367,12 +394,12 @@ class KBS_DB_Customers extends KBS_DB  {
 		if ( ! $customer = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $this->table_name WHERE $db_field = %s LIMIT 1", $value ) ) ) {
 
 			// Look for customer from an additional email
-			if( 'email' === $field ) {
+			if ( 'email' === $field ) {
 
 				$meta_table  = KBS()->customer_meta->table_name;
 				$customer_id = $wpdb->get_var( $wpdb->prepare( "SELECT customer_id FROM $meta_table WHERE meta_key = 'additional_email' AND meta_value = '%s' LIMIT 1", $value ) );
 
-				if( ! empty( $customer_id ) ) {
+				if ( ! empty( $customer_id ) ) {
 					return $this->get( $customer_id );
 				}
 

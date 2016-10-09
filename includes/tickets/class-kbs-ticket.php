@@ -328,11 +328,11 @@ class KBS_Ticket {
 
 		$ticket = get_post( $ticket_id );
 
-		if( ! $ticket || is_wp_error( $ticket ) ) {
+		if ( ! $ticket || is_wp_error( $ticket ) ) {
 			return false;
 		}
 
-		if( 'kbs_ticket' !== $ticket->post_type ) {
+		if ( 'kbs_ticket' !== $ticket->post_type ) {
 			return false;
 		}
 
@@ -356,7 +356,7 @@ class KBS_Ticket {
 		$this->post_status     = $this->status;
 
 		$all_ticket_statuses   = kbs_get_ticket_statuses();
-		$this->status_nicename = array_key_exists( $this->status, $all_ticket_statuses ) ? $all_ticket_statuses[ $this->status ] : ucfirst( $this->status );
+		$this->status_nicename = array_key_exists( $this->post_status, $all_ticket_statuses ) ? $all_ticket_statuses[ $this->status ] : ucfirst( $this->status );
 
 		// Content & Replies
 		$this->ticket_title    = $ticket->post_title;
@@ -422,7 +422,9 @@ class KBS_Ticket {
 				'id'         => $this->user_id,
 				'email'      => $this->email,
 				'first_name' => $this->first_name,
-				'last_name'  => $this->last_name
+				'last_name'  => $this->last_name,
+				'primary_phone' => isset( $this->user_info['primary_phone'] ) ? $this->user_info['primary_phone'] : '',
+				'additional_phone' => isset( $this->user_info['additional_phone'] ) ? $this->user_info['additional_phone'] : '',
 			),
 			'sla'          => $this->sla,
 			'status'       => $this->status,
@@ -455,7 +457,7 @@ class KBS_Ticket {
 				$customer = new KBS_Customer( get_current_user_id(), true );
 
 				// Customer is logged in but used a different email to log ticket with so assign to their customer record.
-				if( ! empty( $customer->id ) && $this->email != $customer->email ) {
+				if ( ! empty( $customer->id ) && $this->email != $customer->email ) {
 					$customer->add_email( $this->email );
 				}
 
@@ -468,15 +470,16 @@ class KBS_Ticket {
 			if ( empty( $customer->id ) ) {
 
 				$customer_data = array(
-					'name'        => $this->first_name . ' ' . $this->last_name,
-					'email'       => $this->email,
-					'user_id'     => $this->user_id,
+					'name'          => $this->first_name . ' ' . $this->last_name,
+					'email'         => $this->email,
+					'user_id'       => $this->user_id,
+					'primary_phone' => isset( $this->user_info['primary_phone'] ) ? $this->user_info['primary_phone'] : '',
+					'additional_phone' => isset( $this->user_info['additional_phone'] ) ? $this->user_info['additional_phone'] : ''
 				);
 
 				$customer->create( $customer_data );
 
 			}
-
 
 			$this->customer_id            = $customer->id;
 			$this->pending['customer_id'] = $this->customer_id;
@@ -698,6 +701,8 @@ class KBS_Ticket {
 				case 'closed':
 					$this->process_closed();
 					break;
+				default:
+					do_action( 'kbs_ticket_status_' . $status );
 			}
 
 			do_action( 'kbs_update_ticket_status', $this->ID, $status, $old_status );
@@ -707,55 +712,6 @@ class KBS_Ticket {
 		return $updated;
 
 	} // update_status
-
-	/**
-	 * Creates a ticket
-	 *
-	 * @since 	1.0
-	 * @param 	arr		$data Array of attributes for a ticket. See $defaults aswell as wp_insert_post.
-	 * @param 	arr		$meta Array of attributes for a ticket's meta data. See $default_meta.
-	 * @return	mixed	false if data isn't passed and class not instantiated for creation, or New Ticket ID
-	 */
-	public function create( $data = array(), $meta = array() ) {
-
-		if ( $this->id != 0 ) {
-			return false;
-		}
-
-		add_action( 'save_post_kbs_ticket', 'kbs_ticket_post_save', 10, 3 );
-
-		$defaults = array(
-			'post_type'    => 'kbs_ticket',
-			'post_author'  => is_user_logged_in() ? get_current_user_id() : 1,
-			'post_content' => '',
-			'post_status'  => 'new',
-			'post_title'   => sprintf( __( 'New %s', 'kb-support' ), kbs_get_ticket_label_singular() )
-		);
-		
-		$default_meta = array(
-			'__agent'              => 0,
-			'__target_sla_respond' => kbs_calculate_sla_target_response(),
-			'__target_sla_resolve' => kbs_calculate_sla_target_resolution(),
-			'__source'             => 1
-		);
-
-		$data = wp_parse_args( $data, $defaults );
-		$meta = wp_parse_args( $meta, $default_meta );
-		
-		$data['meta_input'] = array( '_ticket_data' => $meta );
-
-		do_action( 'kbs_pre_create_ticket', $data, $meta );		
-
-		$id	 = wp_insert_post( $data, true );
-		$ticket = WP_Post::get_instance( $id );
-
-		do_action( 'kbs_post_create_ticket', $id, $data );
-		
-		add_action( 'save_post_kbs_ticket', 'kbs_ticket_post_save', 10, 3 );
-
-		return $this->setup_ticket( $ticket );
-
-	} // create
 
 	/**
 	 * Retrieve the ID
@@ -1020,7 +976,7 @@ class KBS_Ticket {
 		$user_info    = wp_parse_args( $user_info, $defaults );
 
 		// Ensure email index is in the old user info array
-		if( empty( $user_info['email'] ) ) {
+		if ( empty( $user_info['email'] ) ) {
 			$user_info['email'] = $this->email;
 		}
 
@@ -1031,9 +987,11 @@ class KBS_Ticket {
 			if ( $customer->id > 0 ) {
 				$name = explode( ' ', $customer->name, 2 );
 				$user_info = array(
-					'first_name' => $name[0],
-					'last_name'  => $name[1],
-					'email'      => $customer->email
+					'first_name'       => $name[0],
+					'last_name'        => $name[1],
+					'email'            => $customer->email,
+					'primary_phone'    => $customer->primary_phone,
+					'additional_phone' => $customer->additional_phone
 				);
 			}
 		} else {
@@ -1062,6 +1020,15 @@ class KBS_Ticket {
 						case 'email':
 							$user_info[ $key ] = $customer->email;
 							break;
+
+						case 'primary_phone':
+							$user_info[ $key ] = $customer->primary_phone;
+							break;
+
+						case 'additional_phone':
+							$user_info[ $key ] = $customer->additional_phone;
+							break;
+
 					}
 				}
 			}

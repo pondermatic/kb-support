@@ -59,10 +59,9 @@ function kbs_admin_action_field( $action, $echo = true )	{
 	
 	$input = '<input type="hidden" name="' . $name . '" id="' . $name . '" value="' . $action . '" />';
 	
-	if( ! empty( $echo ) )	{
+	if ( ! empty( $echo ) )	{
 		echo apply_filters( 'kbs-action_field', $input, $action );
-	}
-	else	{
+	} else	{
 		return apply_filters( 'kbs-action_field', $input, $action );
 	}
 	

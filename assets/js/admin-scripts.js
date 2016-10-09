@@ -517,6 +517,255 @@ jQuery(document).ready(function ($) {
 	}
 	KBS_Forms.init();
 
+	/**
+	 * Customer management screen JS
+	 */
+	var KBS_Customer = {
+		vars: {
+			customer_wrap_editable:  $( '.kbs-customer-wrapper .editable' ),
+			customer_wrap_edit_item: $( '.kbs-customer-wrapper .edit-item' ),
+			user_id: $('input[name="customerinfo[user_id]"]'),
+			note: $( '#customer-note' ),
+		},
+		init : function() {
+			this.add_customer();
+			this.edit_customer();
+			this.cancel_edit();
+			this.add_email();
+			this.user_search();
+			this.remove_user();
+			this.add_note();
+			this.delete_checked();
+		},
+		add_customer: function() {
+			$( document.body ).on( 'click', '#kbs-add-customer-save', function(e) {
+				e.preventDefault();
+				var button  = $(this);
+				var wrapper = button.parent();
+
+				var customer_name     = $('#customer-name').val();
+				var customer_email    = $('#customer-email').val();
+				var nonce             = $('add_customer_nonce').val();
+
+				var postData = {
+					action             : 'kbs_add_customer',
+					customer_name      : customer_name,
+					customer_email     : customer_email,
+					_wpnonce           : nonce
+				};
+
+				$.ajax({
+					type: "POST",
+					dataType: "json",
+					data: postData,
+					url: ajaxurl,
+					beforeSend: function()	{
+						$('.notice-wrap').html('')
+						wrapper.find('.spinner').css('visibility', 'visible');
+						button.attr('disabled', true);
+					},
+					success: function (response)	{
+						if ( ! response.error )	{
+							window.location.href = response.redirect;
+							return true;
+						} else	{
+							button.attr('disabled', false);
+							$('.notice-wrap').html('<div class="notice notice-error"><p>' + response.message + '</p></div>');
+							wrapper.find('.spinner').css('visibility', 'hidden');
+						}
+					}
+				}).fail(function (data) {
+					if ( window.console && window.console.log ) {
+						console.log( data );
+					}
+				});
+
+			});
+		},
+		edit_customer: function() {
+			$( document.body ).on( 'click', '#edit-customer', function( e ) {
+				e.preventDefault();
+
+				KBS_Customer.vars.customer_wrap_editable.hide();
+				KBS_Customer.vars.customer_wrap_edit_item.fadeIn().css( 'display', 'block' );
+			});
+		},
+		cancel_edit: function() {
+			$( document.body ).on( 'click', '#kbs-edit-customer-cancel', function( e ) {
+				e.preventDefault();
+				KBS_Customer.vars.customer_wrap_edit_item.hide();
+				KBS_Customer.vars.customer_wrap_editable.show();
+
+				$( '.kbs_user_search_results' ).html('');
+			});
+		},
+		add_email: function() {
+			$( document.body ).on( 'click', '#add-customer-email', function(e) {
+				e.preventDefault();
+				var button  = $(this);
+				var wrapper = button.parent();
+
+				wrapper.parent().find('.notice-wrap').remove();
+				wrapper.find('.spinner').css('visibility', 'visible');
+				button.attr('disabled', true);
+
+				var customer_id = wrapper.find('input[name="customer-id"]').val();
+				var email       = wrapper.find('input[name="additional-email"]').val();
+				var primary     = wrapper.find('input[name="make-additional-primary"]').is(':checked');
+				var nonce       = wrapper.find('input[name="add_email_nonce"]').val();
+
+				var postData = {
+					kbs_action:  'customer-add-email',
+					customer_id: customer_id,
+					email:       email,
+					primary:     primary,
+					_wpnonce:    nonce,
+				};
+
+				$.post(ajaxurl, postData, function( response ) {
+
+					if ( true === response.success ) {
+						window.location.href=response.redirect;
+					} else {
+						button.attr('disabled', false);
+						wrapper.after('<div class="notice-wrap"><div class="notice notice-error inline"><p>' + response.message + '</p></div></div>');
+						wrapper.find('.spinner').css('visibility', 'hidden');
+					}
+
+				}, 'json');
+
+			});
+		},
+		user_search: function() {
+			// Upon selecting a user from the dropdown, we need to update the User ID
+			$( document.body ).on('click.kbsSelectUser', '.kbs_user_search_results a', function( e ) {
+				e.preventDefault();
+				var user_id = $(this).data('userid');
+				KBS_Customer.vars.user_id.val(user_id);
+			});
+		},
+		remove_user: function() {
+			$( document.body ).on( 'click', '#disconnect-customer', function( e ) {
+				e.preventDefault();
+				var customer_id = $('input[name="customerinfo[id]"]').val();
+
+				var postData = {
+					kbs_action:   'disconnect-userid',
+					customer_id: customer_id,
+					_wpnonce:     $( '#edit-customer-info #_wpnonce' ).val()
+				};
+
+				$.post(ajaxurl, postData, function( response ) {
+					window.location.href=window.location.href;
+				}, 'json');
+
+			});
+		},
+		add_note : function() {
+			$( document.body ).on( 'click', '#add-customer-note', function( e ) {
+				e.preventDefault();
+				var postData = {
+					kbs_action : 'add-customer-note',
+					customer_id : $( '#customer-id' ).val(),
+					customer_note : KBS_Customer.vars.note.val(),
+					add_customer_note_nonce: $( '#add_customer_note_nonce' ).val()
+				};
+
+				if( postData.customer_note ) {
+
+					$.ajax({
+						type: "POST",
+						data: postData,
+						url: ajaxurl,
+						success: function ( response ) {
+							$( '#kbs-customer-notes' ).prepend( response );
+							$( '.kbs-no-customer-notes' ).hide();
+							KBS_Customer.vars.note.val( '' );
+						}
+					}).fail( function ( data ) {
+						if ( window.console && window.console.log ) {
+							console.log( data );
+						}
+					});
+
+				} else {
+					var border_color = KBS_Customer.vars.note.css( 'border-color' );
+					KBS_Customer.vars.note.css( 'border-color', 'red' );
+					setTimeout( function() {
+						KBS_Customer.vars.note.css( 'border-color', border_color );
+					}, 500 );
+				}
+			});
+		},
+		delete_checked: function() {
+			$( '#kbs-customer-delete-confirm' ).change( function() {
+				var submit_button = $('#kbs-delete-customer');
+
+				if ( $(this).prop('checked') ) {
+					submit_button.attr('disabled', false);
+				} else {
+					submit_button.attr('disabled', true);
+				}
+			});
+		}
+	}
+	KBS_Customer.init();
+
+	// AJAX user search
+	$('.kbs-ajax-user-search').keyup(function() {
+		var user_search = $(this).val();
+		var exclude     = '';
+
+		if ( $(this).data('exclude') ) {
+			exclude = $(this).data('exclude');
+		}
+
+		$('.kbs-ajax').show();
+		data = {
+			action: 'kbs_search_users',
+			user_name: user_search,
+			exclude: exclude
+		};
+
+		document.body.style.cursor = 'wait';
+
+		$.ajax({
+			type: "POST",
+			data: data,
+			dataType: "json",
+			url: ajaxurl,
+			success: function (search_response) {
+
+				$('.kbs-ajax').hide();
+				$('.kbs_user_search_results').removeClass('hidden');
+				$('.kbs_user_search_results span').html('');
+				$(search_response.results).appendTo('.kbs_user_search_results span');
+				document.body.style.cursor = 'default';
+			}
+		});
+	});
+
+	$( document.body ).on('click.kbsSelectUser', '.kbs_user_search_results span a', function(e) {
+		e.preventDefault();
+		var login = $(this).data('login');
+		$('.kbs-ajax-user-search').val(login);
+		$('.kbs_user_search_results').addClass('hidden');
+		$('.kbs_user_search_results span').html('');
+	});
+
+	$( document.body ).on('click.kbsCancelUserSearch', '.kbs_user_search_results a.kbs-ajax-user-cancel', function(e) {
+		e.preventDefault();
+		$('.kbs-ajax-user-search').val('');
+		$('.kbs_user_search_results').addClass('hidden');
+		$('.kbs_user_search_results span').html('');
+	});
+
+	$(document).on('keydown', '.customer-note-input', function(e) {
+		if(e.keyCode == 13 && (e.metaKey || e.ctrlKey)) {
+			$('#add-customer-note').click();
+		}
+	});
+
 });
 
 // Retrieve ticket replies

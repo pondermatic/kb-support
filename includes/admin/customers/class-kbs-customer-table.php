@@ -157,16 +157,15 @@ class KBS_Customer_Table extends WP_List_Table {
 		$name        = '#' . $item['id'] . ' ';
 		$name       .= ! empty( $item['name'] ) ? $item['name'] : '<em>' . __( 'Unnamed Customer','kb-support' ) . '</em>';
 		$user        = ! empty( $item['user_id'] ) ? $item['user_id'] : $item['email'];
-		$view_url    = admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-customers&view=overview&id=' . $item['id'] );
+		$view_url    = admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-customers&view=userdata&id=' . $item['id'] );
 		$actions     = array(
 			'view'   => '<a href="' . $view_url . '">' . __( 'View', 'kb-support' ) . '</a>',
 			'delete' => '<a href="' . admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-customers&view=delete&id=' . $item['id'] ) . '">' . __( 'Delete', 'kb-support' ) . '</a>'
 		);
 
 		$customer = new KBS_Customer( $item['id'] );
-		$pending  = kbs_user_pending_verification( $customer->user_id ) ? ' <em>' . __( '(Pending Verification)', 'kb-support' ) . '</em>' : '';
 
-		return '<a href="' . esc_url( $view_url ) . '">' . $name . '</a>' . $pending . $this->row_actions( $actions );
+		return '<a href="' . esc_url( $view_url ) . '">' . $name . '</a>' . $this->row_actions( $actions );
 	} // column_name
 
 	/**

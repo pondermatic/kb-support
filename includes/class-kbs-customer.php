@@ -2,6 +2,8 @@
 /**
  * Customer Object
  *
+ * Largely taken from Easy Digital Downloads.
+ *
  * @package     KBS
  * @subpackage  Classes/Customer
  * @copyright   Copyright (c) 2016, Mike Howard
@@ -49,6 +51,20 @@ class KBS_Customer {
 	public $emails;
 
 	/**
+	 * The customer's primary phone number
+	 *
+	 * @since 1.0
+	 */
+	public $primary_phone;
+
+	/**
+	 * The customer's additional phone number
+	 *
+	 * @since 1.0
+	 */
+	public $additional_phone;
+
+	/**
 	 * The customer's name
 	 *
 	 * @since 1.0
@@ -75,6 +91,13 @@ class KBS_Customer {
 	 * @since  1.0
 	 */
 	public $user_id;
+
+	/**
+	 * Customer Notes
+	 *
+	 * @since	1.0
+	 */
+	public $notes;
 
 	/**
 	 * The Database Abstraction
@@ -132,6 +155,10 @@ class KBS_Customer {
 
 			switch ( $key ) {
 
+				case 'notes':
+					$this->$key = $this->get_notes();
+					break;
+
 				default:
 					$this->$key = $value;
 					break;
@@ -140,8 +167,11 @@ class KBS_Customer {
 
 		}
 
-		$this->emails   = (array) $this->get_meta( 'additional_email', false );
-		$this->emails[] = $this->email;
+		$this->emails           = (array) $this->get_meta( 'additional_email', false );
+		$this->emails[]         = $this->email;
+
+		$this->primary_phone    = $this->get_meta( 'primary_phone', true );
+		$this->additional_phone = $this->get_meta( 'additional_phone', true );
 
 		// Customer ID and email are the only things that are necessary, make sure they exist
 		if ( ! empty( $this->id ) && ! empty( $this->email ) ) {
@@ -584,6 +614,96 @@ class KBS_Customer {
 	} // decrease_ticket_count
 
 	/**
+	 * Get the parsed notes for a customer as an array.
+	 *
+	 * @since	1.0
+	 * @param	int		$length		The number of notes to get
+	 * @param	int		$paged		What note to start at
+	 * @return	arr		The notes requsted
+	 */
+	public function get_notes( $length = 20, $paged = 1 ) {
+
+		$length = is_numeric( $length ) ? $length : 20;
+		$offset = is_numeric( $paged ) && $paged != 1 ? ( ( absint( $paged ) - 1 ) * $length ) : 0;
+
+		$all_notes   = $this->get_raw_notes();
+		$notes_array = array_reverse( array_filter( explode( "\n\n", $all_notes ) ) );
+
+		$desired_notes = array_slice( $notes_array, $offset, $length );
+
+		return $desired_notes;
+
+	} // get_notes
+
+	/**
+	 * Get the total number of notes we have after parsing.
+	 *
+	 * @since	1.0
+	 * @return	int		The number of notes for the customer
+	 */
+	public function get_notes_count() {
+
+		$all_notes = $this->get_raw_notes();
+		$notes_array = array_reverse( array_filter( explode( "\n\n", $all_notes ) ) );
+
+		return count( $notes_array );
+
+	} // get_notes_count
+
+	/**
+	 * Add a note for the customer.
+	 *
+	 * @since	1.0
+	 * @param	str			$note	The note to add
+	 * @return	str|bool	The new note if added succesfully, false otherwise
+	 */
+	public function add_note( $note = '' ) {
+
+		$note = trim( $note );
+		if ( empty( $note ) ) {
+			return false;
+		}
+
+		$notes = $this->get_raw_notes();
+
+		if( empty( $notes ) ) {
+			$notes = '';
+		}
+
+		$note_string = date_i18n( 'F j, Y H:i:s', current_time( 'timestamp' ) ) . ' - ' . $note;
+		$new_note    = apply_filters( 'kbs_customer_add_note_string', $note_string );
+		$notes      .= "\n\n" . $new_note;
+
+		do_action( 'kbs_customer_pre_add_note', $new_note, $this->id );
+
+		$updated = $this->update( array( 'notes' => $notes ) );
+
+		if ( $updated ) {
+			$this->notes = $this->get_notes();
+		}
+
+		do_action( 'kbs_customer_post_add_note', $this->notes, $new_note, $this->id );
+
+		// Return the formatted note, so we can test, as well as update any displays
+		return $new_note;
+
+	} // add_note
+
+	/**
+	 * Get the notes column for the customer.
+	 *
+	 * @since	1.0
+	 * @return	str		The Notes for the customer, non-parsed
+	 */
+	private function get_raw_notes() {
+
+		$all_notes = $this->db->get_column( 'notes', $this->id );
+
+		return (string) $all_notes;
+
+	} // get_raw_notes
+
+	/**
 	 * Retrieve customer meta field for a customer.
 	 *
 	 * @param	str		$meta_key	The meta key to retrieve.
@@ -664,23 +784,25 @@ class KBS_Customer {
 
 				case '%s':
 					if ( 'email' == $key ) {
-						$data[$key] = sanitize_email( $data[$key] );
+						$data[ $key ] = sanitize_email( $data[ $key ] );
+					} elseif ( 'notes' == $key ) {
+						$data[ $key ] = strip_tags( $data[ $key ] );
 					} else {
-						$data[$key] = sanitize_text_field( $data[$key] );
+						$data[ $key ] = sanitize_text_field( $data[ $key ] );
 					}
 					break;
 
 				case '%d':
-					if ( ! is_numeric( $data[$key] ) || (int) $data[$key] !== absint( $data[$key] ) ) {
-						$data[$key] = $default_values[$key];
+					if ( ! is_numeric( $data[ $key ] ) || (int) $data[ $key ] !== absint( $data[ $key ] ) ) {
+						$data[ $key ] = $default_values[ $key ];
 					} else {
-						$data[$key] = absint( $data[$key] );
+						$data[ $key ] = absint( $data[ $key ] );
 					}
 					break;
 
 				case '%f':
 					// Convert what was given to a float
-					$value = floatval( $data[$key] );
+					$value = floatval( $data[ $key ] );
 
 					if ( ! is_float( $value ) ) {
 						$data[$key] = $default_values[$key];

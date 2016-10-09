@@ -10,7 +10,8 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) )
+	exit;
 
 /**
  * Creates the admin submenu pages under the Tickets menu and assigns their
@@ -22,7 +23,11 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  */
 function kbs_add_options_link() {
 
-	global $kbs_settings_page;
+	global $kbs_customers_page, $kbs_settings_page;
+
+	$customer_view_role     = apply_filters( 'kbs_view_customers_role', 'view_ticket_reports' );
+
+	$kbs_customers_page     = add_submenu_page( 'edit.php?post_type=kbs_ticket', __( 'Customers', 'kb-support' ), __( 'Customers', 'kb-support' ), $customer_view_role, 'kbs-customers', 'kbs_customers_page' );
 
 	$kbs_settings_page      = add_submenu_page( 'edit.php?post_type=kbs_ticket', __( 'KB Support Settings', 'kb-support' ), __( 'Settings', 'kb-support' ), 'manage_ticket_settings', 'kbs-settings', 'kbs_options_page' );
 

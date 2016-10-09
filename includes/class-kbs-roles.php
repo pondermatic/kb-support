@@ -6,7 +6,7 @@
  * @subpackage  Classes/Roles
  * @copyright   Copyright (c) 2016, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       0.1
+ * @since       1.0
 */
 
 // Exit if accessed directly
@@ -20,14 +20,14 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * These roles let us have Support Agents, Support Customers, etc, each of whom can do
  * certain things within KBS Support
  *
- * @since	0,1
+ * @since	1.0
  */
 class KBS_Roles {
 
 	/**
 	 * Get things going
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 */
 	public function __construct() {
 		add_filter( 'map_meta_cap', array( $this, 'meta_caps' ), 10, 4 );
@@ -37,7 +37,7 @@ class KBS_Roles {
 	 * Add new support roles with default WP caps
 	 *
 	 * @access	public
-	 * @since	0.1
+	 * @since	1.0
 	 * @return	void
 	 */
 	public function add_roles() {
@@ -91,7 +91,7 @@ class KBS_Roles {
 	 * Add new support-specific capabilities
 	 *
 	 * @access	public
-	 * @since	0.1
+	 * @since	1.0
 	 * @global	WP_Roles $wp_roles
 	 * @return	void
 	 */
@@ -142,7 +142,7 @@ class KBS_Roles {
 	 * Gets the core post type capabilities
 	 *
 	 * @access	public
-	 * @since	0.1
+	 * @since	1.0
 	 * @return	arr		$capabilities	Core post type capabilities
 	 */
 	public function get_core_caps() {
@@ -187,7 +187,7 @@ class KBS_Roles {
 	 * Map meta caps to primitive caps
 	 *
 	 * @access	public
-	 * @since	0.1
+	 * @since	1.0
 	 * @return	arr		$caps
 	 */
 	public function meta_caps( $caps, $cap, $user_id, $args ) {
@@ -220,7 +220,7 @@ class KBS_Roles {
 	 * Remove core post type capabilities (called on uninstall)
 	 *
 	 * @access	public
-	 * @since	0.1
+	 * @since	1.0
 	 * @return	void
 	 */
 	public function remove_caps() {

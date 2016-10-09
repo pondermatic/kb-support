@@ -12,7 +12,8 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) )
+	exit;
 
 /**
  * Retrieve users by role.
@@ -93,3 +94,22 @@ function kbs_validate_username( $username ) {
 
 	return (bool) apply_filters( 'kbs_validate_username', $valid, $username );
 } // kbs_validate_username
+
+/**
+ * Attach the newly created user_id to a customer, if one exists
+ *
+ * @since	1.0
+ * @param 	int		$user_id	The User ID that was created
+ * @return	void
+ */
+function kbs_connect_existing_customer_to_new_user( $user_id ) {
+	$email = get_the_author_meta( 'user_email', $user_id );
+
+	// Update the user ID on the customer
+	$customer = new KBS_Customer( $email );
+
+	if( $customer->id > 0 ) {
+		$customer->update( array( 'user_id' => $user_id ) );
+	}
+}
+add_action( 'user_register', 'kbs_connect_existing_customer_to_new_user', 10, 1 );

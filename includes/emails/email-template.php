@@ -10,7 +10,8 @@
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+if ( !defined( 'ABSPATH' ) )
+	exit;
 
 /**
  * Gets all the email templates that have been registerd. The list is extendable
@@ -148,8 +149,8 @@ function kbs_get_ticket_notification_body_content( $ticket_id = 0, $ticket_data 
 	}
 
 	$default_email_body = __( 'Hello', 'kb-support' ) . "\n\n" . sprintf( __( 'A Support %s has been received', 'kb-support' ), kbs_get_ticket_label_plural() ) . ".\n\n";
-	$default_email_body .= sprintf( __( '%s sold:', 'kb-support' ), kbs_get_ticket_label_plural() ) . "\n\n";
-	$default_email_body .= $download_list . "\n\n";
+	$default_email_body .= sprintf( __( '%s details:', 'kb-support' ), kbs_get_ticket_label_singular() ) . "\n\n";
+	$default_email_body .= /*$download_list . */"\n\n";
 	$default_email_body .= __( 'Submitted by: ', 'kb-support' ) . " " . html_entity_decode( $name, ENT_COMPAT, 'UTF-8' ) . "\n";
 	$default_email_body .= __( 'Thank you', 'kb-support' );
 
