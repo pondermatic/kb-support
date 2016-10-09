@@ -133,7 +133,14 @@ function kb_tickets_post_column_customer( $ticket_id, $kbs_ticket )	{
 
 		$customer = new KBS_Customer( $kbs_ticket->customer_id );
 
-		$output = $customer->name;
+		$customer_page = add_query_arg( array(
+			'post_type' => 'kbs_ticket',
+			'page'      => 'kbs-customers',
+			'view'      => 'userdata',
+			'id'        => $kbs_ticket->customer_id
+		), admin_url( 'edit.php' ) );
+
+		$output = '<a href="' . $customer_page . '">' . $customer->name . '</a>';
 
 	} else	{
 		$output = __( 'No Customer Assigned', 'kb-support' );
@@ -187,6 +194,23 @@ function kb_tickets_post_column_sla( $ticket_id, $kbs_ticket )	{
 
 	return apply_filters( 'kb_tickets_post_column_sla', $output, $ticket_id );
 } // kb_tickets_post_column_sla
+
+/**
+ * Filter posts by customer.
+ *
+ * @since	1.0
+ * @return	void
+ */
+function kbs_filter_customer_posts( $query )	{
+	if ( ! is_admin() || 'kbs_ticket' != $query->get( 'post_type' ) || ! isset( $_GET['customer'] ) )	{
+		return;
+	}
+
+	$query->set( 'meta_key', '_kbs_ticket_customer_id' );
+	$query->set( 'meta_value', $_GET['customer'] );
+	$query->set( 'meta_type', 'NUMERIC' );
+} // kbs_filter_customer_posts
+add_action( 'pre_get_posts', 'kbs_filter_customer_posts' );
 
 /**
  * Save the KBS Ticket custom posts
