@@ -71,7 +71,6 @@ class KBS_Tickets_Query extends KBS_Stats {
 			'day'              => null,
 			's'                => null,
 			'search_in_notes'  => false,
-			'children'         => false,
 			'fields'           => null
 		);
 
@@ -123,8 +122,6 @@ class KBS_Tickets_Query extends KBS_Stats {
 		add_action( 'kbs_pre_get_tickets',  array( $this, 'user'       ) );
 		add_action( 'kbs_pre_get_tickets',  array( $this, 'customer'   ) );
 		add_action( 'kbs_pre_get_tickets',  array( $this, 'search'     ) );
-		add_action( 'kbs_pre_get_tickets',  array( $this, 'children'   ) );
-		add_action( 'kbs_pre_get_tickets',  array( $this, 'type'       ) );
 	} // init
 
 	/**
