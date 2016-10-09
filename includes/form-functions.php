@@ -50,7 +50,10 @@ function kbs_is_submission_form()	{
 
 	if ( ! $is_submission )	{
 		global $post;
-		$is_submission = has_shortcode( $post->post_content, 'kbs_submit' );
+
+		if ( ! empty( $post ) )	{
+			$is_submission = has_shortcode( $post->post_content, 'kbs_submit' );
+		}
 	}
 
 	return apply_filters( 'kbs_is_submission_form', $is_submission );
@@ -474,12 +477,13 @@ function kbs_get_field_types()	{
 function kbs_get_mappings( $mapping = null )	{
 
 	$mappings = array(
-		''               => __( 'None', 'kb-support' ),
-		'customer_first' => __( 'Customer First Name', 'kb-support' ),
-		'customer_last'  => __( 'Customer Last Name', 'kb-support' ),
-		'customer_email' => __( 'Customer Email', 'kb-support' ),
-		'post_title'     => __( 'Ticket Title', 'kb-support' ),
-		'post_content'   => __( 'Ticket Content', 'kb-support' )
+		'customer_first'  => __( 'Customer First Name', 'kb-support' ),
+		'customer_last'   => __( 'Customer Last Name', 'kb-support' ),
+		'customer_email'  => __( 'Customer Email', 'kb-support' ),
+		'customer_phone1' => __( 'Customer Primary Phone', 'kb-support' ),
+		'customer_phone2' => __( 'Customer Additional Phone', 'kb-support' ),
+		'post_title'      => __( 'Ticket Title', 'kb-support' ),
+		'post_content'    => __( 'Ticket Content', 'kb-support' )
 	);
 
 	/**
@@ -491,6 +495,8 @@ function kbs_get_mappings( $mapping = null )	{
 	$mappings = apply_filters( 'kbs_mappings', $mappings );
 
 	asort( $mappings );
+
+	$mappings = array( '' => __( 'None', 'kb-support' ) ) + $mappings;
 
 	if ( isset( $mapping ) && array_key_exists( $mapping, $mappings ) )	{
 		return $mappings[ $mapping ];
