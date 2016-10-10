@@ -64,6 +64,7 @@ class KBS_Tickets_Query extends KBS_Stats {
 			'order'            => 'DESC',
 			'user'             => null,
 			'customer'         => null,
+			'key'              => null,
 			'status'           => kbs_get_ticket_status_keys(),
 			'meta_key'         => null,
 			'year'             => null,
@@ -121,6 +122,7 @@ class KBS_Tickets_Query extends KBS_Stats {
 		add_action( 'kbs_pre_get_tickets',  array( $this, 'agent'      ) );
 		add_action( 'kbs_pre_get_tickets',  array( $this, 'user'       ) );
 		add_action( 'kbs_pre_get_tickets',  array( $this, 'customer'   ) );
+		add_action( 'kbs_pre_get_tickets',  array( $this, 'key'        ) );
 		add_action( 'kbs_pre_get_tickets',  array( $this, 'search'     ) );
 	} // init
 
@@ -326,7 +328,25 @@ class KBS_Tickets_Query extends KBS_Stats {
 			'key'   => '_kbs_ticket_customer_id',
 			'value' => (int) $this->args['customer'],
 		) );
-	}
+	} // customer
+
+	/**
+	 * Specific ticket key
+	 *
+	 * @access	public
+	 * @since	1.0
+	 * @return	void
+	 */
+	public function key() {
+		if ( is_null( $this->args['key'] ) ) {
+			return;
+		}
+
+		$this->__set( 'meta_query', array(
+			'key'   => '_kbs_ticket_key',
+			'value' => $this->args['key'],
+		) );
+	} // key
 
 	/**
 	 * Search
@@ -405,9 +425,8 @@ class KBS_Tickets_Query extends KBS_Stats {
 		}
 
 		$query = array(
-			'key'     => '_ticket_data',
-			'value'   => $this->args['agent'],
-			'compare' => 'REGEXP'
+			'key'     => '_kbs_ticket_agent_id',
+			'value'   => $this->args['agent']
 		);
 
 		$this->__set( 'meta_query', $query );

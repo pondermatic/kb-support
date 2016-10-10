@@ -10,7 +10,20 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) )
+	exit;
+
+/**
+ * Whether or not to track SLA.
+ *
+ * @since	1.0
+ * @return	bool	True to track, otherwise false.
+ */
+function kbs_track_sla()	{
+	$track_sla = kbs_get_option( 'sla_tracking', false );
+
+	return apply_filters( 'kbs_track_sla', $track_sla );
+} // kbs_track_sla
 
 /**
  * Determines the target response time for the ticket.
@@ -20,6 +33,10 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * @return	str		Date/Time for targetted response time.
  */
 function kbs_calculate_sla_target_response()	{
+	if ( ! kbs_track_sla() )	{
+		return false;
+	}
+
 	$now    = current_time( 'timestamp' );
 	$target = strtotime( '+' . kbs_get_option( 'sla_response_time' ), $now );
 	
@@ -34,6 +51,10 @@ function kbs_calculate_sla_target_response()	{
  * @return	str		Date/Time for targetted resolution time.
  */
 function kbs_calculate_sla_target_resolution()	{
+	if ( ! kbs_track_sla() )	{
+		return false;
+	}
+
 	$now    = current_time( 'timestamp' );
 	$target = strtotime( '+' . kbs_get_option( 'sla_resolve_time' ), $now );
 	

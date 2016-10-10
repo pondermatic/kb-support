@@ -88,3 +88,24 @@ function kbs_submit_form_shortcode( $atts ) {
 	return kbs_display_form( $form );
 } // kbs_submit_form_shortcode
 add_shortcode( 'kbs_submit', 'kbs_submit_form_shortcode' );
+
+/**
+ * View Tickets Shortcode.
+ *
+ * Displays a customers ticket.
+ *
+ * @since	1.0
+ * @param	arr		$atts		Shortcode attributes
+ * @return	str
+ */
+function kbs_tickets_shortcode( $atts ) {
+	ob_start();
+	if ( ! isset( $_GET['ticket'] ) )	{
+		echo kbs_display_notice( 'no_ticket' );
+		return ob_get_clean();
+	}
+
+	kbs_get_template_part( 'view', 'ticket' );
+	return ob_get_clean();
+} // kbs_tickets_shortcode
+add_shortcode( 'kbs_tickets', 'kbs_tickets_shortcode' );

@@ -84,12 +84,12 @@ class KBS_Ticket {
 	private $user_info = array();
 
 	/**
-	 * The agent assigned to the ticket
+	 * The ID of the agent assigned to the ticket
 	 *
 	 * @since	1.0
 	 * @var		int
 	 */
-	protected $agent = 0;
+	protected $agent_id = 0;
 
 	/**
 	 * The date the ticket was created
@@ -205,12 +205,20 @@ class KBS_Ticket {
 	private $pending;
 
 	/**
-	 * Array of sla data for this ticket.
+	 * Sla target response time for this ticket.
 	 *
 	 * @since	1.0
-	 * @var		arr
+	 * @var		str
 	 */
-	protected $sla = array();
+	protected $sla_respond = '';
+
+	/**
+	 * SLA target resolution date/time for this ticket.
+	 *
+	 * @since	1.0
+	 * @var		str
+	 */
+	protected $sla_resolve = '';
 
 	/**
 	 * Array of attached file IDs for this ticket.
@@ -366,7 +374,7 @@ class KBS_Ticket {
 
 		// User data
 		$this->ip              = $this->setup_ip();
-		$this->agent           = $this->setup_agent_id();
+		$this->agent_id        = $this->setup_agent_id();
 		$this->customer_id     = $this->setup_customer_id();
 		$this->user_id         = $this->setup_user_id();
 		$this->email           = $this->setup_email();
@@ -375,7 +383,8 @@ class KBS_Ticket {
 		$this->last_name       = $this->user_info['last_name'];
 
 		// SLA
-		$this->sla             = $this->setup_sla();
+		$this->sla_respond     = $this->setup_sla_targets( 'respond' );
+		$this->sla_resolve     = $this->setup_sla_targets( 'resolve' );
 
 		$this->key             = $this->setup_ticket_key();
 		$this->form_data       = $this->setup_form_data();
@@ -416,7 +425,7 @@ class KBS_Ticket {
 
 		$ticket_data = array(
 			'date'         => $this->date,
-			'agent'        => $this->agent,
+			'agent_id'     => $this->agent_id,
 			'user_email'   => $this->email,
 			'user_info' => array(
 				'id'         => $this->user_id,
@@ -426,7 +435,8 @@ class KBS_Ticket {
 				'primary_phone' => isset( $this->user_info['primary_phone'] ) ? $this->user_info['primary_phone'] : '',
 				'additional_phone' => isset( $this->user_info['additional_phone'] ) ? $this->user_info['additional_phone'] : '',
 			),
-			'sla'          => $this->sla,
+			'sla_respond'  => $this->sla_respond,
+			'sla_resolve'  => $this->sla_resolve,
 			'status'       => $this->status,
 			'source'       => $this->source,
 			'files'        => $this->new_files,
@@ -489,7 +499,8 @@ class KBS_Ticket {
 				$this->pending['files'] = $this->new_files;
 			}
 
-			$this->pending['sla'] = $this->sla;
+			$this->pending['sla_respond'] = $this->sla_respond;
+			$this->pending['sla_resolve'] = $this->sla_resolve;
 
 			$this->ticket_meta = apply_filters( 'kbs_ticket_meta', $this->ticket_meta, $ticket_data );
 
@@ -541,6 +552,10 @@ class KBS_Ticket {
 
 					case 'customer_id':
 						$this->update_meta( '_kbs_ticket_customer_id', $this->customer_id );
+						break;
+
+					case 'agent_id':
+						$this->update_meta( '_kbs_ticket_agent_id', $this->agent_id );
 						break;
 
 					case 'user_id':
@@ -605,8 +620,12 @@ class KBS_Ticket {
 						$this->files = $this->attach_files();
 						break;
 
-					case 'sla':
-						$this->update_meta( '_kbs_ticket_sla', $this->sla );
+					case 'sla_respond':
+						$this->update_meta( '_kbs_ticket_sla_target_respond', $this->sla_respond );
+						break;
+
+					case 'sla_resolve':
+						$this->update_meta( '_kbs_ticket_sla_target_resolve', $this->sla_resolve );
 						break;
 
 					default:
@@ -621,9 +640,9 @@ class KBS_Ticket {
 			$customer->increase_ticket_count();
 
 			$new_meta = array(
-				'agent'         => $this->agent,
+				'agent_id'      => $this->agent_id,
 				'source'        => $this->source,
-				'sla'           => $this->sla,
+				'sla'           => array( 'respond' => $this->sla_respond, 'resolve' => $this->sla_resolve ),
 				'user_info'     => is_array( $this->user_info ) ? $this->user_info : array(),
 				'user_ip'       => $this->ip,
 				'resolved'      => $this->resolved_date,
@@ -666,10 +685,12 @@ class KBS_Ticket {
 	 * Set the ticket status and run any status specific changes necessary.
 	 *
 	 * @since	1.0
-	 * @param	str		$status	The status to set the payment to
+	 * @param	str		$status	The status to set the ticket to
 	 * @return	bool	Returns if the status was successfully updated
 	 */
 	public function update_status( $status = false ) {
+
+		$old_status = ! empty( $this->old_status ) ? $this->old_status : false;
 
 		if ( $old_status === $status ) {
 			return false; // Don't permit status changes that aren't changes
@@ -702,7 +723,7 @@ class KBS_Ticket {
 					$this->process_closed();
 					break;
 				default:
-					do_action( 'kbs_ticket_status_' . $status );
+					do_action( 'kbs_ticket_status_' . $status, $this->ID, $old_status );
 			}
 
 			do_action( 'kbs_update_ticket_status', $this->ID, $status, $old_status );
@@ -804,6 +825,20 @@ class KBS_Ticket {
 		if ( 'open' == $this->old_status )	{
 			return;
 		}
+
+		if ( 'new' == $this->old_status )	{
+			$this->update_meta( '_kbs_ticket_opened', current_time( 'mysql' ) );
+			$this->update_meta( '_kbs_ticket_opened_by', get_current_user_id() );
+		}
+
+		if ( empty( $this->sla_respond ) )	{
+			$this->update_meta( '_kbs_ticket_sla_target_respond', kbs_calculate_sla_target_response() );
+		}
+
+		if ( empty( $this->sla_resolve ) )	{
+			$this->update_meta( '_kbs_ticket_sla_target_resolve', kbs_calculate_sla_target_resolution() );
+		}
+
 		do_action( 'kbs_open_ticket', $this );
 	} // process_open
 
@@ -902,11 +937,7 @@ class KBS_Ticket {
 	 * @return	int
 	 */
 	public function setup_agent_id()	{	
-		if ( ! empty( $this->ticket_meta['agent'] ) )	{
-			$this->agent = $this->ticket_meta['agent'];
-		}
-		
-		return apply_filters( 'kbs_get_agent', $this->agent );
+		return $this->get_meta( '_kbs_ticket_agent_id', true );
 	} // setup_agent_id
 
 	/**
@@ -1061,18 +1092,17 @@ class KBS_Ticket {
 	} // setup_ticket_key
 
 	/**
-	 * Setup the SLA data for the ticket
+	 * Setup the SLA target data for the ticket
 	 *
 	 * @since	1.0
+	 * @param	str		$which	Which target to receive. i.e. 'respond' or 'resolve'
 	 * @return	arr|bool	The sla data for the ticket
 	 */
-	private function setup_sla() {
-		if ( empty( $this->ticket_meta['sla'] ) )	{
-			return false;
-		}
+	private function setup_sla_targets( $which = 'respond' ) {
+		$sla = $this->get_meta( '_kbs_ticket_sla_target_' . $which );
 
-		return $this->ticket_meta['sla'];
-	} // setup_sla
+		return $sla;
+	} // setup_sla_targets
 
 	/**
 	 * Setup the ticket form data.
@@ -1127,7 +1157,7 @@ class KBS_Ticket {
 		
 		return $files;
 	} // get_files
-	
+
 	/**
 	 * Retrieve the target response time.
 	 *
@@ -1135,15 +1165,19 @@ class KBS_Ticket {
 	 * @return	int
 	 */
 	public function get_target_respond() {
-		if ( empty( $this->ticket_meta['sla'] ) )	{
-			return;
+		if ( ! kbs_track_sla() )	{
+			return false;
 		}
 
-		$respond = date_i18n( get_option( 'time_format' ) . ' ' . get_option( 'date_format' ), strtotime( $this->ticket_meta['sla']['target_respond'] ) );
+		if ( empty( $this->sla_respond ) )	{
+			return false;
+		}
+
+		$respond = date_i18n( get_option( 'time_format' ) . ' ' . get_option( 'date_format' ), strtotime( $this->sla_respond ) );
 
 		return apply_filters( 'kbs_get_target_respond', $respond );
 	} // get_target_respond
-	
+
 	/**
 	 * Retrieve the target resolution time.
 	 *
@@ -1151,15 +1185,19 @@ class KBS_Ticket {
 	 * @return	int
 	 */
 	public function get_target_resolve() {
-		if ( empty( $this->ticket_meta['sla'] ) )	{
-			return;
+		if ( ! kbs_track_sla() )	{
+			return false;
 		}
 
-		$resolve = date_i18n( get_option( 'time_format' ) . ' ' . get_option( 'date_format' ), strtotime( $this->ticket_meta['sla']['target_resolve'] ) );
+		if ( empty( $this->sla_resolve ) )	{
+			return false;
+		}
+
+		$resolve = date_i18n( get_option( 'time_format' ) . ' ' . get_option( 'date_format' ), strtotime( $this->sla_resolve ) );
 
 		return apply_filters( 'kbs_get_target_resolve', $resolve );
 	} // get_target_resolve
-	
+
 	/**
 	 * Retrieve the target resolution time.
 	 *
@@ -1175,16 +1213,16 @@ class KBS_Ticket {
 		} else	{
 			$end = strtotime( $this->get_target_respond() );
 		}
-		
+
 		$diff = human_time_diff( $end, $now );
-		
+
 		if ( $now > $end )	{
 			$diff .= ' ' . __( 'ago', 'kb-support' );
 		}
 
 		return apply_filters( 'kbs_get_sla_remain', $diff );
 	} // get_sla_remain
-	
+
 	/**
 	 * Retrieve the source used for logging the ticket.
 	 *
@@ -1193,15 +1231,15 @@ class KBS_Ticket {
 	 */
 	public function get_source() {
 		$sources = kbs_get_ticket_log_sources();
-		
+
 		$ticket_source = $this->ticket_meta['source'];
-		
+
 		if ( array_key_exists( $ticket_source, $sources ) )	{
 			$return = $sources[ $ticket_source ];
 		} else	{
 			$return = __( 'Source could not be found', 'kb-support' );
 		}
-		
+
 		return apply_filters( 'kbs_get_source', $return );
 	} // get_source
 
@@ -1260,7 +1298,7 @@ class KBS_Ticket {
 			'post_author'  => get_current_user_id(),
 			'meta_input'   => array(
 				'_kbs_reply_customer_id' => $reply_data['customer_id'],
-				'_kbs_reply_agent'       => $reply_data['agent'],
+				'_kbs_reply_agent_id'    => $reply_data['agent_id'],
 				'_kbs_ticket_key'        => $reply_data['key']
 			)
 		);

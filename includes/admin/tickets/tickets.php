@@ -1,18 +1,20 @@
-<?php
-	defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
-	
+<?php	
 /**
  * Manage kbs-ticket posts.
  * 
- * @since		0.1
+ * @since		1.0
  * @package		KBS
  * @subpackage	Posts
  */
 
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) )
+	exit;
+
 /**
  * Define the columns that should be displayed for the KBS ticket post lists screen
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$columns	An array of column name ⇒ label. The label is shown as the column header.
  * @return	arr		$columns	Filtered array of column name => label to be shown as the column header.
  */
@@ -28,19 +30,19 @@ function kbs_set_kbs_ticket_post_columns( $columns ) {
         'agent'            => __( 'Agent', 'kb-support' )
     );
 	
-	if ( kbs_get_option( 'sla_tracking' ) )	{
+	if ( kbs_track_sla() )	{
 		$columns['sla'] = __( 'SLA Status', 'kbs-support' );
 	}
 	
 	return apply_filters( 'kbs_ticket_post_columns', $columns );
 	
-}
+} // kbs_set_kbs_ticket_post_columns
 add_filter( 'manage_kbs_ticket_posts_columns' , 'kbs_set_kbs_ticket_post_columns' );
 
 /**
  * Define the data to be displayed within the KBS ticket post custom columns.
  *
- * @since	0.1
+ * @since	1.0
  * @param	str		$column_name	The name of the current column for which data should be displayed.
  * @param	int		$post_id		The ID of the current post for which data is being displayed.
  * @return	str
@@ -75,7 +77,7 @@ function kbs_set_kbs_ticket_column_data( $column_name, $post_id ) {
 			break;
 	}
 
-}
+} // kbs_set_kbs_ticket_column_data
 add_action( 'manage_kbs_ticket_posts_custom_column' , 'kbs_set_kbs_ticket_column_data', 10, 2 );
 
 /**
@@ -162,10 +164,10 @@ function kb_tickets_post_column_customer( $ticket_id, $kbs_ticket )	{
 function kb_tickets_post_column_agent( $ticket_id, $kbs_ticket )	{
 	do_action( 'kb_pre_tickets_column_agent', $kbs_ticket );
 
-	if ( ! empty( $kbs_ticket->agent ) )	{
+	if ( ! empty( $kbs_ticket->agent_id ) )	{
 		$output = sprintf( '<a href="%s">%s</a>',
-			get_edit_user_link( $kbs_ticket->agent ),
-			get_userdata( $kbs_ticket->agent )->display_name
+			get_edit_user_link( $kbs_ticket->agent_id ),
+			get_userdata( $kbs_ticket->agent_id )->display_name
 		);
 	} else	{
 		$output = __( 'No Agent Assigned', 'kb-support' );
@@ -213,6 +215,33 @@ function kbs_filter_customer_posts( $query )	{
 add_action( 'pre_get_posts', 'kbs_filter_customer_posts' );
 
 /**
+ * Remove action items from the bulk item menu and post row action list.
+ *
+ * @since	1.0
+ * @param	arr		$actions	The action items array
+ * @return	arr		Filtered action items array
+ */
+function kbs_tickets_remove_trash_action( $actions )	{
+	if ( 'kbs_ticket' == get_post_type() )	{
+
+		$remove_actions = array( 'edit', 'trash', 'inline hide-if-no-js' );
+
+		foreach( $remove_actions as $remove_actions )	{
+
+			if ( isset( $actions[ $remove_actions ] ) )	{
+				unset( $actions[ $remove_actions ] );
+			}
+
+		}
+
+	}
+
+	return $actions;
+} // kbs_tickets_remove_bulk_trash
+add_filter( 'bulk_actions-edit-kbs_ticket', 'kbs_tickets_remove_trash_action' );
+add_filter( 'post_row_actions', 'kbs_tickets_remove_trash_action' );
+
+/**
  * Save the KBS Ticket custom posts
  *
  * @since	1.3
@@ -239,15 +268,30 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
 	// The default fields that get saved
 	$fields = kbs_ticket_metabox_fields();
 
+	$ticket = new KBS_Ticket( $post_id );
+
 	foreach ( $fields as $field )	{
+		$meta_field    = str_replace( 'kbs_', '_kbs_ticket_', $field );
 
 		if ( ! empty( $_POST[ $field ] ) ) {
 			$new_value = apply_filters( 'kbs_ticket_metabox_save_' . $field, $_POST[ $field ] );
-			update_post_meta( $post_id, $field, $new_value );
+
+			$ticket->update_meta( $meta_field, $new_value );
 		} else {
-			delete_post_meta( $post_id, $field );
+			delete_post_meta( $ticket->ID, $meta_field );
 		}
 
+	}
+
+	// When logging a new ticket
+	if ( empty( $update ) )	{
+		if ( get_current_user_id() == $_POST['kbs_agent_id'] )	{
+			$ticket->update_meta( '_kbs_ticket_created_by', get_current_user_id() );
+		}
+	}
+
+	if ( ! empty( $_POST['ticket_status'] ) && $_POST['ticket_status'] != $post->post_status )	{
+		$ticket->update_status( $_POST['ticket_status'] );
 	}
 
 	do_action( 'kbs_save_ticket', $post_id, $post );
@@ -265,5 +309,5 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
 
 	// Re-add the save post action
 	add_action( 'save_post_kbs_ticket', 'kbs_ticket_post_save', 10, 3 );
-}
+} // kbs_ticket_post_save
 add_action( 'save_post_kbs_ticket', 'kbs_ticket_post_save', 10, 3 );

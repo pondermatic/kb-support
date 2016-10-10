@@ -14,15 +14,15 @@ if ( ! defined( 'ABSPATH' ) )
 /**
  * Returns default KBS Ticket meta fields.
  *
- * @since	1.4
+ * @since	1.0
  * @return	arr		$fields		Array of fields.
  */
 function kbs_ticket_metabox_fields() {
 
 	$fields = array(
-			'kbs_customer',
-			'kbs_agent'
-		);
+		'kbs_customer_id',
+		'kbs_agent_id'
+	);
 
 	return apply_filters( 'kbs_ticket_metabox_fields_save', $fields );
 
@@ -42,7 +42,7 @@ function kbs_ticket_remove_meta_boxes()	{
 			array( 'comments', 'kbs_ticket', 'normal' )
 		)
 	);
-	
+
 	foreach( $metaboxes as $metabox )	{
 		remove_meta_box( $metabox[0], $metabox[1], $metabox[2] );
 	}
@@ -221,31 +221,25 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
             
             </div><!-- #minor-publishing-actions -->
             <div id="kbs-ticket-actions">
-                <p class="dashicons-before dashicons-post-status">&nbsp;&nbsp;<label for="post_status"><?php _e( 'Status:' ); ?></label>
-                    <?php echo KBS()->html->ticket_status_dropdown( 'post_status', $kbs_ticket->post_status ); ?>
+                <p class="dashicons-before dashicons-post-status">&nbsp;&nbsp;<label for="ticket_status"><?php _e( 'Status:' ); ?></label>
+                    <?php echo KBS()->html->ticket_status_dropdown( 'ticket_status', $kbs_ticket->post_status ); ?>
                 </p>
 
-                <p class="dashicons-before dashicons-admin-users"></span>&nbsp;&nbsp;<label for="kbs_customer"><?php _e( 'Customer:', 'kb-support' ); ?></label>
+                <p class="dashicons-before dashicons-admin-users"></span>&nbsp;&nbsp;<label for="kbs_customer_id"><?php _e( 'Customer:', 'kb-support' ); ?></label>
 					<?php echo KBS()->html->customer_dropdown( array(
-                        'name'     => 'kbs_customer',
+                        'name'     => 'kbs_customer_id',
                         'selected' => $kbs_ticket->customer_id,
                         'chosen'   => false
                     ) ); ?>
                 </p>
                     
-                <p class="dashicons-before dashicons-businessman"></span>&nbsp;&nbsp;<label for="kbs_agent"><?php _e( 'Agent:', 'kb-support' ); ?></label>
-					<?php echo KBS()->html->agent_dropdown( 'kbs_agent', ( ! empty( $kbs_ticket->agent ) ? $kbs_ticket->agent : get_current_user_id() ) ); ?>
+                <p class="dashicons-before dashicons-businessman"></span>&nbsp;&nbsp;<label for="kbs_agent_id"><?php _e( 'Agent:', 'kb-support' ); ?></label>
+					<?php echo KBS()->html->agent_dropdown( 'kbs_agent_id', ( ! empty( $kbs_ticket->agent_id ) ? $kbs_ticket->agent_id : get_current_user_id() ) ); ?>
                 </p>
                     
                 <?php do_action( 'kbs_ticket_metabox_after_agent', $ticket_id ); ?>
 
-				<?php if ( ! EMPTY_TRASH_DAYS )	: ?>
-					<?php $delete_text = sprintf( __( 'Delete %s Permanently', 'kb-support' ), kbs_get_ticket_label_singular() ); ?>
-				<?php else : ?>
-					<?php $delete_text = __( 'Move to Trash', 'kb-support' ); ?>
-				<?php endif; ?>
-
-                <p><a class="submitdelete deletion" href="<?php echo get_delete_post_link( $kbs_ticket->ID ); ?>"><?php echo $delete_text; ?></a>
+                <p><a href="<?php echo wp_get_referer(); ?>"><?php printf( __( 'Back to %s', 'kb-support' ), kbs_get_ticket_label_plural() ); ?></a>
 
 					<?php submit_button( 
                         sprintf( '%s %s',
@@ -279,7 +273,7 @@ function kbs_ticket_metabox_sla_row( $ticket_id )	{
 	
 	global $kbs_ticket, $kbs_ticket_update;
 	
-	if ( ! kbs_get_option( 'sla_tracking' ) || ! $kbs_ticket_update )	{
+	if ( ! kbs_track_sla() || ! $kbs_ticket_update )	{
 		return;
 	}
 	
@@ -289,8 +283,8 @@ function kbs_ticket_metabox_sla_row( $ticket_id )	{
 	$sla_resolve_remain = '';
 	
 	if ( $kbs_ticket_update )	{
-		$respond            = $kbs_ticket->ticket_meta['sla']['target_respond'];
-		$resolve            = $kbs_ticket->ticket_meta['sla']['target_resolve'];
+		$respond            = $kbs_ticket->sla_respond;
+		$resolve            = $kbs_ticket->sla_resolve;
 		$sla_respond_class  = kbs_sla_has_passed( $kbs_ticket->ID ) ? '_over' : '';
 		$sla_resolve_class  = kbs_sla_has_passed( $kbs_ticket->ID, 'resolve' ) ? '_over' : '';
 		$sla_respond_remain = ' ' . $kbs_ticket->get_sla_remain();
@@ -329,7 +323,7 @@ function kbs_ticket_metabox_content_row( $ticket_id )	{
 	<div id="kbs-ticket-content-container" class="kbs_ticket_wrap">
         <p><?php echo $kbs_ticket->get_content(); ?></p>
         <?php if ( ! empty( $kbs_ticket->ticket_meta['form_data'] ) ) : ?>
-        	<p><<a href="#TB_inline?width=600&height=550&inlineId=terms-conditions" title="Terms &amp; Conditions for Add-ons" class="thickbox">View license terms</a>.</p>
+        	<p><a href="#TB_inline?width=600&height=550&inlineId=terms-conditions" title="Terms &amp; Conditions for Add-ons" class="thickbox">View license terms</a>.</p>
         <?php endif; ?>
     </div>
     <?php

@@ -71,6 +71,17 @@ function kbs_edit_customer( $args ) {
 
 	}
 
+	if ( ! empty( $customer_info['website'] ) )	{
+		$website = filter_var( $customer_info['website'], FILTER_SANITIZE_URL );
+
+		if ( filter_var( $website, FILTER_VALIDATE_URL ) === false ) {
+			$error = __( 'Please enter a valid website address.', 'kb-support' );
+		}
+
+	} else	{
+		$website = '';
+	}
+
 	// Record this for later
 	$previous_user_id  = $customer->user_id;
 
@@ -113,9 +124,11 @@ function kbs_edit_customer( $args ) {
 	$address          = apply_filters( 'kbs_edit_customer_address', $address, $customer_id );
 	$primary_phone    = apply_filters( 'kbs_edit_customer_primary_phone', $primary_phone, $customer_id );
 	$additional_phone = apply_filters( 'kbs_edit_customer_additional_phone', $additional_phone, $customer_id );
+	$website          = apply_filters( 'kbs_edit_customer_website', $website, $customer_id );
 
 	$customer_data = array_map( 'sanitize_text_field', $customer_data );
 	$address       = array_map( 'sanitize_text_field', $address );
+	$website       = ! empty( $website ) ? esc_url_raw( $website ) : $website;
 
 	do_action( 'kbs_pre_edit_customer', $customer_id, $customer_data, $address );
 
@@ -127,6 +140,7 @@ function kbs_edit_customer( $args ) {
 		$customer->update_meta( 'address', $address );
 		$customer->update_meta( 'primary_phone', $primary_phone );
 		$customer->update_meta( 'additional_phone', $additional_phone );
+		$customer->update_meta( 'website', $website );
 
 		// Update some ticket meta if we need to
 		$tickets_array = explode( ',', $customer->ticket_ids );

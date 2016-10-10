@@ -19,10 +19,6 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * @return	void
  */
 function kbs_setup_kbs_post_types() {
-
-	$ticket_archives = defined( 'KBS_TICKET_DISABLE_ARCHIVE' ) && KBS_DISABLE_ARCHIVE ? false : true;
-	$ticket_slug     = defined( 'KBS_TICKET_SLUG' ) ? KBS_SLUG : 'tickets';
-	$ticket_rewrite  = defined( 'KBS_TICKET_DISABLE_REWRITE' ) && KBS_DISABLE_REWRITE ? false : array( 'slug' => $ticket_slug, 'with_front' => false );
 	
 	$kb_archives     = defined( 'KBS_KB_DISABLE_ARCHIVE' ) && KBS_KB_DISABLE_ARCHIVE ? false : true;
 	$kb_slug         = defined( 'KBS_KB_SLUG' ) ? KBS_KB_SLUG : 'kb';
@@ -63,10 +59,10 @@ function kbs_setup_kbs_post_types() {
 		'show_in_menu'       => true,
 		'menu_icon'          => 'dashicons-tickets-alt',
 		'query_var'          => true,
-		'rewrite'            => $ticket_rewrite,
+		'rewrite'            => false,
 		'capability_type'    => 'ticket',
 		'map_meta_cap'       => true,
-		'has_archive'        => $ticket_archives,
+		'has_archive'        => false,
 		'hierarchical'       => false,
 		'supports'           => apply_filters( 'kbs_ticket_supports', array( 'title', 'editor' ) )
 	);
@@ -358,7 +354,7 @@ function kbs_setup_custom_taxonomies() {
 			'labels'       => apply_filters( 'kbs_ticket_category_labels', $ticket_category_labels),
 			'show_ui'      => true,
 			'query_var'    => 'ticket_category',
-			'rewrite'      => array( 'slug' => $ticket_slug . '/category', 'with_front' => false, 'hierarchical' => true ),
+			'rewrite'      => false,
 			'capabilities' => array( 'manage_terms' => 'manage_ticket_terms','edit_terms' => 'edit_ticket_terms','assign_terms' => 'assign_ticket_terms','delete_terms' => 'delete_ticket_terms' )
 		)
 	);
@@ -387,7 +383,7 @@ function kbs_setup_custom_taxonomies() {
 			'labels'       => apply_filters( 'kbs_ticket_tag_labels', $ticket_tag_labels ),
 			'show_ui'      => true,
 			'query_var'    => 'ticket_tag',
-			'rewrite'      => array( 'slug' => $ticket_slug . '/tag', 'with_front' => false, 'hierarchical' => true  ),
+			'rewrite'      => false,
 			'capabilities' => array( 'manage_terms' => 'manage_ticket_terms','edit_terms' => 'edit_ticket_terms','assign_terms' => 'assign_ticket_terms','delete_terms' => 'delete_ticket_terms' )
 		)
 	);

@@ -279,6 +279,10 @@ function kbs_customers_view( $customer ) {
 
 					<span class="customer-additional-phone info-item editable" data-key="additional_phone"><?php echo  $customer->additional_phone; ?></span>
 
+					<span class="customer-website info-item edit-item"><input size="20" data-key="web-address" name="customerinfo[website]" type="text" value="<?php echo $customer->website; ?>" placeholder="<?php _e( 'http://', 'kb-support' ); ?>" /></span>
+
+					<span class="customer-website info-item editable" data-key="website"><?php echo  $customer->website; ?></span>
+
 					<span class="customer-since info-item">
 						<?php _e( 'Customer since', 'kb-support' ); ?>
 						<?php echo date_i18n( get_option( 'date_format' ), strtotime( $customer->date_created ) ) ?>

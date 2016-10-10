@@ -50,6 +50,43 @@ function kbs_get_ticket( $ticket_id )	{
 } // kbs_get_ticket
 
 /**
+ * Retrieve a ticket by a field.
+ *
+ * @since	1.0
+ * @param	str			$field	The field by which to retrieve.
+ * @param	mixed		$value	The value of the field.
+ * @return	obj|false	The post object if found, otherwise false 
+ */
+function kbs_get_ticket_by( $field, $value )	{
+
+	if ( 'id' == $field )	{
+		$field = 'ID';
+	}
+
+	switch( $field )	{
+		case 'ID':
+		case 'id':
+			return kbs_get_ticket( $value );
+		break;
+
+		case 'key':
+			$args = array(
+				'key'    => $value,
+				'number' => 1
+			);
+
+			$tickets = kbs_get_tickets( $args );
+
+			if ( ! empty( $tickets ) )	{
+				return $tickets[0];
+			}
+			break;
+	}
+
+	return false;
+} // kbs_get_ticket_by
+
+/**
  * Retrieve ticket categories.
  *
  * @since	1.0
@@ -393,7 +430,7 @@ function kbs_add_ticket( $ticket_data )	{
 	$ticket->status           = ! empty( $ticket_data['status'] )          ? $ticket_data['status']          : 'new';
 	$ticket->ticket_title     = $ticket_data['post_title'];
 	$ticket->ticket_content   = $ticket_data['post_content'];
-	$ticket->agent            = ! empty( $ticket_data['agent'] )           ? $ticket_data['agent']           : '';
+	$ticket->agent_id         = ! empty( $ticket_data['agent_id'] )        ? $ticket_data['agent_id']        : '';
 	$ticket->user_info        = $ticket_data['user_info'];
 	$ticket->user_id          = ! empty( $ticket_data['user_info']['id'] ) ? $ticket_data['user_info']['id'] : '';
 	$ticket->email            = $ticket_data['user_email'];
@@ -401,10 +438,8 @@ function kbs_add_ticket( $ticket_data )	{
 	$ticket->last_name        = $ticket_data['user_info']['last_name'];
 	$ticket->email            = $ticket_data['user_info']['email'];
 	$ticket->ip               = kbs_get_ip();
-	$ticket->sla              = array(
-		'target_respond' => kbs_calculate_sla_target_response(),
-		'target_resolve' => kbs_calculate_sla_target_resolution()
-	);
+	$ticket->sla_respond      = kbs_calculate_sla_target_response();
+	$ticket->sla_resolve      = kbs_calculate_sla_target_resolution();
 	$ticket->source           = '';
 	$ticket->new_files        = $ticket_data['attachments'];
 	$ticket->form_data        = ! empty( $ticket_data['form_data'] ) ? $ticket_data['form_data'] : '';
@@ -522,80 +557,35 @@ function kbs_add_ticket_from_form( $form_id, $form_data )	{
  * @param	$status		The status to be set for the ticket.
  * @return	mixed.
  */
-function kbs_set_ticket_status( $ticket_id, $status='open' )	{
+function kbs_set_ticket_status( $ticket_id, $status = 'open' )	{
+
 	if ( 'kbs_ticket' != get_post_type( $ticket_id ) )	{
 		return false;
 	}
 
-	remove_action( 'save_post_kbs_ticket', 'kbs_ticket_post_save', 10, 3 );
+	$ticket = new KBS_Ticket( $ticket_id );
 
-	/**
-	 * Fires immediately before updating the ticket status.
-	 * @since	1.0
-	 * @param	int	$ticket_id
-	 * @param	str	$status		The new ticket status to be assigned.
-	 */
-	do_action( 'kbs_pre_update_ticket_status', $ticket_id, $status );
+	if ( $ticket->ID == 0 )	{
+		return;
+	}
 
-	/**
-	 * Fires pre update but is more granular as can be hooked for specific status'
-	 * @since	1.0
-	 * @param	@see do_action( 'kbs_pre_update_ticket_status' )
-	 */
-	do_action( 'kbs_pre_update_ticket_status_' . $status, $ticket_id, $status );
+	return $ticket->update_status( 'open' );
 
-	$old_status = get_post_status( $ticket_id );
-
-	$update = wp_update_post(
-		array( 
-			'ID'          => $ticket_id,
-			'post_status' => $status
-		)
-	);
-	
-	/**
-	 * Fires immediately after updating the ticket status.
-	 * @since	1.0
-	 * @param	int	$ticket_id
-	 * @param	str	$old_status	The ticket status prior to being updated.
-	 * @param	str	$status		The new ticket status that was assigned.
-	 */
-	do_action( 'kbs_post_update_ticket_status', $ticket_id, $old_status, $status );
-
-	/**
-	 * Fires post update but is more granular as can be hooked for specific status'
-	 * @since	1.0
-	 * @param	@see do_action( 'kbs_post_update_ticket_status' )
-	 */
-	do_action( 'kbs_post_update_ticket_status_' . $status, $ticket_id, $old_status, $status );
-
-	add_action( 'save_post_kbs_ticket', 'kbs_ticket_post_save', 10, 3 );
-
-	return $update;
 } // kbs_set_ticket_status
 
 /**
  * Retrieve the ticket meta.
  *
  * @since	1.0
- * @param	int	$ticket_id		The ticket ID
- * @param	str	$key			The individual key to retrieve
+ * @param	int		$ticket_id	The ticket ID
+ * @param	str		$meta_key	The individual key to retrieve
+ * @param	bool	$single		Return single item or array
  * @return	arr	The ticket meta.
  */
-function kbs_get_ticket_meta( $ticket_id, $key='' )	{
-	$meta = get_post_meta( $ticket_id, '_ticket_data', true );
+function kbs_get_ticket_meta( $ticket_id, $meta_key = '', $single = true )	{
+	$ticket = new KBS_Ticket( $ticket_id );
 
-	if ( ! empty( $key ) )	{
-		if ( isset( $meta[ $key ] ) )	{
-			$return = apply_filters( 'kbs_ticket_meta_single', $meta[ $key ], $ticket_id, $key );
-		} else	{
-			$return = apply_filters( 'kbs_ticket_meta_single', false, $ticket_id, $key );
-		}
-	} else	{
-		$return = apply_filters( 'kbs_ticket_meta', $meta );
-	}
-
-	return $return;
+	return $ticket->get_meta( $meta_key, $single );
 } // kbs_get_ticket_meta
 
 /**
@@ -684,7 +674,7 @@ function kbs_get_ticket_url( $ticket_id, $admin = false, $key = false )	{
 function kbs_get_agent( $ticket_id )	{
 	$kbs_ticket = new KBS_Ticket( $ticket_id );
 	
-	return $kbs_ticket->agent;
+	return $kbs_ticket->agent_id;
 } // kbs_get_agent
 
 /**
@@ -722,7 +712,7 @@ function kbs_assign_agent( $ticket_id, $user_id = 0 )	{
 	 */
 	do_action( 'kbs_pre_assign_agent', $ticket_id, $user_id );
 
-	$return = kbs_update_ticket_meta( $ticket_id, 'agent', $user_id );
+	$return = kbs_update_ticket_meta( $ticket_id, '_kbs_ticket_agent_id', $user_id );
 
 	/**
 	 * Fires immediately after assigning an agent

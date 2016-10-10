@@ -134,7 +134,7 @@ function kbs_ajax_insert_ticket_reply()	{
 		'response'    => $_POST['response'],
 		'close'       => $_POST['close_ticket'],
 		'customer_id' => $ticket->customer_id,
-		'agent'       => $ticket->agent,
+		'agent_id'    => $ticket->agent_id,
 		'key'         => $ticket->key
 	);
 

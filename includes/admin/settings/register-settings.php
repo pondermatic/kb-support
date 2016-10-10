@@ -234,7 +234,14 @@ function kbs_get_registered_settings() {
 					'submission_page'   => array(
 						'id'      => 'submission_page',
 						'name'    => sprintf( __( '%s Page', 'kb-support' ), $single ),
-						'desc'    => sprintf( __( 'This is the page where customers will submit their %s', 'kb-support' ), strtolower( $plural ) ),
+						'desc'    => sprintf( __( 'This is the page where customers will submit their %s. Should contain the <code>[kbs_submit]</code> shortcode.', 'kb-support' ), strtolower( $plural ) ),
+						'type'    => 'select',
+						'options' => kbs_get_pages()
+					),
+					'tickets_page'   => array(
+						'id'      => 'tickets_page',
+						'name'    => sprintf( __( '%s Page', 'kb-support' ), $plural ),
+						'desc'    => sprintf( __( 'This is the page where can view and reply to their %s. Should contain the <code>[kbs_tickets]</code> shortcode', 'kb-support' ), strtolower( $plural ) ),
 						'type'    => 'select',
 						'options' => kbs_get_pages()
 					)

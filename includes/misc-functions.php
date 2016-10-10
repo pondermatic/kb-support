@@ -332,6 +332,10 @@ function kbs_get_notices( $notice = '', $notice_only = false )	{
 		'article_restricted_login' => array(
 			'class'  => 'info',
 			'notice' => sprintf( __( 'Access to this %s is restricted. Login to continue.', 'kb-support' ), kbs_get_kb_label_singular() )
+		),
+		'no_ticket' => array(
+			'class'  => 'error',
+			'notice' => sprintf( __( 'No %s found.', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
 		)
 	);
 

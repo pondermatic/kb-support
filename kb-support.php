@@ -216,6 +216,7 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-db.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-stats.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-roles.php';
+		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-cron.php';
 		require_once KBS_PLUGIN_DIR . 'includes/admin/customers/customers-page.php';
 		require_once KBS_PLUGIN_DIR . 'includes/admin/customers/customer-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/admin/customers/customer-actions.php';

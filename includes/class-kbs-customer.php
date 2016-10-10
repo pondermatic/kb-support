@@ -65,6 +65,13 @@ class KBS_Customer {
 	public $additional_phone;
 
 	/**
+	 * The customer's website address
+	 *
+	 * @since 1.0
+	 */
+	public $website;
+
+	/**
 	 * The customer's name
 	 *
 	 * @since 1.0
@@ -172,6 +179,7 @@ class KBS_Customer {
 
 		$this->primary_phone    = $this->get_meta( 'primary_phone', true );
 		$this->additional_phone = $this->get_meta( 'additional_phone', true );
+		$this->website          = $this->get_meta( 'website', true );
 
 		// Customer ID and email are the only things that are necessary, make sure they exist
 		if ( ! empty( $this->id ) && ! empty( $this->email ) ) {

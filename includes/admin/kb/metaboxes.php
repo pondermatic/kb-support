@@ -25,7 +25,7 @@ function kbs_kb_metabox_fields() {
 
 	return apply_filters( 'kbs_kb_metabox_fields_save', $fields );
 
-} // kbs_ticket_metabox_fields
+} // kbs_kb_metabox_fields
 
 /**
  * Define and add the metaboxes for the kbs_ticket post type.

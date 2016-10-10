@@ -46,7 +46,7 @@ function kbs_auto_assign_agent_to_ticket_action()	{
 	
 	$kbs_ticket = new KBS_Ticket( $_GET['post'] );
 	
-	if ( 'new' != $kbs_ticket->post_status || ! empty( $kbs_ticket->agent ) )	{
+	if ( 'new' != $kbs_ticket->post_status || ! empty( $kbs_ticket->agent_id ) )	{
 		return;
 	}
 
@@ -82,3 +82,32 @@ function kbs_delete_ticket_note_action( $data )	{
 
 } // kbs_delete_ticket_note_action
 add_action( 'kbs-delete_ticket_note', 'kbs_delete_ticket_note_action' );
+
+/**
+ * View a single ticket.
+ *
+ * @since	1.0
+ * @return str
+ */
+function kbs_view_ticket_action( $data )	{
+	$redirect = remove_query_arg( array(
+		'kbs_action',
+		'key',
+		'ticket'
+	), get_permalink( kbs_get_option( 'tickets_page' ) ) );
+
+	if ( isset( $data['key'] ) )	{
+		$ticket = $data['key'];
+	} elseif ( isset( $data['ticket'] ) && is_user_logged_in() )	{
+		$ticket = $data['ticket'];
+	} else	{
+		$ticket = '';
+	}
+
+	wp_safe_redirect( add_query_arg( array(
+		'ticket' => $ticket
+	), $redirect ) );
+	die();
+
+} // kbs_view_ticket_action
+add_action( 'kbs_view_ticket', 'kbs_view_ticket_action' );
