@@ -142,7 +142,7 @@
 	color: #000;
 }
 
-/* =Submission Form
+/* =Submission Forms
 -------------------------------------------------------------- */
 #kbs_ticket_wrap span.kbs-description {
 	color: #666;
@@ -241,4 +241,37 @@
 	-webkit-font-smoothing: antialiased;
 	font: normal 20px/1 'dashicons';
 	vertical-align: middle;
+}
+
+#kbs_secure_site_wrapper span.id {
+	display: inline-block;
+	font-size: large;
+	-webkit-font-smoothing: antialiased;
+	vertical-align: middle;
+}
+
+/* =Tickets
+-------------------------------------------------------------- */
+#kbs_single_ticket_form_fields p	{
+	line-height: 100%;
+	font-size: 90%;
+	margin: 0 0 5px;
+}
+#kbs_single_ticket_form_fields p span.data-label	{
+	font-weight: bold;
+	position: relative;
+	width: 120px;
+	display: inline-block;
+}
+#kbs_single_ticket_form_fields p span.post-data-label	{
+	padding-top: 18px;
+	font-weight: bold;
+	position: relative;
+	width: 120px;
+	display: inline-block;
+}
+#kbs_single_ticket_form_fields a.ticket-toggle-content	{
+	font-size: 70%;
+	cursor: pointer;
+	font-style: italic;
 }

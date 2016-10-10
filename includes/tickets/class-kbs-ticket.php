@@ -748,7 +748,7 @@ class KBS_Ticket {
 	 * Retrieve the ticket content
 	 *
 	 * @since	1.0
-	 * @return	int
+	 * @return	str
 	 */
 	public function get_content() {
 		$content = apply_filters( 'the_content', $this->ticket_content );
@@ -756,7 +756,31 @@ class KBS_Ticket {
 		
 		return apply_filters( 'kbs_ticket_content', $content );
 	} // get_content
-	
+
+	/**
+	 * Retrieve the ticket content excerpt.
+	 *
+	 * Used to display the ticket content on the [kbs_view_ticket] shortcode.
+	 *
+	 * @since	1.0
+	 * @return	str
+	 */
+	public function get_the_excerpt() {
+		if ( has_excerpt( $this->ID ) )	{
+			$excerpt = get_post_field( 'post_excerpt', $this->ID );
+		} else	{
+			$excerpt = get_post_field( 'post_content', $this->ID );
+		}
+
+		$more = ' <a class="ticket-toggle-content more">';
+			$more .= __( 'Show more&hellip;', 'kb-support' );
+		$more .= '</a>';
+
+		$excerpt = wp_trim_words( $excerpt, 15, $more );
+
+		return apply_filters( 'kbs_ticket_excerpt', $excerpt );
+	} // get_content
+
 	/**
 	 * Get a post meta item for the payment
 	 *
