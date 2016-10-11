@@ -809,15 +809,9 @@ function kbs_get_ticket_replies( $ticket_id = 0, $args = array() )	{
 		return false;
 	}
 
-	$defaults = array(
-		'post_type'   => 'kbs_ticket_reply',
-		'post_parent' => $ticket_id,
-		'numberposts' => -1
-	);
+	$ticket = new KBS_Ticket( $ticket_id );
 
-	$args = wp_parse_args( $args, $defaults );
-
-	return get_posts( $args );
+	return $ticket->get_replies( $args );
 } // kbs_get_ticket_replies
 
 /**
@@ -834,17 +828,12 @@ function kbs_ticket_get_reply_html( $reply, $ticket_id = 0 ) {
 		$reply = get_post( $reply );
 	}
 
-	if ( ! empty( $reply->post_author ) ) {
-		$user = get_userdata( $reply->post_author );
-		$user = $user->display_name;
-	} else {
-		$user = '';
-	}
+	$author = kbs_get_reply_author_name( $reply, true );
 
 	$date_format = get_option( 'date_format' ) . ', ' . get_option( 'time_format' );
 
 	$reply_html  ='<h3>';
-		$reply_html .= $user . '&nbsp;&ndash;&nbsp;' . date_i18n( $date_format, strtotime( $reply->post_date ) );
+		$reply_html .= $author . '&nbsp;&ndash;&nbsp;' . date_i18n( $date_format, strtotime( $reply->post_date ) );
 	$reply_html .= '</h3>';
 
 	$reply_html .= '<div>';
@@ -854,6 +843,45 @@ function kbs_ticket_get_reply_html( $reply, $ticket_id = 0 ) {
 	return $reply_html;
 
 } // kbs_ticket_get_reply_html
+
+/**
+ * Retrieve the name of the person who replied to the ticket.
+ *
+ * @since	1.0
+ * @param	obj|int	$reply		The reply object or ID
+ * @param	bool	$role		Whether or not to include the role in the response
+ * @return	str		The name of the person who authored the reply. If $role is true, their role in brackets
+ */
+function kbs_get_reply_author_name( $reply, $role = false )	{
+	if ( is_numeric( $reply ) ) {
+		$reply = get_post( $reply );
+	}
+
+	$author      = __( 'Unknown', 'kb-support' );
+	$author_role = '';
+
+	if ( ! empty( $reply->post_author ) ) {
+		$author      = get_userdata( $reply->post_author );
+		$author      = $author->display_name;
+		$author_role = __( 'Agent', 'kb-support' );
+	} else {
+		$customer = get_post_meta( $reply->ID, 'kbs_reply_customer_id', false );
+		if ( $customer )	{
+			$author = new KBS_Customer( $customer );
+			if ( ! empty( $customer->ID ) && ! empty( $customer->name ) )	{
+				$author      = $customer->name;
+				$author_role = __( 'Customer', 'kb-support' );
+			}
+		}
+	}
+
+	if ( $role && ! empty( $author_role ) )	{
+		$author .= ' (' . $author_role . ')';
+	}
+
+	return apply_filters( 'kbs_reply_author_name', $author, $reply, $role, $author_role );
+
+} // kbs_get_reply_author_name
 
 /**
  * Retrieve all notes attached to a ticket.

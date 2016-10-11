@@ -369,7 +369,7 @@ class KBS_Ticket {
 		// Content & Replies
 		$this->ticket_title    = $ticket->post_title;
 		$this->ticket_content  = $ticket->post_content;
-		$this->replies         = kbs_get_ticket_replies( $this->ID );
+		$this->replies         = $this->get_replies();
 		$this->files           = $this->get_files();
 
 		// User data
@@ -1153,15 +1153,20 @@ class KBS_Ticket {
 	 * Retrieve the ticket replies
 	 *
 	 * @since	1.0
-	 * @return	arr
+	 * @param	arr		$args	Array of get_posts arguments.
+	 * @return	obj|false
 	 */
-	public function get_replies() {
-		$replies = get_posts( array(
-			'post_type'      => 'kbs_ticket',
+	public function get_replies( $args = array() ) {
+		$defaults = array(
+			'post_type'      => 'kbs_ticket_reply',
 			'post_parent'    => $this->ID,
 			'post_status'    => 'publish',
 			'posts_per_page' => -1
-		) );
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
+		$replies = get_posts( $args );
 		
 		return apply_filters( 'kbs_ticket_replies', $replies );
 	} // get_replies

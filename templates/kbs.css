@@ -257,6 +257,11 @@
 	font-size: 90%;
 	margin: 0 0 5px;
 }
+#kbs_single_ticket_form_fields ul	{
+	font-size: 90%;
+	margin: 5px 0 10px;
+	list-style-type: none;
+}
 #kbs_single_ticket_form_fields p span.data-label	{
 	font-weight: bold;
 	position: relative;
