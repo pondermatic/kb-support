@@ -382,7 +382,7 @@ function kbs_ticket_metabox_files_row( $ticket_id )	{
 		<div id="kbs-original-ticket-files-wrap" class="kbs_ticket_files_wrap">
         	<p><strong><?php _e( 'Attached Files', 'kb-support' ); ?></strong></p>
 			<?php foreach( $kbs_ticket->files as $file ) : ?>
-                <p><a href="<?php echo wp_get_attachment_url( $file->ID ); ?>" target="_blank"><?php echo basename( get_attached_file( $file->ID ) ); ?></a></p>
+                <p><a class="kbs_ticket_form_data" href="<?php echo wp_get_attachment_url( $file->ID ); ?>" target="_blank"><?php echo basename( get_attached_file( $file->ID ) ); ?></a></p>
             <?php endforeach; ?>
 		</div>
 	

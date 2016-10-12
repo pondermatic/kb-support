@@ -10,10 +10,47 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) )
+	exit;
 
 /**
- * When a reply is added.
+ * When a reply is added by a customer.
+ *
+ * @since	1.0
+ * @param	arr		$data	Array of data passed to action.
+ * @return	void
+ */
+function kbs_ticket_customer_reply_action( $data )	{
+
+	$ticket   = new KBS_Ticket( $data['kbs_ticket_id'] );
+	$redirect = $data['redirect'];
+
+	$reply_data = array(
+		'ticket_id'   => $data['kbs_ticket_id'],
+		'response'    => $data['kbs_reply'],
+		'close'       => ! isset( $data['close_ticket'] ) ? true : false,
+		'customer_id' => $ticket->customer_id
+	);
+
+	$reply_id = $ticket->add_reply( $reply_data );
+
+	if ( $reply_id )	{
+		if ( ! empty( $_FILES['kbs_files'] ) )	{
+			kbs_attach_files_to_reply( $reply_id );
+		}
+		$redirect = add_query_arg( 'kbs_notice', 'reply_success', $redirect );
+	} else	{
+		$redirect = add_query_arg( 'kbs_notice', 'reply_fail', $redirect );
+	}
+
+	wp_safe_redirect( $redirect );
+	exit;
+
+} // kbs_ticket_customer_reply_action
+add_action( 'kbs_submit_ticket_reply', 'kbs_ticket_customer_reply_action' );
+
+/**
+ * When a reply is added via admin.
  *
  * @since	1.0
  * @param	arr		$data	Array of data passed to action.

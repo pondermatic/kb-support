@@ -31,54 +31,80 @@ function kbs_notices()	{
 add_action( 'kbs_notices', 'kbs_notices' );
 
 /**
- * Before Ticket Content
+ * The form submit button label.
  *
- * Adds an action to the beginning of ticket post content that can be hooked to
- * by other functions.
- *
- * @since	0.1
- * @global	$post
- *
- * @param	str		$content	The the_content field of the download object
- * @return	str		The content with any additional data attached
+ * @since	1.0
+ * @return	str		The label for the form submit button.
  */
-function kbs_before_ticket_content( $content ) {
-	global $post;
-
-	if ( $post && $post->post_type == 'kbs_ticket' && is_singular( 'kbs_ticket' ) && is_main_query() && ! post_password_required() ) {
-		ob_start();
-		do_action( 'kbs_before_ticket_content', $post->ID );
-		$content = ob_get_clean() . $content;
-	}
-
-	return $content;
-} // kbs_before_ticket_content
-add_filter( 'the_content', 'kbs_before_ticket_content' );
+function kbs_get_form_submit_label()	{
+	return kbs_get_option( 'form_submit_label', sprintf( __( 'Submit %s', 'kb-support' ), kbs_get_ticket_label_singular() ) );
+} // kbs_get_form_submit_label
 
 /**
- * After Ticket Content
+ * The ticket reply submit button label.
  *
- * Adds an action to the end of ticket post content that can be hooked to by
- * other functions.
- *
- * @since	0.1
- * @global	$post
- *
- * @param	str		$content	The the_content field of the download object
- * @return	str		The content with any additional data attached
+ * @since	1.0
+ * @return	str		The label for the ticket reply form submit button.
  */
-function kbs_after_ticket_content( $content ) {
-	global $post;
+function kbs_get_ticket_reply_label()	{
+	return kbs_get_option( 'ticket_reply_label', __( 'Reply', 'kb-support' ) );
+} // kbs_get_ticket_reply_label
 
-	if ( $post && $post->post_type == 'kbs_ticket' && is_singular( 'kbs_ticket' ) && is_main_query() && ! post_password_required() ) {
-		ob_start();
-		do_action( 'kbs_after_ticket_content', $post->ID );
-		$content .= ob_get_clean();
-	}
+/**
+ * Output the hidden form fields.
+ *
+ * @since	1.0
+ * @param	$form_id	The ID of the form on display.
+ * @return	str
+ */
+function kbs_render_hidden_form_fields( $form_id )	{
+	$hidden_fields = array(
+		'kbs_form_id'  => $form_id,
+		'kbs_honeypot' => '',
+		'redirect'     => kbs_get_current_page_url(),
+		'action'       => 'kbs_validate_ticket_form'
+	);
 
-	return $content;
-} // kbs_after_ticket_content
-add_filter( 'the_content', 'kbs_after_ticket_content' );
+	$hidden_fields = apply_filters( 'kbs_form_hidden_fields', $hidden_fields, $form_id );
+
+	ob_start(); ?>
+
+	<?php foreach( $hidden_fields as $key => $value ) : ?>
+    	<input type="hidden" name="<?php echo $key; ?>" value="<?php echo $value; ?>" />
+    <?php endforeach; ?>
+
+    <?php echo ob_get_clean();
+} // kbs_render_hidden_form_fields
+
+/**
+ * Output the hidden reply form fields.
+ *
+ * @since	1.0
+ * @param	$ticket_id	The ID of the form on display.
+ * @return	str
+ */
+function kbs_render_hidden_reply_fields( $ticket_id )	{
+
+	$current_page  = kbs_get_current_page_url();
+	remove_query_arg( array( 'kbs_notice', 'ticket' ), $current_page );
+
+	$hidden_fields = array(
+		'kbs_ticket_id'  => $ticket_id,
+		'kbs_honeypot'   => '',
+		'redirect'       => add_query_arg( 'ticket', $_GET['ticket'], $current_page ),
+		'action'         => 'kbs_validate_ticket_reply_form'
+	);
+
+	$hidden_fields = apply_filters( 'kbs_reply_hidden_fields', $hidden_fields, $ticket_id );
+
+	ob_start(); ?>
+
+	<?php foreach( $hidden_fields as $key => $value ) : ?>
+    	<input type="hidden" name="<?php echo $key; ?>" value="<?php echo $value; ?>" />
+    <?php endforeach; ?>
+
+    <?php echo ob_get_clean();
+} // kbs_render_hidden_reply_fields
 
 /**
  * Before KB Article Content

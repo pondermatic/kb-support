@@ -144,7 +144,8 @@
 
 /* =Submission Forms
 -------------------------------------------------------------- */
-#kbs_ticket_wrap span.kbs-description {
+#kbs_ticket_wrap span.kbs-description,
+#kbs_item_wrapper span.kbs-description{
 	color: #666;
 	font-size: 80%;
 	display: block;
@@ -170,7 +171,8 @@
 	padding: 0;
 }
 
-#kbs_ticket_form_wrap input.error	{
+#kbs_ticket_form_wrap input.error,
+#input.error	{
 	border-color: #c4554e;
 }
 
@@ -252,35 +254,6 @@
 
 /* =Tickets
 -------------------------------------------------------------- */
-#kbs_single_ticket_form_fields p	{
-	line-height: 100%;
-	font-size: 90%;
-	margin: 0 0 5px;
-}
-#kbs_single_ticket_form_fields ul	{
-	font-size: 90%;
-	margin: 5px 0 10px;
-	list-style-type: none;
-}
-#kbs_single_ticket_form_fields p span.data-label	{
-	font-weight: bold;
-	position: relative;
-	width: 120px;
-	display: inline-block;
-}
-#kbs_single_ticket_form_fields p span.post-data-label	{
-	padding-top: 18px;
-	font-weight: bold;
-	position: relative;
-	width: 120px;
-	display: inline-block;
-}
-#kbs_single_ticket_form_fields a.ticket-toggle-content	{
-	font-size: 70%;
-	cursor: pointer;
-	font-style: italic;
-}
-
 #kbs_item_wrapper .left {
 	float: left;
 }
@@ -327,6 +300,10 @@
 #kbs_item_wrapper .ticket_main_wrapper	{
 	line-height: 110%;
 }
+#kbs_item_wrapper label	{
+	display: inline-block;
+	font-weight: bold;
+}
 #kbs_item_wrapper .ticket_main_wrapper label	{
 	display: inline-block;
 	font-weight: bold;
@@ -336,7 +313,7 @@
 	padding-top: 18px;
 }
 #kbs_item_wrapper .ticket_main_wrapper input {
-	width: 200px;
+	width: 70%;
 }
 #kbs_item_wrapper .ticket_right_wrapper {
 	margin-right: 25px;
@@ -352,25 +329,7 @@
 	min-height: 125px;
 	overflow: visible;
 }
-#kbs_item_wrapper a.delete {
-	color: #ff0000;
-	margin-right: 5px;
-	text-decoration: none;
-}
-.customer-edit-link a,
-.disconnect-user a {
-	font-size: 12px;
-	font-weight: normal;
-	text-decoration: none;
-}
-#customer-edit-actions {
-	line-height: 28px;
-	margin-bottom: 20px;
-	text-align: center;
-}
-#customer-edit-actions .button-secondary {
-	margin-right: 10px;
-}
+
 #kbs_item_wrapper .info_item {
 	display: block;
 	line-height: 16px;
@@ -398,6 +357,23 @@
 }
 #kbs_item_wrapper .sla_data	{
 	padding: 0 0 15px 0;
+}
+#kbs_item_wrapper input.kbs-input	{
+	display: inline-block;
+	width: 70%;
+	font-size: 90%;
+	font-weight: normal;
+}
+#kbs_item_wrapper .kbs-ticket-reply-head	{
+	padding-bottom: 10px;
+}
+#kbs_ticket_replies ul	{
+	 list-style-position: inside;
+	 list-style-type: none;
+}
+
+#kbs_ticket_replies label	{
+	padding-top: 10px;
 }
 
 @media screen and ( max-width: 810px ) and ( min-width: 656px ) {

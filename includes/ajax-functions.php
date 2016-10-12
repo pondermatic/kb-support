@@ -12,7 +12,8 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) )
+	exit;
 
 /**
  * Check if AJAX works as expected
@@ -172,6 +173,55 @@ function kbs_ajax_display_ticket_replies()	{
 	die();
 } // kbs_ajax_display_ticket_replies
 add_action( 'wp_ajax_kbs_display_ticket_replies', 'kbs_ajax_display_ticket_replies' );
+
+/**
+ * Validate a ticket reply form.
+ *
+ * @since	1.0
+ * @return	void
+ */
+function kbs_ajax_validate_ticket_reply_form()	{
+
+	$error = false;
+
+	kbs_do_honeypot_check( $_POST );
+
+	if ( empty( $_POST['kbs_reply'] ) )	{
+		wp_send_json( array(
+			'error' => kbs_get_notices( 'missing_reply', true ),
+			'field' => 'kbs_reply'
+		) );
+	}
+
+	if ( empty( $_POST['kbs_confirm_email'] ) || ! is_email( $_POST['kbs_confirm_email'] ) )	{
+		wp_send_json( array(
+			'error' => kbs_get_notices( 'email_invalid', true ),
+			'field' => 'kbs_confirm_email'
+		) );
+	}
+
+	$ticket   = new KBS_Ticket( $_POST['kbs_ticket_id'] );
+	$customer = new KBS_Customer( $_POST['kbs_confirm_email'] );
+
+	if ( $customer->id == 0 || $customer->id != $ticket->customer_id )	{
+		wp_send_json( array(
+			'error' => kbs_get_notices( 'email_invalid', true ),
+			'field' => 'kbs_confirm_email'
+		) );
+	}
+
+	/**
+	 * Allow plugins to perform additional validation.
+	 *
+	 * @since	1.0
+	 */
+	do_action( 'kbs_validate_ticket_reply_form', $ticket, $customer );
+
+	wp_send_json_success( array( 'error' => $error ) );
+
+} // kbs_ajax_validate_ticket_reply_form
+add_action( 'wp_ajax_kbs_validate_ticket_reply_form', 'kbs_ajax_validate_ticket_reply_form' );
+add_action( 'wp_ajax_nopriv_kbs_validate_ticket_reply_form', 'kbs_ajax_validate_ticket_reply_form' );
 
 /**
  * Adds a note to a ticket.

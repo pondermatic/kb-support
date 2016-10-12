@@ -1312,6 +1312,7 @@ class KBS_Ticket {
 	 * @return	int|false	The reply ID on success, or false on failure
 	 */
 	public function add_reply( $reply_data = array() ) {
+
 		// Return if no reply data
 		if ( empty( $reply_data ) )	{
 			return false;
@@ -1325,14 +1326,18 @@ class KBS_Ticket {
 			'post_content' => $reply_data['response'],
 			'post_parent'  => $reply_data['ticket_id'],
 			'post_author'  => get_current_user_id(),
-			'meta_input'   => array(
-				'_kbs_reply_customer_id' => $reply_data['customer_id'],
-				'_kbs_reply_agent_id'    => $reply_data['agent_id'],
-				'_kbs_ticket_key'        => $reply_data['key']
-			)
+			'meta_input'   => array()
 		);
 
-		if ( $reply_data['close'] )	{
+		if ( isset( $reply_data['customer_id'] ) )	{
+			$args['meta_input']['_kbs_reply_customer_id'] = $reply_data['customer_id'];
+		}
+
+		if ( isset( $reply_data['agent_id'] ) )	{
+			$args['meta_input']['_kbs_reply_agent_id'] = $reply_data['agent_id'];
+		}
+
+		if ( ! empty( $reply_data['close'] ) )	{
 			$args['meta_input']['_kbs_reply_resolution'] = true;
 		}
 

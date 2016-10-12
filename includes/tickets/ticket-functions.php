@@ -828,16 +828,30 @@ function kbs_ticket_get_reply_html( $reply, $ticket_id = 0 ) {
 		$reply = get_post( $reply );
 	}
 
-	$author = kbs_get_reply_author_name( $reply, true );
-
+	$author      = kbs_get_reply_author_name( $reply, true );
 	$date_format = get_option( 'date_format' ) . ', ' . get_option( 'time_format' );
+	$files       = kbs_ticket_has_files( $reply->ID );
+	$file_count  = ( $files ? count( $files ) : false );
 
 	$reply_html  ='<h3>';
 		$reply_html .= $author . '&nbsp;&ndash;&nbsp;' . date_i18n( $date_format, strtotime( $reply->post_date ) );
+		if ( $file_count )	{
+			$reply_html .= ' (' . $file_count . ' ' . _n( 'attached file', 'attached files', $file_count ) . ')';
+		}
 	$reply_html .= '</h3>';
 
 	$reply_html .= '<div>';
 		$reply_html .= wpautop( $reply->post_content );
+		if ( $files )	{
+
+			$reply_html .= '<ul>';
+
+			foreach( $files as $file )	{
+				$reply_html .= '<li><a href="' . wp_get_attachment_url( $file->ID ) . '" target="_blank">' . basename( get_attached_file( $file->ID ) ) . '</a></li>';
+			}
+
+			$reply_html .= '</ul>';
+		}
 	$reply_html .= '</div>';
 
 	return $reply_html;
@@ -865,10 +879,10 @@ function kbs_get_reply_author_name( $reply, $role = false )	{
 		$author      = $author->display_name;
 		$author_role = __( 'Agent', 'kb-support' );
 	} else {
-		$customer = get_post_meta( $reply->ID, 'kbs_reply_customer_id', false );
-		if ( $customer )	{
-			$author = new KBS_Customer( $customer );
-			if ( ! empty( $customer->ID ) && ! empty( $customer->name ) )	{
+		$customer_id = get_post_meta( $reply->ID, '_kbs_reply_customer_id', true );
+		if ( $customer_id )	{
+			$customer = new KBS_Customer( $customer_id );
+			if ( $customer )	{
 				$author      = $customer->name;
 				$author_role = __( 'Customer', 'kb-support' );
 			}

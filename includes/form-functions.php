@@ -693,16 +693,6 @@ function kbs_process_ticket_submission( $data )	{
 add_action( 'kbs_submit_ticket', 'kbs_process_ticket_submission' );
 
 /**
- * The form submit button label.
- *
- * @since	1.0
- * @return	str		The label for the form submit button.
- */
-function kbs_get_form_submit_label()	{
-	return kbs_get_option( 'form_submit_label', sprintf( __( 'Submit %s', 'kb-support' ), kbs_get_ticket_label_singular() ) );
-} // kbs_get_form_submit_label
-
-/**
  * Display a form text input field.
  *
  * This function is also the callback for email and URL fields.
@@ -1122,29 +1112,3 @@ function kbs_display_form_field_description( $field, $settings )	{
     	<span class="kbs-description"><?php esc_html_e( $settings['description'] ); ?></span>
     <?php endif;
 } // kbs_display_form_field_description
-
-/**
- * Output the hidden form fields.
- *
- * @since	1.0
- * @param	$form_id	The ID of the form on display.
- * @return	str
- */
-function kbs_render_hidden_form_fields( $form_id )	{
-	$hidden_fields = array(
-		'kbs_form_id'  => $form_id,
-		'kbs_honeypot' => '',
-		'redirect'     => kbs_get_current_page_url(),
-		'action'       => 'kbs_validate_ticket_form'
-	);
-
-	$hidden_fields = apply_filters( 'kbs_form_hidden_fields', $hidden_fields, $form_id );
-
-	ob_start(); ?>
-
-	<?php foreach( $hidden_fields as $key => $value ) : ?>
-    	<input type="hidden" name="<?php echo $key; ?>" value="<?php echo $value; ?>" />
-    <?php endforeach; ?>
-
-    <?php echo ob_get_clean();
-} // kbs_render_hidden_form_fields

@@ -329,10 +329,17 @@ function kbs_get_registered_settings() {
 					'form_submit_label' => array(
 						'id'   => 'form_submit_label',
 						'name' => __( 'Submit Label', 'kb-support' ),
-						'desc' => __( 'The label for the ticket form submit button.', 'kb-support' ),
+						'desc' => sprintf( __( 'The label for the %s form submit button.', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'text',
 						'std'  => sprintf( __( 'Submit %s', 'kb-support' ), $single )
 					),
+					'ticket_reply_label' => array(
+						'id'   => 'ticket_reply_label',
+						'name' => __( 'Reply Label', 'kb-support' ),
+						'desc' => sprintf( __( 'The label for the %s reply form submit button.', 'kb-support' ), strtolower( $single ) ),
+						'type' => 'text',
+						'std'  => __( 'Reply', 'kb-support' )
+					)
 				),
 				'sla' => array(
 					'sla_settings_header' => array(

@@ -13,91 +13,6 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
- * Checks if file uploads are enabled
- *
- * @since	1.0
- * @return	bool	$ret	True if guest checkout is enabled, false otherwise
- */
-function kbs_file_uploads_are_enabled() {
-	$return = false;
-
-	if( kbs_get_option( 'file_uploads', false ) )	{
-		$return = true;
-	}
-	
-	return (bool) apply_filters( 'kbs_file_uploads', $return );
-} // kbs_file_uploads_are_enabled
-
-/**
- * Set Upload Directory
- *
- * Sets the upload dir to kbs.
- *
- * @since	1.0
- * @return	arr		Upload directory information.
- */
-function kbs_set_upload_dir( $upload ) {
-
-	// Override the year / month being based on the post publication date, if year/month organization is enabled
-	if ( get_option( 'uploads_use_yearmonth_folders' ) )	{
-
-		$time             = current_time( 'mysql' );
-		$y                = substr( $time, 0, 4 );
-		$m                = substr( $time, 5, 2 );
-		$upload['subdir'] = "/$y/$m";
-
-	}
-
-	$upload['subdir'] = '/kbs' . $upload['subdir'];
-	$upload['path']   = $upload['basedir'] . $upload['subdir'];
-	$upload['url']    = $upload['baseurl'] . $upload['subdir'];
-	
-	return apply_filters( 'kbs_set_upload_dir', $upload );
-
-} // kbs_set_upload_dir
-
-/**
- * Change Tickets Upload Directory.
- *
- * This function works by hooking on the WordPress Media Uploader
- * and moving the uploading files that are used for KBS to a kbs
- * directory under wp-content/uploads/ therefore,
- * the new directory is wp-content/uploads/kbs/{year}/{month}.
- *
- * @since	1.0
- * @global	$pagenow
- * @return	void
- */
-function kbs_change_downloads_upload_dir() {
-
-	global $pagenow;
-
-	if ( ! empty( $_REQUEST['post_id'] ) && ( 'async-upload.php' == $pagenow || 'media-upload.php' == $pagenow ) )	{
-
-		if ( 'kbs_ticket' == get_post_type( $_REQUEST['post_id'] ) ) {
-			add_filter( 'upload_dir', 'kbs_set_upload_dir' );
-		}
-
-	}
-
-} // kbs_change_downloads_upload_dir
-add_action( 'admin_init', 'kbs_change_downloads_upload_dir', 999 );
-
-/**
- * Sets the enctype for file upload forms.
- *
- * @since	1.0
- * @return	str
- */
-function kbs_maybe_set_enctype() {
-	if ( kbs_file_uploads_are_enabled() )	{
-		$output = ' enctype="multipart/form-data"';
-		
-		echo apply_filters( 'kbs_maybe_set_enctype', $output );
-	}
-} // kbs_file_uploads_are_enabled
-
-/**
  * Checks if Guest checkout is enabled
  *
  * @since	1.0
@@ -336,6 +251,22 @@ function kbs_get_notices( $notice = '', $notice_only = false )	{
 		'no_ticket' => array(
 			'class'  => 'error',
 			'notice' => sprintf( __( 'No %s found.', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
+		),
+		'missing_reply' => array(
+			'class'  => 'error',
+			'notice' => __( 'Please enter your reply.', 'kb-support' )
+		),
+		'reply_success' => array(
+			'class'  => 'success',
+			'notice' => __( 'Your reply has been received. If necessary, one of our agents will be in touch shortly.', 'kb-support' )
+		),
+		'reply_fail' => array(
+			'class'  => 'error',
+			'notice' => __( 'Your reply could not be processed.', 'kb-support' )
+		),
+		'max_files' => array(
+			'class'  => 'error',
+			'notice' => sprintf( __( 'The maximum number of files you are allowed to upload is %s.', 'kb-support' ), kbs_get_max_file_uploads() )
 		)
 	);
 

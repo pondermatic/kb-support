@@ -376,9 +376,11 @@ a.kbs_ticket_form_data	{
 	font-size: 12px;
 	font-style: italic;
 }
-
 #kbs-notes-history.kbs_notes_accordion p.kbs-delete,
 #kbs-replies-history.kbs_replies_accordion p.kbs-delete	{
 	font-size: 12px;
 	text-align: right;
+}
+#kbs-replies-history.kbs_replies_accordion a	{
+	font-size: 12px;
 }

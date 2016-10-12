@@ -37,8 +37,11 @@ function kbs_load_scripts() {
 		'ajaxurl'                 => kbs_get_ajax_url(),
 		'ajax_loader'             => KBS_PLUGIN_URL . 'assets/images/loading.gif',
 		'permalinks'              => get_option( 'permalink_structure' ) ? '1' : '0',
+		'max_files'               => kbs_get_max_file_uploads(),
+		'max_files_exceeded'      => kbs_get_notices( 'max_files', true ),
 		'submit_ticket_loading'   => __( 'Please Wait...', 'kb-support' ),
 		'submit_ticket'           => kbs_get_form_submit_label(),
+		'reply_label'             => kbs_get_ticket_reply_label(),
 		'honeypot_fail'           => __( 'Honeypot validation error', 'kb-support' )
 	) ) );
 
