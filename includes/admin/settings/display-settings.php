@@ -6,18 +6,19 @@
  * @subpackage  Admin/Settings
  * @copyright   Copyright (c) 2016, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       0.1
+ * @since       1.0
 */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) )
+	exit;
 
 /**
  * Options Page
  *
  * Renders the options page contents.
  *
- * @since	0.1
+ * @since	1.0
  * @return	void
  */
 function kbs_options_page() {

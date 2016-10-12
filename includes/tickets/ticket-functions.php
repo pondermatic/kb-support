@@ -626,6 +626,19 @@ function kbs_get_ticket_id( $ticket )	{
 } // kbs_get_ticket_id
 
 /**
+ * Get the user email associated with a ticket.
+ *
+ * @since	1.0
+ * @param	int		$ticket_id	Ticket ID
+ * @return	str		$email		User Email
+ */
+function kbs_get_ticket_user_email( $ticket_id ) {
+	$ticket = new KBS_Ticket( $ticket_id );
+
+	return $ticket->email;
+} // kbs_get_ticket_user_email
+
+/**
  * Retrieve the URL for a ticket.
  *
  * @since	1.0

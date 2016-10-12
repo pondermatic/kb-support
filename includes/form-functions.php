@@ -445,7 +445,7 @@ function kbs_get_field_types()	{
 		'url'                      => __( 'URL Field', 'kb-support' ),		
 	);
 	
-	if ( kbs_get_option( 'file_uploads', 0 ) < 1 )	{
+	if ( ! kbs_file_uploads_are_enabled() )	{
 		unset( $field_types['file_uploads'] );
 	}
 	
@@ -1073,21 +1073,22 @@ function kbs_display_form_file_upload_field( $field, $settings )	{
 		return;
 	}
 
-	$placeholder = ! empty( $settings['placeholder'] )  ? ' placeholder="' . esc_attr( $settings['placeholder'] ) . '"' : '';
-	$class       = ! empty( $settings['input_class'] )  ? esc_attr( $settings['input_class'] )                          : '';
-	$multiple    = kbs_get_option( 'file_uploads' ) > 1 ? ' multiple'                                                   : '';
+	$output      = '';
+	$placeholder = ! empty( $settings['placeholder'] ) ? ' placeholder="' . esc_attr( $settings['placeholder'] ) . '"' : '';
+	$class       = ! empty( $settings['input_class'] ) ? esc_attr( $settings['input_class'] ) : '';
 
 	$class = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $class ) ) );
 
 	do_action( 'kbs_before_form_field', $field, $settings );
 	do_action( 'kbs_before_form_' . $settings['type'] . '_field', $field, $settings );
 
-	$output = sprintf( '<input type="file" name="%1$s[]" id="%1$s"%2$s%3$s%4$s />',
-		esc_attr( $field->post_name ),
-		! empty( $class ) ? ' class="' . $class . ' kbs-input"' : '',
-		$placeholder,
-		$multiple
-	);
+	for ( $i = 1; $i <= kbs_get_max_file_uploads(); $i++ )	{
+        $output .= sprintf( '<input type="file" name="%1$s[]" id="%1$s"%2$s%3$s />',
+			esc_attr( $field->post_name ),
+			! empty( $class ) ? ' class="' . $class . ' kbs-input"' : '',
+			$placeholder
+		);
+	}
 
 	$output = apply_filters( 'kbs_display_form_file_upload_field', $output, $field, $settings );
 

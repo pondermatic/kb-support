@@ -371,9 +371,11 @@
 	 list-style-position: inside;
 	 list-style-type: none;
 }
-
 #kbs_ticket_replies label	{
 	padding-top: 10px;
+}
+a.ticket_reply_content	{
+	cursor: pointer;	
 }
 
 @media screen and ( max-width: 810px ) and ( min-width: 656px ) {

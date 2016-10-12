@@ -294,7 +294,7 @@ function kbs_get_registered_settings() {
 					'file_uploads' => array(
 						'id'      => 'file_uploads',
 						'name'    => __( 'Allow File Uploads', 'kb-support' ),
-						'desc'    => sprintf( __( 'Maximum number of files that can be attached during %s creation or response.', 'kb-support' ), strtolower( $single ) ),
+						'desc'    => sprintf( __( 'Maximum number of files that can be attached during %s creation or reply.', 'kb-support' ), strtolower( $single ) ),
 						'type'    => 'number',
 						'size'    => 'small',
 						'max'     => '10',
@@ -475,7 +475,7 @@ function kbs_get_registered_settings() {
 						'name' => __( 'Content', 'kb-support' ),
 						'desc' => sprintf( __( 'Enter the text that is sent as a %1$s received email to users after submission of a %1$s. HTML is accepted.', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'rich_editor',
-						'std'  => __( "Dear", "kb-support" ) . " {name},\n\n" . __( "Thank you for logging your support ticket. Details of your ticket are displayed below.", "kb-support" ) . "\n\n" . '{ticket_details}'
+						'std'  => kbs_get_ticket_logged_email_body_content()
 					),
 				),
 				'ticket_notifications' => array(
@@ -493,10 +493,13 @@ function kbs_get_registered_settings() {
 					),
 					'ticket_notification' => array(
 						'id'   => 'ticket_notification',
-						'name' => sprintf( __( '%s Notification', 'kb-support' ), $single ) . "\n\n" . '{ticket_details}',
+						'name' => sprintf( __( '%s Notification', 'kb-support' ), $single ),
 						'desc' => sprintf( __( 'Enter the text that is sent as %s received notification email after submission of a case. HTML is accepted.' ), strtolower( $single ) ),
 						'type' => 'rich_editor',
-						'std'  => '',//kbs_get_default_ticket_notification_email()
+						'std'  => __( 'Hello!', 'kb-support' ) . "\n\n" .
+								  sprintf( __( 'A new support %s has been received from', 'kb-support' ), strtolower( $single ) ) . " {name}.\n\n" .
+								  "{ticket_details}\n\n" .
+								  __( 'Thank you', 'kb-support' )
 					),
 					'admin_notice_emails' => array(
 						'id'   => 'admin_notice_emails',
@@ -511,6 +514,38 @@ function kbs_get_registered_settings() {
 						'desc' => sprintf( __( 'Check this box if you do not want to receive %s notification emails.', 'kb-support' ), $single ),
 						'type' => 'checkbox'
 					)
+				),
+				'status_changed' => array(
+					'status_changed_settings' => array(
+						'id'   => 'status_changed_settings',
+						'name' => '<h3>' . __( 'Status Change', 'kb-support' ) . '</h3>',
+						'type' => 'header'
+					),
+					'status_change_subject' => array(
+						'id'   => 'status_change_subject',
+						'name' => __( 'Email Subject', 'kb-support' ),
+						'desc' => __( 'Enter the subject line for the status changed email', 'kb-support' ),
+						'type' => 'text',
+						'std'  => sprintf( __( 'Your Support %s was Updated', 'kb-support' ), $single )
+					),
+					'status_change_heading' => array(
+						'id'   => 'status_change_heading',
+						'name' => __( 'Email Heading', 'kb-support' ),
+						'desc' => __( 'Enter the heading for the status changed email', 'kb-support' ),
+						'type' => 'text',
+						'std'  => sprintf( __( 'Support %s Update', 'kb-support' ), $single )
+					),
+					'status_change_content' => array(
+						'id'   => 'status_change_content',
+						'name' => __( 'Content', 'kb-support' ),
+						'desc' => sprintf( __( 'Enter the content that is sent to customers when their %1$s has been updated. HTML is accepted.', 'kb-support' ), strtolower( $single ) ),
+						'type' => 'rich_editor',
+						'std'  => __( "Dear", "kb-support" ) . " {name},\n\n" . 
+								  sprintf( __( "There's been an update to your support %s.", "kb-support" ), strtolower( $single ) ) . "\n\n" .
+								  '{ticket_url}' . "\n\n" .
+								  __( 'Regards', 'kb-support' ) . "\n\n" .
+								  '{sitename}'
+					),
 				)
 			)
 		),
@@ -833,8 +868,9 @@ function kbs_get_registered_settings_sections() {
 		) ),
 		'emails'     => apply_filters( 'kbs_settings_sections_emails', array(
 			'main'                 => __( 'Emails', 'kb-support' ),
-			'ticket_logged'      => sprintf( __( '%s Logged', 'kb-support' ), kbs_get_ticket_label_singular() ),
-			'ticket_notifications' => sprintf( __( '%s Notifications', 'kb-support' ), kbs_get_ticket_label_singular() )
+			'ticket_logged'        => sprintf( __( '%s Logged', 'kb-support' ), kbs_get_ticket_label_singular() ),
+			'ticket_notifications' => sprintf( __( '%s Notifications', 'kb-support' ), kbs_get_ticket_label_singular() ),
+			'status_changed'      => __( 'Status Change', 'kb-support' )
 		) ),
 		'styles'     => apply_filters( 'kbs_settings_sections_styles', array(
 			'main'                 => __( 'Styles', 'kb-support' )

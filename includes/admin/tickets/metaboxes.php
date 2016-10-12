@@ -433,8 +433,7 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 	} else	{
 		$settings = apply_filters( 'kbs_ticket_reply_mce_settings', array(
 			'textarea_rows'    => 5,
-			'drag_drop_upload' => true,
-			'quicktags'        => false
+			'quicktags'        => true
 		) ); ?>
 
 		<div id="kbs-ticket-reply-wrap">

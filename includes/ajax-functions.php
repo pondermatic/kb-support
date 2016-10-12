@@ -187,16 +187,20 @@ function kbs_ajax_validate_ticket_reply_form()	{
 	kbs_do_honeypot_check( $_POST );
 
 	if ( empty( $_POST['kbs_reply'] ) )	{
-		wp_send_json( array(
-			'error' => kbs_get_notices( 'missing_reply', true ),
-			'field' => 'kbs_reply'
-		) );
+		$error = kbs_get_notices( 'missing_reply', true );
+		$field = 'kbs_reply';
+	} elseif ( empty( $_POST['kbs_confirm_email'] ) || ! is_email( $_POST['kbs_confirm_email'] ) )	{
+		$error = kbs_get_notices( 'email_invalid', true );
+		$field = 'kbs_confirm_email';
+	} elseif ( ! empty( $_FILES ) && ! empty( $_FILES['name'][ kbs_get_max_file_uploads() ] ) )	{
+		$error = kbs_get_notices( 'max_files', true );
+		$field = 'kbs_files';
 	}
 
-	if ( empty( $_POST['kbs_confirm_email'] ) || ! is_email( $_POST['kbs_confirm_email'] ) )	{
+	if ( ! empty( $error ) )	{
 		wp_send_json( array(
-			'error' => kbs_get_notices( 'email_invalid', true ),
-			'field' => 'kbs_confirm_email'
+			'error' => $error,
+			'field' => $field
 		) );
 	}
 
@@ -358,6 +362,15 @@ function kbs_ajax_validate_form_submission()	{
 
 			$error = kbs_form_submission_errors( $field->ID, 'required' );
 			$field = $field->post_name;
+
+		} elseif ( 'file_upload' == $settings['type'] )	{
+
+			if ( ! empty( $_FILES ) && ! empty( $_FILES['name'][ kbs_get_max_file_uploads() ] ) )	{
+
+				$error = kbs_get_notices( 'max_files', true );
+				$field = 'kbs_files';
+
+			}
 
 		} elseif ( 'email' == $settings['type'] || 'customer_email' == $settings['mapping'] )	{
 

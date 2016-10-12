@@ -44,7 +44,7 @@ function kbs_email_ticket_received( $ticket_id, $admin_notice = true ) {
 	$heading      = apply_filters( 'kbs_ticket_heading', $heading, $ticket_id, $ticket_data );
 
 	$attachments  = apply_filters( 'kbs_ticket_attachments', array(), $ticket_id, $ticket_data );
-	$message      = kbs_do_email_tags( kbs_get_email_body_content( $ticket_id, $ticket_data ), $ticket_id );
+	$message      = kbs_do_email_tags( kbs_get_ticket_logged_email_body_content( $ticket_id, $ticket_data ), $ticket_id );
 
 	$emails       = KBS()->emails;
 
@@ -87,7 +87,7 @@ function kbs_email_test_ticket_received() {
 
 	$attachments = apply_filters( 'kbs_ticket_attachments', array(), 0, array() );
 
-	$message     = kbs_do_email_tags( kbs_get_email_body_content( 0, array() ), 0 );
+	$message     = kbs_do_email_tags( kbs_get_ticket_logged_email_body_content( 0, array() ), 0 );
 
 	$emails = KBS()->emails;
 	$emails->__set( 'from_name' , $from_name );
@@ -135,7 +135,7 @@ function kbs_admin_email_notice( $ticket_id = 0, $ticket_data = array() ) {
 
 	$attachments = apply_filters( 'kbs_admin_ticket_notification_attachments', array(), $ticket_id, $ticket_data );
 
-	$message     = kbs_get_ticket_notification_body_content( $ticket_id, $ticket_data );
+	$message     = kbs_get_ticket_notification_email_body_content( $ticket_id, $ticket_data );
 
 	$emails = KBS()->emails;
 	$emails->__set( 'from_name', $from_name );

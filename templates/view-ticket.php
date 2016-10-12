@@ -98,11 +98,18 @@ if ( ! empty( $ticket->ID ) ) : ?>
                     <?php if ( ! empty( $ticket->replies ) ) : ?>
 						<ul>
 						<?php foreach( $ticket->replies as $reply ) : ?>
+
+							<?php $reply_content = apply_filters( 'the_content', $reply->post_content );
+                            $reply_content = str_replace( ']]>', ']]&gt;', $reply_content ); ?>
+
 							<li id="kbs_ticket_reply-<?php echo $reply->ID; ?>" class="kbs-ticket-reply-head" data-item="reply-<?php echo $reply->ID; ?>">
                             	<span class="ticket_reply info-item">
-									<?php echo date_i18n( get_option( 'time_format' ) . ' \o\n ' . get_option( 'date_format' ), strtotime(  $reply->post_date ) ); ?> 
+									<a class="ticket_reply_content" data-key="<?php echo $reply->ID; ?>"><?php echo date_i18n( get_option( 'time_format' ) . ' \o\n ' . get_option( 'date_format' ), strtotime(  $reply->post_date ) ); ?> 
 									<?php _e( 'by', 'kb-support' ); ?>  
-									<?php echo kbs_get_reply_author_name( $reply->ID, true ); ?>
+									<?php echo kbs_get_reply_author_name( $reply->ID, true ); ?></a>
+                                    <div id="ticket_response_<?php echo $reply->ID; ?>" class="single_reply kbs_hidden">
+                                    	<?php echo $reply_content; ?>
+                                    </div>
                                 </span>
                             </li>
 						<?php endforeach; ?>
@@ -139,11 +146,12 @@ if ( ! empty( $ticket->ID ) ) : ?>
                             echo wp_editor( '', 'kbs_reply', $wp_settings ); ?>
 
 							<?php if ( kbs_file_uploads_are_enabled() ) : ?>
-                            	<?php $multiple = kbs_get_option( 'file_uploads' ) > 1 ? ' multiple' : ''; ?>
                                 <div class="reply_files">
-                                    <p><label for="kbs_files"><?php _e( 'Attach Files', 'kb-support' ); ?></label>
-                                    	<span class="kbs-description"><?php printf( __( 'Maximum %d files', 'kb-support' ), kbs_get_max_file_uploads() ); ?></span>
-                                        <input type="file" class="kbs-input" name="kbs_files[]" id="kbs-files"<?php echo $multiple; ?> />
+                                    <p>
+                                    	<label for="kbs_files"><?php _e( 'Attach Files', 'kb-support' ); ?></label><br />
+                                    	<?php for ( $i = 1; $i <= kbs_get_max_file_uploads(); $i++ ) : ?>
+                                            <input type="file" class="kbs-input" name="kbs_files[]" />
+                                        <?php endfor; ?>
                                     </p>
                                 </div>
                             <?php endif; ?>

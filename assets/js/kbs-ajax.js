@@ -34,16 +34,6 @@ jQuery(document).ready(function ($) {
 
 		var $form      = $("#kbs_ticket_form");
 		var ticketData = $("#kbs_ticket_form").serialize();
-		var $files      = $("input[type='file']");
-
-        if ( parseInt( $files.get(0).files.length ) > kbs_scripts.max_files )	{
-			$form.find('.kbs_alert').show("fast");
-			$form.find('.kbs_alert').html(kbs_scripts.max_files_exceeded);
-			$('#kbs_reply_submit').prop("disabled", false);
-			$('#kbs-loading').remove();
-			$('#kbs_reply_submit').val(kbs_scripts.submit_ticket);
-			return;
-        }
 
 		$.ajax({
 			type       : 'POST',
@@ -74,6 +64,11 @@ jQuery(document).ready(function ($) {
 
 	/* = Ticket reply form validation and submission
 	====================================================================================== */
+	$(document).on('click', '.ticket_reply_content', function()	{
+		var reply_id = $(this).data("key");
+		$('#ticket_response_' + reply_id).toggle("fast");
+	});
+
 	$(document).on('click', '#kbs_ticket_reply_form #kbs_reply_submit', function(e) {
 		var kbsReplyForm = document.getElementById('kbs_ticket_reply_form');
 
@@ -95,16 +90,6 @@ jQuery(document).ready(function ($) {
 
 		var $form       = $("#kbs_ticket_reply_form");
 		var ticketData  = $("#kbs_ticket_reply_form").serialize();
-		var $files      = $("input[type='file']");
-
-        if ( parseInt( $files.get(0).files.length ) > kbs_scripts.max_files )	{
-			$form.find('.kbs_alert').show("fast");
-			$form.find('.kbs_alert').html(kbs_scripts.max_files_exceeded);
-			$('#kbs_reply_submit').prop("disabled", false);
-			$('#kbs-loading').remove();
-			$('#kbs_reply_submit').val(kbs_scripts.reply_label);
-			return;
-        }
 
 		$.ajax({
 			type       : 'POST',
