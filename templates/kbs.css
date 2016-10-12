@@ -280,3 +280,162 @@
 	cursor: pointer;
 	font-style: italic;
 }
+
+#kbs_item_wrapper .left {
+	float: left;
+}
+#kbs_item_wrapper .right {
+	float: right;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	max-width: 33%;
+}
+#kbs_item_wrapper input {
+	font-weight: normal;
+}
+#kbs_item_wrapper {
+	display: inline-block;
+	margin-left: -1px;
+	min-height: 200px;
+	width: 100%;
+	z-index: 2;
+	font-size: 90%;
+}
+#kbs_item_wrapper .data_section {
+	border-bottom: 1px solid #eee;
+	margin-bottom: 10px;
+	overflow: auto;
+}
+#kbs_item_wrapper .data_section table {
+	margin-bottom: 20px;
+}
+#kbs_item_wrapper > div {
+	padding: 0px 20px;
+}
+#kbs_item_wrapper > div:first-child {
+	padding-top: 20px;
+}
+#kbs_item_wrapper > div:last-child {
+	border: none;
+	padding-bottom: 20px;
+}
+#kbs_item_wrapper .ticket_id {
+	font-size: 20px;
+	font-weight: 600;
+}
+#kbs_item_wrapper .ticket_main_wrapper	{
+	line-height: 110%;
+}
+#kbs_item_wrapper .ticket_main_wrapper label	{
+	display: inline-block;
+	font-weight: bold;
+	width: 100px;
+}
+#kbs_item_wrapper .major_ticket_items label	{
+	padding-top: 18px;
+}
+#kbs_item_wrapper .ticket_main_wrapper input {
+	width: 200px;
+}
+#kbs_item_wrapper .ticket_right_wrapper {
+	margin-right: 25px;
+	max-width: 33%;
+	width: 202px;
+}
+#kbs_item_wrapper .ticket_info {
+	margin-top: 5px;
+	margin-bottom: 10px;
+	min-height: 185px;
+}
+#kbs_item_wrapper .ticket_item_wrapper {
+	min-height: 125px;
+	overflow: visible;
+}
+#kbs_item_wrapper a.delete {
+	color: #ff0000;
+	margin-right: 5px;
+	text-decoration: none;
+}
+.customer-edit-link a,
+.disconnect-user a {
+	font-size: 12px;
+	font-weight: normal;
+	text-decoration: none;
+}
+#customer-edit-actions {
+	line-height: 28px;
+	margin-bottom: 20px;
+	text-align: center;
+}
+#customer-edit-actions .button-secondary {
+	margin-right: 10px;
+}
+#kbs_item_wrapper .info_item {
+	display: block;
+	line-height: 16px;
+	padding-bottom: 5px;
+}
+#kbs_item_wrapper .edit-item {
+	display: none;
+}
+#kbs_item_wrapper fieldset legend	{
+	padding-left: 1.5px;
+	padding-right: 1.5px;
+	font-weight: bold;
+	font-size: 110%;
+	padding: 0px 6px 0px 6px;
+}
+#kbs_item_wrapper fieldset fieldset {
+	margin: 0;
+	border: none;
+	padding: 0;
+}
+#kbs_item_wrapper fieldset {
+	border: 1px solid #eee;
+	padding: 1.387em;
+	margin: 0 0 21px;
+}
+#kbs_item_wrapper .sla_data	{
+	padding: 0 0 15px 0;
+}
+
+@media screen and ( max-width: 810px ) and ( min-width: 656px ) {
+	#kbs_item_wrapper {
+		width: 600px;
+	}
+}
+@media screen and ( max-width: 656px ) {
+	#kbs_item_wrapper {
+		margin: 0;
+		width: 100%;
+	}
+	#kbs_item_wrapper > div:first-child {
+		height: 230px;
+	}
+	#kbs_item_wrapper .ticket_info {
+		min-height: 210px;
+	}
+	.kbs_item_info.ticket_info {
+		position: relative;
+	}
+	#kbs_item_wrapper .ticket_files_wrapper {
+		position: absolute;
+		max-width: 200px;
+		vertical-align: top;
+	}
+	#kbs_item_wrapper .ticket_main_wrapper {
+		float: none;
+		position: absolute;
+		left: 110px;
+	}
+	#kbs_item_wrapper .data_section {
+		margin-bottom: 0;
+	}
+	#kbs_item_wrapper .ticket_id {
+		font-size: 16px;
+	}
+	#kbs_item_wrapper > div:first-child {
+		height: auto;
+	}
+}
