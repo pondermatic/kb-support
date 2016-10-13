@@ -342,10 +342,11 @@ function kbs_get_ticket_statuses( $can_select = true )	{
  * Retrieves keys for all available ticket statuses.
  *
  * @since	1.0
+ * @param	bool	$can_select		True to only return selectable status. False for all.
  * @return	arr		$ticket_status	All available ticket statuses
  */
-function kbs_get_ticket_status_keys() {
-	$statuses = array_keys( kbs_get_ticket_statuses() );
+function kbs_get_ticket_status_keys( $can_select = true ) {
+	$statuses = array_keys( kbs_get_ticket_statuses( $can_select ) );
 	asort( $statuses );
 
 	return array_values( $statuses );

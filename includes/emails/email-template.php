@@ -47,11 +47,40 @@ function kbs_email_template_tags( $message, $ticket_data, $ticket_id, $admin_not
  * Email Preview Template Tags
  *
  * @since	1.0
- * @param string $message Email message with template tags
- * @return string $message Fully formatted message
+ * @param	str		$message	Email message with template tags
+ * @return	str		$message	Fully formatted message
  */
 function kbs_email_preview_template_tags( $message ) {
 
+	$user      = wp_get_current_user();
+	$ticket_id = kbs_get_ticket_id( rand( 1, 100 ) );
+
+	$search  = array(
+		'{name}', '{fullname}', '{username}', '{user_email}', '{sitename}',
+		'{date}', '{ticket_id}', '{ticket_link}', '{ticket_details}'
+	);
+	$replace = array(
+		$user->first_name,
+		$user->display_name,
+		$user->user_login,
+		$user->user_email,
+		get_bloginfo( 'name' ),
+		get_date_from_gmt( current_time( 'timestamp' ), get_option( 'date_format' ) ),
+		get_date_from_gmt( current_time( 'timestamp' ), get_option( 'time_format' ) ),
+		kbs_get_ticket_id( $ticket_id ),
+		kbs_get_ticket_url( $ticket_id )
+	);
+
+	$message = str_replace( '{name}', $user->display_name, $message );
+	$message = str_replace( '{fullname}', $user->display_name, $message );
+ 	$message = str_replace( '{username}', $user->user_login, $message );
+	$message = str_replace( '{user_email}', $user->user_email, $message );
+	$message = str_replace( '{sitename}', get_bloginfo( 'name' ), $message );
+	$message = str_replace( '{date}', get_date_from_gmt( current_time( 'timestamp' ), get_option( 'date_format' ) ) );
+	$message = str_replace( '{ticket_id}', $ticket_id, $message );
+	$message = str_replace( '{ticket_details}', $ticket_id, $message );
+
+	return $message;
 } // kbs_email_preview_template_tags
 
 /**

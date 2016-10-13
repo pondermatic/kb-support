@@ -459,7 +459,7 @@ function kbs_get_registered_settings() {
 					'ticket_subject' => array(
 						'id'   => 'ticket_subject',
 						'name' => __( 'Email Subject', 'kb-support' ),
-						'desc' => sprintf( __( 'Enter the subject line for the %s logged email', 'kb-support' ), strtolower( $single ) ),
+						'desc' => sprintf( __( 'Enter the subject line for the %s logged email. Template tags accepted.', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'text',
 						'std'  => sprintf( __( '%s Recieved', 'kb-support' ), $single )
 					),
@@ -473,7 +473,7 @@ function kbs_get_registered_settings() {
 					'ticket_content' => array(
 						'id'   => 'ticket_content',
 						'name' => __( 'Content', 'kb-support' ),
-						'desc' => sprintf( __( 'Enter the text that is sent as a %1$s received email to users after submission of a %1$s. HTML is accepted.', 'kb-support' ), strtolower( $single ) ),
+						'desc' => sprintf( __( 'Enter the text that is sent as a %1$s received email to users after submission of a %1$s. HTML is accepted. Available template tags:', 'kb-support' ), strtolower( $single ) ) . '<br />' . kbs_get_emails_tags_list(),
 						'type' => 'rich_editor',
 						'std'  => kbs_get_ticket_logged_email_body_content()
 					),
@@ -487,14 +487,14 @@ function kbs_get_registered_settings() {
 					'ticket_notification_subject' => array(
 						'id'   => 'ticket_notification_subject',
 						'name' => sprintf( __( '%s Notification Subject', 'kb-support' ), $single ),
-						'desc' => sprintf( __( 'Enter the subject line for the %s notification email', 'kb-support' ), strtolower( $single ) ),
+						'desc' => sprintf( __( 'Enter the subject line for the %s notification email. Template tags accepted.', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'text',
 						'std'  => sprintf( __( 'New %s received - Case #{ticket_id}', 'kb-support' ), strtolower( $single ) )
 					),
 					'ticket_notification' => array(
 						'id'   => 'ticket_notification',
 						'name' => sprintf( __( '%s Notification', 'kb-support' ), $single ),
-						'desc' => sprintf( __( 'Enter the text that is sent as %s received notification email after submission of a case. HTML is accepted.' ), strtolower( $single ) ),
+						'desc' => sprintf( __( 'Enter the text that is sent as %s received notification email after submission of a case. HTML is accepted. Available template tags:' ), strtolower( $single ) ) . '<br />' . kbs_get_emails_tags_list(),
 						'type' => 'rich_editor',
 						'std'  => __( 'Hello!', 'kb-support' ) . "\n\n" .
 								  sprintf( __( 'A new support %s has been received from', 'kb-support' ), strtolower( $single ) ) . " {name}.\n\n" .
@@ -524,7 +524,7 @@ function kbs_get_registered_settings() {
 					'status_change_subject' => array(
 						'id'   => 'status_change_subject',
 						'name' => __( 'Email Subject', 'kb-support' ),
-						'desc' => __( 'Enter the subject line for the status changed email', 'kb-support' ),
+						'desc' => __( 'Enter the subject line for the status changed email. Template tags accepted.', 'kb-support' ),
 						'type' => 'text',
 						'std'  => sprintf( __( 'Your Support %s was Updated', 'kb-support' ), $single )
 					),
@@ -538,7 +538,7 @@ function kbs_get_registered_settings() {
 					'status_change_content' => array(
 						'id'   => 'status_change_content',
 						'name' => __( 'Content', 'kb-support' ),
-						'desc' => sprintf( __( 'Enter the content that is sent to customers when their %1$s has been updated. HTML is accepted.', 'kb-support' ), strtolower( $single ) ),
+						'desc' => sprintf( __( 'Enter the content that is sent to customers when their %1$s has been updated. HTML is accepted. Available template tags:', 'kb-support' ), strtolower( $single ) ) . '<br/>' . kbs_get_emails_tags_list(),
 						'type' => 'rich_editor',
 						'std'  => __( "Dear", "kb-support" ) . " {name},\n\n" . 
 								  sprintf( __( "There's been an update to your support %s.", "kb-support" ), strtolower( $single ) ) . "\n\n" .

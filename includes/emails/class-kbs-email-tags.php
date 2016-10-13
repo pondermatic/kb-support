@@ -312,11 +312,6 @@ function kbs_setup_email_tags() {
 			'tag'         => 'ticket_link',
 			'description' => __( 'Adds a link so users can view their ticket directly on your website if they are unable to view it in the browser correctly.', 'kb-support' ),
 			'function'    => 'kbs_email_tag_ticket_link'
-		),
-		array(
-			'tag'         => 'ip_address',
-			'description' => __( 'The customers IP Address', 'kb-support' ),
-			'function'    => 'kbs_email_tag_ip_address'
 		)
 	);
 
@@ -494,15 +489,3 @@ function kbs_email_tag_sitename( $ticket_id ) {
 function kbs_email_tag_ticket_link( $ticket_id ) {
 	
 } // kbs_email_tag_ticket_link
-
-/**
- * Email template tag: IP address
- * IP address of the customer
- *
- * @since	1.0
- * @param	int		$ticket_id
- * @return	str		IP address
- */
-function kbs_email_tag_ip_address( $ticket_id ) {
-	
-} // kbs_email_tag_ip_address
