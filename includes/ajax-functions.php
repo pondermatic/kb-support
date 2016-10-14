@@ -207,6 +207,14 @@ function kbs_ajax_validate_ticket_reply_form()	{
 	$ticket   = new KBS_Ticket( $_POST['kbs_ticket_id'] );
 	$customer = new KBS_Customer( $_POST['kbs_confirm_email'] );
 
+	/**
+	 * Allow plugin developers to filter the customer object in case users other than
+	 * the original person logging the ticket can reply.
+	 *
+	 * @since	1.0
+	 */
+	$customer = apply_filters( 'kbs_reply_customer_validate', $customer );
+
 	if ( $customer->id == 0 || $customer->id != $ticket->customer_id )	{
 		wp_send_json( array(
 			'error' => kbs_get_notices( 'email_invalid', true ),

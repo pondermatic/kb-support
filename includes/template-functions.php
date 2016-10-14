@@ -80,10 +80,12 @@ function kbs_render_hidden_form_fields( $form_id )	{
  * Output the hidden reply form fields.
  *
  * @since	1.0
- * @param	$ticket_id	The ID of the form on display.
- * @return	str
+ * @global	obj		$current_user	If logged in, the current user object
+ * @param	int		$ticket_id		The ID of the form on display.
+ * @return	arr		Hidden form fields for reply form
  */
 function kbs_render_hidden_reply_fields( $ticket_id )	{
+	global $current_user;
 
 	$current_page  = kbs_get_current_page_url();
 	remove_query_arg( array( 'kbs_notice', 'ticket' ), $current_page );
@@ -94,6 +96,12 @@ function kbs_render_hidden_reply_fields( $ticket_id )	{
 		'redirect'       => add_query_arg( 'ticket', $_GET['ticket'], $current_page ),
 		'action'         => 'kbs_validate_ticket_reply_form'
 	);
+
+	// If logged in we don't need to display the email input but we still need to capture it
+	// for form validation
+	if ( is_user_logged_in() )	{
+		$hidden_fields['kbs_confirm_email'] = $current_user->user_email;
+	}
 
 	$hidden_fields = apply_filters( 'kbs_reply_hidden_fields', $hidden_fields, $ticket_id );
 

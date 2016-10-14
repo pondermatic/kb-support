@@ -726,9 +726,9 @@ class KBS_Ticket {
 					do_action( 'kbs_ticket_status_' . $status, $this->ID, $old_status );
 			}
 
-			do_action( 'kbs_update_ticket_status', $this->ID, $status, $old_status );
-
 		}
+
+		do_action( 'kbs_update_ticket_status', $this->ID, $status, $old_status );
 
 		return $updated;
 
@@ -850,9 +850,14 @@ class KBS_Ticket {
 			return;
 		}
 
-		if ( 'new' == $this->old_status )	{
+		if ( 'new' == $this->old_status || 'auto-draft' == $this->old_status )	{
 			$this->update_meta( '_kbs_ticket_opened', current_time( 'mysql' ) );
 			$this->update_meta( '_kbs_ticket_opened_by', get_current_user_id() );
+
+			if ( is_admin() )	{
+				$ticket->update_meta( '_kbs_ticket_created_by', get_current_user_id() );
+			}
+
 		}
 
 		if ( empty( $this->sla_respond ) )	{
@@ -863,7 +868,7 @@ class KBS_Ticket {
 			$this->update_meta( '_kbs_ticket_sla_target_resolve', kbs_calculate_sla_target_resolution() );
 		}
 
-		do_action( 'kbs_open_ticket', $this );
+		do_action( 'kbs_open_ticket', $this->ID, $this );
 	} // process_open
 
 	/**
@@ -877,7 +882,7 @@ class KBS_Ticket {
 		if ( 'hold' == $this->old_status )	{
 			return;
 		}
-		do_action( 'kbs_hold_ticket', $this );
+		do_action( 'kbs_hold_ticket', $this->ID, $this );
 	} // process_on_hold
 
 	/**
@@ -891,7 +896,7 @@ class KBS_Ticket {
 		if ( 'closed' == $this->old_status )	{
 			return;
 		}
-		do_action( 'kbs_close_ticket', $this );
+		do_action( 'kbs_close_ticket', $this->ID, $this );
 	} // process_closed
 
 	/**
@@ -1314,9 +1319,11 @@ class KBS_Ticket {
 	public function add_reply( $reply_data = array() ) {
 
 		// Return if no reply data
-		if ( empty( $reply_data ) )	{
+		if ( empty( $reply_data ) || empty( $reply_data['response'] ) || empty( $reply_data['ticket_id'] ) )	{
 			return false;
 		}
+
+		$close = ! empty( $reply_data['close'] ) ? isset( $reply_data['close'] ) : false;
 
 		do_action( 'kbs_pre_reply_to_ticket', $reply_data, $this );
 
@@ -1337,7 +1344,7 @@ class KBS_Ticket {
 			$args['meta_input']['_kbs_reply_agent_id'] = $reply_data['agent_id'];
 		}
 
-		if ( ! empty( $reply_data['close'] ) )	{
+		if ( $close )	{
 			$args['meta_input']['_kbs_reply_resolution'] = true;
 		}
 
@@ -1347,7 +1354,12 @@ class KBS_Ticket {
 			return false;
 		}
 
-		do_action( 'kbs_reply_to_ticket', $reply_id, $reply_data, $this );
+		if ( $close )	{
+			$this->update_status( 'closed' );
+			$this->update_meta( '_kbs_resolution_id', $reply_id );
+		}
+
+		do_action( 'kbs_reply_to_ticket', $this->ID, $reply_id, $reply_data, $this );
 
 		return $reply_id;
 

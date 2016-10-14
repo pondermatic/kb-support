@@ -267,6 +267,10 @@ function kbs_get_notices( $notice = '', $notice_only = false )	{
 		'max_files' => array(
 			'class'  => 'error',
 			'notice' => sprintf( __( 'The maximum number of files you are allowed to upload is %s.', 'kb-support' ), kbs_get_max_file_uploads() )
+		),
+		'invalid_customer' => array(
+			'class'  => 'error',
+			'notice' => sprintf( __( 'You are not allowed to manage this %s.', 'kb-support' ), kbs_get_ticket_label_singular() )
 		)
 	);
 

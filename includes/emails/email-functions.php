@@ -25,6 +25,7 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function kbs_email_ticket_received( $ticket_id, $admin_notice = true ) {
 
+	$single       = kbs_get_ticket_label_singular();
 	$ticket       = new KBS_Ticket( $ticket_id );
 	$ticket_data  = $ticket->get_meta();
 
@@ -36,12 +37,13 @@ function kbs_email_ticket_received( $ticket_id, $admin_notice = true ) {
 
 	$to_email     = $ticket->email;
 
-	$subject      = kbs_get_option( 'ticket_subject', sprintf( __( 'Support %s Details', 'kb-support' ), kbs_get_ticket_label_singular() ) );
+	$subject      = kbs_get_option( 'ticket_subject', sprintf( __( 'Support %s Details', 'kb-support' ), $single ) );
 	$subject      = apply_filters( 'kbs_ticket_subject', wp_strip_all_tags( $subject ), $ticket_id );
 	$subject      = kbs_do_email_tags( $subject, $ticket_id );
 
-	$heading      = kbs_get_option( 'ticket_heading', sprintf( __( 'Support %s Details', 'kb-support' ), kbs_get_ticket_label_singular() ) );
+	$heading      = kbs_get_option( 'ticket_heading', sprintf( __( 'Support %s Details', 'kb-support' ), $single ) );
 	$heading      = apply_filters( 'kbs_ticket_heading', $heading, $ticket_id, $ticket_data );
+	$heading      = kbs_do_email_tags( $heading, $ticket_id );
 
 	$attachments  = apply_filters( 'kbs_ticket_attachments', array(), $ticket_id, $ticket_data );
 	$message      = kbs_do_email_tags( kbs_get_ticket_logged_email_body_content( $ticket_id, $ticket_data ), $ticket_id );
@@ -61,6 +63,124 @@ function kbs_email_ticket_received( $ticket_id, $admin_notice = true ) {
 		do_action( 'kbs_admin_ticket_notice', $ticket_id, $ticket_data );
 	}
 } // kbs_email_ticket_received
+
+/**
+ * Email to customer when a reply is added to a ticket.
+ *
+ * @since	1.0
+ * @param	int		$ticket_id		Ticket ID
+ * @return	void
+ */
+function kbs_email_ticket_reply( $ticket_id ) {
+
+	$disable = kbs_get_option( 'ticket_reply_disable_email', false );
+	$disable = apply_filters( 'kbs_ticket_reply_disable_email', $disable );
+	
+	if ( ! empty( $disable ) )	{
+		return;
+	}
+
+	$single = kbs_get_ticket_label_singular();
+	$ticket = new KBS_Ticket( $ticket_id );
+
+	// We do not send reply emails if a ticket is closed.
+	if ( 'closed' == $ticket->post_status )	{
+		return;
+	}
+
+	$ticket_data  = $ticket->get_meta();
+
+	$from_name    = kbs_get_option( 'from_name', wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) );
+	$from_name    = apply_filters( 'kbs_ticket_reply_from_name', $from_name, $ticket_id, $ticket_data );
+
+	$from_email   = kbs_get_option( 'from_email', get_bloginfo( 'admin_email' ) );
+	$from_email   = apply_filters( 'kbs_ticket_reply_from_address', $from_email, $ticket_id, $ticket_data );
+
+	$to_email     = $ticket->email;
+
+	$subject      = kbs_get_option( 'ticket_reply_subject', sprintf( __( 'Your Support %s Received a Reply - ##{ticket_id}##', 'kb-support' ), $single ) );
+	$subject      = apply_filters( 'kbs_ticket_reply_subject', wp_strip_all_tags( $subject ), $ticket_id );
+	$subject      = kbs_do_email_tags( $subject, $ticket_id );
+
+	$heading      = kbs_get_option( 'ticket_reply_heading', sprintf( __( 'Support %s Update for #{ticket_id}', 'kb-support' ), $single ) );
+	$heading      = apply_filters( 'kbs_ticket_reply_heading', $heading, $ticket_id, $ticket_data );
+	$heading      = kbs_do_email_tags( $heading, $ticket_id );
+
+	$attachments  = apply_filters( 'kbs_ticket_reply_attachments', array(), $ticket_id, $ticket_data );
+	$message      = kbs_do_email_tags( kbs_get_ticket_reply_email_body_content( $ticket_id, $ticket_data ), $ticket_id );
+
+	$emails       = KBS()->emails;
+
+	$emails->__set( 'from_name', $from_name );
+	$emails->__set( 'from_email', $from_email );
+	$emails->__set( 'heading', $heading );
+
+	$headers = apply_filters( 'kbs_ticket_reply_headers', $emails->get_headers(), $ticket_id, $ticket_data );
+	$emails->__set( 'headers', $headers );
+
+	$emails->send( $to_email, $subject, $message, $attachments );
+
+} // kbs_email_ticket_reply
+add_action( 'kbs_reply_to_ticket', 'kbs_email_ticket_reply', 999 );
+
+/**
+ * Email to customer when a ticket is closed.
+ *
+ * @since	1.0
+ * @param	int		$ticket_id		Ticket ID
+ * @return	void
+ */
+function kbs_email_ticket_closed( $ticket_id ) {
+
+	$disable = kbs_get_option( 'ticket_closed_disable_email', false );
+	$disable = apply_filters( 'kbs_ticket_reply_disable_email', $disable );
+	
+	if ( ! empty( $disable ) )	{
+		return;
+	}
+
+	$single = kbs_get_ticket_label_singular();
+	$ticket = new KBS_Ticket( $ticket_id );
+
+	// We only send emails if a ticket is closed.
+	if ( 'closed' != $ticket->post_status )	{
+		return;
+	}
+
+	$ticket_data  = $ticket->get_meta();
+
+	$from_name    = kbs_get_option( 'from_name', wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) );
+	$from_name    = apply_filters( 'kbs_ticket_closed_from_name', $from_name, $ticket_id, $ticket_data );
+
+	$from_email   = kbs_get_option( 'from_email', get_bloginfo( 'admin_email' ) );
+	$from_email   = apply_filters( 'kbs_ticket_closed_from_address', $from_email, $ticket_id, $ticket_data );
+
+	$to_email     = $ticket->email;
+
+	$subject      = kbs_get_option( 'ticket_closed_subject', sprintf( __( 'Your Support %s is Closed ##{ticket_id}##', 'kb-support' ), $single ) );
+	$subject      = apply_filters( 'kbs_ticket_closed_subject', wp_strip_all_tags( $subject ), $ticket_id );
+	$subject      = kbs_do_email_tags( $subject, $ticket_id );
+
+	$heading      = kbs_get_option( 'ticket_closed_heading', sprintf( __( 'Support %s #{ticket_id} Closed', 'kb-support' ), $single ) );
+	$heading      = apply_filters( 'kbs_ticket_closed_heading', $heading, $ticket_id, $ticket_data );
+	$heading      = kbs_do_email_tags( $heading, $ticket_id );
+
+	$attachments  = apply_filters( 'kbs_ticket_closed_attachments', array(), $ticket_id, $ticket_data );
+	$message      = kbs_do_email_tags( kbs_get_ticket_closed_email_body_content( $ticket_id, $ticket_data ), $ticket_id );
+
+	$emails       = KBS()->emails;
+
+	$emails->__set( 'from_name', $from_name );
+	$emails->__set( 'from_email', $from_email );
+	$emails->__set( 'heading', $heading );
+
+	$headers = apply_filters( 'kbs_ticket_closed_headers', $emails->get_headers(), $ticket_id, $ticket_data );
+	$emails->__set( 'headers', $headers );
+
+	$emails->send( $to_email, $subject, $message, $attachments );
+
+} // kbs_email_ticket_closed
+add_action( 'kbs_close_ticket', 'kbs_email_ticket_closed', 999 );
 
 /**
  * Email the ticket received confirmation to the admin accounts for testing.
@@ -84,6 +204,7 @@ function kbs_email_test_ticket_received() {
 
 	$heading     = kbs_get_option( 'ticket_heading', sprintf( __( 'Support %s Details', 'kb-support' ), $single ) );
 	$heading     = apply_filters( 'kbs_ticket_heading', $heading, 0, array() );
+	$heading     = kbs_do_email_tags( $heading, $ticket_id );
 
 	$attachments = apply_filters( 'kbs_ticket_attachments', array(), 0, array() );
 
@@ -111,6 +232,7 @@ function kbs_email_test_ticket_received() {
  */
 function kbs_admin_email_notice( $ticket_id = 0, $ticket_data = array() ) {
 
+	$single    = kbs_get_ticket_label_singular();
 	$ticket_id = absint( $ticket_id );
 
 	if ( empty( $ticket_id ) ) {
@@ -123,7 +245,7 @@ function kbs_admin_email_notice( $ticket_id = 0, $ticket_data = array() ) {
 	$from_email  = kbs_get_option( 'from_email', get_bloginfo( 'admin_email' ) );
 	$from_email  = apply_filters( 'kbs_notification_ticket_from_address', $from_email, $ticket_id, $ticket_data );
 
-	$subject     = kbs_get_option( 'ticket_notification_subject', sprintf( __( 'New %1Ss logged - Case #%1$s', 'kb-support' ), kbs_get_ticket_label_singular(), $ticket_id ) );
+	$subject     = kbs_get_option( 'ticket_notification_subject', sprintf( __( 'New %1Ss logged - Case #%1$s', 'kb-support' ), $single, $ticket_id ) );
 	$subject     = apply_filters( 'kbs_admin_ticket_notification_subject', wp_strip_all_tags( $subject ), $ticket_id );
 	$subject     = kbs_do_email_tags( $subject, $ticket_id );
 
@@ -141,7 +263,7 @@ function kbs_admin_email_notice( $ticket_id = 0, $ticket_data = array() ) {
 	$emails->__set( 'from_name', $from_name );
 	$emails->__set( 'from_email', $from_email );
 	$emails->__set( 'headers', $headers );
-	$emails->__set( 'heading', sprintf( __( 'New %s Received', 'kb-support' ), kbs_get_ticket_label_singular() ) );
+	$emails->__set( 'heading', sprintf( __( 'New %s Received', 'kb-support' ), $single ) );
 
 	$emails->send( kbs_get_admin_notice_emails(), $subject, $message, $attachments );
 

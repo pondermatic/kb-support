@@ -57,7 +57,7 @@ function kbs_email_preview_template_tags( $message ) {
 
 	$search  = array(
 		'{name}', '{fullname}', '{username}', '{user_email}', '{sitename}',
-		'{date}', '{ticket_id}', '{ticket_link}', '{ticket_details}'
+		'{date}', '{ticket_id}', '{ticket_url}', '{ticket_details}'
 	);
 	$replace = array(
 		$user->first_name,
@@ -160,6 +160,64 @@ function kbs_get_ticket_logged_email_body_content( $ticket_id = 0, $ticket_data 
 	return apply_filters( 'kbs_ticket_logged_email_content', $email_body, $ticket_id, $ticket_data );
 
 } // kbs_get_ticket_logged_email_body_content
+
+/**
+ * Ticket Reply Email Template Body
+ *
+ * This is the default content sent to the customer when a reply is added to a ticket.
+ *
+ * @since	1.0
+ * @param	int		$ticket_id		Ticket ID
+ * @param	arr		$ticket_data	Ticket Data
+ * @return	str		$email_body		Body of the email
+ */
+function kbs_get_ticket_reply_email_body_content( $ticket_id = 0, $ticket_data = array() ) {
+
+	$logged_email_body = __( 'Dear', 'kb-support' ) . " {name},\n\n";
+	$logged_email_body .= sprintf( __( 'Your support %s # {ticket_id} has received a reply.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ) . "\n\n";
+	$logged_email_body .= "{ticket_url}\n\n";
+	$logged_email_body .= "Regards\n\n";
+	$logged_email_body .= "{sitename}";
+
+	$email = kbs_get_option( 'ticket_reply_content', false );
+	$email = $email ? stripslashes( $email ) : $logged_email_body;
+
+	$email_body = apply_filters( 'kbs_ticket_reply_email_template_wpautop', true ) ? wpautop( $email ) : $email;
+
+	$email_body = apply_filters( 'kbs_ticket_reply_email_content_' . KBS()->emails->get_template(), $email_body, $ticket_id, $ticket_data );
+
+	return apply_filters( 'kbs_ticket_reply_email_content', $email_body, $ticket_id, $ticket_data );
+
+} // kbs_get_ticket_reply_email_body_content
+
+/**
+ * Ticket Closed Email Template Body
+ *
+ * This is the default content sent to the customer when a ticket is closed.
+ *
+ * @since	1.0
+ * @param	int		$ticket_id		Ticket ID
+ * @param	arr		$ticket_data	Ticket Data
+ * @return	str		$email_body		Body of the email
+ */
+function kbs_get_ticket_closed_email_body_content( $ticket_id = 0, $ticket_data = array() ) {
+
+	$logged_email_body = __( 'Dear', 'kb-support' ) . " {name},\n\n";
+	$logged_email_body .= sprintf( __( 'Your support %s # {ticket_id} is now closed.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ) . "\n\n";
+	$logged_email_body .= "{ticket_url}\n\n";
+	$logged_email_body .= "Regards\n\n";
+	$logged_email_body .= "{sitename}";
+
+	$email = kbs_get_option( 'ticket_closed_content', false );
+	$email = $email ? stripslashes( $email ) : $logged_email_body;
+
+	$email_body = apply_filters( 'kbs_ticket_closed_email_template_wpautop', true ) ? wpautop( $email ) : $email;
+
+	$email_body = apply_filters( 'kbs_ticket_closed_email_content_' . KBS()->emails->get_template(), $email_body, $ticket_id, $ticket_data );
+
+	return apply_filters( 'kbs_ticket_closed_email_content', $email_body, $ticket_id, $ticket_data );
+
+} // kbs_get_ticket_closed_email_body_content
 
 /**
  * Ticket Notification Template Body

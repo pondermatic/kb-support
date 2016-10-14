@@ -28,7 +28,7 @@ function kbs_ticket_customer_reply_action( $data )	{
 	$reply_data = array(
 		'ticket_id'   => $data['kbs_ticket_id'],
 		'response'    => $data['kbs_reply'],
-		'close'       => ! isset( $data['close_ticket'] ) ? true : false,
+		'close'       => isset( $data['kbs_close_ticket'] ) ? true : false,
 		'customer_id' => $ticket->customer_id
 	);
 

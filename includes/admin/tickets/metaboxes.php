@@ -72,7 +72,7 @@ function kbs_ticket_add_meta_boxes( $post )	{
 
 	add_meta_box(
 		'kbs-ticket-metabox-save',
-		sprintf( '%1$s %2$s', $save, kbs_get_ticket_label_singular() ),
+		sprintf( '%1$s %2$s # %3$s', $save, kbs_get_ticket_label_singular(), kbs_get_ticket_id( $kbs_ticket->ID ) ),
 		'kbs_ticket_metabox_save_callback',
 		'kbs_ticket',
 		'side',
@@ -90,16 +90,20 @@ function kbs_ticket_add_meta_boxes( $post )	{
 			'high',
 			array()
 		);
-		
-		add_meta_box(
-			'kbs-ticket-metabox-ticket-reply',
-			sprintf( __( 'Reply to %1$s', 'kb-support' ), kbs_get_ticket_label_singular() ),
-			'kbs_ticket_metabox_reply_callback',
-			'kbs_ticket',
-			'normal',
-			'high',
-			array()
-		);
+
+		if ( 'new' != $kbs_ticket->status && 'closed' == $kbs_ticket->status )	{
+
+			add_meta_box(
+				'kbs-ticket-metabox-ticket-reply',
+				sprintf( __( 'Reply to %1$s', 'kb-support' ), kbs_get_ticket_label_singular() ),
+				'kbs_ticket_metabox_reply_callback',
+				'kbs_ticket',
+				'normal',
+				'high',
+				array()
+			);
+
+		}
 
 		add_meta_box(
 			'kbs-ticket-metabox-ticket-private',

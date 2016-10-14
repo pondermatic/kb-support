@@ -309,9 +309,9 @@ function kbs_setup_email_tags() {
 			'function'    => 'kbs_email_tag_sitename'
 		),
 		array(
-			'tag'         => 'ticket_link',
-			'description' => __( 'Adds a link so users can view their ticket directly on your website if they are unable to view it in the browser correctly.', 'kb-support' ),
-			'function'    => 'kbs_email_tag_ticket_link'
+			'tag'         => 'ticket_url',
+			'description' => __( 'Adds a URL so users can view their ticket directly on your website.', 'kb-support' ),
+			'function'    => 'kbs_email_tag_ticket_url'
 		)
 	);
 
@@ -479,13 +479,13 @@ function kbs_email_tag_sitename( $ticket_id ) {
 } // kbs_email_tag_sitename
 
 /**
- * Email template tag: ticket_link
- * Adds a link so users can view their ticket directly on your website if they are unable to view it in the browser correctly
+ * Email template tag: ticket_url
+ * Adds a link so users can view their ticket directly on your website
  *
  * @since	1.0
  * @param	int		$ticket_id
  * @return	str		Ticket link
  */
-function kbs_email_tag_ticket_link( $ticket_id ) {
-	
-} // kbs_email_tag_ticket_link
+function kbs_email_tag_ticket_url( $ticket_id ) {
+	return kbs_get_ticket_url( $ticket_id, false, true );
+} // kbs_email_tag_ticket_url

@@ -283,13 +283,6 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
 
 	}
 
-	// When logging a new ticket
-	if ( empty( $update ) )	{
-		if ( get_current_user_id() == $_POST['kbs_agent_id'] )	{
-			$ticket->update_meta( '_kbs_ticket_created_by', get_current_user_id() );
-		}
-	}
-
 	if ( ! empty( $_POST['ticket_status'] ) && $_POST['ticket_status'] != $post->post_status )	{
 		$ticket->update_status( $_POST['ticket_status'] );
 	}
