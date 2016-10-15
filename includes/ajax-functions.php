@@ -98,6 +98,7 @@ function kbs_test_ajax_works() {
  */
 function kbs_is_ajax_disabled() {
 	$retval = ! kbs_get_option( 'enable_ajax_ticket' );
+
 	return apply_filters( 'kbs_is_ajax_disabled', $retval );
 } // kbs_is_ajax_disabled
 
@@ -492,7 +493,7 @@ add_action( 'wp_ajax_kbs_add_customer', 'kbs_ajax_add_customer' );
  */
 function kbs_ajax_search_users()	{
 
-	if( current_user_can( 'manage_ticket_settings' ) ) {
+	if ( current_user_can( 'manage_ticket_settings' ) ) {
 
 		$search_query = trim( $_POST['user_name'] );
 		$exclude      = trim( $_POST['exclude'] );
@@ -512,13 +513,14 @@ function kbs_ajax_search_users()	{
 		$found_users = apply_filters( 'kbs_ajax_found_users', get_users( $get_users_args ), $search_query );
 
 		$user_list = '<ul>';
-		if( $found_users ) {
+		if ( $found_users ) {
 			foreach( $found_users as $user ) {
 				$user_list .= '<li><a href="#" data-userid="' . esc_attr( $user->ID ) . '" data-login="' . esc_attr( $user->user_login ) . '">' . esc_html( $user->user_login ) . '</a></li>';
 			}
 		} else {
 			$user_list .= '<li>' . __( 'No users found', 'kb-support' ) . '</li>';
 		}
+
 		$user_list .= '</ul>';
 
 		echo json_encode( array( 'results' => $user_list ) );
@@ -527,3 +529,73 @@ function kbs_ajax_search_users()	{
 	die();
 } // kbs_ajax_search_users
 add_action( 'wp_ajax_kbs_search_users', 'kbs_ajax_search_users' );
+
+/**
+ * Perform article search.
+ *
+ * @since	1.0
+ * @return	void
+ */
+function kbs_ajax_article_search()	{
+
+	$output      = false;
+	$results     = false;
+	$search_term = $_POST['term'];
+
+	$args = array(
+		'number'      => kbs_get_option( 'kb_num_posts_ajax', 5 ),
+		's'           => $search_term
+	);
+
+	if ( ! is_user_logged_in() && kbs_get_option( 'kb_hide_restricted_ajax' ) )	{
+		$args['post__not_in'] = kbs_get_restricted_articles();
+	}
+
+	$articles_query = new KBS_Articles_Query( $args );
+	$articles       = $articles_query->get_articles();
+
+	if ( ! empty( $articles ) )	{
+
+		$output = '<ul>';
+
+		foreach( $articles as $article )	{
+			$output .= '<li>';
+				$output .= '<a href="' . get_post_permalink( $article->ID ) . '" target="_blank">';
+					$output .= esc_attr( $article->post_title );
+				$output .= '</a>';
+				$output .= '<br />';
+
+				if ( kbs_article_is_restricted( $article->ID ) )	{
+					$output .= kbs_get_notices( 'article_restricted', true );
+				} else	{
+					$output .= kbs_get_article_excerpt( $article->ID );
+				}
+
+			$output .= '</li>';
+		}
+
+		$output .='</ul>';
+
+		if ( $articles_query->total_articles > $args['number'] )	{
+
+			$search_url = add_query_arg( array(
+				'kbs_action' => 'search_kb_articles',
+				's_kb'       => $search_term
+			), site_url() );
+
+			$output .= '<a href="' . $search_url . '" target="_blank">';
+				$output .= sprintf( __( 'View all %d possible solutions.', 'kb-support' ), $articles_query->total_articles );
+			$output .= '</a>';
+
+		}
+
+		$results = true;
+	}
+
+	wp_send_json( array(
+		'articles' => $output
+	) );
+
+} // kbs_ajax_article_search
+add_action( 'wp_ajax_kbs_ajax_article_search', 'kbs_ajax_article_search' );
+add_action( 'wp_ajax_nopriv_kbs_ajax_article_search', 'kbs_ajax_article_search' );

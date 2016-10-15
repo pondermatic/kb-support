@@ -11,6 +11,56 @@ jQuery(document).ready(function ($) {
 		} );
 	}
 
+	/* = Ticket submission form article search
+	====================================================================================== */
+	$('#close-search').click(function(e) {
+        $('.kbs-article-search-results').hide("slow");
+    });
+
+	$('.kbs-article-search').focusout(function( event )	{
+
+		$('#kbs-article-list').html('');
+
+		if ( $(this).val().length < 3 ) {
+			$('.kbs-article-search-results').hide("slow");
+			return;
+		}
+
+		$('.kbs-article-search-results').hide("fast");
+		$('#kbs-loading').html('<img src="' + kbs_scripts.ajax_loader + '" />');
+		$('#kbs-loading').show("fast");
+
+		var postData = {
+			term   : $(this).val(),
+			action : 'kbs_ajax_article_search'
+		}
+
+		$.ajax({
+			type       : 'POST',
+			dataType   : 'json',
+			data       : postData,
+			url        : kbs_scripts.ajaxurl,
+			success    : function (response) {
+				if ( response.articles && '' != response.articles )	{
+					$('#kbs-article-list').html(response.articles);
+					$('.kbs-article-search-results').show("slow");
+				} else	{
+					$('#kbs-article-list').html();
+					$('.kbs-article-search-results').hide("slow");
+				}
+			},
+			complete: function()	{
+				$('#kbs-loading').hide("fast");
+				$('#kbs-loading').html('');
+			}
+		}).fail(function (data) {
+			if ( window.console && window.console.log ) {
+				console.log( data );
+			}
+		});
+
+	});
+
 	/* = Ticket submission form validation and submission
 	====================================================================================== */
 	$(document).on('click', '#kbs_ticket_form #kbs_ticket_submit', function(e) {

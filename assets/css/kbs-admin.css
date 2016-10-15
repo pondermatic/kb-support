@@ -88,6 +88,7 @@ span.padlock:before {
 #kbs_formfields .kbs_meta_field_label_wrap p textarea { margin: 4px 0; width: 100%; }
 #kbs_formfields .kbs_meta_field_label_wrap p .submit input { width: auto; }
 #kbs_meta_field_mapping_wrap,
+#kbs_meta_field_kb_search_wrap,
 #kbs_meta_field_select_options_wrap,
 #kbs_meta_field_select_multiple_wrap,
 #kbs_meta_field_option_selected_wrap,

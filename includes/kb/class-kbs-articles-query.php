@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
- * KBS_KB_Articles_Query Class
+ * KBS_Articles_Query Class
  *
  * This class is for retrieving KB Article data
  *
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) )
  *
  * @since	1.0
  */
-class KBS_KB_Articles_Query extends KBS_Stats {
+class KBS_Articles_Query extends KBS_Stats {
 
 	/**
 	 * The args to pass to the kbs_get_kb_articles() query
@@ -36,11 +36,20 @@ class KBS_KB_Articles_Query extends KBS_Stats {
 	/**
 	 * The articles found based on the criteria set
 	 *
-	 * @var		array|false
+	 * @var		arr|false
 	 * @access	public
 	 * @since	1.0
 	 */
-	public $articles = false;
+	public $articles = 0;
+
+	/**
+	 * The count of articles found based on the criteria set
+	 *
+	 * @var		int
+	 * @access	public
+	 * @since	1.0
+	 */
+	public $total_articles = 0;
 
 	/**
 	 * Default query arguments.
@@ -54,23 +63,23 @@ class KBS_KB_Articles_Query extends KBS_Stats {
 	 */
 	public function __construct( $args = array() ) {
 		$defaults = array(
-			'output'           => 'articles', // Use 'posts' to get standard post objects
-			'post_type'        => array( 'kbs_kb' ),
-			'start_date'       => false,
-			'end_date'         => false,
-			'author'           => null,
-			'restricted'       => null,
-			'number'           => 20,
-			'page'             => null,
-			'orderby'          => 'ID',
-			'order'            => 'DESC',
-			'status'           => get_post_stati(),
-			'meta_key'         => null,
-			'year'             => null,
-			'month'            => null,
-			'day'              => null,
-			's'                => null,
-			'fields'           => null
+			'post_type'  => array( 'kbs_kb' ),
+			'articles'   => null,
+			'start_date' => false,
+			'end_date'   => false,
+			'author'     => null,
+			'restricted' => null,
+			'number'     => 20,
+			'page'       => null,
+			'orderby'    => 'views',
+			'order'      => 'DESC',
+			'status'     => 'publish',
+			'meta_key'   => null,
+			'year'       => null,
+			'month'      => null,
+			'day'        => null,
+			's'          => null,
+			'fields'     => null
 		);
 
 		$this->args = wp_parse_args( $args, $defaults );
@@ -85,10 +94,11 @@ class KBS_KB_Articles_Query extends KBS_Stats {
 	 * @since	1.0
 	 */
 	public function __set( $query_var, $value ) {
-		if ( in_array( $query_var, array( 'meta_query', 'tax_query' ) ) )
+		if ( in_array( $query_var, array( 'meta_query', 'tax_query' ) ) )	{
 			$this->args[ $query_var ][] = $value;
-		else
+		} else	{
 			$this->args[ $query_var ] = $value;
+		}
 	} // __set
 
 	/**
@@ -117,6 +127,7 @@ class KBS_KB_Articles_Query extends KBS_Stats {
 		add_action( 'kbs_pre_get_articles',  array( $this, 'month'      ) );
 		add_action( 'kbs_pre_get_articles',  array( $this, 'per_page'   ) );
 		add_action( 'kbs_pre_get_articles',  array( $this, 'page'       ) );
+		add_action( 'kbs_pre_get_articles',  array( $this, 'articles'   ) );
 		add_action( 'kbs_pre_get_articles',  array( $this, 'restricted' ) );
 		add_action( 'kbs_pre_get_articles',  array( $this, 'author'     ) );
 		add_action( 'kbs_pre_get_articles',  array( $this, 'search'     ) );
@@ -138,26 +149,9 @@ class KBS_KB_Articles_Query extends KBS_Stats {
 
 		$query = new WP_Query( $this->args );
 
-		$custom_output = array(
-			'articles',
-			'kbs_kb',
-		);
+		$this->total_articles = (int) $query->found_posts;
+		$this->articles       = $query->posts;
 
-		if ( ! in_array( $this->args['output'], $custom_output ) ) {
-			return $query->posts;
-		}
-
-		if ( $query->have_posts() ) {
-			while ( $query->have_posts() ) {
-				$query->the_post();
-
-				$article_id = get_post()->ID;
-
-				$this->articles[] = apply_filters( 'kbs_kb_articles', $article_id, $this );
-			}
-
-			wp_reset_postdata();
-		}
 
 		do_action( 'kbs_post_get_articles', $this );
 
@@ -238,14 +232,13 @@ class KBS_KB_Articles_Query extends KBS_Stats {
 	 */
 	public function per_page() {
 
-		if( ! isset( $this->args['number'] ) ){
+		if ( ! isset( $this->args['number'] ) ){
 			return;
 		}
 
 		if ( $this->args['number'] == -1 ) {
 			$this->__set( 'nopaging', true );
-		}
-		else{
+		} else {
 			$this->__set( 'posts_per_page', $this->args['number'] );
 		}
 
@@ -278,13 +271,32 @@ class KBS_KB_Articles_Query extends KBS_Stats {
 	public function orderby() {
 		switch ( $this->args['orderby'] ) {
 			case 'views':
+			default:
+				$this->__set( 'meta_key', '_kb_article_views' );
 				$this->__set( 'orderby', 'meta_value_num' );
-				break;
-			default :
-				$this->__set( 'orderby', $this->args['orderby'] );
 				break;
 		}
 	} // orderby
+
+	/**
+	 * Articles
+	 *
+	 * @access	public
+	 * @since	1.0
+	 * @return	void
+	 */
+	public function articles() {
+		if ( ! isset ( $this->args['articles'] ) ) {
+			return;
+		}
+
+		if ( ! is_array( $this->args['articles'] ) )	{
+			$this->args['articles'] = explode( ',', $this->args['articles'] );
+		}
+
+		$this->__set( 'post__in', $this->args['articles'] );
+		$this->__unset( 'articles' );
+	} // articles
 
 	/**
 	 * Restricted
@@ -298,10 +310,8 @@ class KBS_KB_Articles_Query extends KBS_Stats {
 			return;
 		}
 
-		$key = '_kbs_kb_logged_in_only';
-
 		$query = array(
-			'key'     => $key,
+			'key'     => '_kbs_kb_logged_in_only',
 			'value'   => '1'
 		);
 
@@ -310,7 +320,7 @@ class KBS_KB_Articles_Query extends KBS_Stats {
 	} // restricted
 
 	/**
-	 * Restricted
+	 * Author
 	 *
 	 * @access	public
 	 * @since	1.0
@@ -333,41 +343,21 @@ class KBS_KB_Articles_Query extends KBS_Stats {
 	 */
 	public function search() {
 
-		if( ! isset( $this->args['s'] ) ) {
+		if ( ! isset( $this->args['s'] ) ) {
 			return;
 		}
 
 		$search = trim( $this->args['s'] );
 
-		if( empty( $search ) ) {
+		if ( empty( $search ) ) {
 			return;
 		}
 
-		$is_email = is_email( $search ) || strpos( $search, '@' ) !== false;
-		$is_user  = strpos( $search, strtolower( 'user:' ) ) !== false;
-
-		if ( $is_email ) {
-
-			$user_data = get_user_by( 'email', $search );
-
-			if ( $user_data )	{
-				$search = $user_data->ID;
-			}
-
-			$key = '_mdjm_event_client';
-			$search_meta = array(
-				'key'     => $key,
-				'value'   => $search
-			);
-
-			$this->__set( 'meta_query', $search_meta );
-			$this->__unset( 's' );
-
-		} elseif ( is_numeric( $search ) ) {
+		if ( is_numeric( $search ) ) {
 
 			$post = get_post( $search );
 
-			if( is_object( $post ) && $post->post_type == 'mdjm-event' ) {
+			if ( is_object( $post ) && $post->post_type == 'kbs_kb' ) {
 
 				$arr   = array();
 				$arr[] = $search;
@@ -375,17 +365,23 @@ class KBS_KB_Articles_Query extends KBS_Stats {
 				$this->__unset( 's' );
 			}
 
-		} elseif ( '#' == substr( $search, 0, 1 ) ) {
-
-			$search = str_replace( '#:', '', $search );
-			$search = str_replace( '#', '', $search );
-			$this->__set( 'event', $search );
-			$this->__unset( 's' );
-
 		} else {
 			$this->__set( 's', $search );
 		}
 
 	} // search
 
-} // MDJM_KB_Articles_Query
+	/**
+	 * Order posts by relevance.
+	 *
+	 * @access	public
+	 * @since	1.0
+	 * @return	void
+	 */
+	public function orderby_relevance()	{
+		if ( empty( $this->posts ) )	{
+			
+		}
+	} // orderby_relevance
+
+} // KBS_Articles_Query

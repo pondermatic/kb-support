@@ -252,6 +252,23 @@
 	vertical-align: middle;
 }
 
+.kbs-article-search-results	{
+	font-size: 80%;
+}
+.kbs-article-search-results .right {
+	float: right;
+}
+.kbs-article-search-results .right {
+	cursor: pointer;
+}
+#kbs-article-list	{
+	font-weight: normal;
+}
+
+#kbs-article-list ul	{
+	list-style-type: none;
+}
+
 /* =Tickets
 -------------------------------------------------------------- */
 #kbs_item_wrapper .left {

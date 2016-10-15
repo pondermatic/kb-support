@@ -5,7 +5,7 @@
  *
  * @package		KBS
  * @subpackage	Forms
- * @since		0.1
+ * @since		1.0
  */
 
 // Exit if accessed directly
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) )
  * Apply the `mdjm_event_add_metaboxes` filter to allow for filtering of metaboxes and settings.
  * Uses function_exists to verify the callback function exists.
  *
- * @since	0.1
+ * @since	1.0
  * @param
  * @return
  */
@@ -47,7 +47,7 @@ add_action( 'add_meta_boxes_kbs_form', 'kbs_form_add_meta_boxes' );
 /**
  * Render form fields meta box.
  *
- * @since	0.1
+ * @since	1.0
  * @param	obj		$post		The form post object (WP_Post).
  * @return
  */
@@ -57,7 +57,7 @@ function kbs_form_fields_mb_callback( $post )	{
 
 	/*
 	 * Output the form fields
-	 * @since	0.1
+	 * @since	1.0
 	 */
 	do_action( 'kbs_form_mb_form_fields', $post->ID );
 	
@@ -66,7 +66,7 @@ function kbs_form_fields_mb_callback( $post )	{
 /**
  * Render add field meta box.
  *
- * @since	0.1
+ * @since	1.0
  * @param	obj		$post		The form post object (WP_Post).
  * @param	arr		$args		Arguments passed to metabox.
  * @return
@@ -77,7 +77,7 @@ function kbs_form_add_field_mb_callback( $post, $args )	{
 
 	/*
 	 * Output the new field form
-	 * @since	0.1
+	 * @since	1.0
 	 */
 	do_action( 'kbs_form_mb_add_form_field', $post->ID, $args );
 	
@@ -89,7 +89,7 @@ function kbs_form_add_field_mb_callback( $post, $args )	{
  * This meta box is displayed when a form is initially created
  * and set to the 'auto-draft' status.
  *
- * @since	0.1
+ * @since	1.0
  * @param	obj		$post		The form post object (WP_Post).
  * @param	arr		$args		Arguments passed to metabox.
  * @return
@@ -105,7 +105,7 @@ function kbs_form_not_ready_mb_callback( $post, $args )	{
 /**
  * Output the existing form fields.
  *
- * @since	0.1
+ * @since	1.0
  * @param	int		$post_id	The form post ID.
  * @return	str
  */
@@ -159,7 +159,7 @@ add_action( 'kbs_form_mb_form_fields', 'kbs_display_meta_box_form_fields', 10 );
 /**
  * Render the form field row.
  *
- * @since	0.1
+ * @since	1.0
  * @param	obj		$field	The WP_Post object for the field.
  * @param	obj		$form	The WP_Post object for the form.
  * return	void
@@ -229,7 +229,7 @@ add_action( 'kbs_render_field_row', 'kbs_render_form_field_row', 10, 2 );
 /**
  * Render the row for entering the label.
  *
- * @since	0.1
+ * @since	1.0
  * @param	int		$post_id	The form post ID.
  * @param	arr		$args		Function arguments
  * @return	str
@@ -259,7 +259,7 @@ add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_label_row', 10, 2 );
 /**
  * Render the row for entering the description.
  *
- * @since	0.1
+ * @since	1.0
  * @param	int		$post_id	The form post ID.
  * @param	arr		$args		Function arguments
  * @return	str
@@ -299,7 +299,7 @@ add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_description_row', 15
 /**
  * Render the row for selecting the type.
  *
- * @since	0.1
+ * @since	1.0
  * @param	int		$post_id	The form post ID.
  * @param	arr		$args		Function arguments
  * @return	str
@@ -329,7 +329,7 @@ add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_type_row', 20, 2 );
 /**
  * Render the row for selecting the mapping.
  *
- * @since	0.1
+ * @since	1.0
  * @param	int		$post_id	The form post ID.
  * @param	arr		$args		Function arguments
  * @return	str
@@ -365,7 +365,7 @@ add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_mapping_row', 25, 2 
 /**
  * Render the row for setting as required.
  *
- * @since	0.1
+ * @since	1.0
  * @param	int		$post_id	The form post ID.
  * @param	arr		$args		Function arguments
  * @return	str
@@ -405,7 +405,7 @@ add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_required_row', 30, 2
 /**
  * Render the row for entering the label class.
  *
- * @since	0.1
+ * @since	1.0
  * @param	int		$post_id	The form post ID.
  * @param	arr		$args		Function arguments
  * @return	str
@@ -432,7 +432,7 @@ add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_label_class_row', 35
 /**
  * Render the row for entering the input class.
  *
- * @since	0.1
+ * @since	1.0
  * @param	int		$post_id	The form post ID.
  * @param	arr		$args		Function arguments
  * @return	str
@@ -459,7 +459,7 @@ add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_input_class_row', 40
 /**
  * Render the row for adding the new field.
  *
- * @since	0.1
+ * @since	1.0
  * @param	int		$post_id	The form post ID.
  * @param	arr		$args		Function arguments
  * @return	str
@@ -507,7 +507,7 @@ add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_add_field_btn_row', 
 /**
  * Render the rows for setting field options.
  *
- * @since	0.1
+ * @since	1.0
  * @param	int		$post_id	The form post ID.
  * @param	arr		$args		Function arguments
  * @return	str
@@ -516,6 +516,17 @@ function kbs_render_field_options_rows( $post_id )	{
 	global $kbs_edit_field;
 
 	?>
+    
+    <div id="kbs_meta_field_kb_search_wrap">
+    	<p><label for="kbs_field_kb_search">
+			<?php echo KBS()->html->checkbox( array(
+				'name'        => 'kbs_field_kb_search',
+				'current' => ! empty( $kbs_edit_field->settings['kb_search'] ) ? $kbs_edit_field->settings['kb_search'] : null
+			) ); ?>
+			<strong><?php printf( __( 'Enable %s Ajax Search?', 'kb-support' ), kbs_get_kb_label_plural() ); ?></strong></label>
+        </p>
+    </div>
+    
     <div id="kbs_meta_field_select_options_wrap">
     	<p><strong><?php _e( 'Options', 'kb-support' ); ?></strong><br />
 		<label for="kbs_field_select_options">
@@ -598,7 +609,7 @@ add_action( 'kbs_form_mb_field_options', 'kbs_render_field_options_rows', 10, 1 
 /**
  * Determines if a field is being edited.
  *
- * @since	0.1
+ * @since	1.0
  * @global	$kbs_edit_field		The field post object if editing, or false.
  * @param	int		$post_id	The form post ID.
  * @return	void

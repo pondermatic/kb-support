@@ -779,7 +779,7 @@ class KBS_Ticket {
 		$excerpt = wp_trim_words( $excerpt, 15, $more );
 
 		return apply_filters( 'kbs_ticket_excerpt', $excerpt );
-	} // get_content
+	} // get_the_excerpt
 
 	/**
 	 * Get a post meta item for the payment

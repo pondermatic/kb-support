@@ -156,6 +156,7 @@ class KBS_Form {
 		$settings = array(
 			'type'            => $data['type'],
 			'mapping'         => ! empty( $data['mapping'] )         ? $data['mapping']                            : '',
+			'kb_search'       => ! empty( $data['kb_search'] )       ? true                                        : false,
 			'required'        => ! empty( $data['required'] )        ? true                                        : false,
 			'label_class'     => ! empty( $data['label_class'] )     ? $data['label_class']                        : '',
 			'input_class'     => ! empty( $data['input_class'] )     ? $data['input_class']                        : '',
@@ -212,6 +213,7 @@ class KBS_Form {
 		$settings = array(
 			'type'            => $data['type'],
 			'mapping'         => ! empty( $data['mapping'] )         ? $data['mapping']                            : '',
+			'kb_search'       => ! empty( $data['kb_search'] )       ? true                                        : false,
 			'required'        => ! empty( $data['required'] )        ? true                                        : false,
 			'label_class'     => ! empty( $data['label_class'] )     ? $data['label_class']                        : '',
 			'input_class'     => ! empty( $data['input_class'] )     ? $data['input_class']                        : '',

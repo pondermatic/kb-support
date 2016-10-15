@@ -18,20 +18,16 @@ if ( ! defined( 'ABSPATH' ) )
  *
  * Retrieve KB Articles from the database.
  *
- * This is a simple wrapper for KBS_KB_Articles_Query.
+ * This is a simple wrapper for KBS_Articles_Query.
  *
  * @since	1.0
  * @param	arr		$args		Arguments passed to get_articles
  * @return	obj		$articles	Articles retrieved from the database
  */
 function kbs_get_articles( $args = array() ) {
-	// Fallback to post objects to ensure backwards compatibility
-	if( ! isset( $args['output'] ) ) {
-		$args['output'] = 'posts';
-	}
-
 	$args     = apply_filters( 'kbs_get_articles_args', $args );
-	$articles = new KBS_KB_Articles_Query( $args );
+	$articles = new KBS_Articles_Query( $args );
+
 	return $articles->get_articles();
 } // kbs_get_articles
 
@@ -160,6 +156,16 @@ function kbs_count_articles( $args = array() ) {
 } // kbs_count_articles
 
 /**
+ * Whether or not restricted articles should be hidden.
+ *
+ * @since	1.0
+ * @return	bool
+ */
+function kbs_hide_restricted_articles()	{
+	return kbs_get_option( 'kb_hide_restricted', false );
+} // kbs_hide_restricted_articles
+
+/**
  * Get Hidden KB Article IDs
  *
  * Retrieve Hidden KB Articles from the database.
@@ -254,11 +260,15 @@ function kbs_article_content_is_restricted( $post = null )	{
  */
 function kbs_kb_hide_restricted_articles( $query )	{
 
+	if ( defined( 'DOING_AJAX' ) && DOING_AJAX )	{
+		return;
+	}
+
 	if ( is_admin() || ! is_post_type_archive( 'kbs_kb' ) || ! $query->is_main_query() )	{
 		return;
 	}
 
-	if ( ! kbs_get_option( 'kb_hide_restricted', false ) )	{
+	if ( ! kbs_hide_restricted_articles() || is_user_logged_in() )	{
 		return;
 	}
 
@@ -305,4 +315,32 @@ function kbs_increment_article_view_count( $article_id )	{
 	$view_count++;
 
 	return update_post_meta( $article_id, '_kb_article_views', $view_count );
-} // kbs_get_article_view_count
+} // kbs_increment_article_view_count
+
+/**
+ * Retrieve the KB Article excerpt.
+ *
+ * @since	1.0
+ * @param	int		$article_id		Article ID
+ * @return	str		The article excerpt.
+ */
+function kbs_get_article_excerpt( $article_id ) {
+
+	if ( empty( $article_id ) )	{
+		return;
+	}
+
+	if ( has_excerpt( $article_id ) )	{
+		$excerpt = get_post_field( 'post_excerpt', $article_id );
+	} else	{
+		$excerpt = get_post_field( 'post_content', $article_id );
+	}
+
+	$num_words = kbs_get_option( 'kbs_article_excerpt_length', 100 );
+	$num_words = apply_filters( 'kbs_article_excerpt_length', $num_words );
+
+	$excerpt = wp_trim_words( $excerpt, $num_words, '&hellip;' );
+
+	return apply_filters( 'kbs_ticket_excerpt', $excerpt );
+
+} // kbs_get_article_excerpt

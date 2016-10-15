@@ -53,8 +53,20 @@ global $kbs_form;
                             <?php $kbs_form->display_field( $field, $settings ); ?>
 
                             <?php if ( ! empty( $settings['description'] ) && 'field' == $settings['description_pos'] ) : ?>
-                                	<?php kbs_display_form_field_description( $field, $settings ); ?>
-                                <?php endif; ?>
+								<?php kbs_display_form_field_description( $field, $settings ); ?>
+                            <?php endif; ?>
+
+							<?php if ( ! empty( $settings['kb_search'] ) ) : ?>
+                            	<div id="kbs-loading" class="kbs-loader kbs-hidden"></div>
+                            	<div class="kbs_alert kbs_alert_warn kbs-article-search-results kbs_hidden">
+                                    <span class="right">
+                                    	<a id="close-search"><?php _e( 'Close', 'kb-support' ); ?></a>
+                                    </span>
+                                    <strong><?php printf( __( 'Could any of the following %s help resolve your query?', 'kb-support' ), kbs_get_kb_label_plural() ); ?></strong>
+                                    <span id="kbs-article-list"></span>
+                                </div>
+                            <?php endif; ?>
+
                         </p>
 
                 <?php endforeach; ?>
@@ -63,13 +75,21 @@ global $kbs_form;
             </fieldset>
 
             <fieldset id="kbs_ticket_form_submit">
+
             	<?php do_action( 'kbs_ticket_form_before_submit' ); ?>
             	<?php kbs_render_hidden_form_fields( $kbs_form->ID ); ?>
+
                 <input class="button" name="kbs_ticket_submit" id="kbs_ticket_submit" type="submit" value="<?php esc_attr_e( kbs_get_form_submit_label() ); ?>" />
+
                 <?php do_action( 'kbs_ticket_form_after_submit' ); ?>
+
             </fieldset>
+
         	<?php do_action( 'kbs_ticket_form_bottom' ); ?>
+
         </form>
+
         <?php do_action( 'kbs_after_ticket_form' ); ?>
+
     </div><!--end #kbs_ticket_form_wrap-->
 </div><!-- end of #kbs_ticket_wrap -->

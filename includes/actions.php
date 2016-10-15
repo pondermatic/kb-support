@@ -5,7 +5,7 @@
  * @package     KBS
  * @subpackage  Functions
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       0.1
+ * @since       1.0
  */
 
 // Exit if accessed directly
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) )
  * present in $_GET is called using WordPress's do_action function. These
  * functions are called on init.
  *
- * @since	0.1
+ * @since	1.0
  * @return	void
 */
 function kbs_get_actions() {
@@ -32,7 +32,7 @@ add_action( 'init', 'kbs_get_actions' );
  * present in $_POST is called using WordPress's do_action function. These
  * functions are called on init.
  *
- * @since	0.1
+ * @since	1.0
  * @return	void
 */
 function kbs_post_actions() {
@@ -47,7 +47,7 @@ add_action( 'init', 'kbs_post_actions' );
  *
  * Prints the output for a hidden form field which is required for post forms.
  *
- * @since	0.1
+ * @since	1.0
  * @param	str		$action		The action identifier
  * @param	bool	$echo		True echo's the input field, false to return
  * @return	str		$input		Hidden form field string

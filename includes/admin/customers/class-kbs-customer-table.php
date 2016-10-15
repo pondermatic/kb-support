@@ -133,12 +133,8 @@ class KBS_Customer_Table extends WP_List_Table {
 
 			case 'num_tickets' :
 				$value = '<a href="' .
-					admin_url( '/edit.php?post_type=kbs_ticket&page=kbs-ticket-history&user=' . urlencode( $item['email'] )
+					admin_url( '/edit.php?post_type=kbs_ticket&customer=' . urlencode( $item['id'] )
 				) . '">' . esc_html( $item['num_tickets'] ) . '</a>';
-				break;
-
-			case 'amount_spent' :
-				$value = edd_currency_filter( edd_format_amount( $item[ $column_name ] ) );
 				break;
 
 			case 'date_created' :

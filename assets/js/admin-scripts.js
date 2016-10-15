@@ -364,6 +364,13 @@ jQuery(document).ready(function ($) {
 				} else	{
 					$('#kbs_meta_field_mapping_wrap').hide();
 				}
+
+				if( 'post_title' == $('#kbs_field_mapping').val() )	{
+					$('#kbs_meta_field_kb_search_wrap').show();
+				} else	{
+					$('#kbs_meta_field_kb_search_wrap').hide();
+				}
+
 			}
 
 			// Preload field options when editing
@@ -378,7 +385,15 @@ jQuery(document).ready(function ($) {
 				toggleFieldOptions(kbs_field_type.val());
 
 			});
-			
+
+			$( document.body ).on('change', $('#kbs_field_mapping'), function(e)	{
+				if( 'post_title' == $('#kbs_field_mapping').val() )	{
+					$('#kbs_meta_field_kb_search_wrap').show();
+				} else	{
+					$('#kbs_meta_field_kb_search_wrap').hide();
+				}
+			});
+
 			// Send Add New Field Requests
 			$( document.body ).on( 'click', '#kbs-add-form-field', function(event) {
 				
@@ -400,6 +415,7 @@ jQuery(document).ready(function ($) {
 					label            : $('#kbs_field_label').val(),
 					type             : $('#kbs_field_type').val(),
 					mapping          : $('#kbs_field_mapping').val(),
+					kb_search        : ( $('#kbs_field_kb_search').is(':checked') )        ? $('#kbs_field_kb_search').val()     : 0,
 					required         : ( $('#kbs_field_required').is(':checked') )        ? $('#kbs_field_required').val()        : 0,
 					label_class      : $('#kbs_field_label_class').val(),
 					input_class      : $('#kbs_field_input_class').val(),
@@ -460,6 +476,7 @@ jQuery(document).ready(function ($) {
 					label            : $('#kbs_field_label').val(),
 					type             : $('#kbs_field_type').val(),
 					mapping          : $('#kbs_field_mapping').val(),
+					kb_search        : ( $('#kbs_field_kb_search').is(':checked') ) ? $('#kbs_field_kb_search').val() : 0,
 					required         : ( $('#kbs_field_required').is(':checked') ) ? $('#kbs_field_required').val() : 0,
 					label_class      : $('#kbs_field_label_class').val(),
 					input_class      : $('#kbs_field_input_class').val(),

@@ -98,7 +98,7 @@ add_shortcode( 'kbs_submit', 'kbs_submit_form_shortcode' );
  * @param	arr		$atts		Shortcode attributes
  * @return	str
  */
-function kbs_tickets_shortcode( $atts ) {
+function kbs_tickets_shortcode( $atts )	{
 	ob_start();
 	if ( ! isset( $_GET['ticket'] ) )	{
 		echo kbs_display_notice( 'no_ticket' );
@@ -109,3 +109,77 @@ function kbs_tickets_shortcode( $atts ) {
 	return ob_get_clean();
 } // kbs_tickets_shortcode
 add_shortcode( 'kbs_tickets', 'kbs_tickets_shortcode' );
+
+/**
+ * Articles Shortcode
+ *
+ * Displays Articles that meet the criteria set within given arguments.
+ *
+ * @since	1.0
+ * @param	att		$atts	Shortcode attributes
+ * @return	str
+ */
+function kbs_articles_shortcode( $atts )	{
+
+	$args = shortcode_atts( array(
+		'post__in'    => null,    // Article IDs to display
+		'numberposts' => 20,      // Number of posts to display
+		'orderby'     => 'views', // Order by
+		'order'       => 'DESC',  // Order
+		'tags'        => null,    // Tags to include
+		'categories'  => null,    // Categories to include
+		'excerpt'     => true,    // Whether to display an excerpt
+		'length'      => kbs_get_option( 'kbs_article_excerpt_length', 100 ) // Length of excerpt. -1 for full content
+		), $atts, 'kbs_articles'
+	);
+
+	$length  = $args['length'];
+	$excerpt = $args['excerpt'];
+	unset( $args['length'], $args['excerpt'] );
+
+	if ( 'views' == $args['orderby'] )	{
+		$args['meta_key'] = '_kb_article_views';
+		$args['orderby']  = 'meta_value_num';
+	}
+
+	$args['post_type'] = 'kbs_kb';
+
+	$articles_query = new WP_Query( $args );
+
+	ob_start();
+
+	if ( $articles_query->have_posts() ) : ?>
+        <ul>
+
+        <?php while ( $articles_query->have_posts() ) :
+            $articles_query->the_post(); ?>
+            <li><?php the_title(); ?></li>
+        <?php endwhile; ?>
+
+        </ul>
+
+        <?php wp_reset_postdata(); ?>
+    <?php else : ?>
+        // no posts found
+    <?php endif;
+
+	return ob_get_clean();
+
+} // kbs_articles_shortcode
+add_shortcode( 'kbs_articles', 'kbs_articles_shortcode' );
+
+/**
+ * Search Form Shortcode
+ *
+ * Shows a search form allowing users to search KB Articles. This function simply
+ * calls the kbs_kb_article_search_form function to display the search form.
+ *
+ * @since	1.0
+ * @param	att		$atts	Shortcode attributes
+ * @uses	kbs_kb_article_search_form()
+ * @return	str
+ */
+function kbs_article_search_form_shortcode()	{
+	return kbs_kb_article_search_form();
+} // kbs_article_search_form_shortcode
+add_shortcode( 'kbs_search', 'kbs_article_search_form_shortcode' );

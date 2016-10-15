@@ -707,7 +707,7 @@ function kbs_display_form_text_field( $field, $settings )	{
 	$type        = ! empty( $settings['type'] )        ? $settings['type']                                             : 'text';
 	$placeholder = ! empty( $settings['placeholder'] ) ? ' placeholder="' . esc_attr( $settings['placeholder'] ) . '"' : '';
 	$class       = ! empty( $settings['input_class'] ) ? esc_attr( $settings['input_class'] )                          : '';
-	$required    = '';//! empty( $settings['required'] )    ? ' required'                                                   : '';
+	$required    = ! empty( $settings['required'] )    ? ' required'                                                   : '';
 
 	if ( $type == 'date_field' )	{
 		if( empty( $class ) ) {
@@ -745,7 +745,7 @@ function kbs_display_form_text_field( $field, $settings )	{
 	do_action( 'kbs_before_form_field', $field, $settings );
 	do_action( 'kbs_before_form_' . $settings['type'] . '_field', $field, $settings );
 
-	$output = sprintf( '<input type="%1$s" name="%2$s" id="%2$s" class="kbs-input %3$s"%4$s%5$s%6$s />',
+	$output = sprintf( '<input type="%1$s" name="%2$s" id="%2$s" class="kbs-article-search kbs-input %3$s"%4$s%5$s%6$s />',
 		esc_attr( $type ),
 		esc_attr( $field->post_name ),
 		! empty( $class ) ? $class : '',

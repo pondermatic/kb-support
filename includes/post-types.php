@@ -128,8 +128,6 @@ function kbs_setup_kbs_post_types() {
 	$kb_args = array(
 		'labels'             => $kb_labels,
 		'public'             => true,
-		'publicly_queryable' => true,
-		'show_ui'            => true,
 		'show_in_menu'       => true,
 		'menu_icon'          => 'dashicons-welcome-learn-more',
 		'query_var'          => true,

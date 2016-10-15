@@ -400,9 +400,32 @@ function kbs_get_registered_settings() {
 					'kb_hide_restricted' => array(
 						'id'      => 'kb_hide_restricted',
 						'name'    => sprintf( __( 'Hide Restricted %s', 'kb-support' ), kbs_get_kb_label_plural() ),
-						'desc'    => sprintf( __( 'Select to hide restricted %s when a user is not permitted to view', 'kb-support' ), kbs_get_kb_label_plural() ),
-						'type'    => 'checkbox',
-						'std'     => '0'
+						'desc'    => sprintf( __( 'Restricted %s are always hidden from search results when a user is not logged in. Select to also hide from archives.', 'kb-support' ), kbs_get_kb_label_plural() ),
+						'type'    => 'checkbox'
+					),
+					'kb_hide_restricted_ajax' => array(
+						'id'      => 'kb_hide_restricted_ajax',
+						'name'    => __( 'Restricted Ajax Search', 'kb-support' ),
+						'desc'    => sprintf( __( 'Same as <code>Hide Restricted %s</code> but this option manipulates Ajax search results.', 'kb-support' ), kbs_get_kb_label_plural() ),
+						'type'    => 'checkbox'
+					),
+					'kb_num_posts_ajax' => array(
+						'id'      => 'kb_num_posts_ajax',
+						'name'    => __( 'Number of Posts from Ajax', 'kb-support' ),
+						'desc'    => sprintf( __( 'Enter the number of suggested %s that should be returned from the submission form Ajax search.', 'kb-support' ), kbs_get_kb_label_plural() ),
+						'type'    => 'number',
+						'step'    => '1',
+						'size'    => 'small',
+						'std'     => '5'
+					),
+					'kb_excerpt_length' => array(
+						'id'      => 'kb_excerpt_length',
+						'name'    => __( 'Search Excerpt Length', 'kb-support' ),
+						'desc'    => __( 'Enter the number of words that should form the excerpt length during an ajax search. i.e. on the submission form.', 'kb-support' ),
+						'type'    => 'number',
+						'step'    => '5',
+						'size'    => 'small',
+						'std'     => '100'
 					)
 				)
 			)
