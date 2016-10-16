@@ -92,6 +92,10 @@ function kbs_kb_post_save( $post_id, $post, $update )	{
 		return;
 	}
 
+	if ( ! $update )	{
+		add_post_meta( $post_id, '_kb_article_views', '0', true );
+	}
+
 	$url = remove_query_arg( 'kbs-message' );
 
 	if (

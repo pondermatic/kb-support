@@ -552,6 +552,7 @@ class KBS_Ticket {
 
 					case 'customer_id':
 						$this->update_meta( '_kbs_ticket_customer_id', $this->customer_id );
+						add_post_meta( $this->ID, '_kbs_ticket_created_by', $this->customer_id, true );
 						break;
 
 					case 'agent_id':
@@ -848,16 +849,6 @@ class KBS_Ticket {
 	private function process_open() {
 		if ( 'open' == $this->old_status )	{
 			return;
-		}
-
-		if ( 'new' == $this->old_status || 'auto-draft' == $this->old_status )	{
-			$this->update_meta( '_kbs_ticket_opened', current_time( 'mysql' ) );
-			$this->update_meta( '_kbs_ticket_opened_by', get_current_user_id() );
-
-			if ( is_admin() )	{
-				$ticket->update_meta( '_kbs_ticket_created_by', get_current_user_id() );
-			}
-
 		}
 
 		if ( empty( $this->sla_respond ) )	{

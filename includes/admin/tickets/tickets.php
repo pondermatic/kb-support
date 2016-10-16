@@ -265,6 +265,10 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
 		return;
 	}
 
+	if ( ! $update && is_admin() )	{
+		add_post_meta( $post_id, '_kbs_ticket_created_by', get_current_user_id(), true );
+	}
+
 	// The default fields that get saved
 	$fields = kbs_ticket_metabox_fields();
 
