@@ -565,7 +565,7 @@ function kbs_ajax_article_search()	{
 				$output .= '</a>';
 				$output .= '<br />';
 
-				if ( kbs_article_is_restricted( $article->ID ) )	{
+				if ( ! kbs_user_can_view_article( $article ) )	{
 					$output .= kbs_get_notices( 'article_restricted', true );
 				} else	{
 					$output .= kbs_get_article_excerpt( $article->ID );

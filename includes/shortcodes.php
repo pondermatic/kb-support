@@ -153,7 +153,9 @@ function kbs_articles_shortcode( $atts )	{
 
         <?php while ( $articles_query->have_posts() ) :
             $articles_query->the_post(); ?>
-            <li><?php the_title(); ?></li>
+            <?php if ( kbs_user_can_view_article( get_the_ID() ) ) : ?>
+                <li><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></li>
+            <?php endif; ?>
         <?php endwhile; ?>
 
         </ul>
