@@ -199,8 +199,8 @@ function kbs_article_is_restricted( $post_id = 0 )	{
 		$post_id = $post->ID;
 	}
 
-	$restricted = get_post_meta( $post_id, '_kbs_kb_logged_in_only', true );
-	$restricted = apply_filters( 'kbs_article_is_restricted', $restricted, $post_id );
+	$restricted = get_post_meta( $post_id, '_kbs_kb_restricted', true );
+	$restricted = apply_filters( 'kbs_article_restricted', $restricted, $post_id );
 
 	return $restricted;
 } // kbs_article_is_restricted

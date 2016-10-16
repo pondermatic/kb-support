@@ -6,7 +6,7 @@
  * @subpackage  Functions/Templates
  * @copyright   Copyright (c) 2016, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       0.1
+ * @since       1.0
  */
 
 // Exit if accessed directly
@@ -120,7 +120,7 @@ function kbs_render_hidden_reply_fields( $ticket_id )	{
  * Adds an action to the beginning of kb article post content that can be hooked to
  * by other functions.
  *
- * @since	0.1
+ * @since	1.0
  * @global	$post
  *
  * @param	str		$content	The the_content field of the kb article object
@@ -180,7 +180,7 @@ function kbs_restrict_kb_article_content( $content ) {
 
 	if ( $post && 'kbs_kb' == $post->post_type )	{
 
-		if ( ! kbs_user_can_view_article( $post ) )	{
+		if ( kbs_article_is_restricted() && ! is_user_logged_in() )	{
 
 			// Remove comments
 			add_filter( 'comments_open', '__return_false');
@@ -292,7 +292,7 @@ function kbs_get_button_colors() {
  *
  * Returns an array of button styles.
  *
- * @since	0.1
+ * @since	1.0
  * @return	arr		$styles		Button styles
  */
 function kbs_get_button_styles() {
@@ -307,7 +307,7 @@ function kbs_get_button_styles() {
 /**
  * Returns the path to the KBS templates directory
  *
- * @since	0.1
+ * @since	1.0
  * @return 	str
  */
 function kbs_get_templates_dir() {
@@ -317,7 +317,7 @@ function kbs_get_templates_dir() {
 /**
  * Returns the URL to the KBS templates directory
  *
- * @since	0.1
+ * @since	1.0
  * @return	str
  */
 function kbs_get_templates_url() {
@@ -327,7 +327,7 @@ function kbs_get_templates_url() {
 /**
  * Retrieves a template part
  *
- * @since	0.1
+ * @since	1.0
  *
  * Taken from bbPress
  *
@@ -347,8 +347,11 @@ function kbs_get_template_part( $slug, $name = null, $load = true ) {
 
 	// Setup possible parts
 	$templates = array();
-	if ( isset( $name ) )
+
+	if ( isset( $name ) )	{
 		$templates[] = $slug . '-' . $name . '.php';
+	}
+
 	$templates[] = $slug . '.php';
 
 	// Allow template parts to be filtered
@@ -367,7 +370,7 @@ function kbs_get_template_part( $slug, $name = null, $load = true ) {
  *
  * Taken from bbPress
  *
- * @since	0.1
+ * @since	1.0
  *
  * @param	str|arr		$template_names		Template file(s) to search for, in order.
  * @param	bool		$load				If true the template file will be loaded if it is found.
@@ -398,13 +401,14 @@ function kbs_locate_template( $template_names, $load = false, $require_once = tr
 			}
 		}
 
-		if( $located ) {
+		if ( $located ) {
 			break;
 		}
 	}
 
-	if ( ( true == $load ) && ! empty( $located ) )
+	if ( ( true == $load ) && ! empty( $located ) )	{
 		load_template( $located, $require_once );
+	}
 
 	return $located;
 } // kbs_locate_template
@@ -412,7 +416,7 @@ function kbs_locate_template( $template_names, $load = false, $require_once = tr
 /**
  * Returns a list of paths to check for template locations
  *
- * @since	0.1
+ * @since	1.0
  * @return mixed|void
  */
 function kbs_get_theme_template_paths() {
@@ -438,7 +442,7 @@ function kbs_get_theme_template_paths() {
  *
  * Themes can filter this by using the kbs_templates_dir filter.
  *
- * @since	0.1
+ * @since	1.0
  * @return	str
 */
 function kbs_get_theme_template_dir_name() {
@@ -448,7 +452,7 @@ function kbs_get_theme_template_dir_name() {
 /**
  * Adds KBS Version to the <head> tag
  *
- * @since	0.1
+ * @since	1.0
  * @return	void
 */
 function kbs_version_in_header(){

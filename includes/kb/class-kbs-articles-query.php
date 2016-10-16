@@ -311,7 +311,7 @@ class KBS_Articles_Query extends KBS_Stats {
 		}
 
 		$query = array(
-			'key'     => '_kbs_kb_logged_in_only',
+			'key'     => '_kbs_kb_restricted',
 			'value'   => '1'
 		);
 

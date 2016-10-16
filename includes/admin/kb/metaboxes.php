@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) )
 function kbs_kb_metabox_fields() {
 
 	$fields = array(
-			'_kbs_kb_logged_in_only'
+			'_kbs_kb_restricted'
 		);
 
 	return apply_filters( 'kbs_kb_metabox_fields_save', $fields );
@@ -90,17 +90,17 @@ function kbs_kb_metabox_options_fields( $post_id )	{
 	global $kbs_kb_update;
 
 	if ( $kbs_kb_update )	{
-		$logged_in_only = get_post_meta( $post_id, '_kbs_kb_logged_in_only', true );
+		$logged_in_only = get_post_meta( $post_id, '_kbs_kb_restricted', true );
 	} else	{	
-		$logged_in_only = kbs_get_option( 'kb_logged_in', false );
+		$logged_in_only = kbs_get_option( 'kb_restricted', false );
 	}
 
 	?>
 	<div id="kbs-kn-options">
     	<p><?php echo KBS()->html->checkbox( array(
-			'name'    => '_kbs_kb_logged_in_only',
+			'name'    => '_kbs_kb_restricted',
 			'current' => $logged_in_only
-		) ); ?> <label for="_kbs_kb_logged_in_only"></label><?php _e( 'Only logged in users can access?', 'kb-support' ); ?></label></p>
+		) ); ?> <label for="_kbs_kb_restricted"></label><?php _e( 'Restrict access?', 'kb-support' ); ?></label></p>
     </div>
 
     <?php

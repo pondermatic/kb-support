@@ -390,10 +390,10 @@ function kbs_get_registered_settings() {
 						'name' => '<h3>' . sprintf( __( '%s Settings', 'kb-support' ), kbs_get_kb_label_singular() ) . '</h3>',
 						'type' => 'header'
 					),
-					'kb_logged_in' => array(
-						'id'      => 'kb_logged_in',
-						'name'    => __( 'Logged in Users Only', 'kb-support' ),
-						'desc'    => sprintf( __( 'Select to make %s available to logged in users only by default.', 'kb-support' ), kbs_get_kb_label_plural() ),
+					'kb_restricted' => array(
+						'id'      => 'kb_restricted',
+						'name'    => sprintf( __( 'Restrict %s', 'kb-support' ), kbs_get_kb_label_plural() ),
+						'desc'    => sprintf( __( 'Select to make restrict %s by default. Can by changed per %s', 'kb-support' ), kbs_get_kb_label_plural(), kbs_get_kb_label_singular() ),
 						'type'    => 'checkbox',
 						'std'     => '0'
 					),
