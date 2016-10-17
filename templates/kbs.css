@@ -439,4 +439,8 @@ a.ticket_reply_content	{
 -------------------------------------------------------------- */
 div.kbs_articles_list ul li	{
 	list-style-type: none;
+	padding-bottom: 10px;
+}
+div.kbs_articles_list ul li span	{
+	display: block;
 }
