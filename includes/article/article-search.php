@@ -26,7 +26,7 @@ function kbs_filter_articles_search( $query )	{
 		return;
 	}
 
-	if ( is_admin() || ! is_post_type_archive( 'article' ) )	{
+	if ( is_admin() )	{
 		return;
 	}
 
@@ -34,7 +34,7 @@ function kbs_filter_articles_search( $query )	{
 		return;
 	}
 
-	if ( ! is_admin() && $query->is_main_query() )	{
+	if ( $query->is_main_query() )	{
 
 		if ( $query->is_search )	{
 
@@ -55,10 +55,10 @@ add_action( 'pre_get_posts', 'kbs_filter_articles_search' );
  * @since	1.0
  * @return	str
  */
-function kbs_article_article_search_form()	{
+function kbs_article_search_form()	{
 	ob_start();
 
 	kbs_get_template_part( 'shortcode', 'search' );
 
 	return apply_filters( 'kbs_article_search_form', ob_get_clean() );
-} // kbs_article_article_search_form
+} // kbs_article_search_form
