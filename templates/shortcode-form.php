@@ -62,7 +62,7 @@ global $kbs_form;
                                     <span class="right">
                                     	<a id="close-search"><?php _e( 'Close', 'kb-support' ); ?></a>
                                     </span>
-                                    <strong><?php printf( __( 'Could any of the following %s help resolve your query?', 'kb-support' ), kbs_get_kb_label_plural() ); ?></strong>
+                                    <strong><?php printf( __( 'Could any of the following %s help resolve your query?', 'kb-support' ), kbs_get_article_label_plural() ); ?></strong>
                                     <span id="kbs-article-list"></span>
                                 </div>
                             <?php endif; ?>

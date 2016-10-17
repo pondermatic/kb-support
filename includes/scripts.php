@@ -202,8 +202,8 @@ function kbs_load_admin_scripts( $hook ) {
 		'ticket_reply_failed'     => sprintf( __( 'Could not add %s Reply', 'kb-support' ), kbs_get_ticket_label_singular() ),
 		'no_note_content'         => __( 'There is no content in your note', 'kb-support' ),
 		'note_not_added'          => __( 'Your note could not be added', 'kb-support' ),
-		'type_to_search'          => sprintf( __( 'Type to search %s', 'kb-support' ), kbs_get_kb_label_plural() ),
-		'search_placeholder'      => sprintf( __( 'Type to search all %s', 'kb-support' ), kbs_get_kb_label_plural() ),
+		'type_to_search'          => sprintf( __( 'Type to search %s', 'kb-support' ), kbs_get_article_label_plural() ),
+		'search_placeholder'      => sprintf( __( 'Type to search all %s', 'kb-support' ), kbs_get_article_label_plural() ),
 		'editing_field_type'      => $editing_field_type,
 		'field_label_missing'     => __( 'Enter a Label for your field.', 'kb-support' ),
 		'field_type_missing'      => __( 'Select the field Type', 'kb-support' )

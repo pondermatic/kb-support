@@ -91,7 +91,7 @@ function kbs_ticket_add_meta_boxes( $post )	{
 			array()
 		);
 
-		if ( 'new' != $kbs_ticket->status && 'closed' == $kbs_ticket->status )	{
+		if ( 'new' != $kbs_ticket->status )	{
 
 			add_meta_box(
 				'kbs-ticket-metabox-ticket-reply',
@@ -429,12 +429,14 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 
 	global $kbs_ticket, $kbs_ticket_update;
 
-	if ( 'closed' == $kbs_ticket->post_status )	{
-		printf( __( 'This %1$s is currently closed. <a href="%2$s">Re-open %1$s.</a>', 'kb-support' ),
-			kbs_get_ticket_label_singular(),
-			wp_nonce_url( add_query_arg( 'kbs-action', 're-open-ticket', get_edit_post_link( $ticket_id ) ), 'kbs-reopen-ticket', 'kbs-ticket-nonce' )
-		);
-	} else	{
+	if ( 'closed' == $kbs_ticket->post_status ) : ?>
+		<p>
+			<?php printf( __( 'This %1$s is currently closed. <a href="%2$s">Re-open %1$s.</a>', 'kb-support' ),
+				kbs_get_ticket_label_singular(),
+				wp_nonce_url( add_query_arg( 'kbs-action', 're-open-ticket', get_edit_post_link( $ticket_id ) ), 'kbs-reopen-ticket', 'kbs-ticket-nonce' )
+			); ?>
+		</p>
+	<?php else :
 		$settings = apply_filters( 'kbs_ticket_reply_mce_settings', array(
 			'textarea_rows'    => 5,
 			'quicktags'        => true
@@ -460,8 +462,8 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
             <div class="kbs-reply"><a id="kbs-reply-close" class="button button-secondary"><?php _e( 'Reply and Close', 'kb-support' ); ?></a></div>
         </div>
         <div id="kbs-new-reply-loader"></div>
-        <?php
-	}
+
+	<?php endif;
 		
 } // kbs_ticket_metabox_details_row
 add_action( 'kbs_ticket_reply_fields', 'kbs_ticket_metabox_reply_row', 20 );

@@ -206,7 +206,7 @@ final class KB_Support {
 
 		require_once KBS_PLUGIN_DIR . 'includes/actions.php';
 
-		if( file_exists( KBS_PLUGIN_DIR . 'includes/deprecated-functions.php' ) ) {
+		if ( file_exists( KBS_PLUGIN_DIR . 'includes/deprecated-functions.php' ) )	{
 			require_once KBS_PLUGIN_DIR . 'includes/deprecated-functions.php';
 		}
 
@@ -220,10 +220,10 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/admin/customers/customers-page.php';
 		require_once KBS_PLUGIN_DIR . 'includes/admin/customers/customer-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/admin/customers/customer-actions.php';
-		require_once KBS_PLUGIN_DIR . 'includes/kb/kb-actions.php';
-		require_once KBS_PLUGIN_DIR . 'includes/kb/class-kbs-articles-query.php';
-		require_once KBS_PLUGIN_DIR . 'includes/kb/kb-functions.php';
-		require_once KBS_PLUGIN_DIR . 'includes/kb/kb-search.php';
+		require_once KBS_PLUGIN_DIR . 'includes/article/article-actions.php';
+		require_once KBS_PLUGIN_DIR . 'includes/article/class-kbs-articles-query.php';
+		require_once KBS_PLUGIN_DIR . 'includes/article/article-functions.php';
+		require_once KBS_PLUGIN_DIR . 'includes/article/article-search.php';
 		require_once KBS_PLUGIN_DIR . 'includes/tickets/class-kbs-ticket-stats.php';
 		require_once KBS_PLUGIN_DIR . 'includes/tickets/class-kbs-tickets-query.php';
 		require_once KBS_PLUGIN_DIR . 'includes/tickets/class-kbs-ticket.php';
@@ -255,8 +255,8 @@ final class KB_Support {
 			require_once KBS_PLUGIN_DIR . '/includes/admin/admin-notices.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/tickets/tickets.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/tickets/metaboxes.php';
-			require_once KBS_PLUGIN_DIR . '/includes/admin/kb/kb.php';
-			require_once KBS_PLUGIN_DIR . 'includes/admin/kb/metaboxes.php';
+			require_once KBS_PLUGIN_DIR . '/includes/admin/article/article.php';
+			require_once KBS_PLUGIN_DIR . 'includes/admin/article/metaboxes.php';
 			require_once KBS_PLUGIN_DIR . '/includes/admin/forms/forms.php';
 			require_once KBS_PLUGIN_DIR . '/includes/admin/forms/metaboxes.php';
 			require_once KBS_PLUGIN_DIR . '/includes/admin/forms/form-actions.php';

@@ -543,11 +543,11 @@ function kbs_ajax_article_search()	{
 	$search_term = $_POST['term'];
 
 	$args = array(
-		'number'      => kbs_get_option( 'kb_num_posts_ajax', 5 ),
-		's'           => $search_term
+		'number' => kbs_get_option( 'article_num_posts_ajax', 5 ),
+		's'      => $search_term
 	);
 
-	if ( ! is_user_logged_in() && kbs_get_option( 'kb_hide_restricted_ajax' ) )	{
+	if ( ! is_user_logged_in() && kbs_get_option( 'article_hide_restricted_ajax' ) )	{
 		$args['post__not_in'] = kbs_get_restricted_articles();
 	}
 
@@ -579,8 +579,8 @@ function kbs_ajax_article_search()	{
 		if ( $articles_query->total_articles > $args['number'] )	{
 
 			$search_url = add_query_arg( array(
-				'kbs_action' => 'search_kb_articles',
-				's_kb'       => $search_term
+				'kbs_action' => 'search_articles',
+				's_article'  => $search_term
 			), site_url() );
 
 			$output .= '<a href="' . $search_url . '" target="_blank">';

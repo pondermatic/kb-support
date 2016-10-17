@@ -242,11 +242,11 @@ function kbs_get_notices( $notice = '', $notice_only = false )	{
 		),
 		'article_restricted' => array(
 			'class'  => 'info',
-			'notice' => sprintf( __( 'Access to this %s is restricted.', 'kb-support' ), kbs_get_kb_label_singular() )
+			'notice' => sprintf( __( 'Access to this %s is restricted.', 'kb-support' ), kbs_get_article_label_singular() )
 		),
 		'article_restricted_login' => array(
 			'class'  => 'info',
-			'notice' => sprintf( __( 'Access to this %s is restricted. Login to continue.', 'kb-support' ), kbs_get_kb_label_singular() )
+			'notice' => sprintf( __( 'Access to this %s is restricted. Login to continue.', 'kb-support' ), kbs_get_article_label_singular() )
 		),
 		'no_ticket' => array(
 			'class'  => 'error',

@@ -88,15 +88,15 @@ class KBS_HTML_Elements {
 	 * @param	int		$selected	Category to select automatically
 	 * @return	str		$output		Category dropdown
 	 */
-	public function kb_category_dropdown( $name = 'kbs_kb_categories', $selected = 0 ) {
-		$categories = get_terms( 'kb_category', apply_filters( 'kbs_kb_category_dropdown', array() ) );
+	public function article_category_dropdown( $name = 'kbs_article_categories', $selected = 0 ) {
+		$categories = get_terms( 'article_category', apply_filters( 'kbs_article_category_dropdown', array() ) );
 		$options    = array();
 
 		foreach ( $categories as $category ) {
 			$options[ absint( $category->term_id ) ] = esc_html( $category->name );
 		}
 
-		$category_labels = kbs_get_taxonomy_labels( 'kb_category' );
+		$category_labels = kbs_get_taxonomy_labels( 'article_category' );
 		$output = $this->select( array(
 			'name'             => $name,
 			'selected'         => $selected,
@@ -106,7 +106,7 @@ class KBS_HTML_Elements {
 		) );
 
 		return $output;
-	} // kb_category_dropdown
+	} // article_category_dropdown
 
 	/**
 	 * Renders an HTML Dropdown of years

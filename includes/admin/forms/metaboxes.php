@@ -523,7 +523,7 @@ function kbs_render_field_options_rows( $post_id )	{
 				'name'        => 'kbs_field_kb_search',
 				'current' => ! empty( $kbs_edit_field->settings['kb_search'] ) ? $kbs_edit_field->settings['kb_search'] : null
 			) ); ?>
-			<strong><?php printf( __( 'Enable %s Ajax Search?', 'kb-support' ), kbs_get_kb_label_plural() ); ?></strong></label>
+			<strong><?php printf( __( 'Enable %s Ajax Search?', 'kb-support' ), kbs_get_article_label_plural() ); ?></strong></label>
         </p>
     </div>
     

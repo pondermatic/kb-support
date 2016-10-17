@@ -138,11 +138,11 @@ function kbs_articles_shortcode( $atts )	{
 	unset( $args['length'], $args['excerpt'] );
 
 	if ( 'views' == $args['orderby'] )	{
-		$args['meta_key'] = '_kb_article_views';
+		$args['meta_key'] = '_kbs_article_views';
 		$args['orderby']  = 'meta_value_num';
 	}
 
-	$args['post_type'] = 'kbs_kb';
+	$args['post_type'] = 'article';
 
 	$articles_query = new WP_Query( $args );
 
@@ -179,14 +179,14 @@ add_shortcode( 'kbs_articles', 'kbs_articles_shortcode' );
  * Search Form Shortcode
  *
  * Shows a search form allowing users to search KB Articles. This function simply
- * calls the kbs_kb_article_search_form function to display the search form.
+ * calls the kbs_article_search_form function to display the search form.
  *
  * @since	1.0
  * @param	att		$atts	Shortcode attributes
- * @uses	kbs_kb_article_search_form()
+ * @uses	kbs_article_search_form()
  * @return	str
  */
 function kbs_article_search_form_shortcode()	{
-	return kbs_kb_article_search_form();
+	return kbs_article_search_form();
 } // kbs_article_search_form_shortcode
 add_shortcode( 'kbs_search', 'kbs_article_search_form_shortcode' );

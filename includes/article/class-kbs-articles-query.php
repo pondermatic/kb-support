@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) )
 class KBS_Articles_Query extends KBS_Stats {
 
 	/**
-	 * The args to pass to the kbs_get_kb_articles() query
+	 * The args to pass to the kbs_get_articles() query
 	 *
 	 * @var		array
 	 * @access	public
@@ -63,7 +63,7 @@ class KBS_Articles_Query extends KBS_Stats {
 	 */
 	public function __construct( $args = array() ) {
 		$defaults = array(
-			'post_type'  => array( 'kbs_kb' ),
+			'post_type'  => array( 'article' ),
 			'articles'   => null,
 			'start_date' => false,
 			'end_date'   => false,
@@ -151,7 +151,6 @@ class KBS_Articles_Query extends KBS_Stats {
 
 		$this->total_articles = (int) $query->found_posts;
 		$this->articles       = $query->posts;
-
 
 		do_action( 'kbs_post_get_articles', $this );
 
@@ -272,7 +271,7 @@ class KBS_Articles_Query extends KBS_Stats {
 		switch ( $this->args['orderby'] ) {
 			case 'views':
 			default:
-				$this->__set( 'meta_key', '_kb_article_views' );
+				$this->__set( 'meta_key', '_kbs_article_views' );
 				$this->__set( 'orderby', 'meta_value_num' );
 				break;
 		}
@@ -311,7 +310,7 @@ class KBS_Articles_Query extends KBS_Stats {
 		}
 
 		$query = array(
-			'key'     => '_kbs_kb_restricted',
+			'key'     => '_kbs_article_restricted',
 			'value'   => '1'
 		);
 
@@ -357,7 +356,7 @@ class KBS_Articles_Query extends KBS_Stats {
 
 			$post = get_post( $search );
 
-			if ( is_object( $post ) && $post->post_type == 'kbs_kb' ) {
+			if ( is_object( $post ) && $post->post_type == 'article' ) {
 
 				$arr   = array();
 				$arr[] = $search;

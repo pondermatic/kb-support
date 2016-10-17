@@ -6,23 +6,24 @@
  * @subpackage  Functions
  * @copyright   Copyright (c) 2016, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       0.1
+ * @since       1.0
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) )
+	exit;
 
 /**
  * Registers and sets up the Tickets and Articles custom post types
  *
- * @since	0.1
+ * @since	1.0
  * @return	void
  */
-function kbs_setup_kbs_post_types() {
+function kbs_setup_post_types() {
 	
-	$kb_archives     = defined( 'KBS_KB_DISABLE_ARCHIVE' ) && KBS_KB_DISABLE_ARCHIVE ? false : true;
-	$kb_slug         = defined( 'KBS_KB_SLUG' ) ? KBS_KB_SLUG : 'kb';
-	$kb_rewrite      = defined( 'KBS_KB_DISABLE_REWRITE' ) && KBS_KB_DISABLE_REWRITE ? false : array( 'slug' => $kb_slug, 'with_front' => false );
+	$article_archives = defined( 'KBS_ARTICLE_DISABLE_ARCHIVE' ) && KBS_ARTICLE_DISABLE_ARCHIVE ? false : true;
+	$articles_slug    = defined( 'KBS_SLUG' ) ? KBS_SLUG : 'articles';
+	$articles_rewrite = defined( 'KBS_ARTICLE_DISABLE_REWRITE' ) && KBS_ARTICLE_DISABLE_REWRITE ? false : array( 'slug' => $articles_slug, 'with_front' => false );
 
 	$ticket_labels =  apply_filters( 'kbs_ticket_labels', array(
 		'name'                  => _x( '%2$s', 'kbs_ticket post type name', 'kb-support' ),
@@ -104,10 +105,10 @@ function kbs_setup_kbs_post_types() {
 
 	register_post_type( 'kbs_ticket_reply', apply_filters( 'kbs_ticket_reply_post_type_args', $ticket_reply_args ) );
 
-	/** KB Post Type */
-	$kb_labels = array(
-		'name'               => _x( '%2$s', 'kbs_kb type general name', 'kb-support' ),
-		'singular_name'      => _x( '%1$s', 'kbs_kb type singular name', 'kb-support' ),
+	/** Article Post Type */
+	$article_labels = array(
+		'name'               => _x( '%2$s', 'article type general name', 'kb-support' ),
+		'singular_name'      => _x( '%1$s', 'article type singular name', 'kb-support' ),
 		'add_new'            => __( 'New %1$s', 'kb-support' ),
 		'add_new_item'       => __( 'New %1$s', 'kb-support' ),
 		'edit_item'          => __( 'Edit %1$s', 'kb-support' ),
@@ -121,26 +122,26 @@ function kbs_setup_kbs_post_types() {
 		'menu_name'          => __( '%2$s', 'kb-support' )
 	);
 
-	foreach ( $kb_labels as $key => $value ) {
-		$kb_labels[ $key ] = sprintf( $value, kbs_get_kb_label_singular(), kbs_get_kb_label_plural() );
+	foreach ( $article_labels as $key => $value ) {
+		$article_labels[ $key ] = sprintf( $value, kbs_get_article_label_singular(), kbs_get_article_label_plural() );
 	}
 
-	$kb_args = array(
-		'labels'             => $kb_labels,
+	$article_args = array(
+		'labels'             => $article_labels,
 		'public'             => true,
 		'show_in_menu'       => true,
 		'menu_icon'          => 'dashicons-welcome-learn-more',
 		'query_var'          => true,
-		'rewrite'            => $kb_rewrite,
+		'rewrite'            => $articles_rewrite,
 		'capability_type'    => 'ticket',
 		'map_meta_cap'       => true,
-		'has_archive'        => $kb_archives,
+		'has_archive'        => $article_archives,
 		'hierarchical'       => false,
-		'supports'           => apply_filters( 'kbs_kb_supports', array( 'title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'author', 'trackbacks', 'comments' ) ),
+		'supports'           => apply_filters( 'kbs_article_supports', array( 'title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'author', 'trackbacks', 'comments' ) ),
 		'can_export'         => true
 	);
 
-	register_post_type( 'kbs_kb', $kb_args );
+	register_post_type( 'article', $article_args );
 	
 	/** KB Form Type */
 	$form_labels = array(
@@ -205,13 +206,13 @@ function kbs_setup_kbs_post_types() {
 
 	register_post_type( 'kbs_form_field', $field_args );
 
-} // kbs_setup_kbs_post_types
-add_action( 'init', 'kbs_setup_kbs_post_types', 1 );
+} // kbs_setup_post_types
+add_action( 'init', 'kbs_setup_post_types', 1 );
 
 /**
- * Get Default Labels
+ * Get Default Ticket Labels
  *
- * @since	0.1
+ * @since	1.0
  * @return	arr		$defaults	Default labels
  */
 function kbs_get_default_ticket_labels() {
@@ -225,7 +226,7 @@ function kbs_get_default_ticket_labels() {
 /**
  * Get Singular Ticket Label
  *
- * @since	0.1
+ * @since	1.0
  *
  * @param	bool	$lowercase
  * @return	str		$defaults['singular']	Singular Ticket label
@@ -238,7 +239,7 @@ function kbs_get_ticket_label_singular( $lowercase = false ) {
 /**
  * Get Plural Ticket Label
  *
- * @since	0.1
+ * @since	1.0
  *
  * @param	bool	$lowercase
  * @return	str		$defaults['plural']		Plural Ticket label
@@ -249,49 +250,49 @@ function kbs_get_ticket_label_plural( $lowercase = false ) {
 } // kbs_get_ticket_label_plural
 
 /**
- * Get Default Labels
+ * Get Default Article Labels
  *
- * @since	0.1
+ * @since	1.0
  * @return	arr		$defaults	Default labels
  */
-function kbs_get_default_kb_labels() {
+function kbs_get_default_article_labels() {
 	$defaults = array(
 	   'singular' => __( 'KB Article', 'kb-support' ),
 	   'plural'   => __( 'KB Articles','kb-support' )
 	);
 	return apply_filters( 'kbs_default_articles_name', $defaults );
-} // kbs_get_default_kb_labels
+} // kbs_get_default_article_labels
 
 /**
  * Get Singular Article Label
  *
- * @since	0.1
+ * @since	1.0
  *
  * @param	bool	$lowercase
  * @return	str		$defaults['singular']	Singular Ticket label
  */
-function kbs_get_kb_label_singular( $lowercase = false ) {
-	$defaults = kbs_get_default_kb_labels();
+function kbs_get_article_label_singular( $lowercase = false ) {
+	$defaults = kbs_get_default_article_labels();
 	return ($lowercase) ? strtolower( $defaults['singular'] ) : $defaults['singular'];
-} // kbs_get_kb_label_singular
+} // kbs_get_article_label_singular
 
 /**
  * Get Plural Article Label
  *
- * @since	0.1
+ * @since	1.0
  *
  * @param	bool	$lowercase
  * @return	str		$defaults['plural']		Plural Ticket label
  */
-function kbs_get_kb_label_plural( $lowercase = false ) {
-	$defaults = kbs_get_default_kb_labels();
+function kbs_get_article_label_plural( $lowercase = false ) {
+	$defaults = kbs_get_default_article_labels();
 	return ( $lowercase ) ? strtolower( $defaults['plural'] ) : $defaults['plural'];
-} // kbs_get_kb_label_plural
+} // kbs_get_article_label_plural
 
 /**
  * Change default "Enter title here" input
  *
- * @since	0.1
+ * @since	1.0
  * @param	str		$title	Default title placeholder text
  * @return	str		$title	New placeholder text
  */
@@ -309,8 +310,8 @@ function kbs_change_default_title( $title ) {
 	 if ( 'kbs_ticket' == $screen->post_type ) {
 		$label = kbs_get_ticket_label_singular();
 		$title = sprintf( __( 'Enter %s title here', 'kb-support' ), $label );
-	 } elseif ( 'kbs_kb' == $screen->post_type ) {
-		$label = kbs_get_kb_label_singular();
+	 } elseif ( 'article' == $screen->post_type ) {
+		$label = kbs_get_article_label_singular();
 		$title = sprintf( __( 'Enter %s title here', 'kb-support' ), $label );
 	 } elseif ( 'kbs_form' == $screen->post_type )	{
 		$title = __( 'Enter form name here', 'kb-support' ); 
@@ -322,15 +323,14 @@ function kbs_change_default_title( $title ) {
 add_filter( 'enter_title_here', 'kbs_change_default_title' );
 
 /**
- * Registers the custom taxonomies for the kbs_ticket and kbs_kb custom post types.
+ * Registers the custom taxonomies for the kbs_ticket and article custom post types.
  *
- * @since	0.1
+ * @since	1.0
  * @return	void
 */
 function kbs_setup_custom_taxonomies() {
 
-	$ticket_slug     = defined( 'KBS_TICKET_SLUG' ) ? KBS_TICKET_SLUG : 'tickets';
-	$kb_slug         = defined( 'KBS_KB_SLUG' )     ? KBS_KB_SLUG     : 'kb';
+	$articles_slug = defined( 'KBS_SLUG' ) ? KBS_SLUG : 'articles';
 
 	/** Ticket Categories */
 	$ticket_category_labels = array(
@@ -389,62 +389,62 @@ function kbs_setup_custom_taxonomies() {
 	register_taxonomy( 'ticket_tag', array( 'kbs_ticket' ), $ticket_tag_args );
 	register_taxonomy_for_object_type( 'ticket_tag', 'kbs_ticket' );
 
-	/** KB Categories */
-	$kb_category_labels = array(
+	/** Article Categories */
+	$article_category_labels = array(
 		'name'              => sprintf( _x( 'Categories', 'taxonomy general name', 'kb-support' ), kbs_get_ticket_label_singular() ),
-		'singular_name'     => sprintf( _x( 'Category', 'taxonomy singular name', 'kb-support' ), kbs_get_kb_label_singular() ),
-		'search_items'      => sprintf( __( 'Search %s Categories', 'kb-support' ), kbs_get_kb_label_singular() ),
-		'all_items'         => sprintf( __( 'All %s Categories', 'kb-support' ), kbs_get_kb_label_singular() ),
-		'parent_item'       => sprintf( __( 'Parent %s Category', 'kb-support' ), kbs_get_kb_label_singular() ),
-		'parent_item_colon' => sprintf( __( 'Parent %s Category:', 'kb-support' ), kbs_get_kb_label_singular() ),
-		'edit_item'         => sprintf( __( 'Edit %s Category', 'kb-support' ), kbs_get_kb_label_singular() ),
-		'update_item'       => sprintf( __( 'Update %s Category', 'kb-support' ), kbs_get_kb_label_singular() ),
-		'add_new_item'      => sprintf( __( 'Add New %s Category', 'kb-support' ), kbs_get_kb_label_singular() ),
-		'new_item_name'     => sprintf( __( 'New %s Category Name', 'kb-support' ), kbs_get_kb_label_singular() ),
-		'menu_name'         => sprintf( __( 'Categories', 'kb-support' ), kbs_get_kb_label_singular() )
+		'singular_name'     => sprintf( _x( 'Category', 'taxonomy singular name', 'kb-support' ), kbs_get_article_label_singular() ),
+		'search_items'      => sprintf( __( 'Search %s Categories', 'kb-support' ), kbs_get_article_label_singular() ),
+		'all_items'         => sprintf( __( 'All %s Categories', 'kb-support' ), kbs_get_article_label_singular() ),
+		'parent_item'       => sprintf( __( 'Parent %s Category', 'kb-support' ), kbs_get_article_label_singular() ),
+		'parent_item_colon' => sprintf( __( 'Parent %s Category:', 'kb-support' ), kbs_get_article_label_singular() ),
+		'edit_item'         => sprintf( __( 'Edit %s Category', 'kb-support' ), kbs_get_article_label_singular() ),
+		'update_item'       => sprintf( __( 'Update %s Category', 'kb-support' ), kbs_get_article_label_singular() ),
+		'add_new_item'      => sprintf( __( 'Add New %s Category', 'kb-support' ), kbs_get_article_label_singular() ),
+		'new_item_name'     => sprintf( __( 'New %s Category Name', 'kb-support' ), kbs_get_article_label_singular() ),
+		'menu_name'         => sprintf( __( 'Categories', 'kb-support' ), kbs_get_article_label_singular() )
 	);
 
-	$kb_category_args = apply_filters( 'kbs_ticket_category_args', array(
+	$article_category_args = apply_filters( 'kbs_article_category_args', array(
 			'hierarchical' => true,
-			'labels'       => apply_filters( 'kbs_ticket_category_labels', $kb_category_labels),
+			'labels'       => apply_filters( 'kbs_article_category_labels', $article_category_labels),
 			'show_ui'      => true,
-			'query_var'    => 'ticket_category',
-			'rewrite'      => array( 'slug' => $kb_slug . '/category', 'with_front' => false, 'hierarchical' => true ),
+			'query_var'    => 'article_category',
+			'rewrite'      => array( 'slug' => $articles_slug . '/category', 'with_front' => false, 'hierarchical' => true ),
 			'capabilities' => array( 'manage_terms' => 'manage_ticket_terms','edit_terms' => 'edit_ticket_terms','assign_terms' => 'assign_ticket_terms','delete_terms' => 'delete_ticket_terms' )
 		)
 	);
 
-	register_taxonomy( 'kb_category', array( 'kbs_kb' ), $kb_category_args );
-	register_taxonomy_for_object_type( 'kb_category', 'kbs_kb' );
+	register_taxonomy( 'article_category', array( 'article' ), $article_category_args );
+	register_taxonomy_for_object_type( 'article_category', 'article' );
 
-	/** KB Tags */
-	$kb_tag_labels = array(
-		'name'                  => sprintf( _x( 'Tags', 'taxonomy general name', 'kb-support' ), kbs_get_kb_label_singular() ),
-		'singular_name'         => sprintf( _x( 'Tag', 'taxonomy singular name', 'kb-support' ), kbs_get_kb_label_singular() ),
-		'search_items'          => sprintf( __( 'Search %s Tags', 'kb-support' ), kbs_get_kb_label_singular() ),
-		'all_items'             => sprintf( __( 'All %s Tags', 'kb-support' ), kbs_get_kb_label_singular() ),
-		'parent_item'           => sprintf( __( 'Parent %s Tag', 'kb-support' ), kbs_get_kb_label_singular() ),
-		'parent_item_colon'     => sprintf( __( 'Parent %s Tag:', 'kb-support' ), kbs_get_kb_label_singular() ),
-		'edit_item'             => sprintf( __( 'Edit %s Tag', 'kb-support' ), kbs_get_kb_label_singular() ),
-		'update_item'           => sprintf( __( 'Update %s Tag', 'kb-support' ), kbs_get_kb_label_singular() ),
-		'add_new_item'          => sprintf( __( 'Add New %s Tag', 'kb-support' ), kbs_get_kb_label_singular() ),
-		'new_item_name'         => sprintf( __( 'New %s Tag Name', 'kb-support' ), kbs_get_kb_label_singular() ),
-		'menu_name'             => sprintf( __( 'Tags', 'kb-support' ), kbs_get_kb_label_singular() ),
-		'choose_from_most_used' => sprintf( __( 'Choose from most used %s tags', 'kb-support' ), kbs_get_kb_label_singular() ),
+	/** Article Tags */
+	$article_tag_labels = array(
+		'name'                  => sprintf( _x( 'Tags', 'taxonomy general name', 'kb-support' ), kbs_get_article_label_singular() ),
+		'singular_name'         => sprintf( _x( 'Tag', 'taxonomy singular name', 'kb-support' ), kbs_get_article_label_singular() ),
+		'search_items'          => sprintf( __( 'Search %s Tags', 'kb-support' ), kbs_get_article_label_singular() ),
+		'all_items'             => sprintf( __( 'All %s Tags', 'kb-support' ), kbs_get_article_label_singular() ),
+		'parent_item'           => sprintf( __( 'Parent %s Tag', 'kb-support' ), kbs_get_article_label_singular() ),
+		'parent_item_colon'     => sprintf( __( 'Parent %s Tag:', 'kb-support' ), kbs_get_article_label_singular() ),
+		'edit_item'             => sprintf( __( 'Edit %s Tag', 'kb-support' ), kbs_get_article_label_singular() ),
+		'update_item'           => sprintf( __( 'Update %s Tag', 'kb-support' ), kbs_get_article_label_singular() ),
+		'add_new_item'          => sprintf( __( 'Add New %s Tag', 'kb-support' ), kbs_get_article_label_singular() ),
+		'new_item_name'         => sprintf( __( 'New %s Tag Name', 'kb-support' ), kbs_get_article_label_singular() ),
+		'menu_name'             => sprintf( __( 'Tags', 'kb-support' ), kbs_get_article_label_singular() ),
+		'choose_from_most_used' => sprintf( __( 'Choose from most used %s tags', 'kb-support' ), kbs_get_article_label_singular() ),
 	);
 
-	$kb_tag_args = apply_filters( 'kbs_ticket_tag_args', array(
+	$article_tag_args = apply_filters( 'kbs_article_tag_args', array(
 			'hierarchical' => false,
-			'labels'       => apply_filters( 'kbs_ticket_tag_labels', $kb_tag_labels ),
+			'labels'       => apply_filters( 'kbs_article_tag_labels', $article_tag_labels ),
 			'show_ui'      => true,
-			'query_var'    => 'ticket_tag',
-			'rewrite'      => array( 'slug' => $kb_slug . '/tag', 'with_front' => false, 'hierarchical' => true  ),
+			'query_var'    => 'article_tag',
+			'rewrite'      => array( 'slug' => $articles_slug . '/tag', 'with_front' => false, 'hierarchical' => true  ),
 			'capabilities' => array( 'manage_terms' => 'manage_ticket_terms','edit_terms' => 'edit_ticket_terms','assign_terms' => 'assign_ticket_terms','delete_terms' => 'delete_ticket_terms' )
 		)
 	);
 
-	register_taxonomy( 'kb_tag', array( 'kbs_kb' ), $ticket_tag_args );
-	register_taxonomy_for_object_type( 'kb_tag', 'kbs_kb' );
+	register_taxonomy( 'article_tag', array( 'article' ), $article_tag_args );
+	register_taxonomy_for_object_type( 'article_tag', 'article' );
 
 } // kbs_setup_custom_taxonomies
 add_action( 'init', 'kbs_setup_custom_taxonomies', 0 );
@@ -452,7 +452,7 @@ add_action( 'init', 'kbs_setup_custom_taxonomies', 0 );
 /**
  * Get the singular and plural labels for a ticket taxonomy.
  *
- * @since	0.1
+ * @since	1.0
  * @param	str		$taxonomy	The Taxonomy to get labels for
  * @return	arr		Associative array of labels (name = plural)
  */
@@ -460,7 +460,7 @@ function kbs_get_taxonomy_labels( $taxonomy = 'ticket_category' ) {
 
 	$allowed_taxonomies = apply_filters(
 		'kbs_allowed_taxonomies',
-		array( 'ticket_category', 'ticket_tag', 'kb_category', 'kb_tag' )
+		array( 'ticket_category', 'ticket_tag', 'article_category', 'article_tag' )
 	);
 
 	if ( ! in_array( $taxonomy, $allowed_taxonomies ) ) {
@@ -488,7 +488,7 @@ function kbs_get_taxonomy_labels( $taxonomy = 'ticket_category' ) {
  * Registers Custom Post Statuses which are used by the Tickets.
  *
  *
- * @since	0.1
+ * @since	1.0
  * @return	void
  */
 function kbs_register_post_type_statuses() {
@@ -564,7 +564,7 @@ function kbs_get_post_statuses( $output = 'names', $allowed_only = false )	{
  *
  * Returns an array of with all updated messages.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$messages	Post updated message
  * @return	arr		$messages	New post updated messages
  */
@@ -574,7 +574,7 @@ function kbs_updated_messages( $messages ) {
 
 	$url1 = '<a href="' . get_permalink( $post_ID ) . '">';
 	$url2 = kbs_get_ticket_label_singular();
-	$url3 = kbs_get_kb_label_singular();
+	$url3 = kbs_get_article_label_singular();
 	$url4 = '</a>';
 
 	$messages['kbs_ticket'] = array(
@@ -585,7 +585,7 @@ function kbs_updated_messages( $messages ) {
 		8 => sprintf( __( '%2$s submitted. %1$sView %2$s%3$s.', 'kb-support' ), $url1, $url2, $url4 )
 	);
 	
-	$messages['kbs_kb'] = array(
+	$messages['article'] = array(
 		1 => sprintf( __( '%2$s updated. %1$sView %2$s%3$s.', 'kb-support'   ), $url1, $url3, $url4 ),
 		4 => sprintf( __( '%2$s updated. %1$sView %2$s%3$s.', 'kb-support'   ), $url1, $url3, $url4 ),
 		6 => sprintf( __( '%2$s published. %1$sView %2$s%3$s.', 'kb-support' ), $url1, $url3, $url4 ),
@@ -609,7 +609,7 @@ add_filter( 'post_updated_messages', 'kbs_updated_messages' );
 /**
  * Updated bulk messages
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$bulk_messages	Post updated messages
  * @param	arr		$bulk_counts	Post counts
  * @return	arr		$bulk_messages	New post updated messages
@@ -618,8 +618,8 @@ function kbs_bulk_updated_messages( $bulk_messages, $bulk_counts ) {
 
 	$ticket_singular  = kbs_get_ticket_label_singular();
 	$ticket_plural    = kbs_get_ticket_label_plural();
-	$article_singular = kbs_get_kb_label_singular();
-	$article_plural   = kbs_get_kb_label_plural();
+	$article_singular = kbs_get_article_label_singular();
+	$article_plural   = kbs_get_article_label_plural();
 
 	$bulk_messages['kbs_ticket'] = array(
 		'updated'   => sprintf( _n( '%1$s %2$s updated.', '%1$s %3$s updated.', $bulk_counts['updated'], 'kb-support' ), $bulk_counts['updated'], $ticket_singular, $ticket_plural ),
@@ -629,7 +629,7 @@ function kbs_bulk_updated_messages( $bulk_messages, $bulk_counts ) {
 		'untrashed' => sprintf( _n( '%1$s %2$s restored from the Trash.', '%1$s %3$s restored from the Trash.', $bulk_counts['untrashed'], 'kb-support' ), $bulk_counts['untrashed'], $ticket_singular, $ticket_plural )
 	);
 	
-	$bulk_messages['kbs_kb'] = array(
+	$bulk_messages['article'] = array(
 		'updated'   => sprintf( _n( '%1$s %2$s updated.', '%1$s %3$s updated.', $bulk_counts['updated'], 'kb-support' ), $bulk_counts['updated'], $article_singular, $article_plural ),
 		'locked'    => sprintf( _n( '%1$s %2$s not updated, somebody is editing it.', '%1$s %3$s not updated, somebody is editing them.', $bulk_counts['locked'], 'kb-support' ), $bulk_counts['locked'], $article_singular, $article_plural ),
 		'deleted'   => sprintf( _n( '%1$s %2$s permanently deleted.', '%1$s %3$s permanently deleted.', $bulk_counts['deleted'], 'kb-support' ), $bulk_counts['deleted'], $article_singular, $article_plural ),

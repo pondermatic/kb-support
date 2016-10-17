@@ -10,7 +10,8 @@
 */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) )
+	exit;
 
 /**
  * Admin Messages
@@ -52,7 +53,15 @@ function kbs_admin_messages() {
 	if ( isset( $_GET['kbs-message'] ) && 'ticket_reply_added' == $_GET['kbs-message'] )	{
 		$closed = '';
 		if ( isset( $_GET['post'] ) && 'kbs_ticket' == get_post_type( $_GET['post'] ) && 'closed' == get_post_status( $_GET['post'] ) )	{
-			$closed = sprintf( __( ' and the %1$s was closed', 'kb-support' ), kbs_get_ticket_label_singular() );
+
+			$create_article_link = add_query_arg( array(
+				'kbs-action' => 'create_article',
+				'ticket_id'  => $_GET['post']
+			), admin_url() );
+
+			$closed = sprintf( __( ' and the %1$s was closed.', 'kb-support' ), kbs_get_ticket_label_singular() );
+			$closed .= ' ';
+			$closed .= sprintf( __( 'Create <a href="%s">%s</a>', 'kb-support' ), $create_article_link, kbs_get_article_label_singular() );
 		}
 
 		add_settings_error(
@@ -274,6 +283,24 @@ function kbs_admin_messages() {
 			'kbs-notices',
 			'kbs-customer-disconnect-user-failed',
 			__( 'Could not disconnect customer from user ID.', 'kb-support' ),
+			'error'
+		);
+	}
+
+	if ( isset( $_GET['kbs-message'] ) && 'article_created' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-create-article-success',
+			sprintf( __( 'Draft %1$s created from %2$s. Review, edit and publish the new %1$s below.', 'kb-support' ), kbs_get_article_label_singular( true ), kbs_get_ticket_label_singular( true ) ),
+			'updated'
+		);
+	}
+
+	if ( isset( $_GET['kbs-message'] ) && 'create_article_failed' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-create-article-failed',
+			sprintf( __( 'Could not create new %1$s from %2$s.', 'kb-support' ), kbs_get_article_label_singular( true ), kbs_get_ticket_label_singular( true ) ),
 			'error'
 		);
 	}

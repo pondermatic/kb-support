@@ -1,22 +1,24 @@
 <?php
-	defined( 'ABSPATH' ) or die( "Direct access to this page is disabled!!!" );
-	
 /**
- * Manage kbs-article posts.
+ * Manage article posts.
  * 
- * @since		0.1
+ * @since		1.0
  * @package		KBS
  * @subpackage	Posts
  */
 
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) )
+	exit;
+
 /**
- * Define the columns that should be displayed for the KBS Article post lists screen
+ * Define the columns that should be displayed for the Article post lists screen
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$columns	An array of column name ⇒ label. The label is shown as the column header.
  * @return	arr		$columns	Filtered array of column name => label to be shown as the column header.
  */
-function kbs_set_kbs_kb_post_columns( $columns ) {
+function kbs_set_article_post_columns( $columns ) {
     
 	$columns = array(
         'cb'               => '<input type="checkbox" />',
@@ -30,20 +32,20 @@ function kbs_set_kbs_kb_post_columns( $columns ) {
 		'linked'           => sprintf( __( 'Linked %s', 'kb-support' ), kbs_get_ticket_label_plural() )
     );
 	
-	return apply_filters( 'kbs_kb_post_columns', $columns );
+	return apply_filters( 'kbs_article_post_columns', $columns );
 	
-} // kbs_set_kbs_kb_post_columns
-add_filter( 'manage_kbs_kb_posts_columns' , 'kbs_set_kbs_kb_post_columns' );
+} // kbs_set_article_post_columns
+add_filter( 'manage_article_posts_columns' , 'kbs_set_article_post_columns' );
 
 /**
- * Define the data to be displayed within the KBS Article post custom columns.
+ * Define the data to be displayed within the Article post custom columns.
  *
- * @since	0.1
+ * @since	1.0
  * @param	str		$column_name	The name of the current column for which data should be displayed.
  * @param	int		$post_id		The ID of the current post for which data is being displayed.
  * @return	str
  */
-function kbs_set_kbs_kb_column_data( $column_name, $post_id ) {
+function kbs_set_articles_column_data( $column_name, $post_id ) {
 
 	switch ( $column_name ) {
 		case 'views':
@@ -57,8 +59,22 @@ function kbs_set_kbs_kb_column_data( $column_name, $post_id ) {
 			break;
 
 		case 'linked':
-			echo $output = '';
-			echo apply_filters( 'kb_articles_post_column_linked', $output, $post_id );
+			$linked_tickets = kbs_get_linked_tickets( $post_id );
+			$ticket_ids     = array();
+
+			if ( $linked_tickets )	{
+
+				$linked_tickets = apply_filters( 'kbs_articles_post_column_linked', $linked_tickets, $post_id );
+
+				foreach( $linked_tickets as $ticket_id )	{
+					$ticket_ids[] = '<a href="' . kbs_get_ticket_url( $ticket_id, true ) . '">' . $ticket_id . '</a>';
+				}
+
+				if ( ! empty( $ticket_ids ) )	{
+					echo implode( ', ', $ticket_ids );
+				}
+
+			}
 			break;
 			
 		default:
@@ -66,23 +82,23 @@ function kbs_set_kbs_kb_column_data( $column_name, $post_id ) {
 			break;
 	}
 
-} // kbs_set_kbs_kb_column_data
-add_action( 'manage_kbs_kb_posts_custom_column' , 'kbs_set_kbs_kb_column_data', 10, 2 );
+} // kbs_set_articles_column_data
+add_action( 'manage_article_posts_custom_column' , 'kbs_set_articles_column_data', 10, 2 );
 
 /**
- * Save the KBS Article custom posts
+ * Save the Article custom posts
  *
- * @since	0.1
+ * @since	1.0
  * @param	int		$post_id		The ID of the post being saved.
  * @param	obj		$post			The WP_Post object of the post being saved.
  * @param	bool	$update			Whether an existing post if being updated or not.
  *
  * @return	void
  */
-function kbs_kb_post_save( $post_id, $post, $update )	{	
+function kbs_article_post_save( $post_id, $post, $update )	{	
 
 	// Remove the save post action to avoid loops
-	remove_action( 'save_post_kbs_kb', 'kbs_kb_post_save', 10, 3 );
+	remove_action( 'save_post_article', 'kbs_article_post_save', 10, 3 );
 
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )	{
 		return;
@@ -93,28 +109,28 @@ function kbs_kb_post_save( $post_id, $post, $update )	{
 	}
 
 	if ( ! $update )	{
-		add_post_meta( $post_id, '_kb_article_views', '0', true );
+		add_post_meta( $post_id, '_kbs_article_views', 0, true );
 	}
 
 	$url = remove_query_arg( 'kbs-message' );
 
 	if (
-		! isset( $_POST['kbs_kb_meta_box_nonce'] )
-		|| ! wp_verify_nonce( $_POST['kbs_kb_meta_box_nonce'], 'kbs_kb_meta_save' )
+		! isset( $_POST['kbs_article_meta_box_nonce'] )
+		|| ! wp_verify_nonce( $_POST['kbs_article_meta_box_nonce'], 'kbs_article_meta_save' )
 	)	{
 		return;
 	}
 
 	// Fire the before save action but only if this is not a new article creation (i.e $post->post_status == 'draft')
 	if ( $update === true )	{
-		do_action( 'kbs_kb_before_save', $post_id, $post, $update );
+		do_action( 'kbs_article_before_save', $post_id, $post, $update );
 	}
 
-	$fields = kbs_kb_metabox_fields();
+	$fields = kbs_article_metabox_fields();
 
 	foreach( $fields as $field )	{
 		if ( ! empty( $_POST[ $field ] ) ) {
-			$new_value = apply_filters( 'kbs_kb_metabox_save_' . $field, $_POST[ $field ] );
+			$new_value = apply_filters( 'kbs_article_metabox_save_' . $field, $_POST[ $field ] );
 			update_post_meta( $post_id, $field, $new_value );
 		} else {
 			delete_post_meta( $post_id, $field );
@@ -122,9 +138,9 @@ function kbs_kb_post_save( $post_id, $post, $update )	{
 	}
 
 	// Fire the after save action
-	do_action( 'kbs_kb_after_save', $post_id, $post, $update );
+	do_action( 'kbs_article_after_save', $post_id, $post, $update );
 
 	// Re-add the save post action
-	add_action( 'save_post_kbs_kb', 'kbs_kb_post_save', 10, 3 );
+	add_action( 'save_post_article', 'kbs_article_post_save', 10, 3 );
 }
-add_action( 'save_post_kbs_kb', 'kbs_kb_post_save', 10, 3 );
+add_action( 'save_post_article', 'kbs_article_post_save', 10, 3 );

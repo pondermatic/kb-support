@@ -318,7 +318,7 @@ jQuery(document).ready(function ($) {
 				}
 				
 				if ( 'select' == kbs_selected_field
-					|| 'kb_category_dropdown'     == kbs_selected_field
+					|| 'article_category_dropdown'     == kbs_selected_field
 					|| 'ticket_category_dropdown' == kbs_selected_field
 				)	{
 					$('#kbs_meta_field_select_searchable_wrap').show();

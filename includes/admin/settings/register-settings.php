@@ -382,44 +382,44 @@ function kbs_get_registered_settings() {
 			)
 		),
 		/** KB Settings */
-		'kb_articles' => apply_filters( 'kbs_article_settings',
+		'articles' => apply_filters( 'kbs_article_settings',
 			array(
 				'main'   => array(
 					'kb_settings_header' => array(
 						'id'   => 'kb_settings_header',
-						'name' => '<h3>' . sprintf( __( '%s Settings', 'kb-support' ), kbs_get_kb_label_singular() ) . '</h3>',
+						'name' => '<h3>' . sprintf( __( '%s Settings', 'kb-support' ), kbs_get_article_label_singular() ) . '</h3>',
 						'type' => 'header'
 					),
-					'kb_restricted' => array(
-						'id'      => 'kb_restricted',
-						'name'    => sprintf( __( 'Restrict %s', 'kb-support' ), kbs_get_kb_label_plural() ),
-						'desc'    => sprintf( __( 'Select to make restrict %s by default. Can by changed per %s', 'kb-support' ), kbs_get_kb_label_plural(), kbs_get_kb_label_singular() ),
+					'article_restricted' => array(
+						'id'      => 'article_restricted',
+						'name'    => sprintf( __( 'Restrict %s', 'kb-support' ), kbs_get_article_label_plural() ),
+						'desc'    => sprintf( __( 'Select to make restrict %s by default. Can by changed per %s', 'kb-support' ), kbs_get_article_label_plural(), kbs_get_article_label_singular() ),
 						'type'    => 'checkbox',
 						'std'     => '0'
 					),
-					'kb_hide_restricted' => array(
-						'id'      => 'kb_hide_restricted',
-						'name'    => sprintf( __( 'Hide Restricted %s', 'kb-support' ), kbs_get_kb_label_plural() ),
-						'desc'    => sprintf( __( 'Restricted %s are always hidden from search results when a user is not logged in. Select to also hide from archives.', 'kb-support' ), kbs_get_kb_label_plural() ),
+					'article_hide_restricted' => array(
+						'id'      => 'article_hide_restricted',
+						'name'    => sprintf( __( 'Hide Restricted %s', 'kb-support' ), kbs_get_article_label_plural() ),
+						'desc'    => sprintf( __( 'Restricted %s are always hidden from search results when a user is not logged in. Select to also hide from archives.', 'kb-support' ), kbs_get_article_label_plural() ),
 						'type'    => 'checkbox'
 					),
-					'kb_hide_restricted_ajax' => array(
-						'id'      => 'kb_hide_restricted_ajax',
+					'article_hide_restricted_ajax' => array(
+						'id'      => 'article_hide_restricted_ajax',
 						'name'    => __( 'Restricted Ajax Search', 'kb-support' ),
-						'desc'    => sprintf( __( 'Same as <code>Hide Restricted %s</code> but this option manipulates Ajax search results.', 'kb-support' ), kbs_get_kb_label_plural() ),
+						'desc'    => sprintf( __( 'Same as <code>Hide Restricted %s</code> but this option manipulates Ajax search results.', 'kb-support' ), kbs_get_article_label_plural() ),
 						'type'    => 'checkbox'
 					),
-					'kb_num_posts_ajax' => array(
-						'id'      => 'kb_num_posts_ajax',
+					'article_num_posts_ajax' => array(
+						'id'      => 'article_num_posts_ajax',
 						'name'    => __( 'Number of Posts from Ajax', 'kb-support' ),
-						'desc'    => sprintf( __( 'Enter the number of suggested %s that should be returned from the submission form Ajax search.', 'kb-support' ), kbs_get_kb_label_plural() ),
+						'desc'    => sprintf( __( 'Enter the number of suggested %s that should be returned from the submission form Ajax search.', 'kb-support' ), kbs_get_article_label_plural() ),
 						'type'    => 'number',
 						'step'    => '1',
 						'size'    => 'small',
 						'std'     => '5'
 					),
-					'kb_excerpt_length' => array(
-						'id'      => 'kb_excerpt_length',
+					'article_excerpt_length' => array(
+						'id'      => 'article_excerpt_length',
 						'name'    => __( 'Search Excerpt Length', 'kb-support' ),
 						'desc'    => __( 'Enter the number of words that should form the excerpt length during an ajax search. i.e. on the submission form.', 'kb-support' ),
 						'type'    => 'number',
@@ -868,11 +868,11 @@ function kbs_get_settings_tabs() {
 	$settings = kbs_get_registered_settings();
 
 	$tabs                 = array();
-	$tabs['general']      = __( 'General', 'kb-support' );
-	$tabs['tickets']      = sprintf( __( '%s', 'kb-support' ), kbs_get_ticket_label_plural() );
-	$tabs['kb_articles']  = sprintf( __( '%s', 'kb-support' ), kbs_get_kb_label_plural() );
-	$tabs['emails']       = __( 'Emails', 'kb-support' );
-	$tabs['styles']       = __( 'Styles', 'kb-support' );
+	$tabs['general']  = __( 'General', 'kb-support' );
+	$tabs['tickets']  = sprintf( __( '%s', 'kb-support' ), kbs_get_ticket_label_plural() );
+	$tabs['articles'] = sprintf( __( '%s', 'kb-support' ), kbs_get_article_label_plural() );
+	$tabs['emails']   = __( 'Emails', 'kb-support' );
+	$tabs['styles']   = __( 'Styles', 'kb-support' );
 
 	if ( ! empty( $settings['extensions'] ) ) {
 		$tabs['extensions'] = __( 'Extensions', 'kb-support' );
@@ -932,7 +932,7 @@ function kbs_get_registered_settings_sections() {
 			'submit'               => __( 'Submission Settings', 'kb-support' ),
 			'sla'                  => __( 'Service Levels', 'kb-support' )
 		) ),
-		'kb_articles'        => apply_filters( 'kbs_settings_sections_kb_articles', array(
+		'articles'        => apply_filters( 'kbs_settings_sections_articles', array(
 			'main'                 => sprintf( __( 'General %s Settings', 'kb-support' ), $single )
 		) ),
 		'emails'     => apply_filters( 'kbs_settings_sections_emails', array(
