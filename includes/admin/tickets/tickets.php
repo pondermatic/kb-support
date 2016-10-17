@@ -19,14 +19,18 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	arr		$columns	Filtered array of column name => label to be shown as the column header.
  */
 function kbs_set_kbs_ticket_post_columns( $columns ) {
-    
+
+	$category_labels = kbs_get_taxonomy_labels( 'ticket_category' );
+	$tag_labels      = kbs_get_taxonomy_labels( 'ticket_tag' );
+
 	$columns = array(
         'cb'               => '<input type="checkbox" />',
         'id'               => '#',
 		'dates'            => __( 'Date', 'kb-support' ),
 		'title'            => __( 'Title', 'kb-support' ),
         'customer'         => __( 'Customer', 'kb-support' ),
-		'categories'       => __( 'Category', 'kb-support' ),
+		'ticket_category'  => $category_labels['menu_name'],
+		'ticket_tag'       => $tag_labels['menu_name'],
         'agent'            => __( 'Agent', 'kb-support' )
     );
 	
@@ -62,6 +66,24 @@ function kbs_set_kbs_ticket_column_data( $column_name, $post_id ) {
 
 		case 'customer':
 			echo kb_tickets_post_column_customer( $post_id, $kbs_ticket );
+			break;
+
+		case 'ticket_category':
+			$terms = get_the_term_list( $post_id, 'ticket_category', '', '<br />', '');
+			if ( $terms )	{
+				echo $terms;
+			} else	{
+				echo '&mdash;';
+			}
+			break;
+
+		case 'ticket_tag':
+			$terms = get_the_term_list( $post_id, 'ticket_tag', '', '<br />', '');
+			if ( $terms )	{
+				echo $terms;
+			} else	{
+				echo '&mdash;';
+			}
 			break;
 
 		case 'agent':

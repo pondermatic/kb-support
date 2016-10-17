@@ -19,13 +19,16 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	arr		$columns	Filtered array of column name => label to be shown as the column header.
  */
 function kbs_set_article_post_columns( $columns ) {
-    
+
+	$category_labels = kbs_get_taxonomy_labels( 'article_category' );
+	$tag_labels      = kbs_get_taxonomy_labels( 'article_tag' );
+
 	$columns = array(
         'cb'               => '<input type="checkbox" />',
 		'title'            => __( 'Title', 'kb-support' ),
 		'date'             => __( 'Date', 'kb-support' ),
-		'categories'       => __( 'Categories', 'kb-support' ),
-        'tags'             => __( 'Tags', 'kb-support' ),
+		'article_category' => $category_labels['menu_name'],
+        'article_tag'      => $tag_labels['menu_name'],
 		'author'           => __( 'Author', 'kb-support' ),
 		'views'            => __( 'Views', 'kb-support' ),
 		'visibility'       => __( 'Visibility', 'kb-support' ),
@@ -48,6 +51,24 @@ add_filter( 'manage_article_posts_columns' , 'kbs_set_article_post_columns' );
 function kbs_set_articles_column_data( $column_name, $post_id ) {
 
 	switch ( $column_name ) {
+		case 'article_category':
+			$terms = get_the_term_list( $post_id, 'article_category', '', '<br />', '');
+			if ( $terms )	{
+				echo $terms;
+			} else	{
+				echo '&mdash;';
+			}
+			break;
+
+		case 'article_tag':
+			$terms = get_the_term_list( $post_id, 'article_tag', '', '<br />', '');
+			if ( $terms )	{
+				echo $terms;
+			} else	{
+				echo '&mdash;';
+			}
+			break;
+
 		case 'views':
 			echo kbs_get_article_view_count( $post_id );
 			break;
@@ -74,6 +95,8 @@ function kbs_set_articles_column_data( $column_name, $post_id ) {
 					echo implode( ', ', $ticket_ids );
 				}
 
+			} else	{
+				echo '&mdash;';
 			}
 			break;
 			
