@@ -471,12 +471,14 @@ function kbs_get_taxonomy_labels( $taxonomy = 'ticket_category' ) {
 	$taxonomy = get_taxonomy( $taxonomy );
 
 	if ( false !== $taxonomy ) {
-		$singular = $taxonomy->labels->singular_name;
-		$name     = $taxonomy->labels->name;
+		$singular  = $taxonomy->labels->singular_name;
+		$name      = $taxonomy->labels->name;
+		$menu_name = $taxonomy->labels->menu_name;
 
 		$labels = array(
 			'name'          => $name,
 			'singular_name' => $singular,
+			'menu_name'     => $menu_name
 		);
 	}
 
