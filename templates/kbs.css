@@ -434,3 +434,9 @@ a.ticket_reply_content	{
 		height: auto;
 	}
 }
+
+/* =[kbs_articles] shortcode
+-------------------------------------------------------------- */
+div.kbs_articles_list ul li	{
+	list-style-type: none;
+}
