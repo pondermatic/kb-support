@@ -22,11 +22,6 @@ jQuery(document).ready(function ($) {
 			activeHeader: "ui-icon-circle-arrow-s"
 		};
 
-		$( ".create_article" ).on( 'click', null, null, function(event) { 
-			window.location.href = $(this).attr("href"); 
-			event.preventDefault(); 
-		});
-
 		$( ".kbs_accordion, .kbs_notes_accordion, .kbs_replies_accordion" ).accordion({
 			active: false,
 			collapsible: true,
@@ -53,7 +48,7 @@ jQuery(document).ready(function ($) {
 
 			// Settings Upload field JS
 			if ( typeof wp === "undefined" || '1' !== kbs_vars.new_media_ui ) {
-				//Old Thickbox uploader
+				// Old Thickbox uploader
 				var kbs_settings_upload_button = $( '.kbs_settings_upload_button' );
 				if ( kbs_settings_upload_button.length > 0 ) {
 					window.formfield = '';
@@ -364,6 +359,7 @@ jQuery(document).ready(function ($) {
 
 				if ( 'text'          == kbs_selected_field
 					|| 'email'       == kbs_selected_field
+					|| 'url'         == kbs_selected_field
 					|| 'textarea'    == kbs_selected_field
 					|| 'rich_editor' == kbs_selected_field )	{
 					$('#kbs_meta_field_mapping_wrap').show();
