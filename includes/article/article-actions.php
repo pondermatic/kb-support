@@ -27,7 +27,7 @@ function kbs_search_articles_action( $data )	{
 		'post_type' => 'article'
 	);
 
-	do_action( 'kbs_search_articles', $data );
+	do_action( 'kbs_article_search', $data );
 
 	$redirect = add_query_arg( $args, esc_url( home_url( '/' ) ) );
 
