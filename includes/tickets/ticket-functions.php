@@ -776,6 +776,7 @@ function kbs_reopen_ticket( $data )	{
 			
 			if ( $update )	{
 				$message = 'ticket_reopened';
+				kbs_insert_note( $data['post'], sprintf( __( '%s re-opened.', 'kb-support' ), kbs_get_ticket_label_singular() ) ); 
 			}
 		}
 		
@@ -816,10 +817,10 @@ add_action( 'kbs_post_assign_agent', 'kbs_ticket_status_from_new_to_open' );
  *
  * @since	1.0
  * @param	int		$ticket_id		The Ticket ID.
- * @param	arr		$args			See @get_children
+ * @param	arr		$args			See @get_posts
  * @return	obj|false
  */
-function kbs_get_ticket_replies( $ticket_id = 0, $args = array() )	{
+function kbs_get_replies( $ticket_id = 0, $args = array() )	{
 	if ( empty( $ticket_id ) )	{
 		return false;
 	}
@@ -827,7 +828,28 @@ function kbs_get_ticket_replies( $ticket_id = 0, $args = array() )	{
 	$ticket = new KBS_Ticket( $ticket_id );
 
 	return $ticket->get_replies( $args );
-} // kbs_get_ticket_replies
+} // kbs_get_replies
+
+/**
+ * Retrieve the last reply for the ticket.
+ *
+ * @since	1.0
+ * @uses	kbs_get_replies()
+ * @param	int		$ticket_id		The Ticket ID.
+ * @param	arr		$args			See @get_posts
+ * @return	obj|false
+ */
+function kbs_get_last_reply( $ticket_id, $args = array() )	{
+	$args['posts_per_page'] = 1;
+
+	$reply = kbs_get_replies( $ticket_id, $args );
+
+	if ( $reply )	{
+		return $reply[0];
+	}
+
+	return $reply;
+} // kbs_get_last_reply
 
 /**
  * Gets the ticket reply HTML.
@@ -837,7 +859,7 @@ function kbs_get_ticket_replies( $ticket_id = 0, $args = array() )	{
  * @param	int		$ticket_id	The ticket ID the reply is connected to
  * @return	str
  */
-function kbs_ticket_get_reply_html( $reply, $ticket_id = 0 ) {
+function kbs_get_reply_html( $reply, $ticket_id = 0 ) {
 
 	if ( is_numeric( $reply ) ) {
 		$reply = get_post( $reply );
@@ -848,6 +870,12 @@ function kbs_ticket_get_reply_html( $reply, $ticket_id = 0 ) {
 	$files       = kbs_ticket_has_files( $reply->ID );
 	$file_count  = ( $files ? count( $files ) : false );
 
+	$create_article_link = add_query_arg( array(
+		'kbs-action' => 'create_article',
+		'ticket_id'  => $ticket_id,
+		'reply_id'   => $reply->ID
+	), admin_url() );
+
 	$reply_html  ='<h3>';
 		$reply_html .= $author . '&nbsp;&ndash;&nbsp;' . date_i18n( $date_format, strtotime( $reply->post_date ) );
 		if ( $file_count )	{
@@ -856,22 +884,29 @@ function kbs_ticket_get_reply_html( $reply, $ticket_id = 0 ) {
 	$reply_html .= '</h3>';
 
 	$reply_html .= '<div>';
+		$reply_html .= '<p class="right">';
+			$reply_html .= '<a class="create_article" href="' . $create_article_link . '">' . sprintf( __( 'Create %s', 'kb-support' ), kbs_get_article_label_singular() ) . '</a>';
+		$reply_html .= '</p>';
 		$reply_html .= wpautop( $reply->post_content );
+
 		if ( $files )	{
 
 			$reply_html .= '<ul>';
 
 			foreach( $files as $file )	{
-				$reply_html .= '<li><a href="' . wp_get_attachment_url( $file->ID ) . '" target="_blank">' . basename( get_attached_file( $file->ID ) ) . '</a></li>';
+				$reply_html .= '<li>';
+					$reply_html .= '<a href="' . wp_get_attachment_url( $file->ID ) . '" target="_blank">' . basename( get_attached_file( $file->ID ) ) . '</a>';
+				$reply_html .= '</li>';
 			}
 
 			$reply_html .= '</ul>';
 		}
+
 	$reply_html .= '</div>';
 
 	return $reply_html;
 
-} // kbs_ticket_get_reply_html
+} // kbs_get_reply_html
 
 /**
  * Retrieve the name of the person who replied to the ticket.
@@ -920,21 +955,21 @@ function kbs_get_reply_author_name( $reply, $role = false )	{
  * @param	str		$search		Search for notes that contain a search term
  * @return	arr		$notes		Ticket Notes
  */
-function kbs_ticket_get_notes( $ticket_id = 0, $search = '' ) {
+function kbs_get_notes( $ticket_id = 0, $search = '' ) {
 
 	if ( empty( $ticket_id ) && empty( $search ) ) {
 		return false;
 	}
 
-	remove_action( 'pre_get_comments', 'kbs_ticket_hide_notes', 10 );
+	remove_action( 'pre_get_comments', 'kbs_hide_notes', 10 );
 
 	$notes = get_comments( array( 'post_id' => $ticket_id, 'search' => $search ) );
 
-	add_action( 'pre_get_comments', 'kbs_ticket_hide_notes', 10 );
+	add_action( 'pre_get_comments', 'kbs_hide_notes', 10 );
 
 	return $notes;
 
-} // kbs_ticket_get_notes
+} // kbs_get_notes
 
 /**
  * Add a note to a ticket.
@@ -944,7 +979,7 @@ function kbs_ticket_get_notes( $ticket_id = 0, $search = '' ) {
  * @param	str		$note		The note to store
  * @return	int		The new note ID
  */
-function kbs_ticket_insert_note( $ticket_id = 0, $note = '' ) {
+function kbs_insert_note( $ticket_id = 0, $note = '' ) {
 
 	if ( empty( $ticket_id ) )	{
 		return false;
@@ -971,7 +1006,7 @@ function kbs_ticket_insert_note( $ticket_id = 0, $note = '' ) {
 	do_action( 'kbs_insert_ticket_note', $note_id, $ticket_id, $note );
 
 	return $note_id;
-} // kbs_ticket_insert_note
+} // kbs_insert_note
 
 /**
  * Deletes a ticket note.
@@ -981,7 +1016,7 @@ function kbs_ticket_insert_note( $ticket_id = 0, $note = '' ) {
  * @param	int		$ticket_id		The ticket ID the note is connected to
  * @return	bool	True on success, false otherwise
  */
-function kbs_ticket_delete_note( $comment_id = 0, $ticket_id = 0 ) {
+function kbs_delete_note( $comment_id = 0, $ticket_id = 0 ) {
 	if( empty( $comment_id ) )
 		return false;
 
@@ -990,7 +1025,7 @@ function kbs_ticket_delete_note( $comment_id = 0, $ticket_id = 0 ) {
 	do_action( 'kbs_post_delete_ticket_note', $comment_id, $ticket_id );
 
 	return $result;
-} // kbs_ticket_delete_note
+} // kbs_delete_note
 
 /**
  * Gets the ticket note HTML.
@@ -1000,7 +1035,7 @@ function kbs_ticket_delete_note( $comment_id = 0, $ticket_id = 0 ) {
  * @param	int		$ticket_id	The ticket ID the note is connected to
  * @return	str
  */
-function kbs_ticket_get_note_html( $note, $ticket_id = 0 ) {
+function kbs_get_note_html( $note, $ticket_id = 0 ) {
 
 	if ( is_numeric( $note ) ) {
 		$note = get_comment( $note );
@@ -1032,7 +1067,7 @@ function kbs_ticket_get_note_html( $note, $ticket_id = 0 ) {
 
 	return $note_html;
 
-} // kbs_ticket_get_note_html
+} // kbs_get_note_html
 
 /**
  * Exclude notes (comments) on kbs_ticket post type from showing in Recent
@@ -1042,7 +1077,7 @@ function kbs_ticket_get_note_html( $note, $ticket_id = 0 ) {
  * @param	obj		$query	WordPress Comment Query Object
  * @return	void
  */
-function kbs_ticket_hide_notes( $query ) {
+function kbs_hide_notes( $query ) {
 	global $wp_version;
 
 	if ( version_compare( floatval( $wp_version ), '4.1', '>=' ) ) {
@@ -1057,8 +1092,8 @@ function kbs_ticket_hide_notes( $query ) {
 		$query->query_vars['type__not_in'] = $types;
 
 	}
-} // kbs_ticket_hide_notes
-add_action( 'pre_get_comments', 'kbs_ticket_hide_notes', 10 );
+} // kbs_hide_notes
+add_action( 'pre_get_comments', 'kbs_hide_notes', 10 );
 
 /**
  * Exclude notes (comments) on kbs_ticket post type from showing in comment feeds.
@@ -1068,13 +1103,13 @@ add_action( 'pre_get_comments', 'kbs_ticket_hide_notes', 10 );
  * @param	obj		$wp_comment_query	WordPress Comment Query Object
  * @return	arr		$where
  */
-function kbs_ticket_hide_notes_from_feeds( $where, $wp_comment_query ) {
+function kbs_hide_notes_from_feeds( $where, $wp_comment_query ) {
     global $wpdb;
 
 	$where .= $wpdb->prepare( " AND comment_type != %s", 'kbs_ticket_note' );
 	return $where;
-} // kbs_ticket_hide_notes_from_feeds
-add_filter( 'comment_feed_where', 'kbs_ticket_hide_notes_from_feeds', 10, 2 );
+} // kbs_hide_notes_from_feeds
+add_filter( 'comment_feed_where', 'kbs_hide_notes_from_feeds', 10, 2 );
 
 
 /**
@@ -1085,7 +1120,7 @@ add_filter( 'comment_feed_where', 'kbs_ticket_hide_notes_from_feeds', 10, 2 );
  * @param	int		$post_id	Post ID
  * @return	arr		Array of comment counts
 */
-function kbs_ticket_remove_notes_from_comment_counts( $stats, $post_id ) {
+function kbs_remove_notes_from_comment_counts( $stats, $post_id ) {
 	global $wpdb, $pagenow;
 
 	if( 'index.php' != $pagenow ) {
@@ -1138,5 +1173,5 @@ function kbs_ticket_remove_notes_from_comment_counts( $stats, $post_id ) {
 	wp_cache_set( "comments-{$post_id}", $stats, 'counts' );
 
 	return $stats;
-} // kbs_ticket_remove_notes_from_comment_counts
-add_filter( 'wp_count_comments', 'kbs_ticket_remove_notes_from_comment_counts', 10, 2 );
+} // kbs_remove_notes_from_comment_counts
+add_filter( 'wp_count_comments', 'kbs_remove_notes_from_comment_counts', 10, 2 );

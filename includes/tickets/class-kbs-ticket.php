@@ -1281,7 +1281,7 @@ class KBS_Ticket {
 			return false;
 		}
 
-		return kbs_ticket_insert_note( $this->ID, $note );
+		return kbs_insert_note( $this->ID, $note );
 	} // add_note
 
 	/**
@@ -1297,7 +1297,7 @@ class KBS_Ticket {
 			return false;
 		}
 
-		return kbs_ticket_delete_note( $note_id, $this->ID );
+		return kbs_delete_note( $note_id, $this->ID );
 	} // delete_note
 
 	/**

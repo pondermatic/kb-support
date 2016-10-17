@@ -107,7 +107,7 @@ function kbs_delete_ticket_note_action( $data )	{
 		die();
 	}
 
-	if ( kbs_ticket_delete_note( $note_id, $ticket_id ) )	{
+	if ( kbs_delete_note( $note_id, $ticket_id ) )	{
 		$message = 'note_deleted';
 	} else	{
 		$message = 'note_not_deleted';

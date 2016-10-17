@@ -157,14 +157,14 @@ function kbs_ajax_display_ticket_replies()	{
 	$output = '';
 
 	if ( ! empty( $_POST['kbs_reply_id'] ) )	{
-		$output .= kbs_ticket_get_reply_html( $_POST['kbs_reply_id'], $_POST['kbs_ticket_id'] );
+		$output .= kbs_get_reply_html( $_POST['kbs_reply_id'], $_POST['kbs_ticket_id'] );
 	} else	{
 
-		$replies  = kbs_get_ticket_replies( $_POST['kbs_ticket_id'] );
+		$replies  = kbs_get_replies( $_POST['kbs_ticket_id'] );
 	
 		if ( ! empty( $replies ) )	{
 			foreach( $replies as $reply )	{
-				$output .= kbs_ticket_get_reply_html( $reply, $_POST['kbs_ticket_id'] );
+				$output .= kbs_get_reply_html( $reply, $_POST['kbs_ticket_id'] );
 			}
 		}
 
@@ -243,7 +243,7 @@ add_action( 'wp_ajax_nopriv_kbs_validate_ticket_reply_form', 'kbs_ajax_validate_
  * @return	void
  */
 function kbs_ajax_ticket_insert_note()	{
-	$note_id = kbs_ticket_insert_note( $_POST['ticket_id'], $_POST['note_content'] );
+	$note_id = kbs_insert_note( $_POST['ticket_id'], $_POST['note_content'] );
 
 	wp_send_json( array( 'note_id' => $note_id ) );
 } // kbs_ajax_ticket_insert_note
@@ -259,14 +259,14 @@ function kbs_ajax_display_ticket_notes()	{
 	$output = '';
 
 	if ( ! empty( $_POST['kbs_note_id'] ) )	{
-		$output .= kbs_ticket_get_note_html( $_POST['kbs_note_id'], $_POST['kbs_ticket_id'] );
+		$output .= kbs_get_note_html( $_POST['kbs_note_id'], $_POST['kbs_ticket_id'] );
 	} else	{
 
-		$notes  = kbs_ticket_get_notes( $_POST['kbs_ticket_id'] );
+		$notes  = kbs_get_notes( $_POST['kbs_ticket_id'] );
 	
 		if ( ! empty( $notes ) )	{
 			foreach( $notes as $note )	{
-				$output .= kbs_ticket_get_note_html( $note, $_POST['kbs_ticket_id'] );
+				$output .= kbs_get_note_html( $note, $_POST['kbs_ticket_id'] );
 			}
 		}
 
