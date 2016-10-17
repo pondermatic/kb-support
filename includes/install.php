@@ -61,7 +61,7 @@ function kbs_run_install() {
 	global $wpdb, $kbs_options, $wp_version;
 
 	// Setup the Custom Post Types
-	kbs_setup_kbs_post_types();
+	kbs_setup_post_types();
 
 	// Setup the Custom Taxonomies
 	kbs_setup_custom_taxonomies();
