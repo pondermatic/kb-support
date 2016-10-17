@@ -166,6 +166,7 @@ function kbs_form_default_fields()	{
 			'required'        => true,
 			'label'           => __( 'First Name', 'kb-support' ),
 			'show_logged_in'  => false,
+			'kb_search'       => false,
 			'menu_order'      => '0'
 		),
 		'last_name'   => array(
@@ -174,6 +175,7 @@ function kbs_form_default_fields()	{
 			'required'        => true,
 			'label'           => __( 'Last Name', 'kb-support' ),
 			'show_logged_in'  => false,
+			'kb_search'       => false,
 			'menu_order'      => '1'
 		), 
 		'email'       => array(
@@ -182,6 +184,7 @@ function kbs_form_default_fields()	{
 			'required'        => true,
 			'label'           => __( 'Email Address', 'kb-support' ),
 			'show_logged_in'  => false,
+			'kb_search'       => false,
 			'menu_order'      => '2'
 		),
 		'subject'     => array(
@@ -190,6 +193,7 @@ function kbs_form_default_fields()	{
 			'required'        => true,
 			'label'           => __( 'Subject', 'kb-support' ),
 			'show_logged_in'  => true,
+			'kb_search'       => true,
 			'menu_order'      => '3'
 		),
 		'rich_editor' => array(
@@ -198,6 +202,7 @@ function kbs_form_default_fields()	{
 			'required'        => true,
 			'label'           => __( 'Description', 'kb-support' ),
 			'show_logged_in'  => true,
+			'kb_search'       => false,
 			'menu_order'      => '4'
 		)
 	);
@@ -239,6 +244,7 @@ function kbs_add_default_fields_to_form( $form_id )	{
 				'placeholder'     => '',
 				'description'     => '',
 				'hide_label'      => false,
+				'kb_search'       => $field_data['kb_search'],
 				'show_logged_in'  => $field_data['show_logged_in'],
 				'menu_order'      => $field_data['menu_order']
 			);
@@ -477,13 +483,14 @@ function kbs_get_field_types()	{
 function kbs_get_mappings( $mapping = null )	{
 
 	$mappings = array(
-		'customer_first'  => __( 'Customer First Name', 'kb-support' ),
-		'customer_last'   => __( 'Customer Last Name', 'kb-support' ),
-		'customer_email'  => __( 'Customer Email', 'kb-support' ),
-		'customer_phone1' => __( 'Customer Primary Phone', 'kb-support' ),
-		'customer_phone2' => __( 'Customer Additional Phone', 'kb-support' ),
-		'post_title'      => __( 'Ticket Title', 'kb-support' ),
-		'post_content'    => __( 'Ticket Content', 'kb-support' )
+		'customer_first'   => __( 'Customer First Name', 'kb-support' ),
+		'customer_last'    => __( 'Customer Last Name', 'kb-support' ),
+		'customer_email'   => __( 'Customer Email', 'kb-support' ),
+		'customer_phone1'  => __( 'Customer Primary Phone', 'kb-support' ),
+		'customer_phone2'  => __( 'Customer Additional Phone', 'kb-support' ),
+		'customer_website' => __( 'Customer Website', 'kb-support' ),
+		'post_title'       => __( 'Ticket Title', 'kb-support' ),
+		'post_content'     => __( 'Ticket Content', 'kb-support' )
 	);
 
 	/**
@@ -725,6 +732,10 @@ function kbs_display_form_text_field( $field, $settings )	{
 	$class = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $class ) ) );
 	$value = '';
 
+	if ( ! empty( $settings['kb_search'] ) )	{
+		$class = 'kbs-article-search ' . $class;
+	}
+
 	if ( ! empty( $settings['mapping'] ) && is_user_logged_in() )	{
 		$user_id = get_current_user_id();
 
@@ -740,12 +751,16 @@ function kbs_display_form_text_field( $field, $settings )	{
 			$value = ' value="' . get_userdata( $user_id )->user_email . '"';
 		}
 
+		if ( 'customer_website' == $settings['mapping'] )	{
+			$value = ' value="' . get_userdata( $user_id )->user_url . '"';
+		}
+
 	}
 
 	do_action( 'kbs_before_form_field', $field, $settings );
 	do_action( 'kbs_before_form_' . $settings['type'] . '_field', $field, $settings );
 
-	$output = sprintf( '<input type="%1$s" name="%2$s" id="%2$s" class="kbs-article-search kbs-input %3$s"%4$s%5$s%6$s />',
+	$output = sprintf( '<input type="%1$s" name="%2$s" id="%2$s" class="kbs-input %3$s"%4$s%5$s%6$s />',
 		esc_attr( $type ),
 		esc_attr( $field->post_name ),
 		! empty( $class ) ? $class : '',
