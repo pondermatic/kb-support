@@ -427,13 +427,14 @@ class KBS_Ticket {
 			'date'         => $this->date,
 			'agent_id'     => $this->agent_id,
 			'user_email'   => $this->email,
-			'user_info' => array(
-				'id'         => $this->user_id,
-				'email'      => $this->email,
-				'first_name' => $this->first_name,
-				'last_name'  => $this->last_name,
-				'primary_phone' => isset( $this->user_info['primary_phone'] ) ? $this->user_info['primary_phone'] : '',
+			'user_info'    => array(
+				'id'               => $this->user_id,
+				'email'            => $this->email,
+				'first_name'       => $this->first_name,
+				'last_name'        => $this->last_name,
+				'primary_phone'    => isset( $this->user_info['primary_phone'] )    ? $this->user_info['primary_phone']    : '',
 				'additional_phone' => isset( $this->user_info['additional_phone'] ) ? $this->user_info['additional_phone'] : '',
+				'website'          => isset( $this->user_info['website'] )          ? $this->user_info['website']          : ''
 			),
 			'sla_respond'  => $this->sla_respond,
 			'sla_resolve'  => $this->sla_resolve,
@@ -480,11 +481,12 @@ class KBS_Ticket {
 			if ( empty( $customer->id ) ) {
 
 				$customer_data = array(
-					'name'          => $this->first_name . ' ' . $this->last_name,
-					'email'         => $this->email,
-					'user_id'       => $this->user_id,
-					'primary_phone' => isset( $this->user_info['primary_phone'] ) ? $this->user_info['primary_phone'] : '',
-					'additional_phone' => isset( $this->user_info['additional_phone'] ) ? $this->user_info['additional_phone'] : ''
+					'name'             => $this->first_name . ' ' . $this->last_name,
+					'email'            => $this->email,
+					'user_id'          => $this->user_id,
+					'primary_phone'    => isset( $this->user_info['primary_phone'] )    ? $this->user_info['primary_phone']    : '',
+					'additional_phone' => isset( $this->user_info['additional_phone'] ) ? $this->user_info['additional_phone'] : '',
+					'website'          => isset( $this->user_info['website'] )          ? $this->user_info['website']          : ''
 				);
 
 				$customer->create( $customer_data );
@@ -1042,7 +1044,8 @@ class KBS_Ticket {
 					'last_name'        => $name[1],
 					'email'            => $customer->email,
 					'primary_phone'    => $customer->primary_phone,
-					'additional_phone' => $customer->additional_phone
+					'additional_phone' => $customer->additional_phone,
+					'website'          => $customer->website
 				);
 			}
 		} else {
@@ -1078,6 +1081,10 @@ class KBS_Ticket {
 
 						case 'additional_phone':
 							$user_info[ $key ] = $customer->additional_phone;
+							break;
+
+						case 'website':
+							$user_info[ $key ] = $customer->website;
 							break;
 
 					}
