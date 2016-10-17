@@ -48,13 +48,23 @@ function kbs_create_article_action( $data )	{
 
 	$ticket = new KBS_Ticket( $data['ticket_id'] );
 
-	$args = array(
-		'post_status'  => 'draft',
-		'post_title'   => $ticket->ticket_title,
-		'post_content' => $ticket->ticket_content
-	);
+	if ( ! empty( $data['reply_id'] ) )	{
+		$reply = get_post( $data['reply_id'] );
+	} else	{
+		$reply = kbs_get_last_reply( $ticket->ID );
+	}
 
-	$article_id = kbs_add_article( $args, $ticket->ID );
+	if ( $reply )	{
+		$args = array(
+			'post_status'  => 'draft',
+			'post_title'   => $ticket->ticket_title,
+			'post_content' => $reply->post_content
+		);
+
+		$article_id = kbs_add_article( $args, $ticket->ID );
+	} else	{
+		$article_id = false;
+	}
 
 	if ( $article_id )	{
 

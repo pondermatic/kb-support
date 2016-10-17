@@ -21,6 +21,12 @@ jQuery(document).ready(function ($) {
 			header: "ui-icon-circle-arrow-e",
 			activeHeader: "ui-icon-circle-arrow-s"
 		};
+
+		$( ".create_article" ).on( 'click', null, null, function(event) { 
+			window.location.href = $(this).attr("href"); 
+			event.preventDefault(); 
+		});
+
 		$( ".kbs_accordion, .kbs_notes_accordion, .kbs_replies_accordion" ).accordion({
 			active: false,
 			collapsible: true,
