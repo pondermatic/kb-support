@@ -504,11 +504,11 @@ function kbs_add_ticket_from_form( $form_id, $form_data )	{
 
 			switch( $settings['mapping'] )	{
 				case 'customer_first':
-					$ticket_data['user_info']['first_name'] = ucfirst( sanitize_text_field( $form_data[ $field->post_name ] ) );
+					$ticket_data['user_info']['first_name']       = ucfirst( sanitize_text_field( $form_data[ $field->post_name ] ) );
 					break;
 
 				case 'customer_last':
-					$ticket_data['user_info']['last_name']  = ucfirst( sanitize_text_field( $form_data[ $field->post_name ] ) );
+					$ticket_data['user_info']['last_name']        = ucfirst( sanitize_text_field( $form_data[ $field->post_name ] ) );
 					break;
 
 				case 'customer_email':
@@ -522,6 +522,10 @@ function kbs_add_ticket_from_form( $form_id, $form_data )	{
 
 				case 'customer_phone2':
 					$ticket_data['user_info']['additional_phone'] = $form_data[ $field->post_name ];
+					break;
+
+				case 'customer_website':
+					$ticket_data['user_info']['website']          = $form_data[ $field->post_name ];
 					break;
 
 				default:

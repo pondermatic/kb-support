@@ -122,48 +122,75 @@ add_shortcode( 'kbs_tickets', 'kbs_tickets_shortcode' );
 function kbs_articles_shortcode( $atts )	{
 
 	$args = shortcode_atts( array(
-		'post__in'    => null,    // Article IDs to display
-		'numberposts' => 20,      // Number of posts to display
-		'orderby'     => 'views', // Order by
-		'order'       => 'DESC',  // Order
-		'tags'        => null,    // Tags to include
-		'categories'  => null,    // Categories to include
-		'excerpt'     => true,    // Whether to display an excerpt
-		'length'      => kbs_get_option( 'kbs_article_excerpt_length', 100 ) // Length of excerpt. -1 for full content
-		), $atts, 'kbs_articles'
-	);
+		'post__in'        => null,    // Article IDs to display
+		'posts_per_page'  => 20,      // Number of posts to display
+		'orderby'         => 'views', // Order by
+		'order'           => 'DESC',  // Order
+		'tags'            => null,    // Tag IDs to include, comma seperate
+		'categories'      => null,    // Category IDs to include, comma seperate
+		'excerpt'         => true,    // Whether to display an excerpt
+		'length'          => (int) kbs_get_option( 'kbs_article_excerpt_length', 100 ), // Length of excerpt. -1 for full content
+		'hide_restricted' => (bool) kbs_hide_restricted_articles()                      // Whether to hide restricted articles
+	), $atts, 'kbs_articles' );
 
-	$length  = $args['length'];
-	$excerpt = $args['excerpt'];
-	unset( $args['length'], $args['excerpt'] );
+	$length     = $args['length'];
+	$excerpt    = $args['excerpt'];
+	
+	if ( isset( $args['tags'] ) )	{
+		$args['tag__in'] = array( $args['tags'] );
+	}
+
+	if ( isset( $args['categories'] ) )	{
+		$args['category__in'] = array( $args['categories'] );
+	}
+
+	unset( $args['length'], $args['excerpt'], $args['tags'], $args['categories'] );
 
 	if ( 'views' == $args['orderby'] )	{
 		$args['meta_key'] = '_kbs_article_views';
 		$args['orderby']  = 'meta_value_num';
 	}
 
+	if ( ! empty( $tags ) )	{
+		$args['tag__in'] = '';
+	}
+
+	if ( ! empty( $tags ) )	{
+		$args['tag__in'] = '';
+	}
+
 	$args['post_type'] = 'article';
 
+	if ( ! $args['hide_restricted'] )	{
+		remove_action( 'pre_get_posts', 'kbs_articles_exclude_restricted' );
+	}
+
 	$articles_query = new WP_Query( $args );
+
+	if ( ! $args['hide_restricted'] )	{
+		add_action( 'pre_get_posts', 'kbs_articles_exclude_restricted' );
+	}
 
 	ob_start();
 
 	if ( $articles_query->have_posts() ) : ?>
-        <ul>
-
-        <?php while ( $articles_query->have_posts() ) :
-
-            $articles_query->the_post(); ?>
-
-            <?php if ( kbs_user_can_view_article( get_the_ID() ) ) : ?>
-
-                <li><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></li>
-
-            <?php endif; ?>
-
-        <?php endwhile; ?>
-
-        </ul>
+        <div class="kbs_articles_list">
+            <ul>
+    
+            <?php while( $articles_query->have_posts() ) :
+    
+                $articles_query->the_post(); ?>
+    
+                <?php if ( ! $args['hide_restricted'] || kbs_user_can_view_article( get_the_ID() ) ) : ?>
+    
+                    <li><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></li>
+    
+                <?php endif; ?>
+    
+            <?php endwhile; ?>
+    
+            </ul>
+        </div>
 
         <?php wp_reset_postdata(); ?>
     <?php else : ?>
