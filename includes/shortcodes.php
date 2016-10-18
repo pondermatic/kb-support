@@ -64,28 +64,38 @@ add_shortcode( 'kbs_register', 'kbs_register_form_shortcode' );
 function kbs_submit_form_shortcode( $atts ) {
 
 	if ( ! kbs_user_can_submit() )	{
-		ob_start();
-		echo kbs_display_notice( 'need_login' );
-
-		$register_login = kbs_get_option( 'show_register_form', 'none' );
-
-		if ( 'both' == $register_login || 'login' == $register_login )	{
-			echo kbs_login_form( kbs_get_current_page_url() );
+		/**
+		 * Allow plugins to change the screen displayed when a user cannot submit.
+		 *
+		 * @since	1.0
+		 */
+		if ( has_action( 'kbs_user_cannot_submit' ) )	{
+			do_action( 'kbs_user_cannot_submit' );			
+		} else	{
+			ob_start();
+			echo kbs_display_notice( 'need_login' );
+	
+			$register_login = kbs_get_option( 'show_register_form', 'none' );
+	
+			if ( 'both' == $register_login || 'login' == $register_login )	{
+				echo kbs_login_form( kbs_get_current_page_url() );
+			}
+	
+			if ( 'both' == $register_login || 'registration' == $register_login )	{
+				echo kbs_register_form( kbs_get_current_page_url() );
+			}
+	
+			return ob_get_clean();
 		}
+	} else	{
 
-		if ( 'both' == $register_login || 'registration' == $register_login )	{
-			echo kbs_register_form( kbs_get_current_page_url() );
-		}
+		$args = shortcode_atts( array(
+			'form' => 0,
+			), $atts, 'kbs_submit' );
+	
+		return kbs_display_form( $args['form'] );
 
-		return ob_get_clean();
 	}
-
-	extract( shortcode_atts( array(
-		'form' => 0,
-		), $atts, 'kbs_submit' )
-	);
-
-	return kbs_display_form( $form );
 } // kbs_submit_form_shortcode
 add_shortcode( 'kbs_submit', 'kbs_submit_form_shortcode' );
 
