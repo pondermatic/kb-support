@@ -33,7 +33,7 @@ jQuery(document).ready(function ($) {
 		var postData = {
 			term   : $(this).val(),
 			action : 'kbs_ajax_article_search'
-		}
+		};
 
 		$.ajax({
 			type       : 'POST',
@@ -41,7 +41,7 @@ jQuery(document).ready(function ($) {
 			data       : postData,
 			url        : kbs_scripts.ajaxurl,
 			success    : function (response) {
-				if ( response.articles && '' != response.articles )	{
+				if ( response.articles && '' !== response.articles )	{
 					$('#kbs-article-list').html(response.articles);
 					$('.kbs-article-search-results').show("slow");
 				} else	{
