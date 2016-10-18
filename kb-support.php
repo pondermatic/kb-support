@@ -33,13 +33,14 @@
  */
 
 // Exit if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) )
+	exit;
 
 if ( ! class_exists( 'KB_Support' ) ) :
 /**
  * Main KB_Support Class.
  *
- * @since 1.4
+ * @since 1.0
  */
 final class KB_Support {
 	/** Singleton *************************************************************/
@@ -217,6 +218,7 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-stats.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-roles.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-cron.php';
+		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-license-handler.php';
 		require_once KBS_PLUGIN_DIR . 'includes/admin/customers/customers-page.php';
 		require_once KBS_PLUGIN_DIR . 'includes/admin/customers/customer-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/admin/customers/customer-actions.php';
