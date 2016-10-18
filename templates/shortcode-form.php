@@ -9,7 +9,7 @@ global $kbs_form;
 	<?php do_action( 'kbs_notices' ); ?>
 	<div id="kbs_ticket_form_wrap" class="kbs_clearfix">
         <?php do_action( 'kbs_before_ticket_form' ); ?>
-        <form<?php kbs_maybe_set_enctype(); ?> id="kbs_ticket_form" class="kbs_form" action="" method="post">
+        <form<?php kbs_maybe_set_enctype(); ?> id="kbs_ticket_form" class="kbs_form" method="post">
     		<div class="kbs_alert kbs_alert_error kbs_hidden"></div>
             <?php do_action( 'kbs_ticket_form_top' ); ?>
 
@@ -28,46 +28,46 @@ global $kbs_form;
 					<?php $label_class = ''; ?>
                     <?php $settings    = $kbs_form->get_field_settings( $field->ID ); ?>
 
-                        <p class="kbs-<?php echo $field->post_name; ?>">
-                            <?php if ( empty( $settings['hide_label'] ) && 'recaptcha' != $settings['type'] ) : ?>
-                            	<?php if ( ! empty( $settings['label_class'] ) ) : ?>
-                                	<?php $label_class = ' class="' . sanitize_html_class( $settings['label_class'] ) . '"'; ?>
+                    <p class="kbs-<?php echo $field->post_name; ?>">
+                        <?php if ( empty( $settings['hide_label'] ) && 'recaptcha' != $settings['type'] ) : ?>
+                            <?php if ( ! empty( $settings['label_class'] ) ) : ?>
+                                <?php $label_class = ' class="' . sanitize_html_class( $settings['label_class'] ) . '"'; ?>
+                            <?php endif; ?>
+
+                            <label for="<?php echo $field->post_name; ?>"<?php echo $label_class; ?>>
+
+                                <?php esc_attr_e( get_the_title( $field->ID ) ); ?>
+
+                                <?php if ( $settings['required'] ) : ?>
+                                    <span class="kbs-required-indicator">*</span>
                                 <?php endif; ?>
 
-                                <label for="<?php echo $field->post_name; ?>"<?php echo $label_class; ?>>
+                            </label>
 
-									<?php esc_attr_e( get_the_title( $field->ID ) ); ?>
-
-                                    <?php if ( $settings['required'] ) : ?>
-                                        <span class="kbs-required-indicator">*</span>
-                                    <?php endif; ?>
-
-                                </label>
-
-                                <?php if ( ! empty( $settings['description'] ) && 'label' == $settings['description_pos'] ) : ?>
-                                	<?php kbs_display_form_field_description( $field, $settings ); ?>
-                                <?php endif; ?>
-
+                            <?php if ( ! empty( $settings['description'] ) && 'label' == $settings['description_pos'] ) : ?>
+                                <?php kbs_display_form_field_description( $field, $settings ); ?>
                             <?php endif; ?>
 
-                            <?php $kbs_form->display_field( $field, $settings ); ?>
+                        <?php endif; ?>
 
-                            <?php if ( ! empty( $settings['description'] ) && 'field' == $settings['description_pos'] ) : ?>
-								<?php kbs_display_form_field_description( $field, $settings ); ?>
-                            <?php endif; ?>
+                        <?php $kbs_form->display_field( $field, $settings ); ?>
 
-							<?php if ( ! empty( $settings['kb_search'] ) ) : ?>
-                            	<div id="kbs-loading" class="kbs-loader kbs-hidden"></div>
-                            	<div class="kbs_alert kbs_alert_warn kbs-article-search-results kbs_hidden">
-                                    <span class="right">
-                                    	<a id="close-search"><?php _e( 'Close', 'kb-support' ); ?></a>
-                                    </span>
-                                    <strong><?php printf( __( 'Could any of the following %s help resolve your query?', 'kb-support' ), kbs_get_article_label_plural() ); ?></strong>
-                                    <span id="kbs-article-list"></span>
-                                </div>
-                            <?php endif; ?>
+                        <?php if ( ! empty( $settings['description'] ) && 'field' == $settings['description_pos'] ) : ?>
+                            <?php kbs_display_form_field_description( $field, $settings ); ?>
+                        <?php endif; ?>
 
-                        </p>
+                    </p>
+
+					<?php if ( ! empty( $settings['kb_search'] ) ) : ?>
+                        <div id="kbs-loading" class="kbs-loader kbs-hidden"></div>
+                        <div class="kbs_alert kbs_alert_warn kbs-article-search-results kbs_hidden">
+                            <span class="right">
+                                <a id="close-search"><?php _e( 'Close', 'kb-support' ); ?></a>
+                            </span>
+                            <strong><?php printf( __( 'Could any of the following %s help resolve your query?', 'kb-support' ), kbs_get_article_label_plural() ); ?></strong>
+                            <span id="kbs-article-list"></span>
+                        </div>
+                    <?php endif; ?>
 
                 <?php endforeach; ?>
 
