@@ -872,7 +872,12 @@ function kbs_get_settings_tabs() {
 	$tabs['tickets']  = sprintf( __( '%s', 'kb-support' ), kbs_get_ticket_label_plural() );
 	$tabs['articles'] = sprintf( __( '%s', 'kb-support' ), kbs_get_article_label_plural() );
 	$tabs['emails']   = __( 'Emails', 'kb-support' );
+
+	$tabs = apply_filters( 'kbs_settings_tabs_before_styles', $tabs );
+
 	$tabs['styles']   = __( 'Styles', 'kb-support' );
+
+	$tabs = apply_filters( 'kbs_settings_tabs_after_styles', $tabs );
 
 	if ( ! empty( $settings['extensions'] ) ) {
 		$tabs['extensions'] = __( 'Extensions', 'kb-support' );

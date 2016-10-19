@@ -74,6 +74,8 @@ global $kbs_form;
         		<?php do_action( 'kbs_ticket_form_after_fields' ); ?>
             </fieldset>
 
+			<?php do_action( 'kbs_ticket_form_before_submit_fieldset' ); ?>
+
             <fieldset id="kbs_ticket_form_submit">
 
             	<?php do_action( 'kbs_ticket_form_before_submit' ); ?>
