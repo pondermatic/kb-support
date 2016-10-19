@@ -8,7 +8,7 @@
 */
 @charset "UTF-8";
 
-/* =Alerts
+/* = Alerts
 -------------------------------------------------------------- */
 .kbs_alert {
 	-webkit-border-radius: 2px;
@@ -49,7 +49,7 @@
 	border-color: #faebcc;
 }
 
-/* =General
+/* = General
 -------------------------------------------------------------- */
 .kbs_hidden	{ display: none; }
 
@@ -62,7 +62,7 @@
 	content: ".";
 }
 
-/* =Loader
+/* = Loader
 -------------------------------------------------------------- */
 .kbs-icon-spinner:before {
 	content: "\71";
@@ -116,7 +116,7 @@
 	}
 }
 
-/* =Registration / Login Form
+/* = Registration / Login Form
 -------------------------------------------------------------- */
 #kbs_register_form fieldset legend,
 #kbs_login_form fieldset legend	{
@@ -133,7 +133,7 @@
 	width: 200px;
 }
 
-/* =Theme Specific styling
+/* = Theme Specific styling
 -------------------------------------------------------------- */
 
 /* Twenty Twelve */
@@ -142,7 +142,7 @@
 	color: #000;
 }
 
-/* =Submission Forms
+/* = Submission Forms
 -------------------------------------------------------------- */
 #kbs_ticket_wrap span.kbs-description,
 #kbs_item_wrapper span.kbs-description{
@@ -269,7 +269,7 @@
 	list-style-type: none;
 }
 
-/* =Tickets
+/* = Tickets
 -------------------------------------------------------------- */
 #kbs_item_wrapper .left {
 	float: left;
@@ -435,7 +435,13 @@ a.ticket_reply_content	{
 	}
 }
 
-/* =[kbs_articles] shortcode
+/* = Payment Form
+-------------------------------------------------------------- */
+#kbs_item_wrapper .balance	{
+	font-weight: bold;
+}
+
+/* = [kbs_articles] shortcode
 -------------------------------------------------------------- */
 div.kbs_articles_list ul li	{
 	list-style-type: none;
