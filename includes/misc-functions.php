@@ -85,7 +85,7 @@ function kbs_get_current_page_url() {
 
 	global $wp;
 
-	if( get_option( 'permalink_structure' ) ) {
+	if ( get_option( 'permalink_structure' ) ) {
 
 		$base = trailingslashit( home_url( $wp->request ) );
 
@@ -143,6 +143,16 @@ function kbs_get_timezone_id() {
 	// fallback
 	return 'UTC';
 } // kbs_get_timezone_id
+
+/**
+ * Get PHP Arg Separator Output
+ *
+ * @since	1.0
+ * @return	str		Arg separator output
+ */
+function kbs_get_php_arg_separator_output() {
+	return ini_get( 'arg_separator.output' );
+} // kbs_get_php_arg_separator_output
 
 /**
  * Validate the form honeypot to protect against bots.
