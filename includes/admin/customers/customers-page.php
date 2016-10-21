@@ -430,13 +430,7 @@ function kbs_customers_view( $customer ) {
 
         <h3><?php printf( __( 'Recent %s', 'kb-support' ), kbs_get_ticket_label_plural() ); ?></h3>
 		<?php
-			$ticket_ids        = explode( ',', $customer->ticket_ids );
-			$ticket_statuses   = kbs_get_ticket_statuses( false );
-			$tickets           = kbs_get_tickets( array(
-				'status'   => array_keys( $ticket_statuses ),
-				'post__in' => $ticket_ids,
-				'number'   => 10
-			) );
+			$tickets = kbs_get_customer_tickets( $customer->id, array(), false )
 		?>
 		<table class="wp-list-table widefat striped tickets">
 			<thead>
