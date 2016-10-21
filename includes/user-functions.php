@@ -16,6 +16,41 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Retrieve customer tickets
+ *
+ * @since	1.0
+ * @param	int|obj		$customer	The customer ID or a KBS_Customer object.
+ * @param	arr			$args		Args that can be passed to kbs_get_tickets()
+ * @param	bool		$can_select	True to only return selectable status. False for all.
+ * @return	obj			Array of customer ticket objects.
+ */
+function kbs_get_customer_tickets( $customer, $args = array(), $can_select = true )	{
+
+	$customer_id = $customer;
+
+	if ( is_object( $customer ) )	{
+		$customer_id = $customer->id;
+	}
+
+	if ( empty( $customer_id ) )	{
+		return false;
+	}
+
+	$ticket_statuses = kbs_get_ticket_statuses( $can_select );
+
+	$defaults = array(
+		'customer' => $customer_id,
+		'status'   => array_keys( $ticket_statuses ),
+		'number'   => 10
+	);
+
+	$args = wp_parse_args( $args, $defaults );
+
+	return kbs_get_tickets( $args );
+
+} // kbs_get_customer_tickets
+
+/**
  * Retrieve users by role.
  *
  * @since	1.0
