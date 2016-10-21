@@ -127,14 +127,6 @@ class KBS_Roles {
 				}
 			}
 
-			$wp_roles->add_cap( 'support_customer', 'edit_ticket' );
-			$wp_roles->add_cap( 'support_customer', 'edit_tickets' );
-			$wp_roles->add_cap( 'support_customer', 'delete_ticket' );
-			$wp_roles->add_cap( 'support_customer', 'delete_tickets' );
-			$wp_roles->add_cap( 'support_customer', 'publish_tickets' );
-			$wp_roles->add_cap( 'support_customer', 'edit_published_tickets' );
-			$wp_roles->add_cap( 'support_customer', 'upload_files' );
-			$wp_roles->add_cap( 'support_customer', 'assign_ticket_terms' );
 		}
 
 	} // add_caps
@@ -150,7 +142,7 @@ class KBS_Roles {
 
 		$capabilities = array();
 
-		$capability_types = array( 'ticket' );
+		$capability_types = array( 'ticket', 'article' );
 
 		foreach ( $capability_types as $capability_type ) {
 			$capabilities[ $capability_type ] = array(

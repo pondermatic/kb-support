@@ -133,7 +133,7 @@ function kbs_setup_post_types() {
 		'menu_icon'          => 'dashicons-welcome-learn-more',
 		'query_var'          => true,
 		'rewrite'            => $articles_rewrite,
-		'capability_type'    => 'ticket',
+		'capability_type'    => 'article',
 		'map_meta_cap'       => true,
 		'has_archive'        => $article_archives,
 		'hierarchical'       => false,
