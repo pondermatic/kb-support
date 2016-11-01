@@ -110,12 +110,14 @@ add_shortcode( 'kbs_submit', 'kbs_submit_form_shortcode' );
  */
 function kbs_tickets_shortcode( $atts )	{
 	ob_start();
+
 	if ( ! isset( $_GET['ticket'] ) )	{
 		echo kbs_display_notice( 'no_ticket' );
 		return ob_get_clean();
 	}
 
 	kbs_get_template_part( 'view', 'ticket' );
+
 	return ob_get_clean();
 } // kbs_tickets_shortcode
 add_shortcode( 'kbs_tickets', 'kbs_tickets_shortcode' );
@@ -214,7 +216,7 @@ add_shortcode( 'kbs_articles', 'kbs_articles_shortcode' );
  * calls the kbs_article_search_form function to display the search form.
  *
  * @since	1.0
- * @param	att		$atts	Shortcode attributes
+ * @param	arr		$atts	Shortcode attributes
  * @uses	kbs_article_search_form()
  * @return	str
  */
@@ -222,3 +224,22 @@ function kbs_article_search_form_shortcode()	{
 	return kbs_article_search_form();
 } // kbs_article_search_form_shortcode
 add_shortcode( 'kbs_search', 'kbs_article_search_form_shortcode' );
+
+/**
+ * Profile Editor Shortcode
+ *
+ * Allow users to amend their account details details from the front-end.
+ *
+ * @since 1.0
+ *
+ * @param	arr		$atts	Shortcode attributes
+ * @return	str
+ */
+function kbs_profile_editor_shortcode( $atts ) {
+	ob_start();
+
+	kbs_get_template_part( 'shortcode', 'profile-editor' );
+
+	return ob_get_clean();
+} // kbs_profile_editor_shortcode
+add_shortcode( 'kbs_profile_editor', 'kbs_profile_editor_shortcode' );

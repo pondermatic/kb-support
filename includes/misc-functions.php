@@ -198,6 +198,10 @@ function kbs_get_notices( $notice = '', $notice_only = false )	{
 			'class'  => 'info',
 			'notice' => sprintf( __( 'You must be logged in to create a support %s.', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
 		),
+		'profile_login' => array(
+			'class'  => 'info',
+			'notice' => __( 'You must login to manage your profile.', 'kb-support' )
+		),
 		'username_incorrect' => array(
 			'class'  => 'error',
 			'notice' => __( 'The username was not recognised.', 'kb-support' )
@@ -233,6 +237,14 @@ function kbs_get_notices( $notice = '', $notice_only = false )	{
 		'email_invalid' => array(
 			'class'  => 'error',
 			'notice' => __( 'You entered an invalid email address.', 'kb-support' )
+		),
+		'email_removed' => array(
+			'class'  => 'success',
+			'notice' => __( 'Email address removed.', 'kb-support' )
+		),
+		'email_remove_failed' => array(
+			'class'  => 'error',
+			'notice' => __( 'Unable to remove email address.', 'kb-support' )
 		),
 		'empty_password' => array(
 			'class'  => 'error',
@@ -281,6 +293,10 @@ function kbs_get_notices( $notice = '', $notice_only = false )	{
 		'invalid_customer' => array(
 			'class'  => 'error',
 			'notice' => sprintf( __( 'You are not allowed to manage this %s.', 'kb-support' ), kbs_get_ticket_label_singular() )
+		),
+		'profile_updated' => array(
+			'class'  => 'success',
+			'notice' => __( 'Profile updated successfully.', 'kb-support' )
 		)
 	);
 

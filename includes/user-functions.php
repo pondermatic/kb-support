@@ -148,3 +148,158 @@ function kbs_connect_existing_customer_to_new_user( $user_id ) {
 	}
 }
 add_action( 'user_register', 'kbs_connect_existing_customer_to_new_user', 10, 1 );
+
+/**
+ * Process Profile Updates from the Editor Form
+ *
+ * @since	1.0
+ * @param	arr		$data	Data sent from the profile editor
+ * @return void
+ */
+function kbs_process_profile_editor_updates( $data ) {
+
+	if ( empty( $_POST['kbs_profile_editor_submit'] ) && ! is_user_logged_in() ) {
+		return false;
+	}
+
+	// Nonce security
+	if ( ! wp_verify_nonce( $data['kbs_profile_editor_nonce'], 'kbs-profile-editor-nonce' ) ) {
+		return false;
+	}
+
+	$user_id       = get_current_user_id();
+	$old_user_data = get_userdata( $user_id );
+
+	$display_name = isset( $data['kbs_display_name'] )    ? sanitize_text_field( $data['kbs_display_name'] )    : $old_user_data->display_name;
+	$first_name   = isset( $data['kbs_first_name'] )      ? sanitize_text_field( $data['kbs_first_name'] )      : $old_user_data->first_name;
+	$last_name    = isset( $data['kbs_last_name'] )       ? sanitize_text_field( $data['kbs_last_name'] )       : $old_user_data->last_name;
+	$email        = isset( $data['kbs_email'] )           ? sanitize_email( $data['kbs_email'] )                : $old_user_data->user_email;
+	$line1        = isset( $data['kbs_address_line1'] )   ? sanitize_text_field( $data['kbs_address_line1'] )   : '';
+	$line2        = isset( $data['kbs_address_line2'] )   ? sanitize_text_field( $data['kbs_address_line2'] )   : '';
+	$city         = isset( $data['kbs_address_city'] )    ? sanitize_text_field( $data['kbs_address_city'] )    : '';
+	$state        = isset( $data['kbs_address_state'] )   ? sanitize_text_field( $data['kbs_address_state'] )   : '';
+	$zip          = isset( $data['kbs_address_zip'] )     ? sanitize_text_field( $data['kbs_address_zip'] )     : '';
+	$country      = isset( $data['kbs_address_country'] ) ? sanitize_text_field( $data['kbs_address_country'] ) : '';
+
+	$error    = false;
+	$userdata = array(
+		'ID'           => $user_id,
+		'first_name'   => $first_name,
+		'last_name'    => $last_name,
+		'display_name' => $display_name,
+		'user_email'   => $email
+	);
+
+	$address = array(
+		'line1'    => $line1,
+		'line2'    => $line2,
+		'city'     => $city,
+		'state'    => $state,
+		'zip'      => $zip,
+		'country'  => $country
+	);
+
+	do_action( 'kbs_pre_update_user_profile', $user_id, $userdata );
+
+	if ( ! empty( $data['kbs_new_user_pass1'] ) ) {
+		if ( $data['kbs_new_user_pass1'] !== $data['kbs_new_user_pass2'] ) {
+			$error = 'password_mismatch';
+		} else {
+			$userdata['user_pass'] = $data['kbs_new_user_pass1'];
+		}
+	}
+
+	if ( ! $error && $email != $old_user_data->user_email ) {
+
+		if ( ! is_email( $email ) ) {
+			$error = 'email_invalid';
+		}
+
+		if ( email_exists( $email ) ) {
+			$error = 'email_unavailable';
+		}
+
+	}
+
+	$url = remove_query_arg( 'kbs_notice', $data['kbs_redirect'] );
+
+	if ( $error ) {
+		$url = add_query_arg( 'kbs_notice', $error, $url );
+		wp_safe_redirect( $url );
+		die();
+	}
+
+	// Process updates
+	$updated = wp_update_user( $userdata );
+
+	$customer = new KBS_Customer( $user_id, true );
+
+	if ( ! empty( $address ) )	{
+		$meta     = update_user_meta( $user_id, '_kbs_user_address', $address );
+		$customer->update_meta( 'address', $address );
+	}
+
+	if ( $customer->email === $email || ( is_array( $customer->emails ) && in_array( $email, $customer->emails ) ) ) {
+		$customer->set_primary_email( $email );
+	};
+
+	if ( $customer->id > 0 ) {
+		$update_args = array(
+			'name'  => $first_name . ' ' . $last_name,
+		);
+
+		$customer->update( $update_args );
+	}
+
+	if ( $updated ) {
+		do_action( 'kbs_user_profile_updated', $user_id, $userdata );
+		wp_safe_redirect( add_query_arg( 'kbs_notice', 'profile_updated', $url ) );
+		die();
+	}
+
+} // kbs_process_profile_editor_updates
+add_action( 'kbs_edit_user_profile', 'kbs_process_profile_editor_updates' );
+
+/**
+ * Process the 'remove' email address action on the profile editor form.
+ *
+ * @since	1.0
+ * @return	void
+ */
+function kbs_process_profile_editor_remove_email() {
+
+	if ( ! is_user_logged_in() ) {
+		return false;
+	}
+
+	// Nonce security
+	if ( ! wp_verify_nonce( $_GET['_wpnonce'], 'kbs-remove-customer-email' ) ) {
+		return false;
+	}
+
+	if ( empty( $_GET['email'] ) || ! is_email( $_GET['email'] ) ) {
+		return false;
+	}
+
+	$customer = new KBS_Customer( get_current_user_id(), true );
+	$url      = remove_query_arg( 'kbs_notice', $_GET['redirect'] );
+
+	if ( $customer->remove_email( $_GET['email'] ) ) {
+
+		$url = add_query_arg( 'kbs_notice', 'profile_updated', $_GET['redirect'] );
+
+		$user          = wp_get_current_user();
+		$user_login    = ! empty( $user->user_login ) ? $user->user_login : 'KBSBot';
+		$customer_note = __( sprintf( 'Email address %s removed by %s', $_GET['email'], $user_login ), 'kb-support' );
+		$customer->add_note( $customer_note );
+
+		$url = add_query_arg( 'kbs_notice', 'email_removed', $url );
+
+	} else {
+		$url = add_query_arg( 'kbs_notice', 'email_remove_failed', $url );
+	}
+
+	wp_safe_redirect( $url );
+	exit;
+} // kbs_process_profile_editor_remove_email
+add_action( 'kbs_profile-remove-email', 'kbs_process_profile_editor_remove_email' );
