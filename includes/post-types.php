@@ -358,7 +358,8 @@ function kbs_setup_custom_taxonomies() {
 				'edit_terms'   => 'edit_ticket_terms',
 				'assign_terms' => 'assign_ticket_terms',
 				'delete_terms' => 'delete_ticket_terms'
-			)
+			),
+			'update_count_callback' => '_update_generic_term_count'
 		)
 	);
 
@@ -392,7 +393,8 @@ function kbs_setup_custom_taxonomies() {
 				'edit_terms'   => 'edit_ticket_terms',
 				'assign_terms' => 'assign_ticket_terms',
 				'delete_terms' => 'delete_ticket_terms'
-			)
+			),
+			'update_count_callback' => '_update_generic_term_count'
 		)
 	);
 
