@@ -109,6 +109,64 @@ function kbs_set_articles_column_data( $column_name, $post_id ) {
 add_action( 'manage_article_posts_custom_column' , 'kbs_set_articles_column_data', 10, 2 );
 
 /**
+ * Add Article Filters
+ *
+ * Adds taxonomy drop down filters for articles.
+ *
+ * @since	1.0
+ * @return	void
+ */
+function kbs_add_article_filters() {
+	global $typenow;
+
+	if ( 'article' == $typenow ) {
+		$terms = get_terms( 'article_category' );
+
+		if ( count( $terms ) > 0 )	{
+			$category_labels = kbs_get_taxonomy_labels( 'article_category' );
+
+			echo "<select name='article_category' id='article_category' class='postform'>";
+				echo "<option value=''>" . sprintf( __( 'Show all %s', 'kb-support' ), strtolower( $category_labels['name'] ) ) . "</option>";
+
+				foreach ( $terms as $term )	{
+					$selected = isset( $_GET['article_category'] ) && $_GET['article_category'] == $term->slug ? ' selected="selected"' : '';
+					echo '<option value="' . esc_attr( $term->slug ) . '"' . $selected . '>' . esc_html( $term->name ) .' (' . $term->count .')</option>';
+				}
+
+			echo "</select>";
+		}
+
+		$terms = get_terms( 'article_tag' );
+		if ( count( $terms ) > 0 )	{
+			$tag_labels = kbs_get_taxonomy_labels( 'article_tag' );
+
+			echo "<select name='article_tag' id='article_tag' class='postform'>";
+				echo "<option value=''>" . sprintf( __( 'Show all %s', 'kb-support' ), strtolower( $tag_labels['name'] ) ) . "</option>";
+
+				foreach ( $terms as $term ) {
+					$selected = isset( $_GET['article_tag']) && $_GET['article_tag'] == $term->slug ? ' selected="selected"' : '';
+					echo '<option value="' . esc_attr( $term->slug ) . '"' . $selected . '>' . esc_html( $term->name ) .' (' . $term->count .')</option>';
+				}
+
+			echo "</select>";
+		}
+
+		if ( isset( $_REQUEST['all_posts'] ) && '1' === $_REQUEST['all_posts'] )	{
+
+			echo '<input type="hidden" name="all_posts" value="1" />';
+
+		} elseif ( ! current_user_can( 'view_ticket_reports' ) )	{
+
+			$author_id = get_current_user_id();
+			echo '<input type="hidden" name="author" value="' . esc_attr( $author_id ) . '" />';
+
+		}
+	}
+
+} // kbs_add_article_filters
+add_action( 'restrict_manage_posts', 'kbs_add_article_filters', 100 );
+
+/**
  * Save the Article custom posts
  *
  * @since	1.0
