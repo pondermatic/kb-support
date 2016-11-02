@@ -440,8 +440,8 @@ class KBS_Customer {
 	 * Get an array of KBS_Ticket objects from the ticket_ids attached to the customer
 	 *
 	 * @since	1.0
-	 * @param	arr|str	$status	A single status as a string or an array of statuses
-	 * @return	arr		An array of KBS_Ticket objects or an empty array
+	 * @param	arr|str		$status		A single status as a string or an array of statuses
+	 * @return	arr			An array of KBS_Ticket objects or an empty array
 	 */
 	public function get_tickets( $status = array() ) {
 

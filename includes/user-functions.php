@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
- * Retrieve customer tickets
+ * Retrieve customer tickets.
  *
  * @since	1.0
  * @param	int|obj		$customer	The customer ID or a KBS_Customer object.
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) )
  * @param	bool		$can_select	True to only return selectable status. False for all.
  * @return	obj			Array of customer ticket objects.
  */
-function kbs_get_customer_tickets( $customer, $args = array(), $can_select = true )	{
+function kbs_get_customer_tickets( $customer, $args = array(), $can_select = true, $pagination = false )	{
 
 	$customer_id = $customer;
 
@@ -38,6 +38,16 @@ function kbs_get_customer_tickets( $customer, $args = array(), $can_select = tru
 
 	$ticket_statuses = kbs_get_ticket_statuses( $can_select );
 
+	if ( $pagination )	{
+		if ( get_query_var( 'paged' ) )	{
+			$paged = get_query_var('paged');
+		} else if ( get_query_var( 'page' ) )	{
+			$paged = get_query_var( 'page' );
+		} else	{
+			$paged = 1;
+		}
+	}
+
 	$defaults = array(
 		'customer' => $customer_id,
 		'status'   => array_keys( $ticket_statuses ),
@@ -46,9 +56,48 @@ function kbs_get_customer_tickets( $customer, $args = array(), $can_select = tru
 
 	$args = wp_parse_args( $args, $defaults );
 
+	if ( $pagination )	{
+		$args['page'] = $paged;
+	} else	{
+		$args['nopaging'] = true;
+	}
+
 	return kbs_get_tickets( $args );
 
 } // kbs_get_customer_tickets
+
+/**
+ * Retrieve customer ticket count.
+ *
+ * @since	1.0
+ * @param	int|obj		$customer	The customer ID or a KBS_Customer object.
+ * @return	int			Array of customer ticket objects.
+ */
+function kbs_get_customer_ticket_count( $customer )	{
+
+	$customer_id = $customer;
+
+	if ( is_object( $customer ) )	{
+		$customer_id = $customer->id;
+	}
+
+	if ( empty( $customer_id ) )	{
+		return false;
+	}
+
+	$tickets = kbs_count_tickets( array( 'customer' => $customer_id ) );
+	$count   = 0;
+
+	if ( ! empty( $tickets ) )	{
+		foreach( $tickets as $status )	{
+			if ( ! empty( $status ) )	{
+				$count += $status;
+			}
+		}
+	}
+
+	return $count;
+} // kbs_get_customer_ticket_count
 
 /**
  * Retrieve users by role.

@@ -102,7 +102,7 @@ add_shortcode( 'kbs_submit', 'kbs_submit_form_shortcode' );
 /**
  * View Tickets Shortcode.
  *
- * Displays a customers ticket.
+ * Displays a customers ticket, or their ticket history.
  *
  * @since	1.0
  * @param	arr		$atts		Shortcode attributes
@@ -111,12 +111,11 @@ add_shortcode( 'kbs_submit', 'kbs_submit_form_shortcode' );
 function kbs_tickets_shortcode( $atts )	{
 	ob_start();
 
-	if ( ! isset( $_GET['ticket'] ) )	{
-		echo kbs_display_notice( 'no_ticket' );
-		return ob_get_clean();
+	if ( isset( $_GET['ticket'] ) )	{
+		kbs_get_template_part( 'view', 'ticket' );
+	} else	{
+		kbs_get_template_part( 'ticket', 'history' );
 	}
-
-	kbs_get_template_part( 'view', 'ticket' );
 
 	return ob_get_clean();
 } // kbs_tickets_shortcode

@@ -262,6 +262,14 @@ function kbs_get_notices( $notice = '', $notice_only = false )	{
 			'class'  => 'error',
 			'notice' => __( 'There was an error submitting your support request. Please try again', 'kb-support' )
 		),
+		'no_ticket' => array(
+			'class'  => 'error',
+			'notice' => sprintf( __( 'No %s found.', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
+		),
+		'ticket_login' => array(
+			'class'  => 'info',
+			'notice' => sprintf( __( 'You must login to view your %s.', 'kb-support' ), kbs_get_ticket_label_plural( true ) )
+		),
 		'article_restricted' => array(
 			'class'  => 'info',
 			'notice' => sprintf( __( 'Access to this %s is restricted.', 'kb-support' ), kbs_get_article_label_singular() )
@@ -269,10 +277,6 @@ function kbs_get_notices( $notice = '', $notice_only = false )	{
 		'article_restricted_login' => array(
 			'class'  => 'info',
 			'notice' => sprintf( __( 'Access to this %s is restricted. Login to continue.', 'kb-support' ), kbs_get_article_label_singular() )
-		),
-		'no_ticket' => array(
-			'class'  => 'error',
-			'notice' => sprintf( __( 'No %s found.', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
 		),
 		'missing_reply' => array(
 			'class'  => 'error',

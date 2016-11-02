@@ -158,7 +158,7 @@ function kbs_count_tickets( $args = array() ) {
 	$where = "WHERE p.post_type = 'kbs_ticket'";
 
 	// Count tickets for a search
-	if( ! empty( $args['s'] ) ) {
+	if ( ! empty( $args['s'] ) ) {
 
 		if ( is_email( $args['s'] ) || strlen( $args['s'] ) == 32 ) {
 
@@ -253,7 +253,7 @@ function kbs_count_tickets( $args = array() ) {
 	$count = $wpdb->get_results( $query, ARRAY_A );
 	$stats    = array();
 	$total    = 0;
-	$statuses = kbs_get_ticket_status_keys();
+	$statuses = kbs_get_ticket_status_keys( false );
 
 	foreach ( $statuses as $state ) {
 		$stats[ $state ] = 0;
@@ -667,14 +667,14 @@ function kbs_get_ticket_url( $ticket_id, $admin = false, $key = false )	{
 	} else	{
 
 		if ( $key )	{
-			$args = array( 'ticket_key' => kbs_get_ticket_key( $ticket_id ) );
+			$args = array( 'key' => kbs_get_ticket_key( $ticket_id ) );
 		} else	{
-			$args = array( 'ticket_id' => $ticket_id );
+			$args = array( 'ticket' => $ticket_id );
 		}
 
-		$url     = add_query_arg( array(
-		
-		), site_url( '' ) );
+		$args['kbs_action'] = 'view_ticket';
+
+		$url = add_query_arg( $args, site_url( '' ) );
 
 		$url = apply_filters( 'kbs_ticket_url', $url, $ticket_id );
 
