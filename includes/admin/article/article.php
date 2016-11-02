@@ -144,7 +144,7 @@ function kbs_add_article_filters() {
 				echo "<option value=''>" . sprintf( __( 'Show all %s', 'kb-support' ), strtolower( $tag_labels['name'] ) ) . "</option>";
 
 				foreach ( $terms as $term ) {
-					$selected = isset( $_GET['article_tag']) && $_GET['article_tag'] == $term->slug ? ' selected="selected"' : '';
+					$selected = isset( $_GET['article_tag'] ) && $_GET['article_tag'] == $term->slug ? ' selected="selected"' : '';
 					echo '<option value="' . esc_attr( $term->slug ) . '"' . $selected . '>' . esc_html( $term->name ) .' (' . $term->count .')</option>';
 				}
 

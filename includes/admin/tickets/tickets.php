@@ -220,6 +220,64 @@ function kb_tickets_post_column_sla( $ticket_id, $kbs_ticket )	{
 } // kb_tickets_post_column_sla
 
 /**
+ * Add Ticket Filters
+ *
+ * Adds taxonomy drop down filters for tickets.
+ *
+ * @since	1.0
+ * @return	void
+ */
+function kbs_add_ticket_filters() {
+	global $typenow;
+
+	if ( 'kbs_ticket' == $typenow ) {
+		$terms = get_terms( 'ticket_category' );
+
+		if ( count( $terms ) > 0 )	{
+			$category_labels = kbs_get_taxonomy_labels( 'ticket_category' );
+
+			echo "<select name='ticket_category' id='ticket_category' class='postform'>";
+				echo "<option value=''>" . sprintf( __( 'Show all %s', 'kb-support' ), strtolower( $category_labels['name'] ) ) . "</option>";
+
+				foreach ( $terms as $term )	{
+					$selected = isset( $_GET['ticket_category'] ) && $_GET['ticket_category'] == $term->slug ? ' selected="selected"' : '';
+					echo '<option value="' . esc_attr( $term->slug ) . '"' . $selected . '>' . esc_html( $term->name ) .' (' . $term->count .')</option>';
+				}
+
+			echo "</select>";
+		}
+
+		$terms = get_terms( 'ticket_tag' );
+		if ( count( $terms ) > 0 )	{
+			$tag_labels = kbs_get_taxonomy_labels( 'ticket_tag' );
+
+			echo "<select name='ticket_tag' id='ticket_tag' class='postform'>";
+				echo "<option value=''>" . sprintf( __( 'Show all %s', 'kb-support' ), strtolower( $tag_labels['name'] ) ) . "</option>";
+
+				foreach ( $terms as $term ) {
+					$selected = isset( $_GET['ticket_tag'] ) && $_GET['ticket_tag'] == $term->slug ? ' selected="selected"' : '';
+					echo '<option value="' . esc_attr( $term->slug ) . '"' . $selected . '>' . esc_html( $term->name ) .' (' . $term->count .')</option>';
+				}
+
+			echo "</select>";
+		}
+
+		if ( isset( $_REQUEST['all_posts'] ) && '1' === $_REQUEST['all_posts'] )	{
+
+			echo '<input type="hidden" name="all_posts" value="1" />';
+
+		} elseif ( ! current_user_can( 'view_ticket_reports' ) )	{
+
+			$author_id = get_current_user_id();
+			echo '<input type="hidden" name="author" value="' . esc_attr( $author_id ) . '" />';
+
+		}
+	}
+
+} // kbs_add_ticket_filters
+add_action( 'restrict_manage_posts', 'kbs_add_ticket_filters', 100 );
+
+/**
  * Filter posts by customer.
  *
  * @since	1.0
