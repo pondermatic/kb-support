@@ -8,7 +8,7 @@
  *
  * A few examples:
  *
- * {ticket_details}
+ * {ticket_content}
  * {name}
  * {sitename}
  *
@@ -264,11 +264,6 @@ function kbs_setup_email_tags() {
 	// Setup default tags array
 	$email_tags = array(
 		array(
-			'tag'         => 'ticket_details',
-			'description' => __( 'Details of the ticket', 'kb-support' ),
-			'function'    => 'text/html' == KBS()->emails->get_content_type() ? 'kbs_email_tag_ticket_details' : 'kbs_email_tag_ticket_details_plain'
-		),
-		array(
 			'tag'         => 'name',
 			'description' => __( 'The customers first name', 'kb-support' ),
 			'function'    => 'kbs_email_tag_first_name'
@@ -289,6 +284,11 @@ function kbs_setup_email_tags() {
 			'function'    => 'kbs_email_tag_user_email'
 		),
 		array(
+			'tag'         => 'sitename',
+			'description' => __( 'Your site name', 'kb-support' ),
+			'function'    => 'kbs_email_tag_sitename'
+		),
+		array(
 			'tag'         => 'date',
 			'description' => __( 'The date of the ticket', 'kb-support' ),
 			'function'    => 'kbs_email_tag_date'
@@ -304,14 +304,24 @@ function kbs_setup_email_tags() {
 			'function'    => 'kbs_email_tag_ticket_id'
 		),
 		array(
-			'tag'         => 'sitename',
-			'description' => __( 'Your site name', 'kb-support' ),
-			'function'    => 'kbs_email_tag_sitename'
+			'tag'         => 'ticket_title',
+			'description' => __( 'Title of the ticket', 'kb-support' ),
+			'function'    => 'kbs_email_tag_ticket_title'
+		),
+		array(
+			'tag'         => 'ticket_content',
+			'description' => __( 'Content of the ticket', 'kb-support' ),
+			'function'    => 'kbs_email_tag_ticket_content'
 		),
 		array(
 			'tag'         => 'ticket_url',
-			'description' => __( 'Adds a URL so users can view their ticket directly on your website.', 'kb-support' ),
+			'description' => __( 'Adds a URL so customers can view their ticket directly on your website.', 'kb-support' ),
 			'function'    => 'kbs_email_tag_ticket_url'
+		),
+		array(
+			'tag'         => 'ticket_admin_url',
+			'description' => __( 'Adds a URL so admins can access a ticket directly.', 'kb-support' ),
+			'function'    => 'kbs_email_tag_ticket_admin_url'
 		)
 	);
 
@@ -325,29 +335,6 @@ function kbs_setup_email_tags() {
 
 } // kbs_setup_email_tags
 add_action( 'kbs_add_email_tags', 'kbs_setup_email_tags' );
-
-/**
- * Email template tag: ticket_details
- * A list of download links for each download purchased
- *
- * @since	1.0
- * @param	int		$ticket_id
- * @return	str		Ticket details
- */
-function kbs_email_tag_ticket_details( $ticket_id ) {
-} // kbs_email_tag_ticket_details
-
-/**
- * Email template tag: download_list
- * A list of download links for each download purchased in plaintext
- *
- * @since	1.0
- * @param	int		$ticket_id
- * @return	str		Ticket details
- */
-function kbs_email_tag_ticket_details_plain( $ticket_id ) {
-	
-} // kbs_email_tag_ticket_details_plain
 
 /**
  * Email template tag: name
@@ -427,6 +414,18 @@ function kbs_email_tag_user_email( $ticket_id ) {
 } // kbs_email_tag_user_email
 
 /**
+ * Email template tag: sitename
+ * Your site name
+ *
+ * @since	1.0
+ * @param	int		$ticket_id
+ * @return	str		sitename
+ */
+function kbs_email_tag_sitename( $ticket_id ) {
+	return wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
+} // kbs_email_tag_sitename
+
+/**
  * Email template tag: date
  * Date of ticket
  *
@@ -467,25 +466,53 @@ function kbs_email_tag_ticket_id( $ticket_id ) {
 } // kbs_email_tag_ticket_id
 
 /**
- * Email template tag: sitename
- * Your site name
+ * Email template tag: ticket_title
+ * The title of the submitted ticket.
  *
  * @since	1.0
  * @param	int		$ticket_id
- * @return	str		sitename
+ * @return	str		Ticket title
  */
-function kbs_email_tag_sitename( $ticket_id ) {
-	return wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
-} // kbs_email_tag_sitename
+function kbs_email_tag_ticket_title( $ticket_id )	{
+	return get_the_title( $ticket_id );
+} // kbs_email_tag_ticket_title
+
+/**
+ * Email template tag: ticket_content
+ * The content of the submitted ticket.
+ *
+ * @since	1.0
+ * @param	int		$ticket_id
+ * @return	str		Ticket content
+ */
+function kbs_email_tag_ticket_content( $ticket_id )	{
+	return get_post_field( 'post_content', $ticket_id, 'raw' );
+} // kbs_email_tag_ticket_content
 
 /**
  * Email template tag: ticket_url
- * Adds a link so users can view their ticket directly on your website
+ * Adds a URL so customers can view their ticket directly on your website
  *
  * @since	1.0
  * @param	int		$ticket_id
- * @return	str		Ticket link
+ * @return	str		Ticket URL
  */
 function kbs_email_tag_ticket_url( $ticket_id ) {
-	return kbs_get_ticket_url( $ticket_id, false, true );
+	$url = kbs_get_ticket_url( $ticket_id, false, true );
+
+	return apply_filters( 'kbs_tag_ticket_url', '<a href="' . $url . '">' . $url . '</a>' );
 } // kbs_email_tag_ticket_url
+
+/**
+ * Email template tag: ticket_url
+ * Adds a URL so admins can access a ticket directly
+ *
+ * @since	1.0
+ * @param	int		$ticket_id
+ * @return	str		Ticket admin URL
+ */
+function kbs_email_tag_ticket_admin_url( $ticket_id ) {
+	$url = kbs_get_ticket_url( $ticket_id, true );
+
+	return apply_filters( 'kbs_tag_ticket_url', '<a href="' . $url . '">' . $url . '</a>' );
+} // kbs_email_tag_ticket_admin_url
