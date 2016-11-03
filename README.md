@@ -33,5 +33,5 @@ There are various ways you can contribute:
 
 Raise an [Issue](https://github.com/KB-Support/kb-support/issues) on GitHub
 Send us a Pull Request with your bug fixes and/or new features
-Translate Easy Digital Downloads into different languages
+Translate KB Support into different languages
 Provide feedback and suggestions on [enhancements](https://github.com/KB-Support/kb-support/issues?direction=desc&labels=Enhancement&page=1&sort=created&state=open)
