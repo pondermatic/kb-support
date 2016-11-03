@@ -71,7 +71,7 @@ if ( ! empty( $ticket->ID ) ) :
                                 </span>
 
                                 <span class="ticket_customer_name info_item">
-                                    <label><?php _e( 'Logged by', 'kb-support' ); ?>:</label> <?php echo $customer->name; ?>
+                                    <label><?php _e( 'Logged by', 'kb-support' ); ?>:</label> <?php echo kbs_email_tag_fullname( $ticket->ID ); ?>
                                 </span>
 
                                 <span class="ticket_status info_item">
