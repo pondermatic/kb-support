@@ -8,7 +8,7 @@ __Please Note:__ GitHub is for bug reports and contributions only - if you have 
 
 ## Getting Started
 
-* __Do not report potential security vulnerabilities here. Email them privately to our security team at [security@kb-support.com](mailto:security@easydigitaldownloads.com)__
+* __Do not report potential security vulnerabilities here. Email them privately to our security team at [security@kb-support.com](mailto:security@kb-support.com)__
 * Submit a ticket for your issue, assuming one does not already exist
   * Raise it on our [Issue Tracker](https://github.com/KB-Support/kb-support/issues)
   * Clearly describe the issue including steps to reproduce the bug
