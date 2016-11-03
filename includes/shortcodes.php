@@ -122,6 +122,41 @@ function kbs_tickets_shortcode( $atts )	{
 add_shortcode( 'kbs_tickets', 'kbs_tickets_shortcode' );
 
 /**
+ * Search Form Shortcode
+ *
+ * Shows a search form allowing users to search KB Articles. This function simply
+ * calls the kbs_article_search_form function to display the search form.
+ *
+ * @since	1.0
+ * @param	arr		$atts	Shortcode attributes
+ * @uses	kbs_article_search_form()
+ * @return	str
+ */
+function kbs_article_search_form_shortcode()	{
+	return kbs_article_search_form();
+} // kbs_article_search_form_shortcode
+add_shortcode( 'kbs_search', 'kbs_article_search_form_shortcode' );
+
+/**
+ * Profile Editor Shortcode
+ *
+ * Allow users to amend their account details details from the front-end.
+ *
+ * @since 1.0
+ *
+ * @param	arr		$atts	Shortcode attributes
+ * @return	str
+ */
+function kbs_profile_editor_shortcode( $atts ) {
+	ob_start();
+
+	kbs_get_template_part( 'shortcode', 'profile-editor' );
+
+	return ob_get_clean();
+} // kbs_profile_editor_shortcode
+add_shortcode( 'kbs_profile_editor', 'kbs_profile_editor_shortcode' );
+
+/**
  * Articles Shortcode
  *
  * Displays Articles that meet the criteria set within given arguments.
@@ -133,23 +168,49 @@ add_shortcode( 'kbs_tickets', 'kbs_tickets_shortcode' );
 function kbs_articles_shortcode( $atts )	{
 
 	$args = shortcode_atts( array(
-		'post__in'        => null,    // Article IDs to display
-		'posts_per_page'  => 20,      // Number of posts to display
+		'articles'        => null,    // Article IDs to display
+		'number'          => 20,      // Number of posts to display
+		'author'          => null,    // Article author IDs to include
 		'orderby'         => 'views', // Order by
 		'order'           => 'DESC',  // Order
 		'tags'            => 0,       // Tag IDs to include, comma seperate
 		'categories'      => 0,       // Category IDs to include, comma seperate
+		'tax_relation'    => 'AND',   // Tax query relation
 		'excerpt'         => 1,       // Whether to display an excerpt
-		'length'          => (int) kbs_get_option( 'kbs_article_excerpt_length', 100 ), // Length of excerpt. -1 for full content
 		'hide_restricted' => (bool) kbs_hide_restricted_articles() // Whether to hide restricted articles
 	), $atts, 'kbs_articles' );
 
+	if ( isset( $args['articles'] ) )	{
+		$args['post__in'] = explode( ',', $args['articles'] );
+		unset( $args['articles'] );
+	}
+
+	$args['posts_per_page'] = $args['number'];
+	unset( $args['number'] );
+
+	if ( isset( $args['author'] ) )	{
+		$args['author__in'] = explode( ',', $args['author'] );
+		unset( $args['author'] );
+	}
+
+	$args['tax_query'] = array();
+
 	if ( ! empty( $args['tags'] ) )	{
-		$args['tag__in'] = array( $args['tags'] );
+		if ( ! empty( $args['categories'] ) )	{
+			$args['tax_query'] = array( 'relation' => $args['tax_relation'] );
+		}
+
+		$args['tax_query'][] = array(
+			'taxonomy' => 'article_tag',
+			'terms'    => explode( ',', $args['tags'] )
+		);
 	}
 
 	if ( ! empty( $args['categories'] ) )	{
-		$args['category__in'] = array( $args['categories'] );
+		$args['tax_query'][] = array(
+			'taxonomy' => 'article_category',
+			'terms'    => explode( ',', $args['categories'] )
+		);
 	}
 
 	if ( 'views' == $args['orderby'] )	{
@@ -159,7 +220,15 @@ function kbs_articles_shortcode( $atts )	{
 
 	$args['post_type'] = 'article';
 
-	if ( empty ( $args['hide_restricted'] ) )	{
+	// Cleanup non WP_Query args
+	unset( $args['tax_relation'] );
+	unset( $args['categories'] );
+	unset( $args['tags'] );
+
+	// Allow developers to filter the WP_Query args
+	$args = apply_filters( 'kbs_articles_shortcode_args', $args );
+
+	if ( empty( $args['hide_restricted'] ) )	{
 		remove_action( 'pre_get_posts', 'kbs_articles_exclude_restricted' );
 	}
 
@@ -200,45 +269,10 @@ function kbs_articles_shortcode( $atts )	{
 
         <?php wp_reset_postdata(); ?>
     <?php else : ?>
-        <p><?php printf( __( 'No %s found', 'kb-support' ), kbs_get_articles_label_plural( true ) ); ?></p>
+        <p><?php printf( __( 'No %s found', 'kb-support' ), kbs_get_article_label_plural( true ) ); ?></p>
     <?php endif;
 
 	return ob_get_clean();
 
 } // kbs_articles_shortcode
 add_shortcode( 'kbs_articles', 'kbs_articles_shortcode' );
-
-/**
- * Search Form Shortcode
- *
- * Shows a search form allowing users to search KB Articles. This function simply
- * calls the kbs_article_search_form function to display the search form.
- *
- * @since	1.0
- * @param	arr		$atts	Shortcode attributes
- * @uses	kbs_article_search_form()
- * @return	str
- */
-function kbs_article_search_form_shortcode()	{
-	return kbs_article_search_form();
-} // kbs_article_search_form_shortcode
-add_shortcode( 'kbs_search', 'kbs_article_search_form_shortcode' );
-
-/**
- * Profile Editor Shortcode
- *
- * Allow users to amend their account details details from the front-end.
- *
- * @since 1.0
- *
- * @param	arr		$atts	Shortcode attributes
- * @return	str
- */
-function kbs_profile_editor_shortcode( $atts ) {
-	ob_start();
-
-	kbs_get_template_part( 'shortcode', 'profile-editor' );
-
-	return ob_get_clean();
-} // kbs_profile_editor_shortcode
-add_shortcode( 'kbs_profile_editor', 'kbs_profile_editor_shortcode' );
