@@ -267,9 +267,12 @@
 #kbs-article-list	{
 	font-weight: normal;
 }
-
 #kbs-article-list ul	{
-	list-style-type: none;
+	list-style-type: circle;
+}
+.article_excerpt	{
+	display: block;
+	padding-top: 0px;
 }
 
 /* = Tickets

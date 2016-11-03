@@ -241,7 +241,7 @@ function kbs_articles_shortcode( $atts )	{
 	ob_start();
 
 	if ( $articles_query->have_posts() ) : ?>
-        <div class="kbs_articles_list">
+        <div id="kbs_articles_list">
             <ul>
     
             <?php while( $articles_query->have_posts() ) :
@@ -254,7 +254,7 @@ function kbs_articles_shortcode( $atts )	{
                     <li>
                     	<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
                         <?php if ( ! empty( $args['excerpt'] ) ) : ?>
-                        	<span>
+                        	<span class="article_excerpt">
 								<?php echo kbs_get_article_excerpt( $article_id ); ?>
                             </span>
                         <?php endif; ?>
