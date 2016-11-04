@@ -24,7 +24,7 @@ From your own experience in running a helpdesk for your product(s) you will know
 
 ## Support
 This repository is not suitable for support, therefore please do not use our issue tracker for support requests. Please use it for core KB Support issues only.
-If you are in need of support, please visit https://kb-support and log a [support ticket](https://kb-support.com/support-request/). Support issues logged within the GitHub issue tracker will be closed.
+If you are in need of support, please visit [https://kb-support/](https://kb-support/) and log a [support ticket](https://kb-support.com/support-request/). Support issues logged within the GitHub issue tracker will be closed.
 
 ## Contributing to KB Support
 Anyone is welcome to contribute to KB Support. Please read the [guidelines for contributing](https://github.com/KB-Support/kb-support/blob/master/CONTRIBUTING.md) to this repository.
