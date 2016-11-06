@@ -255,26 +255,6 @@
 	vertical-align: middle;
 }
 
-.kbs-article-search-results	{
-	font-size: 80%;
-}
-.kbs-article-search-results .right {
-	float: right;
-}
-.kbs-article-search-results .right {
-	cursor: pointer;
-}
-#kbs-article-list	{
-	font-weight: normal;
-}
-#kbs-article-list ul	{
-	list-style-type: circle;
-}
-.article_excerpt	{
-	display: block;
-	padding-top: 0px;
-}
-
 /* = Tickets
 -------------------------------------------------------------- */
 #kbs_item_wrapper .left {
@@ -465,8 +445,53 @@ a.ticket_reply_content	{
 	font-weight: bold;
 }
 
-/* = [kbs_articles] shortcode
+/* = Article Search
 -------------------------------------------------------------- */
+#kbs_search_form	{
+	width: 100%;
+	margin: 0 auto;
+	white-space: nowrap;
+}
+.search-field	{
+	padding: 6px 3px 6px 3px;
+}
+#kbs_search_form input[type=text],
+#kbs_search_form input[type=search]	{
+	font-size: larger;
+	border: 1px solid #d0d0d0;
+	width: 80%;
+}
+#kbs_search_form input[type=submit], input[type=submit]:hover,
+#kbs_search_form button, button:hover {
+	position: relative; 
+	left: -4px;
+	border: 1px solid #d0d0d0;
+	padding: 6px 15px 6px 15px;
+	font-size: larger;
+	cursor: pointer;
+}
+.kbs-article-search-results	{
+	font-size: 80%;
+}
+.kbs-article-search-results .right {
+	float: right;
+}
+.kbs-article-search-results .right {
+	cursor: pointer;
+}
+
+/* = Articles List
+-------------------------------------------------------------- */
+#kbs-article-list	{
+	font-weight: normal;
+}
+#kbs-article-list ul	{
+	list-style-type: circle;
+}
+.article_excerpt	{
+	display: block;
+	padding-top: 0px;
+}
 div.kbs_articles_list ul li	{
 	list-style-type: none;
 	padding-bottom: 10px;
