@@ -53,6 +53,25 @@ function kbs_register_form_shortcode( $atts ) {
 add_shortcode( 'kbs_register', 'kbs_register_form_shortcode' );
 
 /**
+ * Profile Editor Shortcode
+ *
+ * Allow users to amend their account details details from the front-end.
+ *
+ * @since 1.0
+ *
+ * @param	arr		$atts	Shortcode attributes
+ * @return	str
+ */
+function kbs_profile_editor_shortcode( $atts ) {
+	ob_start();
+
+	kbs_get_template_part( 'shortcode', 'profile-editor' );
+
+	return ob_get_clean();
+} // kbs_profile_editor_shortcode
+add_shortcode( 'kbs_profile_editor', 'kbs_profile_editor_shortcode' );
+
+/**
  * Ticket Form Shortcode
  *
  * Displays the ticket submission form
@@ -136,25 +155,6 @@ function kbs_article_search_form_shortcode()	{
 	return kbs_article_search_form();
 } // kbs_article_search_form_shortcode
 add_shortcode( 'kbs_search', 'kbs_article_search_form_shortcode' );
-
-/**
- * Profile Editor Shortcode
- *
- * Allow users to amend their account details details from the front-end.
- *
- * @since 1.0
- *
- * @param	arr		$atts	Shortcode attributes
- * @return	str
- */
-function kbs_profile_editor_shortcode( $atts ) {
-	ob_start();
-
-	kbs_get_template_part( 'shortcode', 'profile-editor' );
-
-	return ob_get_clean();
-} // kbs_profile_editor_shortcode
-add_shortcode( 'kbs_profile_editor', 'kbs_profile_editor_shortcode' );
 
 /**
  * Articles Shortcode
