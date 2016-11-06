@@ -4,26 +4,29 @@
  */
 $single = kbs_get_article_label_singular();
 $plural = kbs_get_article_label_plural();
-?>
 
-<form role="search" method="get" class="search-form" id="kbs-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+$format = current_theme_supports( 'html5', 'search-form' ) ? 'html5' : 'xhtml';
 
-	<label>
+$format = apply_filters( 'search_form_format', $format ); ?>
 
-		<span class="screen-reader-text">
-			<?php echo sprintf( _x( 'Search %s for:', 'label', 'kb-support' ), $plural ); ?>
-        </span>
-
-		<input type="search" class="search-field" id="kbs-search-field" placeholder="<?php echo sprintf( esc_attr_x( 'Search %s &hellip;', 'placeholder', 'kb-support' ), $plural ); ?>" value="<?php echo get_search_query(); ?>" name="s_article" title="<?php echo sprintf( esc_attr_x( 'Search %s for:', 'label', 'kb-support' ), $plural ); ?>" />
-
-	</label>
-
-	<input type="hidden" name="kbs_action" value="search_articles" />
-
-	<button type="submit" class="search-submit" id="kbs-search-submit">
-    	<span class="screen-reader-text">
-			<?php echo _x( 'Search', 'submit button', 'kb-support' ); ?>
-        </span>
-    </button>
-
-</form>
+<div id="kbs_search_form" class="kbs_search">
+	<?php if ( 'html5' == $format ) : ?>
+    
+        <form role="search" method="get" class="search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+            <input type="text" class="search-field" placeholder="<?php echo sprintf( esc_attr_x( 'Search %s &hellip;', 'placeholder', 'kb-support' ), $plural ); ?>" value="<?php echo get_search_query(); ?>" name="s_article" />
+            <input type="hidden" name="kbs_action" value="search_articles" />
+            <button class="search-submit"><?php echo _x( 'Search', 'submit button', 'kb-support' ); ?></button>
+        </form>
+    
+    <?php else : ?>
+    
+        <form role="search" method="get" id="searchform" class="searchform" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+            <div>
+                <input type="text" value="<?php echo get_search_query(); ?>" name="s_article" id="s" placeholder="<?php echo sprintf( esc_attr_x( 'Search %s &hellip;', 'placeholder', 'kb-support' ), $plural ); ?>" />
+                <input type="hidden" name="kbs_action" value="search_articles" />
+                <input type="submit" id="searchsubmit" value="<?php echo _x( 'Search', 'submit button', 'kb-support' ); ?>" />
+            </div>
+        </form>
+    
+    <?php endif; ?>
+</div>
