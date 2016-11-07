@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: Helpdesk, Support, Service, Support Helpdesk, Ticket, Ticket System, Support Tickets, Helpdesk Tickets, SLA, Service Desk, Knowledgbase, KB, KB Articles, Forms
 Requires at least: 4.1
 Tested up to: 4.7
-Stable tag: 1.0
+Stable tag: 0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: http://kb-support.com/support-our-work/
