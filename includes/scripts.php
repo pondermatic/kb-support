@@ -27,7 +27,7 @@ function kbs_load_scripts() {
 	$js_dir = KBS_PLUGIN_URL . 'assets/js/';
 
 	// Use minified libraries if SCRIPT_DEBUG is turned off
-	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '';//'.min';
+	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
 	// Load AJAX scripts
 	wp_register_script( 'kbs-ajax', $js_dir . 'kbs-ajax' . $suffix . '.js', array( 'jquery' ), KBS_VERSION );
@@ -69,7 +69,7 @@ function kbs_register_styles() {
 	}
 
 	// Use minified libraries if SCRIPT_DEBUG is turned off
-	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '';//'.min';
+	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
 	$file          = 'kbs' . $suffix . '.css';
 	$templates_dir = kbs_get_theme_template_dir_name();
@@ -121,7 +121,7 @@ add_action( 'wp_enqueue_scripts', 'kbs_register_styles' );
 function kbs_load_admin_styles( $hook ) {
 
 	$css_dir = KBS_PLUGIN_URL . 'assets/css/';
-	$suffix  = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '';//'.min';
+	$suffix  = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
 	$ui_style = ( 'classic' == get_user_option( 'admin_color' ) ) ? 'classic' : 'fresh';
 
@@ -166,7 +166,7 @@ function kbs_load_admin_scripts( $hook ) {
 	$js_dir  = KBS_PLUGIN_URL . 'assets/js/';
 
 	// Use minified libraries if SCRIPT_DEBUG is turned off
-	$suffix  = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '';//'.min';
+	$suffix  = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
 	$admin_deps = array();
 	if ( ! kbs_is_admin_page( $hook, 'edit' ) && ! kbs_is_admin_page( $hook, 'new' ) ) {
