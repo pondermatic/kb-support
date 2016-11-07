@@ -121,12 +121,12 @@ class KBS_Welcome {
 			.kbs-about-wrap #kbs-header { margin-bottom: 15px; }
 			.kbs-about-wrap #kbs-header h1 { margin-bottom: 15px !important; }
 			.kbs-about-wrap .about-text { margin: 0 0 15px; max-width: 670px; }
-			.kbs-about-wrap .feature-section { margin-top: 20px; }
+			.kbs-about-wrap .feature-section { margin-top: 5px; }
 			.kbs-about-wrap .feature-section-content,
 			.kbs-about-wrap .feature-section-media { width: 50%; box-sizing: border-box; }
 			.kbs-about-wrap .feature-section-content { float: left; padding-right: 50px; }
 			.kbs-about-wrap .feature-section-content h4 { margin: 0 0 1em; }
-			.kbs-about-wrap .feature-section-media { float: right; text-align: right; margin-bottom: 20px; }
+			.kbs-about-wrap .feature-section-media { float: right; text-align: right; margin-bottom: 5px; }
 			.kbs-about-wrap .feature-section-media img { border: 1px solid #ddd; }
 			.kbs-about-wrap .feature-section:not(.under-the-hood) .col { margin-top: 0; }
 			/* responsive */
@@ -149,18 +149,28 @@ class KBS_Welcome {
 	 */
 	public function welcome_message() {
 		list( $display_version ) = explode( '-', KBS_VERSION );
+
+		$page = isset( $_GET['page'] ) ? $_GET['page'] : 'kbs-about';
+
 		?>
 		<div id="kbs-header">
 			<img class="kbs-badge" src="<?php echo KBS_PLUGIN_URL . 'assets/images/mdjm_web_header.png'; ?>" alt="<?php _e( 'MDJM Event Management', 'kb-support' ); ?>" / >
 			<h1><?php printf( __( 'Welcome to KB Support %s', 'kb-support' ), $display_version ); ?></h1>
 			<p class="about-text">
-				<?php _e( 'Thank you for updating to the latest version!', 'kb-support' ); ?>
-                <br />
-                <?php
-                	printf(
-						__( 'KB Support %s is ready to make improve your support business efficiency!', 'kb-support' ),
-						$display_version
-					);
+				<?php
+				switch ( $page )	{
+					case 'kbs-getting-started':
+						_e( "Let's get Started!", 'kb-support' );
+						break;
+
+					default:
+						_e( 'Thank you for updating to the latest version!', 'kb-support' );
+						echo '<br />';
+						printf(
+							__( 'KB Support %s is ready to make improve your support business efficiency!', 'kb-support' ),
+							$display_version
+						);
+				}
 				?>
 			</p>
 		</div>
@@ -265,17 +275,17 @@ class KBS_Welcome {
 		?>
 		<div class="wrap about-wrap kbs-about-wrap">
 			<?php
-				// load welcome message and content tabs
+				// Load welcome message and content tabs
 				$this->welcome_message();
 				$this->tabs();
 			?>
 			<p class="about-description"><?php _e( "Now that KB Support is installed, you're ready to get started. It works out of the box, but its also fully customisable.", 'kb-support' ); ?></p>
 
 			<div class="changelog">
-				<h3><?php _e( 'Customise KB Support Settings', 'kb-support' ); ?></h3>
+				<h3><?php _e( 'Configure KB Support Settings', 'kb-support' ); ?></h3>
 				<div class="feature-section">
 					<div class="feature-section-media">
-						<img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/mdjm-first-event.png'; ?>" class="kbs-welcome-screenshots"/>
+						<img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/getting-started-email.png'; ?>" class="kbs-welcome-screenshots" />
 					</div>
 					<div class="feature-section-content">
 						<h4><a href="<?php echo admin_url( 'edit.php?post_type=kbs_ticket&page-kbs-settings' ); ?>"><?php printf( __( '%s &rarr; Settings', 'kb-support' ), $this->ticket_plural ); ?></a></h4>
@@ -292,7 +302,7 @@ class KBS_Welcome {
 				<h3><?php _e( 'Customise your Submission Form(s)', 'kb-support' ); ?></h3>
 				<div class="feature-section">
 					<div class="feature-section-media">
-						<img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/mdjm-first-event.png'; ?>" class="kbs-welcome-screenshots"/>
+						<img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/getting-started-form.png'; ?>" class="kbs-welcome-screenshots" />
 					</div>
 					<div class="feature-section-content">
 						<h4><a href="<?php echo admin_url( 'edit.php?post_type=kbs_form' ); ?>"><?php printf( __( '%s &rarr; Submission Forms', 'kb-support' ), $this->ticket_plural ); ?></a></h4>
@@ -306,7 +316,7 @@ class KBS_Welcome {
 				<h3><?php printf( __( 'Start Creating %s', 'kb-support' ), $this->article_plural ); ?></h3>
 				<div class="feature-section">
 					<div class="feature-section-media">
-						<img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/mdjm-first-event.png'; ?>" class="kbs-welcome-screenshots"/>
+						<img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/getting-started-articles.png'; ?>" class="kbs-welcome-screenshots"/>
 					</div>
 					<div class="feature-section-content">
 						<h4><a href="<?php echo admin_url( 'post-new.php?post_type=article' ); ?>"><?php printf( __( '%1$s &rarr; New %1$s', 'kb-support' ), $this->article_plural ); ?></a></h4>
