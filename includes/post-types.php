@@ -198,6 +198,7 @@ function kbs_setup_post_types() {
 		'labels'             => $field_labels,
 		'public'             => false,
 		'rewrite'            => false,
+		'capability_type'    => 'submission_form',
 		'has_archive'        => false,
 		'hierarchical'       => false,
 		'supports'           => array(),
