@@ -167,7 +167,7 @@ function kbs_setup_post_types() {
 		'show_in_menu'       => 'edit.php?post_type=kbs_ticket',
 		'menu_icon'          => 'dashicons-book-alt',
 		'rewrite'            => false,
-		'capability_type'    => 'ticket',
+		'capability_type'    => 'submission_form',
 		'map_meta_cap'       => true,
 		'has_archive'        => false,
 		'hierarchical'       => false,

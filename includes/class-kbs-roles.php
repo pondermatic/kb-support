@@ -127,6 +127,34 @@ class KBS_Roles {
 				}
 			}
 
+			$wp_roles->add_cap( 'administrator', 'edit_submission_form' );
+			$wp_roles->add_cap( 'administrator', 'read_submission_form' );
+			$wp_roles->add_cap( 'administrator', 'delete_submission_form' );
+			$wp_roles->add_cap( 'administrator', 'edit_submission_forms' );
+			$wp_roles->add_cap( 'administrator', 'edit_others_submission_forms' );
+			$wp_roles->add_cap( 'administrator', 'publish_submission_forms' );
+			$wp_roles->add_cap( 'administrator', 'read_private_submission_forms' );
+			$wp_roles->add_cap( 'administrator', 'delete_submission_forms' );
+			$wp_roles->add_cap( 'administrator', 'delete_private_submission_forms' );
+			$wp_roles->add_cap( 'administrator', 'delete_published_submission_forms' );
+			$wp_roles->add_cap( 'administrator', 'delete_others_submission_forms' );
+			$wp_roles->add_cap( 'administrator', 'edit_private_submission_forms' );
+			$wp_roles->add_cap( 'administrator', 'edit_published_submission_forms' );
+
+			$wp_roles->add_cap( 'support_manager', 'edit_submission_form' );
+			$wp_roles->add_cap( 'support_manager', 'read_submission_form' );
+			$wp_roles->add_cap( 'support_manager', 'delete_submission_form' );
+			$wp_roles->add_cap( 'support_manager', 'edit_submission_forms' );
+			$wp_roles->add_cap( 'support_manager', 'edit_others_submission_forms' );
+			$wp_roles->add_cap( 'support_manager', 'publish_submission_forms' );
+			$wp_roles->add_cap( 'support_manager', 'read_private_submission_forms' );
+			$wp_roles->add_cap( 'support_manager', 'delete_submission_forms' );
+			$wp_roles->add_cap( 'support_manager', 'delete_private_submission_forms' );
+			$wp_roles->add_cap( 'support_manager', 'delete_published_submission_forms' );
+			$wp_roles->add_cap( 'support_manager', 'delete_others_submission_forms' );
+			$wp_roles->add_cap( 'support_manager', 'edit_private_submission_forms' );
+			$wp_roles->add_cap( 'support_manager', 'edit_published_submission_forms' );
+
 		}
 
 	} // add_caps
