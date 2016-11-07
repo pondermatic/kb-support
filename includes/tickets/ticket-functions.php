@@ -178,8 +178,9 @@ function kbs_count_tickets( $args = array() ) {
 
 			$join = "LEFT JOIN $wpdb->postmeta m ON (p.ID = m.post_id)";
 			$where .= $wpdb->prepare( "
-				AND m.meta_key = '_mdjm_event_client'
+				AND m.meta_key = %s
 				AND m.meta_value = %d",
+				'_kbs_ticket_client',
 				$args['s']
 			);
 

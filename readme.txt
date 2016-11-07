@@ -21,12 +21,11 @@ From your own experience in running a helpdesk for your product(s) you will know
 Key Features of KB Support include:
 
 * Easily manage and customise submission forms. No coding required, multiple forms can be created and utilised
-* Customers do not need an account to create, or manage support tickets. Guest submission is fully supported
+* Customers do not need an account to create or manage support tickets. Guest submission is fully supported
 * A fully responsive and clean front end design where customers can manage their tickets, including viewing and creating replies
-* Integrated Knowledgebase Articles can be easily created and referenced to try and offer solutions without tickets being created
-* Ability to *Restrict* individual knowledgebase articles so that only logged in users can access them. Useful for your premium paid products
+* Integrated Knowledge Base Articles can be easily created and referenced to try and offer solutions without tickets being created
+* Ability to *Restrict* individual knowledge base articles so that only logged in users can access them. Useful for your premium paid products
 * A number of useful shortcodes to display submission forms, KB Article lists, ticket history, login/registration forms, profile editor, KB Article search form - and more
-* Clean, well written and documented code
 * A bunch of hooks and filters for our developer friends
 
 More information can be found at [https://kb-support.com/](https://kb-support.com/).
@@ -37,12 +36,15 @@ More information can be found at [https://kb-support.com/](https://kb-support.co
 
 Would you like to help translate the plugin into more languages? [Join our WP-Translations Community](https://kb-support.com/articles/translating-kb-support/).
 
-
 == Installation ==
 
 **Automated Installation**
 
-https://kb-support.com/articles/category/installation/
+1. Activate the plugin
+1. Go to Tickets > Settings and configure the options
+1. Insert form shortcode into the ticket submission page
+1. For detailed setup instructions, vist the official [Documentation](https://kb-support.com/articles/category/installation/)
+
 **Manual Installation**
 
 Once you have downloaded the plugin zip file, follow these simple instructions to get going;
@@ -55,11 +57,21 @@ Once you have downloaded the plugin zip file, follow these simple instructions t
 
 == Frequently Asked Questions ==
 
-= Is any support provided? =
+= Where can I find documentation? =
+
+Searchable docs can be found at [https://kb-support.com]([https://kb-support.com)
+
+= How do I Add a Submission Form? =
+
+Create your submission form within Tickets > Submission Forms, and copy the shortcode to any page. i.e. [kbs_submit form="1277"]
+
+= How do I Show a Customers Ticket History? =
+
+Place the [kbs_tickets] shortcode on any page.
 
 = Is there a Pro version with additional features? =
 
-Premium extensions are available at [https://kb-support.com/extensions/](https://kb-support.com/extensions/ "KB Support Extensions").
+Extensions are available at [https://kb-support.com/downloads/](https://kb-support.com/downloads/ "KB Support Extensions") to further enhance KB Support features and functionality.
 
 == Screenshots ==
 
@@ -67,10 +79,10 @@ Premium extensions are available at [https://kb-support.com/extensions/](https:/
 
 == Changelog ==
 
-= 1.0 =
+= 0.9 =
 
-**Release **
+**Release**
 
-Our initial release!
+Our initial release! Still classed as Beta!
 
 == Upgrade Notice ==

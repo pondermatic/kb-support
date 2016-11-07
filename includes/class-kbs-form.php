@@ -463,4 +463,4 @@ class KBS_Form {
 		update_post_meta( $this->ID, '_submission_count', $submissions );
 	} // get_submission_count
 
-} // MDJM_DCF_Form
+} // KBS_Form

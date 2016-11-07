@@ -378,7 +378,7 @@ class KBS_Tickets_Query extends KBS_Stats {
 				$search = $user_data->ID;
 			}
 
-			$key = '_mdjm_event_client';
+			$key = '_kbs_ticket_client';
 			$search_meta = array(
 				'key'     => $key,
 				'value'   => $search
@@ -391,7 +391,7 @@ class KBS_Tickets_Query extends KBS_Stats {
 
 			$post = get_post( $search );
 
-			if( is_object( $post ) && $post->post_type == 'mdjm-event' ) {
+			if( is_object( $post ) && $post->post_type == 'kbs_ticket' ) {
 
 				$arr   = array();
 				$arr[] = $search;
@@ -432,4 +432,4 @@ class KBS_Tickets_Query extends KBS_Stats {
 		$this->__set( 'meta_query', $query );
 	} // agent
 
-} // MDJM_Tickets_Query
+} // KBS_Tickets_Query

@@ -106,6 +106,69 @@ function kbs_run_install() {
 
 	}
 
+	// Create ticket page if it has not been created
+	if ( ! array_key_exists( 'tickets_page', $current_options ) )	{
+		// Tickets page
+		$tickets_page = wp_insert_post(
+			array(
+				'post_title'     => __( 'Ticket Manager', 'kb-support' ),
+				'post_content'   => '[kbs_tickets]',
+				'post_status'    => 'publish',
+				'post_author'    => 1,
+				'post_type'      => 'page',
+				'comment_status' => 'closed'
+			)
+		);
+
+		// Store the page ID in KBS options
+		if ( ! empty( $tickets_page ) )	{
+			$options['tickets_page']  = $tickets_page;
+		}
+
+	}
+
+	$default_submission_form = get_option( 'kbs_default_submission_form_created', false );
+
+	// Create default submission form if needed
+	if ( ! $default_submission_form )	{
+
+		$submission_form_id = wp_insert_post( array(
+			'post_type'    => 'kbs_form_field',
+			'post_status'  => 'publish',
+			'post_title'   => __( 'Ticket Submissions', 'kb-support' ),
+			'post_content' => '',
+			'post_author'  => 1
+		) );
+
+	}
+
+	// Create ticket page if it has not been created
+	if ( ! empty( $submission_form_id ) )	{
+
+		kbs_add_default_fields_to_form( $submission_form_id );
+
+		$form = new KBS_Form( $submission_form_id );
+
+		// Tells us the default submission form was created so we don't create another
+		add_option( 'kbs_default_submission_form_created', true );
+
+		// Add the form submission page
+		$submission_page = wp_insert_post( array(
+			'post_title'     => sprintf( __( 'Log a Support %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
+			'post_content'   => $form->get_shortcode(),
+			'post_status'    => 'publish',
+			'post_author'    => 1,
+			'post_type'      => 'page',
+			'comment_status' => 'closed'
+		) );
+
+		// Store the page ID in KBS options
+		if ( ! empty( $submission_page ) )	{
+			$options['submission_page']  = $submission_page;
+		}
+
+	}
+
 	$merged_options = array_merge( $kbs_options, $options );
 	$kbs_options    = $merged_options;
 
