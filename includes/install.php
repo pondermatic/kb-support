@@ -60,6 +60,12 @@ register_activation_hook( KBS_PLUGIN_FILE, 'kbs_install' );
 function kbs_run_install() {
 	global $wpdb, $kbs_options, $wp_version;
 
+	// Bail if already installed
+	$already_installed = get_option( 'kbs_installed' );
+	if ( $already_installed )	{
+		return;
+	}
+
 	// Setup the Custom Post Types
 	kbs_setup_post_types();
 
@@ -133,7 +139,7 @@ function kbs_run_install() {
 	if ( ! $default_submission_form )	{
 
 		$submission_form_id = wp_insert_post( array(
-			'post_type'    => 'kbs_form_field',
+			'post_type'    => 'kbs_form',
 			'post_status'  => 'publish',
 			'post_title'   => __( 'Ticket Submissions', 'kb-support' ),
 			'post_content' => '',
@@ -174,6 +180,8 @@ function kbs_run_install() {
 
 	update_option( 'kbs_settings', $merged_options );
 	update_option( 'kbs_version', KBS_VERSION );
+	update_option( 'kbs_install_version', KBS_VERSION );
+	update_option( 'kbs_installed', current_time( 'mysql' ) );
 
 	// Create KBS support roles
 	$roles = new KBS_Roles;
