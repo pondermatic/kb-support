@@ -856,6 +856,19 @@ function kbs_get_replies( $ticket_id = 0, $args = array() )	{
 } // kbs_get_replies
 
 /**
+ * Retrieve ticket reply count.
+ *
+ * @since	1.0
+ * @param	int		$ticket_id		The Ticket ID.
+ * @return	int
+ */
+function kbs_get_reply_count( $ticket_id )	{
+	$ticket = new KBS_Ticket( $ticket_id );
+
+	return $ticket->get_reply_count();
+} // kbs_get_reply_count
+
+/**
  * Retrieve the last reply for the ticket.
  *
  * @since	1.0

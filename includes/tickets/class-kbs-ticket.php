@@ -1222,6 +1222,32 @@ class KBS_Ticket {
 	} // get_replies
 
 	/**
+	 * Retrieve ticket reply count.
+	 *
+	 * @since	1.0
+	 * @return	int		Ticket reply count
+	 */
+	public function get_reply_count()	{
+		global $wpdb;
+
+		$reply_count = $wpdb->get_var( $wpdb->prepare(
+		"
+			SELECT count(*)
+			FROM $wpdb->posts
+			WHERE post_status = %s
+			AND post_type = %s
+			AND post_parent = %d
+		",
+		'publish',
+		'kbs_ticket_reply',
+		$this->ID
+	) );
+
+	return $reply_count;
+
+	} // get_reply_count
+
+	/**
 	 * Retrieve the source used for logging the ticket.
 	 *
 	 * @since	1.0
