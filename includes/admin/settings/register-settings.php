@@ -271,12 +271,6 @@ function kbs_get_registered_settings() {
 						'type'    => 'text',
 						'size'    => 'small'
 					),
-					'auto_assign_agent' => array(
-						'id'      => 'auto_assign_agent',
-						'name'    => __( 'Auto Assign on Access?', 'kb-support' ),
-						'desc'    => sprintf( __( 'If enabled, unassigned %1$s will be auto assigned to an agent when they access the %2$s. The %2$s status will also update to <code>open</code> if currently <code>new</code>', 'kb-support' ), strtolower( $plural ), strtolower( $single ) ),
-						'type'    => 'checkbox'
-					),
 					'admin_agents' => array(
 						'id'      => 'admin_agents',
 						'name'    => __( 'Administrators are Agents?', 'kb-support' ),
@@ -339,6 +333,31 @@ function kbs_get_registered_settings() {
 						'desc' => sprintf( __( 'The label for the %s reply form submit button.', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'text',
 						'std'  => __( 'Reply', 'kb-support' )
+					)
+				),
+				'assign' => array(
+					'assign_settings_header' => array(
+						'id'   => 'assign_settings_header',
+						'name' => '<h3>' . sprintf( __( 'Assignment', 'kb-support' ), $single ) . '</h3>',
+						'type' => 'header'
+					),
+					'assign_on_submit' => array(
+						'id'      => 'assign_on_submit',
+						'name'    => sprintf( __( 'Auto Assign new %s?', 'kb-support' ), $plural ),
+						'desc'    => sprintf( __( 'Select an option to automatically assign a %s to an agent when it is received', 'kb-support' ), strtolower( $single ) ),
+						'type'    => 'select',
+						'options' => array(
+							'0'      => __( 'Do not Auto Assign', 'kb-support' ),
+							'least'  => sprintf( __( 'Least %s', 'kb-support' ), strtolower( $plural ) ),
+							'random' => __( 'Random', 'kb-support' ),
+						),
+						'std'     => '0'
+					),
+					'auto_assign_agent' => array(
+						'id'      => 'auto_assign_agent',
+						'name'    => __( 'Auto Assign on Access?', 'kb-support' ),
+						'desc'    => sprintf( __( 'If enabled, unassigned %1$s will be auto assigned to an agent when they access the %2$s. The %2$s status will also update to <code>open</code> if currently <code>new</code>. Avoids agent "Cherry Picking"', 'kb-support' ), strtolower( $plural ), strtolower( $single ) ),
+						'type'        => 'checkbox'
 					)
 				),
 				'sla' => array(
@@ -935,6 +954,7 @@ function kbs_get_registered_settings_sections() {
 		'tickets'        => apply_filters( 'kbs_settings_sections_tickets', array(
 			'main'                 => sprintf( __( 'General %s Settings', 'kb-support' ), $single ),
 			'submit'               => __( 'Submission Settings', 'kb-support' ),
+			'assign'               => sprintf( __( '%s Assignment', 'kb-support' ), $single ),
 			'sla'                  => __( 'Service Levels', 'kb-support' )
 		) ),
 		'articles'        => apply_filters( 'kbs_settings_sections_articles', array(

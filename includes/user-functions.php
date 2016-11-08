@@ -103,16 +103,25 @@ function kbs_get_customer_ticket_count( $customer )	{
  * Retrieve users by role.
  *
  * @since	1.0
- * @param	str	$role	Name of the role to retrieve.
+ * @param	str		$role	Name of the role to retrieve.
+ * @param	bool	$ids	True to return array of IDs, false for array of user objects
  * @return	mixed
  */
-function kbs_get_users_by_role( $role = array( 'support_agent', 'support_manager' ) )	{
+function kbs_get_users_by_role( $role = array( 'support_agent', 'support_manager' ), $ids = false )	{
 	global $wpdb;
 
-	$user_query = new WP_User_Query( array(
+	$args = array(
 		'orderby'    => 'display_name',
 		'role__in' => $role
-	) );
+	);
+
+	if ( ! empty( $ids ) )	{
+		$args['fields'] = 'ID';
+	}
+
+	$args = apply_filters( 'kbs_users_by_role', $args );
+
+	$user_query = new WP_User_Query( $args );
 	
 	$users = $user_query->get_results();
 	
@@ -123,14 +132,14 @@ function kbs_get_users_by_role( $role = array( 'support_agent', 'support_manager
  * Retrieve all customers.
  *
  * @since	1.0
- * @param
+ * @param	bool	$ids	True to return array of IDs, false for array of user objects
  * @return	mixed
  */
-function kbs_get_customers()	{
+function kbs_get_customers( $ids = false )	{
 	$role = array( 'support_customer' );
 	$role = apply_filters( 'kbs_customer_roles', $role );
 
-	$customers = kbs_get_users_by_role( $role );
+	$customers = kbs_get_users_by_role( $role, $ids );
 	
 	return apply_filters( 'kbs_customers', $customers );
 } // kbs_get_customers
@@ -149,20 +158,62 @@ function kbs_count_total_customers( $args = array() ) {
  * Retrieve all agents.
  *
  * @since	1.0
- * @param
+ * @param	bool	$ids	True to return array of IDs, false for array of user objects
  * @return	mixed
  */
-function kbs_get_agents()	{
+function kbs_get_agents( $ids = false )	{
 	$role  = array( 'support_agent', 'support_manager' );
 
 	if ( kbs_get_option( 'admin_agents', false ) )	{
 		$role[] = 'administrator';
 	}
 
-	$users = kbs_get_users_by_role( $role );
+	$users = kbs_get_users_by_role( $role, $ids );
 	
 	return $users;
 } // kbs_get_agents
+
+/**
+ * Retrieve a random agent.
+ *
+ * @since	1.0
+ * @return	int		Random agent user ID
+ */
+function kbs_get_random_agent()	{
+	$agents   = kbs_get_agents( true );
+	$agent_id = 0;
+
+	if ( ! empty( $agents ) )	{
+		$random   = array_rand( $agents, 1 );
+		$agent_id = $agents[ $random ];
+	}
+
+	return $agent_id;
+} // kbs_get_random_agent
+
+/**
+ * Retrieve the count of agent tickets.
+ *
+ * @since	1.0
+ * @param	int		$agent_id	The agent ID for which to retrieve the count.
+ * @return	int		Count of agent tickets
+ */
+function kbs_agent_ticket_count( $agent_id )	{
+	$tickets = kbs_count_tickets( array( 'agent' => $agent_id ) );
+
+	$count   = 0;
+
+	if ( ! empty( $tickets ) )	{
+		$active_statuses = kbs_get_active_ticket_status_keys();
+		foreach( $tickets as $status )	{
+			if ( ! empty( $status ) && in_array( $status, $active_statuses ) )	{
+				$count += $status;
+			}
+		}
+	}
+
+	return $count;
+} // kbs_agent_ticket_count
 
 /**
  * Validate a potential username

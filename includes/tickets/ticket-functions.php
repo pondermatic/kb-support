@@ -233,6 +233,26 @@ function kbs_count_tickets( $args = array() ) {
 
 	}
 
+	if ( ! empty( $args['customer'] ) )	{
+		$join = "LEFT JOIN $wpdb->postmeta m ON (p.ID = m.post_id)";
+		$where .= $wpdb->prepare( "
+			AND m.meta_key = %s
+			AND m.meta_value = %s",
+			'_kbs_ticket_customer_id',
+			$args['customer']
+		);
+	}
+
+	if ( ! empty( $args['agent'] ) )	{
+		$join = "LEFT JOIN $wpdb->postmeta m ON (p.ID = m.post_id)";
+		$where .= $wpdb->prepare( "
+			AND m.meta_key = %s
+			AND m.meta_value = %s",
+			'_kbs_ticket_agent_id',
+			$args['agent']
+		);
+	}
+
 	$where = apply_filters( 'kbs_count_tickets_where', $where );
 	$join  = apply_filters( 'kbs_count_tickets_join', $join );
 

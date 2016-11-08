@@ -129,6 +129,7 @@ class KBS_Welcome {
 			.kbs-about-wrap .feature-section-media { float: right; text-align: right; margin-bottom: 5px; }
 			.kbs-about-wrap .feature-section-media img { border: 1px solid #ddd; }
 			.kbs-about-wrap .feature-section:not(.under-the-hood) .col { margin-top: 0; }
+			.kbs-about-wrap ul { list-style-type: disc; padding-left: 20px; }
 			/* responsive */
 			@media all and ( max-width: 782px ) {
 				.kbs-about-wrap .feature-section-content,
@@ -341,10 +342,9 @@ class KBS_Welcome {
 			</div>
 
 			<div class="changelog">
-				<h3><?php _e( 'Stay Up to Date', 'kb-support' );?></h3>
 				<div class="feature-section two-col">
 					<div class="col">
-						<h4><?php _e( 'Get the Latest News','kb-support' );?></h4>
+						<h3><?php _e( 'Get the Latest News','kb-support' );?></h4>
 						<p><?php printf( __( '<a href="%s" target="_blank">Subscribe to our Newsletter</a> for all the latest news from KB Support.', 'kb-support' ), 'http://eepurl.com/cnxWcz' ); ?></p>
 					</div>
 					<div class="col">
@@ -356,30 +356,20 @@ class KBS_Welcome {
 
 			<div class="changelog">
 				<h3><?php _e( 'Extensions', 'kb-support' );?></h3>
-				<div class="feature-section two-col">
-					<div class="col">
-						<h4><?php _e( 'Visit our Plugin Store','kb-support' );?></h4>
-						<p><?php printf( __( 'We have an ever growing <a href="%s" target="_blank">catalogue of extensions</a> that will extend the functionality of KB Support and further enhance your customers support experience.', 'kb-support' ), 'https://kb-support.com/downloads/' ); ?></p>
-					</div>
-				</div>
+                    <p><?php printf( __( 'We have an ever growing catalogue of extensions available at our <a href="%s" target="_blank">plugin store</a> that will extend the functionality of KB Support and further enhance your customers support experience.', 'kb-support' ), 'https://kb-support.com/downloads/' ); ?></p>
 			</div>
 
 			<div class="changelog">
 				<h3><?php _e( 'Contribute to KB Support', 'kb-support' );?></h3>
-				<div class="feature-section two-col">
-					<div class="col">
-						<h4><?php _e( 'Join our Team','kb-support' );?></h4>
-						<p><?php _e( 'Anyone is welcome to contribute to KB Support. Please read the <a href="" target="_blank">guidelines for contributing</a> to our <a href="" target="_blank">GitHub repository</a>.', 'kb-support' ); ?></p>
-						<p><?php _e( 'There are various ways you can contribute', 'kb-support' ); ?>&hellip;</p>
-						<ul>
-							<li><?php printf( __( '<a href="%s" target="_blank">Raise an Issue on GitHub</a>', 'kb-support' ), 'https://github.com/KB-Support/kb-support/issues' ); ?></li>
-                        	<li><?php printf( __( '<a href="%s" target="_blank">Send us a Pull Request</a> with your bug fixes and/or new features', 'kb-support' ), 'https://www.google.co.uk/url?sa=t&rct=j&q=&esrc=s&source=web&cd=2&cad=rja&uact=8&ved=0ahUKEwikn8uql5fQAhXiDsAKHcP6AIQQFgggMAE&url=https%3A%2F%2Fhelp.github.com%2Farticles%2Fcreating-a-pull-request%2F&usg=AFQjCNEyxULKOpCMlFly-Rcy8_YemfrOhQ&sig2=OSYkosRNJKTjCkbKTS8Qdg&bvm=bv.137904068,d.bGg' ); ?></li>
-							<li><?php printf( __( '<a href="%s" target="_blank">Translate KB Support</a> into different languages', 'kb-support' ), 'https://kb-support.com/articles/translating-kb-support/' ); ?></li>
-                       	 	<li><?php _e( 'Provide feedback and suggestions on enhancements', 'kb-support' ); ?></li>
-                        	<li><?php _e( 'Assist with maintaining documentation', 'kb-support' ); ?></li>
-                        </ul>
-					</div>
-				</div>
+                <p><?php _e( 'Anyone is welcome to contribute to KB Support. Please read the <a href="" target="_blank">guidelines for contributing</a> to our <a href="" target="_blank">GitHub repository</a>.', 'kb-support' ); ?></p>
+                <p><?php _e( 'There are various ways you can contribute', 'kb-support' ); ?>&hellip;</p>
+                <ul>
+                    <li><?php printf( __( '<a href="%s" target="_blank">Raise an Issue on GitHub</a>', 'kb-support' ), 'https://github.com/KB-Support/kb-support/issues' ); ?></li>
+                    <li><?php printf( __( '<a href="%s" target="_blank">Send us a Pull Request</a> with your bug fixes and/or new features', 'kb-support' ), 'https://www.google.co.uk/url?sa=t&rct=j&q=&esrc=s&source=web&cd=2&cad=rja&uact=8&ved=0ahUKEwikn8uql5fQAhXiDsAKHcP6AIQQFgggMAE&url=https%3A%2F%2Fhelp.github.com%2Farticles%2Fcreating-a-pull-request%2F&usg=AFQjCNEyxULKOpCMlFly-Rcy8_YemfrOhQ&sig2=OSYkosRNJKTjCkbKTS8Qdg&bvm=bv.137904068,d.bGg' ); ?></li>
+                    <li><?php printf( __( '<a href="%s" target="_blank">Translate KB Support</a> into different languages', 'kb-support' ), 'https://kb-support.com/articles/translating-kb-support/' ); ?></li>
+                    <li><?php _e( 'Provide feedback and suggestions on enhancements', 'kb-support' ); ?></li>
+                    <li><?php _e( 'Assist with maintaining documentation', 'kb-support' ); ?></li>
+                </ul>
 			</div>
 
 		</div>
@@ -437,7 +427,7 @@ class KBS_Welcome {
 
 		$upgrade = get_option( 'kbs_version_upgraded_from' );
 
-		if( ! $upgrade ) { // First time install
+		if ( ! $upgrade ) { // First time install
 			wp_safe_redirect( admin_url( 'index.php?page=kbs-getting-started' ) ); exit;
 		} else { // Update
 			wp_safe_redirect( admin_url( 'index.php?page=kbs-about' ) ); exit;

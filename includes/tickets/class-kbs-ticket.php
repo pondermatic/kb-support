@@ -419,6 +419,10 @@ class KBS_Ticket {
 			$this->pending['key'] = $this->key;
 		}
 
+		if ( empty( $this->agent_id ) )	{
+			$this->auto_assign_agent();
+		}
+
 		if ( ! empty( $this->form_data ) )	{
 			$this->pending['form_data'] = $this->form_data;
 		}
@@ -961,6 +965,49 @@ class KBS_Ticket {
 	public function setup_agent_id()	{	
 		return $this->get_meta( '_kbs_ticket_agent_id', true );
 	} // setup_agent_id
+
+	/**
+	 * Auto assign an agent.
+	 *
+	 * @since	1.0
+	 * @return	int|false
+	 */
+	public function auto_assign_agent()	{
+		$auto_assign = kbs_get_option( 'assign_on_submit' );
+
+		if ( ! empty( $auto_assign ) )	{
+			switch( $auto_assign )	{
+				case 'least':
+					$agents    = kbs_get_agents( true );
+					$agent_id  = 0;
+					$low_count = 999999;
+
+					foreach( $agents as $agent )	{
+						$ticket_count = kbs_agent_ticket_count( $agent );
+
+						if ( $ticket_count < $low_count )	{
+							$low_count = $ticket_count;
+							$agent_id  = $agent;
+						}
+					}
+
+					$this->agent_id = $agent_id;
+					$this->pending['agent_id'] = $agent_id;
+					break;
+
+				case 'random':
+					$agent = kbs_get_random_agent();
+					
+					$this->agent_id = $agents[ $random ];
+					$this->pending['agent_id'] = $agents[ $random ];
+					break;
+
+				default:
+					do_action( 'kbs_auto_assign_agent', $this );
+					break;
+			}
+		}
+	} // auto_assign_agent
 
 	/**
 	 * Setup the customer ID
