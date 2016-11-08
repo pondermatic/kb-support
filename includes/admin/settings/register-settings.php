@@ -532,17 +532,19 @@ function kbs_get_registered_settings() {
 						'name' => sprintf( __( '%s Notification Subject', 'kb-support' ), $single ),
 						'desc' => sprintf( __( 'Enter the subject line for the %s notification email. Template tags accepted.', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'text',
-						'std'  => sprintf( __( 'New %s received - Case #{ticket_id}', 'kb-support' ), strtolower( $single ) )
+						'std'  => sprintf( __( 'New %s received - #{ticket_id}', 'kb-support' ), strtolower( $single ) )
 					),
 					'ticket_notification' => array(
 						'id'   => 'ticket_notification',
 						'name' => sprintf( __( '%s Notification', 'kb-support' ), $single ),
 						'desc' => sprintf( __( 'Enter the text that is sent as %s received notification email after submission of a case. HTML is accepted. Available template tags:' ), strtolower( $single ) ) . '<br />' . kbs_get_emails_tags_list(),
 						'type' => 'rich_editor',
-						'std'  => __( 'Hello!', 'kb-support' ) . "\n\n" .
-								  sprintf( __( 'A new support %s has been received from', 'kb-support' ), strtolower( $single ) ) . " {name}.\n\n" .
-								  "{ticket_details}\n\n" .
-								  __( 'Thank you', 'kb-support' )
+						'std'  => __( 'Hey there!', 'kb-support' ) . "\n\n" .
+								  sprintf( __( 'A new %s has been logged at.', 'kb-support' ), strtolower( $single ) ) . " {sitename}.\n\n" .
+								  "<strong>{ticket_title} - #{ticket_id}</strong>\n\n" .
+								  "{ticket_admin_url}\n\n" .
+								  __( 'Regards', 'kb-support' ) . "\n\n" .
+								  '{sitename}'
 					),
 					'admin_notice_emails' => array(
 						'id'   => 'admin_notice_emails',
@@ -575,14 +577,14 @@ function kbs_get_registered_settings() {
 						'name' => __( 'Email Subject', 'kb-support' ),
 						'desc' => sprintf( __( 'Enter the subject line for the %s reply email. Template tags accepted.', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'text',
-						'std'  => sprintf( __( 'Your Support %s Received a Reply ##{ticket_id}##', 'kb-support' ), $single )
+						'std'  => sprintf( __( 'Your Support %s Received a Reply', 'kb-support' ), $single ) . ' ##{ticket_id}##'
 					),
 					'ticket_reply_heading' => array(
 						'id'   => 'ticket_reply_heading',
 						'name' => __( 'Email Heading', 'kb-support' ),
 						'desc' => __( 'Enter the heading for the %s reply email', 'kb-support' ),
 						'type' => 'text',
-						'std'  => sprintf( __( 'Support %s Update for #{ticket_id}', 'kb-support' ), $single )
+						'std'  => sprintf( __( 'Support %s Update for', 'kb-support' ), $single ) . ' #{ticket_id}'
 					),
 					'ticket_reply_content' => array(
 						'id'   => 'ticket_reply_content',
@@ -590,7 +592,7 @@ function kbs_get_registered_settings() {
 						'desc' => sprintf( __( 'Enter the content that is sent to customers when their %1$s receives a reply. HTML is accepted. Available template tags:', 'kb-support' ), strtolower( $single ) ) . '<br/>' . kbs_get_emails_tags_list(),
 						'type' => 'rich_editor',
 						'std'  => __( "Dear", "kb-support" ) . " {name},\n\n" . 
-								  sprintf( __( 'Your support %s # {ticket_id} has received a reply.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
+								  sprintf( __( 'Your support %1$s # {ticket_id} has received a reply. Click the link below to access your %1$s and review the details.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
 								  '{ticket_url}' . "\n\n" .
 								  __( 'Regards', 'kb-support' ) . "\n\n" .
 								  '{sitename}'
@@ -613,7 +615,7 @@ function kbs_get_registered_settings() {
 						'name' => __( 'Email Subject', 'kb-support' ),
 						'desc' => sprintf( __( 'Enter the subject line for the %s closed email. Template tags accepted.', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'text',
-						'std'  => sprintf( __( 'Your Support %s is Closed ##{ticket_id}##', 'kb-support' ), $single )
+						'std'  => sprintf( __( 'Your Support %s is Closed', 'kb-support' ), $single ) . ' ##{ticket_id}##'
 					),
 					'ticket_closed_heading' => array(
 						'id'   => 'ticket_closed_heading',
@@ -628,7 +630,7 @@ function kbs_get_registered_settings() {
 						'desc' => sprintf( __( 'Enter the content that is sent to customers when their %1$s is closed. HTML is accepted. Available template tags:', 'kb-support' ), strtolower( $single ) ) . '<br/>' . kbs_get_emails_tags_list(),
 						'type' => 'rich_editor',
 						'std'  => __( "Dear", "kb-support" ) . " {name},\n\n" . 
-								  sprintf( __( 'Your support %s # {ticket_id} is now closed.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
+								  sprintf( __( 'Your support %1$s # {ticket_id} is now closed. You can review the details of your %1$s by clicking the URL below.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
 								  '{ticket_url}' . "\n\n" .
 								  __( 'Regards', 'kb-support' ) . "\n\n" .
 								  '{sitename}'

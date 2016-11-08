@@ -146,9 +146,16 @@ add_action( 'template_redirect', 'kbs_display_email_template_preview' );
 function kbs_get_ticket_logged_email_body_content( $ticket_id = 0, $ticket_data = array() )	{
 
 	$logged_email_body = __( 'Dear', 'kb-support' ) . " {name},\n\n";
-	$logged_email_body .= sprintf( __( 'Thank you for logging your support %s, details of which are displayed below.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ) . "\n\n";
-	$logged_email_body .= "{ticket_details}\n\n";
-	$logged_email_body .= "{sitename}";
+	$logged_email_body .= sprintf( __( 'Thank you for logging your support %s.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ) . "\n\n";
+	$logged_email_body .= __( "We've received the details and will be in touch as necessary shortly.", 'kb-support' ) . "\n\n";
+	$logged_email_body .= __( 'Regards', 'kb-support' ) . "\n\n";
+	$logged_email_body .= '{sitename}' . "\n\n";
+	$logged_email_body .= '<hr />';
+	
+	$logged_email_body .= '<h3>' . sprintf( __( 'Your Ticket Details', 'kb-support' ), kbs_get_ticket_label_singular() ) . ' - #{ticket_id}</h3>' . "\n";
+	$logged_email_body .= '<strong>{ticket_title}</strong>' . "\n\n";
+	$logged_email_body .= '{ticket_content}' . "\n\n";
+	$logged_email_body .= '{ticket_url}' . "\n\n";
 
 	$email = kbs_get_option( 'ticket_content', false );
 	$email = $email ? stripslashes( $email ) : $logged_email_body;
