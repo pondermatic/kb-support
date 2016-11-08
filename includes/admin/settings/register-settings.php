@@ -540,7 +540,7 @@ function kbs_get_registered_settings() {
 						'desc' => sprintf( __( 'Enter the text that is sent as %s received notification email after submission of a case. HTML is accepted. Available template tags:' ), strtolower( $single ) ) . '<br />' . kbs_get_emails_tags_list(),
 						'type' => 'rich_editor',
 						'std'  => __( 'Hey there!', 'kb-support' ) . "\n\n" .
-								  sprintf( __( 'A new %s has been logged at.', 'kb-support' ), strtolower( $single ) ) . " {sitename}.\n\n" .
+								  sprintf( __( 'A new %s has been logged at', 'kb-support' ), strtolower( $single ) ) . " {sitename}.\n\n" .
 								  "<strong>{ticket_title} - #{ticket_id}</strong>\n\n" .
 								  "{ticket_admin_url}\n\n" .
 								  __( 'Regards', 'kb-support' ) . "\n\n" .
