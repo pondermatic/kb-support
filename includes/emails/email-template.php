@@ -76,7 +76,7 @@ function kbs_email_preview_template_tags( $message ) {
  	$message = str_replace( '{username}', $user->user_login, $message );
 	$message = str_replace( '{user_email}', $user->user_email, $message );
 	$message = str_replace( '{sitename}', get_bloginfo( 'name' ), $message );
-	$message = str_replace( '{date}', get_date_from_gmt( current_time( 'timestamp' ), get_option( 'date_format' ) ) );
+	$message = str_replace( '{date}', get_date_from_gmt( current_time( 'timestamp' ), get_option( 'date_format' ) ), $message );
 	$message = str_replace( '{ticket_id}', $ticket_id, $message );
 	$message = str_replace( '{ticket_details}', $ticket_id, $message );
 
@@ -122,7 +122,6 @@ function kbs_display_email_template_preview() {
 	if( ! current_user_can( 'manage_ticket_settings' ) ) {
 		return;
 	}
-
 
 	KBS()->emails->heading = sprintf( __( '%s Received', 'kb-support' ), kbs_get_ticket_label_singular() );
 
