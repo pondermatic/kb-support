@@ -246,6 +246,7 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/login-register.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-customer.php';
 		require_once KBS_PLUGIN_DIR . 'includes/user-functions.php';
+		require_once KBS_PLUGIN_DIR . 'includes/agent-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-db-customers.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-db-customer-meta.php';
 		require_once KBS_PLUGIN_DIR . 'includes/shortcodes.php';

@@ -75,7 +75,12 @@ Extensions are available at [https://kb-support.com/downloads/](https://kb-suppo
 
 == Screenshots ==
 
-1. 
+1. The interface for managing a ticket Submission Form. Create as many forms as you need, choose from a number of fields and add to your web page with a simple shortcode
+
+2. What the default submission form might look like on your website when your customers log a support ticket. Theme in image is Twenty Seventeen
+
+
+
 
 == Changelog ==
 
