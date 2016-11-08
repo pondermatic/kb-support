@@ -10,7 +10,7 @@
  * @subpackage  Classes/Emails
  * @copyright   Copyright (c) 2016, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.1.php GNU Public License
- * @since       0.1
+ * @since       1.0
  */
 
 // Exit if accessed directly
@@ -19,63 +19,63 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * KBS_Emails Class
  *
- * @since	0.1
+ * @since	1.0
  */
 class KBS_Emails {
 
 	/**
 	 * Holds the from address
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 */
 	private $from_address;
 
 	/**
 	 * Holds the from name
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 */
 	private $from_name;
 
 	/**
 	 * Holds the email content type
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 */
 	private $content_type;
 
 	/**
 	 * Holds the email headers
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 */
 	private $headers;
 
 	/**
 	 * Whether to send email in HTML
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 */
 	private $html = true;
 
 	/**
 	 * The email template to use
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 */
 	private $template;
 
 	/**
 	 * The header text for the email
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 */
 	private $heading = '';
 
 	/**
 	 * Get things going
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 */
 	public function __construct() {
 
@@ -91,7 +91,7 @@ class KBS_Emails {
 	/**
 	 * Set a property
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 */
 	public function __set( $key, $value ) {
 		$this->$key = $value;
@@ -100,7 +100,7 @@ class KBS_Emails {
 	/**
 	 * Get the email from name
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 */
 	public function get_from_name() {
 		if ( ! $this->from_name ) {
@@ -113,7 +113,7 @@ class KBS_Emails {
 	/**
 	 * Get the email from address
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 */
 	public function get_from_address() {
 		if ( ! $this->from_address ) {
@@ -126,7 +126,7 @@ class KBS_Emails {
 	/**
 	 * Get the email content type
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 */
 	public function get_content_type() {
 		if ( ! $this->content_type && $this->html ) {
@@ -141,7 +141,7 @@ class KBS_Emails {
 	/**
 	 * Get the email headers
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 */
 	public function get_headers() {
 		if ( ! $this->headers ) {
@@ -156,7 +156,7 @@ class KBS_Emails {
 	/**
 	 * Retrieve email templates
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 */
 	public function get_templates() {
 		$templates = array(
@@ -170,7 +170,7 @@ class KBS_Emails {
 	/**
 	 * Get the enabled email template
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 *
 	 * @return string|null
 	 */
@@ -185,7 +185,7 @@ class KBS_Emails {
 	/**
 	 * Get the header text for the email
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 */
 	public function get_heading() {
 		return apply_filters( 'kbs_email_heading', $this->heading );
@@ -194,7 +194,7 @@ class KBS_Emails {
 	/**
 	 * Parse email template tags
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 * @param string $content
 	 */
 	public function parse_tags( $content ) {
@@ -204,7 +204,7 @@ class KBS_Emails {
 	/**
 	 * Build the final email
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 * @param string $message
 	 *
 	 * @return string
@@ -224,7 +224,7 @@ class KBS_Emails {
 		/**
 		 * Hooks into the email header
 		 *
-		 * @since	0.1
+		 * @since	1.0
 		 */
 		do_action( 'kbs_email_header', $this );
 
@@ -233,7 +233,7 @@ class KBS_Emails {
 			 * Hooks into the template of the email
 			 *
 			 * @param string $this->template Gets the enabled email template
-			 * @since	0.1
+			 * @since	1.0
 			 */
 			do_action( 'kbs_email_template_' . $this->get_template() );
 		} else {
@@ -243,7 +243,7 @@ class KBS_Emails {
 		/**
 		 * Hooks into the body of the email
 		 *
-		 * @since	0.1
+		 * @since	1.0
 		 */
 		do_action( 'kbs_email_body', $this );
 
@@ -252,7 +252,7 @@ class KBS_Emails {
 		/**
 		 * Hooks into the footer of the email
 		 *
-		 * @since	0.1
+		 * @since	1.0
 		 */
 		do_action( 'kbs_email_footer', $this );
 
@@ -268,7 +268,7 @@ class KBS_Emails {
 	 * @param  string  $subject          The subject line of the email to send.
 	 * @param  string  $message          The body of the email to send.
 	 * @param  string|array $attachments Attachments to the email in a format supported by wp_mail()
-	 * @since	0.1
+	 * @since	1.0
 	 */
 	public function send( $to, $subject, $message, $attachments = '' ) {
 
@@ -280,7 +280,7 @@ class KBS_Emails {
 		/**
 		 * Hooks before the email is sent
 		 *
-		 * @since	0.1
+		 * @since	1.0
 		 */
 		do_action( 'kbs_email_send_before', $this );
 
@@ -312,7 +312,7 @@ class KBS_Emails {
 		/**
 		 * Hooks after the email is sent
 		 *
-		 * @since	0.1
+		 * @since	1.0
 		 */
 		do_action( 'kbs_email_send_after', $this );
 
@@ -323,7 +323,7 @@ class KBS_Emails {
 	/**
 	 * Add filters / actions before the email is sent
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 */
 	public function send_before() {
 		add_filter( 'wp_mail_from', array( $this, 'get_from_address' ) );
@@ -334,7 +334,7 @@ class KBS_Emails {
 	/**
 	 * Remove filters / actions after the email is sent
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 */
 	public function send_after() {
 		remove_filter( 'wp_mail_from', array( $this, 'get_from_address' ) );
@@ -348,7 +348,7 @@ class KBS_Emails {
 	/**
 	 * Converts text to formatted HTML. This is primarily for turning line breaks into <p> and <br/> tags.
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 */
 	public function text_to_html( $message ) {
 
