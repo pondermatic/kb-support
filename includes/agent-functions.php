@@ -94,3 +94,104 @@ function kbs_agent_ticket_count( $agent_id )	{
 
 	return $count;
 } // kbs_agent_ticket_count
+
+/**
+ * Log an agents online status.
+ *
+ * Sets a transient that tells us the agent is actively logged on.
+ *
+ * @since	1.0
+ * @return	void
+ */
+function kbs_set_agent_status()	{
+
+	if ( is_admin() && is_user_logged_in() )	{
+
+		$agent_id = get_current_user_id();
+
+		$expire   = MINUTE_IN_SECONDS * 30;
+		$expire   = apply_filters( 'kbs_agent_status_expire_time', $expire );
+		$screen   = get_current_screen();
+
+		if ( ! empty( $agent_id ) && kbs_is_agent( $agent_id ) )	{
+
+			$transient_key = '_kbs_active_agent_' . $agent_id;
+			set_transient( $transient_key, $screen->id, $expire );
+		}
+
+	}
+
+} // kbs_set_agent_status
+add_action( 'current_screen', 'kbs_set_agent_status' );
+
+/**
+ * Retrieve an agents status.
+ *
+ * This function is a wrapper for the get_transient function
+ *
+ * @since	1.0
+ * @param	int		$agent_id	The user ID of the agent to check
+ * @return	mixed	True if online, or false
+ */
+function kbs_get_agent_status( $agent_id )	{
+	return get_transient( '_kbs_active_agent_' . $agent_id );
+} // kbs_get_agent_status
+
+
+/**
+ * Whether or not an agent is online.
+ *
+ * @since	1.0
+ * @param	int		$agent_id	The user ID of the agent to check
+ * @return	bool	True if online, or false
+ */
+function kbs_agent_is_online( $agent_id )	{
+	$status = kbs_get_agent_status( $agent_id );
+
+	$online = false === $status ? false : true;
+
+	return apply_filters( 'kbs_agent_is_online', $online );
+} // kbs_agent_is_online
+
+/**
+ * Sets an agents status to offline during logoff.
+ *
+ * @since	1.0
+ * @return	void
+ */
+function kbs_set_agent_offline( $agent_id = 0 )	{
+	if ( empty( $agent_id ) )	{
+		$agent_id = get_current_user_id();
+	}
+
+	if ( kbs_is_agent( $agent_id ) )	{
+		delete_transient( '_kbs_active_agent_' . $agent_id );
+	}
+} // kbs_set_agent_offline
+add_action( 'login_form_logout', 'kbs_set_agent_offline' );
+
+/**
+ * Displays an agents online status icon.
+ *
+ * @since	1.0
+ * @param	int		$agent_id	The user ID of the agent to check
+ * @param	bool	$echo		True to echo the indicator, false to return
+ * @return	str		Online status indicator icon
+ */
+function kbs_agent_display_status_icon( $agent_id, $echo = true )	{
+
+	$status = kbs_agent_is_online( $agent_id ) ? 'online' : 'offline';
+
+	$img_src   = KBS_PLUGIN_URL . 'assets/images/agent_status_' . $status;
+	$img_alt   = sprintf( __( 'Agent %s', 'kb-support' ), $status );
+	$img_title = sprintf( __( '%s is currently %s', 'kb-support' ), get_userdata( $agent_id )->display_name, $status );
+
+	$icon = ' <img class="kbs_agent_status_' . $status . '" src="' . $img_src . '.gif" alt="' . $img_alt . '" title="' . $img_title . '" height="10" width="10">';
+
+	if ( $echo )	{
+		echo $icon;
+	} else	{
+		return $icon;
+	}
+
+} // kbs_agent_display_status_icon
