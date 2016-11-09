@@ -277,6 +277,13 @@ function kbs_get_registered_settings() {
 						'desc'    => __( 'If enabled, users with the <code>Administrator</code> role will also be Support Agents.', 'kb-support' ),
 						'type'    => 'checkbox',
 						'std'     => '1'
+					),
+					'agent_status'  => array(
+						'id'      => 'agent_status',
+						'name'    => __( 'Display Agent Status?', 'kb-support' ),
+						'desc'    => sprintf( __( 'If enabled, customers will see an indicator as to whether or not the assigned agent is online when reviewing their %s.', 'kb-support' ), strtolower( $single ) ),
+						'type'    => 'checkbox',
+						'std'     => '0'
 					)
 				),
 				'submit' => array(

@@ -49,6 +49,28 @@
 	border-color: #faebcc;
 }
 
+/* = Agent Status
+-------------------------------------------------------------- */
+.kbs_agent_status_online:after	{
+	content: "";
+	display: inline-block;
+	width: 12px;
+	height: 12px;
+	background: url(images/agent_status_online.gif);
+	background-repeat: no-repeat;
+	background-size: 12px 12px;
+	margin: 0 0 0 5px;
+}
+.kbs_agent_status_offline:after	{
+	content: "";
+	display: inline-block;
+	width: 12px;
+	height: 12px;
+	background: url(images/agent_status_offline.gif);
+	background-repeat: no-repeat;
+	background-size: 12px 12px;
+	margin: 0 0 0 5px;
+}
 /* = General
 -------------------------------------------------------------- */
 .kbs_hidden	{ display: none; }

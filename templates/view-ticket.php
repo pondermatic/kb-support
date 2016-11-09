@@ -18,9 +18,10 @@ $ticket = kbs_get_ticket_by( $field, $_GET['ticket'] );
 
 if ( ! empty( $ticket->ID ) ) :
 
-	$ticket      = new KBS_Ticket( $ticket->ID );
-	$use_user_id = false;
-	$user_id     = $ticket->user_id;
+	$ticket       = new KBS_Ticket( $ticket->ID );
+	$use_user_id  = false;
+	$user_id      = $ticket->user_id;
+	$status_class = '';
 
 	if ( is_user_logged_in() ) :
 		$use_user_id = true;
@@ -83,8 +84,13 @@ if ( ! empty( $ticket->ID ) ) :
 										$agent = get_userdata( $ticket->agent_id )->display_name;
 									else :
 										$agent = __( 'No Agent Assigned', 'kb-support' );
+									endif;
+
+									if ( kbs_display_agent_status() ) :
+										$status_class = 'kbs_agent_status_' . kbs_get_agent_online_status( $ticket->agent_id );
 									endif; ?>
-                                    <label><?php _e( 'Agent', 'kb-support' ); ?>:</label> <?php echo $agent; ?>
+
+                                    <label><?php _e( 'Agent', 'kb-support' ); ?>:</label> <span class="<?php echo $status_class; ?>"><?php echo $agent; ?></span>
                                 </span>
 
                                 <div class="major_ticket_items">

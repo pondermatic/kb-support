@@ -137,6 +137,15 @@ function kbs_get_agent_status( $agent_id )	{
 	return get_transient( '_kbs_active_agent_' . $agent_id );
 } // kbs_get_agent_status
 
+/**
+ * Whether to display an agents online status.
+ *
+ * @since	1.0
+ * @return	bool
+ */
+function kbs_display_agent_status()	{
+	return kbs_get_option( 'agent_status', false );
+} // kbs_display_agent_status
 
 /**
  * Whether or not an agent is online.
@@ -150,7 +159,7 @@ function kbs_agent_is_online( $agent_id )	{
 
 	$online = false === $status ? false : true;
 
-	return apply_filters( 'kbs_agent_is_online', $online );
+	return apply_filters( 'kbs_agent_is_online', $online, $agent_id );
 } // kbs_agent_is_online
 
 /**
@@ -171,27 +180,15 @@ function kbs_set_agent_offline( $agent_id = 0 )	{
 add_action( 'login_form_logout', 'kbs_set_agent_offline' );
 
 /**
- * Displays an agents online status icon.
+ * Retrieve an agents online status.
  *
  * @since	1.0
  * @param	int		$agent_id	The user ID of the agent to check
- * @param	bool	$echo		True to echo the indicator, false to return
- * @return	str		Online status indicator icon
+ * @return	str		'online' | 'offline'
  */
-function kbs_agent_display_status_icon( $agent_id, $echo = true )	{
-
+function kbs_get_agent_online_status( $agent_id )	{
 	$status = kbs_agent_is_online( $agent_id ) ? 'online' : 'offline';
+	$status = apply_filters( 'kbs_agent_online_status', $status, $agent_id );
 
-	$img_src   = KBS_PLUGIN_URL . 'assets/images/agent_status_' . $status;
-	$img_alt   = sprintf( __( 'Agent %s', 'kb-support' ), $status );
-	$img_title = sprintf( __( '%s is currently %s', 'kb-support' ), get_userdata( $agent_id )->display_name, $status );
-
-	$icon = ' <img class="kbs_agent_status_' . $status . '" src="' . $img_src . '.gif" alt="' . $img_alt . '" title="' . $img_title . '" height="10" width="10">';
-
-	if ( $echo )	{
-		echo $icon;
-	} else	{
-		return $icon;
-	}
-
-} // kbs_agent_display_status_icon
+	return $status;
+} // kbs_get_agent_online_status
