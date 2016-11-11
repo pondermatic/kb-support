@@ -54,6 +54,29 @@ function kbs_is_agent( $agent_id = 0 )	{
 } // kbs_is_agent
 
 /**
+ * Retrieve the agent with the least ticket count.
+ *
+ * @since	1.0
+ * @return	int		Agent ID
+ */
+function kbs_get_agent_least_tickets()	{
+	$agents    = kbs_get_agents( true );
+	$agent_id  = 0;
+	$low_count = 999999;
+
+	foreach( $agents as $agent )	{
+		$ticket_count = kbs_agent_ticket_count( $agent );
+
+		if ( $ticket_count < $low_count )	{
+			$low_count = $ticket_count;
+			$agent_id  = $agent;
+		}
+	}
+error_log( $agent_id, 0 );
+	return $agent_id;
+} // kbs_get_agent_least_tickets
+
+/**
  * Retrieve a random agent.
  *
  * @since	1.0
@@ -80,7 +103,6 @@ function kbs_get_random_agent()	{
  */
 function kbs_agent_ticket_count( $agent_id )	{
 	$tickets = kbs_count_tickets( array( 'agent' => $agent_id ) );
-
 	$count   = 0;
 
 	if ( ! empty( $tickets ) )	{
@@ -94,6 +116,46 @@ function kbs_agent_ticket_count( $agent_id )	{
 
 	return $count;
 } // kbs_agent_ticket_count
+
+/**
+ * Auto assigns an agent to a ticket.
+ *
+ * @since	1.0
+ * @param	int		$ticket_id		The ticket ID
+ * @param	arr		$ticket_data	Data passed to ticket
+ * @param	obj		$ticket			KBS_Ticket object
+ * @return	void
+ */
+function kbs_auto_assign_agent( $ticket_data )	{
+	$auto_assign = kbs_get_option( 'assign_on_submit', false );
+
+	if ( ! empty( $auto_assign ) )	{
+		switch( $auto_assign )	{
+			case 'least':
+				$ticket_data['agent_id'] = kbs_get_agent_least_tickets();
+				break;
+	
+			case 'random':
+				$ticket_data['agent_id'] = kbs_get_random_agent();		
+				break;
+	
+			default:
+				do_action( 'kbs_auto_assign_agent', $ticket );
+				break;
+		}
+	
+		// If an agent is assigned update status if 'new'
+		if ( ! empty( $ticket_data['agent_id'] ) )	{
+			if ( empty( $ticket_data['status'] ) || 'new' == $ticket_data['status'] )	{
+				$ticket_data['status'] = 'open';
+			}
+		}
+	}
+
+	return $ticket_data;
+
+} // kbs_auto_assign_agent
+//add_filter( 'kbs_add_ticket_data', 'kbs_auto_assign_agent' );
 
 /**
  * Log an agents online status.
