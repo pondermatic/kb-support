@@ -419,9 +419,9 @@ class KBS_Ticket {
 			$this->pending['key'] = $this->key;
 		}
 
-		if ( empty( $this->agent_id ) )	{
+		/*if ( empty( $this->agent_id ) )	{
 			$this->auto_assign_agent();
-		}
+		}*/
 
 		if ( ! empty( $this->form_data ) )	{
 			$this->pending['form_data'] = $this->form_data;
@@ -500,6 +500,10 @@ class KBS_Ticket {
 			$this->customer_id            = $customer->id;
 			$this->pending['customer_id'] = $this->customer_id;
 			$customer->attach_ticket( $this->ID );
+
+			if ( ! empty( $this->agent_id ) )	{
+				$this->pending['agent_id'] = $this->agent_id;
+			}
 
 			if ( ! empty( $this->new_files ) )	{
 				$this->pending['files'] = $this->new_files;
