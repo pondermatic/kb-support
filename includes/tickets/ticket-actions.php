@@ -22,6 +22,10 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function kbs_ticket_customer_reply_action( $data )	{
 
+	if ( ! isset( $data['kbs_ticket_reply'] ) || ! wp_verify_nonce( $_POST['kbs_ticket_reply'], 'kbs-reply-validate' ) )	{
+		wp_die( __( 'Security failed.', 'kb-support' ) );
+	}
+
 	$ticket   = new KBS_Ticket( $data['kbs_ticket_id'] );
 	$redirect = $data['redirect'];
 

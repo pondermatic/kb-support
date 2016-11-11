@@ -62,6 +62,7 @@ function kbs_render_hidden_form_fields( $form_id )	{
 		'kbs_form_id'  => $form_id,
 		'kbs_honeypot' => '',
 		'redirect'     => kbs_get_current_page_url(),
+		'kbs_nonce'    => wp_create_nonce( 'kbs_submission_nonce' ),
 		'action'       => 'kbs_validate_ticket_form'
 	);
 
@@ -72,6 +73,8 @@ function kbs_render_hidden_form_fields( $form_id )	{
 	<?php foreach( $hidden_fields as $key => $value ) : ?>
     	<input type="hidden" name="<?php echo $key; ?>" value="<?php echo $value; ?>" />
     <?php endforeach; ?>
+
+	<?php wp_nonce_field( 'kbs-form-validate', 'kbs_log_ticket' ); ?>
 
     <?php echo ob_get_clean();
 } // kbs_render_hidden_form_fields
@@ -110,6 +113,8 @@ function kbs_render_hidden_reply_fields( $ticket_id )	{
 	<?php foreach( $hidden_fields as $key => $value ) : ?>
     	<input type="hidden" name="<?php echo $key; ?>" value="<?php echo $value; ?>" />
     <?php endforeach; ?>
+
+	<?php wp_nonce_field( 'kbs-reply-validate', 'kbs_ticket_reply' ); ?>
 
     <?php echo ob_get_clean();
 } // kbs_render_hidden_reply_fields

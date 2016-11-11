@@ -662,6 +662,10 @@ function kbs_form_submission_errors( $field_id, $error )	{
  */
 function kbs_process_ticket_submission( $data )	{
 
+	if ( ! isset( $data['kbs_log_ticket'] ) || ! wp_verify_nonce( $_POST['kbs_log_ticket'], 'kbs-form-validate' ) )	{
+		wp_die( __( 'Security failed.', 'kb-support' ) );
+	}
+
 	kbs_do_honeypot_check( $data );
 
 	$form_id  = ! empty( $data['kbs_form_id'] ) ? $data['kbs_form_id'] : '';
