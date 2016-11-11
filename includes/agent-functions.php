@@ -72,7 +72,7 @@ function kbs_get_agent_least_tickets()	{
 			$agent_id  = $agent;
 		}
 	}
-error_log( $agent_id, 0 );
+
 	return $agent_id;
 } // kbs_get_agent_least_tickets
 
@@ -107,9 +107,9 @@ function kbs_agent_ticket_count( $agent_id )	{
 
 	if ( ! empty( $tickets ) )	{
 		$active_statuses = kbs_get_active_ticket_status_keys();
-		foreach( $tickets as $status )	{
-			if ( ! empty( $status ) && in_array( $status, $active_statuses ) )	{
-				$count += $status;
+		foreach( $tickets as $status => $count )	{
+			if ( ! empty( $tickets->$status ) && in_array( $status, $active_statuses ) )	{
+				$count += $count;
 			}
 		}
 	}
