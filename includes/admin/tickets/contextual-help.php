@@ -56,6 +56,7 @@ function kbs_ticket_contextual_help() {
 		) . '</p>'
 	);
 
+	do_action( 'kbs_before_ticket_general_contextual_help' );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-ticket-general',
 		'title'   => __( 'General', 'kb-support' ),
@@ -73,6 +74,7 @@ function kbs_ticket_contextual_help() {
 			'</p>'
 	) );
 
+	do_action( 'kbs_before_ticket_create_contextual_help' );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-ticket-create',
 		'title'   => sprintf( __( 'Create %s', 'kb-support' ), $ticket_singular ),
@@ -91,6 +93,7 @@ function kbs_ticket_contextual_help() {
 			) . '</p>'
 	) );
 
+	do_action( 'kbs_before_ticket_reply_contextual_help' );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-ticket-reply',
 		'title'   => sprintf( __( 'Reply to %s', 'kb-support' ), $ticket_singular ),
@@ -106,6 +109,7 @@ function kbs_ticket_contextual_help() {
 			) . '</p>'
 	) );
 
+	do_action( 'kbs_before_ticket_notes_contextual_help' );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-ticket-notes',
 		'title'   => __( 'Private Notes', 'kb-support' ),
@@ -113,7 +117,7 @@ function kbs_ticket_contextual_help() {
 			'<p>' . __( 'Agents can add private notes to exchange information with other Support Workers. Customers will never see this information.', 'kb-support' ) . '</p>'
 	) );
 
-	do_action( 'kbs_articles_contextual_help' );
+	do_action( 'kbs_ticket_contextual_help' );
 
 } // kbs_ticket_contextual_help
 add_action( 'load-post.php', 'kbs_ticket_contextual_help' );

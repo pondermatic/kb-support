@@ -56,6 +56,7 @@ function kbs_article_contextual_help() {
 		) . '</p>'
 	);
 
+	do_action( 'kbs_before_article_general_contextual_help' );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-article-general',
 		'title'   => __( 'General', 'kb-support' ),
@@ -78,6 +79,7 @@ function kbs_article_contextual_help() {
 			'</p>'
 	) );
 
+	do_action( 'kbs_before_article_linked_contextual_help' );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-article-linked',
 		'title'   => sprintf( __( 'Linked %s', 'kb-support' ), $ticket_plural ),
@@ -89,6 +91,7 @@ function kbs_article_contextual_help() {
 			) . '</p>'
 	) );
 
+	do_action( 'kbs_before_article_options_contextual_help' );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-article-optons',
 		'title'   => __( 'Options', 'kb-support' ),
@@ -99,7 +102,7 @@ function kbs_article_contextual_help() {
 			) . '</p>'
 	) );
 
-	do_action( 'kbs_articles_contextual_help' );
+	do_action( 'kbs_article_contextual_help' );
 
 } // kbs_article_contextual_help
 add_action( 'load-post.php', 'kbs_article_contextual_help' );

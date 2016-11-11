@@ -56,6 +56,7 @@ function kbs_settings_contextual_help() {
 		) . '</p>'
 	);
 
+	do_action( 'kbs_before_settings_general_contextual_help' );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-settings-general',
 		'title'   => __( 'General', 'kb-support' ),
@@ -74,6 +75,7 @@ function kbs_settings_contextual_help() {
 			'</ul>'
 	) );
 
+	do_action( 'kbs_before_settings_tickets_contextual_help' );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-settings-tickets',
 		'title'   => $ticket_plural,
@@ -135,6 +137,7 @@ function kbs_settings_contextual_help() {
 			'</ul>'
 	) );
 
+	do_action( 'kbs_before_settings_articles_contextual_help' );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-settings-articles',
 		'title'   => $article_plural,
@@ -167,5 +170,6 @@ function kbs_settings_contextual_help() {
 	) );
 
 	do_action( 'kbs_settings_contextual_help', $screen );
+
 } // kbs_settings_contextual_help
 add_action( 'load-kbs_ticket_page_kbs-settings', 'kbs_settings_contextual_help' );
