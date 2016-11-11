@@ -82,12 +82,12 @@ if ( ! empty( $ticket->ID ) ) :
                                 <span class="ticket_agent info_item">
                                 	<?php if ( ! empty( $ticket->agent_id ) ) :
 										$agent = get_userdata( $ticket->agent_id )->display_name;
+
+										if ( kbs_display_agent_status() ) :
+											$status_class = 'kbs_agent_status_' . kbs_get_agent_online_status( $ticket->agent_id );
+										endif;
 									else :
 										$agent = __( 'No Agent Assigned', 'kb-support' );
-									endif;
-
-									if ( kbs_display_agent_status() ) :
-										$status_class = 'kbs_agent_status_' . kbs_get_agent_online_status( $ticket->agent_id );
 									endif; ?>
 
                                     <label><?php _e( 'Agent', 'kb-support' ); ?>:</label> <span class="<?php echo $status_class; ?>"><?php echo $agent; ?></span>
