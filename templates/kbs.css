@@ -483,8 +483,10 @@ a.ticket_reply_content	{
 	border: 1px solid #d0d0d0;
 	width: 80%;
 }
-#kbs_search_form input[type=submit], input[type=submit]:hover,
-#kbs_search_form button, button:hover {
+#kbs_search_form input[type=submit],
+#kbs_search_form input[type=submit]:hover,
+#kbs_search_form button,
+#kbs_search_form button:hover {
 	position: relative; 
 	left: -4px;
 	border: 1px solid #d0d0d0;
@@ -497,9 +499,10 @@ a.ticket_reply_content	{
 }
 .kbs-article-search-results .right {
 	float: right;
-}
-.kbs-article-search-results .right {
 	cursor: pointer;
+}
+#kbs-article-results ul	{
+	list-style-type: none;
 }
 
 /* = Articles List
@@ -508,7 +511,7 @@ a.ticket_reply_content	{
 	font-weight: normal;
 }
 #kbs-article-list ul	{
-	list-style-type: circle;
+	list-style-type: disc;
 }
 .article_excerpt	{
 	display: block;

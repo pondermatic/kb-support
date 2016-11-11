@@ -19,7 +19,7 @@ jQuery(document).ready(function ($) {
 
 	$('.kbs-article-search').focusout(function( event )	{
 
-		$('#kbs-article-list').html('');
+		$('#kbs-article-results').html('');
 
 		if ( $(this).val().length < 3 ) {
 			$('.kbs-article-search-results').hide("slow");
@@ -42,10 +42,10 @@ jQuery(document).ready(function ($) {
 			url        : kbs_scripts.ajaxurl,
 			success    : function (response) {
 				if ( response.articles && '' !== response.articles )	{
-					$('#kbs-article-list').html(response.articles);
+					$('#kbs-article-results').html(response.articles);
 					$('.kbs-article-search-results').show("slow");
 				} else	{
-					$('#kbs-article-list').html();
+					$('#kbs-article-results').html();
 					$('.kbs-article-search-results').hide("slow");
 				}
 			},
