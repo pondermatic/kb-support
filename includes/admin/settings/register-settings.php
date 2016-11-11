@@ -437,7 +437,7 @@ function kbs_get_registered_settings() {
 					),
 					'article_num_posts_ajax' => array(
 						'id'      => 'article_num_posts_ajax',
-						'name'    => __( 'Number of Posts from Ajax', 'kb-support' ),
+						'name'    => __( 'Number of Results from Ajax', 'kb-support' ),
 						'desc'    => sprintf( __( 'Enter the number of suggested %s that should be returned from the submission form Ajax search.', 'kb-support' ), kbs_get_article_label_plural() ),
 						'type'    => 'number',
 						'step'    => '1',
