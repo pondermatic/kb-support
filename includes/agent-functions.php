@@ -54,6 +54,57 @@ function kbs_is_agent( $agent_id = 0 )	{
 } // kbs_is_agent
 
 /**
+ * Whether or not an agent can view the ticket.
+ *
+ * @since	1.0
+ * @param	int|obj	$ticket		The ticket ID or a KBS_Ticket class object
+ * @param	int		$agent_id	The user ID of the agent.
+ * @return	bool	True if agent can view, otherwise false
+ */
+function kbs_agent_can_access_ticket( $ticket = '', $agent_id = '' )	{
+
+	if ( empty( $ticket ) )	{
+		return false;
+	}
+
+	if ( is_numeric( $ticket ) )	{
+		$ticket = new KBS_Ticket( $ticket );
+		if ( empty( $ticket->ID ) )	{
+			return false;
+		}
+	}
+
+	if ( ! kbs_get_option( 'admin_agents' ) && current_user_can( 'administrator' ) )	{
+		return false;
+	}
+
+	if ( empty( $agent_id ) )	{
+		$agent_id = get_current_user_id();
+	}
+
+	$return   = false;
+	$restrict = kbs_get_option( 'restrict_agent_view' );
+
+	if ( ! $restrict )	{
+		$return = true;
+	}
+
+	if ( empty( $ticket->agent_id ) || $agent_id == $ticket->agent_id )	{
+		$return = true;
+	}
+
+	$allowed_statuses = array( 'new', 'auto-draft', 'draft' );
+	if ( in_array( get_post_status( $ticket->ID ), $allowed_statuses ) )	{
+		$return = true;
+	}
+
+	$return = apply_filters( 'kbs_agent_can_access_ticket', $return, $ticket, $agent_id );
+
+	return (bool) $return;
+
+} // kbs_agent_can_access_ticket
+
+/**
  * Retrieve the agent with the least ticket count.
  *
  * @since	1.0

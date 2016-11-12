@@ -220,6 +220,48 @@ function kb_tickets_post_column_sla( $ticket_id, $kbs_ticket )	{
 } // kb_tickets_post_column_sla
 
 /**
+ * Filter tickets query so agents only see their own tickets and new tickets.
+ *
+ * @since	1.0
+ * @return	void
+ */
+function kbs_restrict_agent_ticket_view( $query )	{
+
+	if ( ! is_admin() || 'kbs_ticket' != $query->get( 'post_type' ) )	{
+		return;
+	}
+
+	// If user is admin and admins are agents, they see all.
+	if ( kbs_get_option( 'admin_agents' ) && current_user_can( 'administrator' ) )	{
+		return;
+	}
+
+	if ( kbs_get_option( 'restrict_agent_view', false ) )	{
+		$agent_id = get_current_user_id();
+
+		$query->set( 'meta_query', array(
+			'relation' => 'OR',
+			array(
+				'key'     => '_kbs_ticket_agent_id',
+				'value'   => $agent_id,
+				'type'    => 'NUMERIC'
+			),
+			array(
+				'key'     => '_kbs_ticket_agent_id',
+				'value'   => ''
+			),
+			array(
+				'key'     => '_kbs_ticket_agent_id',
+				'value'   => 'anything',
+				'compare' => 'NOT EXISTS'
+			)
+	   ) );
+  }
+
+} // kbs_restrict_agent_ticket_view
+add_action( 'pre_get_posts', 'kbs_restrict_agent_ticket_view' );
+
+/**
  * Add Ticket Filters
  *
  * Adds taxonomy drop down filters for tickets.
@@ -278,12 +320,12 @@ function kbs_add_ticket_filters() {
 add_action( 'restrict_manage_posts', 'kbs_add_ticket_filters', 100 );
 
 /**
- * Filter posts by customer.
+ * Filter tickets by customer.
  *
  * @since	1.0
  * @return	void
  */
-function kbs_filter_customer_posts( $query )	{
+function kbs_filter_customer_tickets( $query )	{
 	if ( ! is_admin() || 'kbs_ticket' != $query->get( 'post_type' ) || ! isset( $_GET['customer'] ) )	{
 		return;
 	}
@@ -291,8 +333,8 @@ function kbs_filter_customer_posts( $query )	{
 	$query->set( 'meta_key', '_kbs_ticket_customer_id' );
 	$query->set( 'meta_value', $_GET['customer'] );
 	$query->set( 'meta_type', 'NUMERIC' );
-} // kbs_filter_customer_posts
-add_action( 'pre_get_posts', 'kbs_filter_customer_posts' );
+} // kbs_filter_customer_tickets
+add_action( 'pre_get_posts', 'kbs_filter_customer_tickets' );
 
 /**
  * Remove action items from the bulk item menu and post row action list.
