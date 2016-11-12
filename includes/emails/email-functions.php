@@ -25,6 +25,13 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function kbs_email_ticket_received( $ticket_id, $admin_notice = true ) {
 
+	$disable = kbs_get_option( 'ticket_received_disable_email', false );
+	$disable = apply_filters( 'kbs_ticket_received_disable_email', $disable );
+	
+	if ( ! empty( $disable ) )	{
+		return;
+	}
+
 	$single       = kbs_get_ticket_label_singular();
 	$ticket       = new KBS_Ticket( $ticket_id );
 	$ticket_data  = $ticket->get_meta();

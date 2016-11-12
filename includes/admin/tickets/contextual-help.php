@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
- * KB Articles contextual help.
+ * Ticket contextual help.
  *
  * @since       1.0
  * @return      void
@@ -56,7 +56,7 @@ function kbs_ticket_contextual_help() {
 		) . '</p>'
 	);
 
-	do_action( 'kbs_before_ticket_general_contextual_help' );
+	do_action( 'kbs_ticket_before_general_contextual_help' );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-ticket-general',
 		'title'   => __( 'General', 'kb-support' ),
@@ -74,7 +74,7 @@ function kbs_ticket_contextual_help() {
 			'</p>'
 	) );
 
-	do_action( 'kbs_before_ticket_create_contextual_help' );
+	do_action( 'kbs_ticket_before_create_contextual_help' );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-ticket-create',
 		'title'   => sprintf( __( 'Create %s', 'kb-support' ), $ticket_singular ),
@@ -93,7 +93,7 @@ function kbs_ticket_contextual_help() {
 			) . '</p>'
 	) );
 
-	do_action( 'kbs_before_ticket_reply_contextual_help' );
+	do_action( 'kbs_ticket_before_reply_contextual_help' );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-ticket-reply',
 		'title'   => sprintf( __( 'Reply to %s', 'kb-support' ), $ticket_singular ),
@@ -109,7 +109,7 @@ function kbs_ticket_contextual_help() {
 			) . '</p>'
 	) );
 
-	do_action( 'kbs_before_ticket_notes_contextual_help' );
+	do_action( 'kbs_ticket_before_notes_contextual_help' );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-ticket-notes',
 		'title'   => __( 'Private Notes', 'kb-support' ),

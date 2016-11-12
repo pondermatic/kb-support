@@ -119,10 +119,7 @@ class KBS_Form {
 	 * @return	str
 	 */
 	public function get_shortcode() {
-
-		$shortcode = '[kbs_submit form="' . $this->ID . '"]';
-
-		return $shortcode;
+		return kbs_get_form_shortcode( $this->ID );
 	} // get_shortcode
 
 	/**
@@ -163,7 +160,6 @@ class KBS_Form {
 			'select_options'  => $select_options,
 			'select_multiple' => ! empty( $data['select_multiple'] ) ? true                                        : false,
 			'selected'        => ! empty( $data['selected'] )        ? true                                        : false,
-			'maxfiles'        => ! empty( $data['maxfiles'] )        ? $data['maxfiles']                           : false,
 			'chosen'          => ! empty( $data['chosen'] )          ? true                                        : false,
 			'description'     => ! empty( $data['description'] )     ? sanitize_text_field( $data['description'] ) : '',
 			'description_pos' => ! empty( $data['description_pos'] ) ? $data['description_pos']                    : 'label',
@@ -220,7 +216,6 @@ class KBS_Form {
 			'select_options'  => ! empty( $data['select_options'] )  ? explode( "\n", $data['select_options'] )    : '',
 			'select_multiple' => ! empty( $data['select_multiple'] ) ? true                                        : false,
 			'selected'        => ! empty( $data['selected'] )        ? true                                        : false,
-			'maxfiles'        => ! empty( $data['maxfiles'] )        ? $data['maxfiles']                           : false,
 			'chosen'          => ! empty( $data['chosen'] )          ? true                                        : false,
 			'description'     => ! empty( $data['description'] )     ? sanitize_text_field( $data['description'] ) : '',
 			'description_pos' => ! empty( $data['description_pos'] ) ? $data['description_pos']                    : 'label',

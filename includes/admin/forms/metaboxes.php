@@ -515,7 +515,7 @@ function kbs_render_field_options_rows( $post_id )	{
 	global $kbs_edit_field;
 
 	?>
-    
+
     <div id="kbs_meta_field_kb_search_wrap">
     	<p><label for="kbs_field_kb_search">
 			<?php echo KBS()->html->checkbox( array(
@@ -525,7 +525,7 @@ function kbs_render_field_options_rows( $post_id )	{
 			<strong><?php printf( __( 'Enable %s Ajax Search?', 'kb-support' ), kbs_get_article_label_plural() ); ?></strong></label>
         </p>
     </div>
-    
+
     <div id="kbs_meta_field_select_options_wrap">
     	<p><strong><?php _e( 'Options', 'kb-support' ); ?></strong><br />
 		<label for="kbs_field_select_options">
@@ -537,7 +537,7 @@ function kbs_render_field_options_rows( $post_id )	{
 			) ); ?>
 		</label></p>
     </div>
-    
+
     <div id="kbs_meta_field_select_multiple_wrap">
     	<p><label for="kbs_field_select_multiple">
 			<?php echo KBS()->html->checkbox( array(
@@ -547,7 +547,7 @@ function kbs_render_field_options_rows( $post_id )	{
 			<strong><?php _e( 'Multiple Select?', 'kb-support' ); ?></strong></label>
         </p>
     </div>
-    
+
     <div id="kbs_meta_field_option_selected_wrap">
     	<p><label for="kbs_field_option_selected">
 			<?php echo KBS()->html->checkbox( array(
@@ -557,7 +557,7 @@ function kbs_render_field_options_rows( $post_id )	{
 			<strong><?php _e( 'Initially Selected?', 'kb-support' ); ?></strong></label>
         </p>
     </div>
-    
+
     <div id="kbs_meta_field_select_searchable_wrap">
     	<p><label for="kbs_field_select_chosen">
 			<?php echo KBS()->html->checkbox( array(
@@ -567,19 +567,6 @@ function kbs_render_field_options_rows( $post_id )	{
 			<strong><?php _e( 'Searchable?', 'kb-support' ); ?></strong></label>
         </p>
     </div>
-    
-    <div id="kbs_meta_field_maxfiles_wrap">
-		<p><strong><?php _e( 'Maximum Files', 'kb-support' ); ?></strong><br />
-        <label for="kbs_field_maxfiles">
-			<?php echo KBS()->html->number( array(
-				'name'  => 'kbs_field_maxfiles',
-				'value' => ! empty( $kbs_edit_field->settings['maxfiles'] ) ? $kbs_edit_field->settings['maxfiles'] : null,
-				'class' => 'small-text kbs_input',
-				'min'   => 1,
-				'max'   => kbs_get_option( 'file_uploads' )
-			) ); ?>
-		</label></p>
-	</div>
     
     <div id="kbs_meta_field_placeholder_wrap">
     	<p><strong><?php _e( 'Placeholder', 'kb-support' ); ?></strong><br />
@@ -591,7 +578,7 @@ function kbs_render_field_options_rows( $post_id )	{
 			) ); ?>
 		</label></p>
     </div>
-    
+
     <div id="kbs_meta_field_hide_label_wrap">
 		<p><label for="kbs_field_hide_label">
 			<?php echo KBS()->html->checkbox( array(
@@ -614,9 +601,9 @@ add_action( 'kbs_form_mb_field_options', 'kbs_render_field_options_rows', 10, 1 
  * @return	void
  */
 function kbs_maybe_editing_field()	{
-	
+
 	global $kbs_edit_field;
-	
+
 	if ( ! isset( $_GET['kbs-action'], $_GET['field_id'] ) )	{
 		$kbs_edit_field = false;
 	} else	{

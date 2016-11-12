@@ -25,6 +25,7 @@ Key Features of KB Support include:
 * A fully responsive and clean front end design where customers can manage their tickets, including viewing and creating replies
 * Integrated Knowledge Base Articles can be easily created and referenced to try and offer solutions without tickets being created
 * Ability to *Restrict* individual knowledge base articles so that only logged in users can access them. Useful for your premium paid products
+* Auto assign new tickets to agents based on current ticket count, or randomly
 * Tracks an agents status so you can see if they are online or offline
 * A number of useful shortcodes to display submission forms, KB Article lists, ticket history, login/registration forms, profile editor, KB Article search form - and more
 * A bunch of hooks and filters for our developer friends

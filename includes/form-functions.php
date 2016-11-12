@@ -127,6 +127,20 @@ function kbs_get_form( $form_id )	{
 } // kbs_get_form
 
 /**
+ * Retrieve the form shortcode.
+ *
+ * @since	1.0
+ * @param	int		$form_id	The form ID
+ * @return	str
+ */
+function kbs_get_form_shortcode( $form_id ) {
+	$shortcode = '[kbs_submit form="' . $form_id . '"]';
+	$shortcode = apply_filters( 'kbs_form_shortcode', $shortcode, $form_id );
+
+	return $shortcode;
+} // kbs_get_form_shortcode
+
+/**
  * Whether or not a form has the mandatory email field.
  *
  * @since	1.0
@@ -239,7 +253,6 @@ function kbs_add_default_fields_to_form( $form_id )	{
 				'select_options'  => '',
 				'select_multiple' => false,
 				'selected'        => false,
-				'maxfiles'        => false,
 				'chosen'          => false,
 				'placeholder'     => '',
 				'description'     => '',

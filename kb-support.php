@@ -219,9 +219,6 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-roles.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-cron.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-license-handler.php';
-		require_once KBS_PLUGIN_DIR . 'includes/admin/customers/customers-page.php';
-		require_once KBS_PLUGIN_DIR . 'includes/admin/customers/customer-functions.php';
-		require_once KBS_PLUGIN_DIR . 'includes/admin/customers/customer-actions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/article-actions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/class-kbs-articles-query.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/article-functions.php';
@@ -256,6 +253,10 @@ final class KB_Support {
 			require_once KBS_PLUGIN_DIR . 'includes/admin/admin-actions.php';
 			require_once KBS_PLUGIN_DIR . '/includes/admin/admin-pages.php';
 			require_once KBS_PLUGIN_DIR . '/includes/admin/admin-notices.php';
+			require_once KBS_PLUGIN_DIR . 'includes/admin/customers/customers-page.php';
+			require_once KBS_PLUGIN_DIR . 'includes/admin/customers/customer-functions.php';
+			require_once KBS_PLUGIN_DIR . 'includes/admin/customers/customer-actions.php';
+			require_once KBS_PLUGIN_DIR . 'includes/admin/customers/contextual-help.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/tickets/tickets.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/tickets/metaboxes.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/tickets/contextual-help.php';
@@ -265,6 +266,7 @@ final class KB_Support {
 			require_once KBS_PLUGIN_DIR . 'includes/admin/forms/forms.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/forms/metaboxes.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/forms/form-actions.php';
+			require_once KBS_PLUGIN_DIR . 'includes/admin/forms/contextual-help.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/settings/display-settings.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/settings/contextual-help.php';
 		}

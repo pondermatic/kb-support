@@ -377,7 +377,7 @@ function kbs_get_registered_settings() {
 						'id'      => 'sla_tracking',
 						'name'    => __( 'Enable SLA Tracking', 'kb-support' ),
 						'type'    => 'checkbox',
-						'std'     => '1'
+						'std'     => '0'
 					),
 					'sla_response_time' => array(
 						'id'      => 'sla_response_time',
@@ -505,7 +505,12 @@ function kbs_get_registered_settings() {
 						'name' => '<h3>' . sprintf( __( '%s Received', 'kb-support' ), $single ) . '</h3>',
 						'type' => 'header'
 					),
-					
+					'ticket_received_disable_email' => array(
+						'id'   => 'ticket_received_disable_email',
+						'name' => __( 'Disable this Email', 'kb-support' ),
+						'desc' => sprintf( __( 'Select to stop emails being sent when a %s is logged.', 'kb-support' ), strtolower( $single ) ),
+						'type' => 'checkbox'
+					),
 					'ticket_subject' => array(
 						'id'   => 'ticket_subject',
 						'name' => __( 'Email Subject', 'kb-support' ),
@@ -534,6 +539,12 @@ function kbs_get_registered_settings() {
 						'name' => '<h3>' . sprintf( __( '%s Notifications', 'kb-support' ), $single ) . '</h3>',
 						'type' => 'header'
 					),
+					'disable_admin_notices' => array(
+						'id'   => 'disable_admin_notices',
+						'name' => __( 'Disable Admin Notifications', 'kb-support' ),
+						'desc' => sprintf( __( 'Check this box to disable admin %s notification emails.', 'kb-support' ), strtolower( $single ) ),
+						'type' => 'checkbox'
+					),
 					'ticket_notification_subject' => array(
 						'id'   => 'ticket_notification_subject',
 						'name' => sprintf( __( '%s Notification Subject', 'kb-support' ), $single ),
@@ -559,12 +570,6 @@ function kbs_get_registered_settings() {
 						'desc' => sprintf( __( 'Enter the email address(es) that should receive a notification anytime a %s is logged, one per line', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'textarea',
 						'std'  => get_bloginfo( 'admin_email' )
-					),
-					'disable_admin_notices' => array(
-						'id'   => 'disable_admin_notices',
-						'name' => __( 'Disable Admin Notifications', 'kb-support' ),
-						'desc' => sprintf( __( 'Check this box if you do not want to receive %s notification emails.', 'kb-support' ), $single ),
-						'type' => 'checkbox'
 					)
 				),
 				'ticket_reply' => array(
@@ -575,7 +580,7 @@ function kbs_get_registered_settings() {
 					),
 					'ticket_reply_disable_email' => array(
 						'id'   => 'ticket_reply_disable_email',
-						'name' => __( 'Disable this Notification', 'kb-support' ),
+						'name' => __( 'Disable this Email', 'kb-support' ),
 						'desc' => sprintf( __( 'Select to stop emails being sent when a %s reply is added.', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'checkbox'
 					),
@@ -613,7 +618,7 @@ function kbs_get_registered_settings() {
 					),
 					'ticket_closed_disable_email' => array(
 						'id'   => 'ticket_closed_disable_email',
-						'name' => __( 'Disable this Notification', 'kb-support' ),
+						'name' => __( 'Disable this Email', 'kb-support' ),
 						'desc' => sprintf( __( 'Select to stop emails being sent when a %s is closed.', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'checkbox'
 					),
@@ -657,28 +662,8 @@ function kbs_get_registered_settings() {
 					'disable_styles' => array(
 						'id'   => 'disable_styles',
 						'name' => __( 'Disable Styles', 'kb-support' ),
-						'desc' => __( 'Check this to disable all included styling of buttons, checkout fields, and all other elements.', 'kb-support' ),
+						'desc' => __( 'Check this to disable all KB Support default styling of buttons, fields, and all other elements.', 'kb-support' ),
 						'type' => 'checkbox'
-					),
-					'button_header' => array(
-						'id'   => 'button_header',
-						'name' => '<strong>' . __( 'Buttons', 'kb-support' ) . '</strong>',
-						'desc' => sprintf( __( 'Options for submit %s buttons', 'kb-support' ), strtolower( $single ) ),
-						'type' => 'header'
-					),
-					'button_style' => array(
-						'id'      => 'button_style',
-						'name'    => __( 'Default Button Style', 'kb-support' ),
-						'desc'    => __( 'Choose the style you want to use for the buttons.', 'kb-support' ),
-						'type'    => 'select',
-						'options' => kbs_get_button_styles()
-					),
-					'checkout_color' => array(
-						'id'      => 'checkout_color',
-						'name'    => __( 'Default Button Color', 'kb-support' ),
-						'desc'    => __( 'Choose the color you want to use for the buttons.', 'kb-support' ),
-						'type'    => 'color_select',
-						'options' => kbs_get_button_colors()
 					)
 				)
 			)
@@ -964,13 +949,13 @@ function kbs_get_registered_settings_sections() {
 			'main'                 => sprintf( __( 'General %s Settings', 'kb-support' ), $single ),
 			'submit'               => __( 'Submission Settings', 'kb-support' ),
 			'assign'               => sprintf( __( '%s Assignment', 'kb-support' ), $single ),
-			'sla'                  => __( 'Service Levels', 'kb-support' )
+			//'sla'                  => __( 'Service Levels', 'kb-support' )
 		) ),
 		'articles'        => apply_filters( 'kbs_settings_sections_articles', array(
 			'main'                 => sprintf( __( 'General %s Settings', 'kb-support' ), $single )
 		) ),
 		'emails'     => apply_filters( 'kbs_settings_sections_emails', array(
-			'main'                 => __( 'Emails', 'kb-support' ),
+			'main'                 => __( 'Email Settings', 'kb-support' ),
 			'ticket_logged'        => sprintf( __( '%s Logged', 'kb-support' ), $single ),
 			'ticket_notifications' => sprintf( __( '%s Notifications', 'kb-support' ), $single ),
 			'ticket_reply'         => __( 'Reply Added', 'kb-support' ),

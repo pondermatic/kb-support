@@ -295,14 +295,14 @@ jQuery(document).ready(function ($) {
 					 || 'textarea'   == kbs_selected_field
 					 || 'url'        == kbs_selected_field
 				)	{
-						 
+
 					$('#kbs_meta_field_placeholder_wrap').show();
 					$('#kbs_meta_field_hide_label_wrap').show();
 				} else	{
 					$('#kbs_meta_field_placeholder_wrap').hide();
 					$('#kbs_meta_field_hide_label_wrap').hide();
 				}
-				
+
 				if ( 'select'          == kbs_selected_field
 					|| 'checkbox_list' == kbs_selected_field
 					|| 'radio'         == kbs_selected_field
@@ -311,13 +311,13 @@ jQuery(document).ready(function ($) {
 				} else	{
 					$('#kbs_meta_field_select_options_wrap').hide();
 				}
-				
+
 				if ( 'select' == kbs_selected_field )	{
 					$('#kbs_meta_field_select_multiple_wrap').show();
 				} else	{
 					$('#kbs_meta_field_select_multiple_wrap').hide();
 				}
-				
+
 				if ( 'select' == kbs_selected_field
 					|| 'article_category_dropdown'     == kbs_selected_field
 					|| 'ticket_category_dropdown' == kbs_selected_field
@@ -326,13 +326,13 @@ jQuery(document).ready(function ($) {
 				} else	{
 					$('#kbs_meta_field_select_searchable_wrap').hide();
 				}
-				
+
 				if ( 'checkbox' == kbs_selected_field )	{
 					$('#kbs_meta_field_option_selected_wrap').show();
 				} else	{
 					$('#kbs_meta_field_option_selected_wrap').hide();
 				}
-				
+
 				if ( 'checkbox'      == kbs_selected_field
 					|| 'file_upload' == kbs_selected_field
 				)	{
@@ -340,13 +340,7 @@ jQuery(document).ready(function ($) {
 				} else	{
 					$('#kbs_meta_field_required_wrap').show();
 				}
-				
-				if ( 'file_upload' == kbs_selected_field )	{
-					$('#kbs_meta_field_maxfiles_wrap').show();
-				} else	{
-					$('#kbs_meta_field_maxfiles_wrap').hide();
-				}
-				
+			
 				if ( 'recaptcha' == kbs_selected_field )	{
 					$('#kbs_meta_field_required_wrap').hide();
 					$('#kbs_meta_field_label_class_wrap').hide();
@@ -424,7 +418,6 @@ jQuery(document).ready(function ($) {
 					select_options   : $('textarea#kbs_field_select_options').val(),
 					select_multiple  : ( $('#kbs_field_select_multiple').is(':checked') ) ? $('#kbs_field_select_multiple').val() : 0,
 					selected         : ( $('#kbs_field_option_selected').is(':checked') ) ? $('#kbs_field_option_selected').val() : 0,
-					maxfiles         : $('#kbs_field_maxfiles').val(),
 					chosen           : ( $('#kbs_field_select_chosen').is(':checked') )   ? $('#kbs_field_select_chosen').val()   : 0,
 					description      : $('#kbs_field_description').val(),
 					description_pos  : $('input[name=kbs_field_description_pos]').filter(':checked').val(),
@@ -485,7 +478,6 @@ jQuery(document).ready(function ($) {
 					select_options   : $('textarea#kbs_field_select_options').val(),
 					select_multiple  : ( $('#kbs_field_select_multiple').is(':checked') ) ? $('#kbs_field_select_multiple').val() : 0,
 					selected         : ( $('#kbs_field_option_selected').is(':checked') ) ? $('#kbs_field_option_selected').val() : 0,
-					maxfiles         : $('#kbs_field_maxfiles').val(),
 					chosen           : ( $('#kbs_field_select_chosen').is(':checked') )   ? $('#kbs_field_select_chosen').val()   : 0,
 					placeholder      : $('#kbs_field_placeholder').val(),
 					description      : $('#kbs_field_description').val(),

@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) )
 function kbs_article_contextual_help() {
 	$screen = get_current_screen();
 
-	if ( $screen->id != 'article' )	{
+	if ( 'article' != $screen->id )	{
 		return;
 	}
 
@@ -56,7 +56,7 @@ function kbs_article_contextual_help() {
 		) . '</p>'
 	);
 
-	do_action( 'kbs_before_article_general_contextual_help' );
+	do_action( 'kbs_article_before_general_contextual_help' );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-article-general',
 		'title'   => __( 'General', 'kb-support' ),
@@ -79,7 +79,7 @@ function kbs_article_contextual_help() {
 			'</p>'
 	) );
 
-	do_action( 'kbs_before_article_linked_contextual_help' );
+	do_action( 'kbs_article_before_linked_contextual_help' );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-article-linked',
 		'title'   => sprintf( __( 'Linked %s', 'kb-support' ), $ticket_plural ),
@@ -91,7 +91,7 @@ function kbs_article_contextual_help() {
 			) . '</p>'
 	) );
 
-	do_action( 'kbs_before_article_options_contextual_help' );
+	do_action( 'kbs_article_before_options_contextual_help' );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-article-optons',
 		'title'   => __( 'Options', 'kb-support' ),

@@ -22,14 +22,11 @@ if ( ! defined( 'ABSPATH' ) )
 function kbs_settings_contextual_help() {
 	$screen = get_current_screen();
 
-	if ( $screen->id != 'kbs_ticket_page_kbs-settings' )	{
-		return;
-	}
-
 	$article_singular = kbs_get_article_label_singular();
 	$article_plural   = kbs_get_article_label_plural();
 	$ticket_singular  = kbs_get_ticket_label_singular();
 	$ticket_plural    = kbs_get_ticket_label_plural();
+	$settings         = kbs_get_registered_settings();
 
 	$screen->set_help_sidebar(
 		'<p><strong>' . __( 'More Information:', 'kb-support' ) . '</strong></p>' .
@@ -56,7 +53,7 @@ function kbs_settings_contextual_help() {
 		) . '</p>'
 	);
 
-	do_action( 'kbs_before_settings_general_contextual_help' );
+	do_action( 'kbs_settings_before_general_contextual_help' );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-settings-general',
 		'title'   => __( 'General', 'kb-support' ),
@@ -75,7 +72,7 @@ function kbs_settings_contextual_help() {
 			'</ul>'
 	) );
 
-	do_action( 'kbs_before_settings_tickets_contextual_help' );
+	do_action( 'kbs_settings_before_tickets_contextual_help' );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-settings-tickets',
 		'title'   => $ticket_plural,
@@ -137,7 +134,7 @@ function kbs_settings_contextual_help() {
 			'</ul>'
 	) );
 
-	do_action( 'kbs_before_settings_articles_contextual_help' );
+	do_action( 'kbs_settings_before_articles_contextual_help' );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-settings-articles',
 		'title'   => $article_plural,
@@ -166,6 +163,142 @@ function kbs_settings_contextual_help() {
 					__( '<strong>Search Excerpt Length</strong> - Enter the number of characters that should be displayed from a %1$s during an ajax search.', 'kb-support' ),
 					strtolower( $ticket_singular )
 				) . '</li>' .
+			'</ul>'
+	) );
+
+	do_action( 'kbs_settings_before_emails_contextual_help' );
+	$screen->add_help_tab( array(
+		'id'      => 'kbs-settings-emails',
+		'title'   => __( 'Emails', 'kb-support' ),
+		'content' =>
+			'<p>' . __( '<strong>Email Settings</strong>', 'kb-support' ) . '</p>' .
+			'<ul>' .
+				'<li>' . __( '<strong>From Name</strong> - Enter the name you want KB Support generated emails to come from.', 'kb-support' ) . '</li>' .
+				'<li>' . __( '<strong>From Email</strong> - Enter the email address KB Support generated emails should come from.', 'kb-support' ) . '</li>' .
+				'<li>' . __( '<strong>Email Template</strong> - Select <code>Default Template</code> to send HTML emails, or select plain text only (no formatting).', 'kb-support' ) . '</li>' .
+				'<li>' . __( '<strong>Logo</strong> - Upload your logo and it will appear at the top of all KB Support generated HTML emails.', 'kb-support' ) . '</li>' .
+			'</ul>' .
+			'<p>' . sprintf( __( '<strong>%s Logged</strong>', 'kb-support' ), $ticket_singular ) . '<br />' .
+				sprintf( __( '<em>Adjust the settings for emails that are sent to a customer when they have logged a %1$s via a submission form.</em>', 'kb-support' ), strtolower( $ticket_singular ) ) . '</p>' .
+			'<ul>' .
+				'<li>' . sprintf( __( '<strong>Disable this Email</strong> - Select to stop emails being sent to the customer when they have logged a %1$s.', 'kb-support' ),
+				strtolower( $ticket_singular )
+				) . '</li>' .
+				'<li>' . sprintf( __( '<strong>Email Subject</strong> - Enter the subject for the email sent to customers when a %1$s is logged by them.', 'kb-support' ),
+				strtolower( $ticket_singular )
+				) . '</li>' .
+				'<li>' . sprintf( __( '<strong>Email Heading</strong> - Enter the heading to be displayed at the top of the email content for the email sent to customers when a %1$s is logged by them.', 'kb-support' ),
+				strtolower( $ticket_singular )
+				) . '</li>' .
+				'<li>' . sprintf( __( '<strong>Content</strong> - Enter the content of the email that is sent to a customer when they have logged a %1$s. A list of email tags you can use are displayed under the textarea.', 'kb-support' ),
+				strtolower( $ticket_singular )
+				) . '</li>' .
+			'</ul>' .
+			'<p>' . sprintf( __( '<strong>%s Notifications</strong>', 'kb-support' ), $ticket_singular ) . '<br />' .
+				sprintf( __( '<em>Adjust the settings for emails that are sent to Support Workers when a new %1$s is logged.</em>', 'kb-support' ), strtolower( $ticket_singular ) ) . '</p>' .
+			'<ul>' .
+				'<li>' . sprintf( __( '<strong>Disable Admin Notifications</strong> - Select to stop emails being sent to Support Workers when a new %1$s is logged.', 'kb-support' ),
+				strtolower( $ticket_singular )
+				) . '</li>' .
+				'<li>' . sprintf( __( '<strong>%1$s Notification Subject</strong> - Enter the subject for the email sent to Support Workers a new %2$s is logged.', 'kb-support' ),
+				$ticket_singular,
+				strtolower( $ticket_singular )
+				) . '</li>' .
+				'<li>' . sprintf( __( '<strong>%1$s Notification</strong> - Enter the content of the email that is sent to Support Workers when a %2$s is logged. A list of email tags you can use are displayed under the textarea.', 'kb-support' ),
+				$ticket_singular,
+				strtolower( $ticket_singular )
+				) . '</li>' .
+			'</ul>' .
+			'<p>' . __( '<strong>Reply Added</strong>', 'kb-support' ) . '<br />' .
+				sprintf( __( '<em>Adjust the settings for emails that are sent to a customer when a Support Worker adds a reply to their %1$s.</em>', 'kb-support' ), strtolower( $ticket_singular ) ) . '</p>' .
+			'<ul>' .
+				'<li>' . sprintf( __( '<strong>Disable this Email</strong> - Select to stop emails being sent to the customer when they receive a reply to their %1$s.', 'kb-support' ),
+				strtolower( $ticket_singular )
+				) . '</li>' .
+				'<li>' . sprintf( __( '<strong>Email Subject</strong> - Enter the subject for the email sent to customers when a Support Worker has added a reply to their %1$s.', 'kb-support' ),
+				strtolower( $ticket_singular )
+				) . '</li>' .
+				'<li>' . sprintf( __( '<strong>Email Heading</strong> - Enter the heading to be displayed at the top of the email content for the email sent to customers when a reply is added to their %1$s.', 'kb-support' ),
+				strtolower( $ticket_singular )
+				) . '</li>' .
+				'<li>' . sprintf( __( '<strong>Content</strong> - Enter the content of the email that is sent to a customer when they receive a reply to their %1$s. A list of email tags you can use are displayed under the textarea.', 'kb-support' ),
+				strtolower( $ticket_singular )
+				) . '</li>' .
+			'</ul>' .
+			'<p>' . sprintf( __( '<strong>%1$s Closed</strong>', 'kb-support' ), $ticket_singular ) . '<br />' .
+				sprintf( __( '<em>Adjust the settings for emails that are sent to a customer when a Support Worker closes their %1$s.</em>', 'kb-support' ), strtolower( $ticket_singular ) ) . '</p>' .
+			'<ul>' .
+				'<li>' . sprintf( __( '<strong>Disable this Email</strong> - Select to stop emails being sent to the customer when their %1$s is closed.', 'kb-support' ),
+				strtolower( $ticket_singular )
+				) . '</li>' .
+				'<li>' . sprintf( __( '<strong>Email Subject</strong> - Enter the subject for the email sent to customers when a Support Worker has closed their %1$s.', 'kb-support' ),
+				strtolower( $ticket_singular )
+				) . '</li>' .
+				'<li>' . sprintf( __( '<strong>Email Heading</strong> - Enter the heading to be displayed at the top of the email content for the email sent to customers when a their %1$s is closed.', 'kb-support' ),
+				strtolower( $ticket_singular )
+				) . '</li>' .
+				'<li>' . sprintf( __( '<strong>Content</strong> - Enter the content of the email that is sent to a customer when their %1$s is closed. A list of email tags you can use are displayed under the textarea.', 'kb-support' ),
+				strtolower( $ticket_singular )
+				) . '</li>' .
+			'</ul>'
+	) );
+
+	do_action( 'kbs_settings_before_styles_contextual_help' );
+	$screen->add_help_tab( array(
+		'id'      => 'kbs-settings-styles',
+		'title'   => __( 'Styles', 'kb-support' ),
+		'content' =>
+			'<p>' . __( '<strong>Disable Styles</strong> - Select this option to stop KB Support loading its CSS style sheet. All default formatting of forms, fields and all other elements will be inherited from your currently active theme.', 'kb-support' ) . '</p>'
+	) );
+
+	if ( ! empty( $settings['extensions'] ) )	{
+		do_action( 'kbs_settings_before_extensions_contextual_help' );
+		$screen->add_help_tab( array(
+			'id'      => 'kbs-settings-extensions',
+			'title'   => __( 'Extensions', 'kb-support' ),
+			'content' =>
+				'<p>' . __( 'The configuration settings for any KB Support extensions you have installed are controlled here.', 'kb-support' ) . '</p>'
+		) );
+		do_action( 'kbs_settings_extensions_contextual_help' );
+	}
+
+	if ( ! empty( $settings['licenses'] ) )	{
+		do_action( 'kbs_settings_before_licenses_contextual_help' );
+		$screen->add_help_tab( array(
+			'id'      => 'kbs-settings-licenses',
+			'title'   => __( 'Licenses', 'kb-support' ),
+			'content' =>
+				'<p>' . __( 'If you have any of the KB Support premium extensions installed, you should enter their license keys here to ensure you receive the latest product updates.', 'kb-support' ) . '</p>'
+		) );
+		do_action( 'kbs_settings_licenses_contextual_help' );
+	}
+
+	do_action( 'kbs_settings_before_misc_contextual_help' );
+	$screen->add_help_tab( array(
+		'id'      => 'kbs-settings-misc',
+		'title'   => __( 'Misc', 'kb-support' ),
+		'content' =>
+			'<p>' . __( '<strong>Misc Settings</strong>', 'kb-support' ) . '</p>' .
+			'<ul>' .
+				'<li>' . sprintf( __( '<strong>Remove Data on Uninstall?</strong> - Select to remove all KB Support data when the plugin is uninstalled. All %1$s, %2$s, Submission Forms, Customers and settings will be permanently deleted.', 'kb-support' ),
+				$ticket_plural,
+				$article_plural ) . '</li>' .
+			'</ul>' .
+			'<p>' . __( '<strong>Google reCaptcha</strong>', 'kb-support' ) . '<br />' .
+				sprintf( __( '<em>If you want to use a Google reCaptcha within your %1$s submission form, you\'ll need to enter the settings here.</em>', 'kb-support' ), $ticket_singular ) . '</p>' .
+			'<ul>' .
+				'<li>' . __( '<strong>Site Key</strong> - Enter your Google reCaptcha site key here otherwise your reCaptcha field will not work.', 'kb-support' ) . '</li>' .
+				'<li>' . __( '<strong>reCaptcha Theme</strong> - Select a theme for your reCaptcha that fits in best with your website.', 'kb-support' ) . '</li>' .
+				'<li>' . __( '<strong>reCaptcha Type</strong> - Choose between a reCaptcha image or audio.', 'kb-support' ) . '</li>' .
+				'<li>' . __( '<strong>reCaptcha Size</strong> - Select a compact or normal sized reCaptcha.', 'kb-support' ) . '</li>' .
+			'</ul>' .
+			'<p>' . __( '<strong>Terms and Conditions</strong>', 'kb-support' ) . '<br />' .
+				sprintf( __( '<em>You may choose to display a terms and conditions agreement field on your %1$s submission forms. You can define the settings here.</em>', 'kb-support' ), $ticket_singular ) . '</p>' .
+			'<ul>' .
+				'<li>' . sprintf( __( '<strong>Agree to Terms</strong> - Select this option to insert a field into your %1$s submission form that customers must select to indicate they have read and agreed to your Terms and Conditions.', 'kb-support' ), strtolower( $ticket_singular ) ) . '</li>' .
+				'<li>' . __( '<strong>Agree to Terms Label</strong> - This is the label that will accompany the checkbox for terms agreement.', 'kb-support' ) . '</li>' .
+				'<li>' . __( '<strong>Terms Heading</strong> - Enter a heading that will appear at the top of the Terms and Conditions pop-up window.', 'kb-support' ) . '</li>' .
+				'<li>' . __( '<strong>Agreement Text</strong> - Enter your Terms and Conditions here.', 'kb-support' ) . '</li>' .
 			'</ul>'
 	) );
 
