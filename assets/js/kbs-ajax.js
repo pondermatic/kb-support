@@ -73,7 +73,7 @@ jQuery(document).ready(function ($) {
 		e.preventDefault();
 		$(this).val(kbs_scripts.submit_ticket_loading);
 		$(this).prop("disabled", true);
-		$(this).after(' <span id="kbs-loading" class="kbs-loader kbs-hidden"><img src="' + kbs_scripts.ajax_loader + '" /></span>');
+		$(this).after(' <span id="kbs-loading" class="kbs-loader"><img src="' + kbs_scripts.ajax_loader + '" /></span>');
 		$('input').removeClass("error");
 
 		var tinymceActive = (typeof tinyMCE != 'undefined') && tinyMCE.activeEditor && ! tinyMCE.activeEditor.isHidden();
@@ -97,7 +97,7 @@ jQuery(document).ready(function ($) {
 					$form.find('#' + response.field).addClass("error");
 					$form.find('#' + response.field).focus();
 					$('#kbs_ticket_submit').prop("disabled", false);
-					$('#kbs-loading').remove();
+					$('#kbs_ticket_form_submit').find('#kbs-loading').remove();
 					$('#kbs_ticket_submit').val(kbs_scripts.submit_ticket);
 				} else	{
 					$form.append( '<input type="hidden" name="kbs_action" value="submit_ticket" />' );
