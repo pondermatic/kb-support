@@ -103,7 +103,7 @@ function kbs_process_login_form( $data ) {
 		}
 
 		if ( ! empty( $error ) )	{
-			$url = remove_query_arg( 'kbs_notice', 'kbs_redirect' );
+			$url = remove_query_arg( array( 'kbs_notice', 'kbs_redirect' ) );
 			wp_redirect( add_query_arg( array(
 				'kbs_notice'   => $error,
 				'kbs_redirect' => $data['kbs_redirect']
