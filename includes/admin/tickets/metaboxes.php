@@ -19,9 +19,10 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function kbs_ticket_metabox_fields() {
 
+	// Format is KBS_Ticket key => field name
 	$fields = array(
-		'kbs_customer_id',
-		'kbs_agent_id'
+		'customer_id' => 'kbs_customer_id',
+		'agent_id'    => 'kbs_agent_id'
 	);
 
 	return apply_filters( 'kbs_ticket_metabox_fields_save', $fields );

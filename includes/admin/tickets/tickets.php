@@ -354,37 +354,25 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
 
 	$ticket = new KBS_Ticket( $post_id );
 
-	foreach ( $fields as $field )	{
-		$meta_field    = str_replace( 'kbs_', '_kbs_ticket_', $field );
+	foreach ( $fields as $key => $field )	{
 
 		if ( ! empty( $_POST[ $field ] ) ) {
 			$new_value = apply_filters( 'kbs_ticket_metabox_save_' . $field, $_POST[ $field ] );
 
-			$ticket->update_meta( $meta_field, $new_value );
+			$ticket->__set( $key, $new_value );
 		} else {
-			delete_post_meta( $ticket->ID, $meta_field );
+			$ticket->__set( $key, '' );
 		}
 
 	}
 
 	if ( ! empty( $_POST['ticket_status'] ) && $_POST['ticket_status'] != $post->post_status )	{
-		$ticket->update_status( $_POST['ticket_status'] );
+		$ticket->__set( 'status', $_POST['ticket_status'] );
 	}
+
+	$ticket->save();
 
 	do_action( 'kbs_save_ticket', $post_id, $post );
 
-	// Remove the save post action to avoid loops
-	remove_action( 'save_post_kbs_ticket', 'kbs_ticket_post_save', 10, 3 );
-
-	// Fire the before save action but only if this is not a new ticket creation (i.e $post->post_status == 'draft')
-	if( $update === true )	{
-		do_action( 'kbs_ticket_before_save', $post_id, $post, $update );
-	}
-
-	// Fire the after save action
-	do_action( 'kbs_ticket_after_save', $post_id, $post, $update );
-
-	// Re-add the save post action
-	add_action( 'save_post_kbs_ticket', 'kbs_ticket_post_save', 10, 3 );
 } // kbs_ticket_post_save
 add_action( 'save_post_kbs_ticket', 'kbs_ticket_post_save', 10, 3 );

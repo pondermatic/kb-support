@@ -299,7 +299,9 @@ class KBS_Ticket {
 			$this->old_status = $this->status;
 		}
 
-		if( '_ID' !== $key ) {
+		$this->pending[ $key ] = $value;
+
+		if ( '_ID' !== $key ) {
 			$this->$key = $value;
 		}
 	} // __set
@@ -418,10 +420,6 @@ class KBS_Ticket {
 			$this->key = strtolower( md5( $this->email . date( 'Y-m-d H:i:s' ) . $auth_key . uniqid( 'kbs', true ) ) );  // Unique key
 			$this->pending['key'] = $this->key;
 		}
-
-		/*if ( empty( $this->agent_id ) )	{
-			$this->auto_assign_agent();
-		}*/
 
 		if ( ! empty( $this->form_data ) )	{
 			$this->pending['form_data'] = $this->form_data;
@@ -543,14 +541,14 @@ class KBS_Ticket {
 
 		}
 
-		if( $this->ID !== $this->_ID ) {
+		if ( $this->ID !== $this->_ID ) {
 			$this->ID = $this->_ID;
 		}
 
 		// If we have something pending, let's save it
 		if ( ! empty( $this->pending ) ) {
 
-			foreach ( $this->pending as $key => $value ) {
+			foreach( $this->pending as $key => $value ) {
 				switch( $key ) {
 					case 'status':
 						$this->update_status( $this->status );
@@ -639,6 +637,10 @@ class KBS_Ticket {
 						$this->update_meta( '_kbs_ticket_sla_target_resolve', $this->sla_resolve );
 						break;
 
+					case 'source':
+						$this->update_meta( '_kbs_ticket_source', $this->source );
+						break;
+
 					default:
 						do_action( 'kbs_ticket_save', $this, $key );
 						break;
@@ -716,8 +718,9 @@ class KBS_Ticket {
 			do_action( 'kbs_before_ticket_status_change', $this->ID, $status, $old_status );
 
 			$update_fields = array( 'ID' => $this->ID, 'post_status' => $status, 'edit_date' => current_time( 'mysql' ) );
+			$update_fields = apply_filters( 'kbs_update_ticket_status_fields', $update_fields );
 
-			$updated = wp_update_post( apply_filters( 'kbs_update_ticket_status_fields', $update_fields ) );
+			$updated = wp_update_post( $update_fields );
 
 			$all_ticket_statuses   = kbs_get_ticket_statuses();
 			$this->status_nicename = array_key_exists( $status, $all_ticket_statuses ) ? $all_ticket_statuses[ $status ] : ucfirst( $status );
@@ -846,7 +849,11 @@ class KBS_Ticket {
 
 		$meta_value = apply_filters( 'kbs_update_ticket_meta_' . $meta_key, $meta_value, $this->ID );
 
-		return update_post_meta( $this->ID, $meta_key, $meta_value, $prev_value );
+		if ( ! empty( $meta_value ) )	{
+			return update_post_meta( $this->ID, $meta_key, $meta_value, $prev_value );
+		} else	{
+			return delete_post_meta( $this->ID, $meta_key );
+		}
 	} // update_meta
 
 	/**
@@ -861,6 +868,7 @@ class KBS_Ticket {
 			return;
 		}
 
+		// Add the SLA data
 		if ( empty( $this->sla_respond ) )	{
 			$this->update_meta( '_kbs_ticket_sla_target_respond', kbs_calculate_sla_target_response() );
 		}
@@ -951,7 +959,7 @@ class KBS_Ticket {
 	private function setup_completed_date() {
 		$ticket = get_post( $this->ID );
 
-		if( 'closed' != $ticket->post_status ) {
+		if ( 'closed' != $ticket->post_status ) {
 			return false; // This ticket was never resolved
 		}
 
@@ -969,49 +977,6 @@ class KBS_Ticket {
 	public function setup_agent_id()	{	
 		return $this->get_meta( '_kbs_ticket_agent_id', true );
 	} // setup_agent_id
-
-	/**
-	 * Auto assign an agent.
-	 *
-	 * @since	1.0
-	 * @return	int|false
-	 */
-	public function auto_assign_agent()	{
-		$auto_assign = kbs_get_option( 'assign_on_submit' );
-
-		if ( ! empty( $auto_assign ) )	{
-			switch( $auto_assign )	{
-				case 'least':
-					$agents    = kbs_get_agents( true );
-					$agent_id  = 0;
-					$low_count = 999999;
-
-					foreach( $agents as $agent )	{
-						$ticket_count = kbs_agent_ticket_count( $agent );
-
-						if ( $ticket_count < $low_count )	{
-							$low_count = $ticket_count;
-							$agent_id  = $agent;
-						}
-					}
-
-					$this->agent_id = $agent_id;
-					$this->pending['agent_id'] = $agent_id;
-					break;
-
-				case 'random':
-					$agent = kbs_get_random_agent();
-					
-					$this->agent_id = $agents[ $random ];
-					$this->pending['agent_id'] = $agents[ $random ];
-					break;
-
-				default:
-					do_action( 'kbs_auto_assign_agent', $this );
-					break;
-			}
-		}
-	} // auto_assign_agent
 
 	/**
 	 * Setup the customer ID
@@ -1252,7 +1217,7 @@ class KBS_Ticket {
 	} // get_reply_count
 
 	/**
-	 * Retrieve the source used for logging the ticket.
+	 * Retrieve the tickets attached files.
 	 *
 	 * @since	1.0
 	 * @return	obj|bool

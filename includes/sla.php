@@ -62,6 +62,23 @@ function kbs_calculate_sla_target_resolution()	{
 } // kbs_calculate_sla_target_resolution
 
 /**
+ * Log first respond value.
+ *
+ * @since	1.0
+ * @param	int		$ticket_id	The ticket ID
+ * @param	str		$status		The ticket status
+ * @return	str		Date/Time for targetted resolution time.
+ */
+function kbs_set_sla_first_respond( $ticket_id, $status )	{
+
+	if ( 'new' !== $status )	{
+		return add_post_meta( $ticket_id, '_kbs_ticket_first_respond', current_time( 'mysql' ) );
+	}
+
+} // kbs_calculate_sla_target_resolution
+add_action( 'kbs_update_ticket_status', 'kbs_calculate_sla_target_resolution', 10, 2 );
+
+/**
  * Retrieve the target SLA response time.
  *
  * @since	1.0

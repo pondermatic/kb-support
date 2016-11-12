@@ -734,36 +734,49 @@ function kbs_get_ticket_key( $ticket_id )	{
  * Assigns an agent to the ticket.
  *
  * @since	1.0
- * @param	int	$ticket_id	The ticket ID to update.
- * @param	int	$user_id	The agent user ID. If not set, use current user.
- * @return	mixed.
+ * @param	int		$ticket_id	The ticket ID to update.
+ * @param	int		$agent_id	The agent user ID. If not set, use current user.
+ * @return	bool	True on success, false on failure
  */
-function kbs_assign_agent( $ticket_id, $user_id = 0 )	{
-	if ( empty( $user_id ) )	{
-		$user_id = get_current_user_id();
+function kbs_assign_agent( $ticket_id, $agent_id = 0 )	{
+
+	if ( empty( $agent_id ) )	{
+		$agent_id = get_current_user_id();
 	}
-	
+
+	if ( ! kbs_is_agent( $agent_id ) )	{
+		return false;
+	}
+
+	$ticket = new KBS_Ticket( $ticket_id );
+
+	if ( empty( $ticket->ID ) )	{
+		return false;
+	}
+
 	/**
 	 * Fires immediately before assigning an agent
 	 *
 	 * @since	1.0
 	 * @param	int	$ticket_id		The ticket ID
-	 * @param	int	$user_id		The user ID
+	 * @param	int	$agent_id		The agent user ID
 	 */
-	do_action( 'kbs_pre_assign_agent', $ticket_id, $user_id );
+	do_action( 'kbs_pre_assign_agent', $ticket_id, $agent_id );
 
-	$return = kbs_update_ticket_meta( $ticket_id, '_kbs_ticket_agent_id', $user_id );
+	$ticket->__set( 'agent_id', $agent_id );
+	$return = $ticket->save();
 
 	/**
 	 * Fires immediately after assigning an agent
 	 *
 	 * @since	1.0
 	 * @param	int	$ticket_id		The ticket ID
-	 * @param	int	$user_id		The user ID
+	 * @param	int	$agent_id		The agent user ID
 	 */
-	do_action( 'kbs_post_assign_agent', $ticket_id, $user_id );
+	do_action( 'kbs_post_assign_agent', $ticket_id, $agent_id );
 
 	return $return;
+
 } // kbs_assign_agent
 
 /**
