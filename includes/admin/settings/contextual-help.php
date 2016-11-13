@@ -89,11 +89,6 @@ function kbs_settings_contextual_help() {
 					$ticket_singular,
 					strtolower( $ticket_singular )
 				) . '</li>' .
-				'<li>' . __( '<strong>Administrators are Agents?</strong> - Select this option if users with the WordPress Administrator role should be seen as agents.', 'kb-support' ) . '</li>' .
-				'<li>' . sprintf( 
-					__( '<strong>Display Agent Status?</strong> - If selected, customers will be able to see an indicator that shows whether the agent assigned to their %1$s is actively online or not when looking at their %1$s details.', 'kb-support' ),
-					strtolower( $ticket_singular )
-				) . '</li>' .
 			'</ul>' .
 			'<p>' . __( '<strong>Submission Settings</strong>', 'kb-support' ) . '</p>' .
 			'<ul>' .
@@ -119,8 +114,21 @@ function kbs_settings_contextual_help() {
 					strtolower( $ticket_singular )
 				) . '</li>' .
 			'</ul>' .
-			'<p>' . sprintf( __( '<strong>%s Assignment</strong>', 'kb-support' ), $ticket_singular ) . '</p>' .
+			'<p>' . __( '<strong>Agent Settings</strong>', 'kb-support' ) . '</p>' .
 			'<ul>' .
+				'<li>' . sprintf(
+					__( '<strong>Administrators are Agents?</strong> - Select this option if users with the WordPress Administrator role should be seen as agents. If not enabled, users with the Administrator role will not be able to create or view any %1$s.', 'kb-support' ),
+					strtolower( $ticket_plural )
+				) . '</li>' .
+				'<li>' . sprintf( 
+					__( '<strong>Restritct Agent %1$s View?</strong> - Enabling this option will result in Support Workers not being able to view %2$s that are assigned to other agents. The only %2$s they will be able to view will be those that are assigned to them, or those that are not assigned to any agent.', 'kb-support' ),
+					$ticket_singular,
+					strtolower( $ticket_plural )
+				) . '</li>' .
+				'<li>' . sprintf( 
+					__( '<strong>Display Agent Status?</strong> - If selected, customers will be able to see an indicator that shows whether the agent assigned to their %1$s is actively online or not when looking at their %1$s details.', 'kb-support' ),
+					strtolower( $ticket_singular )
+				) . '</li>' .
 				'<li>' . sprintf( 
 					__( '<strong>Auto Assign new %1$s</strong> - You can automatically assign an agent to a new %2$s submitted via a submission form. Disable, or choose to auto assign to an agent with the least amount of active %3$s, or a random agent.', 'kb-support' ),
 					$ticket_plural,

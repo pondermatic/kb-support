@@ -270,20 +270,6 @@ function kbs_get_registered_settings() {
 						'desc'    => '',
 						'type'    => 'text',
 						'size'    => 'small'
-					),
-					'admin_agents' => array(
-						'id'      => 'admin_agents',
-						'name'    => __( 'Administrators are Agents?', 'kb-support' ),
-						'desc'    => __( 'If enabled, users with the <code>Administrator</code> role will also be Support Agents.', 'kb-support' ),
-						'type'    => 'checkbox',
-						'std'     => '1'
-					),
-					'agent_status'  => array(
-						'id'      => 'agent_status',
-						'name'    => __( 'Display Agent Status?', 'kb-support' ),
-						'desc'    => sprintf( __( 'If enabled, customers will see an indicator as to whether or not the assigned agent is online when reviewing their %s.', 'kb-support' ), strtolower( $single ) ),
-						'type'    => 'checkbox',
-						'std'     => '0'
 					)
 				),
 				'submit' => array(
@@ -342,10 +328,35 @@ function kbs_get_registered_settings() {
 						'std'  => __( 'Reply', 'kb-support' )
 					)
 				),
-				'assign' => array(
+				'agents' => array(
+					'agent_settings_header' => array(
+						'id'   => 'agent_settings_header',
+						'name' => '<h3>' . __( 'Agents', 'kb-support' ) . '</h3>',
+						'type' => 'header'
+					),
+					'admin_agents' => array(
+						'id'      => 'admin_agents',
+						'name'    => __( 'Administrators are Agents?', 'kb-support' ),
+						'desc'    => __( 'If enabled, users with the <code>Administrator</code> role will also be Support Agents.', 'kb-support' ),
+						'type'    => 'checkbox',
+						'std'     => '1'
+					),
+					'restrict_agent_view' => array(
+						'id'      => 'restrict_agent_view',
+						'name'    => sprintf( __( 'Restrict Agent %s View?', 'kb-support' ), $single ),
+						'desc'    => sprintf( __( 'If enabled, Support Agents will only be able to see %1$s that are assigned to them , or %1$s that are not yet assigned. If the agent is an administrator, they will always see all %1$s.', 'kb-support' ), strtolower( $plural ) ),
+						'type'    => 'checkbox'
+					),
+					'agent_status'  => array(
+						'id'      => 'agent_status',
+						'name'    => __( 'Display Agent Status?', 'kb-support' ),
+						'desc'    => sprintf( __( 'If enabled, customers will see an indicator as to whether or not the assigned agent is online when reviewing their %s.', 'kb-support' ), strtolower( $single ) ),
+						'type'    => 'checkbox',
+						'std'     => '0'
+					),
 					'assign_settings_header' => array(
 						'id'   => 'assign_settings_header',
-						'name' => '<h3>' . sprintf( __( 'Assignment', 'kb-support' ), $single ) . '</h3>',
+						'name' => '<h3>' . sprintf( __( '%s Assignment', 'kb-support' ), $single ) . '</h3>',
 						'type' => 'header'
 					),
 					'assign_on_submit' => array(
@@ -355,7 +366,7 @@ function kbs_get_registered_settings() {
 						'type'    => 'select',
 						'options' => array(
 							'0'      => __( 'Do not Auto Assign', 'kb-support' ),
-							'least'  => sprintf( __( 'Least %s', 'kb-support' ), strtolower( $plural ) ),
+							'least'  => sprintf( __( 'Least %s', 'kb-support' ), $plural ),
 							'random' => __( 'Random', 'kb-support' ),
 						),
 						'std'     => '0'
@@ -948,7 +959,7 @@ function kbs_get_registered_settings_sections() {
 		'tickets'        => apply_filters( 'kbs_settings_sections_tickets', array(
 			'main'                 => sprintf( __( 'General %s Settings', 'kb-support' ), $single ),
 			'submit'               => __( 'Submission Settings', 'kb-support' ),
-			'assign'               => sprintf( __( '%s Assignment', 'kb-support' ), $single ),
+			'agents'               => __( 'Agent Settings', 'kb-support' ),
 			//'sla'                  => __( 'Service Levels', 'kb-support' )
 		) ),
 		'articles'        => apply_filters( 'kbs_settings_sections_articles', array(
