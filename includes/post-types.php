@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) )
 function kbs_setup_post_types() {
 	
 	$article_archives = defined( 'KBS_ARTICLE_DISABLE_ARCHIVE' ) && KBS_ARTICLE_DISABLE_ARCHIVE ? false : true;
-	$articles_slug    = defined( 'KBS_SLUG' ) ? KBS_SLUG : 'articles';
+	$articles_slug    = defined( 'KBS_ARTICLE_SLUG' ) ? KBS_ARTICLE_SLUG : 'articles';
 	$articles_rewrite = defined( 'KBS_ARTICLE_DISABLE_REWRITE' ) && KBS_ARTICLE_DISABLE_REWRITE ? false : array( 'slug' => $articles_slug, 'with_front' => false );
 
 	$ticket_labels =  apply_filters( 'kbs_ticket_labels', array(
@@ -331,7 +331,7 @@ add_filter( 'enter_title_here', 'kbs_change_default_title' );
 */
 function kbs_setup_custom_taxonomies() {
 
-	$articles_slug = defined( 'KBS_SLUG' ) ? KBS_SLUG : 'articles';
+	$articles_slug = defined( 'KBS_ARTICLE_SLUG' ) ? KBS_ARTICLE_SLUG : 'articles';
 
 	/** Ticket Categories */
 	$ticket_category_labels = array(
