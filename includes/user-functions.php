@@ -238,7 +238,7 @@ function kbs_process_profile_editor_updates( $data ) {
 		'country'  => $country
 	);
 
-	do_action( 'kbs_pre_update_user_profile', $user_id, $userdata );
+	do_action( 'kbs_pre_update_user_profile', $user_id, $userdata, $data );
 
 	if ( ! empty( $data['kbs_new_user_pass1'] ) ) {
 		if ( $data['kbs_new_user_pass1'] !== $data['kbs_new_user_pass2'] ) {
@@ -291,7 +291,7 @@ function kbs_process_profile_editor_updates( $data ) {
 	}
 
 	if ( $updated ) {
-		do_action( 'kbs_user_profile_updated', $user_id, $userdata );
+		do_action( 'kbs_user_profile_updated', $user_id, $userdata, $data );
 		wp_safe_redirect( add_query_arg( 'kbs_notice', 'profile_updated', $url ) );
 		die();
 	}
