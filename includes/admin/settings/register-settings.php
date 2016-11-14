@@ -1258,7 +1258,7 @@ function kbs_missing_callback($args) {
  * @global	$kbs_options	Array of all the KBS Options
  * @return	void
  */
-function kbs_select_callback($args) {
+function kbs_select_callback( $args ) {
 	global $kbs_options;
 
 	if ( isset( $kbs_options[ $args['id'] ] ) ) {

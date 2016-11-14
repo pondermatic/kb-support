@@ -225,6 +225,11 @@
 	font-style: italic;
 }
 
+#kbs_ticket_form_wrap p.checklabel {
+	font-size: 80%;
+	font-style: italic;
+}
+
 #kbs_ticket_form_wrap label:after {
 	display: block;
 	visibility: hidden;
