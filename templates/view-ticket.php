@@ -40,7 +40,7 @@ if ( ! empty( $ticket->ID ) ) :
         <div id="kbs_item_wrapper" class="kbs_ticket_wrapper" style="float: left">
             <div class="ticket_info_wrapper data_section">
 
-                <?php do_action( 'kbs_before_single_ticket_form' ); ?>
+                <?php do_action( 'kbs_before_single_ticket_form', $ticket ); ?>
 
                 <form<?php kbs_maybe_set_enctype(); ?> id="kbs_ticket_reply_form" class="kbs_form" action="" method="post">
 
@@ -49,7 +49,7 @@ if ( ! empty( $ticket->ID ) ) :
                         <legend><?php printf( __( 'Support %s Details # %s', 'kb-support' ), $singular, kbs_get_ticket_id( $ticket->ID ) ); ?></legend>
                             <div class="ticket_files_wrapper right">
 
-                                <?php do_action( 'kbs_before_single_ticket_form_files' ); ?>
+                                <?php do_action( 'kbs_before_single_ticket_form_files', $ticket ); ?>
 
                                 <?php if ( ! empty( $ticket->files ) ) : ?>
                                     <strong><?php _e( 'File Attachments', 'kb-support' ); ?></strong>
@@ -109,7 +109,7 @@ if ( ! empty( $ticket->ID ) ) :
 
                         </fieldset>
 
-                        <?php do_action( 'kbs_before_single_ticket_form_replies' ); ?>
+                        <?php do_action( 'kbs_before_single_ticket_form_replies', $ticket ); ?>
 
                         <fieldset id="kbs_ticket_replies">
                         <legend><?php _e( 'Replies', 'kb-support' ); ?></legend>
@@ -146,7 +146,7 @@ if ( ! empty( $ticket->ID ) ) :
                             </div>
                         <?php endif; ?>
 
-                        <?php do_action( 'kbs_before_single_ticket_reply' ); ?>
+                        <?php do_action( 'kbs_before_single_ticket_reply', $ticket ); ?>
 
                         <?php if ( 'closed' != $ticket->status ) : ?>
 
@@ -164,7 +164,7 @@ if ( ! empty( $ticket->ID ) ) :
                                 echo wp_editor( '', 'kbs_reply', $wp_settings ); ?>
 
                                 <?php if ( kbs_file_uploads_are_enabled() ) : ?>
-                                    <?php do_action( 'kbs_before_single_ticket_files' ); ?>
+                                    <?php do_action( 'kbs_before_single_ticket_files', $ticket ); ?>
                                     <div class="reply_files">
                                         <p>
                                             <label for="kbs_files"><?php _e( 'Attach Files', 'kb-support' ); ?></label><br />
@@ -175,7 +175,7 @@ if ( ! empty( $ticket->ID ) ) :
                                     </div>
                                 <?php endif; ?>
 
-                                <?php do_action( 'kbs_before_single_ticket_email' ); ?>
+                                <?php do_action( 'kbs_before_single_ticket_email', $ticket ); ?>
 
                                 <?php if ( ! is_user_logged_in() ) : ?>
 
@@ -188,7 +188,7 @@ if ( ! empty( $ticket->ID ) ) :
 
                                 <?php endif; ?>
 
-                                <?php do_action( 'kbs_before_single_ticket_close' ); ?>
+                                <?php do_action( 'kbs_before_single_ticket_close', $ticket ); ?>
 
                                 <div class="reply_close">
                                     <p><input type="checkbox" name="kbs_close_ticket" id="kbs-close-ticket" /> 
@@ -197,7 +197,7 @@ if ( ! empty( $ticket->ID ) ) :
                                 </div>
 
                                 <?php kbs_render_hidden_reply_fields( $ticket->ID ); ?>
-                                <?php do_action( 'kbs_before_single_ticket_reply_submit' ); ?>
+                                <?php do_action( 'kbs_before_single_ticket_reply_submit', $ticket ); ?>
                                 <input class="button" name="kbs_ticket_reply" id="kbs_reply_submit" type="submit" value="<?php _e( 'Reply', 'kb-support' ); ?>" />
 
                             </div>
@@ -212,7 +212,7 @@ if ( ! empty( $ticket->ID ) ) :
 
                 </form>
 
-                <?php do_action( 'kbs_after_single_ticket_form' ); ?>
+                <?php do_action( 'kbs_after_single_ticket_form', $ticket ); ?>
 
             </div>
         </div>
