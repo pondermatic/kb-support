@@ -53,7 +53,7 @@ function kbs_settings_contextual_help() {
 		) . '</p>'
 	);
 
-	do_action( 'kbs_settings_before_general_contextual_help' );
+	do_action( 'kbs_settings_before_general_contextual_help', $screen );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-settings-general',
 		'title'   => __( 'General', 'kb-support' ),
@@ -72,7 +72,7 @@ function kbs_settings_contextual_help() {
 			'</ul>'
 	) );
 
-	do_action( 'kbs_settings_before_tickets_contextual_help' );
+	do_action( 'kbs_settings_before_tickets_contextual_help', $screen );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-settings-tickets',
 		'title'   => $ticket_plural,
@@ -142,7 +142,7 @@ function kbs_settings_contextual_help() {
 			'</ul>'
 	) );
 
-	do_action( 'kbs_settings_before_articles_contextual_help' );
+	do_action( 'kbs_settings_before_articles_contextual_help', $screen );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-settings-articles',
 		'title'   => $article_plural,
@@ -174,7 +174,7 @@ function kbs_settings_contextual_help() {
 			'</ul>'
 	) );
 
-	do_action( 'kbs_settings_before_emails_contextual_help' );
+	do_action( 'kbs_settings_before_emails_contextual_help', $screen );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-settings-emails',
 		'title'   => __( 'Emails', 'kb-support' ),
@@ -251,7 +251,7 @@ function kbs_settings_contextual_help() {
 			'</ul>'
 	) );
 
-	do_action( 'kbs_settings_before_styles_contextual_help' );
+	do_action( 'kbs_settings_before_styles_contextual_help', $screen );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-settings-styles',
 		'title'   => __( 'Styles', 'kb-support' ),
@@ -260,28 +260,28 @@ function kbs_settings_contextual_help() {
 	) );
 
 	if ( ! empty( $settings['extensions'] ) )	{
-		do_action( 'kbs_settings_before_extensions_contextual_help' );
+		do_action( 'kbs_settings_before_extensions_contextual_help', $screen );
 		$screen->add_help_tab( array(
 			'id'      => 'kbs-settings-extensions',
 			'title'   => __( 'Extensions', 'kb-support' ),
-			'content' =>
+			'content' => apply_filters( 'kbs_settings_extensions_contextual_help',
 				'<p>' . __( 'The configuration settings for any KB Support extensions you have installed are controlled here.', 'kb-support' ) . '</p>'
+			)
 		) );
-		do_action( 'kbs_settings_extensions_contextual_help' );
 	}
 
 	if ( ! empty( $settings['licenses'] ) )	{
-		do_action( 'kbs_settings_before_licenses_contextual_help' );
+		do_action( 'kbs_settings_before_licenses_contextual_help', $screen );
 		$screen->add_help_tab( array(
 			'id'      => 'kbs-settings-licenses',
 			'title'   => __( 'Licenses', 'kb-support' ),
 			'content' =>
 				'<p>' . __( 'If you have any of the KB Support premium extensions installed, you should enter their license keys here to ensure you receive the latest product updates.', 'kb-support' ) . '</p>'
 		) );
-		do_action( 'kbs_settings_licenses_contextual_help' );
+		do_action( 'kbs_settings_licenses_contextual_help', $screen );
 	}
 
-	do_action( 'kbs_settings_before_misc_contextual_help' );
+	do_action( 'kbs_settings_before_misc_contextual_help', $screen );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-settings-misc',
 		'title'   => __( 'Misc', 'kb-support' ),
