@@ -191,13 +191,8 @@ function kbs_restrict_article_content( $content ) {
 			add_filter( 'comments_open', '__return_false');
 			add_filter( 'get_comments_number', '__return_false');
 
-			if ( is_archive() )	{
-				$content = kbs_article_content_is_restricted();
-				$action = 'archive';
-			} else	{
-				$content = kbs_article_content_is_restricted();
-				$action = 'single';
-			}
+			$content = kbs_article_content_is_restricted();
+			$action  = is_archive() ? 'archive' : 'single';
 
 			/**
 			 * Allow plugins to hook into the actions taken when content is restricted.

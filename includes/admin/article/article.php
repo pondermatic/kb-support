@@ -77,6 +77,7 @@ function kbs_set_articles_column_data( $column_name, $post_id ) {
 			if ( kbs_article_is_restricted( $post_id ) )	{
 				echo '<span class="padlock" title="' . __( 'This is a restricted article', 'kb-support' ) . '"></span>';
 			}
+			do_action( 'kbs_article_column_visibility', $post_id );
 			break;
 
 		case 'linked':
@@ -104,6 +105,8 @@ function kbs_set_articles_column_data( $column_name, $post_id ) {
 			echo __( 'No callback found for post column', 'kb-support' );
 			break;
 	}
+
+	//do_action( 'kbs_article_column_' . $column_name, $post_id );
 
 } // kbs_set_articles_column_data
 add_action( 'manage_article_posts_custom_column' , 'kbs_set_articles_column_data', 10, 2 );

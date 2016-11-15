@@ -20,8 +20,8 @@ if ( ! defined( 'ABSPATH' ) )
 function kbs_article_metabox_fields() {
 
 	$fields = array(
-			'_kbs_article_restricted'
-		);
+		'_kbs_article_restricted'
+	);
 
 	return apply_filters( 'kbs_article_metabox_fields_save', $fields );
 
@@ -54,9 +54,9 @@ function kbs_article_add_meta_boxes( $post )	{
 	);
 
 	add_meta_box(
-		'kbs-article-metabox-options',
-		__( 'Options', 'kb-support' ),
-		'kbs_article_metabox_options_callback',
+		'kbs-article-metabox-restrictions',
+		__( 'Restrictions', 'kb-support' ),
+		'kbs_article_metabox_restrictions_callback',
 		'article',
 		'side',
 		'',
@@ -86,14 +86,14 @@ function kbs_article_metabox_linked_tickets_callback()	{
 } // kbs_article_metabox_linked_tickets_callback
 
 /**
- * The callback function for the article options metabox.
+ * The callback function for the article restrictions metabox.
  *
  * @since	1.0
  * @global	obj		$post				WP_Post object
  * @global	bool	$kbs_ticket_update	True if this article is being updated, false if new
  * @return	void
  */
-function kbs_article_metabox_options_callback()	{
+function kbs_article_metabox_restrictions_callback()	{
 	global $post, $kbs_article_update;
 
 	wp_nonce_field( 'kbs_article_meta_save', 'kbs_article_meta_box_nonce' );
@@ -103,8 +103,8 @@ function kbs_article_metabox_options_callback()	{
 	 * @since	1.0
 	 * @param	int	$post_id	The KB post ID
 	 */
-	do_action( 'kbs_article_options_fields', $post->ID );
-} // kbs_article_metabox_options_callback
+	do_action( 'kbs_article_restrictions_fields', $post->ID );
+} // kbs_article_metabox_restrictions_callback
 
 /**
  * Display the Article Linked Tickets metabox.
@@ -142,14 +142,14 @@ function kbs_article_metabox_linked_tickets_fields( $post_id )	{
 add_action( 'kbs_article_linked_tickets_fields', 'kbs_article_metabox_linked_tickets_fields', 10, 1 );
 
 /**
- * Display the Article options metabox fields.
+ * Display the Article restrict article field.
  *
  * @since	1.0
  * @global	bool	$kbs_ticket_update	True if this article is being updated, false if new.
  * @param	int		$post_id			The KB post ID.
  * @return	str
  */
-function kbs_article_metabox_options_fields( $post_id )	{
+function kbs_article_metabox_restrict_article_field( $post_id )	{
 	global $kbs_article_update;
 
 	if ( $kbs_article_update )	{
@@ -167,5 +167,5 @@ function kbs_article_metabox_options_fields( $post_id )	{
     </div>
 
     <?php
-} // kbs_article_metabox_options_fields
-add_action( 'kbs_article_options_fields', 'kbs_article_metabox_options_fields', 10, 1 );
+} // kbs_article_metabox_restrict_article_field
+add_action( 'kbs_article_restrictions_fields', 'kbs_article_metabox_restrict_article_field', 10, 1 );

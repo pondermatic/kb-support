@@ -27,6 +27,9 @@ a.kbs-delete:hover { color: #f00; }
 	background-repeat: no-repeat;
 	background-position: 98% 50%;
 }
+.kbs-currency {
+	width: 75px;
+}
 /* General Settings Styles
 -------------------------------------------------------------- */
 .kbs_ticket_page_kbs-settings .form-table label { color: #666; font-size: 14px; font-style: italic; margin: 4px 0 0; }
@@ -45,7 +48,13 @@ span.padlock:before {
 	font: normal 20px/1 'dashicons';
 	vertical-align: middle;
 }
-
+span.price_restricted:before {
+	content: '\f174';
+	display: inline-block;
+	-webkit-font-smoothing: antialiased;
+	font: normal 20px/1 'dashicons';
+	vertical-align: middle;
+}
 .kbs_user_search_wrap {
 	position: relative;
 	overflow: visible;
