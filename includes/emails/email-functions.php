@@ -272,7 +272,7 @@ function kbs_admin_email_notice( $ticket_id = 0, $ticket_data = array() ) {
 	$emails->__set( 'headers', $headers );
 	$emails->__set( 'heading', sprintf( __( 'New %s Received', 'kb-support' ), $single ) );
 
-	$emails->send( kbs_get_admin_notice_emails(), $subject, $message, $attachments );
+	$emails->send( kbs_get_admin_notice_emails( $ticket_id ), $subject, $message, $attachments );
 
 } // kbs_admin_email_notice
 add_action( 'kbs_admin_ticket_notice', 'kbs_admin_email_notice', 10, 2 );
@@ -282,12 +282,25 @@ add_action( 'kbs_admin_ticket_notice', 'kbs_admin_email_notice', 10, 2 );
  * changed in the KBS Settings)
  *
  * @since	1.0
+ * @param	int		$ticket_id	Ticket ID
  * @return	mixed
  */
-function kbs_get_admin_notice_emails() {
+function kbs_get_admin_notice_emails( $ticket_id = 0 )	{
 	$emails = kbs_get_option( 'admin_notice_emails', false );
 	$emails = strlen( trim( $emails ) ) > 0 ? $emails : get_bloginfo( 'admin_email' );
 	$emails = array_map( 'trim', explode( "\n", $emails ) );
+
+	if ( ! empty( $ticket_id ) )	{
+		$agent_id  = kbs_get_agent( $ticket_id );
+
+		if ( ! empty( $agent_id ) )	{
+			$agent_data  = get_userdata( $agent_id );
+
+			if ( ! empty( $agent_data ) )	{
+				$emails      = str_replace( '{agent}', $agent_data->user_email, $emails );
+			}
+		}
+	}
 
 	return apply_filters( 'kbs_admin_notice_emails', $emails );
 } // kbs_get_admin_notice_emails

@@ -216,6 +216,11 @@ function kbs_settings_contextual_help() {
 				$ticket_singular,
 				strtolower( $ticket_singular )
 				) . '</li>' .
+				'<li>' . sprintf( __( '<strong>%1$s Notification Emails</strong> - Enter a list of email addresses (one per line) that should be notified when a new %2$s is logged by a customer. Enter <code>%3$s</code> to include the assigned agent\'s email address.', 'kb-support' ),
+				$ticket_singular,
+				strtolower( $ticket_singular ),
+				'{agent}'
+				) . '</li>' .
 			'</ul>' .
 			'<p>' . __( '<strong>Reply Added</strong>', 'kb-support' ) . '<br />' .
 				sprintf( __( '<em>Adjust the settings for emails that are sent to a customer when a Support Worker adds a reply to their %1$s.</em>', 'kb-support' ), strtolower( $ticket_singular ) ) . '</p>' .

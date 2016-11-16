@@ -552,8 +552,8 @@ function kbs_get_registered_settings() {
 					),
 					'disable_admin_notices' => array(
 						'id'   => 'disable_admin_notices',
-						'name' => __( 'Disable Admin Notifications', 'kb-support' ),
-						'desc' => sprintf( __( 'Check this box to disable admin %s notification emails.', 'kb-support' ), strtolower( $single ) ),
+						'name' => __( 'Disable Notifications', 'kb-support' ),
+						'desc' => sprintf( __( 'Check this box to disable %s notification emails.', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'checkbox'
 					),
 					'ticket_notification_subject' => array(
@@ -578,7 +578,8 @@ function kbs_get_registered_settings() {
 					'admin_notice_emails' => array(
 						'id'   => 'admin_notice_emails',
 						'name' => sprintf( __( '%s Notification Emails', 'kb-support' ), $single ),
-						'desc' => sprintf( __( 'Enter the email address(es) that should receive a notification anytime a %s is logged, one per line', 'kb-support' ), strtolower( $single ) ),
+						'desc' => sprintf(
+							__( 'Enter the email address(es) that should receive a notification anytime a %s is logged, one per line. Enter <code>{agent}</code> to insert the assigned agent\'s email address', 'kb-support' ), strtolower( $single ), '{agent}' ),
 						'type' => 'textarea',
 						'std'  => get_bloginfo( 'admin_email' )
 					)
