@@ -185,7 +185,7 @@ function kbs_restrict_article_content( $content ) {
 
 	if ( $post && 'article' == $post->post_type )	{
 
-		if ( kbs_article_is_restricted() && ! is_user_logged_in() )	{
+		if ( kbs_article_is_restricted() )	{
 
 			// Remove comments
 			add_filter( 'comments_open', '__return_false');

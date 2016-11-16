@@ -253,6 +253,11 @@ function kbs_article_is_restricted( $post_id = 0 )	{
 	}
 
 	$restricted = get_post_meta( $post_id, '_kbs_article_restricted', true );
+
+	if ( $restricted && is_user_logged_in() )	{
+		$restricted = false;
+	}
+
 	$restricted = apply_filters( 'kbs_article_restricted', $restricted, $post_id );
 
 	return $restricted;
@@ -273,7 +278,7 @@ function kbs_user_can_view_article( $article, $user_id = 0 )	{
 
 	$can_view = true;
 
-	if ( kbs_hide_restricted_articles() && kbs_article_is_restricted( $article->ID ) && ! is_user_logged_in() )	{
+	if ( ! is_user_logged_in() || ( kbs_hide_restricted_articles() && kbs_article_is_restricted( $article->ID ) ) )	{
 		$can_view = false;
 	}
 
