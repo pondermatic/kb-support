@@ -411,7 +411,7 @@ jQuery(document).ready(function ($) {
 					label            : $('#kbs_field_label').val(),
 					type             : $('#kbs_field_type').val(),
 					mapping          : $('#kbs_field_mapping').val(),
-					kb_search        : ( $('#kbs_field_kb_search').is(':checked') )        ? $('#kbs_field_kb_search').val()     : 0,
+					kb_search        : ( $('#kbs_field_kb_search').is(':checked') )       ? $('#kbs_field_kb_search').val()     : 0,
 					required         : ( $('#kbs_field_required').is(':checked') )        ? $('#kbs_field_required').val()        : 0,
 					label_class      : $('#kbs_field_label_class').val(),
 					input_class      : $('#kbs_field_input_class').val(),
