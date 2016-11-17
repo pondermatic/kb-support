@@ -270,6 +270,12 @@ function kbs_get_registered_settings() {
 						'desc'    => '',
 						'type'    => 'text',
 						'size'    => 'small'
+					),
+					'hide_closed' => array(
+						'id'      => 'hide_closed',
+						'name'    => sprintf( __( 'Hide Closed %s?', 'kb-support' ), $plural ),
+						'desc'    => sprintf( __( 'Enable this option to remove closed %1$s from the default view on the admin %1$s screen', 'kb-support' ), strtolower( $plural ) ),
+						'type'    => 'checkbox'
 					)
 				),
 				'submit' => array(

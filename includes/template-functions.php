@@ -170,7 +170,7 @@ function kbs_after_article_content( $content ) {
 add_filter( 'the_content', 'kbs_after_article_content', 100 );
 
 /**
- * After Article Content for restricted content.
+ * Article Content for restricted content.
  *
  * Remove content if it should be restricted.
  *
