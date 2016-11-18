@@ -80,6 +80,10 @@ function kbs_email_ticket_received( $ticket_id, $admin_notice = true ) {
  */
 function kbs_email_ticket_reply( $ticket_id ) {
 
+	if ( ! is_admin() )	{
+		return;
+	}
+
 	$disable = kbs_get_option( 'ticket_reply_disable_email', false );
 	$disable = apply_filters( 'kbs_ticket_reply_disable_email', $disable );
 	
@@ -286,6 +290,10 @@ add_action( 'kbs_admin_ticket_notice', 'kbs_admin_email_ticket_notice', 10, 2 );
  * @return	void
  */
 function kbs_admin_email_reply_notice( $reply_id = 0, $data = array() ) {
+
+	if ( is_admin() )	{
+		return;
+	}
 
 	$single    = kbs_get_ticket_label_singular();
 	$ticket_id = absint( $reply_id );

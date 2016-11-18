@@ -1372,7 +1372,7 @@ class KBS_Ticket {
 			'post_status'  => 'publish',
 			'post_content' => $reply_data['response'],
 			'post_parent'  => $reply_data['ticket_id'],
-			'post_author'  => is_admin() ? get_current_user_id() : $reply_data['customer_id'],
+			'post_author'  => get_current_user_id(),
 			'meta_input'   => array()
 		);
 
