@@ -240,17 +240,6 @@ function kbs_get_ticket_notification_email_body_content( $ticket_id = 0, $ticket
 	$name   = '';
 	$email  = kbs_get_ticket_user_email( $ticket_id );
 
-	$user_info = maybe_unserialize( $ticket_data['user_info'] );
-
-	if ( isset( $user_info['id'] ) && $user_info['id'] > 0 ) {
-		$user_data = get_userdata( $user_info['id'] );
-		$name = $user_data->display_name;
-	} elseif ( isset( $user_info['first_name'] ) && isset( $user_info['last_name'] ) ) {
-		$name = $user_info['first_name'] . ' ' . $user_info['last_name'];
-	} else {
-		$name = $email;
-	}
-
 	$default_email_body = __( 'Hey there!', 'kb-support' ) . "\n\n";
 	$default_email_body .= sprintf( __( 'A new %s has been logged at', 'kb-support' ), strtolower( $single ) ) . " {sitename}.\n\n";
 	$default_email_body .= "<strong>{ticket_title} - #{ticket_id}</strong>\n\n";
@@ -285,17 +274,6 @@ function kbs_get_reply_notification_email_body_content( $ticket_id = 0, $ticket_
 	$plural = kbs_get_ticket_label_plural();
 	$name   = '';
 	$email  = kbs_get_ticket_user_email( $ticket_id );
-
-	$user_info = maybe_unserialize( $ticket_data['user_info'] );
-
-	if ( isset( $user_info['id'] ) && $user_info['id'] > 0 ) {
-		$user_data = get_userdata( $user_info['id'] );
-		$name = $user_data->display_name;
-	} elseif ( isset( $user_info['first_name'] ) && isset( $user_info['last_name'] ) ) {
-		$name = $user_info['first_name'] . ' ' . $user_info['last_name'];
-	} else {
-		$name = $email;
-	}
 
 	$default_email_body = __( 'Hey there!', 'kb-support' ) . "\n\n";
 	$default_email_body .= sprintf( __( 'A new reply has been received for a support %s.', 'kb-support' ), strtolower( $single ) ) . "\n\n";
