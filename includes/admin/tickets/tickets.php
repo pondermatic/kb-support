@@ -365,7 +365,8 @@ function kbs_remove_inactive_tickets( $query )	{
 	$active_tickets = kbs_get_tickets( array(
 		'status' => $active_statuses,
 		'fields' => 'ids',
-		'output' => 'fields'
+		'output' => 'fields',
+		'number' => -1
 	) );
 
 	if ( $active_tickets )	{
