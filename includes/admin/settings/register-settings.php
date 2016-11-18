@@ -567,7 +567,7 @@ function kbs_get_registered_settings() {
 						'name' => sprintf( __( '%s Notification Subject', 'kb-support' ), $single ),
 						'desc' => sprintf( __( 'Enter the subject line for the %s notification email. Template tags accepted.', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'text',
-						'std'  => sprintf( __( 'New %s received - #{ticket_id}', 'kb-support' ), strtolower( $single ) )
+						'std'  => sprintf( __( 'New %s Received - #{ticket_id}', 'kb-support' ), $single )
 					),
 					'ticket_notification' => array(
 						'id'   => 'ticket_notification',
@@ -576,6 +576,25 @@ function kbs_get_registered_settings() {
 						'type' => 'rich_editor',
 						'std'  => __( 'Hey there!', 'kb-support' ) . "\n\n" .
 								  sprintf( __( 'A new %s has been logged at', 'kb-support' ), strtolower( $single ) ) . " {sitename}.\n\n" .
+								  "<strong>{ticket_title} - #{ticket_id}</strong>\n\n" .
+								  "{ticket_admin_url}\n\n" .
+								  __( 'Regards', 'kb-support' ) . "\n\n" .
+								  '{sitename}'
+					),
+					'reply_notification_subject' => array(
+						'id'   => 'reply_notification_subject',
+						'name' => __( 'Reply Notification Subject', 'kb-support' ),
+						'desc' => sprintf( __( 'Enter the subject line of the notification email that is sent when a customer submits a %s reply. Template tags accepted.', 'kb-support' ), strtolower( $single ) ),
+						'type' => 'text',
+						'std'  => sprintf( __( 'New %s Reply Received - #{ticket_id}', 'kb-support' ), $single )
+					),
+					'reply_notification' => array(
+						'id'   => 'reply_notification',
+						'name' => sprintf( __( '%s Reply Notification', 'kb-support' ), $single ),
+						'desc' => sprintf( __( 'Enter the text that is sent as a notification email when a customer submits a %s reply. HTML is accepted. Available template tags:' ), strtolower( $single ) ) . '<br />' . kbs_get_emails_tags_list(),
+						'type' => 'rich_editor',
+						'std'  => __( 'Hey there!', 'kb-support' ) . "\n\n" .
+								  sprintf( __( 'A new %s reply has been received at', 'kb-support' ), strtolower( $single ) ) . " {sitename}.\n\n" .
 								  "<strong>{ticket_title} - #{ticket_id}</strong>\n\n" .
 								  "{ticket_admin_url}\n\n" .
 								  __( 'Regards', 'kb-support' ) . "\n\n" .

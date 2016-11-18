@@ -33,13 +33,10 @@ function kbs_get_email_templates() {
  * @since	1.0
  *
  * @param	str		$message		Message with the template tags
- * @param	arr		$ticket_data	Ticket Data
  * @param	int		$ticket_id		Ticket ID
- * @param	bool	$admin_notice	Whether or not this is a notification email
- *
  * @return	str		$message		Fully formatted message
  */
-function kbs_email_template_tags( $message, $ticket_data, $ticket_id, $admin_notice = false ) {
+function kbs_email_template_tags( $message, $ticket_id ) {
 	return kbs_do_email_tags( $message, $ticket_id );
 } // kbs_email_template_tags
 
@@ -57,7 +54,7 @@ function kbs_email_preview_template_tags( $message ) {
 
 	$search  = array(
 		'{name}', '{fullname}', '{username}', '{user_email}', '{sitename}',
-		'{date}', '{ticket_id}', '{ticket_url}', '{ticket_details}'
+		'{date}', '{ticket_id}', '{ticket_url}', '{ticket_content}'
 	);
 	$replace = array(
 		$user->first_name,
@@ -68,7 +65,8 @@ function kbs_email_preview_template_tags( $message ) {
 		get_date_from_gmt( current_time( 'timestamp' ), get_option( 'date_format' ) ),
 		get_date_from_gmt( current_time( 'timestamp' ), get_option( 'time_format' ) ),
 		kbs_get_ticket_id( $ticket_id ),
-		kbs_get_ticket_url( $ticket_id )
+		kbs_get_ticket_url( $ticket_id ),
+		sprintf( __( 'This is where your %s content would be displayed.', 'kb-support' ), kbs_get_ticket_label_plural( true ) )
 	);
 
 	$message = str_replace( '{name}', $user->display_name, $message );
@@ -253,19 +251,66 @@ function kbs_get_ticket_notification_email_body_content( $ticket_id = 0, $ticket
 		$name = $email;
 	}
 
-	$default_email_body = __( 'Hello!', 'kb-support' ) . "\n\n";
-	$default_email_body .= sprintf( __( 'A new support %s has been received from', 'kb-support' ), strtolower( $single ) ) . " {name}.\n\n";
-	$default_email_body .= "{ticket_details}\n\n";
-	$default_email_body .= __( 'Thank you', 'kb-support' );
+	$default_email_body = __( 'Hey there!', 'kb-support' ) . "\n\n";
+	$default_email_body .= sprintf( __( 'A new %s has been logged at', 'kb-support' ), strtolower( $single ) ) . " {sitename}.\n\n";
+	$default_email_body .= "<strong>{ticket_title} - #{ticket_id}</strong>\n\n";
+	$default_email_body .= "{ticket_admin_url}\n\n";
+	$default_email_body .= __( 'Regards', 'kb-support' ) . "\n\n";
+	$default_email_body .= '{sitename}';
 
 	$email = kbs_get_option( 'ticket_notification', false );
 	$email = $email ? stripslashes( $email ) : $default_email_body;
 
-	$email_body = kbs_email_template_tags( $email, $ticket_data, $ticket_id, true );
-	$email_body = kbs_do_email_tags( $email, $ticket_id );
+	$email_body = kbs_email_template_tags( $email, $ticket_id );
 
 	$email_body = apply_filters( 'kbs_ticket_notification_email_template_wpautop', true ) ? wpautop( $email_body ) : $email_body;
 
 	return apply_filters( 'kbs_ticket_notification_email', $email_body, $ticket_id, $ticket_data );
 
 } // kbs_get_ticket_notification_email_body_content
+
+/**
+ * Reply Notification Template Body
+ *
+ * This is the default notification content sent to the admin when a customer replies to a ticket.
+ *
+ * @since	1.0
+ * @param	int		$ticket_id		Ticket ID
+ * @param	arr		$ticket_data	Ticket Data
+ * @return	str		$email_body		Body of the email
+ */
+function kbs_get_reply_notification_email_body_content( $ticket_id = 0, $ticket_data = array() ) {
+
+	$single = kbs_get_ticket_label_singular();
+	$plural = kbs_get_ticket_label_plural();
+	$name   = '';
+	$email  = kbs_get_ticket_user_email( $ticket_id );
+
+	$user_info = maybe_unserialize( $ticket_data['user_info'] );
+
+	if ( isset( $user_info['id'] ) && $user_info['id'] > 0 ) {
+		$user_data = get_userdata( $user_info['id'] );
+		$name = $user_data->display_name;
+	} elseif ( isset( $user_info['first_name'] ) && isset( $user_info['last_name'] ) ) {
+		$name = $user_info['first_name'] . ' ' . $user_info['last_name'];
+	} else {
+		$name = $email;
+	}
+
+	$default_email_body = __( 'Hey there!', 'kb-support' ) . "\n\n";
+	$default_email_body .= sprintf( __( 'A new reply has been received for a support %s.', 'kb-support' ), strtolower( $single ) ) . "\n\n";
+	$default_email_body .= "<strong>{ticket_title} - #{ticket_id}</strong>\n\n";
+	$default_email_body .= "{ticket_admin_url}\n\n";
+	$default_email_body .= __( 'Regards', 'kb-support' ) . "\n\n";
+	$default_email_body .= '{sitename}';
+
+	$email = kbs_get_option( 'reply_notification', false );
+	$email = $email ? stripslashes( $email ) : $default_email_body;
+
+	$email_body = kbs_email_template_tags( $email, $ticket_id );
+
+	$email_body = apply_filters( 'kbs_ticket_reply_notification_email_template_wpautop', true ) ? wpautop( $email_body ) : $email_body;
+
+	return apply_filters( 'kbs_ticket_reply_notification_email', $email_body, $ticket_id, $ticket_data );
+
+} // kbs_get_reply_notification_email_body_content

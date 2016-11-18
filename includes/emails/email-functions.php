@@ -233,11 +233,11 @@ function kbs_email_test_ticket_received() {
  * Sends the Admin Ticket Notification Email
  *
  * @since	1.0
- * @param	int		$ticket_id		Ticket ID (default: 0)
+ * @param	int		$ticket_id		Ticket ID
  * @param	arr		$ticket_data	Ticket Meta and Data
  * @return	void
  */
-function kbs_admin_email_notice( $ticket_id = 0, $ticket_data = array() ) {
+function kbs_admin_email_ticket_notice( $ticket_id = 0, $ticket_data = array() ) {
 
 	$single    = kbs_get_ticket_label_singular();
 	$ticket_id = absint( $ticket_id );
@@ -274,8 +274,62 @@ function kbs_admin_email_notice( $ticket_id = 0, $ticket_data = array() ) {
 
 	$emails->send( kbs_get_admin_notice_emails( $ticket_id ), $subject, $message, $attachments );
 
-} // kbs_admin_email_notice
-add_action( 'kbs_admin_ticket_notice', 'kbs_admin_email_notice', 10, 2 );
+} // kbs_admin_email_ticket_notice
+add_action( 'kbs_admin_ticket_notice', 'kbs_admin_email_ticket_notice', 10, 2 );
+
+/**
+ * Sends the Admin Reply Notification Email
+ *
+ * @since	1.0
+ * @param	int		$reply_id		Reply ID
+ * @param	arr		$data			Array of reply data from form
+ * @return	void
+ */
+function kbs_admin_email_reply_notice( $reply_id = 0, $data = array() ) {
+
+	$single    = kbs_get_ticket_label_singular();
+	$ticket_id = absint( $reply_id );
+
+	if ( empty( $reply_id ) ) {
+		return;
+	}
+
+	$ticket_id   = get_post_field( 'post_parent', $reply_id );
+
+	if ( empty( $ticket_id ) ) {
+		return;
+	}
+
+	$from_name   = kbs_get_option( 'from_name', wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) );
+	$from_name   = apply_filters( 'kbs_notification_reply_from_name', $from_name, $ticket_id, $data );
+
+	$from_email  = kbs_get_option( 'from_email', get_bloginfo( 'admin_email' ) );
+	$from_email  = apply_filters( 'kbs_notification_reply_from_address', $from_email, $ticket_id, $data );
+
+	$subject     = kbs_get_option( 'reply_notification_subject', sprintf( __( 'New %1Ss Reply Received - %1$s #%1$s', 'kb-support' ), $single, $ticket_id ) );
+	$subject     = apply_filters( 'kbs_admin_reply_notification_subject', wp_strip_all_tags( $subject ), $ticket_id );
+	$subject     = kbs_do_email_tags( $subject, $ticket_id );
+
+	$headers     = "From: " . stripslashes_deep( html_entity_decode( $from_name, ENT_COMPAT, 'UTF-8' ) ) . " <$from_email>\r\n";
+	$headers    .= "Reply-To: ". $from_email . "\r\n";
+	//$headers  .= "MIME-Version: 1.0\r\n";
+	$headers    .= "Content-Type: text/html; charset=utf-8\r\n";
+	$headers     = apply_filters( 'kbs_admin_reply_notification_headers', $headers, $ticket_id, $data );
+
+	$attachments = apply_filters( 'kbs_admin_reply_notification_attachments', array(), $ticket_id, $data );
+
+	$message     = kbs_get_reply_notification_email_body_content( $ticket_id, $data );
+
+	$emails = KBS()->emails;
+	$emails->__set( 'from_name', $from_name );
+	$emails->__set( 'from_email', $from_email );
+	$emails->__set( 'headers', $headers );
+	$emails->__set( 'heading', sprintf( __( 'New %s Received', 'kb-support' ), $single ) );
+
+	$emails->send( kbs_get_admin_notice_emails( $ticket_id ), $subject, $message, $attachments );
+
+} // kbs_admin_email_reply_notice
+add_action( 'kbs_ticket_customer_reply', 'kbs_admin_email_reply_notice', 10, 2 );
 
 /**
  * Retrieves the emails for which admin notifications are sent to (these can be
@@ -317,26 +371,6 @@ function kbs_admin_notices_disabled( $ticket_id = 0 ) {
 	$ret = kbs_get_option( 'disable_admin_notices', false );
 	return (bool) apply_filters( 'kbs_admin_notices_disabled', $ret, $ticket_id );
 } // kbs_admin_notices_disabled
-
-/**
- * Get ticket notification email text
- *
- * Returns the stored email text if available, the standard email text if not
- *
- * @since	1.0
- * @param
- * @return	str		$message
- */
-function kbs_get_default_sale_notification_email() {
-	$default_email_body = __( 'Hello', 'kb-support' ) . "\n\n" . sprintf( __( 'A %s has been logged', 'kb-support' ), kbs_get_ticket_label_singular() ) . ".\n\n";
-	$default_email_body .= '{ticket_details}' . "\n\n";
-	$default_email_body .= __( 'Thank you', 'kb-support' );
-
-	$message = kbs_get_option( 'ticket_notification', false );
-	$message = ! empty( $message ) ? $message : $default_email_body;
-
-	return $message;
-} // kbs_get_default_sale_notification_email
 
 /**
  * Get various correctly formatted names used in emails

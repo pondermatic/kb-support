@@ -314,6 +314,21 @@ function kbs_setup_email_tags() {
 			'function'    => 'kbs_email_tag_ticket_content'
 		),
 		array(
+			'tag'         => 'reply_date',
+			'description' => __( 'The date of the most recent ticket reply', 'kb-support' ),
+			'function'    => 'kbs_email_tag_reply_date'
+		),
+		array(
+			'tag'         => 'reply_time',
+			'description' => __( 'The time of the most recent ticket reply', 'kb-support' ),
+			'function'    => 'kbs_email_tag_reply_time'
+		),
+		array(
+			'tag'         => 'reply_content',
+			'description' => __( 'Content of the most recent reply', 'kb-support' ),
+			'function'    => 'kbs_email_tag_reply_content'
+		),
+		array(
 			'tag'         => 'ticket_url',
 			'description' => __( 'Adds a URL so customers can view their ticket directly on your website.', 'kb-support' ),
 			'function'    => 'kbs_email_tag_ticket_url'
@@ -488,6 +503,58 @@ function kbs_email_tag_ticket_title( $ticket_id )	{
 function kbs_email_tag_ticket_content( $ticket_id )	{
 	return get_post_field( 'post_content', $ticket_id, 'raw' );
 } // kbs_email_tag_ticket_content
+
+/**
+ * Email template tag: reply_date
+ * Date of most recent reply
+ *
+ * @since	1.0
+ * @param	int		$ticket_id
+ * @return	str		date
+ */
+function kbs_email_tag_reply_date( $ticket_id  ) {
+	$reply = kbs_get_last_reply( $ticket_id );
+
+	if ( $reply )	{
+		$post_time = get_post_time( 'U', false, $reply->ID );
+	
+		return get_date_from_gmt( $post_time, get_option( 'date_format' ) );
+	}
+} // kbs_email_tag_reply_date
+
+/**
+ * Email template tag: reply_time
+ * Time of most recent reply
+ *
+ * @since	1.0
+ * @param	int		$ticket_id
+ * @return	str		date
+ */
+function kbs_email_tag_reply_time( $ticket_id ) {
+	$reply = kbs_get_last_reply( $ticket_id );
+
+	if ( $reply )	{
+		$post_time = get_post_time( 'U', false, $reply->ID );
+	
+		return get_date_from_gmt( $post_time, get_option( 'time_format' ) );
+	}
+} // kbs_email_tag_reply_time
+
+/**
+ * Email template tag: reply_content
+ * The content of the most recent ticket reply.
+ *
+ * @since	1.0
+ * @param	int		$ticket_id
+ * @return	str		Reply content
+ */
+function kbs_email_tag_reply_content( $ticket_id )	{
+	$reply = kbs_get_last_reply( $ticket_id );
+
+	if ( $reply )	{
+		return get_post_field( 'post_content', $reply->ID, 'raw' );
+	}
+} // kbs_email_tag_reply_content
 
 /**
  * Email template tag: ticket_url
