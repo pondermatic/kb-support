@@ -291,7 +291,7 @@ add_action( 'kbs_admin_ticket_notice', 'kbs_admin_email_ticket_notice', 10, 2 );
  */
 function kbs_admin_email_reply_notice( $reply_id = 0, $data = array() ) {
 
-	if ( is_admin() )	{
+	if ( is_admin() || kbs_admin_notices_disabled( $ticket_id ) )	{
 		return;
 	}
 
