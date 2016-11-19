@@ -208,26 +208,6 @@ function kbs_settings_contextual_help() {
 				strtolower( $ticket_singular )
 				) . '</li>' .
 			'</ul>' .
-			'<p>' . sprintf( __( '<strong>%s Notifications</strong>', 'kb-support' ), $ticket_singular ) . '<br />' .
-				sprintf( __( '<em>Adjust the settings for emails that are sent to Support Workers when a new %1$s is logged.</em>', 'kb-support' ), strtolower( $ticket_singular ) ) . '</p>' .
-			'<ul>' .
-				'<li>' . sprintf( __( '<strong>Disable Admin Notifications</strong> - Select to stop emails being sent to Support Workers when a new %1$s is logged.', 'kb-support' ),
-				strtolower( $ticket_singular )
-				) . '</li>' .
-				'<li>' . sprintf( __( '<strong>%1$s Notification Subject</strong> - Enter the subject for the email sent to Support Workers a new %2$s is logged.', 'kb-support' ),
-				$ticket_singular,
-				strtolower( $ticket_singular )
-				) . '</li>' .
-				'<li>' . sprintf( __( '<strong>%1$s Notification</strong> - Enter the content of the email that is sent to Support Workers when a %2$s is logged. A list of email tags you can use are displayed under the textarea.', 'kb-support' ),
-				$ticket_singular,
-				strtolower( $ticket_singular )
-				) . '</li>' .
-				'<li>' . sprintf( __( '<strong>%1$s Notification Emails</strong> - Enter a list of email addresses (one per line) that should be notified when a new %2$s is logged by a customer. Enter <code>%3$s</code> to include the assigned agent\'s email address.', 'kb-support' ),
-				$ticket_singular,
-				strtolower( $ticket_singular ),
-				'{agent}'
-				) . '</li>' .
-			'</ul>' .
 			'<p>' . __( '<strong>Reply Added</strong>', 'kb-support' ) . '<br />' .
 				sprintf( __( '<em>Adjust the settings for emails that are sent to a customer when a Support Worker adds a reply to their %1$s.</em>', 'kb-support' ), strtolower( $ticket_singular ) ) . '</p>' .
 			'<ul>' .
@@ -258,6 +238,31 @@ function kbs_settings_contextual_help() {
 				) . '</li>' .
 				'<li>' . sprintf( __( '<strong>Content</strong> - Enter the content of the email that is sent to a customer when their %1$s is closed. A list of email tags you can use are displayed under the textarea.', 'kb-support' ),
 				strtolower( $ticket_singular )
+				) . '</li>' .
+			'</ul>' .
+			'<p>' . __( '<strong>Notifications</strong>', 'kb-support' ) . '<br />' .
+				sprintf( __( '<em>Adjust the settings for emails that are sent to Support Workers when a new %1$s is logged.</em>', 'kb-support' ), strtolower( $ticket_singular ) ) . '</p>' .
+			'<ul>' .
+				'<li>' . sprintf( __( '<strong>Disable Admin Notifications</strong> - Select to stop emails being sent to Support Workers when a new %1$s is logged.', 'kb-support' ),
+				strtolower( $ticket_singular )
+				) . '</li>' .
+				'<li>' . sprintf( __( '<strong>%1$s Notification Subject</strong> - Enter the subject for the email sent to Support Workers a new %2$s is logged.', 'kb-support' ),
+				$ticket_singular,
+				strtolower( $ticket_singular )
+				) . '</li>' .
+				'<li>' . sprintf( __( '<strong>%1$s Notification</strong> - Enter the content of the email that is sent to Support Workers when a %2$s reply is submitted from the a customer. A list of email tags you can use are displayed under the textarea.', 'kb-support' ),
+				$ticket_singular,
+				strtolower( $ticket_singular )
+				) . '</li>' .
+				'<li>' . __( '<strong>Notification Subject</strong> - Enter the subject for the email sent to Support Workers a new reply is added to a %2$s.', 'kb-support' ) . '</li>' .
+				'<li>' . sprintf( __( '<strong>%1$s Reply Notification</strong> - Enter the content of the email that is sent to Support Workers when a %2$s is logged. A list of email tags you can use are displayed under the textarea.', 'kb-support' ),
+				$ticket_singular,
+				strtolower( $ticket_singular )
+				) . '</li>' .
+				'<li>' . sprintf( __( '<strong>%1$s Notification Emails</strong> - Enter a list of email addresses (one per line) that should be notified when a new %2$s is logged by a customer. Enter <code>%3$s</code> to include the assigned agent\'s email address.', 'kb-support' ),
+				$ticket_singular,
+				strtolower( $ticket_singular ),
+				'{agent}'
 				) . '</li>' .
 			'</ul>'
 	) );

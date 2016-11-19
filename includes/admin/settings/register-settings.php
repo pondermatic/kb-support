@@ -550,65 +550,6 @@ function kbs_get_registered_settings() {
 						'std'  => kbs_get_ticket_logged_email_body_content()
 					),
 				),
-				'ticket_notifications' => array(
-					'ticket_notification_settings' => array(
-						'id'   => 'ticket_notification_settings',
-						'name' => '<h3>' . sprintf( __( '%s Notifications', 'kb-support' ), $single ) . '</h3>',
-						'type' => 'header'
-					),
-					'disable_admin_notices' => array(
-						'id'   => 'disable_admin_notices',
-						'name' => __( 'Disable Notifications', 'kb-support' ),
-						'desc' => sprintf( __( 'Check this box to disable %s notification emails.', 'kb-support' ), strtolower( $single ) ),
-						'type' => 'checkbox'
-					),
-					'ticket_notification_subject' => array(
-						'id'   => 'ticket_notification_subject',
-						'name' => sprintf( __( '%s Notification Subject', 'kb-support' ), $single ),
-						'desc' => sprintf( __( 'Enter the subject line for the %s notification email. Template tags accepted.', 'kb-support' ), strtolower( $single ) ),
-						'type' => 'text',
-						'std'  => sprintf( __( 'New %s Received - #{ticket_id}', 'kb-support' ), $single )
-					),
-					'ticket_notification' => array(
-						'id'   => 'ticket_notification',
-						'name' => sprintf( __( '%s Notification', 'kb-support' ), $single ),
-						'desc' => sprintf( __( 'Enter the text that is sent as %s received notification email after submission of a case. HTML is accepted. Available template tags:' ), strtolower( $single ) ) . '<br />' . kbs_get_emails_tags_list(),
-						'type' => 'rich_editor',
-						'std'  => __( 'Hey there!', 'kb-support' ) . "\n\n" .
-								  sprintf( __( 'A new %s has been logged at', 'kb-support' ), strtolower( $single ) ) . " {sitename}.\n\n" .
-								  "<strong>{ticket_title} - #{ticket_id}</strong>\n\n" .
-								  "{ticket_admin_url}\n\n" .
-								  __( 'Regards', 'kb-support' ) . "\n\n" .
-								  '{sitename}'
-					),
-					'reply_notification_subject' => array(
-						'id'   => 'reply_notification_subject',
-						'name' => __( 'Reply Notification Subject', 'kb-support' ),
-						'desc' => sprintf( __( 'Enter the subject line of the notification email that is sent when a customer submits a %s reply. Template tags accepted.', 'kb-support' ), strtolower( $single ) ),
-						'type' => 'text',
-						'std'  => sprintf( __( 'New %s Reply Received - #{ticket_id}', 'kb-support' ), $single )
-					),
-					'reply_notification' => array(
-						'id'   => 'reply_notification',
-						'name' => sprintf( __( '%s Reply Notification', 'kb-support' ), $single ),
-						'desc' => sprintf( __( 'Enter the text that is sent as a notification email when a customer submits a %s reply. HTML is accepted. Available template tags:' ), strtolower( $single ) ) . '<br />' . kbs_get_emails_tags_list(),
-						'type' => 'rich_editor',
-						'std'  => __( 'Hey there!', 'kb-support' ) . "\n\n" .
-								  sprintf( __( 'A new %s reply has been received at', 'kb-support' ), strtolower( $single ) ) . " {sitename}.\n\n" .
-								  "<strong>{ticket_title} - #{ticket_id}</strong>\n\n" .
-								  "{ticket_admin_url}\n\n" .
-								  __( 'Regards', 'kb-support' ) . "\n\n" .
-								  '{sitename}'
-					),
-					'admin_notice_emails' => array(
-						'id'   => 'admin_notice_emails',
-						'name' => sprintf( __( '%s Notification Emails', 'kb-support' ), $single ),
-						'desc' => sprintf(
-							__( 'Enter the email address(es) that should receive a notification anytime a %s is logged, one per line. Enter <code>{agent}</code> to insert the assigned agent\'s email address', 'kb-support' ), strtolower( $single ), '{agent}' ),
-						'type' => 'textarea',
-						'std'  => get_bloginfo( 'admin_email' )
-					)
-				),
 				'ticket_reply' => array(
 					'ticket_reply_settings' => array(
 						'id'   => 'ticket_reply_settings',
@@ -683,6 +624,65 @@ function kbs_get_registered_settings() {
 								  '{ticket_url}' . "\n\n" .
 								  __( 'Regards', 'kb-support' ) . "\n\n" .
 								  '{sitename}'
+					)
+				),
+				'ticket_notifications' => array(
+					'ticket_notification_settings' => array(
+						'id'   => 'ticket_notification_settings',
+						'name' => '<h3>' . sprintf( __( '%s Notifications', 'kb-support' ), $single ) . '</h3>',
+						'type' => 'header'
+					),
+					'disable_admin_notices' => array(
+						'id'   => 'disable_admin_notices',
+						'name' => __( 'Disable Notifications', 'kb-support' ),
+						'desc' => sprintf( __( 'Check this box to disable %s notification emails.', 'kb-support' ), strtolower( $single ) ),
+						'type' => 'checkbox'
+					),
+					'ticket_notification_subject' => array(
+						'id'   => 'ticket_notification_subject',
+						'name' => sprintf( __( '%s Notification Subject', 'kb-support' ), $single ),
+						'desc' => sprintf( __( 'Enter the subject line for the %s notification email. Template tags accepted.', 'kb-support' ), strtolower( $single ) ),
+						'type' => 'text',
+						'std'  => sprintf( __( 'New %s Received - ##{ticket_id}##', 'kb-support' ), $single )
+					),
+					'ticket_notification' => array(
+						'id'   => 'ticket_notification',
+						'name' => sprintf( __( '%s Notification', 'kb-support' ), $single ),
+						'desc' => sprintf( __( 'Enter the text that is sent as %s received notification email after submission of a case. HTML is accepted. Available template tags:' ), strtolower( $single ) ) . '<br />' . kbs_get_emails_tags_list(),
+						'type' => 'rich_editor',
+						'std'  => __( 'Hey there!', 'kb-support' ) . "\n\n" .
+								  sprintf( __( 'A new %s has been logged at', 'kb-support' ), strtolower( $single ) ) . " {sitename}.\n\n" .
+								  "<strong>{ticket_title} - #{ticket_id}</strong>\n\n" .
+								  "{ticket_admin_url}\n\n" .
+								  __( 'Regards', 'kb-support' ) . "\n\n" .
+								  '{sitename}'
+					),
+					'reply_notification_subject' => array(
+						'id'   => 'reply_notification_subject',
+						'name' => __( 'Reply Notification Subject', 'kb-support' ),
+						'desc' => sprintf( __( 'Enter the subject line of the notification email that is sent when a customer submits a %s reply. Template tags accepted.', 'kb-support' ), strtolower( $single ) ),
+						'type' => 'text',
+						'std'  => sprintf( __( 'New %s Reply Received - ##{ticket_id}##', 'kb-support' ), $single )
+					),
+					'reply_notification' => array(
+						'id'   => 'reply_notification',
+						'name' => sprintf( __( '%s Reply Notification', 'kb-support' ), $single ),
+						'desc' => sprintf( __( 'Enter the text that is sent as a notification email when a customer submits a %s reply. HTML is accepted. Available template tags:' ), strtolower( $single ) ) . '<br />' . kbs_get_emails_tags_list(),
+						'type' => 'rich_editor',
+						'std'  => __( 'Hey there!', 'kb-support' ) . "\n\n" .
+								  sprintf( __( 'A new %s reply has been received at', 'kb-support' ), strtolower( $single ) ) . " {sitename}.\n\n" .
+								  "<strong>{ticket_title} - #{ticket_id}</strong>\n\n" .
+								  "{ticket_admin_url}\n\n" .
+								  __( 'Regards', 'kb-support' ) . "\n\n" .
+								  '{sitename}'
+					),
+					'admin_notice_emails' => array(
+						'id'   => 'admin_notice_emails',
+						'name' => sprintf( __( '%s Notification Emails', 'kb-support' ), $single ),
+						'desc' => sprintf(
+							__( 'Enter the email address(es) that should receive a notification anytime a %s is logged, one per line. Enter <code>{agent}</code> to insert the assigned agent\'s email address', 'kb-support' ), strtolower( $single ), '{agent}' ),
+						'type' => 'textarea',
+						'std'  => get_bloginfo( 'admin_email' )
 					)
 				)
 			)
@@ -994,9 +994,9 @@ function kbs_get_registered_settings_sections() {
 		'emails'     => apply_filters( 'kbs_settings_sections_emails', array(
 			'main'                 => __( 'Email Settings', 'kb-support' ),
 			'ticket_logged'        => sprintf( __( '%s Logged', 'kb-support' ), $single ),
-			'ticket_notifications' => sprintf( __( '%s Notifications', 'kb-support' ), $single ),
 			'ticket_reply'         => __( 'Reply Added', 'kb-support' ),
-			'ticket_closed'        => sprintf( __( '%s Closed', 'kb-support' ), $single )
+			'ticket_closed'        => sprintf( __( '%s Closed', 'kb-support' ), $single ),
+			'ticket_notifications' => __( 'Notifications', 'kb-support' ),
 		) ),
 		'styles'     => apply_filters( 'kbs_settings_sections_styles', array(
 			'main'                 => __( 'Styles', 'kb-support' )
