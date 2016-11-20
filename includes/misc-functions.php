@@ -278,6 +278,22 @@ function kbs_get_notices( $notice = '', $notice_only = false )	{
 			'class'  => 'info',
 			'notice' => sprintf( __( 'Access to this %s is restricted. Login to continue.', 'kb-support' ), kbs_get_article_label_singular() )
 		),
+		'category_restricted' => array(
+			'class'  => 'info',
+			'notice' => sprintf( __( 'Access to %s in this category is restricted.', 'kb-support' ), kbs_get_article_label_plural() )
+		),
+		'category_restricted_login' => array(
+			'class'  => 'info',
+			'notice' => sprintf( __( 'Access to %s in this category is restricted. Login to continue.', 'kb-support' ), kbs_get_article_label_plural() )
+		),
+		'tag_restricted' => array(
+			'class'  => 'info',
+			'notice' => sprintf( __( 'Access to %s with this tag is restricted.', 'kb-support' ), kbs_get_article_label_plural() )
+		),
+		'tag_restricted_login' => array(
+			'class'  => 'info',
+			'notice' => sprintf( __( 'Access to %s with this tag is restricted. Login to continue.', 'kb-support' ), kbs_get_article_label_plural() )
+		),
 		'missing_reply' => array(
 			'class'  => 'error',
 			'notice' => __( 'Please enter your reply.', 'kb-support' )

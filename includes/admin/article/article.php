@@ -52,18 +52,44 @@ function kbs_set_articles_column_data( $column_name, $post_id ) {
 
 	switch ( $column_name ) {
 		case 'article_category':
-			$terms = get_the_term_list( $post_id, 'article_category', '', '<br />', '');
-			if ( $terms )	{
-				echo $terms;
+			$terms = get_the_terms( $post_id, 'article_category' );
+			$links = array();
+			if ( ! empty( $terms ) )	{
+				foreach ( $terms as $term )	{
+					$restricted = '';
+					$link = get_term_link( $term, 'article_category' );
+					if ( is_wp_error( $link ) )	{
+						return $link;
+					}
+					if ( kbs_article_term_is_restricted( $term->term_id ) )	{
+						$restricted = '<span class="padlock"></span>';
+						$restricted = apply_filters( 'kbs_article_list_category_restricted', $restricted );
+					}
+					$links[] = '<a href="' . esc_url( $link ) . '" rel="tag">' . $term->name . '</a> ' . $restricted;
+				}
+				echo implode( '<br />', $links );
 			} else	{
 				echo '&mdash;';
 			}
 			break;
 
 		case 'article_tag':
-			$terms = get_the_term_list( $post_id, 'article_tag', '', '<br />', '');
-			if ( $terms )	{
-				echo $terms;
+			$terms = get_the_terms( $post_id, 'article_tag' );
+			$links = array();
+			if ( ! empty( $terms ) )	{
+				foreach ( $terms as $term )	{
+					$restricted = '';
+					$link = get_term_link( $term, 'article_tag' );
+					if ( is_wp_error( $link ) )	{
+						return $link;
+					}
+					if ( kbs_article_term_is_restricted( $term->term_id ) )	{
+						$restricted = '<span class="padlock"></span>';
+						$restricted = apply_filters( 'kbs_article_list_tag_restricted', $restricted );
+					}
+					$links[] = '<a href="' . esc_url( $link ) . '" rel="tag">' . $term->name . '</a> ' . $restricted;
+				}
+				echo implode( '<br />', $links );
 			} else	{
 				echo '&mdash;';
 			}

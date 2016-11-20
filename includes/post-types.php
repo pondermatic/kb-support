@@ -473,7 +473,7 @@ function kbs_setup_custom_taxonomies() {
 add_action( 'init', 'kbs_setup_custom_taxonomies', 0 );
 
 /**
- * Get the singular and plural labels for a ticket taxonomy.
+ * Get the singular and plural labels for a taxonomy.
  *
  * @since	1.0
  * @param	str		$taxonomy	The Taxonomy to get labels for

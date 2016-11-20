@@ -209,135 +209,6 @@ function kbs_count_articles( $args = array() ) {
 } // kbs_count_articles
 
 /**
- * Whether or not restricted articles should be hidden.
- *
- * @since	1.0
- * @return	bool
- */
-function kbs_hide_restricted_articles()	{
-	return kbs_get_option( 'article_hide_restricted', false );
-} // kbs_hide_restricted_articles
-
-/**
- * Get Hidden KB Article IDs
- *
- * Retrieve Hidden KB Articles from the database.
- *
- * This is a simple wrapper for KBS_Articles_Query.
- *
- * @since	1.0
- * @param	arr		$args		Arguments passed to get_articles
- * @return	arr		Array of article IDs retrieved from the database
- */
-function kbs_get_restricted_articles()	{
-	$args = array(
-		'restricted' => true,
-		'fields'     => 'ids'
-	);
-
-	return kbs_get_articles( $args );
-} // kbs_get_restricted_articles
-
-/**
- * Whether or not the article is restricted.
- *
- * @since	1.0
- * @param	int		$post_id	The post ID
- * @return	bool	True if restricted
- */
-function kbs_article_is_restricted( $post_id = 0 )	{
-	global $post;
-
-	if ( empty( $post_id ) && ! empty( $post ) )	{
-		$post_id = $post->ID;
-	}
-
-	$restricted = get_post_meta( $post_id, '_kbs_article_restricted', true );
-
-	if ( $restricted && is_user_logged_in() )	{
-		$restricted = false;
-	}
-
-	$restricted = apply_filters( 'kbs_article_restricted', $restricted, $post_id );
-
-	return $restricted;
-} // kbs_article_is_restricted
-
-/**
- * Whether or not a user can view a KB Article.
- *
- * @since	1.0
- * @param	int|obj		$article	A KB Article ID or post object.
- * @param	int			$user_id	The user ID.
- * @return	bool		True if the user can view the KB Article.
- */
-function kbs_user_can_view_article( $article, $user_id = 0 )	{
-	if ( is_int( $article ) )	{
-		$article = get_post( $article );
-	}
-
-	$can_view = true;
-
-	if ( ! is_user_logged_in() || ( kbs_hide_restricted_articles() && kbs_article_is_restricted( $article->ID ) ) )	{
-		$can_view = false;
-	}
-
-	/**
-	 * Allow plugins to filter the response.
-	 *
-	 * @since	1.0
-	 */
-	return apply_filters( 'kbs_user_can_view_article', $can_view, $article, $user_id );
-} // kbs_user_can_view_article
-
-/**
- * When a user is trying to view restricted content.
- *
- * @since	1.0
- * @return	str		Message displayed when content is restricted
- */
-function kbs_article_content_is_restricted( $post = null )	{
-	global $post;
-
-	if ( is_archive() )	{
-		$notice  = kbs_get_notices( 'article_restricted', true );
-		$content = $notice;
-	} else	{
-		$content = kbs_display_notice( 'article_restricted_login' );
-		$content .= kbs_login_form();
-	}
-
-	return $content;
-} // kbs_article_content_is_restricted
-
-/**
- * Exclude restricted posts.
- *
- * @since	1.0
- * @return	void
- */
-function kbs_articles_exclude_restricted( $query )	{
-
-	if ( defined( 'DOING_AJAX' ) && DOING_AJAX )	{
-		return;
-	}
-
-	if ( is_admin() || ! is_post_type_archive( 'article' ) || ! $query->is_main_query() )	{
-		return;
-	}
-
-	if ( ! kbs_hide_restricted_articles() || is_user_logged_in() )	{
-		return;
-	}
-
-	$hidden_ids = kbs_get_restricted_articles();
-
-	$query->set( 'post__not_in', $hidden_ids );
-
-} // kbs_articles_exclude_restricted
-add_action( 'pre_get_posts', 'kbs_articles_exclude_restricted' );
-
-/**
  * Retrieve the total view count for a KB Article.
  *
  * @since	1.0
@@ -397,7 +268,7 @@ function kbs_get_article_excerpt( $article_id ) {
 
 	$excerpt = wp_trim_words( $excerpt, $num_words, '&hellip;' );
 
-	return apply_filters( 'kbs_ticket_excerpt', $excerpt );
+	return apply_filters( 'kbs_article_excerpt', $excerpt );
 
 } // kbs_get_article_excerpt
 

@@ -222,6 +222,8 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/article/article-actions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/class-kbs-articles-query.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/article-functions.php';
+		require_once KBS_PLUGIN_DIR . 'includes/article/article-restricted.php';
+		require_once KBS_PLUGIN_DIR . 'includes/article/article-content.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/article-search.php';
 		require_once KBS_PLUGIN_DIR . 'includes/tickets/class-kbs-ticket-stats.php';
 		require_once KBS_PLUGIN_DIR . 'includes/tickets/class-kbs-tickets-query.php';
@@ -261,6 +263,7 @@ final class KB_Support {
 			require_once KBS_PLUGIN_DIR . 'includes/admin/tickets/metaboxes.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/tickets/contextual-help.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/article/article.php';
+			require_once KBS_PLUGIN_DIR . 'includes/admin/article/article-restricted.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/article/metaboxes.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/article/contextual-help.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/forms/forms.php';
