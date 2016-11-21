@@ -95,7 +95,7 @@ function kbs_get_article_terms( $article_id = 0 )	{
  */
 function kbs_get_restricted_terms( $args = array() )	{
 	$defaults = array(
-		'taxonomy'   => array( 'article_category', 'article_tag' ),
+		'taxonomy'   => array( 'article_category' ),
 		'hide_empty' => false,
 		'fields'     => 'ids',
 		'meta_key'   => '_kbs_term_restricted',
@@ -106,7 +106,7 @@ function kbs_get_restricted_terms( $args = array() )	{
 
 	$query = new WP_Term_Query( $args );
 
-	return kbs_get_articles( $args );
+	return $query;
 } // kbs_get_restricted_terms
 
 /**
@@ -121,14 +121,14 @@ function kbs_article_is_term_restricted( $term_id )	{
 } // kbs_article_is_term_restricted
 
 /**
- * Whether or not a user can view a KB Article.
+ * Whether or not a user can access a KB Article.
  *
  * @since	1.0
  * @param	int|obj		$article	A KB Article ID or post object.
  * @param	int			$user_id	The user ID.
  * @return	bool		True if the user can view the KB Article.
  */
-function kbs_user_can_view_article( $article, $user_id = 0 )	{
+function kbs_article_user_can_access( $article, $user_id = 0 )	{
 	if ( is_int( $article ) )	{
 		$article = get_post( $article );
 	}
@@ -144,28 +144,8 @@ function kbs_user_can_view_article( $article, $user_id = 0 )	{
 	 *
 	 * @since	1.0
 	 */
-	return apply_filters( 'kbs_user_can_view_article', $can_view, $article, $user_id );
-} // kbs_user_can_view_article
-
-/**
- * When a user is trying to view restricted content.
- *
- * @since	1.0
- * @return	str		Message displayed when content is restricted
- */
-function kbs_article_content_is_restricted( $post = null )	{
-	global $post;
-
-	if ( is_archive() )	{
-		$notice  = kbs_get_notices( 'article_restricted', true );
-		$content = $notice;
-	} else	{
-		$content = kbs_display_notice( 'article_restricted_login' );
-		$content .= kbs_login_form();
-	}
-
-	return $content;
-} // kbs_article_content_is_restricted
+	return apply_filters( 'kbs_article_user_can_access', $can_view, $article, $user_id );
+} // kbs_article_user_can_access
 
 /**
  * Exclude restricted posts.

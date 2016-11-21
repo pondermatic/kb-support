@@ -28,7 +28,6 @@ function kbs_article_taxonomy_restricted_add_meta_field()	{
 }
 // kbs_article_taxonomy_restricted_add_meta_field
 add_action( 'article_category_add_form_fields', 'kbs_article_taxonomy_restricted_add_meta_field' );
-add_action( 'article_tag_add_form_fields', 'kbs_article_taxonomy_restricted_add_meta_field' );
 
 /**
  * Adds the restricted checkbox when editing terms.
@@ -51,7 +50,6 @@ function kbs_article_taxonomy_restricted_edit_meta_field( $term )	{
 }
 // kbs_article_taxonomy_restricted_edit_meta_field
 add_action( 'article_category_edit_form_fields', 'kbs_article_taxonomy_restricted_edit_meta_field' );
-add_action( 'article_tag_edit_form_fields', 'kbs_article_taxonomy_restricted_edit_meta_field' );
 
 /**
  * Saves the restricted setting for the term.
@@ -72,8 +70,6 @@ function kbs_article_save_restricted_meta( $term_id, $taxonomy )	{
 } // kbs_article_save_restricted_meta
 add_action( 'edited_article_category', 'kbs_article_save_restricted_meta', 10, 2 );
 add_action( 'create_article_category', 'kbs_article_save_restricted_meta', 10, 2 );
-add_action( 'edited_article_tag', 'kbs_article_save_restricted_meta', 10, 2 );
-add_action( 'create_article_tag', 'kbs_article_save_restricted_meta', 10, 2 );
 
 /**
  * Adds the visibility column to the terms list.
@@ -88,7 +84,6 @@ function kbs_article_tax_add_visibility_column( $columns )	{
     return $columns;
 } // kbs_article_tax_add_visibility_column
 add_filter('manage_edit-article_category_columns', 'kbs_article_tax_add_visibility_column');
-add_filter('manage_edit-article_tag_columns', 'kbs_article_tax_add_visibility_column');
 
 /**
  * Renders the data for the visibility column on the terms list.
@@ -111,4 +106,3 @@ function kbs_article_tax_render_visibility_column_content( $content, $column_nam
 	return $content;
 } // kbs_article_tax_render_visibility_column_content
 add_filter( 'manage_article_category_custom_column', 'kbs_article_tax_render_visibility_column_content', 10, 3 );
-add_filter( 'manage_article_tag_custom_column', 'kbs_article_tax_render_visibility_column_content', 10, 3 );

@@ -440,6 +440,19 @@ function kbs_get_registered_settings() {
 						'type'    => 'checkbox',
 						'std'     => '0'
 					),
+					'restricted_login'    => array(
+						'id'      => 'restricted_login',
+						'name'    => __( 'Show Register / Login Form?', 'kb-support' ),
+						'desc'    => sprintf( __( 'Display the registration and/or login forms when a non-logged-in user lands on a restricted %s.', 'kb-support' ), kbs_get_article_label_singular() ),
+						'type'    => 'select',
+						'std'     => 'login',
+						'options' => array(
+							'both'         => __( 'Registration and Login Forms', 'kb-support' ),
+							'registration' => __( 'Registration Form Only', 'kb-support' ),
+							'login'        => __( 'Login Form Only', 'kb-support' ),
+							'none'         => __( 'None', 'kb-support' ),
+						)
+					),
 					'article_hide_restricted' => array(
 						'id'      => 'article_hide_restricted',
 						'name'    => sprintf( __( 'Hide Restricted %s', 'kb-support' ), kbs_get_article_label_plural() ),
@@ -469,6 +482,23 @@ function kbs_get_registered_settings() {
 						'step'    => '5',
 						'size'    => 'small',
 						'std'     => '100'
+					)
+				),
+				'restricted_notices' => array(
+					'kb_settings_restricted_header' => array(
+						'id'   => 'kb_settings_restricted_header',
+						'name' => '<h3>' . sprintf( __( '%s Notices', 'kb-support' ), kbs_get_article_label_singular() ) . '</h3>',
+						'type' => 'header'
+					),
+					'restricted_notice'   => array(
+						'id'   => 'restricted_notice',
+						'name' => sprintf( __( 'Single %s', 'kb-support' ), kbs_get_article_label_singular() ),
+						'desc' => sprintf( __( 'The text that will be displayed after the excerpt when a user attempts to access a restricted %s', 'kb-support' ), kbs_get_article_label_singular() ),
+						'type' => 'rich_editor',
+						'std'  => '<h3>' . __( 'Restricted Content', 'kb-support' ) . '</h3>' .
+							sprintf( __( 'The %s you are viewing is restricted. Please login below to access the full content.', 'kb-support' ),
+							kbs_get_article_label_singular()
+						)
 					)
 				)
 			)
@@ -989,7 +1019,8 @@ function kbs_get_registered_settings_sections() {
 			//'sla'                  => __( 'Service Levels', 'kb-support' )
 		) ),
 		'articles'        => apply_filters( 'kbs_settings_sections_articles', array(
-			'main'                 => sprintf( __( 'General %s Settings', 'kb-support' ), $single )
+			'main'                 => sprintf( __( 'General %s Settings', 'kb-support' ), kbs_get_article_label_singular() ),
+			'restricted_notices'   => __( 'Restricted Content Notices', 'kb-support' )
 		) ),
 		'emails'     => apply_filters( 'kbs_settings_sections_emails', array(
 			'main'                 => __( 'Email Settings', 'kb-support' ),

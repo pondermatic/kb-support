@@ -14,9 +14,7 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
- * Article Content for restricted content.
- *
- * Remove content if it should be restricted.
+ * Filter Article Content if it is restricted.
  *
  * @since	1.0
  * @global	$post
@@ -24,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) )
  * @param	str		$content	The the_content field of the kb article object
  * @return	str		The content with any additional data attached
  */
-function kbs_restrict_article_content( $content ) {
+function kbs_filter_article_content( $content ) {
 	global $post;
 
 	if ( $post && 'article' == $post->post_type )	{
@@ -34,26 +32,113 @@ function kbs_restrict_article_content( $content ) {
 			// Remove comments
 			kbs_article_remove_comments();
 
-			$content = kbs_article_content_is_restricted();
-			$action  = is_archive() ? 'archive' : 'single';
+			$type    = is_archive() ? 'archive' : 'single';
+			$message = kbs_article_format_content( $type );
 
-			/**
-			 * Allow plugins to hook into the actions taken when content is restricted.
-			 *
-			 * @param	obj		$post	The Article post object
-			 * @since	1.0
-			 */
-			do_action( 'kbs_resctricted_article_' . $action, $post );
+		}
 
+		return $content . $message;
+
+	}
+
+	return $content;
+} // kbs_filter_article_content
+add_filter( 'the_content', 'kbs_filter_article_content', 100 );
+
+/**
+ * Display an overview only for restricted content. 
+ *
+ * @since	1.0
+ * @param	str		$type		The type of content being displayed. 'single' | 'archive'
+ * @return	str		The content to display for restricted articles.
+ */
+function kbs_article_format_content( $type = 'single' )	{
+	global $post;
+
+	$excerpt_length = kbs_get_article_excerpt_length();
+
+	$excerpt = kbs_article_excerpt_by_id( $post, $excerpt_length );
+	$message = '';
+
+	if ( 'single' == $type )	{
+		$raw_message = kbs_get_option( 'restricted_notice' );
+		$message     = '<div class="kbs_alert kbs_alert_info">' . wpautop( stripslashes( $raw_message ) ) . '</div>';
+
+		$register_login = kbs_get_option( 'restricted_login', 'none' );
+	
+		if ( 'both' == $register_login || 'login' == $register_login )	{
+			$message .= kbs_login_form( kbs_get_current_page_url() );
+		}
+
+		if ( 'both' == $register_login || 'registration' == $register_login )	{
+			$message .= kbs_register_form( kbs_get_current_page_url() );
 		}
 
 	}
 
-	if ( ! isset( $action ) || ! has_action( 'kbs_resctricted_article_' . $action ) )	{
-		return $content;
+	$message = apply_filters( 'kbs_article_restricted_message', $message, $raw_message, $type );
+	$content = $excerpt . $message;
+
+	return $content;
+} // kbs_article_format_content
+
+/**
+ * Retrieve the excerpt length from settings.
+ *
+ * @since	1.0
+ * @return	int		The required excerpt length 
+ */
+
+function kbs_get_article_excerpt_length()	{
+	$length = kbs_get_option( 'kbs_article_excerpt_length', 100 );
+
+	return (int) apply_filters( 'kbs_article_excerpt_length', $length );
+} // kbs_get_article_excerpt_length
+
+/**
+ * Gets the excerpt of a specific article by its ID or object.
+ *
+ * @param	obj|int	$post		The ID or object of the post article to get the excerpt of
+ * @param	int		$length		The length of the excerpt in words
+ * @param	str		$tags		The allowed HTML tags that will not be stripped out.
+ * @param	str		$extra		Text to append to the end of the excerpt.
+ */
+
+function kbs_article_excerpt_by_id( $post, $length = 50, $tags = '<a><em><strong><blockquote><ul><ol><li><p>', $extra = ' . . .' ) {
+
+	if ( is_int( $post ) ) {
+		// get the post object of the passed ID
+		$post = get_post( $post );
+	} elseif ( ! is_object( $post ) ) {
+		return false;
 	}
-} // kbs_restrict_article_content
-add_filter( 'the_content', 'kbs_restrict_article_content', 999 );
+
+	$more = false;
+
+	if ( has_excerpt( $post->ID ) ) {
+		$the_excerpt = $post->post_excerpt;
+	} elseif ( strstr( $post->post_content, '<!--more-->' ) ) {
+		$more = true;
+		$length = strpos( $post->post_content, '<!--more-->' );
+		$the_excerpt = $post->post_content;
+	} else {
+		$the_excerpt = $post->post_content;
+	}
+
+	$tags = apply_filters( 'kbs_article_excerpt_tags', $tags );
+
+	if ( $more ) {
+		$the_excerpt = strip_shortcodes( strip_tags( stripslashes( substr( $the_excerpt, 0, $length ) ), $tags ) );
+	} else {
+		$the_excerpt   = strip_shortcodes( strip_tags( stripslashes( $the_excerpt ), $tags ) );
+		$the_excerpt   = preg_split( '/\b/', $the_excerpt, $length * 2+1 );
+		$excerpt_waste = array_pop( $the_excerpt );
+		$the_excerpt   = implode( $the_excerpt );
+		$the_excerpt  .= $extra;
+	}
+
+	return wpautop( $the_excerpt );
+} // kbs_article_excerpt_by_id
 
 /**
  * Remove comments for restricted articles.

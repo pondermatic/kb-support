@@ -270,14 +270,6 @@ function kbs_get_notices( $notice = '', $notice_only = false )	{
 			'class'  => 'info',
 			'notice' => sprintf( __( 'You must login to view your %s.', 'kb-support' ), kbs_get_ticket_label_plural( true ) )
 		),
-		'article_restricted' => array(
-			'class'  => 'info',
-			'notice' => sprintf( __( 'Access to this %s is restricted.', 'kb-support' ), kbs_get_article_label_singular() )
-		),
-		'article_restricted_login' => array(
-			'class'  => 'info',
-			'notice' => sprintf( __( 'Access to this %s is restricted. Login to continue.', 'kb-support' ), kbs_get_article_label_singular() )
-		),
 		'category_restricted' => array(
 			'class'  => 'info',
 			'notice' => sprintf( __( 'Access to %s in this category is restricted.', 'kb-support' ), kbs_get_article_label_plural() )
