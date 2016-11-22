@@ -25,19 +25,22 @@ if ( ! defined( 'ABSPATH' ) )
 function kbs_filter_article_content( $content ) {
 	global $post;
 
-	if ( $post && 'article' == $post->post_type )	{
+	if ( defined( 'DOING_AJAX' ) && DOING_AJAX )	{
+		return $content;
+	}
+
+	if ( 'article' == $post->post_type && ! kbs_article_user_can_access( $post ) )	{
 
 		if ( kbs_article_is_restricted() )	{
 
 			// Remove comments
 			kbs_article_remove_comments();
 
-			$type    = is_archive() ? 'archive' : 'single';
-			$message = kbs_article_format_content( $type );
+			$type = is_single() ? 'single' : 'archive';
+
+			$content = kbs_article_format_content( $type );
 
 		}
-
-		return $content . $message;
 
 	}
 
@@ -56,9 +59,9 @@ function kbs_article_format_content( $type = 'single' )	{
 	global $post;
 
 	$excerpt_length = kbs_get_article_excerpt_length();
-
-	$excerpt = kbs_article_excerpt_by_id( $post, $excerpt_length );
-	$message = '';
+	$raw_message    = '';
+	$excerpt        = kbs_article_excerpt_by_id( $post, $excerpt_length );
+	$message        = '';
 
 	if ( 'single' == $type )	{
 		$raw_message = kbs_get_option( 'restricted_notice' );
@@ -90,7 +93,7 @@ function kbs_article_format_content( $type = 'single' )	{
  */
 
 function kbs_get_article_excerpt_length()	{
-	$length = kbs_get_option( 'kbs_article_excerpt_length', 100 );
+	$length = kbs_get_option( 'kbs_article_excerpt_length', 55 );
 
 	return (int) apply_filters( 'kbs_article_excerpt_length', $length );
 } // kbs_get_article_excerpt_length
@@ -104,13 +107,16 @@ function kbs_get_article_excerpt_length()	{
  * @param	str		$extra		Text to append to the end of the excerpt.
  */
 
-function kbs_article_excerpt_by_id( $post, $length = 50, $tags = '<a><em><strong><blockquote><ul><ol><li><p>', $extra = ' . . .' ) {
+function kbs_article_excerpt_by_id( $post, $length = '', $tags = '<a><em><strong><blockquote><ul><ol><li><p>', $extra = ' . . .' ) {
 
 	if ( is_int( $post ) ) {
-		// get the post object of the passed ID
 		$post = get_post( $post );
 	} elseif ( ! is_object( $post ) ) {
 		return false;
+	}
+
+	if ( empty( $length ) )	{
+		$length = kbs_get_article_excerpt_length();
 	}
 
 	$more = false;
@@ -137,7 +143,7 @@ function kbs_article_excerpt_by_id( $post, $length = 50, $tags = '<a><em><strong
 		$the_excerpt  .= $extra;
 	}
 
-	return wpautop( $the_excerpt );
+	return wpautop( force_balance_tags( $the_excerpt ) );
 } // kbs_article_excerpt_by_id
 
 /**
