@@ -184,11 +184,13 @@ function kbs_article_maybe_increment_views()	{
 		return;
 	}
 
-	if ( ! kbs_user_can_view_article( get_the_ID() ) )	{
+	$article_id = get_the_ID();
+
+	if ( ! kbs_article_user_can_access( $article_id ) )	{
 		return;
 	}
 
-	kbs_increment_article_view_count( get_the_ID() );
+	kbs_increment_article_view_count( $article_id );
 
 } // kbs_article_maybe_increment_views
 add_action( 'wp', 'kbs_article_maybe_increment_views' );
