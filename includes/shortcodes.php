@@ -249,7 +249,7 @@ function kbs_articles_shortcode( $atts )	{
                 $articles_query->the_post();
 				$article_id     = get_the_ID(); ?>
     
-                <?php if ( ! $args['hide_restricted'] || kbs_user_can_view_article( $article_id ) ) : ?>
+                <?php if ( ! $args['hide_restricted'] || kbs_article_user_can_access( $article_id ) ) : ?>
     
                     <li>
                     	<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
