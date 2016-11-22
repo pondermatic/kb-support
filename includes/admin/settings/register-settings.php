@@ -481,7 +481,7 @@ function kbs_get_registered_settings() {
 						'type'    => 'number',
 						'step'    => '5',
 						'size'    => 'small',
-						'std'     => '100'
+						'std'     => '55'
 					)
 				),
 				'restricted_notices' => array(
