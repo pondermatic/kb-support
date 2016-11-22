@@ -37,7 +37,7 @@ add_action( 'article_category_add_form_fields', 'kbs_article_taxonomy_restricted
  * @return	str
  */
 function kbs_article_taxonomy_restricted_edit_meta_field( $term )	{
-	$restricted = kbs_article_term_is_restricted( $term->term_id );
+	$restricted = kbs_article_is_term_restricted( $term->term_id );
 	?>
     <tr class="form-field term-restricted-wrap">
 	<th scope="row" valign="top"><label for="tag-restricted	"><?php _e( 'Restrict Access?', 'kb-support' ); ?></label></th>
@@ -95,7 +95,7 @@ add_filter('manage_edit-article_category_columns', 'kbs_article_tax_add_visibili
  * @return	str		String to render
  */
 function kbs_article_tax_render_visibility_column_content( $content, $column_name, $term_id )	{
-	if ( kbs_article_term_is_restricted( $term_id ) )	{
+	if ( kbs_article_is_term_restricted( $term_id ) )	{
 
 		$label = kbs_get_taxonomy_labels( $_GET['taxonomy'] );
 		echo '<span class="padlock" title="' . sprintf( __( 'This is a restricted %s', 'kb-support' ), strtolower( $label['singular_name'] ) ) . '"></span>';
