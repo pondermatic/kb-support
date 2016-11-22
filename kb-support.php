@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: KB Support
- * Plugin URI: http://TBA
+ * Plugin URI: https://kb-support.com/
  * Description: All in one Support desk and knowledge base. Easy to use, easy to manage, loved by customers
  * Version: 0.9
  * Date: 06 May 2016
