@@ -62,6 +62,7 @@ if ( kbs_get_option( 'remove_on_uninstall' ) )	{
 		// Delete Terms.
 		if ( $terms ) {
 			foreach ( $terms as $term ) {
+				$wpdb->delete( $wpdb->term_relationships, array( 'term_taxonomy_id' => $term->term_taxonomy_id ) );
 				$wpdb->delete( $wpdb->term_taxonomy, array( 'term_taxonomy_id' => $term->term_taxonomy_id ) );
 				$wpdb->delete( $wpdb->terms, array( 'term_id' => $term->term_id ) );
 			}
