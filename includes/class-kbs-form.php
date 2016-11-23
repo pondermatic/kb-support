@@ -406,7 +406,7 @@ class KBS_Form {
 
 		do_action( 'kbs_pre_delete_field', $field_id );
 
-		$result = wp_delete_post( $form_id, true );
+		$result = wp_delete_post( $field_id, true );
 
 		do_action( 'kbs_post_delete_field', $field_id );
 
