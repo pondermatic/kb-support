@@ -68,6 +68,27 @@ function kbs_set_upload_dir( $upload ) {
 } // kbs_set_upload_dir
 
 /**
+ * Retrieve the current upload DIR for tickets.
+ *
+ * @since	1.0
+ * @param	$key	The array key to return or false for the entire array.
+ * @return	str
+ */
+function kbs_get_upload_dir( $key = false )	{
+	add_filter( 'upload_dir', 'kbs_set_upload_dir' );
+
+	$upload_dir = wp_upload_dir();
+
+	if ( $key && isset( $upload_dir[ $key ] ) )	{
+		$dir = $upload_dir[ $key ];
+	} else	{
+		$dir = $upload_dir;
+	}
+
+	return $dir;
+} // kbs_get_upload_dir
+
+/**
  * Change Tickets Upload Directory.
  *
  * This function works by hooking on the WordPress Media Uploader
