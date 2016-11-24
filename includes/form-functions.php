@@ -712,7 +712,9 @@ function kbs_process_ticket_submission( $data )	{
 		}
 	}
 
-	if ( kbs_add_ticket_from_form( $form_id, $posted ) )	{
+	$ticket_id = kbs_add_ticket_from_form( $form_id, $posted );
+
+	if ( $ticket_id )	{
 		$message = 'ticket_submitted';
 	} else	{
 		$message = 'ticket_failed';
