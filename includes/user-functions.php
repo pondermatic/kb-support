@@ -16,6 +16,17 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Retrieve the customer ID from a ticket.
+ *
+ * @since	1.0
+ * @param	int		$ticket_id	The ticket ID
+ * @return	int		The customer ID
+ */
+function kbs_get_customer_id_from_ticket( $ticket_id )	{
+	return get_post_meta( $ticket_id, '_kbs_ticket_customer_id', true );
+} // kbs_get_customer_id_from_ticket
+
+/**
  * Retrieve customer tickets.
  *
  * @since	1.0
