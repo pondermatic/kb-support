@@ -94,8 +94,7 @@ jQuery(document).ready(function ($) {
 				if ( response.error )	{
 					$form.find('.kbs_alert_error').show("fast");
 					$form.find('.kbs_alert_error').html(response.error);
-					$form.find('#' + response.field).addClass("error");
-					$form.find('#' + response.field).focus();
+
 					$('#kbs_ticket_submit').prop("disabled", false);
 					$('#kbs_ticket_form_submit').find('#kbs-loading').remove();
 					$('#kbs_ticket_submit').val(kbs_scripts.submit_ticket);
