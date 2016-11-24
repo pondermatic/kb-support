@@ -1092,7 +1092,7 @@ function kbs_display_form_recaptcha_field( $field, $settings )	{
 	do_action( 'kbs_after_form_field', $field, $settings );
 	do_action( 'kbs_after_form_' . $settings['type'] . '_field', $field, $settings );
 
-} // kbs_display_form_textarea_field
+} // kbs_display_form_recaptcha_field
 add_action( 'kbs_form_display_recaptcha_field', 'kbs_display_form_recaptcha_field', 10, 2 );
 
 /**
