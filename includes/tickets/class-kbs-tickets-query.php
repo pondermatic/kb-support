@@ -65,7 +65,7 @@ class KBS_Tickets_Query extends KBS_Stats {
 			'user'             => null,
 			'customer'         => null,
 			'key'              => null,
-			'status'           => kbs_get_ticket_status_keys(),
+			'status'           => kbs_get_ticket_status_keys( false ),
 			'meta_key'         => null,
 			'year'             => null,
 			'month'            => null,
