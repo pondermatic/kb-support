@@ -355,6 +355,7 @@ function kbs_ajax_validate_form_submission()	{
 	$form           = new KBS_Form( $_POST['kbs_form_id'] );
 	$error          = false;
 	$agree_to_terms = kbs_get_option( 'show_agree_to_terms', false );
+	$agree_text     = kbs_get_option( 'agree_text', false );
 	$field          = '';
 
 	if ( ! kbs_user_can_submit() )	{
@@ -400,7 +401,7 @@ function kbs_ajax_validate_form_submission()	{
 	
 	}
 
-	if ( $agree_to_terms && empty( $_POST['kbs_agree_terms'] ) )	{
+	if ( $agree_to_terms && $agree_text && empty( $_POST['kbs_agree_terms'] ) )	{
 		wp_send_json( array(
 			'error' => kbs_form_submission_errors( 0, 'agree_to_terms' ),
 			'field' => 'kbs-agree-terms'
