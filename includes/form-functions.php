@@ -715,7 +715,11 @@ function kbs_process_ticket_submission( $data )	{
 	$ticket_id = kbs_add_ticket_from_form( $form_id, $posted );
 
 	if ( $ticket_id )	{
-		$message = 'ticket_submitted';
+		$message  = 'ticket_submitted';
+		$redirect = add_query_arg( array(
+			'ticket' => kbs_get_ticket_key( $ticket_id )
+			), get_permalink( kbs_get_option( 'tickets_page' ) )
+		);
 	} else	{
 		$message = 'ticket_failed';
 	}
