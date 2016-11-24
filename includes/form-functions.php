@@ -60,6 +60,18 @@ function kbs_is_submission_form()	{
 } // kbs_is_submission_form
 
 /**
+ * Retrieve the ticket submission page.
+ *
+ * @since	1.0
+ * @return	str		The URL to the submission page.
+ */
+function kbs_get_submission_page()	{
+	$page = kbs_get_option( 'submission_page' );
+
+	return apply_filters( 'kbs_submission_page', get_permalink( $page ) );
+} // kbs_is_submission_form
+
+/**
  * Determines if secure ticket submission pages are enforced.
  *
  * @since	1.0
