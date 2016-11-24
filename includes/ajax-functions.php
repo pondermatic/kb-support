@@ -355,6 +355,7 @@ function kbs_ajax_validate_form_submission()	{
 	$form           = new KBS_Form( $_POST['kbs_form_id'] );
 	$error          = false;
 	$agree_to_terms = kbs_get_option( 'show_agree_to_terms', false );
+	$field          = 'kbs_empty_field';
 
 	if ( ! kbs_user_can_submit() )	{
 		wp_send_json( array(
@@ -389,14 +390,14 @@ function kbs_ajax_validate_form_submission()	{
 			}
 
 		}
-
+	
 		if ( $error )	{
 			wp_send_json( array(
 				'error' => $error,
 				'field' => $field
 			) );
 		}
-
+	
 	}
 
 	if ( $agree_to_terms && empty( $_POST['kbs_agree_terms'] ) )	{
@@ -411,7 +412,16 @@ function kbs_ajax_validate_form_submission()	{
 	 *
 	 * @since	1.0
 	 */
-	do_action( 'kbs_validate_form_submission', $form );
+	$error = apply_filters( 'kbs_validate_form_submission', $error, $form, $_POST );
+
+	if ( $error )	{
+		if ( $error )	{
+			wp_send_json( array(
+				'error' => $error,
+				'field' => $field
+			) );
+		}
+	}
 
 	wp_send_json_success( array( 'error' => $error ) );
 
