@@ -130,6 +130,54 @@ function kbs_maybe_set_enctype() {
 } // kbs_maybe_set_enctype
 
 /**
+ * Retrieves an array of default file extensions that can be uploaded via the submission and reply forms.
+ *
+ * @since	1.0
+ * @return	str		String of default file extensions
+ */
+function kbs_get_default_file_types()	{
+	$file_types  = '.jpg, .jpeg, .jpe, .gif, .png, .bmp, .tif, .tiff, .txt, .csv, .css, .htm, .html, .rtf, .zip, .tar, .gz, .gzip, .7z';
+	$file_types .= '.doc, .ppt, .xls, .docx, .xlsx, .pptx, .odt, .odp, .ods, .odg, .wp, .wpd, .numbers, .pages';
+
+	return $file_types;
+} // kbs_get_allowed_file_types
+
+/**
+ * Retrieves an array of file extensions that can be uploaded via the submission and reply forms.
+ *
+ * @since	1.0
+ * @return	str		Allowed file extensions
+ */
+function kbs_get_allowed_file_types()	{
+	return kbs_get_option( 'file_extensions' );
+} // kbs_get_allowed_file_types
+
+/**
+ * Sanitize file extensions.
+ *
+ * Creates an array of file extensions when setting option is updated.
+ *
+ * @since	1.0
+ * @param	str		$value		Comma seperated list of allowed file extensions
+ * @return	arr		Array of allowed file extensions
+ */
+function kbs_sanitize_file_extensions( $value )	{
+	$extensions = explode( ',', $value );
+
+	// Make sure extensions are preceeded with a dot
+	foreach( $extensions as $array_key => $extension )	{
+		if ( '.' != substr( trim( $extension ), 0, 1 ) )	{
+			$extensions[ $array_key ] = ' .' . trim( $extension );
+		}
+	}
+
+	$value = implode( ',', $extensions );
+
+	return $value;
+} // kbs_sanitize_file_extensions
+add_filter( 'kbs_settings_sanitize_file_extensions', 'kbs_sanitize_file_extensions' );
+
+/**
  * Whether or not there are files to upload.
  *
  * @since	1.0
