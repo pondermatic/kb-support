@@ -284,15 +284,6 @@ function kbs_get_registered_settings() {
 						'name' => '<h3>' . __( 'Submission Settings', 'kb-support' ) . '</h3>',
 						'type' => 'header'
 					),
-					'file_uploads' => array(
-						'id'      => 'file_uploads',
-						'name'    => __( 'Allow File Uploads', 'kb-support' ),
-						'desc'    => sprintf( __( 'Maximum number of files that can be attached during %s creation or reply.', 'kb-support' ), strtolower( $single ) ),
-						'type'    => 'number',
-						'size'    => 'small',
-						'max'     => '10',
-						'std'     => '0'
-					),
 					'enforce_ssl' => array(
 						'id'   => 'enforce_ssl',
 						'name' => __( 'Enforce SSL for Submissions?', 'kb-support' ),
@@ -332,6 +323,22 @@ function kbs_get_registered_settings() {
 						'desc' => sprintf( __( 'The label for the %s reply form submit button.', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'text',
 						'std'  => __( 'Reply', 'kb-support' )
+					),
+					'file_uploads' => array(
+						'id'      => 'file_uploads',
+						'name'    => __( 'Allow File Uploads', 'kb-support' ),
+						'desc'    => sprintf( __( 'Maximum number of files that can be attached during %s creation or reply.', 'kb-support' ), strtolower( $single ) ),
+						'type'    => 'number',
+						'size'    => 'small',
+						'max'     => '10',
+						'std'     => '0'
+					),
+					'file_extensions' => array(
+						'id'      => 'file_extensions',
+						'name'    => __( 'Allowed File Extensions', 'kb-support' ),
+						'desc'    => sprintf( __( 'Enter a list of file extensions that a customer may upload during %s submission. Seperate each extension with a comma.', 'kb-support' ), strtolower( $single ) ),
+						'type'    => 'textarea',
+						'std'     => kbs_get_default_file_types()
 					)
 				),
 				'agents' => array(
@@ -892,8 +899,12 @@ function kbs_settings_sanitize( $input = array() ) {
 			$input[ $key ] = apply_filters( 'kbs_settings_sanitize_' . $type, $value, $key );
 		}
 
+		// Specific key filter
+		$input[ $key ] = apply_filters( 'kbs_settings_sanitize_' . $key, $value );
+
 		// General filter
 		$input[ $key ] = apply_filters( 'kbs_settings_sanitize', $input[ $key ], $key );
+
 	}
 
 	// Loop through the whitelist and unset any that are empty for the tab being saved
@@ -913,7 +924,6 @@ function kbs_settings_sanitize( $input = array() ) {
 			if ( empty( $input[ $key ] ) && isset( $kbs_options[ $key ] ) ) {
 				unset( $kbs_options[ $key ] );
 			}
-
 		}
 	}
 

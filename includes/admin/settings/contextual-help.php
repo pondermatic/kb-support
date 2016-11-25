@@ -99,10 +99,6 @@ function kbs_settings_contextual_help() {
 			'<p>' . __( '<strong>Submission Settings</strong>', 'kb-support' ) . '</p>' .
 			'<ul>' .
 				'<li>' . sprintf( 
-					__( '<strong>Allow File Uploads</strong> - Enter the number of files a customer can upload when submitting a %1$s. Set to <code>0</code> to disable file uploads.', 'kb-support' ),
-					$ticket_singular
-				) . '</li>' .
-				'<li>' . sprintf( 
 					__( '<strong>Enforce SSL for Submissions?</strong> - If selected, the %1$s submission page must be presented securely via HTTPS. A valid SSL certificate is required.', 'kb-support' ),
 					strtolower( $ticket_singular )
 				) . '</li>' .
@@ -118,6 +114,14 @@ function kbs_settings_contextual_help() {
 				'<li>' . sprintf( 
 					__( '<strong>Reply Label</strong> - Enter the text you would like displayed on the %1$s Reply form submit button.', 'kb-support' ),
 					strtolower( $ticket_singular )
+				) . '</li>' .
+				'<li>' . sprintf( 
+					__( '<strong>Allow File Uploads</strong> - Enter the number of files a customer can upload when submitting a %1$s. Set to <code>0</code> to disable file uploads.', 'kb-support' ),
+					$ticket_singular
+				) . '</li>' .
+				'<li>' . sprintf( 
+					__( '<strong>Allowed File Types</strong> - Enter the file extensions that a customer can upload when submitting a %1$s. Seperate each file extension with a comma. If a customer attempts to upload a file with an extension that is not listed, they will receive an error.', 'kb-support' ),
+					$ticket_singular
 				) . '</li>' .
 			'</ul>' .
 			'<p>' . __( '<strong>Agent Settings</strong>', 'kb-support' ) . '</p>' .
