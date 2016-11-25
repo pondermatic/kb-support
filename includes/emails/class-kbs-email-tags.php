@@ -314,6 +314,11 @@ function kbs_setup_email_tags() {
 			'function'    => 'kbs_email_tag_ticket_content'
 		),
 		array(
+			'tag'         => 'ticket_files',
+			'description' => __( 'List of files attached to the ticket with links', 'kb-support' ),
+			'function'    => 'kbs_email_tag_ticket_files'
+		),
+		array(
 			'tag'         => 'reply_date',
 			'description' => __( 'The date of the most recent ticket reply', 'kb-support' ),
 			'function'    => 'kbs_email_tag_reply_date'
@@ -503,6 +508,27 @@ function kbs_email_tag_ticket_title( $ticket_id )	{
 function kbs_email_tag_ticket_content( $ticket_id )	{
 	return get_post_field( 'post_content', $ticket_id, 'raw' );
 } // kbs_email_tag_ticket_content
+
+/**
+ * Email template tag: ticket_files
+ * List of files attached to the ticket with links to open.
+ *
+ * @since	1.0
+ * @param	int		$ticket_id
+ * @return	str		Ticket content
+ */
+function kbs_email_tag_ticket_files( $ticket_id )	{
+	$files = kbs_ticket_has_files( $ticket_id );
+
+	if ( $files )	{
+		$output = '';
+		foreach( $files as $file )	{
+			$output .= '<p><a href="' . wp_get_attachment_url( $file->ID ) . '">' . basename( get_attached_file( $file->ID ) ) . '</a></p>';
+		}
+
+		return $output;
+	}
+} // kbs_email_tag_ticket_files
 
 /**
  * Email template tag: reply_date
