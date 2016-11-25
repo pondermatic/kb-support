@@ -882,6 +882,33 @@ function kbs_get_reply_count( $ticket_id )	{
 } // kbs_get_reply_count
 
 /**
+ * Whether or not an agent has replied to a ticket.
+ *
+ * @since	1.0
+ * @param	int			$ticket_id		The Ticket ID.
+ * @return	obj|false	
+ */
+function kbs_ticket_has_agent_reply( $ticket_id )	{
+	$reply_args = array(
+		'posts_per_page' => 1,
+		'meta_query'     => array(
+			'relation'    => 'AND',
+			array(
+				'key'     => '_kbs_reply_agent_id',
+				'compare' => 'EXISTS'
+			),
+			array(
+				'key'     => '_kbs_reply_agent_id',
+				'value'   => '0',
+				'compare' => '!='
+			)
+		)
+	);
+
+	return kbs_get_replies( $ticket_id, $reply_args );
+} // kbs_ticket_has_agent_reply
+
+/**
  * Retrieve the last reply for the ticket.
  *
  * @since	1.0
