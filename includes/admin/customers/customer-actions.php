@@ -524,6 +524,7 @@ function kbs_customer_delete( $args ) {
 	$confirm       = ! empty( $args['kbs-customer-delete-confirm'] ) ? true : false;
 	$remove_data   = ! empty( $args['kbs-customer-delete-records'] ) ? true : false;
 	$nonce         = $args['_wpnonce'];
+	$error         = false;
 
 	if ( ! wp_verify_nonce( $nonce, 'delete-customer' ) ) {
 		wp_die( __( "Cheatin' eh?!", 'kb-support' ) );
