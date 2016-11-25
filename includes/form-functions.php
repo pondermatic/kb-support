@@ -1124,10 +1124,11 @@ function kbs_display_form_file_upload_field( $field, $settings )	{
 	do_action( 'kbs_before_form_' . $settings['type'] . '_field', $field, $settings );
 
 	for ( $i = 1; $i <= kbs_get_max_file_uploads(); $i++ )	{
-        $output .= sprintf( '<input type="file" name="%1$s[]"%2$s%3$s />',
+        $output .= sprintf( '<input type="file" name="%1$s[]"%2$s%3$s accept="%4$s" />',
 			esc_attr( $field->post_name ),
 			! empty( $class ) ? ' class="' . $class . ' kbs-input"' : '',
-			$placeholder
+			$placeholder,
+			kbs_get_allowed_file_types()
 		);
 	}
 
