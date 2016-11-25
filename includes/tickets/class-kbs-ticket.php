@@ -221,6 +221,14 @@ class KBS_Ticket {
 	protected $sla_resolve = '';
 
 	/**
+	 * SLA first response date/time for this ticket.
+	 *
+	 * @since	1.0
+	 * @var		str
+	 */
+	protected $first_response = '';
+
+	/**
 	 * Array of attached file IDs for this ticket.
 	 *
 	 * @since	1.0
@@ -387,6 +395,7 @@ class KBS_Ticket {
 		// SLA
 		$this->sla_respond     = $this->setup_sla_targets( 'respond' );
 		$this->sla_resolve     = $this->setup_sla_targets( 'resolve' );
+		$this->first_response  = $this->setup_first_response();
 
 		$this->key             = $this->setup_ticket_key();
 		$this->form_data       = $this->setup_form_data();
@@ -1148,6 +1157,18 @@ class KBS_Ticket {
 	} // setup_sla_targets
 
 	/**
+	 * Setup the SLA first response for the ticket
+	 *
+	 * @since	1.0
+	 * @return	arr|bool	The first response time for the ticket
+	 */
+	private function setup_first_response() {
+		$response = $this->get_meta( '_kbs_ticket_sla_first_respond' );
+
+		return $response;
+	} // setup_first_response
+
+	/**
 	 * Setup the ticket form data.
 	 *
 	 * @since	1.0
@@ -1239,15 +1260,27 @@ class KBS_Ticket {
 	 * @return	int
 	 */
 	public function get_target_respond() {
-		if ( ! kbs_track_sla() )	{
-			return false;
-		}
-
 		if ( empty( $this->sla_respond ) )	{
 			return false;
 		}
 
 		$respond = date_i18n( get_option( 'time_format' ) . ' ' . get_option( 'date_format' ), strtotime( $this->sla_respond ) );
+
+		return apply_filters( 'kbs_get_target_respond', $respond );
+	} // get_target_respond
+
+	/**
+	 * Retrieve the actual first response time.
+	 *
+	 * @since	1.0
+	 * @return	int
+	 */
+	public function get_first_response() {
+		if ( empty( $this->first_response ) )	{
+			return false;
+		}
+
+		$respond = date_i18n( get_option( 'time_format' ) . ' ' . get_option( 'date_format' ), strtotime( $this->first_response ) );
 
 		return apply_filters( 'kbs_get_target_respond', $respond );
 	} // get_target_respond
@@ -1259,10 +1292,6 @@ class KBS_Ticket {
 	 * @return	int
 	 */
 	public function get_target_resolve() {
-		if ( ! kbs_track_sla() )	{
-			return false;
-		}
-
 		if ( empty( $this->sla_resolve ) )	{
 			return false;
 		}

@@ -33,10 +33,6 @@ function kbs_track_sla()	{
  * @return	str		Date/Time for targetted response time.
  */
 function kbs_calculate_sla_target_response()	{
-	if ( ! kbs_track_sla() )	{
-		return false;
-	}
-
 	$now    = current_time( 'timestamp' );
 	$target = strtotime( '+' . kbs_get_option( 'sla_response_time' ), $now );
 	
@@ -51,10 +47,6 @@ function kbs_calculate_sla_target_response()	{
  * @return	str		Date/Time for targetted resolution time.
  */
 function kbs_calculate_sla_target_resolution()	{
-	if ( ! kbs_track_sla() )	{
-		return false;
-	}
-
 	$now    = current_time( 'timestamp' );
 	$target = strtotime( '+' . kbs_get_option( 'sla_resolve_time' ), $now );
 	
@@ -62,21 +54,27 @@ function kbs_calculate_sla_target_resolution()	{
 } // kbs_calculate_sla_target_resolution
 
 /**
- * Log first respond value.
+ * Log first respond value when an agent sends the first reply.
  *
  * @since	1.0
  * @param	int		$ticket_id	The ticket ID
- * @param	str		$status		The ticket status
- * @return	str		Date/Time for targetted resolution time.
+ * @return	void
  */
-function kbs_set_sla_first_respond( $ticket_id, $status )	{
-
-	if ( 'new' !== $status )	{
-		return add_post_meta( $ticket_id, '_kbs_ticket_first_respond', current_time( 'mysql' ) );
-	}
-
+function kbs_set_sla_first_respond( $ticket_id )	{
+	return add_post_meta( $ticket_id, '_kbs_ticket_sla_first_respond', current_time( 'timestamp' ) );
 } // kbs_calculate_sla_target_resolution
-add_action( 'kbs_update_ticket_status', 'kbs_calculate_sla_target_resolution', 10, 2 );
+add_action( 'kbs_ticket_admin_reply', 'kbs_set_sla_first_respond', 10, 2 );
+
+/**
+ * Retrieve the tickets first response time value.
+ *
+ * @since	1.0
+ * @param	int		$ticket_id	The ticket ID
+ * @return	void
+ */
+function kbs_get_sla_first_response( $ticket_id )	{
+	return get_post_meta( $ticket_id, '_kbs_ticket_sla_first_respond', current_time( 'timestamp' ) );
+} // kbs_calculate_sla_target_resolution
 
 /**
  * Retrieve the target SLA response time.
