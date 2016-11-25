@@ -142,6 +142,8 @@ function kbs_ajax_insert_ticket_reply()	{
 
 	$reply_id = $ticket->add_reply( $reply_data );
 
+	do_action( 'kbs_ticket_admin_reply', $ticket->ID, $reply_id );
+
 	wp_send_json( array( 'reply_id' => $reply_id ) );
 
 } // kbs_ajax_reply_to_ticket
