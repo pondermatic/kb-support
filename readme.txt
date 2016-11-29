@@ -28,6 +28,8 @@ Key Features of KB Support include:
 * Auto assign new tickets to agents based on current ticket count, or randomly
 * Tracks an agents status so you can see if they are online or offline
 * A number of useful shortcodes to display submission forms, KB Article lists, ticket history, login/registration forms, profile editor, KB Article search form - and more
+* Private notes that are visible to agents only
+* Restrict which tickets an agent can view. i.e. Just those to which they are assigned
 * A bunch of hooks and filters for our developer friends
 
 More information can be found at [https://kb-support.com/](https://kb-support.com/).
@@ -65,15 +67,17 @@ Searchable docs can be found at [https://kb-support.com]([https://kb-support.com
 
 = How do I Add a Submission Form? =
 
-Create your submission form within Tickets > Submission Forms, and copy the shortcode to any page. i.e. [kbs_submit form="1277"]
+Create your submission form within Tickets > Submission Forms, and copy the shortcode to any page. i.e. [kbs_submit form="1277"].
 
-= How do I Show a Customers Ticket History? =
+A default form with the most popular fields is added during installation. Customise this form to meet your needs, or create new forms as required.
+
+= How can a Customer view their Ticket History? =
 
 Place the [kbs_tickets] shortcode on any page.
 
 = Is there a Pro version with additional features? =
 
-Extensions are available at [https://kb-support.com/downloads/](https://kb-support.com/downloads/ "KB Support Extensions") to further enhance KB Support features and functionality.
+Extensions are available at [https://kb-support.com/downloads/](https://kb-support.com/downloads/ "KB Support Extensions") to further enhance KB Support features and functionality. New extensions are being added regularly. [Join our mailing list](http://eepurl.com/cnxWcz) to be the first to hear about new releases!
 
 == Screenshots ==
 
