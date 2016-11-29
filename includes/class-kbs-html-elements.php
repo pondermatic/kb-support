@@ -33,7 +33,7 @@ class KBS_HTML_Elements {
 	 */
 	public function ticket_status_dropdown( $name = 'post_status', $selected = 0 ) {
 		$ticket_statuses = kbs_get_post_statuses( 'labels', true );
-		$options    = array();
+		$options         = array();
 		
 		foreach ( $ticket_statuses as $ticket_status ) {
 			$options[ $ticket_status->name ] = esc_html( $ticket_status->label );
