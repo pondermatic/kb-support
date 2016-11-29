@@ -155,7 +155,7 @@ class KBS_Welcome {
 
 		?>
 		<div id="kbs-header">
-			<img class="kbs-badge" src="<?php echo KBS_PLUGIN_URL . 'assets/images/mdjm_web_header.png'; ?>" alt="<?php _e( 'MDJM Event Management', 'kb-support' ); ?>" / >
+			<img class="kbs-badge" src="<?php echo KBS_PLUGIN_URL . 'assets/images/mdjm_web_header.png'; ?>" alt="<?php _e( 'KB Support', 'kb-support' ); ?>" / >
 			<h1><?php printf( __( 'Welcome to KB Support %s', 'kb-support' ), $display_version ); ?></h1>
 			<p class="about-text">
 				<?php
@@ -281,6 +281,7 @@ class KBS_Welcome {
 				$this->tabs();
 			?>
 			<p class="about-description"><?php _e( "Now that KB Support is installed, you're ready to get started. It works out of the box, but its also fully customisable.", 'kb-support' ); ?></p>
+            <p class="description"><?php printf( __( 'For further assistance, take a look at our <a href="%s" target="_blank">support documentation</a>', 'kb-support' ), 'https://kb-support.com/support/' ); ?></p>
 
 			<div class="changelog">
 				<h3><?php _e( 'Configure KB Support Settings', 'kb-support' ); ?></h3>
@@ -356,7 +357,7 @@ class KBS_Welcome {
 
 			<div class="changelog">
 				<h3><?php _e( 'Extensions', 'kb-support' );?></h3>
-                    <p><?php printf( __( 'We have an ever growing catalogue of extensions available at our <a href="%s" target="_blank">plugin store</a> that will extend the functionality of KB Support and further enhance your customers support experience.', 'kb-support' ), 'https://kb-support.com/downloads/' ); ?></p>
+                <p><?php printf( __( 'We have an ever growing catalogue of extensions available at our <a href="%s" target="_blank">plugin store</a> that will extend the functionality of KB Support and further enhance your customers support experience.', 'kb-support' ), 'https://kb-support.com/products/' ); ?></p>
 			</div>
 
 			<div class="changelog">
@@ -367,7 +368,7 @@ class KBS_Welcome {
                     <li><?php printf( __( '<a href="%s" target="_blank">Raise an Issue on GitHub</a>', 'kb-support' ), 'https://github.com/KB-Support/kb-support/issues' ); ?></li>
                     <li><?php printf( __( '<a href="%s" target="_blank">Send us a Pull Request</a> with your bug fixes and/or new features', 'kb-support' ), 'https://www.google.co.uk/url?sa=t&rct=j&q=&esrc=s&source=web&cd=2&cad=rja&uact=8&ved=0ahUKEwikn8uql5fQAhXiDsAKHcP6AIQQFgggMAE&url=https%3A%2F%2Fhelp.github.com%2Farticles%2Fcreating-a-pull-request%2F&usg=AFQjCNEyxULKOpCMlFly-Rcy8_YemfrOhQ&sig2=OSYkosRNJKTjCkbKTS8Qdg&bvm=bv.137904068,d.bGg' ); ?></li>
                     <li><?php printf( __( '<a href="%s" target="_blank">Translate KB Support</a> into different languages', 'kb-support' ), 'https://kb-support.com/articles/translating-kb-support/' ); ?></li>
-                    <li><?php _e( 'Provide feedback and suggestions on enhancements', 'kb-support' ); ?></li>
+                    <li><?php printf( __( 'Provide feedback and suggestions on <a href="%s" target="_blank">enhancements</a>', 'kb-support' ), 'https://github.com/KB-Support/kb-support/issues' ); ?></li>
                     <li><?php _e( 'Assist with maintaining documentation', 'kb-support' ); ?></li>
                 </ul>
 			</div>
@@ -377,7 +378,7 @@ class KBS_Welcome {
 	} // getting_started_screen
 
 	/**
-	 * Parse the MDJM readme.txt file
+	 * Parse the KBS readme.txt file
 	 *
 	 * @since	1.0
 	 * @return	str		$readme		HTML formatted readme file
