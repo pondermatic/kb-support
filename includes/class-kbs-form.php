@@ -422,11 +422,17 @@ class KBS_Form {
 	 * @return	str		The field.
 	 */
 	public function display_field( $field, $settings )	{
+		do_action( 'kbs_before_form_field', $field, $settings );
+		do_action( 'kbs_before_form_' . $settings['type'] . '_field', $field, $settings );
+
 		/*
 		 * Output the field
 		 * @since	1.0
 		 */
 		do_action( 'kbs_form_display_' . $settings['type'] . '_field', $field, $settings );
+
+		do_action( 'kbs_after_form_field', $field, $settings );
+		do_action( 'kbs_after_form_' . $settings['type'] . '_field', $field, $settings );
 	} // display_field
 
 	/**
