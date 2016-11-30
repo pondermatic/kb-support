@@ -111,6 +111,7 @@ grunt.initConfig({
 			main: {
 				src:  [
 					'**',
+					'!_notes/**',
 					'!node_modules/**',
 					'!build/**',
 					'!.git/**',
@@ -118,8 +119,11 @@ grunt.initConfig({
 					'!package.json',
 					'!.gitignore',
 					'!.gitmodules',
+					'!.travis.yml',
 					'!.tx/**',
 					'!tests/**',
+					'!docs/**',
+					'!phpunit.xml',
 					'!**/Gruntfile.js',
 					'!**/package.json',
 					'!**/README.md',
@@ -129,7 +133,7 @@ grunt.initConfig({
 			}
 		},
 
-		//Compress build directory into <name>.zip and <name>-<version>.zip
+		// Compress build directory into <name>.zip and <name>-<version>.zip
 		compress: {
 			main: {
 				options: {
@@ -173,30 +177,41 @@ grunt.initConfig({
             }
         },
 
-		phpdocumentor: {
-            dist: {
-                options: {
-                    ignore: 'node_modules'
-                }
-            }
-        },
+		uglify: {
+			options: {
+				manage: false
+			},
+			my_target: {
+				files: {
+				'assets/js/admin-scripts.min.js': ['assets/js/admin-scripts.js'],
+				'assets/js/kbs-ajax.min.js': ['assets/js/kbs-ajax.js']
+				}
+			}
+		},
+
+		cssmin:	{
+			build:	{
+				files: {
+					'assets/css/kbs-admin.min.css': ['assets/css/kbs-admin.css'],
+					'templates/kbs.min.css': ['templates/kbs.css']
+				}
+			}
+		},
 
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-phpdocumentor');
+	grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-wp-i18n');
 
 	// Default tasks
 	grunt.registerTask( 'default', [
 		'jshint',
+		'uglify',
+		'cssmin',
 		'makepot'
-	]);
-
-	// Doc tasks
-	grunt.registerTask('docs' [
-		'phpdocumentor:dist'
 	]);
 
 	// Build task(s).
