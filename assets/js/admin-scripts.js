@@ -136,14 +136,11 @@ jQuery(document).ready(function ($) {
 					file_frame.open();
 				});
 
-				// WP 3.5+ uploader
-				var file_frame;
-				window.formfield = '';
 			}
 
 		}
 
-	}
+	};
 	KBS_Settings.init();
 	
 	/**
@@ -179,7 +176,7 @@ jQuery(document).ready(function ($) {
 				if ( 'kbs-reply-close' == event.target.id )	{
 					var confirmClose = confirm( kbs_vars.ticket_confirm_close );
 
-					if (confirmClose == false) {
+					if (confirmClose === false) {
 						return;
 					}
 				}
@@ -202,7 +199,7 @@ jQuery(document).ready(function ($) {
 					},
 					success: function (response) {
 						if (response.reply_id)	{
-							kbs_load_ticket_replies(ticket_id, response.reply_id)
+							kbs_load_ticket_replies(ticket_id, response.reply_id);
 							window.location.href = kbs_vars.admin_url + '?kbs-action=ticket_reply_added&ticket_id=' + ticket_id;
 							return true;
 						} else	{
@@ -247,7 +244,7 @@ jQuery(document).ready(function ($) {
 					},
 					success: function (response) {
 						if (response.note_id)	{
-							kbs_load_ticket_notes(ticket_id, response.note_id)
+							kbs_load_ticket_notes(ticket_id, response.note_id);
 							$('#kbs_new_note').val('');
 						} else	{
 							alert(kbs_vars.note_not_added);
@@ -271,7 +268,7 @@ jQuery(document).ready(function ($) {
 				}, 200);
 			}
 		}
-	}
+	};
 	KBS_Tickets.init();
 	
 	/**
@@ -287,14 +284,7 @@ jQuery(document).ready(function ($) {
 		forms : function() {
 
 			var toggleFieldOptions = function(kbs_selected_field)	{
-				if ( 'text'          == kbs_selected_field
-					 || 'date_field' == kbs_selected_field
-					 || 'email'      == kbs_selected_field
-					 || 'number'     == kbs_selected_field
-					 || 'select'     == kbs_selected_field
-					 || 'textarea'   == kbs_selected_field
-					 || 'url'        == kbs_selected_field
-				)	{
+				if ( 'text' == kbs_selected_field || 'date_field' == kbs_selected_field || 'email' == kbs_selected_field || 'number' == kbs_selected_field || 'select' == kbs_selected_field || 'textarea' == kbs_selected_field || 'url' == kbs_selected_field )	{
 
 					$('#kbs_meta_field_placeholder_wrap').show();
 					$('#kbs_meta_field_hide_label_wrap').show();
@@ -303,10 +293,7 @@ jQuery(document).ready(function ($) {
 					$('#kbs_meta_field_hide_label_wrap').hide();
 				}
 
-				if ( 'select'          == kbs_selected_field
-					|| 'checkbox_list' == kbs_selected_field
-					|| 'radio'         == kbs_selected_field
-				)	{
+				if ( 'select' == kbs_selected_field || 'checkbox_list' == kbs_selected_field || 'radio' == kbs_selected_field )	{
 					$('#kbs_meta_field_select_options_wrap').show();
 				} else	{
 					$('#kbs_meta_field_select_options_wrap').hide();
@@ -318,10 +305,7 @@ jQuery(document).ready(function ($) {
 					$('#kbs_meta_field_select_multiple_wrap').hide();
 				}
 
-				if ( 'select' == kbs_selected_field
-					|| 'article_category_dropdown'     == kbs_selected_field
-					|| 'ticket_category_dropdown' == kbs_selected_field
-				)	{
+				if ( 'select' == kbs_selected_field || 'article_category_dropdown' == kbs_selected_field || 'ticket_category_dropdown' == kbs_selected_field )	{
 					$('#kbs_meta_field_select_searchable_wrap').show();
 				} else	{
 					$('#kbs_meta_field_select_searchable_wrap').hide();
@@ -333,9 +317,7 @@ jQuery(document).ready(function ($) {
 					$('#kbs_meta_field_option_selected_wrap').hide();
 				}
 
-				if ( 'checkbox'      == kbs_selected_field
-					|| 'file_upload' == kbs_selected_field
-				)	{
+				if ( 'checkbox' == kbs_selected_field || 'file_upload' == kbs_selected_field )	{
 					$('#kbs_meta_field_required_wrap').hide();
 				} else	{
 					$('#kbs_meta_field_required_wrap').show();
@@ -351,11 +333,7 @@ jQuery(document).ready(function ($) {
 					$('#kbs_meta_field_input_class_wrap').show();
 				}
 
-				if ( 'text'          == kbs_selected_field
-					|| 'email'       == kbs_selected_field
-					|| 'url'         == kbs_selected_field
-					|| 'textarea'    == kbs_selected_field
-					|| 'rich_editor' == kbs_selected_field )	{
+				if ( 'text' == kbs_selected_field || 'email' == kbs_selected_field || 'url' == kbs_selected_field || 'textarea' == kbs_selected_field || 'rich_editor' == kbs_selected_field )	{
 					$('#kbs_meta_field_mapping_wrap').show();
 				} else	{
 					$('#kbs_meta_field_mapping_wrap').hide();
@@ -367,7 +345,7 @@ jQuery(document).ready(function ($) {
 					$('#kbs_meta_field_kb_search_wrap').hide();
 				}
 
-			}
+			};
 
 			// Preload field options when editing
 			if ( kbs_vars.editing_field_type )	{
@@ -525,7 +503,7 @@ jQuery(document).ready(function ($) {
 
 		}
 
-	}
+	};
 	KBS_Forms.init();
 
 	/**
@@ -571,7 +549,7 @@ jQuery(document).ready(function ($) {
 					data: postData,
 					url: ajaxurl,
 					beforeSend: function()	{
-						$('.notice-wrap').html('')
+						$('.notice-wrap').html('');
 						wrapper.find('.spinner').css('visibility', 'visible');
 						button.attr('disabled', true);
 					},
@@ -719,7 +697,7 @@ jQuery(document).ready(function ($) {
 				}
 			});
 		}
-	}
+	};
 	KBS_Customer.init();
 
 	// AJAX user search

@@ -5,7 +5,7 @@
  * Description: All in one Support desk and knowledge base. Easy to use, easy to manage, loved by customers
  * Version: 0.9
  * Date: 06 May 2016
- * Author: Mike Howard <mike@mikesplaugins.co.uk>
+ * Author: Mike Howard <mike@mikesplugins.co.uk>
  * Author URI: http://mikesplugins.co.uk
  * Text Domain: kb-support
  * Domain Path: /languages

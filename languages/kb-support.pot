@@ -1,10 +1,10 @@
-# Copyright (C) 2016 Mike Howard <mike@mikesplaugins.co.uk>
+# Copyright (C) 2016 Mike Howard <mike@mikesplugins.co.uk>
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
 "Project-Id-Version: KB Support 0.9\n"
 "Report-Msgid-Bugs-To: https://kb-support.com/\n"
-"POT-Creation-Date: 2016-11-30 01:01:18+00:00\n"
+"POT-Creation-Date: 2016-11-30 21:05:10+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1349,7 +1349,7 @@ msgstr ""
 
 #: includes/admin/settings/contextual-help.php:286
 #: includes/admin/settings/register-settings.php:973
-#: includes/admin/welcome.php:358
+#: includes/admin/welcome.php:359
 msgid "Extensions"
 msgstr ""
 
@@ -2600,8 +2600,8 @@ msgstr ""
 msgid "Getting started with KB Support"
 msgstr ""
 
-#: includes/admin/welcome.php:158
-msgid "MDJM Event Management"
+#. Plugin Name of the plugin/theme
+msgid "KB Support"
 msgstr ""
 
 #: includes/admin/welcome.php:159
@@ -2646,119 +2646,125 @@ msgid ""
 "of the box, but its also fully customisable."
 msgstr ""
 
-#: includes/admin/welcome.php:286
+#: includes/admin/welcome.php:284
+msgid ""
+"For further assistance, take a look at our <a href=\"%s\" "
+"target=\"_blank\">support documentation</a>"
+msgstr ""
+
+#: includes/admin/welcome.php:287
 msgid "Configure KB Support Settings"
 msgstr ""
 
-#: includes/admin/welcome.php:292
+#: includes/admin/welcome.php:293
 msgid "%s &rarr; Settings"
 msgstr ""
 
-#: includes/admin/welcome.php:293
+#: includes/admin/welcome.php:294
 msgid ""
 "We've set the default options for you, however slight adjustments may "
 "ensure that KB Support is fully optimal for you and your customers."
 msgstr ""
 
-#: includes/admin/welcome.php:295
+#: includes/admin/welcome.php:296
 msgid "Review Email Templates"
 msgstr ""
 
-#: includes/admin/welcome.php:296
+#: includes/admin/welcome.php:297
 msgid ""
 "Take a few moments to review the email templates as this content will be "
 "sent to your customers during the life cycle of their support %s."
 msgstr ""
 
-#: includes/admin/welcome.php:303
+#: includes/admin/welcome.php:304
 msgid "Customise your Submission Form(s)"
 msgstr ""
 
-#: includes/admin/welcome.php:309
+#: includes/admin/welcome.php:310
 msgid "%s &rarr; Submission Forms"
 msgstr ""
 
-#: includes/admin/welcome.php:310
+#: includes/admin/welcome.php:311
 msgid ""
 "The %s submission forms are the first point at which your customers can "
 "provide you with details regarding the issues they are experiencing."
 msgstr ""
 
-#: includes/admin/welcome.php:311
+#: includes/admin/welcome.php:312
 msgid ""
 "We created a default form for you during install, but it is fully "
 "customisable and you should ensure it has all the fields you need."
 msgstr ""
 
-#: includes/admin/welcome.php:317
+#: includes/admin/welcome.php:318
 msgid "Start Creating %s"
 msgstr ""
 
-#: includes/admin/welcome.php:323
+#: includes/admin/welcome.php:324
 msgid "%1$s &rarr; New %1$s"
 msgstr ""
 
-#: includes/admin/welcome.php:324
+#: includes/admin/welcome.php:325
 msgid ""
 "%s provide not only a document repository for your products and/or "
 "services, but also a way for you to offer solutions to your customers "
 "issues during %s creation. "
 msgstr ""
 
-#: includes/admin/welcome.php:325
+#: includes/admin/welcome.php:326
 msgid ""
 "If you offer premium products and/or services, you can restrict access to "
 "some %s as needed."
 msgstr ""
 
-#: includes/admin/welcome.php:331
+#: includes/admin/welcome.php:332
 msgid "Need Help?"
 msgstr ""
 
-#: includes/admin/welcome.php:334
+#: includes/admin/welcome.php:335
 msgid "Documentation"
 msgstr ""
 
-#: includes/admin/welcome.php:335
+#: includes/admin/welcome.php:336
 msgid ""
 "We have a searchable library of <a href=\"https://kb-support.com/support/\" "
 "target=\"_blank\">Support Documents</a> to help new and advanced users with "
 "features and customisations."
 msgstr ""
 
-#: includes/admin/welcome.php:338
+#: includes/admin/welcome.php:339
 msgid "Excellent Support"
 msgstr ""
 
-#: includes/admin/welcome.php:339
+#: includes/admin/welcome.php:340
 msgid ""
 "We pride ourselves on our level of support and excellent response times. If "
 "you are experiencing an issue, <a href=\"%s\" target=\"_blank\">submit a "
 "support ticket</a> and we will respond quickly."
 msgstr ""
 
-#: includes/admin/welcome.php:347
+#: includes/admin/welcome.php:348
 msgid "Get the Latest News"
 msgstr ""
 
-#: includes/admin/welcome.php:348
+#: includes/admin/welcome.php:349
 msgid ""
 "<a href=\"%s\" target=\"_blank\">Subscribe to our Newsletter</a> for all "
 "the latest news from KB Support."
 msgstr ""
 
-#: includes/admin/welcome.php:351
+#: includes/admin/welcome.php:352
 msgid "Socialise with us"
 msgstr ""
 
-#: includes/admin/welcome.php:352
+#: includes/admin/welcome.php:353
 msgid ""
 "The <a href=\"%s\" target=\"_blank\">KB Support Facebook Page</a> and our "
 "<a href=\"%s\" target=\"_blank\">Twitter Account</a> are also great places "
 "for the latest news."
 msgstr ""
 
-#: includes/admin/welcome.php:359
+#: includes/admin/welcome.php:360
 msgid ""
 "We have an ever growing catalogue of extensions available at our <a "
 "href=\"%s\" target=\"_blank\">plugin store</a> that will extend the "
@@ -2766,46 +2772,48 @@ msgid ""
 "experience."
 msgstr ""
 
-#: includes/admin/welcome.php:363
+#: includes/admin/welcome.php:364
 msgid "Contribute to KB Support"
 msgstr ""
 
-#: includes/admin/welcome.php:364
+#: includes/admin/welcome.php:365
 msgid ""
 "Anyone is welcome to contribute to KB Support. Please read the <a href=\"\" "
 "target=\"_blank\">guidelines for contributing</a> to our <a href=\"\" "
 "target=\"_blank\">GitHub repository</a>."
 msgstr ""
 
-#: includes/admin/welcome.php:365
+#: includes/admin/welcome.php:366
 msgid "There are various ways you can contribute"
 msgstr ""
 
-#: includes/admin/welcome.php:367
+#: includes/admin/welcome.php:368
 msgid "<a href=\"%s\" target=\"_blank\">Raise an Issue on GitHub</a>"
 msgstr ""
 
-#: includes/admin/welcome.php:368
+#: includes/admin/welcome.php:369
 msgid ""
 "<a href=\"%s\" target=\"_blank\">Send us a Pull Request</a> with your bug "
 "fixes and/or new features"
 msgstr ""
 
-#: includes/admin/welcome.php:369
+#: includes/admin/welcome.php:370
 msgid ""
 "<a href=\"%s\" target=\"_blank\">Translate KB Support</a> into different "
 "languages"
 msgstr ""
 
-#: includes/admin/welcome.php:370
-msgid "Provide feedback and suggestions on enhancements"
+#: includes/admin/welcome.php:371
+msgid ""
+"Provide feedback and suggestions on <a href=\"%s\" "
+"target=\"_blank\">enhancements</a>"
 msgstr ""
 
-#: includes/admin/welcome.php:371
+#: includes/admin/welcome.php:372
 msgid "Assist with maintaining documentation"
 msgstr ""
 
-#: includes/admin/welcome.php:389
+#: includes/admin/welcome.php:390
 msgid "No valid changelog was found."
 msgstr ""
 
@@ -3984,10 +3992,22 @@ msgstr ""
 msgid "This %s is closed."
 msgstr ""
 
+#. Plugin URI of the plugin/theme
+msgid "https://kb-support.com/"
+msgstr ""
+
 #. Description of the plugin/theme
 msgid ""
 "All in one Support desk and knowledge base. Easy to use, easy to manage, "
 "loved by customers"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Mike Howard <mike@mikesplugins.co.uk>"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://mikesplugins.co.uk"
 msgstr ""
 
 #. Tags of the plugin/theme
