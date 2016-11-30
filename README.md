@@ -1,6 +1,6 @@
 # KB Support
 
-![Plugin Version](https://img.shields.io/wordpress/plugin/v/kb-support.svg?maxAge=2592000) ![Total Downloads](https://img.shields.io/wordpress/plugin/dt/kb-support.svg?maxAge=2592000) ![Plugin Rating](https://img.shields.io/wordpress/plugin/r/kb-support.svg?maxAge=2592000) ![WordPress Compatibility](https://img.shields.io/wordpress/v/kb-support.svg?maxAge=2592000) [![Build Status](https://travis-ci.org/KB-Support/kb-support.svg?branch=master)](https://travis-ci.org/mdjm/kb-support) [![License](https://img.shields.io/badge/license-GPL--2.0%2B-red.svg)](https://github.com/KB-Support/kb-support/blob/master/license.txt)
+![Plugin Version](https://img.shields.io/wordpress/plugin/v/kb-support.svg?maxAge=2592000) ![Total Downloads](https://img.shields.io/wordpress/plugin/dt/kb-support.svg?maxAge=2592000) ![Plugin Rating](https://img.shields.io/wordpress/plugin/r/kb-support.svg?maxAge=2592000) ![WordPress Compatibility](https://img.shields.io/wordpress/v/kb-support.svg?maxAge=2592000) [![Build Status](https://travis-ci.org/KB-Support/kb-support.svg?branch=master)](https://travis-ci.org/KB-Support/kb-support) [![License](https://img.shields.io/badge/license-GPL--2.0%2B-red.svg)](https://github.com/KB-Support/kb-support/blob/master/license.txt)
 
 **A FREE Support Desk tool with fully integrated Knowledge Base built for WordPress**
 
