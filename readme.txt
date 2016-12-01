@@ -21,10 +21,10 @@ From your own experience in running a helpdesk for your product(s) you will know
 Key Features of KB Support include:
 
 * Easily manage and customise submission forms. No coding required, multiple forms can be created and utilised
-* Customers do not need an account to create or manage support tickets. Guest submission is fully supported
+* Guest submission is fully supported. Customers do not need an account to create or manage support tickets.
 * A fully responsive and clean front end design where customers can manage their tickets, including viewing and creating replies
 * Integrated Knowledge Base Articles can be easily created and referenced to try and offer solutions without tickets being created
-* Ability to *Restrict* individual knowledge base articles so that only logged in users can access them. Useful for your premium paid products
+* Ability to restrict access to individual knowledge base articles to logged in users only
 * Auto assign new tickets to agents based on current ticket count, or randomly
 * Tracks an agents status so you can see if they are online or offline
 * A number of useful shortcodes to display submission forms, KB Article lists, ticket history, login/registration forms, profile editor, KB Article search form - and more
