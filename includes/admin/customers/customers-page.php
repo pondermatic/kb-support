@@ -332,12 +332,9 @@ function kbs_customers_view( $customer ) {
 
 					<?php do_action( 'kbs_customer_before_ticket_count', $customer ); ?>
 
-					
-
-                        <a href="<?php echo admin_url( 'edit.php?post_type=kbs_ticket&customer=' . $customer->id ); ?>">
-                            <?php printf( _n( '%d ' . kbs_get_ticket_label_singular(), '%d ' . kbs_get_ticket_label_plural(), $ticket_count, 'kb-support' ), $ticket_count ); ?>
-                        </a>
-
+                    <a href="<?php echo admin_url( 'edit.php?post_type=kbs_ticket&customer=' . $customer->id ); ?>">
+                        <?php printf( _n( '%d ' . kbs_get_ticket_label_singular(), '%d ' . kbs_get_ticket_label_plural(), $ticket_count, 'kb-support' ), $ticket_count ); ?>
+                    </a>
 
 				</div>
 
