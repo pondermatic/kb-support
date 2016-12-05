@@ -180,6 +180,9 @@ function kbs_customers_view( $customer ) {
 
 	$customer_edit_role = apply_filters( 'kbs_edit_customers_role', 'manage_ticket_settings' );
 
+	$tickets      = kbs_get_customer_tickets( $customer->id, array(), false );
+	$ticket_count = count( $tickets );
+
 	?>
 
 	<?php do_action( 'kbs_customer_card_top', $customer ); ?>
@@ -329,10 +332,10 @@ function kbs_customers_view( $customer ) {
 
 					<?php do_action( 'kbs_customer_before_ticket_count', $customer ); ?>
 
-					<?php if ( $customer->ticket_count > 0 ) : ?>
+					<?php if ( $ticket_count > 0 ) : ?>
 
                         <a href="<?php echo admin_url( 'edit.php?post_type=kbs_ticket&customer=' . $customer->id ); ?>">
-                            <?php printf( _n( '%d ' . kbs_get_ticket_label_singular(), '%d ' . kbs_get_ticket_label_plural(), $customer->ticket_count, 'kb-support' ), $customer->ticket_count ); ?>
+                            <?php printf( _n( '%d ' . kbs_get_ticket_label_singular(), '%d ' . kbs_get_ticket_label_plural(), $ticket_count, 'kb-support' ), $ticket_count ); ?>
                         </a>
 
 					<?php endif; ?>
@@ -429,9 +432,7 @@ function kbs_customers_view( $customer ) {
 		<?php do_action( 'kbs_customer_before_tickets_table', $customer ); ?>
 
         <h3><?php printf( __( 'Recent %s', 'kb-support' ), kbs_get_ticket_label_plural() ); ?></h3>
-		<?php
-			$tickets = kbs_get_customer_tickets( $customer->id, array(), false )
-		?>
+		
 		<table class="wp-list-table widefat striped tickets">
 			<thead>
 				<tr>
