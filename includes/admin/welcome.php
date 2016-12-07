@@ -154,27 +154,28 @@ class KBS_Welcome {
 		$page = isset( $_GET['page'] ) ? $_GET['page'] : 'kbs-about';
 
 		?>
-		<div id="kbs-header">
-			<img class="kbs-badge" src="<?php echo KBS_PLUGIN_URL . 'assets/images/mdjm_web_header.png'; ?>" alt="<?php _e( 'KB Support', 'kb-support' ); ?>" / >
-			<h1><?php printf( __( 'Welcome to KB Support %s', 'kb-support' ), $display_version ); ?></h1>
-			<p class="about-text">
-				<?php
-				switch ( $page )	{
-					case 'kbs-getting-started':
-						_e( "Let's get Started!", 'kb-support' );
-						break;
+        <h1><?php printf( __( 'Welcome to KB Support %s', 'kb-support' ), $display_version ); ?></h1>
 
-					default:
-						_e( 'Thank you for updating to the latest version!', 'kb-support' );
-						echo '<br />';
-						printf(
-							__( 'KB Support %s is ready to make improve your support business efficiency!', 'kb-support' ),
-							$display_version
-						);
-				}
-				?>
-			</p>
-		</div>
+        <p class="about-text">
+            <?php
+            switch ( $page )	{
+                case 'kbs-getting-started':
+                    _e( 'Thank you for installing KB Support!', 'kb-support' );
+					echo '<br />';
+					_e( "You are now equipped with the best tool to provide your customers with an exceptional support experience.", 'kb-support' );
+                    break;
+
+                default:
+                    _e( 'Thank you for updating to the latest version!', 'kb-support' );
+                    echo '<br />';
+                    printf(
+                        __( 'KB Support %s is ready to make improve your support business efficiency!', 'kb-support' ),
+                        $display_version
+                    );
+            }
+            ?>
+        </p>
+        <div class="wp-badge"><?php printf( __( 'Version %s' ), $display_version ); ?></div>
 		<?php
 	} // welcome_message
 
@@ -185,17 +186,21 @@ class KBS_Welcome {
 	 * @since	1.0
 	 * @return	void
 	 */
-	public function tabs() {
-		$selected = isset( $_GET['page'] ) ? $_GET['page'] : 'kbs-about';
+	public function tabs()	{
+		$selected        = isset( $_GET['page'] ) ? $_GET['page'] : 'kbs-about';
+		$about_url       = esc_url( admin_url( add_query_arg( array( 'page' => 'kbs-about' ), 'index.php' ) ) );
+		$get_started_url = esc_url( admin_url( add_query_arg( array( 'page' => 'kbs-getting-started' ), 'index.php' ) ) );
 		?>
-		<h1 class="nav-tab-wrapper">
-			<a class="nav-tab <?php echo $selected == 'kbs-about' ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( add_query_arg( array( 'page' => 'kbs-about' ), 'index.php' ) ) ); ?>">
+
+		<h2 class="nav-tab-wrapper wp-clearfix">			
+            <a href="<?php echo $about_url; ?>" class="nav-tab <?php echo $selected == 'kbs-about' ? 'nav-tab-active' : ''; ?>">
 				<?php _e( "What's New", 'kb-support' ); ?>
 			</a>
-			<a class="nav-tab <?php echo $selected == 'kbs-getting-started' ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( add_query_arg( array( 'page' => 'kbs-getting-started' ), 'index.php' ) ) ); ?>">
+			<a href="<?php echo $get_started_url; ?>" class="nav-tab <?php echo $selected == 'kbs-getting-started' ? 'nav-tab-active' : ''; ?>">
 				<?php _e( 'Getting Started', 'kb-support' ); ?>
 			</a>
-		</h1>
+		</h2>
+
 		<?php
 	} // tabs
 
@@ -274,13 +279,34 @@ class KBS_Welcome {
 	 */
 	public function getting_started_screen()	{
 		?>
-		<div class="wrap about-wrap kbs-about-wrap">
+		<div class="wrap about-wrap">
 			<?php
 				// Load welcome message and content tabs
 				$this->welcome_message();
 				$this->tabs();
 			?>
-			<p class="about-description"><?php _e( "Now that KB Support is installed, you're ready to get started. It works out of the box, but its also fully customisable.", 'kb-support' ); ?></p>
+            <div class="feature-section two-col">
+                <h2><?php printf( __( 'Start Receiving &amp; Managing %s', 'kb-support' ), $this->ticket_plural ); ?></h2>
+                <div class="col">
+                    <img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/getting-started-email-1.png'; ?>" sizes="(max-width: 500px) calc(100vw - 40px), (max-width: 781px) calc((100vw - 70px) * .466), (max-width: 959px) calc((100vw - 116px) * .469), (max-width: 1290px) calc((100vw - 240px) * .472), 496px" />
+                    <h3><?php _e( 'Optimise Settings', 'kb-support' ); ?></h3>
+                    <p><?php
+                        _e( "KB Support will work right from install as we've installed the default settings for you, however you should review the available setting options and ensure they're optimised for your support business.", 'kb-support');
+                    ?></p>
+                    <h4><a href="<?php echo admin_url( 'edit.php?post_type=kbs_ticket&page-kbs-settings' ); ?>"><?php printf( __( '%s &rarr; Settings', 'kb-support' ), $this->ticket_plural ); ?></a></h4>
+                </div>
+                <div class="col">
+                    <img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/getting-started-form-1.png'; ?>" sizes="(max-width: 500px) calc(100vw - 40px), (max-width: 781px) calc((100vw - 70px) * .466), (max-width: 959px) calc((100vw - 116px) * .469), (max-width: 1290px) calc((100vw - 240px) * .472), 496px" />
+                    <h3><?php _e( 'Customise your Submission Form(s)', 'kb-support' ); ?></h3>
+                    <p><?php printf( __( 'The %s submission forms are the first point at which your customers can provide you with details regarding the issues they are experiencing.', 'kb-support' ), strtolower( $this->ticket_singular ) ); ?></p>
+						<p><?php _e( 'We created a default form for you during install, but it is fully customisable and you should ensure it has all the fields you need.', 'kb-support' ); ?></p>
+                </div>
+            </div>
+                
+            
+            
+            
+            
             <p class="description"><?php printf( __( 'For further assistance, take a look at our <a href="%s" target="_blank">support documentation</a>', 'kb-support' ), 'https://kb-support.com/support/' ); ?></p>
 
 			<div class="changelog">
