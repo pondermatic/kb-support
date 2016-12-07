@@ -293,111 +293,96 @@ class KBS_Welcome {
                     <p><?php
                         _e( "KB Support will work right from install as we've installed the default settings for you, however you should review the available setting options and ensure they're optimised for your support business.", 'kb-support');
                     ?></p>
-                    <h4><a href="<?php echo admin_url( 'edit.php?post_type=kbs_ticket&page-kbs-settings' ); ?>"><?php printf( __( '%s &rarr; Settings', 'kb-support' ), $this->ticket_plural ); ?></a></h4>
+                    <div class="return-to-dashboard">
+                    	<a href="<?php echo admin_url( 'edit.php?post_type=kbs_ticket&page-kbs-settings' ); ?>"><?php printf( __( '%s &rarr; Settings', 'kb-support' ), $this->ticket_plural ); ?></a>
+                    </div>
                 </div>
                 <div class="col">
                     <img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/getting-started-form-1.png'; ?>" sizes="(max-width: 500px) calc(100vw - 40px), (max-width: 781px) calc((100vw - 70px) * .466), (max-width: 959px) calc((100vw - 116px) * .469), (max-width: 1290px) calc((100vw - 240px) * .472), 496px" />
                     <h3><?php _e( 'Customise your Submission Form(s)', 'kb-support' ); ?></h3>
                     <p><?php printf( __( 'The %s submission forms are the first point at which your customers can provide you with details regarding the issues they are experiencing.', 'kb-support' ), strtolower( $this->ticket_singular ) ); ?></p>
-						<p><?php _e( 'We created a default form for you during install, but it is fully customisable and you should ensure it has all the fields you need.', 'kb-support' ); ?></p>
+					<p><?php _e( 'We created a default form for you during install, but it is fully customisable and you should ensure it has all the fields you need.', 'kb-support' ); ?></p>
+                    <div class="return-to-dashboard">
+                    	<a href="<?php echo admin_url( 'edit.php?post_type=kbs_form' ); ?>"><?php printf( __( '%s &rarr; Submission Forms', 'kb-support' ), $this->ticket_plural ); ?></a>
+                    </div>
                 </div>
             </div>
-                
-            
-            
-            
-            
-            <p class="description"><?php printf( __( 'For further assistance, take a look at our <a href="%s" target="_blank">support documentation</a>', 'kb-support' ), 'https://kb-support.com/support/' ); ?></p>
 
-			<div class="changelog">
-				<h3><?php _e( 'Configure KB Support Settings', 'kb-support' ); ?></h3>
-				<div class="feature-section">
-					<div class="feature-section-media">
-						<img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/getting-started-email.png'; ?>" class="kbs-welcome-screenshots" />
-					</div>
-					<div class="feature-section-content">
-						<h4><a href="<?php echo admin_url( 'edit.php?post_type=kbs_ticket&page-kbs-settings' ); ?>"><?php printf( __( '%s &rarr; Settings', 'kb-support' ), $this->ticket_plural ); ?></a></h4>
-						<p><?php _e( "We've set the default options for you, however slight adjustments may ensure that KB Support is fully optimal for you and your customers.", 'kb-support' ); ?></p>
+            <hr />
 
-						<h4><?php _e( 'Review Email Templates', 'kb-support' ); ?></h4>
-						<p><?php printf( __( 'Take a few moments to review the email templates as this content will be sent to your customers during the life cycle of their support %s.', 'kb-support' ), strtolower( $this->ticket_plural ) ); ?></p>
+			<div class="feature-section one-col">
+                <h2><?php printf( __( 'Create %s', 'kb-support' ), $this->article_plural ); ?></h2>
+                <p><?php printf( __( '%1$s provide a single document repository for your products and/or services. ', 'kb-support' ), $this->article_plural ); ?><br />
+                	<?php printf( __( 'You can configure your submission forms in such a way that when a customer is submitting a new %2$s a search of all %1$s will be made from the terms they enter into the subject field and any relevant %1$s will be offered as a potential solution to their query. This can dramatically reduce the number of %3$s you receive., ', 'kb-support' ), $this->article_plural, strtolower( $this->ticket_singular ), strtolower( $this->ticket_plural ) ); ?></p>
+                <img src="https://s.w.org/images/core/4.6/native-fonts-992.png?v1" alt="" srcset="https://cldup.com/Hqmo5VLb-E.png?v1 922w, https://s.w.org/images/core/4.6/native-fonts-200.png?v1 200w,https://s.w.org/images/core/4.6/native-fonts-371.png?v1 371w,https://s.w.org/images/core/4.6/native-fonts-510.png?v1 510w, https://s.w.org/images/core/4.6/native-fonts-560.png?v1 560w, https://s.w.org/images/core/4.6/native-fonts-781.png?v1 781w, https://s.w.org/images/core/4.6/native-fonts-2000.png?v1 2000w" sizes="(max-width: 500px) calc(100vw - 40px), (max-width: 782px) calc(100vw - 70px), (max-width: 959px) calc(100vw - 116px), (max-width: 1290px) calc(100vw - 240px), 1050px" />
+                <div class="return-to-dashboard">
+                	<a href="<?php echo admin_url( 'post-new.php?post_type=article' ); ?>"><?php printf( __( '%1$s &rarr; New %1$s', 'kb-support' ), $this->article_plural ); ?></a>
+                </div>
+            </div>
 
-					</div>
-				</div>
-			</div>
+			<hr />
 
-			<div class="changelog">
-				<h3><?php _e( 'Customise your Submission Form(s)', 'kb-support' ); ?></h3>
-				<div class="feature-section">
-					<div class="feature-section-media">
-						<img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/getting-started-form.png'; ?>" class="kbs-welcome-screenshots" />
-					</div>
-					<div class="feature-section-content">
-						<h4><a href="<?php echo admin_url( 'edit.php?post_type=kbs_form' ); ?>"><?php printf( __( '%s &rarr; Submission Forms', 'kb-support' ), $this->ticket_plural ); ?></a></h4>
-						<p><?php printf( __( 'The %s submission forms are the first point at which your customers can provide you with details regarding the issues they are experiencing.', 'kb-support' ), strtolower( $this->ticket_singular ) ); ?></p>
-						<p><?php _e( 'We created a default form for you during install, but it is fully customisable and you should ensure it has all the fields you need.', 'kb-support' ); ?></p>
-					</div>
-				</div>
-			</div>
+            <div class="changelog">
+				<h2><?php _e( "We're Here to Help", 'kb-support' ); ?></h2>
+				<div class="under-the-hood two-col">
+                    <div class="col">
+                        <h3><?php _e( 'Documentation', 'kb-support' ); ?></h3>
+                        <p><?php _e( 'We have a searchable library of <a href="https://kb-support.com/support/" target="_blank">Support Documents</a> to help new and advanced users with features and customisations.', 'kb-support' ); ?></p>
+                    </div>
+                    <div class="col">
+                        <h3><?php _e( 'Excellent Support' ); ?></h3>
+                        <p><?php printf( __( 'We pride ourselves on our level of support and excellent response times. If you are experiencing an issue, <a href="%s" target="_blank">submit a support ticket</a> and we will respond quickly.', 'kb-support' ), 'https://kb-support.com/support-request/' );?></p>
+                    </div>
+                </div>
 
-			<div class="changelog">
-				<h3><?php printf( __( 'Start Creating %s', 'kb-support' ), $this->article_plural ); ?></h3>
-				<div class="feature-section">
-					<div class="feature-section-media">
-						<img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/getting-started-articles.png'; ?>" class="kbs-welcome-screenshots"/>
-					</div>
-					<div class="feature-section-content">
-						<h4><a href="<?php echo admin_url( 'post-new.php?post_type=article' ); ?>"><?php printf( __( '%1$s &rarr; New %1$s', 'kb-support' ), $this->article_plural ); ?></a></h4>
-						<p><?php printf( __( '%s provide not only a document repository for your products and/or services, but also a way for you to offer solutions to your customers issues during %s creation. ', 'kb-support' ), $this->article_plural, strtolower( $this->ticket_singular ) ); ?></p>
-						<p><?php printf( __( 'If you offer premium products and/or services, you can restrict access to some %s as needed.', 'kb-support' ), $this->article_plural ); ?></p>
-					</div>
-				</div>
-			</div>
+				<div class="under-the-hood two-col">
+                    <div class="col">
+                        <h3><?php _e( 'Get the Latest News','kb-support' ); ?></h3>
+                        <p><?php printf( __( '<a href="%s" target="_blank">Subscribe to our Newsletter</a> for all the latest news from KB Support.', 'kb-support' ), 'http://eepurl.com/cnxWcz' ); ?></p>
+                    </div>
+                    <div class="col">
+                        <h3><?php _e( 'Get Social', 'kb-support' );?></h3>
+                        <p><?php printf( __( 'The <a href="%s" target="_blank">KB Support Facebook Page</a> and our <a href="%s" target="_blank">Twitter Account</a> are also great places for the latest news.', 'kb-support' ), 'https://www.facebook.com/kbsupport/', 'https://twitter.com/kbsupport_wp' ); ?></p>
+                    </div>
+                </div>
+            </div>
 
-			<div class="changelog">
-				<h3><?php _e( 'Need Help?', 'kb-support' );?></h3>
-				<div class="feature-section two-col">
-                	<div class="col">
-						<h4><?php _e( 'Documentation', 'kb-support' );?></h4>
-						<p><?php _e( 'We have a searchable library of <a href="https://kb-support.com/support/" target="_blank">Support Documents</a> to help new and advanced users with features and customisations.', 'kb-support' ); ?></p>
-					</div>
-					<div class="col">
-						<h4><?php _e( 'Excellent Support','kb-support' );?></h4>
-						<p><?php printf( __( 'We pride ourselves on our level of support and excellent response times. If you are experiencing an issue, <a href="%s" target="_blank">submit a support ticket</a> and we will respond quickly.', 'kb-support' ), 'https://kb-support.com/support-request/' );?></p>
-					</div>
-				</div>
-			</div>
+			<hr />
 
-			<div class="changelog">
-				<div class="feature-section two-col">
-					<div class="col">
-						<h3><?php _e( 'Get the Latest News','kb-support' );?></h4>
-						<p><?php printf( __( '<a href="%s" target="_blank">Subscribe to our Newsletter</a> for all the latest news from KB Support.', 'kb-support' ), 'http://eepurl.com/cnxWcz' ); ?></p>
-					</div>
-					<div class="col">
-						<h4><?php _e( 'Socialise with us', 'kb-support' );?></h4>
-						<p><?php printf( __( 'The <a href="%s" target="_blank">KB Support Facebook Page</a> and our <a href="%s" target="_blank">Twitter Account</a> are also great places for the latest news.', 'kb-support' ), 'https://www.facebook.com/kbsupport/', 'https://twitter.com/kbsupport_wp' ); ?></p>
-					</div>
-				</div>
-			</div>
+            <div class="feature-section no-heading two-col">
+                <div class="col">
+                    <h3><?php _e( 'Extensions', 'kb-support' ); ?></h3>
+                    <img src="https://s.w.org/images/core/4.7/pdf-760.jpg?v2" srcset="https://s.w.org/images/core/4.7/pdf-760.jpg?v2 760w, https://s.w.org/images/core/4.7/pdf-280.jpg?v2 280w, https://s.w.org/images/core/4.7/pdf-412.jpg?v2 412w, https://s.w.org/images/core/4.7/pdf-516.jpg?v2 516w, https://s.w.org/images/core/4.7/pdf-615.jpg?v2 615w, https://s.w.org/images/core/4.7/pdf-716.jpg?v2 716w" sizes="(max-width: 500px) calc(100vw - 40px), (max-width: 781px) calc((100vw - 70px) * .466), (max-width: 959px) calc((100vw - 116px) * .469), (max-width: 1290px) calc((100vw - 240px) * .472), 496px" alt="" />
+                    <p><?php printf( __( 'We have an ever growing catalogue of extensions available at our <a href="%s" target="_blank">plugin store</a> that will extend the functionality of KB Support and further enhance your customers support experience.', 'kb-support' ), 'https://kb-support.com/downloads/' ); ?></p>
+                </div>
+                <div class="col">
+                    <h3><?php _e( 'Contribute to KB Support', 'kb-support' ); ?></h3>
+                    <p><?php _e( 'Anyone is welcome to contribute to KB Support. Please read the <a href="" target="_blank">guidelines for contributing</a> to our <a href="" target="_blank">GitHub repository</a>.', 'kb-support' ); ?></p>
+                    <p><?php _e( 'There are various ways you can contribute', 'kb-support' ); ?>&hellip;<br />
+                       <?php printf( __( '<a href="%s" target="_blank">Raise an Issue on GitHub</a>', 'kb-support' ), 'https://github.com/KB-Support/kb-support/issues' ); ?><br />
+                       <?php printf( __( '<a href="%s" target="_blank">Send us a Pull Request</a> with your bug fixes and/or new features', 'kb-support' ), 'https://www.google.co.uk/url?sa=t&rct=j&q=&esrc=s&source=web&cd=2&cad=rja&uact=8&ved=0ahUKEwikn8uql5fQAhXiDsAKHcP6AIQQFgggMAE&url=https%3A%2F%2Fhelp.github.com%2Farticles%2Fcreating-a-pull-request%2F&usg=AFQjCNEyxULKOpCMlFly-Rcy8_YemfrOhQ&sig2=OSYkosRNJKTjCkbKTS8Qdg&bvm=bv.137904068,d.bGg' ); ?><br />
+                       <?php printf( __( '<a href="%s" target="_blank">Translate KB Support</a> into different languages', 'kb-support' ), 'https://kb-support.com/articles/translating-kb-support/' ); ?><br />
+                       <?php printf( __( 'Provide feedback and suggestions on <a href="%s" target="_blank">enhancements</a>', 'kb-support' ), 'https://github.com/KB-Support/kb-support/issues' ); ?><br />
+                       <?php _e( 'Assist with maintaining documentation', 'kb-support' ); ?></p>
+                </div>
+            </div>
 
-			<div class="changelog">
-				<h3><?php _e( 'Extensions', 'kb-support' );?></h3>
-                <p><?php printf( __( 'We have an ever growing catalogue of extensions available at our <a href="%s" target="_blank">plugin store</a> that will extend the functionality of KB Support and further enhance your customers support experience.', 'kb-support' ), 'https://kb-support.com/products/' ); ?></p>
-			</div>
+			<hr />
 
-			<div class="changelog">
-				<h3><?php _e( 'Contribute to KB Support', 'kb-support' );?></h3>
-                <p><?php _e( 'Anyone is welcome to contribute to KB Support. Please read the <a href="" target="_blank">guidelines for contributing</a> to our <a href="" target="_blank">GitHub repository</a>.', 'kb-support' ); ?></p>
-                <p><?php _e( 'There are various ways you can contribute', 'kb-support' ); ?>&hellip;</p>
-                <ul>
-                    <li><?php printf( __( '<a href="%s" target="_blank">Raise an Issue on GitHub</a>', 'kb-support' ), 'https://github.com/KB-Support/kb-support/issues' ); ?></li>
-                    <li><?php printf( __( '<a href="%s" target="_blank">Send us a Pull Request</a> with your bug fixes and/or new features', 'kb-support' ), 'https://www.google.co.uk/url?sa=t&rct=j&q=&esrc=s&source=web&cd=2&cad=rja&uact=8&ved=0ahUKEwikn8uql5fQAhXiDsAKHcP6AIQQFgggMAE&url=https%3A%2F%2Fhelp.github.com%2Farticles%2Fcreating-a-pull-request%2F&usg=AFQjCNEyxULKOpCMlFly-Rcy8_YemfrOhQ&sig2=OSYkosRNJKTjCkbKTS8Qdg&bvm=bv.137904068,d.bGg' ); ?></li>
-                    <li><?php printf( __( '<a href="%s" target="_blank">Translate KB Support</a> into different languages', 'kb-support' ), 'https://kb-support.com/articles/translating-kb-support/' ); ?></li>
-                    <li><?php printf( __( 'Provide feedback and suggestions on <a href="%s" target="_blank">enhancements</a>', 'kb-support' ), 'https://github.com/KB-Support/kb-support/issues' ); ?></li>
-                    <li><?php _e( 'Assist with maintaining documentation', 'kb-support' ); ?></li>
-                </ul>
-			</div>
+			<div class="return-to-dashboard">
+                <a href="<?php echo esc_url( self_admin_url( 'edit.php?post_type=kbs_ticket' ) ); ?>">
+                    <?php printf( __( 'Go to %s', 'kb-support' ), $this->ticket_plural ); ?>
+                </a> |
+                 <a href="<?php echo esc_url( self_admin_url( 'edit.php?post_type=kbs_form' ) ); ?>">
+                    <?php _e( 'Manage Submission Forms', 'kb-support' ); ?>
+                </a> |
+                <a href="<?php echo esc_url( self_admin_url( 'edit.php?post_type=article' ) ); ?>">
+                    <?php printf( __( 'Go to %s', 'kb-support' ), $this->article_plural ); ?>
+                </a> |
+                <a href="https://kb-support.com/downloads/" target="_blank">
+                    <?php _e( 'View Extensions', 'kb-support' ); ?>
+                </a>
+            </div>
 
 		</div>
 		<?php
