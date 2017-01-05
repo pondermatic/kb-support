@@ -445,9 +445,10 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 
 	if ( 'closed' == $kbs_ticket->post_status ) : ?>
 		<p>
-			<?php printf( __( 'This %1$s is currently closed. <a href="%2$s">Re-open %1$s.</a>', 'kb-support' ),
-				kbs_get_ticket_label_singular(),
-				wp_nonce_url( add_query_arg( 'kbs-action', 're-open-ticket', get_edit_post_link( $ticket_id ) ), 'kbs-reopen-ticket', 'kbs-ticket-nonce' )
+			<?php printf( __( 'This %1$s is currently closed. <a href="%2$s">Re-open %3$s.</a>', 'kb-support' ),
+				kbs_get_ticket_label_singular( true ),
+				wp_nonce_url( add_query_arg( 'kbs-action', 're-open-ticket', get_edit_post_link( $ticket_id ) ), 'kbs-reopen-ticket', 'kbs-ticket-nonce' ),
+				kbs_get_ticket_label_singular()
 			); ?>
 		</p>
 	<?php else :
