@@ -54,8 +54,8 @@ add_action( 'admin_head', 'kbs_ticket_remove_meta_boxes' );
  * Define and add the metaboxes for the kbs_ticket post type.
  *
  * @since	1.0
- * @param
- * @return
+ * @param	obj		$post	The WP_Post object.
+ * @return	void
  */
 function kbs_ticket_add_meta_boxes( $post )	{
 
@@ -239,11 +239,11 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
             
             </div><!-- #minor-publishing-actions -->
             <div id="kbs-ticket-actions">
-                <p class="dashicons-before dashicons-post-status">&nbsp;&nbsp;<label for="ticket_status"><?php _e( 'Status:' ); ?></label>
+                <p><label for="ticket_status"><?php _e( 'Status:' ); ?></label>
                     <?php echo KBS()->html->ticket_status_dropdown( 'ticket_status', $kbs_ticket->post_status ); ?>
                 </p>
 
-                <p class="dashicons-before dashicons-admin-users"></span>&nbsp;&nbsp;<label for="kbs_customer_id"><?php _e( 'Customer:', 'kb-support' ); ?></label>
+                <p><label for="kbs_customer_id"><?php _e( 'Customer:', 'kb-support' ); ?></label>
 					<?php echo KBS()->html->customer_dropdown( array(
                         'name'     => 'kbs_customer_id',
                         'selected' => $kbs_ticket->customer_id,
@@ -251,7 +251,7 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
                     ) ); ?>
                 </p>
                     
-                <p class="dashicons-before dashicons-businessman"></span>&nbsp;&nbsp;<label for="kbs_agent_id"><?php _e( 'Agent:', 'kb-support' ); ?></label>
+                <p><label for="kbs_agent_id"><?php _e( 'Agent:', 'kb-support' ); ?></label>
 					<?php echo KBS()->html->agent_dropdown( 'kbs_agent_id', ( ! empty( $kbs_ticket->agent_id ) ? $kbs_ticket->agent_id : get_current_user_id() ) ); ?>
                 </p>
                     
