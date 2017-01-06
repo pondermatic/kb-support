@@ -47,7 +47,6 @@ function kbs_calculate_sla_target_response()	{
  * @return	str		Date/Time for targetted resolution time.
  */
 function kbs_calculate_sla_target_resolution()	{
-	$now    = current_time( 'timestamp' );
 	$target = strtotime( '+' . kbs_get_option( 'sla_resolve_time' ), $now );
 	
 	return apply_filters( 'kbs_calculate_sla_target_resolution', date( 'Y-m-d H:i:s', $target ) );
@@ -61,7 +60,10 @@ function kbs_calculate_sla_target_resolution()	{
  * @return	void
  */
 function kbs_set_sla_first_respond( $ticket_id )	{
-	return add_post_meta( $ticket_id, '_kbs_ticket_sla_first_respond', current_time( 'timestamp' ) );
+	$now    = current_time( 'timestamp' );
+
+	add_post_meta( $ticket_id, '_kbs_ticket_sla_first_respond', date( 'Y-m-d H:i:s', current_time( 'timestamp' ) ), true );
+	add_post_meta( $ticket_id, '_kbs_ticket_sla_first_respond_agent', get_current_user_id(), true );
 } // kbs_calculate_sla_target_resolution
 add_action( 'kbs_ticket_admin_reply', 'kbs_set_sla_first_respond', 10, 2 );
 
