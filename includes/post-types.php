@@ -603,11 +603,11 @@ function kbs_updated_messages( $messages ) {
 	$url4 = '</a>';
 
 	$messages['kbs_ticket'] = array(
-		1 => sprintf( __( '%2$s updated. %1$sView %2$s%3$s.', 'kb-support'   ), $url1, $url2, $url4 ),
-		4 => sprintf( __( '%2$s updated. %1$sView %2$s%3$s.', 'kb-support'   ), $url1, $url2, $url4 ),
-		6 => sprintf( __( '%2$s opened. %1$sView %2$s%3$s.', 'kb-support'    ), $url1, $url2, $url4 ),
-		7 => sprintf( __( '%2$s saved. %1$sView %2$s%3$s.', 'kb-support'     ), $url1, $url2, $url4 ),
-		8 => sprintf( __( '%2$s submitted. %1$sView %2$s%3$s.', 'kb-support' ), $url1, $url2, $url4 )
+		1 => sprintf( __( '%1$s updated.', 'kb-support'   ), $url2 ),
+		4 => sprintf( __( '%1$s updated.', 'kb-support'   ), $url2 ),
+		6 => sprintf( __( '%1$s opened.', 'kb-support'    ), $url2 ),
+		7 => sprintf( __( '%1$s saved.', 'kb-support'     ), $url2 ),
+		8 => sprintf( __( '%1$s submitted.', 'kb-support' ), $url2 )
 	);
 	
 	$messages['article'] = array(
@@ -619,11 +619,11 @@ function kbs_updated_messages( $messages ) {
 	);
 	
 	$messages['kbs_form'] = array(
-		1 => sprintf( __( 'Form updated. %1$sView Form%2$s.', 'kb-support'   ), $url1, $url4 ),
-		4 => sprintf( __( 'Form updated. %1$sView Form%2$s.', 'kb-support'   ), $url1, $url4 ),
-		6 => sprintf( __( 'Form published. %1$sView Form%2$s.', 'kb-support' ), $url1, $url4 ),
-		7 => sprintf( __( 'Form saved. %1$sView Form%2$s.', 'kb-support'     ), $url1, $url4 ),
-		8 => sprintf( __( 'Form submitted. %1$sView Form%2$s.', 'kb-support' ), $url1, $url4 )
+		1 => __( 'Form updated.', 'kb-support'   ),
+		4 => __( 'Form updated.', 'kb-support'   ),
+		6 => __( 'Form published.', 'kb-support' ),
+		7 => __( 'Form saved.', 'kb-support'     ),
+		8 => __( 'Form submitted.', 'kb-support' )
 	);
 
 	return $messages;
