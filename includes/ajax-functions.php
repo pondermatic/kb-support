@@ -392,6 +392,13 @@ function kbs_ajax_validate_form_submission()	{
 				$field = $field->post_name;
 			}
 
+		} else	{
+			/**
+			 * Allow plugins to perform additional validation on individual field types.
+			 *
+			 * @since	1.0
+			 */
+			$error = apply_filters( 'kbs_validate_form_field_' . $settings['type'], $error, $field, $settings, $_POST[ $field->post_name ] );
 		}
 	
 		if ( $error )	{
@@ -411,7 +418,7 @@ function kbs_ajax_validate_form_submission()	{
 	}
 
 	/**
-	 * Allow plugins to perform additional validation.
+	 * Allow plugins to perform additional form validation.
 	 *
 	 * @since	1.0
 	 */

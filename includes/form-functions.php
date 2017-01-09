@@ -581,7 +581,7 @@ function kbs_form_ignore_fields()	{
  * Output the icons for the field settings.
  *
  * @since	1.0
- * @param	arr		$settings	The field ID.
+ * @param	int		$field_id	The field ID.
  * @return	str
  */
 function kbs_display_field_setting_icons( $field_id )	{
@@ -614,9 +614,10 @@ function kbs_display_field_setting_icons( $field_id )	{
 		} else	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
+
 	}
 
-	$output = apply_filters( 'kbs_field_setting_icons', $output, $field_id );
+	$output = apply_filters( 'kbs_field_setting_icons', $output, $field_id, $settings );
 
 	return implode( "\t", $output );
 
@@ -666,7 +667,7 @@ function kbs_form_submission_errors( $field_id, $error )	{
 		'agree_to_terms' => __( 'You must agree to the terms and conditions', 'kb-support' )
 	);
 
-	$errors = apply_filters( 'kbs_form_submission_errors', $errors );
+	$errors = apply_filters( 'kbs_form_submission_errors', $errors, $field_id );
 
 	if ( ! array_key_exists( $error, $errors ) )	{
 		return get_the_title( $field_id ) . __( ' contains an error.', 'kb-support' );
@@ -787,6 +788,9 @@ function kbs_display_form_text_field( $field, $settings )	{
 			$value = ' value="' . get_userdata( $user_id )->user_url . '"';
 		}
 
+		// Allow plugins to filter values for mapped fields
+		apply_filters( 'kbs_mapped_form_field_value', $value, $settings, $field );
+
 	}
 
 	$output = sprintf( '<input type="%1$s" name="%2$s" id="%2$s" class="kbs-input %3$s"%4$s%5$s />',
@@ -887,9 +891,13 @@ function kbs_display_form_select_field( $field, $settings )	{
 		$multiple
 	);
 
+	$selected = ! empty( $settings['selected'] ) ? $settings['selected'] : '';
+
 	if ( ! empty( $options ) )	{
 		foreach( $options as $key => $value )	{
-			$output .= '<option value="' . esc_attr( $key ) . '">' . esc_html( $value ) . '</option>';
+			$output .= '<option value="' . esc_attr( $key ) . '"';
+			$output .= selected( $settings['selected'], $key, false );
+			$output .= '>' . esc_html( $value ) . '</option>';
 		}
 	}
 

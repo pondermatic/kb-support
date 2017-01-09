@@ -180,7 +180,7 @@ function kbs_form_contextual_help() {
 			'</li>'
 	) );
 
-	do_action( 'kbs_ticket_contextual_help' );
+	do_action( 'kbs_form_contextual_help' );
 
 } // kbs_form_contextual_help
 add_action( 'load-post.php', 'kbs_form_contextual_help' );

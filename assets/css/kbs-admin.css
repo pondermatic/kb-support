@@ -10,6 +10,8 @@
 .kbs-hidden { display: none; }
 .kbs-clearfix:after { display: block; visibility: hidden; content: "."; text-indent: -9999px; height: 0; }
 .kbs-wrap a { text-decoration: none; }
+.kbs-expired { color: red; }
+.kbs-delete { color: #a00; }
 a.kbs-delete { color: #a00; }
 a.kbs-delete:hover { color: #f00; }
 .kbs_loader {
