@@ -638,17 +638,23 @@ function kbs_display_form( $form_id = 0 ) {
 		return __( 'Submission form not found', 'kb-support' );
 	}
 
-	$kbs_form = new KBS_Form( $form_id );
+	if ( has_action( 'kbs_display_form' ) )	{
+		do_action( 'kbs_display_form', $form_id );
+	} else	{
 
-	if ( ! $kbs_form ) {
-		return __( 'Submission form not found', 'kb-support' );
+		$kbs_form = new KBS_Form( $form_id );
+	
+		if ( ! $kbs_form ) {
+			return __( 'Submission form not found', 'kb-support' );
+		}
+	
+		ob_start();
+	
+		kbs_get_template_part( 'shortcode', apply_filters( 'kbs_form_template', 'form' ) );
+	
+		return apply_filters( 'kbs_submit_form', ob_get_clean() );
+
 	}
-
-	ob_start();
-
-	kbs_get_template_part( 'shortcode', apply_filters( 'kbs_form_template', 'form' ) );
-
-	return apply_filters( 'kbs_submit_form', ob_get_clean() );
 } // kbs_display_form
 
 /**
