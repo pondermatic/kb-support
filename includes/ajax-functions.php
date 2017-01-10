@@ -367,7 +367,9 @@ function kbs_ajax_validate_form_submission()	{
 		) );
 	}
 
-	foreach ( $form->get_fields() as $field )	{
+	$fields = $form->get_fields();
+
+	foreach ( $fields as $field )	{
 
 		$settings = $form->get_field_settings( $field->ID );
 
@@ -398,7 +400,7 @@ function kbs_ajax_validate_form_submission()	{
 			 *
 			 * @since	1.0
 			 */
-			$error = apply_filters( 'kbs_validate_form_field_' . $settings['type'], $error, $field, $settings, $_POST[ $field->post_name ] );
+			$error = apply_filters( 'kbs_validate_form_field_' . $settings['type'], $error, $field, $settings, $_POST[ $field->post_name ], $fields );
 		}
 	
 		if ( $error )	{
