@@ -300,16 +300,16 @@ class KBS_Welcome {
             <div class="feature-section two-col">
                 <h2><?php printf( __( 'Start Receiving &amp; Managing Support %s', 'kb-support' ), $this->ticket_plural ); ?></h2>
                 <div class="col">
-                    <img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/getting-started-email-1.png'; ?>" sizes="(max-width: 500px) calc(100vw - 40px), (max-width: 781px) calc((100vw - 70px) * .466), (max-width: 959px) calc((100vw - 116px) * .469), (max-width: 1290px) calc((100vw - 240px) * .472), 496px" />
+                    <img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/getting-started-email.png'; ?>" sizes="(max-width: 500px) calc(100vw - 40px), (max-width: 781px) calc((100vw - 70px) * .466), (max-width: 959px) calc((100vw - 116px) * .469), (max-width: 1290px) calc((100vw - 240px) * .472), 496px" />
                     <h3><?php _e( 'Optimise Settings', 'kb-support' ); ?></h3>
-                    <p><?php _e( "KB Support will work right from install as we've installed the default settings for you, however you should review the options and ensure they're fully optimised for your support business.", 'kb-support' ); ?></p>
+                    <p><?php _e( "KB Support will work as soon as installed and activated as we've set the default settings for you, however you should review the options and ensure they're fully optimised for your support business.", 'kb-support' ); ?></p>
                     <p><?php printf( __( "These settings define the communication flow and content between your business and your customers, as well as determine who can submit a %s, how %s are assigned to support workers, what tasks support workers can undertake, plus much more.", 'kb-support' ), strtolower( $this->ticket_singular ), strtolower( $this->ticket_plural ) ); ?></p>
                     <div class="return-to-dashboard">
                     	<a href="<?php echo admin_url( 'edit.php?post_type=kbs_ticket&page-kbs-settings' ); ?>"><?php printf( __( '%s &rarr; Settings', 'kb-support' ), $this->ticket_plural ); ?></a>
                     </div>
                 </div>
                 <div class="col">
-                    <img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/getting-started-form-1.png'; ?>" sizes="(max-width: 500px) calc(100vw - 40px), (max-width: 781px) calc((100vw - 70px) * .466), (max-width: 959px) calc((100vw - 116px) * .469), (max-width: 1290px) calc((100vw - 240px) * .472), 496px" />
+                    <img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/getting-started-form.png'; ?>" sizes="(max-width: 500px) calc(100vw - 40px), (max-width: 781px) calc((100vw - 70px) * .466), (max-width: 959px) calc((100vw - 116px) * .469), (max-width: 1290px) calc((100vw - 240px) * .472), 496px" />
                     <h3><?php _e( 'Customise your Submission Form(s)', 'kb-support' ); ?></h3>
                     <p><?php printf( __( 'The %s submission forms are the first point at which your customers can provide you with details regarding the issues they are experiencing.', 'kb-support' ), strtolower( $this->ticket_singular ) ); ?></p>
 					<p><?php printf( __( 'We created a <a href="%s">default form</a> for you during install, but it is fully customisable and you should ensure it has all the fields you need to maximise the opportunity of obtaining all information you need from your customers in order to efficiently address their issue.', 'kb-support' ), $form_url ); ?></p>
@@ -327,7 +327,7 @@ class KBS_Welcome {
                 <p><?php printf( __( 'Support Workers are provided with a number of prompts to quickly and easily publish new %1$s during the management of a %3$s and as soon as it is published, the %2$s is available to any customer via a general search, post listing, and whilst they are in the process of logging a new %3$s.', 'kb-support' ), $this->article_plural, $this->article_singular, strtolower( $this->ticket_singular ), strtolower( $this->ticket_plural ) ); ?></p>
                 <p><?php printf( __( 'Furthermore, individual %1$s can be restricted so that only customers with an active account on your website are able to view their content.', 'kb-support' ), $this->article_plural, $this->article_singular ); ?></p>
                 </p>
-                <img src="https://s.w.org/images/core/4.6/native-fonts-992.png?v1" alt="" srcset="https://cldup.com/Hqmo5VLb-E.png?v1 922w, https://s.w.org/images/core/4.6/native-fonts-200.png?v1 200w,https://s.w.org/images/core/4.6/native-fonts-371.png?v1 371w,https://s.w.org/images/core/4.6/native-fonts-510.png?v1 510w, https://s.w.org/images/core/4.6/native-fonts-560.png?v1 560w, https://s.w.org/images/core/4.6/native-fonts-781.png?v1 781w, https://s.w.org/images/core/4.6/native-fonts-2000.png?v1 2000w" sizes="(max-width: 500px) calc(100vw - 40px), (max-width: 782px) calc(100vw - 70px), (max-width: 959px) calc(100vw - 116px), (max-width: 1290px) calc(100vw - 240px), 1050px" />
+                <img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/getting-started-kb-articles.png'; ?>" sizes="(max-width: 500px) calc(100vw - 40px), (max-width: 782px) calc(100vw - 70px), (max-width: 959px) calc(100vw - 116px), (max-width: 1290px) calc(100vw - 240px), 1050px" style="border: none;" />
                 <div class="return-to-dashboard">
                 	<a href="<?php echo admin_url( 'post-new.php?post_type=article' ); ?>"><?php printf( __( '%1$s &rarr; New %2$s', 'kb-support' ), $this->article_plural, $this->article_singular ); ?></a>
                 </div>
@@ -365,7 +365,6 @@ class KBS_Welcome {
             <div class="feature-section no-heading two-col">
                 <div class="col">
                     <h3><?php _e( 'Extensions', 'kb-support' ); ?></h3>
-                    <img src="https://s.w.org/images/core/4.7/pdf-760.jpg?v2" srcset="https://s.w.org/images/core/4.7/pdf-760.jpg?v2 760w, https://s.w.org/images/core/4.7/pdf-280.jpg?v2 280w, https://s.w.org/images/core/4.7/pdf-412.jpg?v2 412w, https://s.w.org/images/core/4.7/pdf-516.jpg?v2 516w, https://s.w.org/images/core/4.7/pdf-615.jpg?v2 615w, https://s.w.org/images/core/4.7/pdf-716.jpg?v2 716w" sizes="(max-width: 500px) calc(100vw - 40px), (max-width: 781px) calc((100vw - 70px) * .466), (max-width: 959px) calc((100vw - 116px) * .469), (max-width: 1290px) calc((100vw - 240px) * .472), 496px" alt="" />
                     <p><?php printf( __( 'We have an ever growing catalogue of extensions available at our <a href="%s" target="_blank">plugin store</a> that will extend the functionality of KB Support and further enhance your customers support experience.', 'kb-support' ), 'https://kb-support.com/extensions/' ); ?></p>
                 </div>
                 <div class="col">
