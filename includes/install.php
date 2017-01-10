@@ -156,7 +156,7 @@ function kbs_run_install() {
 		$form = new KBS_Form( $submission_form_id );
 
 		// Tells us the default submission form was created so we don't create another
-		add_option( 'kbs_default_submission_form_created', true );
+		add_option( 'kbs_default_submission_form_created', $submission_form_id, '', 'no' );
 
 		// Add the form submission page
 		$submission_page = wp_insert_post( array(
@@ -180,8 +180,8 @@ function kbs_run_install() {
 
 	update_option( 'kbs_settings', $merged_options );
 	update_option( 'kbs_version', KBS_VERSION );
-	update_option( 'kbs_install_version', KBS_VERSION );
-	update_option( 'kbs_installed', current_time( 'mysql' ) );
+	update_option( 'kbs_install_version', KBS_VERSION, 'no' );
+	update_option( 'kbs_installed', current_time( 'mysql' ), 'no' );
 
 	// Create KBS support roles
 	$roles = new KBS_Roles;
