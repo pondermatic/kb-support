@@ -85,9 +85,6 @@ Extensions are available at [https://kb-support.com/downloads/](https://kb-suppo
 
 2. What the default submission form might look like on your website when your customers log a support ticket. Theme in image is Twenty Seventeen
 
-
-
-
 == Changelog ==
 
 = 0.9 =
