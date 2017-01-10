@@ -117,7 +117,9 @@ class KBS_Welcome {
 		?>
 		<style type="text/css" media="screen">
 			/*<![CDATA[*/
-			.kbs-about-wrap .kbs-badge { float: right; border-radius: 4px; margin: 0 0 15px 15px; max-width: 200px; }
+			.kbs-about-wrap .kbs-badge { float: right; border-radius: 4px; margin: 0 0 15px 15px; max-width: 200px; position: absolute; top: 0px; right: 0px; text-align: right; }
+			.kbs-about-wrap .kbs-badge img { border: none; }
+			.kbs-about-wrap .kbs-badge .kbs-version { font-size: 14px; }
 			.kbs-about-wrap #kbs-header { margin-bottom: 15px; }
 			.kbs-about-wrap #kbs-header h1 { margin-bottom: 15px !important; }
 			.kbs-about-wrap .about-text { margin: 0 0 15px; max-width: 670px; }
@@ -154,8 +156,10 @@ class KBS_Welcome {
 		$page = isset( $_GET['page'] ) ? $_GET['page'] : 'kbs-about';
 
 		?>
-        <h1><?php printf( __( 'Welcome to KB Support %s', 'kb-support' ), $display_version ); ?></h1>
-
+        <h1><?php _e( 'Welcome to KB Support!', 'kb-support' ); ?></h1>
+		<div class="kbs-badge"><img src="<?php echo KBS_PLUGIN_URL; ?>assets/images/kbs-logo.png" height="75" width="393" />
+			<span class="kbs-version"><?php printf( __( 'Version %s', 'kb-support' ), $display_version ); ?></span>
+        </div>
         <p class="about-text">
             <?php
             switch ( $page )	{
@@ -175,7 +179,6 @@ class KBS_Welcome {
             }
             ?>
         </p>
-        <div class="wp-badge"><?php printf( __( 'Version %s' ), $display_version ); ?></div>
 		<?php
 	} // welcome_message
 
@@ -279,7 +282,7 @@ class KBS_Welcome {
 	 */
 	public function getting_started_screen()	{
 		?>
-		<div class="wrap about-wrap">
+		<div class="wrap about-wrap kbs-about-wrap">
 			<?php
 				// Load welcome message and content tabs
 				$this->welcome_message();
