@@ -16,6 +16,46 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Registers user profile fields.
+ *
+ * Fields should be registered as field_name => bool (true for agent only, otherwise false for all users)
+ *
+ * @since	1.0
+ * @return	arr		Array of user profile field ids
+ */
+function kbs_register_user_profile_fields()	{
+	$fields = array();
+
+	return apply_filters( 'kbs_user_profile_fields', $fields );
+} // kbs_register_user_profile_fields
+
+/**
+ * Output user profile fields.
+ *
+ * @since	1.0
+ * @param	obj		$user	The WP_User object
+ * @return	arr		Array of user profile fields
+ */
+function kbs_output_user_profile_fields( $user )	{
+
+	$fields = kbs_register_user_profile_fields();
+
+	if ( ! empty( $fields ) )	{
+		ob_start(); ?>
+
+		<h2><?php _e( 'KB Support', 'kb-support' ); ?></h2>
+		<table class="form-table">
+			<?php do_action( 'kbs_display_user_profile_fields', $user, $fields ); ?>
+		</table>
+
+		<?php echo ob_get_clean();
+	}
+
+} // kbs_output_user_profile_fields
+add_action( 'show_user_profile', 'kbs_output_user_profile_fields' );
+add_action( 'edit_user_profile', 'kbs_output_user_profile_fields' );
+
+/**
  * Retrieve the customer ID from a ticket.
  *
  * @since	1.0
