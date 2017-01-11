@@ -391,6 +391,10 @@ a.kbs_ticket_form_data	{
 	}
 }
 
+/* System Info page styles
+-------------------------------------------------------------- */
+#system-info-textarea { width: 800px; height: 600px; font-family: Menlo, Monaco, monospace; background: #FFFFFF; white-space: pre; overflow: auto; display: block; }
+
 /* Accordion Styles
 -------------------------------------------------------------- */
 #kbs-notes-history.kbs_notes_accordion h3,
