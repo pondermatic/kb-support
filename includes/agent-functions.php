@@ -16,6 +16,17 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Retrieve the agent ID from a ticket.
+ *
+ * @since	1.0
+ * @param	int		$ticket_id	The ticket ID
+ * @return	int		The agent ID
+ */
+function kbs_get_agent_id_from_ticket( $ticket_id )	{
+	return get_post_meta( $ticket_id, '_kbs_ticket_agent_id', true );
+} // kbs_get_agent_id_from_ticket
+
+/**
  * Retrieve all agents.
  *
  * @since	1.0
