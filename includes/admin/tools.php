@@ -253,7 +253,7 @@ function kbs_tools_sysinfo_get()	{
 
 	$return .= "\n" . '-- KBS Configuration' . "\n\n";
 	$return .= 'Version:                  ' . KBS_VERSION . "\n";
-	$return .= 'Installed:                ' . KBS_VERSION . "\n";
+	$return .= 'Installed:                ' . date_i18n( get_option( 'date_format' ), strtotime( $installed ) ) . "\n";
 	$return .= 'Upgraded From:            ' . get_option( 'kbs_version_upgraded_from', 'None' ) . "\n";
 
 	$return  = apply_filters( 'kbs_sysinfo_after_kbs_config', $return );
