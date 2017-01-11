@@ -136,7 +136,7 @@ function kbs_load_admin_styles( $hook ) {
 	wp_register_style( 'jquery-ui-css', $css_dir . 'jquery-ui-' . $ui_style . $suffix . '.css' );
 	wp_enqueue_style( 'jquery-ui-css' );
 
-	wp_register_style( 'kbs-admin', $css_dir . 'kbs-admin' . $suffix . '.css', KBS_VERSION );
+	wp_register_style( 'kbs-admin', $css_dir . 'kbs-admin' . $suffix . '.css', array(), KBS_VERSION );
 	wp_enqueue_style( 'kbs-admin' );
 
 	wp_register_style( 'jquery-chosen-css', $css_dir . 'chosen.css', array(), KBS_VERSION );
