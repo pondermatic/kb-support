@@ -668,6 +668,7 @@ function kbs_display_form( $form_id = 0 ) {
 function kbs_form_submission_errors( $field_id, $error )	{
 
 	$errors = array(
+		'process_error'  => __( 'An internal error has occurred, please try again or contact support.', 'kb-support' ),
 		'required'       => get_the_title( $field_id ) . __( ' is a required field.', 'kb-support' ),
 		'invalid_email'  => get_the_title( $field_id ) . __( ' requires a valid email address.', 'kb-support' ),
 		'agree_to_terms' => __( 'You must agree to the terms and conditions', 'kb-support' )
@@ -738,6 +739,56 @@ function kbs_process_ticket_submission( $data )	{
 
 } // kbs_process_ticket_form
 add_action( 'kbs_submit_ticket', 'kbs_process_ticket_submission' );
+
+/**
+ * Display a form text input field.
+ *
+ * This function is also the callback for email and URL fields.
+ *
+ * @since	1.0
+ * @param	bool		$error		The error result
+ * @param	obj			$field		The field post object
+ * @param	arr			$settings	Array of field settings
+ * @param	mixed		$value		The submitted value of the field
+ * @return	str|false	Filtered error result. The error message, or false for no error
+ */
+function kbs_check_email_from_submission( $email )	{
+
+	if ( $error )	{
+		return $error;
+	}
+
+	$is_banned = false;
+	$banned    = kbs_get_banned_emails();
+
+	if ( ! empty( $banned ) )	{
+		if ( is_user_logged_in() )	{
+	
+			// The user is logged in, check that their account email is not banned
+			$user_data = get_userdata( get_current_user_id() );
+			if ( kbs_is_email_banned( $user_data->user_email ) )	{
+				$is_banned = true;
+			}
+	
+			// Also check the email they entered during submission
+			if ( kbs_is_email_banned( $email ) )	{
+				$is_banned = true;
+			}
+	
+		} else {
+	
+			// Guest submission, check that the email is not banned
+			if ( kbs_is_email_banned( $email ) )	{
+				$is_banned = true;
+			}
+	
+		}
+	}
+
+	return $is_banned;
+
+} // kbs_validate_email_from_submission
+//add_filter( 'kbs_validate_form_field_email', 'kbs_check_email_from_submission', 10, 4 );
 
 /**
  * Display a form text input field.
@@ -1160,3 +1211,50 @@ function kbs_display_form_field_description( $field, $settings )	{
     	<span class="kbs-description"><?php esc_html_e( $settings['description'] ); ?></span>
     <?php endif;
 } // kbs_display_form_field_description
+
+/**
+ * Retrieve an array of banned_emails
+ *
+ * @since	1.0
+ * @return	arr		Array of banned emails
+ */
+function kbs_get_banned_emails() {
+	$emails = array_map( 'trim', kbs_get_option( 'banned_emails', array() ) );
+
+	return apply_filters( 'kbs_banned_emails', $emails );
+} // kbs_get_banned_emails
+
+/**
+ * Determines if an email is banned
+ *
+ * @since	1.0
+ * @param	str		$email	Email address to check	
+ * @return	bool	true if the email address is banned, or false
+ */
+function kbs_is_email_banned( $email = '' ) {
+
+	if ( empty( $email ) ) {
+		return false;
+	}
+
+	$banned_emails = kbs_get_banned_emails();
+
+	if ( ! is_array( $banned_emails ) || empty( $banned_emails ) )	{
+		return false;
+	}
+
+	foreach( $banned_emails as $banned_email )	{
+		if ( is_email( $banned_email ) )	{
+			$return = ( $banned_email == trim( $email )          ? true : false );
+		} else {
+			$return = ( stristr( trim( $email ), $banned_email ) ? true : false );
+		}
+
+		if ( true === $return ) {
+			break;
+		}
+	}
+
+	return apply_filters( 'kbs_is_email_banned', $return, $email );
+
+} // kbs_is_email_banned

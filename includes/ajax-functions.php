@@ -392,6 +392,9 @@ function kbs_ajax_validate_form_submission()	{
 			if ( ! is_email( $_POST[ $field->post_name ] ) )	{
 				$error = kbs_form_submission_errors( $field->ID, 'invalid_email' );
 				$field = $field->post_name;
+			} elseif ( kbs_check_email_from_submission( $_POST[ $field->post_name ] ) )	{
+				$error = kbs_form_submission_errors( $field->ID, 'process_error' );
+				$field = $field->post_name;
 			}
 
 		} else	{

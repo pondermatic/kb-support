@@ -251,7 +251,7 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/shortcodes.php';
 		require_once KBS_PLUGIN_DIR . 'includes/sla.php';
 
-		if( is_admin() )	{
+		if ( is_admin() )	{
 			require_once KBS_PLUGIN_DIR . 'includes/admin/admin-actions.php';
 			require_once KBS_PLUGIN_DIR . '/includes/admin/admin-pages.php';
 			require_once KBS_PLUGIN_DIR . '/includes/admin/admin-notices.php';
@@ -272,6 +272,7 @@ final class KB_Support {
 			require_once KBS_PLUGIN_DIR . 'includes/admin/forms/contextual-help.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/settings/display-settings.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/settings/contextual-help.php';
+			require_once KBS_PLUGIN_DIR . 'includes/admin/tools.php';
 		}
 
 		require_once KBS_PLUGIN_DIR . 'includes/install.php';
