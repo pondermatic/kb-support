@@ -31,7 +31,7 @@ if ( is_user_logged_in() )	: ?>
                             <td class="the_ticket_id"><a href="<?php echo $ticket_url; ?>"><?php echo kbs_get_ticket_id( $ticket->ID ); ?></a></td>
                             <td class="date"><?php echo date_i18n( get_option( 'date_format' ), strtotime( $ticket->post_date ) ); ?></td>
                             <td class="status"><?php echo kbs_get_ticket_status( $ticket, true ); ?></td>
-                            <td class="actions"><a href="<?php echo $ticket_url; ?>"><?php _e( 'View', 'kb-support' ); ?></a></td>
+                            <td class="actions"><a href="<?php echo esc_url( $ticket_url ); ?>"><?php _e( 'View', 'kb-support' ); ?></a></td>
                         </tr>
 
                     <?php endforeach; ?>
