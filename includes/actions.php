@@ -50,17 +50,17 @@ add_action( 'init', 'kbs_post_actions' );
  * @since	1.0
  * @param	str		$action		The action identifier
  * @param	bool	$echo		True echo's the input field, false to return
- * @return	str		$input		Hidden form field string
+ * @return	str		Hidden input form field string
  */
 function kbs_action_field( $action, $echo = true )	{
 
 	$name = apply_filters( 'kbs_action_field_name', 'kbs_action' );
 
-	$input = '<input type="hidden" name="' . $name . '" id="' . $name . '" value="' . $action . '" />';
+	$input = '<input type="hidden" name="' . esc_attr( $name ) . '" id="' . esc_attr( $name ) . '" value="' . sanitize_text_field( $action ) . '" />';
 
 	$input = apply_filters( 'kbs_action_field', $action );
 
-	if( ! empty( $echo ) )	{
+	if ( ! empty( $echo ) )	{
 		echo $input;
 	} else	{
 		return $input;
