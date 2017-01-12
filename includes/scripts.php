@@ -48,6 +48,7 @@ function kbs_load_scripts() {
 	if ( ! empty( $post ) )	{
 		if ( is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'kbs_submit') )	{
 			add_thickbox();
+			wp_register_script( 'jquery-chosen', $js_dir . 'chosen.jquery' . $suffix . '.js', array( 'jquery' ), KBS_VERSION );
 		}
 	}
 
@@ -63,6 +64,7 @@ add_action( 'wp_enqueue_scripts', 'kbs_load_scripts' );
  * @return	void
  */
 function kbs_register_styles() {
+	global $post;
 
 	if ( kbs_get_option( 'disable_styles', false ) ) {
 		return;
@@ -73,6 +75,7 @@ function kbs_register_styles() {
 
 	$file          = 'kbs' . $suffix . '.css';
 	$templates_dir = kbs_get_theme_template_dir_name();
+	$css_dir       = KBS_PLUGIN_URL . 'assets/css/';
 
 	$child_theme_style_sheet    = trailingslashit( get_stylesheet_directory() ) . $templates_dir . $file;
 	$child_theme_style_sheet_2  = trailingslashit( get_stylesheet_directory() ) . $templates_dir . 'kbs.css';
@@ -104,6 +107,12 @@ function kbs_register_styles() {
 
 	wp_register_style( 'kbs-styles', $url, array(), KBS_VERSION, 'all' );
 	wp_enqueue_style( 'kbs-styles' );
+
+	if ( ! empty( $post ) )	{
+		if ( is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'kbs_submit') )	{
+			wp_register_style( 'jquery-chosen-css', $css_dir . 'chosen.css', array(), KBS_VERSION );
+		}
+	}
 
 } // kbs_register_styles
 add_action( 'wp_enqueue_scripts', 'kbs_register_styles' );
@@ -217,7 +226,7 @@ function kbs_load_admin_scripts( $hook ) {
 	wp_register_style( 'kbs-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css', array(), KBS_VERSION, 'all' ); 
 	wp_enqueue_style( 'kbs-font-awesome' );
 
-	wp_register_script( 'jquery-chosen', $js_dir . 'chosen.jquery.js', array( 'jquery' ), KBS_VERSION );
+	wp_register_script( 'jquery-chosen', $js_dir . 'chosen.jquery' . $suffix . '.js', array( 'jquery' ), KBS_VERSION );
 	wp_enqueue_script( 'jquery-chosen' );
 
 	wp_enqueue_script( 'jquery-ui-datepicker' );

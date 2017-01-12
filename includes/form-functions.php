@@ -932,6 +932,8 @@ function kbs_display_form_select_field( $field, $settings )	{
 	$options  = array();
 
 	if ( ! empty( $settings['chosen'] ) )	{
+		wp_enqueue_style( 'jquery-chosen-css' );
+		wp_enqueue_script( 'jquery-chosen' );
 		$class .= 'kbs-select-chosen';
 	}
 
