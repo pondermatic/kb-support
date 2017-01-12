@@ -168,31 +168,34 @@ function kbs_register_settings() {
 					continue;
 				}
 
-				$name = isset( $option['name'] ) ? $option['name'] : '';
+				$args = wp_parse_args( $option, array(
+				    'section'       => $section,
+				    'id'            => null,
+				    'desc'          => '',
+				    'name'          => '',
+				    'size'          => null,
+				    'options'       => '',
+				    'std'           => '',
+				    'min'           => null,
+				    'max'           => null,
+				    'step'          => null,
+				    'chosen'        => null,
+				    'placeholder'   => null,
+				    'allow_blank'   => true,
+				    'readonly'      => false,
+				    'faux'          => false,
+				    'tooltip_title' => false,
+				    'tooltip_desc'  => false,
+				    'field_class'   => ''
+				) );
 
 				add_settings_field(
-					'kbs_settings[' . $option['id'] . ']',
-					$name,
-					function_exists( 'kbs_' . $option['type'] . '_callback' ) ? 'kbs_' . $option['type'] . '_callback' : 'kbs_missing_callback',
+					'kbs_settings[' . $args['id'] . ']',
+					$args['name'],
+					function_exists( 'kbs_' . $args['type'] . '_callback' ) ? 'kbs_' . $args['type'] . '_callback' : 'kbs_missing_callback',
 					'kbs_settings_' . $tab . '_' . $section,
 					'kbs_settings_' . $tab . '_' . $section,
-					array(
-						'section'     => $section,
-						'id'          => isset( $option['id'] )          ? $option['id']          : null,
-						'desc'        => ! empty( $option['desc'] )      ? $option['desc']        : '',
-						'name'        => isset( $option['name'] )        ? $option['name']        : null,
-						'size'        => isset( $option['size'] )        ? $option['size']        : null,
-						'options'     => isset( $option['options'] )     ? $option['options']     : '',
-						'std'         => isset( $option['std'] )         ? $option['std']         : '',
-						'min'         => isset( $option['min'] )         ? $option['min']         : null,
-						'max'         => isset( $option['max'] )         ? $option['max']         : null,
-						'step'        => isset( $option['step'] )        ? $option['step']        : null,
-						'chosen'      => isset( $option['chosen'] )      ? $option['chosen']      : null,
-						'placeholder' => isset( $option['placeholder'] ) ? $option['placeholder'] : null,
-						'allow_blank' => isset( $option['allow_blank'] ) ? $option['allow_blank'] : true,
-						'readonly'    => isset( $option['readonly'] )    ? $option['readonly']    : false,
-						'faux'        => isset( $option['faux'] )        ? $option['faux']        : false,
-					)
+					$args
 				);
 			}
 		}
@@ -948,6 +951,26 @@ function kbs_sanitize_text_field( $input ) {
 add_filter( 'kbs_settings_sanitize_text', 'kbs_sanitize_text_field' );
 
 /**
+ * Sanitize HTML Class Names
+ *
+ * @since	1.0
+ * @param	str|arr		$class	HTML Class Name(s)
+ * @return	str			$class
+ */
+function kbs_sanitize_html_class( $class = '' ) {
+
+	if ( is_string( $class ) )	{
+		$class = sanitize_html_class( $class );
+	} else if ( is_array( $class ) )	{
+		$class = array_values( array_map( 'sanitize_html_class', $class ) );
+		$class = implode( ' ', array_unique( $class ) );
+	}
+
+	return $class;
+
+} // kbs_sanitize_html_class
+
+/**
  * Retrieve settings tabs
  *
  * @since	1.0
@@ -1059,33 +1082,6 @@ function kbs_get_registered_settings_sections() {
 } // kbs_get_registered_settings_sections
 
 /**
- * Retrieve a list of all published pages.
- *
- * On large sites this can be expensive, so only load if on the settings page or $force is set to true
- *
- * @since	1.0
- * @param	bool	$force			Force the pages to be loaded even if not on settings
- * @return	arr		$pages_options	An array of the pages
- */
-function kbs_get_pages( $force = false ) {
-
-	$pages_options = array( '' => '' ); // Blank option
-
-	if( ( ! isset( $_GET['page'] ) || 'kbs-settings' != $_GET['page'] ) && ! $force ) {
-		return $pages_options;
-	}
-
-	$pages = get_pages();
-	if ( $pages ) {
-		foreach ( $pages as $page ) {
-			$pages_options[ $page->ID ] = $page->post_title;
-		}
-	}
-
-	return $pages_options;
-} // kbs_get_pages
-
-/**
  * Header Callback
  *
  * Renders the header.
@@ -1095,7 +1091,7 @@ function kbs_get_pages( $force = false ) {
  * @return	void
  */
 function kbs_header_callback( $args ) {
-	echo '';
+	echo apply_filters( 'kbs_after_setting_output', '', $args );
 } // kbs_header_callback
 
 /**
@@ -1109,19 +1105,21 @@ function kbs_header_callback( $args ) {
  * @return	void
  */
 function kbs_checkbox_callback( $args ) {
-	global $kbs_options;
+	$kbs_option = kbs_get_option( $args['id'] );
 
 	if ( isset( $args['faux'] ) && true === $args['faux'] ) {
 		$name = '';
 	} else {
-		$name = 'name="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"';
+		$name = 'name="edd_settings[' . kbs_sanitize_key( $args['id'] ) . ']"';
 	}
 
-	$checked = isset( $kbs_options[ $args['id'] ] ) ? checked( 1, $kbs_options[ $args['id'] ], false ) : '';
-	$html = '<input type="checkbox" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"' . $name . ' value="1" ' . $checked . '/>';
+	$class = edd_sanitize_html_class( $args['field_class'] );
+
+	$checked = ! empty( $kbs_option ) ? checked( 1, $kbs_option, false ) : '';
+	$html = '<input type="checkbox" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"' . $name . ' value="1" ' . $checked . ' class="' . $class . '"/>';
 	$html .= '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"> '  . wp_kses_post( $args['desc'] ) . '</label>';
 
-	echo $html;
+	echo apply_filters( 'kbs_after_setting_output', $html, $args );
 } // kbs_checkbox_callback
 
 /**
@@ -1135,16 +1133,29 @@ function kbs_checkbox_callback( $args ) {
  * @return	void
  */
 function kbs_multicheck_callback( $args ) {
-	global $kbs_options;
+	$kbs_option = kbs_get_option( $args['id'] );
+
+	$class = kbs_sanitize_html_class( $args['field_class'] );
+
+	$html = '';
 
 	if ( ! empty( $args['options'] ) ) {
-		foreach( $args['options'] as $key => $option ):
-			if( isset( $kbs_options[$args['id']][$key] ) ) { $enabled = $option; } else { $enabled = NULL; }
-			echo '<input name="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . '][' . kbs_sanitize_key( $key ) . ']" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . '][' . kbs_sanitize_key( $key ) . ']" type="checkbox" value="' . esc_attr( $option ) . '" ' . checked($option, $enabled, false) . '/>&nbsp;';
-			echo '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . '][' . kbs_sanitize_key( $key ) . ']">' . wp_kses_post( $option ) . '</label><br/>';
-		endforeach;
-		echo '<p class="description">' . $args['desc'] . '</p>';
+		foreach( $args['options'] as $key => $option )	{
+			if ( isset( $kbs_option[ $key ] ) )	{
+				$enabled = $option;
+			} else	{
+				$enabled = NULL;
+			}
+
+			$html .= '<input name="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . '][' . kbs_sanitize_key( $key ) . ']" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . '][' . kbs_sanitize_key( $key ) . ']" class="' . $class . '" type="checkbox" value="' . esc_attr( $option ) . '" ' . checked( $option, $enabled, false ) . '/>&nbsp;';
+
+			$html .= '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . '][' . kbs_sanitize_key( $key ) . ']">' . wp_kses_post( $option ) . '</label><br/>';
+		}
+
+		$html .= '<p class="description">' . $args['desc'] . '</p>';
 	}
+
+	echo apply_filters( 'kbs_after_setting_output', $html, $args );
 } // kbs_multicheck_callback
 
 /**
@@ -1158,21 +1169,29 @@ function kbs_multicheck_callback( $args ) {
  * @return	void
  */
 function kbs_radio_callback( $args ) {
-	global $kbs_options;
+	$kbs_option = kbs_get_option( $args['id'] );
 
-	foreach ( $args['options'] as $key => $option ) :
+	$html = '';
+
+	$class = kbs_sanitize_html_class( $args['field_class'] );
+
+	foreach ( $args['options'] as $key => $option )	{
 		$checked = false;
 
-		if ( isset( $kbs_options[ $args['id'] ] ) && $kbs_options[ $args['id'] ] == $key )
+		if ( $kbs_option && $key == $kbs_option )	{
 			$checked = true;
-		elseif( isset( $args['std'] ) && $args['std'] == $key && ! isset( $kbs_options[ $args['id'] ] ) )
+		} elseif ( isset( $args['std'] ) && $key == $args['std'] && ! $kbs_option )	{
 			$checked = true;
+		}
 
-		echo '<input name="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . '][' . kbs_sanitize_key( $key ) . ']" type="radio" value="' . kbs_sanitize_key( $key ) . '" ' . checked(true, $checked, false) . '/>&nbsp;';
-		echo '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . '][' . kbs_sanitize_key( $key ) . ']">' . esc_html( $option ) . '</label><br/>';
-	endforeach;
+		$html .= '<input name="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . '][' . kbs_sanitize_key( $key ) . ']" class="' . $class . '" type="radio" value="' . kbs_sanitize_key( $key ) . '" ' . checked( true, $checked, false ) . '/>&nbsp;';
 
-	echo '<p class="description">' . wp_kses_post( $args['desc'] ) . '</p>';
+		$html .= '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . '][' . kbs_sanitize_key( $key ) . ']">' . esc_html( $option ) . '</label><br/>';
+	}
+
+	$html .= '<p class="description">' . apply_filters( 'kbs_after_setting_output', wp_kses_post( $args['desc'] ), $args ) . '</p>';
+
+	echo $html;
 } // kbs_radio_callback
 
 /**
@@ -1186,11 +1205,11 @@ function kbs_radio_callback( $args ) {
  * @return	void
  */
 function kbs_text_callback( $args ) {
-	global $kbs_options;
+	$kbs_option = kbs_get_option( $args['id'] );
 
-	if ( isset( $kbs_options[ $args['id'] ] ) ) {
-		$value = $kbs_options[ $args['id'] ];
-	} else {
+	if ( $kbs_option )	{
+		$value = $kbs_option;
+	} else	{
 		$value = isset( $args['std'] ) ? $args['std'] : '';
 	}
 
@@ -1202,12 +1221,14 @@ function kbs_text_callback( $args ) {
 		$name = 'name="kbs_settings[' . esc_attr( $args['id'] ) . ']"';
 	}
 
+	$class = kbs_sanitize_html_class( $args['field_class'] );
+
 	$readonly = $args['readonly'] === true ? ' readonly="readonly"' : '';
 	$size     = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
-	$html     = '<input type="text" class="' . sanitize_html_class( $size ) . '-text" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" ' . $name . ' value="' . esc_attr( stripslashes( $value ) ) . '"' . $readonly . '/>';
+	$html     = '<input type="text" class="' . $class . ' ' . sanitize_html_class( $size ) . '-text" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" ' . $name . ' value="' . esc_attr( stripslashes( $value ) ) . '"' . $readonly . '/>';
 	$html    .= '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"> '  . wp_kses_post( $args['desc'] ) . '</label>';
 
-	echo $html;
+	echo apply_filters( 'kbs_after_setting_output', $html, $args );
 } // kbs_text_callback
 
 /**
@@ -1221,10 +1242,10 @@ function kbs_text_callback( $args ) {
  * @return	void
  */
 function kbs_number_callback( $args ) {
-	global $kbs_options;
+	$kbs_option = kbs_get_option( $args['id'] );
 
-	if ( isset( $kbs_options[ $args['id'] ] ) ) {
-		$value = $kbs_options[ $args['id'] ];
+	if ( $kbs_option ) {
+		$value = $kbs_option;
 	} else {
 		$value = isset( $args['std'] ) ? $args['std'] : '';
 	}
@@ -1237,15 +1258,17 @@ function kbs_number_callback( $args ) {
 		$name = 'name="kbs_settings[' . esc_attr( $args['id'] ) . ']"';
 	}
 
+	$class = kbs_sanitize_html_class( $args['field_class'] );
+
 	$max  = isset( $args['max'] ) ? $args['max'] : 999999;
 	$min  = isset( $args['min'] ) ? $args['min'] : 0;
 	$step = isset( $args['step'] ) ? $args['step'] : 1;
 
 	$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
-	$html = '<input type="number" step="' . esc_attr( $step ) . '" max="' . esc_attr( $max ) . '" min="' . esc_attr( $min ) . '" class="' . sanitize_html_class( $size ) . '-text" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" ' . $name . ' value="' . esc_attr( stripslashes( $value ) ) . '"/>';
+	$html = '<input type="number" step="' . esc_attr( $step ) . '" max="' . esc_attr( $max ) . '" min="' . esc_attr( $min ) . '" class="' . $class . ' ' . sanitize_html_class( $size ) . '-text" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" ' . $name . ' value="' . esc_attr( stripslashes( $value ) ) . '"/>';
 	$html .= '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"> '  . wp_kses_post( $args['desc'] ) . '</label>';
 
-	echo $html;
+	echo apply_filters( 'kbs_after_setting_output', $html, $args );
 } // kbs_number_callback
 
 /**
@@ -1259,18 +1282,20 @@ function kbs_number_callback( $args ) {
  * @return	void
  */
 function kbs_textarea_callback( $args ) {
-	global $kbs_options;
+	$kbs_option = kbs_get_option( $args['id'] );
 
-	if ( isset( $kbs_options[ $args['id'] ] ) ) {
-		$value = $kbs_options[ $args['id'] ];
-	} else {
+	if ( $kbs_option )	{
+		$value = $kbs_option;
+	} else	{
 		$value = isset( $args['std'] ) ? $args['std'] : '';
 	}
 
-	$html = '<textarea class="large-text" cols="50" rows="5" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . esc_attr( $args['id'] ) . ']">' . esc_textarea( stripslashes( $value ) ) . '</textarea>';
+	$class = kbs_sanitize_html_class( $args['field_class'] );
+
+	$html = '<textarea class="' . $class . ' large-text" cols="50" rows="5" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . esc_attr( $args['id'] ) . ']">' . esc_textarea( stripslashes( $value ) ) . '</textarea>';
 	$html .= '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"> '  . wp_kses_post( $args['desc'] ) . '</label>';
 
-	echo $html;
+	echo apply_filters( 'kbs_after_setting_output', $html, $args );
 } // kbs_textarea_callback
 
 /**
@@ -1284,19 +1309,21 @@ function kbs_textarea_callback( $args ) {
  * @return	void
  */
 function kbs_password_callback( $args ) {
-	global $kbs_options;
+	$kbs_option = kbs_get_option( $args['id'] );
 
-	if ( isset( $kbs_options[ $args['id'] ] ) ) {
-		$value = $kbs_options[ $args['id'] ];
-	} else {
+	if ( $kbs_option )	{
+		$value = $kbs_option;
+	} else	{
 		$value = isset( $args['std'] ) ? $args['std'] : '';
 	}
 
+	$class = kbs_sanitize_html_class( $args['field_class'] );
+
 	$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
-	$html = '<input type="password" class="' . sanitize_html_class( $size ) . '-text" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . esc_attr( $args['id'] ) . ']" value="' . esc_attr( $value ) . '"/>';
+	$html = '<input type="password" class="' . $class . ' ' . sanitize_html_class( $size ) . '-text" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . esc_attr( $args['id'] ) . ']" value="' . esc_attr( $value ) . '"/>';
 	$html .= '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"> ' . wp_kses_post( $args['desc'] ) . '</label>';
 
-	echo $html;
+	echo apply_filters( 'kbs_after_setting_output', $html, $args );
 } // kbs_password_callback
 
 /**
@@ -1326,11 +1353,11 @@ function kbs_missing_callback($args) {
  * @return	void
  */
 function kbs_select_callback( $args ) {
-	global $kbs_options;
+	$kbs_option = kbs_get_option( $args['id'] );
 
-	if ( isset( $kbs_options[ $args['id'] ] ) ) {
-		$value = $kbs_options[ $args['id'] ];
-	} else {
+	if ( $kbs_option )	{
+		$value = $kbs_option;
+	} else	{
 		$value = isset( $args['std'] ) ? $args['std'] : '';
 	}
 
@@ -1340,13 +1367,13 @@ function kbs_select_callback( $args ) {
 		$placeholder = '';
 	}
 
+	$class = kbs_sanitize_html_class( $args['field_class'] );
+
 	if ( isset( $args['chosen'] ) ) {
-		$chosen = 'class="kbs-chosen"';
-	} else {
-		$chosen = '';
+		$class .= ' kbs-chosen';
 	}
 
-	$html = '<select id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . esc_attr( $args['id'] ) . ']" ' . $chosen . 'data-placeholder="' . esc_html( $placeholder ) . '" />';
+	$html = '<select id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . esc_attr( $args['id'] ) . ']" class="' . $class . '" data-placeholder="' . esc_html( $placeholder ) . '" />';
 
 	foreach ( $args['options'] as $option => $name ) {
 		$selected = selected( $option, $value, false );
@@ -1356,7 +1383,7 @@ function kbs_select_callback( $args ) {
 	$html .= '</select>';
 	$html .= '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"> ' . wp_kses_post( $args['desc'] ) . '</label>';
 
-	echo $html;
+	echo apply_filters( 'kbs_after_setting_output', $html, $args );
 } // kbs_select_callback
 
 /**
@@ -1370,15 +1397,17 @@ function kbs_select_callback( $args ) {
  * @return	void
  */
 function kbs_color_select_callback( $args ) {
-	global $kbs_options;
+	$kbs_option = kbs_get_option( $args['id'] );
 
-	if ( isset( $kbs_options[ $args['id'] ] ) ) {
-		$value = $kbs_options[ $args['id'] ];
-	} else {
+	if ( $kbs_option )	{
+		$value = $kbs_option;
+	} else	{
 		$value = isset( $args['std'] ) ? $args['std'] : '';
 	}
 
-	$html = '<select id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . esc_attr( $args['id'] ) . ']"/>';
+	$class = kbs_sanitize_html_class( $args['field_class'] );
+
+	$html = '<select id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" class="' . $class . '" name="kbs_settings[' . esc_attr( $args['id'] ) . ']"/>';
 
 	foreach ( $args['options'] as $option => $color ) {
 		$selected = selected( $option, $value, false );
@@ -1388,7 +1417,7 @@ function kbs_color_select_callback( $args ) {
 	$html .= '</select>';
 	$html .= '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"> '  . wp_kses_post( $args['desc'] ) . '</label>';
 
-	echo $html;
+	echo apply_filters( 'kbs_after_setting_output', $html, $args );
 } // kbs_color_select_callback
 
 /**
@@ -1402,31 +1431,37 @@ function kbs_color_select_callback( $args ) {
  * @global	$wp_version		WordPress Version
  */
 function kbs_rich_editor_callback( $args ) {
-	global $kbs_options, $wp_version;
+	$kbs_option = kbs_get_option( $args['id'] );
 
-	if ( isset( $kbs_options[ $args['id'] ] ) ) {
-		$value = $kbs_options[ $args['id'] ];
+	if ( $kbs_option )	{
+		$value = $kbs_option;
 
-		if( empty( $args['allow_blank'] ) && empty( $value ) ) {
+		if ( empty( $args['allow_blank'] ) && empty( $value ) )	{
 			$value = isset( $args['std'] ) ? $args['std'] : '';
 		}
-	} else {
+	} else	{
 		$value = isset( $args['std'] ) ? $args['std'] : '';
 	}
 
 	$rows = isset( $args['size'] ) ? $args['size'] : 20;
 
-	if ( $wp_version >= 3.3 && function_exists( 'wp_editor' ) ) {
-		ob_start();
-		wp_editor( stripslashes( $value ), 'kbs_settings_' . esc_attr( $args['id'] ), array( 'textarea_name' => 'kbs_settings[' . esc_attr( $args['id'] ) . ']', 'textarea_rows' => absint( $rows ) ) );
-		$html = ob_get_clean();
-	} else {
-		$html = '<textarea class="large-text" rows="10" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . esc_attr( $args['id'] ) . ']">' . esc_textarea( stripslashes( $value ) ) . '</textarea>';
-	}
+	$class = kbs_sanitize_html_class( $args['field_class'] );
+
+	ob_start();
+	wp_editor(
+		stripslashes( $value ),
+		'kbs_settings_' . esc_attr( $args['id'] ),
+		array(
+			'textarea_name' => 'kbs_settings[' . esc_attr( $args['id'] ) . ']',
+			'textarea_rows' => absint( $rows ),
+			'editor_class'  => $class
+		)
+	);
+	$html = ob_get_clean();
 
 	$html .= '<br/><label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"> ' . wp_kses_post( $args['desc'] ) . '</label>';
 
-	echo $html;
+	echo apply_filters( 'kbs_after_setting_output', $html, $args );
 } // kbs_rich_editor_callback
 
 /**
@@ -1440,20 +1475,22 @@ function kbs_rich_editor_callback( $args ) {
  * @return	void
  */
 function kbs_upload_callback( $args ) {
-	global $kbs_options;
+	$kbs_option = kbs_get_option( $args['id'] );
 
-	if ( isset( $kbs_options[ $args['id'] ] ) ) {
-		$value = $kbs_options[ $args['id'] ];
-	} else {
-		$value = isset( $args['std'] ) ? $args['std'] : '';
+	if ( $kbs_option )	{
+		$value = $kbs_option;
+	} else	{
+		$value = isset($args['std']) ? $args['std'] : '';
 	}
 
+	$class = kbs_sanitize_html_class( $args['field_class'] );
+
 	$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
-	$html = '<input type="text" class="' . sanitize_html_class( $size ) . '-text" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . esc_attr( $args['id'] ) . ']" value="' . esc_attr( stripslashes( $value ) ) . '"/>';
+	$html = '<input type="text" "' . $class . ' ' . sanitize_html_class( $size ) . '-text" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . esc_attr( $args['id'] ) . ']" value="' . esc_attr( stripslashes( $value ) ) . '"/>';
 	$html .= '<span>&nbsp;<input type="button" class="kbs_settings_upload_button button-secondary" value="' . __( 'Upload File', 'kb-support' ) . '"/></span>';
 	$html .= '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"> ' . wp_kses_post( $args['desc'] ) . '</label>';
 
-	echo $html;
+	echo apply_filters( 'kbs_after_setting_output', $html, $args );
 } // kbs_upload_callback
 
 
@@ -1468,20 +1505,22 @@ function kbs_upload_callback( $args ) {
  * @return	void
  */
 function kbs_color_callback( $args ) {
-	global $kbs_options;
+	$kbs_option = kbs_get_option( $args['id'] );
 
-	if ( isset( $kbs_options[ $args['id'] ] ) ) {
-		$value = $kbs_options[ $args['id'] ];
-	} else {
+	if ( $kbs_option )	{
+		$value = $kbs_option;
+	} else	{
 		$value = isset( $args['std'] ) ? $args['std'] : '';
 	}
 
 	$default = isset( $args['std'] ) ? $args['std'] : '';
 
+	$class = kbs_sanitize_html_class( $args['field_class'] );
+
 	$html = '<input type="text" class="kbs-color-picker" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . esc_attr( $args['id'] ) . ']" value="' . esc_attr( $value ) . '" data-default-color="' . esc_attr( $default ) . '" />';
 	$html .= '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"> '  . wp_kses_post( $args['desc'] ) . '</label>';
 
-	echo $html;
+	echo apply_filters( 'kbs_after_setting_output', $html, $args );
 } // kbs_color_callback
 
 /**
@@ -1494,7 +1533,9 @@ function kbs_color_callback( $args ) {
  * @return	void
  */
 function kbs_descriptive_text_callback( $args ) {
-	echo wp_kses_post( $args['desc'] );
+	$html = wp_kses_post( $args['desc'] );
+
+	echo apply_filters( 'kbs_after_setting_output', $html, $args );
 } // kbs_descriptive_text_callback
 
 /**
@@ -1506,19 +1547,20 @@ function kbs_descriptive_text_callback( $args ) {
  * @return void
  */
 if ( ! function_exists( 'kbs_license_key_callback' ) ) {
-	function kbs_license_key_callback( $args ) {
-		global $kbs_options;
+	function kbs_license_key_callback( $args )	{
+
+		$kbs_option = kbs_get_option( $args['id'] );
 
 		$messages = array();
 		$license  = get_option( $args['options']['is_valid_license_option'] );
 
-		if ( isset( $kbs_options[ $args['id'] ] ) ) {
-			$value = $kbs_options[ $args['id'] ];
-		} else {
+		if ( $kbs_option )	{
+			$value = $kbs_option;
+		} else	{
 			$value = isset( $args['std'] ) ? $args['std'] : '';
 		}
 
-		if( ! empty( $license ) && is_object( $license ) ) {
+		if ( ! empty( $license ) && is_object( $license ) )	{
 
 			// activate_license 'invalid' on anything other than valid, so if there was an error capture it
 			if ( false === $license->success ) {
@@ -1527,11 +1569,23 @@ if ( ! function_exists( 'kbs_license_key_callback' ) ) {
 
 					case 'expired' :
 
-						$class = 'error';
+						$class = 'expired';
 						$messages[] = sprintf(
 							__( 'Your license key expired on %s. Please <a href="%s" target="_blank" title="Renew your license key">renew your license key</a>.', 'kb-support' ),
 							date_i18n( get_option( 'date_format' ), strtotime( $license->expires, current_time( 'timestamp' ) ) ),
 							'http://kb-support.com/checkout/?edd_license_key=' . $value
+						);
+
+						$license_status = 'license-' . $class . '-notice';
+
+						break;
+
+					case 'revoked' :
+
+						$class = 'error';
+						$messages[] = sprintf(
+							__( 'Your license key has been disabled. Please <a href="%s" target="_blank">contact support</a> for more information.', 'kb-support' ),
+							'https://kb-support.com/support'
 						);
 
 						$license_status = 'license-' . $class . '-notice';
@@ -1567,7 +1621,7 @@ if ( ! function_exists( 'kbs_license_key_callback' ) ) {
 					case 'item_name_mismatch' :
 
 						$class = 'error';
-						$messages[] = sprintf( __( 'This is not a %s.', 'kb-support' ), $args['name'] );
+						$messages[] = sprintf( __( 'This appears to be an invalid license key for %s.', 'kb-support' ), $args['name'] );
 
 						$license_status = 'license-' . $class . '-notice';
 
@@ -1580,6 +1634,23 @@ if ( ! function_exists( 'kbs_license_key_callback' ) ) {
 
 						$license_status = 'license-' . $class . '-notice';
 
+						break;
+
+					case 'license_not_activable':
+
+						$class = 'error';
+						$messages[] = __( 'The key you entered belongs to a bundle, please use the product specific license key.', 'kb-support' );
+
+						$license_status = 'license-' . $class . '-notice';
+						break;
+
+					default :
+
+						$class = 'error';
+						$error = ! empty(  $license->error ) ?  $license->error : __( 'unknown_error', 'easy-digital-downloads' );
+						$messages[] = sprintf( __( 'There was an error with this license key: %s. Please <a href="%s">contact our support team</a>.', 'kb-support' ), $error, 'https://kb-support.com/support' );
+
+						$license_status = 'license-' . $class . '-notice';
 						break;
 
 				}
@@ -1629,9 +1700,18 @@ if ( ! function_exists( 'kbs_license_key_callback' ) ) {
 
 			}
 
-		} else {
+		} else	{
+			$class = 'empty';
+
+			$messages[] = sprintf(
+				__( 'To receive updates, please enter your valid %s license key.', 'kb-support' ),
+				$args['name']
+			);
+
 			$license_status = null;
 		}
+
+		$class .= ' ' . kbs_sanitize_html_class( $args['field_class'] );
 
 		$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
 		$html = '<input type="text" class="' . sanitize_html_class( $size ) . '-text" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" value="' . esc_attr( $value ) . '"/>';
@@ -1645,7 +1725,7 @@ if ( ! function_exists( 'kbs_license_key_callback' ) ) {
 		if ( ! empty( $messages ) ) {
 			foreach( $messages as $message ) {
 
-				$html .= '<div class="kbs-license-data kbs-license-' . $class . '">';
+				$html .= '<div class="kbs-license-data kbs-license-' . $class . ' ' . $license_status . '">';
 					$html .= '<p>' . $message . '</p>';
 				$html .= '</div>';
 
@@ -1654,12 +1734,9 @@ if ( ! function_exists( 'kbs_license_key_callback' ) ) {
 
 		wp_nonce_field( kbs_sanitize_key( $args['id'] ) . '-nonce', kbs_sanitize_key( $args['id'] ) . '-nonce' );
 
-		if ( isset( $license_status ) ) {
-			echo '<div class="' . $license_status . '">' . $html . '</div>';
-		} else {
-			echo '<div class="license-null">' . $html . '</div>';
-		}
+		echo $html;
 	}
+
 } // kbs_license_key_callback
 
 /**
@@ -1685,6 +1762,53 @@ function kbs_set_settings_cap() {
 	return 'manage_ticket_settings';
 } // kbs_set_settings_cap
 add_filter( 'option_page_capability_kbs_settings', 'kbs_set_settings_cap' );
+
+/**
+ * Adds the tooltip after the setting field.
+ *
+ * @since	1.0
+ * @param	str		$html	HTML output
+ * @param	arr		$args	Array containing tooltip title and description
+ * @return	str		Filtered HTML output
+ */
+function kbs_add_setting_tooltip( $html, $args ) {
+
+	if ( ! empty( $args['tooltip_title'] ) && ! empty( $args['tooltip_desc'] ) ) {
+		$tooltip = '<span alt="f223" class="edd-help-tip dashicons dashicons-editor-help" title="<strong>' . $args['tooltip_title'] . '</strong>: ' . $args['tooltip_desc'] . '"></span>';
+		$html .= $tooltip;
+	}
+
+	return $html;
+}
+add_filter( 'kbs_after_setting_output', 'kbs_add_setting_tooltip', 10, 2 );
+
+/**
+ * Retrieve a list of all published pages.
+ *
+ * On large sites this can be expensive, so only load if on the settings page or $force is set to true
+ *
+ * @since	1.0
+ * @param	bool	$force			Force the pages to be loaded even if not on settings
+ * @return	arr		$pages_options	An array of the pages
+ */
+function kbs_get_pages( $force = false ) {
+
+	$pages_options = array( '' => '' ); // Blank option
+
+	if( ( ! isset( $_GET['page'] ) || 'kbs-settings' != $_GET['page'] ) && ! $force ) {
+		return $pages_options;
+	}
+
+	$pages = get_pages();
+	if ( $pages ) {
+		foreach ( $pages as $page ) {
+			$pages_options[ $page->ID ] = $page->post_title;
+		}
+	}
+
+	return $pages_options;
+
+} // kbs_get_pages
 
 /**
  * Returns a select list for target response time option.
