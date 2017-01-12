@@ -71,7 +71,7 @@ function kbs_render_hidden_form_fields( $form_id )	{
 	ob_start(); ?>
 
 	<?php foreach( $hidden_fields as $key => $value ) : ?>
-    	<input type="hidden" name="<?php echo $key; ?>" value="<?php echo $value; ?>" />
+    	<input type="hidden" name="<?php esc_attr_e( $key ); ?>" value="<?php esc_attr_e( $value ); ?>" />
     <?php endforeach; ?>
 
 	<?php wp_nonce_field( 'kbs-form-validate', 'kbs_log_ticket' ); ?>
@@ -111,7 +111,7 @@ function kbs_render_hidden_reply_fields( $ticket_id )	{
 	ob_start(); ?>
 
 	<?php foreach( $hidden_fields as $key => $value ) : ?>
-    	<input type="hidden" name="<?php echo $key; ?>" value="<?php echo $value; ?>" />
+    	<input type="hidden" name="<?php esc_attr_e( $key ); ?>" value="<?php esc_attr_e( $value ); ?>" />
     <?php endforeach; ?>
 
 	<?php wp_nonce_field( 'kbs-reply-validate', 'kbs_ticket_reply' ); ?>
@@ -194,74 +194,6 @@ function kbs_article_maybe_increment_views()	{
 
 } // kbs_article_maybe_increment_views
 add_action( 'wp', 'kbs_article_maybe_increment_views' );
-
-/**
- * Get Button Colors
- *
- * Returns an array of button colors.
- *
- * @since	1.0
- * @return	arr		$colors		Button colors
- */
-function kbs_get_button_colors() {
-	$colors = array(
-		'white'     => array(
-			'label' => __( 'White', 'kb-support' ),
-			'hex'   => '#ffffff'
-		),
-		'gray'      => array(
-			'label' => __( 'Gray', 'kb-support' ),
-			'hex'   => '#f0f0f0'
-		),
-		'blue'      => array(
-			'label' => __( 'Blue', 'kb-support' ),
-			'hex'   => '#428bca'
-		),
-		'red'       => array(
-			'label' => __( 'Red', 'kb-support' ),
-			'hex'   => '#d9534f'
-		),
-		'green'     => array(
-			'label' => __( 'Green', 'kb-support' ),
-			'hex'   => '#5cb85c'
-		),
-		'yellow'    => array(
-			'label' => __( 'Yellow', 'kb-support' ),
-			'hex'   => '#f0ad4e'
-		),
-		'orange'    => array(
-			'label' => __( 'Orange', 'kb-support' ),
-			'hex'   => '#ed9c28'
-		),
-		'dark-gray' => array(
-			'label' => __( 'Dark Gray', 'kb-support' ),
-			'hex'   => '#363636'
-		),
-		'inherit'	=> array(
-			'label' => __( 'Inherit', 'kb-support' ),
-			'hex'   => ''
-		)
-	);
-
-	return apply_filters( 'kbs_button_colors', $colors );
-} // kbs_get_button_colors
-
-/**
- * Get Button Styles
- *
- * Returns an array of button styles.
- *
- * @since	1.0
- * @return	arr		$styles		Button styles
- */
-function kbs_get_button_styles() {
-	$styles = array(
-		'button'	=> __( 'Button', 'kb-support' ),
-		'plain'     => __( 'Plain Text', 'kb-support' )
-	);
-
-	return apply_filters( 'kbs_button_styles', $styles );
-} // kbs_get_button_styles
 
 /**
  * Returns the path to the KBS templates directory
