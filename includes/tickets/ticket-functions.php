@@ -449,16 +449,16 @@ function kbs_add_ticket( $ticket_data )	{
 
 	$ticket = new KBS_Ticket();
 
-	$ticket->status           = ! empty( $ticket_data['status'] )          ? $ticket_data['status']          : 'new';
+	$ticket->status           = ! empty( $ticket_data['status'] )          ? $ticket_data['status']               : 'new';
 	$ticket->ticket_title     = $ticket_data['post_title'];
 	$ticket->ticket_content   = $ticket_data['post_content'];
-	$ticket->agent_id         = ! empty( $ticket_data['agent_id'] )        ? $ticket_data['agent_id']        : '';
+	$ticket->agent_id         = ! empty( $ticket_data['agent_id'] )        ? (int)$ticket_data['agent_id']        : '';
 	$ticket->user_info        = $ticket_data['user_info'];
-	$ticket->user_id          = ! empty( $ticket_data['user_info']['id'] ) ? $ticket_data['user_info']['id'] : '';
-	$ticket->email            = $ticket_data['user_email'];
-	$ticket->first_name       = $ticket_data['user_info']['first_name'];
-	$ticket->last_name        = $ticket_data['user_info']['last_name'];
-	$ticket->email            = $ticket_data['user_info']['email'];
+	$ticket->user_id          = ! empty( $ticket_data['user_info']['id'] ) ? (int)$ticket_data['user_info']['id'] : '';
+	$ticket->email            = strtolower( sanitize_email( $ticket_data['user_email'] ) );
+	$ticket->first_name       = ucfirst( sanitize_text_field( $ticket_data['user_info']['first_name'] ) );
+	$ticket->last_name        = ucfirst( sanitize_text_field( $ticket_data['user_info']['last_name'] ) );
+	$ticket->email            = strtolower( sanitize_email( $ticket_data['user_info']['email'] ) );
 	$ticket->ip               = kbs_get_ip();
 	$ticket->sla_respond      = kbs_calculate_sla_target_response();
 	$ticket->sla_resolve      = kbs_calculate_sla_target_resolution();
@@ -503,7 +503,7 @@ function kbs_add_ticket_from_form( $form_id, $form_data )	{
 		'user_info'   => array(),
 		'attachments' => array(),
 		'form_data'   => array(
-			'id'   => $form_id,
+			'id'   => (int)$form_id,
 			'data' => $form_data
 		)
 	);
@@ -525,11 +525,11 @@ function kbs_add_ticket_from_form( $form_id, $form_data )	{
 
 			switch( $settings['mapping'] )	{
 				case 'customer_first':
-					$ticket_data['user_info']['first_name']       = ucfirst( sanitize_text_field( $form_data[ $field->post_name ] ) );
+					$ticket_data['user_info']['first_name']       = ucfirst( $form_data[ $field->post_name ] );
 					break;
 
 				case 'customer_last':
-					$ticket_data['user_info']['last_name']        = ucfirst( sanitize_text_field( $form_data[ $field->post_name ] ) );
+					$ticket_data['user_info']['last_name']        = ucfirst( $form_data[ $field->post_name ] );
 					break;
 
 				case 'customer_email':
