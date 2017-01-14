@@ -33,7 +33,7 @@ function kbs_ticket_customer_reply_action( $data )	{
 		'ticket_id'   => $data['kbs_ticket_id'],
 		'response'    => $data['kbs_reply'],
 		'close'       => isset( $data['kbs_close_ticket'] ) ? true : false,
-		'customer_id' => $ticket->customer_id
+		'customer_id' => (int)$ticket->customer_id
 	);
 
 	$reply_id = $ticket->add_reply( $reply_data );

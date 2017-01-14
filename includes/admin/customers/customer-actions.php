@@ -287,7 +287,7 @@ function kbs_add_customer_email( $args ) {
 
 	} else {
 
-		$email       = sanitize_email($args['email'] );
+		$email       = sanitize_email( $args['email'] );
 		$customer_id = (int) $args['customer_id'];
 		$primary     = 'true' === $args['primary'] ? true : false;
 		$customer    = new KBS_Customer( $customer_id );

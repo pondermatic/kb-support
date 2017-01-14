@@ -148,14 +148,14 @@ if ( ! is_user_logged_in() ) : ?>
 						<div class="kbs_profile_editor_password">
                             <p>
                                 <label for="kbs_new_user_pass1"><?php _e( 'New Password', 'kb-support' ); ?></label>
-                                <input name="kbs_new_user_pass1" id="kbs_new_user_pass1" class="password kbs-input" type="password"/>
+                                <input name="kbs_new_user_pass1" id="kbs_new_user_pass1" class="password kbs-input" type="password" />
                             </p>
 						</div>
 
 						<div class="kbs_profile_editor_password_confirm">
 							<p>
                                 <label for="kbs_new_user_pass2"><?php _e( 'Re-enter Password', 'kb-support' ); ?></label>
-                                <input name="kbs_new_user_pass2" id="kbs_new_user_pass2" class="password kbs-input" type="password"/>
+                                <input name="kbs_new_user_pass2" id="kbs_new_user_pass2" class="password kbs-input" type="password" />
 								<?php do_action( 'kbs_profile_editor_password' ); ?>
                             </p>
                         </div>
@@ -164,10 +164,10 @@ if ( ! is_user_logged_in() ) : ?>
 
 						<div class="kbs_profile_editor_save">
                             <p id="kbs_profile_submit_wrap">
-                                <input type="hidden" name="kbs_profile_editor_nonce" value="<?php echo wp_create_nonce( 'kbs-profile-editor-nonce' ); ?>"/>
+                                <input type="hidden" name="kbs_profile_editor_nonce" value="<?php echo wp_create_nonce( 'kbs-profile-editor-nonce' ); ?>" />
                                 <input type="hidden" name="kbs_action" value="edit_user_profile" />
                                 <input type="hidden" name="kbs_redirect" value="<?php echo esc_url( kbs_get_current_page_url() ); ?>" />
-                                <input name="kbs_profile_editor_submit" id="kbs_profile_editor_submit" type="submit" class="kbs_submit" value="<?php _e( 'Save Changes', 'kb-support' ); ?>"/>
+                                <input name="kbs_profile_editor_submit" id="kbs_profile_editor_submit" type="submit" class="kbs_submit" value="<?php _e( 'Save Changes', 'kb-support' ); ?>" />
                             </p>
                         </div>
 
