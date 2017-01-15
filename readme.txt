@@ -100,9 +100,7 @@ Until we reach version 1.0+ we are still classing this plugin as in beta testing
 * Updated call to `wp_register_style()` to display version
 * Added `kbs_get_agent_id_from_ticket( $ticket_id )` function to retrieve an agent ID directly from the post meta table
 * Removed dynamic `do_action()` calls from $_POST and $_GET submissions
-
-**Bug Fixes**
-
+* Only enqueue chosen menu's on submission page
 
 = 0.9 =
 
