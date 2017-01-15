@@ -14,26 +14,88 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
- * When a reply is added by a customer.
+ * Process ticket form submissions.
  *
  * @since	1.0
- * @param	arr		$data	Array of data passed to action.
  * @return	void
  */
-function kbs_ticket_customer_reply_action( $data )	{
+function kbs_process_ticket_submission()	{
 
-	if ( ! isset( $data['kbs_ticket_reply'] ) || ! wp_verify_nonce( $_POST['kbs_ticket_reply'], 'kbs-reply-validate' ) )	{
+	if ( ! isset( $_POST['kbs_action'] ) || 'submit_ticket' != $_POST['kbs_action'] )	{
+		return;
+	}
+
+	if ( ! isset( $_POST['kbs_log_ticket'] ) || ! wp_verify_nonce( $_POST['kbs_log_ticket'], 'kbs-form-validate' ) )	{
 		wp_die( __( 'Security failed.', 'kb-support' ) );
 	}
 
-	$ticket   = new KBS_Ticket( $data['kbs_ticket_id'] );
-	$redirect = $data['redirect'];
+	kbs_do_honeypot_check( $_POST );
+
+	$form_id  = ! empty( $_POST['kbs_form_id'] ) ? $_POST['kbs_form_id'] : '';
+	$redirect = ! empty( $_POST['redirect'] )    ? $_POST['redirect']    : '';
+
+	$posted = array();
+	$ignore = kbs_form_ignore_fields();
+
+	foreach ( $_POST as $key => $value )	{
+		if ( ! in_array( $key, $ignore ) )	{
+
+			if ( is_string( $value ) || is_int( $value ) )	{
+				$posted[ $key ] = $value;
+
+			} elseif( is_array( $value ) )	{
+				$posted[ $key ] = array_map( 'absint', $value );
+			}
+
+		}
+	}
+
+	$ticket_id = kbs_add_ticket_from_form( $form_id, $posted );
+
+	if ( $ticket_id )	{
+		$message  = 'ticket_submitted';
+		$redirect = add_query_arg( array(
+			'ticket' => kbs_get_ticket_key( $ticket_id )
+			), get_permalink( kbs_get_option( 'tickets_page' ) )
+		);
+	} else	{
+		$message = 'ticket_failed';
+	}
+
+	wp_redirect( add_query_arg(
+		array( 'kbs_notice' => $message ),
+		$redirect
+	) );
+
+	die();
+
+} // kbs_process_ticket_form
+add_action( 'init', 'kbs_process_ticket_submission' );
+
+/**
+ * When a reply is added by a customer.
+ *
+ * @since	1.0
+ * @return	void
+ */
+function kbs_ticket_customer_reply_action()	{
+
+	if ( ! isset( $_POST['kbs_action'] ) || 'submit_ticket_reply' != $_POST['kbs_action'] )	{
+		return;
+	}
+
+	if ( ! isset( $_POST['kbs_ticket_reply'] ) || ! wp_verify_nonce( $_POST['kbs_ticket_reply'], 'kbs-reply-validate' ) )	{
+		wp_die( __( 'Security failed.', 'kb-support' ) );
+	}
+
+	$ticket   = new KBS_Ticket( $_POST['kbs_ticket_id'] );
+	$redirect = $_POST['redirect'];
 
 	$reply_data = array(
-		'ticket_id'   => $data['kbs_ticket_id'],
-		'response'    => $data['kbs_reply'],
-		'close'       => isset( $data['kbs_close_ticket'] ) ? true : false,
-		'customer_id' => (int)$ticket->customer_id
+		'ticket_id'   => $_POST['kbs_ticket_id'],
+		'response'    => $_POST['kbs_reply'],
+		'close'       => isset( $_POST['kbs_close_ticket'] ) ? true : false,
+		'customer_id' => (int) $ticket->customer_id
 	);
 
 	$reply_id = $ticket->add_reply( $reply_data );
@@ -43,7 +105,7 @@ function kbs_ticket_customer_reply_action( $data )	{
 			kbs_attach_files_to_reply( $reply_id );
 		}
 
-		do_action( 'kbs_ticket_customer_reply', $reply_id, $data );
+		do_action( 'kbs_ticket_customer_reply', $reply_id );
 		$redirect = add_query_arg( 'kbs_notice', 'reply_success', $redirect );
 	} else	{
 		$redirect = add_query_arg( 'kbs_notice', 'reply_fail', $redirect );
@@ -53,26 +115,29 @@ function kbs_ticket_customer_reply_action( $data )	{
 	exit;
 
 } // kbs_ticket_customer_reply_action
-add_action( 'kbs_submit_ticket_reply', 'kbs_ticket_customer_reply_action' );
+add_action( 'init', 'kbs_ticket_customer_reply_action' );
 
 /**
  * When a reply is added via admin.
  *
  * @since	1.0
- * @param	arr		$data	Array of data passed to action.
  * @return	void
  */
-function kbs_ticket_reply_added_action( $data )	{
+function kbs_ticket_reply_added_action()	{
+
+	if ( ! isset( $_GET['kbs-action'] ) || 'ticket_reply_added' != $_GET['kbs-action'] )	{
+		return;
+	}
 
 	$url = add_query_arg( array( 'kbs-message' => 'ticket_reply_added' ),
-		kbs_get_ticket_url( $data['ticket_id'], true )
+		kbs_get_ticket_url( $_GET['ticket_id'], true )
 	);
 
 	wp_safe_redirect( $url );
 	exit;
 
 } // kbs_ticket_reply_added_action
-add_action( 'kbs-ticket_reply_added', 'kbs_ticket_reply_added_action' );
+add_action( 'init', 'kbs_ticket_reply_added_action' );
 
 /**
  * Assigns the currently logged in agent to the ticket if the current
@@ -104,12 +169,16 @@ add_action( 'load-post.php', 'kbs_auto_assign_agent_to_ticket_action' );
  * @since	1.0
  * @return	void
  */
-function kbs_delete_ticket_note_action( $data )	{
+function kbs_delete_ticket_note_action()	{
 
-	$ticket_id = $data['ticket_id'];
-	$note_id   = $data['note_id'];
+	if ( ! isset( $_GET['kbs-action'] ) || 'delete_ticket_note' != $_GET['kbs-action'] )	{
+		return;
+	}
 
-	if ( ! isset( $data['kbs_note_nonce'] ) || ! wp_verify_nonce( $data['kbs_note_nonce'], 'kbs_delete_ticket_note_' . $note_id ) )	{
+	$ticket_id = absint( $_GET['ticket_id'] );
+	$note_id   = absint( $_GET['note_id'] );
+
+	if ( ! isset( $_GET['kbs_note_nonce'] ) || ! wp_verify_nonce( $_GET['kbs_note_nonce'], 'kbs_delete_ticket_note_' . $note_id ) )	{
 		die();
 	}
 
@@ -124,7 +193,7 @@ function kbs_delete_ticket_note_action( $data )	{
 	die();
 
 } // kbs_delete_ticket_note_action
-add_action( 'kbs-delete_ticket_note', 'kbs_delete_ticket_note_action' );
+add_action( 'init', 'kbs_delete_ticket_note_action' );
 
 /**
  * View a single ticket.
@@ -132,17 +201,22 @@ add_action( 'kbs-delete_ticket_note', 'kbs_delete_ticket_note_action' );
  * @since	1.0
  * @return str
  */
-function kbs_view_ticket_action( $data )	{
+function kbs_view_ticket_action()	{
+
+	if ( ! isset( $_GET['kbs_action'] ) || 'view_ticket' != $_GET['kbs_action'] )	{
+		return;
+	}
+
 	$redirect = remove_query_arg( array(
 		'kbs_action',
 		'key',
 		'ticket'
 	), get_permalink( kbs_get_option( 'tickets_page' ) ) );
 
-	if ( isset( $data['key'] ) )	{
-		$ticket = $data['key'];
-	} elseif ( isset( $data['ticket'] ) && is_user_logged_in() )	{
-		$ticket = $data['ticket'];
+	if ( isset( $_GET['key'] ) )	{
+		$ticket = $_GET['key'];
+	} elseif ( isset( $_GET['ticket'] ) && is_user_logged_in() )	{
+		$ticket = $_GET['ticket'];
 	} else	{
 		$ticket = '';
 	}
@@ -153,4 +227,4 @@ function kbs_view_ticket_action( $data )	{
 	die();
 
 } // kbs_view_ticket_action
-add_action( 'kbs_view_ticket', 'kbs_view_ticket_action' );
+add_action( 'init', 'kbs_view_ticket_action' );

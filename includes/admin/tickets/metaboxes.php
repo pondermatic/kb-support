@@ -231,12 +231,12 @@ function kbs_ticket_metabox_notes_callback()	{
 function kbs_ticket_metabox_save_row( $ticket_id )	{
 
 	global $kbs_ticket, $kbs_ticket_update;
-	
+
 	?>
 	<div class="submitbox" id="submitpost">
 		<div id="minor-publishing">
         	<div id="minor-publishing-actions">
-            
+
             </div><!-- #minor-publishing-actions -->
             <div id="kbs-ticket-actions">
                 <p><label for="ticket_status"><?php _e( 'Status:' ); ?></label>
@@ -250,11 +250,11 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
                         'chosen'   => false
                     ) ); ?>
                 </p>
-                    
+
                 <p><label for="kbs_agent_id"><?php _e( 'Agent:', 'kb-support' ); ?></label>
 					<?php echo KBS()->html->agent_dropdown( 'kbs_agent_id', ( ! empty( $kbs_ticket->agent_id ) ? $kbs_ticket->agent_id : get_current_user_id() ) ); ?>
                 </p>
-                    
+
                 <?php do_action( 'kbs_ticket_metabox_after_agent', $ticket_id ); ?>
 
                 <p><a href="<?php echo wp_get_referer(); ?>"><?php printf( __( 'Back to %s', 'kb-support' ), kbs_get_ticket_label_plural() ); ?></a>
@@ -274,7 +274,7 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
         </div><!-- #minor-publishing -->
     </div><!-- #submitpost -->
     <?php
-	
+
 } // kbs_ticket_metabox_save_row
 add_action( 'kbs_ticket_status_fields', 'kbs_ticket_metabox_save_row', 10 );
 

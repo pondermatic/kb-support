@@ -215,7 +215,7 @@ function kbs_email_test_ticket_received() {
 
 	$heading     = kbs_get_option( 'ticket_heading', sprintf( __( 'Support %s Details', 'kb-support' ), $single ) );
 	$heading     = apply_filters( 'kbs_ticket_heading', $heading, 0, array() );
-	$heading     = kbs_do_email_tags( $heading, $ticket_id );
+	$heading     = kbs_do_email_tags( $heading, 0 );
 
 	$attachments = apply_filters( 'kbs_ticket_attachments', array(), 0, array() );
 

@@ -33,7 +33,8 @@ function kbs_options_page() {
 
 	$settings_tabs = kbs_get_settings_tabs();
 	$settings_tabs = empty( $settings_tabs) ? array() : $settings_tabs;
-	$active_tab    = isset( $_GET['tab'] ) && array_key_exists( $_GET['tab'], $settings_tabs ) ? $_GET['tab'] : 'general';
+	$active_tab    = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : 'general';
+	$active_tab    = array_key_exists( $active_tab, $settings_tabs ) ? $active_tab : 'general';
 	$sections      = kbs_get_settings_tab_sections( $active_tab );
 	$key           = 'main';
 
@@ -42,16 +43,29 @@ function kbs_options_page() {
 	}
 
 	$registered_sections = kbs_get_settings_tab_sections( $active_tab );
-	$section             = isset( $_GET['section'] ) && ! empty( $registered_sections ) && array_key_exists( $_GET['section'], $registered_sections ) ? $_GET['section'] : $key;
+	$section             = isset( $_GET['section'] ) && ! empty( $registered_sections ) && array_key_exists( $_GET['section'], $registered_sections ) ? sanitize_text_field( $_GET['section'] ) : $key;
 
 	// Unset 'main' if it's empty and default to the first non-empty if it's the chosen section
 	$all_settings = kbs_get_registered_settings();
 
 	// Let's verify we have a 'main' section to show
-	ob_start();
-	do_settings_sections( 'kbs_settings_' . $active_tab . '_main' );
-	$has_main_settings = strlen( ob_get_contents() ) > 0;
-	ob_end_clean();
+	// Let's verify we have a 'main' section to show
+	$has_main_settings = true;
+	if ( empty( $all_settings[ $active_tab ]['main'] ) )	{
+		$has_main_settings = false;
+	}
+
+	// Check for old non-sectioned settings
+	if ( ! $has_main_settings )	{
+		foreach( $all_settings[ $active_tab ] as $sid => $stitle )	{
+			if ( is_string( $sid ) && is_array( $sections ) && array_key_exists( $sid, $sections ) )	{
+				continue;
+			} else	{
+				$has_main_settings = true;
+				break;
+			}
+		}
+	}
 
 	$override = false;
 	if ( false === $has_main_settings ) {
@@ -70,7 +84,7 @@ function kbs_options_page() {
 
 	ob_start();
 	?>
-	<div class="wrap">
+	<div class="wrap <?php echo 'wrap-' . $active_tab; ?>">
 		<h1 class="nav-tab-wrapper">
 			<?php
 			foreach( kbs_get_settings_tabs() as $tab_id => $tab_name ) {
@@ -85,7 +99,7 @@ function kbs_options_page() {
 
 				$active = $active_tab == $tab_id ? ' nav-tab-active' : '';
 
-				echo '<a href="' . esc_url( $tab_url ) . '" title="' . esc_attr( $tab_name ) . '" class="nav-tab' . $active . '">';
+				echo '<a href="' . esc_url( $tab_url ) . '" class="nav-tab' . $active . '">';
 					echo esc_html( $tab_name );
 				echo '</a>';
 			}
@@ -134,7 +148,7 @@ function kbs_options_page() {
 
 				do_settings_sections( 'kbs_settings_' . $active_tab . '_' . $section );
 
-				do_action( 'kbssettings_tab_bottom_' . $active_tab . '_' . $section  );
+				do_action( 'kbs_settings_tab_bottom_' . $active_tab . '_' . $section  );
 
 				// For backwards compatibility
 				if ( 'main' === $section ) {

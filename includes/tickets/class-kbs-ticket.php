@@ -50,7 +50,15 @@ class KBS_Ticket {
 	 * @var		int
 	 */
 	protected $ticket_content;
-	
+
+	/**
+	 * The ticket categories
+	 *
+	 * @since	1.0
+	 * @var		int
+	 */
+	protected $ticket_category;
+
 	/**
 	 * The ticket meta
 	 *
@@ -512,6 +520,10 @@ class KBS_Ticket {
 				$this->pending['agent_id'] = $this->agent_id;
 			}
 
+			if ( ! empty( $this->ticket_category ) )	{
+				$this->pending['ticket_category'] = $this->ticket_category;
+			}
+
 			if ( ! empty( $this->new_files ) )	{
 				$this->pending['files'] = $this->new_files;
 			}
@@ -628,6 +640,14 @@ class KBS_Ticket {
 						);
 
 						wp_update_post( $args );
+						break;
+
+					case 'ticket_category':
+						if ( ! is_array( $this->ticket_category ) )	{
+							$this->ticket_category = array( $this->ticket_category );
+						}
+						$terms = array_map( 'intval', $this->ticket_category );
+						wp_set_object_terms( $this->ID, $terms, 'ticket_category' );
 						break;
 
 					case 'resolved_date':
@@ -1453,6 +1473,24 @@ class KBS_Ticket {
 			}
 
 			$settings = $form->get_field_settings( $form_field->ID );
+
+			if ( 'post_category' == $settings['mapping'] )	{
+				$value = is_array( $value ) ? $value : array( $value );
+				$cats  = array();
+				foreach( $value as $category )	{
+					$term = get_term( $category );
+					if ( $term )	{
+						$cats[] = $term->name;
+					} else	{
+						$cats[] = sprintf( __( 'Term %s no longer exists', 'kb-support' ), $category );
+					}
+				}
+				$value = $cats;
+			}
+
+			if ( is_array( $value ) )	{
+				$value = implode( ', ', $value );
+			}
 
 			$value = apply_filters( 'kbs_show_form_data', $value, $form_field->ID, $settings );
 

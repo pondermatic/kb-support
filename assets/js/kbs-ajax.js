@@ -11,6 +11,14 @@ jQuery(document).ready(function ($) {
 		} );
 	}
 
+	/* = Chosen select fields
+	====================================================================================== */
+	if ( kbs_scripts.is_submission )	{
+		$('.kbs-select-chosen').chosen({
+			inherit_select_classes: true
+		});
+	}
+
 	/* = Ticket submission form article search
 	====================================================================================== */
 	$('#close-search').click(function(e) {
