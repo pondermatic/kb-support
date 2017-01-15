@@ -103,9 +103,9 @@ function kbs_get_ticket_categories( $args = array() )	{
 	
 	$args = wp_parse_args( $args, $defaults );
 	
-	$event_types = get_categories( $args );
+	$ticket_categories = get_categories( $args );
 	
-	return apply_filters( 'kbs_get_ticket_categories', $event_types, $args );
+	return apply_filters( 'kbs_get_ticket_categories', $ticket_categories, $args );
 } // kbs_get_ticket_categories
 
 /**
@@ -446,15 +446,27 @@ function kbs_add_ticket( $ticket_data )	{
 
 	$ticket_data = apply_filters( 'kbs_add_ticket_data', $ticket_data );
 	$attachments = apply_filters( 'kbs_add_ticket_attachments', $ticket_data['attachments'] );
+	$category    = array();
 
 	$ticket = new KBS_Ticket();
 
-	$ticket->status           = ! empty( $ticket_data['status'] )          ? $ticket_data['status']               : 'new';
+
+	if ( ! empty( $ticket_data['post_category'] ) )	{
+		if ( ! is_array( $ticket_data['post_category'] ) )	{
+			$ticket_data['post_category'] = array( $ticket_data['post_category'] );
+		}
+
+		$category = array_map( 'intval', $ticket_data['post_category'] );
+	}
+
+
+	$ticket->status           = ! empty( $ticket_data['status'] )          ? $ticket_data['status']                : 'new';
 	$ticket->ticket_title     = $ticket_data['post_title'];
 	$ticket->ticket_content   = $ticket_data['post_content'];
-	$ticket->agent_id         = ! empty( $ticket_data['agent_id'] )        ? (int)$ticket_data['agent_id']        : '';
+	$ticket->ticket_category  = $category;
+	$ticket->agent_id         = ! empty( $ticket_data['agent_id'] )        ? (int) $ticket_data['agent_id']        : '';
 	$ticket->user_info        = $ticket_data['user_info'];
-	$ticket->user_id          = ! empty( $ticket_data['user_info']['id'] ) ? (int)$ticket_data['user_info']['id'] : '';
+	$ticket->user_id          = ! empty( $ticket_data['user_info']['id'] ) ? (int) $ticket_data['user_info']['id'] : '';
 	$ticket->email            = strtolower( sanitize_email( $ticket_data['user_email'] ) );
 	$ticket->first_name       = ucfirst( sanitize_text_field( $ticket_data['user_info']['first_name'] ) );
 	$ticket->last_name        = ucfirst( sanitize_text_field( $ticket_data['user_info']['last_name'] ) );

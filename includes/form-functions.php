@@ -609,7 +609,7 @@ function kbs_display_field_setting_icons( $field_id )	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
 		
-		if ( ! empty( $settings['mapping'] ) )	{
+		if ( ! empty( $settings['mapping'] ) && 'post_category' != $settings['mapping'] )	{
 			$output[] = '<i title="' . sprintf( __( 'Maps to %s', 'kb-support' ), stripslashes( $mappings[ $settings['mapping'] ] ) ) . '" class="fa fa-map-marker" aria-hidden="true"></i>';
 		} else	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
@@ -685,78 +685,15 @@ function kbs_form_submission_errors( $field_id, $error )	{
 } // kbs_form_submission_errors
 
 /**
- * Process ticket form submissions.
- *
- * @since	1.0
- * @param	arr		$data	$_POST super global
- * @return	void
- */
-function kbs_process_ticket_submission( $data )	{
-
-	if ( ! isset( $data['kbs_log_ticket'] ) || ! wp_verify_nonce( $_POST['kbs_log_ticket'], 'kbs-form-validate' ) )	{
-		wp_die( __( 'Security failed.', 'kb-support' ) );
-	}
-
-	kbs_do_honeypot_check( $data );
-
-	$form_id  = ! empty( $data['kbs_form_id'] ) ? $data['kbs_form_id'] : '';
-	$redirect = ! empty( $data['redirect'] )    ? $data['redirect']    : '';
-
-	$posted = array();
-	$ignore = kbs_form_ignore_fields();
-
-	foreach ( $data as $key => $value )	{
-		if ( ! in_array( $key, $ignore ) )	{
-
-			if ( is_string( $value ) || is_int( $value ) )	{
-				$posted[ $key ] = $value;
-
-			} elseif( is_array( $value ) )	{
-				$posted[ $key ] = array_map( 'absint', $value );
-			}
-
-		}
-	}
-
-	$ticket_id = kbs_add_ticket_from_form( $form_id, $posted );
-
-	if ( $ticket_id )	{
-		$message  = 'ticket_submitted';
-		$redirect = add_query_arg( array(
-			'ticket' => kbs_get_ticket_key( $ticket_id )
-			), get_permalink( kbs_get_option( 'tickets_page' ) )
-		);
-	} else	{
-		$message = 'ticket_failed';
-	}
-
-	wp_redirect( add_query_arg(
-		array( 'kbs_notice' => $message ),
-		$redirect
-	) );
-
-	die();
-
-} // kbs_process_ticket_form
-add_action( 'kbs_submit_ticket', 'kbs_process_ticket_submission' );
-
-/**
  * Display a form text input field.
  *
  * This function is also the callback for email and URL fields.
  *
  * @since	1.0
- * @param	bool		$error		The error result
- * @param	obj			$field		The field post object
- * @param	arr			$settings	Array of field settings
- * @param	mixed		$value		The submitted value of the field
- * @return	str|false	Filtered error result. The error message, or false for no error
+ * @param	bool		$email		The email address to check
+ * @return	bool		True if the email is banned, or false
  */
 function kbs_check_email_from_submission( $email )	{
-
-	if ( $error )	{
-		return $error;
-	}
 
 	$is_banned = false;
 	$banned    = kbs_get_banned_emails();
@@ -769,26 +706,17 @@ function kbs_check_email_from_submission( $email )	{
 			if ( kbs_is_email_banned( $user_data->user_email ) )	{
 				$is_banned = true;
 			}
-	
-			// Also check the email they entered during submission
-			if ( kbs_is_email_banned( $email ) )	{
-				$is_banned = true;
-			}
-	
-		} else {
-	
-			// Guest submission, check that the email is not banned
-			if ( kbs_is_email_banned( $email ) )	{
-				$is_banned = true;
-			}
-	
 		}
+		// Check that the email used to submit ticket is not banned
+		if ( kbs_is_email_banned( $email ) )	{
+			$is_banned = true;
+		}
+	
 	}
 
 	return $is_banned;
 
 } // kbs_validate_email_from_submission
-//add_filter( 'kbs_validate_form_field_email', 'kbs_check_email_from_submission', 10, 4 );
 
 /**
  * Display a form text input field.
@@ -932,8 +860,6 @@ function kbs_display_form_select_field( $field, $settings )	{
 	$options  = array();
 
 	if ( ! empty( $settings['chosen'] ) )	{
-		wp_enqueue_style( 'jquery-chosen-css' );
-		wp_enqueue_script( 'jquery-chosen' );
 		$class .= 'kbs-select-chosen';
 	}
 

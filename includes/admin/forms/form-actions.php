@@ -6,29 +6,33 @@
  * @subpackage  Functions/Forms/Actions
  * @copyright   Copyright (c) 2016, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       0.1
+ * @since       1.0
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) )
+	exit;
 
 /**
  * Delete's a form field.
  *
- * @since	0.1
- * @param	arr		$data	$_GET super global
+ * @since	1.0
  * @return	void
  */
-function kbs_delete_field_action( $data )	{
-	
-	if ( ! isset( $data['kbs-action-nonce'] ) || ! wp_verify_nonce( $data['kbs-action-nonce'], 'delete_form_field' ) )	{
+function kbs_delete_field_action()	{
+
+	if ( ! isset( $_GET['kbs-action'] ) || 'delete_form_field' != $_GET['kbs-action'] )	{
 		return;
 	}
-	
+
+	if ( ! isset( $_GET['kbs-action-nonce'] ) || ! wp_verify_nonce( $_GET['kbs-action-nonce'], 'delete_form_field' ) )	{
+		return;
+	}
+
 	$url     = remove_query_arg( array( 'kbs-message', 'kbs-action', 'kbs_action_nonce', 'field_id' ) );
 	$message = 'field_deleted';
 	
-	if ( ! kbs_delete_field( $data['field_id'] ) )	{
+	if ( ! kbs_delete_field( $_GET['field_id'] ) )	{
 		$message = 'field_delete_fail';
 	}
 
@@ -42,4 +46,4 @@ function kbs_delete_field_action( $data )	{
 
 } // kbs_delete_field_action
 
-add_action( 'kbs-delete_form_field', 'kbs_delete_field_action' );
+add_action( 'init', 'kbs_delete_field_action' );

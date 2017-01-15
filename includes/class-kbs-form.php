@@ -168,6 +168,11 @@ class KBS_Form {
 			'show_logged_in'  => ! empty( $data['show_logged_in'] )  ? $data['show_logged_in']                     : true
 		);
 
+		// Auto map post_category to the ticket_category_dropdown
+		if ( 'ticket_category_dropdown' == $settings['type'] )	{
+			$settings['mapping'] = 'post_category';
+		}
+
 		$settings = apply_filters( 'kbs_new_form_field_settings', $settings, $data );
 
 		$args = array(
@@ -223,6 +228,11 @@ class KBS_Form {
 			'hide_label'      => ! empty( $data['hide_label'] )      ? true                                        : false,
 			'show_logged_in'  => ! empty( $data['show_logged_in'] )  ? $data['show_logged_in']                     : true
 		);
+
+		// Auto map post_category to the ticket_category_dropdown
+		if ( 'ticket_category_dropdown' == $settings['type'] )	{
+			$settings['mapping'] = 'post_category';
+		}
 
 		$settings = apply_filters( 'kbs_save_form_field_settings', $settings, $data );
 

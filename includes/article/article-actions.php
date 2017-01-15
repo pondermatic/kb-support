@@ -17,17 +17,20 @@ if ( ! defined( 'ABSPATH' ) )
  * Process a search of the KB Articles.
  *
  * @since	1.0
- * @param	arr		$data	The search form post data.
  * @return	void
  */
-function kbs_search_articles_action( $data )	{
+function kbs_search_articles_action()	{
+
+	if ( ! isset( $_GET['kbs_action'] ) || 'search_articles' != $_GET['kbs_action'] )	{
+		return;
+	}
 
 	$args = array(
-		's'         => $data['s_article'],
+		's'         => $_GET['s_article'],
 		'post_type' => 'article'
 	);
 
-	do_action( 'kbs_article_search', $data );
+	$args = apply_filters( 'kbs_article_search', $args );
 
 	$redirect = add_query_arg( $args, esc_url( home_url( '/' ) ) );
 
@@ -35,21 +38,24 @@ function kbs_search_articles_action( $data )	{
 	die();
 
 } // kbs_search_articles_action
-add_action( 'kbs_search_articles', 'kbs_search_articles_action' );
+add_action( 'init', 'kbs_search_articles_action' );
 
 /**
  * Creates a new article when a ticket is closed.
  *
  * @since	1.0
- * @param	arr		$data	The search form post data.
  * @return	void
  */
-function kbs_create_article_action( $data )	{
+function kbs_create_article_action()	{
 
-	$ticket = new KBS_Ticket( $data['ticket_id'] );
+	if ( ! isset( $_GET['kbs-action'] ) || 'create_article' != $_GET['kbs-action'] )	{
+		return;
+	}
 
-	if ( ! empty( $data['reply_id'] ) )	{
-		$reply = get_post( $data['reply_id'] );
+	$ticket = new KBS_Ticket( $_GET['ticket_id'] );
+
+	if ( ! empty( $_GET['reply_id'] ) )	{
+		$reply = get_post( $_GET['reply_id'] );
 	} else	{
 		$reply = kbs_get_last_reply( $ticket->ID );
 	}
@@ -77,7 +83,7 @@ function kbs_create_article_action( $data )	{
 	} else	{
 
 		$redirect_args = array(
-			'post'        => $data['ticket_id'],
+			'post'        => $_GET['ticket_id'],
 			'kbs-message' => 'create_article_failed',
 			'action'      => 'edit'
 		);
@@ -90,4 +96,4 @@ function kbs_create_article_action( $data )	{
 	die();
 
 } // kbs_create_article_action
-add_action( 'kbs-create_article', 'kbs_create_article_action' );
+add_action( 'init', 'kbs_create_article_action' );

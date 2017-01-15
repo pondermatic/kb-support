@@ -33,23 +33,28 @@ function kbs_load_scripts() {
 	wp_register_script( 'kbs-ajax', $js_dir . 'kbs-ajax' . $suffix . '.js', array( 'jquery' ), KBS_VERSION );
 	wp_enqueue_script( 'kbs-ajax' );
 
+	$is_submission = false;
+	if ( ! empty( $post ) && is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'kbs_submit') )	{
+		$is_submission = true;
+	}
+
 	wp_localize_script( 'kbs-ajax', 'kbs_scripts', apply_filters( 'kbs_ajax_script_vars', array(
 		'ajaxurl'                 => kbs_get_ajax_url(),
 		'ajax_loader'             => KBS_PLUGIN_URL . 'assets/images/loading.gif',
 		'permalinks'              => get_option( 'permalink_structure' ) ? '1' : '0',
 		'max_files'               => kbs_get_max_file_uploads(),
 		'max_files_exceeded'      => kbs_get_notices( 'max_files', true ),
+		'is_submission'           => $is_submission,
 		'submit_ticket_loading'   => __( 'Please Wait...', 'kb-support' ),
 		'submit_ticket'           => kbs_get_form_submit_label(),
 		'reply_label'             => kbs_get_ticket_reply_label(),
 		'honeypot_fail'           => __( 'Honeypot validation error', 'kb-support' )
 	) ) );
 
-	if ( ! empty( $post ) )	{
-		if ( is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'kbs_submit') )	{
-			add_thickbox();
-			wp_register_script( 'jquery-chosen', $js_dir . 'chosen.jquery' . $suffix . '.js', array( 'jquery' ), KBS_VERSION );
-		}
+	if ( ! empty( $is_submission ) )	{
+		add_thickbox();
+		wp_register_script( 'jquery-chosen', $js_dir . 'chosen.jquery' . $suffix . '.js', array( 'jquery' ), KBS_VERSION );
+		wp_enqueue_script( 'jquery-chosen' );
 	}
 
 } // kbs_load_scripts
@@ -111,6 +116,7 @@ function kbs_register_styles() {
 	if ( ! empty( $post ) )	{
 		if ( is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'kbs_submit') )	{
 			wp_register_style( 'jquery-chosen-css', $css_dir . 'chosen.css', array(), KBS_VERSION );
+			wp_enqueue_style( 'jquery-chosen-css' );
 		}
 	}
 

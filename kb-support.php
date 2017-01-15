@@ -174,7 +174,7 @@ final class KB_Support {
 	private function setup_constants()	{
 
 		if ( ! defined( 'KBS_VERSION' ) )	{
-			define( 'KBS_VERSION', '0.9' );
+			define( 'KBS_VERSION', '0.9.1' );
 		}
 
 		if ( ! defined( 'KBS_PLUGIN_DIR' ) )	{
@@ -204,8 +204,6 @@ final class KB_Support {
 
 		require_once KBS_PLUGIN_DIR . 'includes/admin/settings/register-settings.php';
 		$kbs_options = kbs_get_settings();
-
-		require_once KBS_PLUGIN_DIR . 'includes/actions.php';
 
 		if ( file_exists( KBS_PLUGIN_DIR . 'includes/deprecated-functions.php' ) )	{
 			require_once KBS_PLUGIN_DIR . 'includes/deprecated-functions.php';
@@ -252,7 +250,6 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/sla.php';
 
 		if ( is_admin() )	{
-			require_once KBS_PLUGIN_DIR . 'includes/admin/admin-actions.php';
 			require_once KBS_PLUGIN_DIR . '/includes/admin/admin-pages.php';
 			require_once KBS_PLUGIN_DIR . '/includes/admin/admin-notices.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/customers/customers-page.php';

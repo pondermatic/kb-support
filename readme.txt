@@ -91,17 +91,18 @@ Until we reach version 1.0+ we are still classing this plugin as in beta testing
 
 = 0.9.1 =
 
-**New**
+**Tweaks**
 
 * Added filter `kbs_user_profile_fields` to enable plugins to register user profile fields within the KB Support section
 * Added hook `kbs_display_user_profile_fields` to enable plugins to output user profile fields
 * Added banned emails to tools page. Form submissions containing banned addresses will be rejected
 * Added System Info to tools page
-
-**Tweaks**
-
 * Updated call to `wp_register_style()` to display version
 * Added `kbs_get_agent_id_from_ticket( $ticket_id )` function to retrieve an agent ID directly from the post meta table
+* Removed dynamic `do_action()` calls from $_POST and $_GET submissions
+
+**Bug Fixes**
+
 
 = 0.9 =
 

@@ -230,7 +230,7 @@ a.kbs_ticket_form_data	{
 	float: right;
 	width: auto;
 }
-#kbs-ticket-actions input,
+#kbs-ticket-actions input:not([type='checkbox'])not:[type="submit"],
 #kbs-ticket-actions select
 #kbs-kb-options input,
 #kbs-kb-options select {

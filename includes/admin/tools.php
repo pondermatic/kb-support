@@ -146,29 +146,33 @@ function kbs_tools_banned_emails_save() {
 
 	global $kbs_options;
 
-	if ( ! wp_verify_nonce( $_POST['kbs_banned_emails_nonce'], 'kbs_banned_emails_nonce' ) ) {
+	if ( ! isset( $_POST['kbs-action'] ) || 'save_banned_emails' != $_POST['kbs-action'] )	{
 		return;
 	}
 
-	if ( ! current_user_can( 'manage_ticket_settings' ) ) {
+	if ( ! wp_verify_nonce( $_POST['kbs_banned_emails_nonce'], 'kbs_banned_emails_nonce' ) )	{
 		return;
 	}
 
-	if( ! empty( $_POST['banned_emails'] ) ) {
+	if ( ! current_user_can( 'manage_ticket_settings' ) )	{
+		return;
+	}
+
+	if ( ! empty( $_POST['banned_emails'] ) )	{
 
 		// Sanitize the input
 		$emails = array_map( 'trim', explode( "\n", $_POST['banned_emails'] ) );
 		$emails = array_unique( $emails );
 		$emails = array_map( 'sanitize_text_field', $emails );
 
-		foreach( $emails as $id => $email ) {
+		foreach( $emails as $id => $email )	{
 			if ( ! is_email( $email ) )	{
 				if ( $email[0] != '@' )	{
 					unset( $emails[$id] );
 				}
 			}
 		}
-	} else {
+	} else	{
 		$emails = '';
 	}
 
@@ -176,7 +180,7 @@ function kbs_tools_banned_emails_save() {
 	update_option( 'kbs_settings', $kbs_options );
 
 }
-add_action( 'kbs-save_banned_emails', 'kbs_tools_banned_emails_save' );
+add_action( 'init', 'kbs_tools_banned_emails_save' );
 
 /**
  * Get system info
@@ -389,6 +393,10 @@ function kbs_tools_sysinfo_get()	{
  */
 function kbs_tools_sysinfo_download() {
 
+	if ( ! isset( $_POST['kbs-action'] ) || 'download_sysinfo' != $_POST['kbs-action'] )	{
+		return;
+	}
+
 	if ( ! current_user_can( 'manage_ticket_settings' ) ) {
 		return;
 	}
@@ -401,4 +409,4 @@ function kbs_tools_sysinfo_download() {
 	echo wp_strip_all_tags( $_POST['kbs-sysinfo'] );
 	die();
 } // kbs_tools_sysinfo_download
-add_action( 'kbs-download_sysinfo', 'kbs_tools_sysinfo_download' );
+add_action( 'init', 'kbs_tools_sysinfo_download' );

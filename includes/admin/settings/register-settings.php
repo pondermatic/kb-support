@@ -1110,10 +1110,10 @@ function kbs_checkbox_callback( $args ) {
 	if ( isset( $args['faux'] ) && true === $args['faux'] ) {
 		$name = '';
 	} else {
-		$name = 'name="edd_settings[' . kbs_sanitize_key( $args['id'] ) . ']"';
+		$name = 'name="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"';
 	}
 
-	$class = edd_sanitize_html_class( $args['field_class'] );
+	$class = kbs_sanitize_html_class( $args['field_class'] );
 
 	$checked = ! empty( $kbs_option ) ? checked( 1, $kbs_option, false ) : '';
 	$html = '<input type="checkbox" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"' . $name . ' value="1" ' . $checked . ' class="' . $class . '"/>';
@@ -1774,7 +1774,7 @@ add_filter( 'option_page_capability_kbs_settings', 'kbs_set_settings_cap' );
 function kbs_add_setting_tooltip( $html, $args ) {
 
 	if ( ! empty( $args['tooltip_title'] ) && ! empty( $args['tooltip_desc'] ) ) {
-		$tooltip = '<span alt="f223" class="edd-help-tip dashicons dashicons-editor-help" title="<strong>' . $args['tooltip_title'] . '</strong>: ' . $args['tooltip_desc'] . '"></span>';
+		$tooltip = '<span alt="f223" class="kbs-help-tip dashicons dashicons-editor-help" title="<strong>' . $args['tooltip_title'] . '</strong>: ' . $args['tooltip_desc'] . '"></span>';
 		$html .= $tooltip;
 	}
 
