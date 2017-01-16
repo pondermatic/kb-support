@@ -227,8 +227,22 @@ function kbs_article_post_save( $post_id, $post, $update )	{
 	$fields = kbs_article_metabox_fields();
 
 	foreach( $fields as $field )	{
+		$posted_value = '';
+
 		if ( ! empty( $_POST[ $field ] ) ) {
-			$new_value = apply_filters( 'kbs_article_metabox_save_' . $field, $_POST[ $field ] );
+
+			if ( is_string( $_POST[ $field ] ) )	{
+				$posted_value = sanitize_text_field( $_POST[ $field ] );
+			} elseif ( is_int( $_POST[ $field ] ) )	{
+				$posted_value = $_POST[ $field ];
+			} elseif( is_array( $_POST[ $field ] ) )	{
+				$posted_value = array_map( 'absint', $_POST[ $field ] );
+			}
+		}
+
+		$new_value = apply_filters( 'kbs_article_metabox_save_' . $field, $posted_value );
+
+		if ( ! empty( $new_value ) ) {
 			update_post_meta( $post_id, $field, $new_value );
 		} else {
 			delete_post_meta( $post_id, $field );

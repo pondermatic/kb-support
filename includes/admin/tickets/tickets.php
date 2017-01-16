@@ -493,18 +493,29 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
 
 	foreach ( $fields as $key => $field )	{
 
-		if ( ! empty( $_POST[ $field ] ) ) {
-			$new_value = apply_filters( 'kbs_ticket_metabox_save_' . $field, $_POST[ $field ] );
+		$posted_value = '';
 
-			$ticket->__set( $key, $new_value );
-		} else {
-			$ticket->__set( $key, '' );
+		if ( ! empty( $_POST[ $field ] ) ) {
+
+			if ( is_string( $_POST[ $field ] ) )	{
+				$posted_value = sanitize_text_field( $_POST[ $field ] );
+			} elseif ( is_int( $_POST[ $field ] ) )	{
+				$posted_value = $_POST[ $field ];
+			} elseif( is_array( $_POST[ $field ] ) )	{
+				$posted_value = array_map( 'absint', $_POST[ $field ] );
+			}
 		}
+
+		$new_value = apply_filters( 'kbs_ticket_metabox_save_' . $field, $posted_value );
+
+		$ticket->__set( $key, $new_value );
 
 	}
 
 	if ( ! empty( $_POST['ticket_status'] ) && $_POST['ticket_status'] != $post->post_status )	{
-		$ticket->__set( 'status', $_POST['ticket_status'] );
+		if ( in_array( $post->post_status, kbs_get_ticket_status_keys( false ) ) )	{
+			$ticket->__set( 'status', $_POST['ticket_status'] );
+		}
 	}
 
 	$ticket->save();

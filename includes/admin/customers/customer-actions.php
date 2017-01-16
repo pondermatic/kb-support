@@ -71,9 +71,9 @@ function kbs_edit_customer()	{
 	}
 
 	if ( ! empty( $customer_info['website'] ) )	{
-		$website = filter_var( $customer_info['website'], FILTER_SANITIZE_URL );
+		$website = esc_url( $customer_info['website'] );
 
-		if ( filter_var( $website, FILTER_VALIDATE_URL ) === false ) {
+		if ( empty( $website ) ) {
 			$error = __( 'Please enter a valid website address.', 'kb-support' );
 		}
 
