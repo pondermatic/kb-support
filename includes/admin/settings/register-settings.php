@@ -762,6 +762,12 @@ function kbs_get_registered_settings() {
 						'name' => '<h3>' . __( 'Misc Settings', 'kb-support' ) . '</h3>',
 						'type' => 'header'
 					),
+					'show_credits' => array(
+						'id'      => 'show_credits',
+						'name'    => __( 'Display Credit?', 'kb-support' ),
+						'desc'    => __( 'KB Support is provided for free. If you like our plugin, consider spreading the word by displaying <code>Powered by KB Support</code> below the ticket and reply forms.', 'kb-support' ),
+						'type'    => 'checkbox'
+					),
 					'remove_on_uninstall' => array(
 						'id'      => 'remove_on_uninstall',
 						'name'    => __( 'Remove Data on Uninstall?', 'kb-support' ),

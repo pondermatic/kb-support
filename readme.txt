@@ -89,6 +89,12 @@ Extensions are available at [https://kb-support.com/downloads/](https://kb-suppo
 
 Until we reach version 1.0+ we are still classing this plugin as in beta testing.
 
+= 0.9.2 =
+
+**Tweaks**
+
+* 
+
 = 0.9.1 =
 
 **Tweaks**
