@@ -340,7 +340,9 @@ function kbs_add_credit_text()	{
 
 	if ( kbs_get_option( 'show_credits', false ) )	{
 		ob_start(); ?>
+
 		<span class="kbs-description"><a href="https://kb-support.com/" title="<?php _e( 'KB Support', 'kb-support' ); ?>" target="_blank"><?php _e( 'Powered by KB Support', 'kb-support' ); ?></a></span>
+
 		<?php echo ob_get_clean();
 	}
 
