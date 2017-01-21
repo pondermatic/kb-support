@@ -52,7 +52,7 @@ function kbs_article_contextual_help() {
 		) . '</p>' .
 		'<p>' . sprintf(
 			__( '<a href="%s" target="_blank">Extensions</a>', 'kb-support' ),
-			esc_url( 'https://kb-support.com/downloads/' )
+			esc_url( 'https://kb-support.com/extensions/' )
 		) . '</p>'
 	);
 
