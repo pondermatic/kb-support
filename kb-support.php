@@ -252,6 +252,7 @@ final class KB_Support {
 		if ( is_admin() )	{
 			require_once KBS_PLUGIN_DIR . '/includes/admin/admin-pages.php';
 			require_once KBS_PLUGIN_DIR . '/includes/admin/admin-notices.php';
+			require_once KBS_PLUGIN_DIR . '/includes/admin/admin-plugin.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/customers/customers-page.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/customers/customer-functions.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/customers/customer-actions.php';
