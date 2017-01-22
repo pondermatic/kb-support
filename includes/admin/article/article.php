@@ -61,10 +61,6 @@ function kbs_set_articles_column_data( $column_name, $post_id ) {
 					if ( is_wp_error( $link ) )	{
 						return $link;
 					}
-					if ( kbs_article_is_term_restricted( $term->term_id ) )	{
-						$restricted = '<span class="padlock"></span>';
-						$restricted = apply_filters( 'kbs_article_list_category_restricted', $restricted );
-					}
 					$links[] = '<a href="' . esc_url( $link ) . '" rel="tag">' . $term->name . '</a> ' . $restricted;
 				}
 				echo implode( '<br />', $links );

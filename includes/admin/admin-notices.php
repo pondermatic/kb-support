@@ -4,7 +4,7 @@
  *
  * @package     KBS
  * @subpackage  Admin/Notices
- * @copyright   Copyright (c) 2016, Mike Howard
+ * @copyright   Copyright (c) 2017, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       0.1
 */

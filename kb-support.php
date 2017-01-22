@@ -261,7 +261,6 @@ final class KB_Support {
 			require_once KBS_PLUGIN_DIR . 'includes/admin/tickets/metaboxes.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/tickets/contextual-help.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/article/article.php';
-			require_once KBS_PLUGIN_DIR . 'includes/admin/article/article-restricted.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/article/metaboxes.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/article/contextual-help.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/forms/forms.php';

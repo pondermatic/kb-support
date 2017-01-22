@@ -4,7 +4,7 @@
  *
  * @package     KBS
  * @subpackage  Functions
- * @copyright   Copyright (c) 2016, Mike Howard
+ * @copyright   Copyright (c) 2017, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
@@ -83,44 +83,6 @@ function kbs_get_article_terms( $article_id = 0 )	{
 } // kbs_get_article_terms
 
 /**
- * Get Restricted Term ID's
- *
- * Retrieve Restricted KB Article terms the database.
- *
- * This is a simple wrapper for WP_Terms_Query.
- *
- * @since	1.0
- * @param	arr		$args		Arguments passed to WP_Terms_Query
- * @return	arr		Array of term IDs retrieved from the database
- */
-function kbs_get_restricted_terms( $args = array() )	{
-	$defaults = array(
-		'taxonomy'   => array( 'article_category' ),
-		'hide_empty' => false,
-		'fields'     => 'ids',
-		'meta_key'   => '_kbs_term_restricted',
-		'meta_value' => '1'
-	);
-
-	$args = wp_parse_args( $args, $defaults );
-
-	$query = new WP_Term_Query( $args );
-
-	return $query;
-} // kbs_get_restricted_terms
-
-/**
- * Whether or not a term is restricted.
- *
- * @since	1.0
- * @param	int		$term_id	The term ID.
- * @return	bool	True if restricted, or false
- */
-function kbs_article_is_term_restricted( $term_id )	{
-	return get_term_meta( $term_id, '_kbs_term_restricted', true );
-} // kbs_article_is_term_restricted
-
-/**
  * Whether or not a user can access a KB Article.
  *
  * @since	1.0
@@ -138,6 +100,8 @@ function kbs_article_user_can_access( $article, $user_id = 0 )	{
 	if ( ! is_user_logged_in() || ( kbs_hide_restricted_articles() && kbs_article_is_restricted( $article->ID ) ) )	{
 		$can_view = false;
 	}
+
+	$user_id = get_current_user_id();
 
 	/**
 	 * Allow plugins to filter the response.
