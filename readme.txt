@@ -47,7 +47,7 @@ Would you like to help translate the plugin into more languages? [Join our WP-Tr
 1. Activate the plugin
 1. Go to Tickets > Settings and configure the options
 1. Insert form shortcode into the ticket submission page
-1. For detailed setup instructions, vist the official [Documentation](https://kb-support.com/articles/category/installation/)
+1. For detailed setup instructions, vist the official [Documentation](https://kb-support.com/articles/category/getting-started/)
 
 **Manual Installation**
 

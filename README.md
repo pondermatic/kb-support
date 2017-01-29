@@ -4,7 +4,7 @@
 
 **A FREE Support Desk tool with fully integrated Knowledge Base built for WordPress**
 
-## Welcome to out GitHub Repository!
+## Welcome to our GitHub Repository!
 
 An effective Helpdesk / Support desk tool is one that encourages users to find and implement the solution to their queries without actually logging a support ticket and KB Support has been developed to do exactly that!
 
