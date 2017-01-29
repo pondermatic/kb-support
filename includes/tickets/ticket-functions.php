@@ -589,6 +589,69 @@ function kbs_add_ticket_from_form( $form_id, $form_data )	{
 } // kbs_add_ticket_from_form
 
 /**
+ * Record Submission In Log
+ *
+ * Stores log information for a ticket submission.
+ *
+ * @since	1.0
+ * @global	$kbs_logs
+ * @param	int			$ticket_id		Ticket ID
+ * @param	int			$form_id		Form ID from which the ticket was submitted
+ * @param	str|null	$submit_date	The date of the submission
+ * @return	void
+*/
+function kbs_record_submission_in_log( $ticket_id = 0, $form_id = 0, $submit_date = null ) {
+	global $kbs_logs;
+
+	$log_data = array(
+		'post_parent'   => $ticket_id,
+		'log_type'      => 'submit',
+		'post_date'     => ! empty( $submit_date ) ? $submit_date : null,
+		'post_date_gmt' => ! empty( $submit_date ) ? get_gmt_from_date( $submit_date ) : null
+	);
+
+	$log_meta = array(
+		'form_id' => $form_id
+	);
+
+	$kbs_logs->insert_log( $log_data, $log_meta );
+} // kbs_record_submission_in_log
+
+/**
+ * Record Ticket Reply In Log
+ *
+ * Stores log information for a ticket replies.
+ *
+ * @since	1.0
+ * @global	$kbs_logs
+ * @param	int			$ticket_id		Ticket ID
+ * @param	int			$reply_id		Reply ID
+ * @param	arr			$reply_data		Reply data
+ * @param	obj			$ticket			KBS_Ticket object
+ * @return	void
+*/
+function kbs_record_reply_in_log( $ticket_id = 0, $reply_id = 0, $reply_data = array(), $ticket = null ) {
+	global $kbs_logs;
+
+	$log_data = array(
+		'post_parent'   => $ticket_id,
+		'log_type'      => 'reply',
+		'post_date'     => ! empty( $submit_date ) ? $submit_date : null,
+		'post_date_gmt' => ! empty( $submit_date ) ? get_gmt_from_date( $submit_date ) : null
+	);
+
+	$log_meta = array(
+		'reply_id'      => $reply_id,
+		'customer_id'   => isset( $reply_data['customer_id'] ) ? $reply_data['customer_id'] : $ticket->customer_id,
+		'agent_id'      => isset( $reply_data['agent_id'] )    ? $reply_data['agent_id']    : $ticket->agent_id,
+		'closed_ticket' => ! empty( $reply_data['close'] )     ? true                       : false
+	);
+
+	$kbs_logs->insert_log( $log_data, $log_meta );
+} // kbs_record_reply_in_log
+add_action( 'kbs_reply_to_ticket', 'kbs_record_reply_in_log', 10, 4 );
+
+/**
  * Update the status of a ticket.
  *
  * @since	1.0
@@ -611,6 +674,83 @@ function kbs_set_ticket_status( $ticket_id, $status = 'open' )	{
 	return $ticket->update_status( 'open' );
 
 } // kbs_set_ticket_status
+
+/**
+ * Record Status Change In Log
+ *
+ * Stores log information for a ticket status change.
+ *
+ * @since	1.0
+ * @global	$kbs_logs
+ * @param	int			$ticket_id		Ticket ID
+ * @param	str			$new_status		The new ticket status
+ * @param	str			$old_status		The old ticket status
+ * @param	str|null	$initiated_by	The email address of the user changing status
+ * @return	void
+*/
+function kbs_record_status_change_in_log( $ticket_id = 0, $new_status, $old_status = 'new', $initiated_by = null ) {
+	global $kbs_logs;
+
+	$log_data = array(
+		'post_parent'   => $ticket_id,
+		'log_type'      => 'status'
+	);
+
+	if ( empty( $initiated_by ) )	{
+		if ( is_user_logged_in() )	{
+			$initiated_by = get_userdata( get_current_user_id() )->user_email;
+		} else	{
+			$initiated_by = kbs_get_ticket_user_email( $ticket_id );
+		}
+	}
+
+	$initiated_by = apply_filters( 'kbs_ticket_status_change_initiated_by', $initiated_by, $ticket_id, $new_status, $old_status );
+
+	$log_meta = array(
+		'previous_status' => $old_status,
+		'current_status'  => $new_status,
+		'changed_by'      => $initiated_by
+	);
+
+	$kbs_logs->insert_log( $log_data, $log_meta );
+} // kbs_record_status_change_in_log
+add_action( 'kbs_update_ticket_status', 'kbs_record_status_change_in_log', 10, 3 );
+
+/**
+ * Record Agent Change In Log
+ *
+ * Stores log information for a ticket agent assignment change.
+ *
+ * @since	1.0
+ * @global	$kbs_logs
+ * @param	int			$ticket_id		Ticket ID
+ * @param	str			$new_agent		The new ticket status
+ * @param	str			$old_agent		The old ticket status
+ * @param	str|null	$changed_by		The email address of the user changing agent
+ * @return	void
+*/
+function kbs_record_agent_change_in_log( $ticket_id = 0, $new_agent = 0, $old_agent = 0, $changed_by = null ) {
+	global $kbs_logs;
+
+	$log_data = array(
+		'post_parent'   => $ticket_id,
+		'log_type'      => 'assign'
+	);
+
+	if ( empty( $changed_by ) )	{
+		if ( is_user_logged_in() )	{
+			$changed_by = get_userdata( get_current_user_id() )->user_email;
+		}
+	}
+
+	$log_meta = array(
+		'previous_agent'  => (int) $old_agent,
+		'new_agent'       => (int) $new_agent,
+		'changed_by'      => $changed_by
+	);
+
+	$kbs_logs->insert_log( $log_data, $log_meta );
+} // kbs_record_agent_change_in_log
 
 /**
  * Retrieve the ticket meta.

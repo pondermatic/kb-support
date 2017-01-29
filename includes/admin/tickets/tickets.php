@@ -473,7 +473,7 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
 	if ( ! isset( $_POST['kbs_ticket_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['kbs_ticket_meta_box_nonce'], 'kbs_ticket_meta_save' ) ) {
 		return;
 	}
-	
+
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )	{
 		return;
 	}
@@ -500,7 +500,7 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
 			if ( is_string( $_POST[ $field ] ) )	{
 				$posted_value = sanitize_text_field( $_POST[ $field ] );
 			} elseif ( is_int( $_POST[ $field ] ) )	{
-				$posted_value = $_POST[ $field ];
+				$posted_value = absint( $_POST[ $field ] );
 			} elseif( is_array( $_POST[ $field ] ) )	{
 				$posted_value = array_map( 'absint', $_POST[ $field ] );
 			}

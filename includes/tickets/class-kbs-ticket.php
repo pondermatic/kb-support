@@ -558,6 +558,11 @@ class KBS_Ticket {
 				$saved = false;
 			} else {
 				$this->ID = $ticket_id;
+				$form_id  = 0;
+				if ( ! empty( $this->form_data ) && ! empty( $this->form_data['id'] ) )	{
+					$form_id = (int) $this->form_data['id'];
+				}
+				kbs_record_submission_in_log( $ticket_id, $form_id );
 			}
 
 		}
@@ -585,7 +590,9 @@ class KBS_Ticket {
 						break;
 
 					case 'agent_id':
+						$current_agent = $this->get_meta( '_kbs_ticket_agent_id' );
 						$this->update_meta( '_kbs_ticket_agent_id', $this->agent_id );
+						kbs_record_agent_change_in_log( $this->ID, $this->agent_id, $current_agent );
 						break;
 
 					case 'user_id':
@@ -1421,7 +1428,7 @@ class KBS_Ticket {
 			'post_status'  => 'publish',
 			'post_content' => $reply_data['response'],
 			'post_parent'  => $reply_data['ticket_id'],
-			'post_author'  => get_current_user_id(),
+			'post_author'  => ! empty( $reply_data['author'] ) ? (int) $reply_data['author'] : get_current_user_id(),
 			'meta_input'   => array()
 		);
 
