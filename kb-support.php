@@ -3,7 +3,7 @@
  * Plugin Name: KB Support
  * Plugin URI: https://kb-support.com/
  * Description: All in one Support desk and knowledge base. Easy to use, easy to manage, loved by customers
- * Version: 0.9
+ * Version: 0.9.2
  * Date: 21 January 2017
  * Author: Mike Howard <mike@mikesplugins.co.uk>
  * Author URI: http://mikesplugins.co.uk
@@ -174,7 +174,7 @@ final class KB_Support {
 	private function setup_constants()	{
 
 		if ( ! defined( 'KBS_VERSION' ) )	{
-			define( 'KBS_VERSION', '0.9.1' );
+			define( 'KBS_VERSION', '0.9.2' );
 		}
 
 		if ( ! defined( 'KBS_PLUGIN_DIR' ) )	{

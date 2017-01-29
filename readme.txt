@@ -77,13 +77,21 @@ Place the [kbs_tickets] shortcode on any page.
 
 = Is there a Pro version with additional features? =
 
-Extensions are available at [https://kb-support.com/extensions/](https://kb-support.com/extensions/ "KB Support Extensions") to further enhance KB Support features and functionality. New extensions are being added regularly. [Join our mailing list](http://eepurl.com/cnxWcz) to be the first to hear about new releases!
+Extensions are available at [https://kb-support.com/extensions/](https://kb-support.com/extensions/ "KB Support Extensions") to further enhance KB Support features and functionality. New extensions are being added regularly. [Join our mailing list](http://eepurl.com/cnxWcz) to be the first to hear about new releases and to receive a 30% discount off of your first purchase!
 
 == Screenshots ==
 
 1. The interface for managing a ticket Submission Form. Create as many forms as you need, choose from a number of fields and add to your web page with a simple shortcode
 
 2. What the default submission form might look like on your website when your customers log a support ticket. Theme in image is Twenty Seventeen
+
+3. Suggested KB Article to resolve a ticket that a customer is in the process of submitted
+
+4. The ticket overview screen a customer see's once their submission is completed
+
+5. The edit ticket screen as seen by an agent
+
+6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
 
