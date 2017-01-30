@@ -4,9 +4,9 @@
  * Plugin URI: https://kb-support.com/
  * Description: All in one Support desk and knowledge base. Easy to use, easy to manage, loved by customers
  * Version: 0.9.2
- * Date: 21 January 2017
+ * Date: 30 January 2017
  * Author: Mike Howard <mike@mikesplugins.co.uk>
- * Author URI: http://mikesplugins.co.uk
+ * Author URI: https://kb-support.com
  * Text Domain: kb-support
  * Domain Path: /languages
  * License: GPL2
