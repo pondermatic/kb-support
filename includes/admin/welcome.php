@@ -226,13 +226,14 @@ class KBS_Welcome {
 			?>
 
 			<div class="changelog">
-				<h3></h3>
+				<h3><?php _e( "Ooops well that's embarrasing!", 'kb-support' ); ?></h3>
 				<div class="feature-section">
 					<div class="feature-section-media">
-						
+
 					</div>
 					<div class="feature-section-content">
-						     
+						<p><?php _e( 'Content for this page will be added during plugin updates.', 'kb-support' ); ?></p>
+                        <p><?php _e( 'For now, visit the Getting Started tab.', 'kb-support' ); ?></p>
 					</div>
 				</div>
 			</div>
