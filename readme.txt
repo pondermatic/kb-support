@@ -101,7 +101,10 @@ Until we reach version 1.0+ we are still classing this plugin as in beta testing
 
 **Tweaks**
 
-* 
+* Added upgrade functions
+* Additional hooks within the view-ticket.php template
+* Added plugin links
+* Increment tested with to 4.7.2
 
 = 0.9.1 =
 
