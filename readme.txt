@@ -97,6 +97,12 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 Until we reach version 1.0+ we are still classing this plugin as in beta testing.
 
+= 0.9.3 =
+
+**Tweaks**
+
+* Added draft updated message for articles and forms
+
 = 0.9.2 =
 
 **Tweaks**
