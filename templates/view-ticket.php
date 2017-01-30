@@ -67,17 +67,25 @@ if ( ! empty( $ticket->ID ) ) :
 
                             <div class="ticket_main_wrapper left">
 
+								<?php do_action( 'kbs_single_ticket_before_details', $ticket ); ?>
+
                                 <span class="ticket_date info_item">
                                     <label><?php _e( 'Date', 'kb-support' ); ?>:</label> <?php echo date_i18n( get_option( 'date_format' ), strtotime( $ticket->date ) ); ?>
                                 </span>
+
+								<?php do_action( 'kbs_single_ticket_after_date', $ticket ); ?>
 
                                 <span class="ticket_customer_name info_item">
                                     <label><?php _e( 'Logged by', 'kb-support' ); ?>:</label> <?php echo kbs_email_tag_fullname( $ticket->ID ); ?>
                                 </span>
 
+								<?php do_action( 'kbs_single_ticket_after_logged_by', $ticket ); ?>
+
                                 <span class="ticket_status info_item">
                                     <label><?php _e( 'Status', 'kb-support' ); ?>:</label> <?php echo $ticket->status_nicename; ?>
                                 </span>
+
+								<?php do_action( 'kbs_single_ticket_after_status', $ticket ); ?>
 
                                 <span class="ticket_agent info_item">
                                 	<?php if ( ! empty( $ticket->agent_id ) ) :
@@ -93,15 +101,23 @@ if ( ! empty( $ticket->ID ) ) :
                                     <label><?php _e( 'Agent', 'kb-support' ); ?>:</label> <span class="<?php echo $status_class; ?>"><?php echo $agent; ?></span>
                                 </span>
 
+								<?php do_action( 'kbs_single_ticket_after_agent', $ticket ); ?>
+
+								<?php do_action( 'kbs_single_ticket_before_major_items', $ticket ); ?>
+
                                 <div class="major_ticket_items">
 
                                     <span class="ticket_subject info_item">
                                         <label><?php _e( 'Subject', 'kb-support' ); ?>:</label> <?php esc_attr_e( $ticket->ticket_title ); ?>
                                     </span>
 
+									<?php do_action( 'kbs_single_ticket_after_subject', $ticket ); ?>
+
                                     <span class="ticket_content info_item">
                                         <label><?php _e( 'Content', 'kb-support' ); ?>:</label> <?php echo $ticket->get_content(); ?>
                                     </span>
+
+									<?php do_action( 'kbs_single_ticket_after_content', $ticket ); ?>
 
                                 </div>
 

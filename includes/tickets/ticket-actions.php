@@ -4,7 +4,7 @@
  *
  * @package     KBS
  * @subpackage  Tickets/Functions
- * @copyright   Copyright (c) 2016, Mike Howard
+ * @copyright   Copyright (c) 2017, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
@@ -95,7 +95,8 @@ function kbs_ticket_customer_reply_action()	{
 		'ticket_id'   => $_POST['kbs_ticket_id'],
 		'response'    => $_POST['kbs_reply'],
 		'close'       => isset( $_POST['kbs_close_ticket'] ) ? true : false,
-		'customer_id' => (int) $ticket->customer_id
+		'customer_id' => (int) $ticket->customer_id,
+		'author'      => 0
 	);
 
 	$reply_id = $ticket->add_reply( $reply_data );

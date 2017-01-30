@@ -3,10 +3,10 @@
  * Plugin Name: KB Support
  * Plugin URI: https://kb-support.com/
  * Description: All in one Support desk and knowledge base. Easy to use, easy to manage, loved by customers
- * Version: 0.9
- * Date: 06 May 2016
+ * Version: 0.9.2
+ * Date: 30 January 2017
  * Author: Mike Howard <mike@mikesplugins.co.uk>
- * Author URI: http://mikesplugins.co.uk
+ * Author URI: https://kb-support.com
  * Text Domain: kb-support
  * Domain Path: /languages
  * License: GPL2
@@ -174,7 +174,7 @@ final class KB_Support {
 	private function setup_constants()	{
 
 		if ( ! defined( 'KBS_VERSION' ) )	{
-			define( 'KBS_VERSION', '0.9.1' );
+			define( 'KBS_VERSION', '0.9.2' );
 		}
 
 		if ( ! defined( 'KBS_PLUGIN_DIR' ) )	{
@@ -216,6 +216,7 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-stats.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-roles.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-cron.php';
+		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-logging.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-license-handler.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/article-actions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/class-kbs-articles-query.php';
@@ -252,6 +253,7 @@ final class KB_Support {
 		if ( is_admin() )	{
 			require_once KBS_PLUGIN_DIR . '/includes/admin/admin-pages.php';
 			require_once KBS_PLUGIN_DIR . '/includes/admin/admin-notices.php';
+			require_once KBS_PLUGIN_DIR . '/includes/admin/admin-plugin.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/customers/customers-page.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/customers/customer-functions.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/customers/customer-actions.php';
@@ -260,7 +262,6 @@ final class KB_Support {
 			require_once KBS_PLUGIN_DIR . 'includes/admin/tickets/metaboxes.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/tickets/contextual-help.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/article/article.php';
-			require_once KBS_PLUGIN_DIR . 'includes/admin/article/article-restricted.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/article/metaboxes.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/article/contextual-help.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/forms/forms.php';
@@ -270,6 +271,8 @@ final class KB_Support {
 			require_once KBS_PLUGIN_DIR . 'includes/admin/settings/display-settings.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/settings/contextual-help.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/tools.php';
+			require_once KBS_PLUGIN_DIR . 'includes/admin/upgrades/upgrade-functions.php';
+			require_once KBS_PLUGIN_DIR . 'includes/admin/upgrades/upgrades.php';
 		}
 
 		require_once KBS_PLUGIN_DIR . 'includes/install.php';

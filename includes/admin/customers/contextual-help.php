@@ -4,7 +4,7 @@
  *
  * @package     KBS
  * @subpackage  Admin/Customers
- * @copyright   Copyright (c) 2016, Mike Howard
+ * @copyright   Copyright (c) 2017, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
@@ -52,7 +52,7 @@ function kbs_customers_contextual_help() {
 		) . '</p>' .
 		'<p>' . sprintf(
 			__( '<a href="%s" target="_blank">Extensions</a>', 'kb-support' ),
-			esc_url( 'https://kb-support.com/downloads/' )
+			esc_url( 'https://kb-support.com/extensions/' )
 		) . '</p>'
 	);
 

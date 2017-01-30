@@ -4,7 +4,7 @@
  *
  * @package     KBS
  * @subpackage  Admin/Upgrades
- * @copyright   Copyright (c) 2016, Mike Howard
+ * @copyright   Copyright (c) 2017, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  *
@@ -26,17 +26,19 @@ function kbs_do_automatic_upgrades() {
 	$did_upgrade = false;
 	$kbs_version = preg_replace( '/[^0-9.].*/', '', get_option( 'kbs_version' ) );
 
-	if( version_compare( $kbs_version, KBS_VERSION, '<' ) ) {
+	if ( version_compare( $kbs_version, KBS_VERSION, '<' ) )	{
 
 		// Let us know that an upgrade has happened
 		$did_upgrade = true;
 
 	}
 
-	if( $did_upgrade ) {
+	if ( $did_upgrade )	{
 
 		// Send to what's new page
-		set_transient( '_kbs_activation_redirect', true, 30 );
+		if ( substr_count( KBS_VERSION, '.' ) < 2 )	{
+			set_transient( '_kbs_activation_redirect', true, 30 );
+		}
 
 		update_option( 'kbs_version_upgraded_from', get_option( 'kbs_version' ) );
 		update_option( 'kbs_version', preg_replace( '/[^0-9.].*/', '', KBS_VERSION ) );
@@ -68,7 +70,7 @@ function kbs_show_upgrade_notice()	{
 
 		$resume_url = add_query_arg( $resume_upgrade, admin_url( 'index.php' ) );
 		printf(
-			'<div class="notice notice-error"><p>' . __( 'KB Supportneeds to complete an upgrade that was previously started. Click <a href="%s">here</a> to resume the upgrade.', 'kb-support' ) . '</p></div>',
+			'<div class="notice notice-error"><p>' . __( 'KB Support needs to complete an upgrade that was previously started. Click <a href="%s">here</a> to resume the upgrade.', 'kb-support' ) . '</p></div>',
 			esc_url( $resume_url )
 		);
 
@@ -78,7 +80,7 @@ function kbs_show_upgrade_notice()	{
 		 *  NOTICE:
 		 *
 		 *  When adding new upgrade notices, please be sure to put the action into the upgrades array during install:
-		 *  /includes/install.php @ Appox Line 194
+		 *  /includes/install.php @ Appox Line 198
 		 *
 		 */
 

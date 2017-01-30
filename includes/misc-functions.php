@@ -4,7 +4,7 @@
  *
  * @package     KBS
  * @subpackage  Functions
- * @copyright   Copyright (c) 2016, Mike Howard
+ * @copyright   Copyright (c) 2017, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
@@ -329,6 +329,26 @@ function kbs_get_notices( $notice = '', $notice_only = false )	{
 	return $notices;
 
 } // kbs_get_notices
+
+/**
+ * Adds credit information after the ticket and reply form.
+ *
+ * @since	1.0
+ * @return	str		Credit text
+ */
+function kbs_add_credit_text()	{
+
+	if ( kbs_get_option( 'show_credits', false ) )	{
+		ob_start(); ?>
+
+		<span class="kbs-description"><a href="https://kb-support.com/" title="<?php _e( 'KB Support', 'kb-support' ); ?>" target="_blank"><?php _e( 'Powered by KB Support', 'kb-support' ); ?></a></span>
+
+		<?php echo ob_get_clean();
+	}
+
+} // kbs_add_credit_text
+add_action( 'kbs_after_ticket_form', 'kbs_add_credit_text' );
+add_action( 'kbs_after_single_ticket_form', 'kbs_add_credit_text' );
 
 /**
  * Get Country List

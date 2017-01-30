@@ -8,7 +8,7 @@
  *
  * @package     KBS
  * @subpackage  Classes/DB Customers
- * @copyright   Copyright (c) 2016, Mike Howard
+ * @copyright   Copyright (c) 2017, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
@@ -397,7 +397,7 @@ class KBS_DB_Customers extends KBS_DB  {
 			if ( 'email' === $field ) {
 
 				$meta_table  = KBS()->customer_meta->table_name;
-				$customer_id = $wpdb->get_var( $wpdb->prepare( "SELECT customer_id FROM $meta_table WHERE meta_key = 'additional_email' AND meta_value = '%s' LIMIT 1", $value ) );
+				$customer_id = $wpdb->get_var( $wpdb->prepare( "SELECT kbs_customer_id FROM $meta_table WHERE meta_key = 'additional_email' AND meta_value = '%s' LIMIT 1", $value ) );
 
 				if ( ! empty( $customer_id ) ) {
 					return $this->get( $customer_id );
@@ -479,7 +479,7 @@ class KBS_DB_Customers extends KBS_DB  {
 				$meta_table      = $wpdb->prefix . 'kbs_customermeta';
 				$customers_table = $this->table_name;
 
-				$join  .= " LEFT JOIN $meta_table ON $customers_table.id = $meta_table.customer_id";
+				$join  .= " LEFT JOIN $meta_table ON $customers_table.id = $meta_table.kbs_customer_id";
 				$where .= $wpdb->prepare( " AND ( ( `meta_key` = 'additional_email' AND `meta_value` = %s ) OR `email` = %s )", $args['email'], $args['email'] );
 			}
 		}
@@ -594,7 +594,7 @@ class KBS_DB_Customers extends KBS_DB  {
 				$meta_table      = $wpdb->prefix . 'edd_customermeta';
 				$customers_table = $this->table_name;
 
-				$join  .= " LEFT JOIN $meta_table ON $customers_table.id = $meta_table.customer_id";
+				$join  .= " LEFT JOIN $meta_table ON $customers_table.id = $meta_table.kbs_customer_id";
 				$where .= $wpdb->prepare( " AND ( ( `meta_key` = 'additional_email' AND `meta_value` = %s ) OR `email` = %s )", $args['email'], $args['email'] );
 			}
 		}

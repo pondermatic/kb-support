@@ -607,7 +607,7 @@ function kbs_maybe_editing_field()	{
 	if ( ! isset( $_GET['kbs-action'], $_GET['field_id'] ) )	{
 		$kbs_edit_field = false;
 	} else	{
-		$kbs_edit_field = kbs_get_field( $_GET['field_id'] );
+		$kbs_edit_field = kbs_get_field( absint( $_GET['field_id'] ) );
 	}
 
 } // kbs_maybe_editing_field

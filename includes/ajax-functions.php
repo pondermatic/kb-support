@@ -6,7 +6,7 @@
  *
  * @package     KBS
  * @subpackage  Functions/AJAX
- * @copyright   Copyright (c) 2016, Mike Howard
+ * @copyright   Copyright (c) 2017, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
@@ -137,7 +137,8 @@ function kbs_ajax_insert_ticket_reply()	{
 		'close'       => $_POST['close_ticket'],
 		'customer_id' => $ticket->customer_id,
 		'agent_id'    => $ticket->agent_id,
-		'key'         => $ticket->key
+		'key'         => $ticket->key,
+		'author'      => get_current_user_id()
 	);
 
 	$reply_id = $ticket->add_reply( $reply_data );

@@ -6,7 +6,7 @@
  *
  * @package     KBS
  * @subpackage  Admin/Settings
- * @copyright   Copyright (c) 2016, Mike Howard
+ * @copyright   Copyright (c) 2017, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
 */
@@ -761,6 +761,12 @@ function kbs_get_registered_settings() {
 						'id'   => 'misc_settings_header',
 						'name' => '<h3>' . __( 'Misc Settings', 'kb-support' ) . '</h3>',
 						'type' => 'header'
+					),
+					'show_credits' => array(
+						'id'      => 'show_credits',
+						'name'    => __( 'Display Credit?', 'kb-support' ),
+						'desc'    => __( 'KB Support is provided for free. If you like our plugin, consider spreading the word by displaying <code>Powered by KB Support</code> below the ticket and reply forms.', 'kb-support' ),
+						'type'    => 'checkbox'
 					),
 					'remove_on_uninstall' => array(
 						'id'      => 'remove_on_uninstall',

@@ -11,7 +11,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) )
  *
  * @package     KBS
  * @subpackage  Uninstall
- * @copyright   Copyright (c) 2016, Mike Howard
+ * @copyright   Copyright (c) 2017, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  *
@@ -25,8 +25,8 @@ global $wpdb, $wp_roles;
 if ( kbs_get_option( 'remove_on_uninstall' ) )	{
 
 	// Delete the Custom Post Types
-	$kbs_taxonomies = array( 'ticket_category', 'ticket_tag', 'article_category', 'article_tag' );
-	$kbs_post_types = array( 'kbs_ticket', 'kbs_ticket_reply', 'article', 'kbs_form', 'kbs_form_field' );
+	$kbs_taxonomies = array( 'ticket_category', 'ticket_tag', 'article_category', 'article_tag', 'edd_log_type' );
+	$kbs_post_types = array( 'kbs_ticket', 'kbs_ticket_reply', 'article', 'kbs_form', 'kbs_form_field', 'edd_log' );
 
 	foreach ( $kbs_post_types as $post_type ) {
 

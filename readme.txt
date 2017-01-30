@@ -2,11 +2,11 @@
 Contributors: mikeyhoward1977
 Tags: Helpdesk, Support, Service, Support Helpdesk, Ticket, Ticket System, Support Tickets, Helpdesk Tickets, SLA, Service Desk, Knowledgbase, KB, KB Articles, Forms
 Requires at least: 4.1
-Tested up to: 4.7
-Stable tag: 0.9
+Tested up to: 4.7.2
+Stable tag: 0.9.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Donate link: http://kb-support.com/support-our-work/
+Donate link: https://kb-support.com/donate-kb-support/
 
 KB Support is an easy to use and extremley effective Helpdesk Support System.
 
@@ -47,7 +47,7 @@ Would you like to help translate the plugin into more languages? [Join our WP-Tr
 1. Activate the plugin
 1. Go to Tickets > Settings and configure the options
 1. Insert form shortcode into the ticket submission page
-1. For detailed setup instructions, vist the official [Documentation](https://kb-support.com/articles/category/installation/)
+1. For detailed setup instructions, vist the official [Documentation](https://kb-support.com/articles/category/getting-started/)
 
 **Manual Installation**
 
@@ -77,7 +77,7 @@ Place the [kbs_tickets] shortcode on any page.
 
 = Is there a Pro version with additional features? =
 
-Extensions are available at [https://kb-support.com/downloads/](https://kb-support.com/downloads/ "KB Support Extensions") to further enhance KB Support features and functionality. New extensions are being added regularly. [Join our mailing list](http://eepurl.com/cnxWcz) to be the first to hear about new releases!
+Extensions are available at [https://kb-support.com/extensions/](https://kb-support.com/extensions/ "KB Support Extensions") to further enhance KB Support features and functionality. New extensions are being added regularly. [Join our mailing list](http://eepurl.com/cnxWcz) to be the first to hear about new releases and to receive a 30% discount off of your first purchase!
 
 == Screenshots ==
 
@@ -85,9 +85,23 @@ Extensions are available at [https://kb-support.com/downloads/](https://kb-suppo
 
 2. What the default submission form might look like on your website when your customers log a support ticket. Theme in image is Twenty Seventeen
 
+3. Suggested KB Article to resolve a ticket that a customer is in the process of submitted
+
+4. The ticket overview screen a customer see's once their submission is completed
+
+5. The edit ticket screen as seen by an agent
+
+6. When a customer is accessing a KB Article that is restricted
+
 == Changelog ==
 
 Until we reach version 1.0+ we are still classing this plugin as in beta testing.
+
+= 0.9.2 =
+
+**Tweaks**
+
+* 
 
 = 0.9.1 =
 

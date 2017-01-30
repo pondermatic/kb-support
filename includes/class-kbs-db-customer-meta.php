@@ -6,7 +6,7 @@
  *
  * @package		KBS
  * @subpackage	Classes/DB_Customer_Meta
- * @copyright   Copyright (c) 2016, Mike Howard
+ * @copyright   Copyright (c) 2017, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
@@ -42,10 +42,10 @@ class KBS_DB_Customer_Meta extends KBS_DB {
 	*/
 	public function get_columns() {
 		return array(
-			'meta_id'     => '%d',
-			'customer_id' => '%d',
-			'meta_key'    => '%s',
-			'meta_value'  => '%s',
+			'meta_id'         => '%d',
+			'kbs_customer_id' => '%d',
+			'meta_key'        => '%s',
+			'meta_value'      => '%s',
 		);
 	} // get_columns
 
@@ -57,7 +57,7 @@ class KBS_DB_Customer_Meta extends KBS_DB {
 	*/
 	public function register_table() {
 		global $wpdb;
-		$wpdb->customermeta = $this->table_name;
+		$wpdb->kbs_customermeta = $this->table_name;
 	} // register_table
 
 	/**
@@ -79,7 +79,7 @@ class KBS_DB_Customer_Meta extends KBS_DB {
 			return false;
 		}
 
-		return get_metadata( 'customer', $customer_id, $meta_key, $single );
+		return get_metadata( 'kbs_customer', $customer_id, $meta_key, $single );
 	} // get_meta
 
 	/**
@@ -102,7 +102,7 @@ class KBS_DB_Customer_Meta extends KBS_DB {
 			return false;
 		}
 
-		return add_metadata( 'customer', $customer_id, $meta_key, $meta_value, $unique );
+		return add_metadata( 'kbs_customer', $customer_id, $meta_key, $meta_value, $unique );
 	} // add_meta
 
 	/**
@@ -130,7 +130,7 @@ class KBS_DB_Customer_Meta extends KBS_DB {
 			return false;
 		}
 
-		return update_metadata( 'customer', $customer_id, $meta_key, $meta_value, $prev_value );
+		return update_metadata( 'kbs_customer', $customer_id, $meta_key, $meta_value, $prev_value );
 	} // update_meta
 
 	/**
@@ -151,7 +151,7 @@ class KBS_DB_Customer_Meta extends KBS_DB {
 	 * @since	1.0
 	 */
 	public function delete_meta( $customer_id = 0, $meta_key = '', $meta_value = '' ) {
-		return delete_metadata( 'customer', $customer_id, $meta_key, $meta_value );
+		return delete_metadata( 'kbs_customer', $customer_id, $meta_key, $meta_value );
 	} // delete_meta
 
 	/**
@@ -166,11 +166,11 @@ class KBS_DB_Customer_Meta extends KBS_DB {
 
 		$sql = "CREATE TABLE {$this->table_name} (
 			meta_id bigint(20) NOT NULL AUTO_INCREMENT,
-			customer_id bigint(20) NOT NULL,
+			kbs_customer_id bigint(20) NOT NULL,
 			meta_key varchar(255) DEFAULT NULL,
 			meta_value longtext,
 			PRIMARY KEY  (meta_id),
-			KEY customer_id (customer_id),
+			KEY kbs_customer_id (kbs_customer_id),
 			KEY meta_key (meta_key)
 			) CHARACTER SET utf8 COLLATE utf8_general_ci;";
 
