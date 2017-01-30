@@ -14,6 +14,55 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Plugins row action links
+ *
+ * @since	1.0
+ * @param	arr		$links	Defined action links
+ * @param	str		$file	Plugin file path and name being processed
+ * @return	srr		Filtered action links
+ */
+function kbs_plugin_action_links( $links, $file )	{
+
+	$settings_link = '<a href="' . admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-settings' ) . '">' . esc_html__( 'Settings', 'kb-support' ) . '</a>';
+
+	if ( $file == 'kb-support/kb-support.php' )	{
+		array_unshift( $links, $settings_link );
+	}
+
+	return $links;
+
+} // kbs_plugin_action_links
+add_filter( 'plugin_action_links', 'kbs_plugin_action_links', 10, 2 );
+
+
+/**
+ * Plugin row meta links
+ *
+ * @since	1.0
+ * @param	arr		$input	Defined meta links
+ * @param	str		$file	Plugin file path and name being processed
+ * @return	arr		Filtered meta links
+ */
+function kbs_plugin_row_meta( $input, $file )	{
+
+	if ( $file != 'kb-support/kb-support.php' )	{
+		return $input;
+	}
+
+	$links = array(
+		'<a href="' . admin_url( 'index.php?page=kbs-getting-started' ) . '">' . esc_html__( 'Getting Started', 'kb-support' ) . '</a>',
+		'<a href="' . esc_url( 'https://kb-support.com/extensions/' ) . '" target="_blank">' . esc_html__( 'Extensions', 'kb-support' ) . '</a>',
+		'<a href="' . esc_url( 'https://kb-support.com/support/' ) . '" target="_blank">' . esc_html__( 'Documentation', 'kb-support' ) . '</a>'
+	);
+
+	$input = array_merge( $input, $links );
+
+	return $input;
+
+} // kbs_plugin_row_meta
+add_filter( 'plugin_row_meta', 'kbs_plugin_row_meta', 10, 2 );
+
+/**
  * Adds rate us text to admin footer when KB Support admin pages are viewed.
  *
  * @since	1.0
