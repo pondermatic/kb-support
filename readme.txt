@@ -99,6 +99,10 @@ Until we reach version 1.0+ we are still classing this plugin as in beta testing
 
 = 0.9.3 =
 
+**Bug Fix**
+
+* Re-open ticket link failed to re-open ticket
+
 **Tweaks**
 
 * Added draft updated message for articles and forms
