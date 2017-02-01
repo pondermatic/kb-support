@@ -83,8 +83,8 @@ if ( ! class_exists( 'KBS_License' ) )	{
 		 * @return  void
 		 */
 		private function includes() {
-			if ( ! class_exists( 'KBS_SL_Plugin_Updater' ) )  {
-				require_once 'KBS_SL_Plugin_Updater.php';
+			if ( ! class_exists( 'EDD_SL_Plugin_Updater' ) )  {
+				require_once 'EDD_SL_Plugin_Updater.php';
 			}
 		} // includes
 	
@@ -147,7 +147,7 @@ if ( ! class_exists( 'KBS_License' ) )	{
 			}
 	
 			// Setup the updater
-			$kbs_updater = new KBS_SL_Plugin_Updater(
+			$kbs_updater = new EDD_SL_Plugin_Updater(
 				$this->api_url,
 				$this->file,
 				$args
