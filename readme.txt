@@ -1,6 +1,6 @@
 === KB Support ===
 Contributors: mikeyhoward1977
-Tags: Helpdesk, Support, Service, Support Helpdesk, Ticket, Ticket System, Support Tickets, Helpdesk Tickets, SLA, Service Desk, Knowledgbase, KB, KB Articles, Forms
+Tags: Helpdesk, Support, Service, Support Helpdesk, Ticket, Ticket System, Support Tickets, Helpdesk Tickets, SLA, Service Desk, Knowledgebase, Knowledge Base
 Requires at least: 4.1
 Tested up to: 4.7.2
 Stable tag: 0.9.2
@@ -8,7 +8,7 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
 
-KB Support is an easy to use and extremley effective Helpdesk Support System.
+The all-in-one Help desk, support system and knowledgebase plugin for WordPress. Give your customers the support they expect directly from your WordPress site.
 
 == Description ==
 
