@@ -99,13 +99,20 @@ Until we reach version 1.0+ we are still classing this plugin as in beta testing
 
 = 0.9.3 =
 
-**Bug Fix**
+**New**
 
-* Re-open ticket link failed to re-open ticket
+* Added **Link KB Article** media button to admin ticket reply form enabling quick and easy inserting of links to KB Articles from reply form
 
 **Tweaks**
 
 * Added draft updated message for articles and forms
+* Users with manage_ticket_settings capability (Administrator & Support Manager by default) can now delete tickets
+* Support Managers should always see all tickets, even when the `Restrict Agent Ticket View?` setting option is enabled
+
+**Bug Fixes**
+
+* Re-open ticket link failed to re-open ticket
+* Support Customers should not have the upload_files capability
 
 = 0.9.2 =
 
