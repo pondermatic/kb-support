@@ -73,13 +73,13 @@ function kbs_admin_footer_for_thickbox() {
 
 				// Return early if no article is selected
 				if ('' === url || '0' === url) {
-					alert('<?php printf( __( "You must choose a %s", "kb-support" ), $single_article ); ?>');
+					alert('<?php printf( __( "You must choose a %s.", "kb-support" ), $single_article ); ?>');
 					return;
 				}
 
 				// Use article title if no link text specified
 				if ('' === text)	{
-					text = jQuery("#articles option[value='" + url + "']").text();
+					text = jQuery('#articles option[value="' + url + '"]').text();
 				}
 
 				// Send the shortcode to the editor
@@ -92,7 +92,7 @@ function kbs_admin_footer_for_thickbox() {
 				<h3><?php echo sprintf( __( 'Complete the form below to insert a link to a %s', 'kb-support' ), $single_article ); ?></h3>
 
 				<p><label for="kbs-text"><strong><?php _e( 'Enter Link Text', 'kb-support' ); ?></strong>:</label><br>
-                	<input type="text" class="regular-text" size="30" id="kbs-text" value="" placeholder="<?php _e( 'Link text . . .', 'kb-support' ); ?>"/><br>
+                	<input type="text" class="regular-text" size="30" id="kbs-text" value="" /><br>
 					<span class="description"><?php printf( __( 'Leave empty to use %s title', 'kb-support' ), $single_article ); ?></span></p>
 
 				<p><label for="articles"><strong><?php printf( __( 'Select %s', 'kb-support' ), $single_article ); ?></strong>:</label><br>
