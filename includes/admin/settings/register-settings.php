@@ -360,7 +360,7 @@ function kbs_get_registered_settings() {
 					'restrict_agent_view' => array(
 						'id'      => 'restrict_agent_view',
 						'name'    => sprintf( __( 'Restrict Agent %s View?', 'kb-support' ), $single ),
-						'desc'    => sprintf( __( 'If enabled, Support Agents will only be able to see %1$s that are assigned to them , or %1$s that are not yet assigned. If the agent is an administrator, they will always see all %1$s.', 'kb-support' ), strtolower( $plural ) ),
+						'desc'    => sprintf( __( 'If enabled, Support Agents will only be able to see %1$s that are assigned to them or %1$s that are not yet assigned. If the current user is a Support Manager or an Administrator, they will always see all %1$s.', 'kb-support' ), strtolower( $plural ) ),
 						'type'    => 'checkbox'
 					),
 					'agent_status'  => array(
