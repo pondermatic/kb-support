@@ -112,6 +112,7 @@ Until we reach version 1.0+ we are still classing this plugin as in beta testing
 **Bug Fixes**
 
 * Re-open ticket link failed to re-open ticket
+* Don't count agent views for articles
 * Support Customers should not have the upload_files capability
 
 = 0.9.2 =

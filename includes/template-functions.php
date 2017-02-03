@@ -176,11 +176,15 @@ add_filter( 'the_content', 'kbs_after_article_content', 100 );
  * @return	void
  */
 function kbs_article_maybe_increment_views()	{
-	if ( is_admin() && ! ( defined( 'DOING_AJAX' ) && DOING_AJAX ) )	{
+	if ( is_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) )	{
 		return;
 	}
 
 	if ( 'article' != get_post_type() || ! is_singular( 'article' ) )	{
+		return;
+	}
+
+	if ( is_user_logged_in() && kbs_is_agent( get_current_user_id() ) )	{
 		return;
 	}
 
