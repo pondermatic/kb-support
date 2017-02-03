@@ -2,7 +2,7 @@
 /**
  * Plugin Name: KB Support
  * Plugin URI: https://kb-support.com/
- * Description: All in one Support desk and knowledge base. Easy to use, easy to manage, loved by customers
+ * Description: The ultimate help desk and knowledge base support tool plugin for WordPress. Give your customers the support they expect directly from your WordPress site.
  * Version: 0.9.3
  * Date: 30 January 2017
  * Author: Mike Howard <mike@mikesplugins.co.uk>
