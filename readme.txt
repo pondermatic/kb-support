@@ -1,6 +1,6 @@
 === KB Support ===
 Contributors: mikeyhoward1977
-Tags: Helpdesk, Support, Service, Support Helpdesk, Ticket, Ticket System, Support Tickets, Helpdesk Tickets, SLA, Service Desk, Knowledgebase, Knowledge Base
+Tags: Helpdesk, Help Desk, Support, Customer Support, Service, Service Desk, ITIL, Support Helpdesk, Ticket, Ticket System, Support Tickets, Helpdesk Tickets, Knowledgebase, Knowledge Base
 Requires at least: 4.1
 Tested up to: 4.7.2
 Stable tag: 0.9.2
