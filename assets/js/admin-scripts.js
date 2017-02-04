@@ -16,13 +16,13 @@ jQuery(document).ready(function ($) {
 	});
 
 	// Setup Accordions
-	if ( kbs_vars.post_type && 'kbs_ticket' == kbs_vars.post_type )	{
+	if ( kbs_vars.post_type && 'kbs_ticket' === kbs_vars.post_type )	{
 		var icons = {
-			header: "ui-icon-circle-arrow-e",
-			activeHeader: "ui-icon-circle-arrow-s"
+			header: 'ui-icon-circle-arrow-e',
+			activeHeader: 'ui-icon-circle-arrow-s'
 		};
 
-		$( ".kbs_accordion, .kbs_notes_accordion, .kbs_replies_accordion" ).accordion({
+		$( '.kbs_accordion, .kbs_notes_accordion, .kbs_replies_accordion' ).accordion({
 			active: false,
 			collapsible: true,
 			icons:icons
@@ -47,7 +47,7 @@ jQuery(document).ready(function ($) {
 			}
 
 			// Settings Upload field JS
-			if ( typeof wp === "undefined" || '1' !== kbs_vars.new_media_ui ) {
+			if ( typeof wp === 'undefined' || '1' !== kbs_vars.new_media_ui ) {
 				// Old Thickbox uploader
 				var kbs_settings_upload_button = $( '.kbs_settings_upload_button' );
 				if ( kbs_settings_upload_button.length > 0 ) {
@@ -126,7 +126,7 @@ jQuery(document).ready(function ($) {
 					file_frame.on( 'insert', function() {
 
 						var selection = file_frame.state().get('selection');
-						selection.each( function( attachment, index ) {
+						selection.each( function( attachment ) {
 							attachment = attachment.toJSON();
 							window.formfield.val(attachment.url);
 						});
@@ -160,7 +160,7 @@ jQuery(document).ready(function ($) {
 
 				var ticket_id      = kbs_vars.post_id;
 				var ticketResponse = '';
-				var tinymceActive  = (typeof tinyMCE != 'undefined') && tinyMCE.activeEditor && ! tinyMCE.activeEditor.isHidden();
+				var tinymceActive  = (typeof tinyMCE !== 'undefined') && tinyMCE.activeEditor && ! tinyMCE.activeEditor.isHidden();
 
 				if (tinymceActive) {
 					tinyMCE.triggerSave();
@@ -169,11 +169,11 @@ jQuery(document).ready(function ($) {
 				ticketResponse = $('#kbs_ticket_reply' ).val();
 
 				if ( ticketResponse.length === 0 )	{
-					alert( kbs_vars.no_ticket_reply_content );
+					window.alert( kbs_vars.no_ticket_reply_content );
 					return false;
 				}
 
-				if ( 'kbs-reply-close' == event.target.id )	{
+				if ( 'kbs-reply-close' === event.target.id )	{
 					var confirmClose = confirm( kbs_vars.ticket_confirm_close );
 
 					if (confirmClose === false) {
@@ -184,13 +184,13 @@ jQuery(document).ready(function ($) {
 				var postData         = {
 					ticket_id    : ticket_id,
 					response     : ticketResponse,
-					close_ticket : ( 'kbs-reply-close' == event.target.id ? 1 : 0 ),
+					close_ticket : ( 'kbs-reply-close' === event.target.id ? 1 : 0 ),
 					action       : 'kbs_insert_ticket_reply'
 				};
 
 				$.ajax({
-					type: "POST",
-					dataType: "json",
+					type: 'POST',
+					dataType: 'json',
 					data: postData,
 					url: ajaxurl,
 					beforeSend: function()	{
@@ -203,7 +203,7 @@ jQuery(document).ready(function ($) {
 							window.location.href = kbs_vars.admin_url + '?kbs-action=ticket_reply_added&ticket_id=' + ticket_id;
 							return true;
 						} else	{
-							alert(kbs_vars.reply_not_added);
+							window.alert(kbs_vars.reply_not_added);
 						}
 						$('#kbs-new-reply-loader').html('');
 						$('.kbs-reply').show();
@@ -223,7 +223,7 @@ jQuery(document).ready(function ($) {
 				var ticket_id    = kbs_vars.post_id;
 
 				if ( note_content.length < 1 )	{
-					alert(kbs_vars.no_note_content);
+					window.alert(kbs_vars.no_note_content);
 					return;
 				}
 
@@ -234,8 +234,8 @@ jQuery(document).ready(function ($) {
 				};
 
 				$.ajax({
-					type: "POST",
-					dataType: "json",
+					type: 'POST',
+					dataType: 'json',
 					data: postData,
 					url: ajaxurl,
 					beforeSend: function()	{
@@ -247,7 +247,7 @@ jQuery(document).ready(function ($) {
 							kbs_load_ticket_notes(ticket_id, response.note_id);
 							$('#kbs_new_note').val('');
 						} else	{
-							alert(kbs_vars.note_not_added);
+							window.alert(kbs_vars.note_not_added);
 						}
 						$('#kbs-new-note-loader').html('');
 						$('#kbs-add-note').show();
@@ -261,7 +261,7 @@ jQuery(document).ready(function ($) {
 			});
 
 			// Auto load ticket replies and notes
-			if( kbs_vars.editing_ticket == '1' ) {
+			if( kbs_vars.editing_ticket === '1' ) {
 				setTimeout( function() {
 					kbs_load_ticket_replies( kbs_vars.post_id, 0 );
 					kbs_load_ticket_notes( kbs_vars.post_id, 0 );
@@ -284,7 +284,7 @@ jQuery(document).ready(function ($) {
 		forms : function() {
 
 			var toggleFieldOptions = function(kbs_selected_field)	{
-				if ( 'text' == kbs_selected_field || 'date_field' == kbs_selected_field || 'email' == kbs_selected_field || 'number' == kbs_selected_field || 'select' == kbs_selected_field || 'textarea' == kbs_selected_field || 'url' == kbs_selected_field )	{
+				if ( 'text' === kbs_selected_field || 'date_field' === kbs_selected_field || 'email' === kbs_selected_field || 'number' === kbs_selected_field || 'select' === kbs_selected_field || 'textarea' === kbs_selected_field || 'url' === kbs_selected_field )	{
 
 					$('#kbs_meta_field_placeholder_wrap').show();
 					$('#kbs_meta_field_hide_label_wrap').show();
@@ -293,37 +293,37 @@ jQuery(document).ready(function ($) {
 					$('#kbs_meta_field_hide_label_wrap').hide();
 				}
 
-				if ( 'select' == kbs_selected_field || 'checkbox_list' == kbs_selected_field || 'radio' == kbs_selected_field )	{
+				if ( 'select' === kbs_selected_field || 'checkbox_list' === kbs_selected_field || 'radio' === kbs_selected_field )	{
 					$('#kbs_meta_field_select_options_wrap').show();
 				} else	{
 					$('#kbs_meta_field_select_options_wrap').hide();
 				}
 
-				if ( 'select' == kbs_selected_field )	{
+				if ( 'select' === kbs_selected_field )	{
 					$('#kbs_meta_field_select_multiple_wrap').show();
 				} else	{
 					$('#kbs_meta_field_select_multiple_wrap').hide();
 				}
 
-				if ( 'select' == kbs_selected_field || 'ticket_category_dropdown' == kbs_selected_field )	{
+				if ( 'select' === kbs_selected_field || 'ticket_category_dropdown' === kbs_selected_field )	{
 					$('#kbs_meta_field_select_searchable_wrap').show();
 				} else	{
 					$('#kbs_meta_field_select_searchable_wrap').hide();
 				}
 
-				if ( 'checkbox' == kbs_selected_field )	{
+				if ( 'checkbox' === kbs_selected_field )	{
 					$('#kbs_meta_field_option_selected_wrap').show();
 				} else	{
 					$('#kbs_meta_field_option_selected_wrap').hide();
 				}
 
-				if ( 'checkbox' == kbs_selected_field || 'file_upload' == kbs_selected_field )	{
+				if ( 'checkbox' === kbs_selected_field || 'file_upload' === kbs_selected_field )	{
 					$('#kbs_meta_field_required_wrap').hide();
 				} else	{
 					$('#kbs_meta_field_required_wrap').show();
 				}
 			
-				if ( 'recaptcha' == kbs_selected_field )	{
+				if ( 'recaptcha' === kbs_selected_field )	{
 					$('#kbs_meta_field_required_wrap').hide();
 					$('#kbs_meta_field_label_class_wrap').hide();
 					$('#kbs_meta_field_input_class_wrap').hide();
@@ -333,13 +333,13 @@ jQuery(document).ready(function ($) {
 					$('#kbs_meta_field_input_class_wrap').show();
 				}
 
-				if ( 'text' == kbs_selected_field || 'email' == kbs_selected_field || 'url' == kbs_selected_field || 'textarea' == kbs_selected_field || 'rich_editor' == kbs_selected_field )	{
+				if ( 'text' === kbs_selected_field || 'email' === kbs_selected_field || 'url' === kbs_selected_field || 'textarea' === kbs_selected_field || 'rich_editor' === kbs_selected_field )	{
 					$('#kbs_meta_field_mapping_wrap').show();
 				} else	{
 					$('#kbs_meta_field_mapping_wrap').hide();
 				}
 
-				if( 'post_title' == $('#kbs_field_mapping').val() )	{
+				if( 'post_title' === $('#kbs_field_mapping').val() )	{
 					$('#kbs_meta_field_kb_search_wrap').show();
 				} else	{
 					$('#kbs_meta_field_kb_search_wrap').hide();
@@ -354,14 +354,14 @@ jQuery(document).ready(function ($) {
 
 			var kbs_field_type = $('.kbs_field_type');
 
-			$( document.body ).on('change', kbs_field_type, function(e)	{
+			$( document.body ).on('change', kbs_field_type, function()	{
 
 				toggleFieldOptions(kbs_field_type.val());
 
 			});
 
-			$( document.body ).on('change', $('#kbs_field_mapping'), function(e)	{
-				if( 'post_title' == $('#kbs_field_mapping').val() )	{
+			$( document.body ).on('change', $('#kbs_field_mapping'), function()	{
+				if( 'post_title' === $('#kbs_field_mapping').val() )	{
 					$('#kbs_meta_field_kb_search_wrap').show();
 				} else	{
 					$('#kbs_meta_field_kb_search_wrap').hide();
@@ -374,18 +374,18 @@ jQuery(document).ready(function ($) {
 				event.preventDefault();
 				
 				if ( $('#kbs_field_label').val().length < 1 )	{
-					alert( kbs_vars.field_label_missing );
+					window.alert( kbs_vars.field_label_missing );
 					return false;
 				}
-				if ( $('#kbs_field_type').val() == '-1' )	{
-					alert( kbs_vars.field_type_missing );
+				if ( $('#kbs_field_type').val() === '-1' )	{
+					window.alert( kbs_vars.field_type_missing );
 					return false;
 				}
 
 				var return_url       = $('#form_return_url').val();			
 				var postData         = {
 					form_id          : kbs_vars.post_id,
-					form_data        : $("#post").serialize(),
+					form_data        : $('#post').serialize(),
 					label            : $('#kbs_field_label').val(),
 					type             : $('#kbs_field_type').val(),
 					mapping          : $('#kbs_field_mapping').val(),
@@ -401,25 +401,25 @@ jQuery(document).ready(function ($) {
 					description_pos  : $('input[name=kbs_field_description_pos]').filter(':checked').val(),
 					placeholder      : $('#kbs_field_placeholder').val(),
 					hide_label       : ( $('#kbs_field_hide_label').is(':checked') )      ? $('#kbs_field_hide_label').val()      : 0,
-					action           : 'kbs_add_form_field',
+					action           : 'kbs_add_form_field'
 				};
 				
 				$.ajax({
-					type: "POST",
-					dataType: "json",
+					type: 'POST',
+					dataType: 'json',
 					data: postData,
 					url: ajaxurl,
 					beforeSend: function()	{
-						$("#kbs-field-add").addClass('kbs-hidden');
-						$("#kbs-loading").removeClass('kbs-hidden');
+						$('#kbs-field-add').addClass('kbs-hidden');
+						$('#kbs-loading').removeClass('kbs-hidden');
 					},
 					success: function (response) {
 						window.location.href = return_url + '&kbs-message=' + response.message;
 						return true;
 					}
 				}).fail(function (data) {
-					$("#kbs-field-add").removeClass('kbs-hidden');
-					$("#kbs-loading").addClass('kbs-hidden');
+					$('#kbs-field-add').removeClass('kbs-hidden');
+					$('#kbs-loading').addClass('kbs-hidden');
 					if ( window.console && window.console.log ) {
 						console.log( data );
 					}
@@ -433,18 +433,18 @@ jQuery(document).ready(function ($) {
 				event.preventDefault();
 				
 				if ( $('#kbs_field_label').val().length < 1 )	{
-					alert( kbs_vars.field_label_missing );
+					window.alert( kbs_vars.field_label_missing );
 					return false;
 				}
-				if ( $('#kbs_field_type').val() == '-1' )	{
-					alert( kbs_vars.field_type_missing );
+				if ( $('#kbs_field_type').val() === '-1' )	{
+					window.alert( kbs_vars.field_type_missing );
 					return false;
 				}
 
 				var return_url       = $('#form_return_url').val();			
 				var postData         = {
 					form_id          : kbs_vars.post_id,
-					form_data        : $("#post").serialize(),
+					form_data        : $('#post').serialize(),
 					field_id         : $('#kbs_edit_field').val(), 
 					label            : $('#kbs_field_label').val(),
 					type             : $('#kbs_field_type').val(),
@@ -461,25 +461,25 @@ jQuery(document).ready(function ($) {
 					description      : $('#kbs_field_description').val(),
 					description_pos  : $('input[name=kbs_field_description_pos]').filter(':checked').val(),
 					hide_label       : ( $('#kbs_field_hide_label').is(':checked') )      ? $('#kbs_field_hide_label').val()      : 0,
-					action           : 'kbs_save_form_field',
+					action           : 'kbs_save_form_field'
 				};
 				
 				$.ajax({
-					type: "POST",
-					dataType: "json",
+					type: 'POST',
+					dataType: 'json',
 					data: postData,
 					url: ajaxurl,
 					beforeSend: function()	{
-						$("#kbs-field-save").addClass('kbs-hidden');
-						$("#kbs-loading").removeClass('kbs-hidden');
+						$('#kbs-field-save').addClass('kbs-hidden');
+						$('#kbs-loading').removeClass('kbs-hidden');
 					},
 					success: function (response) {
 						window.location.href = return_url + '&kbs-message=' + response.message;
 						return true;
 					}
 				}).fail(function (data) {
-					$("#kbs-field-save").removeClass('kbs-hidden');
-					$("#kbs-loading").addClass('kbs-hidden');
+					$('#kbs-field-save').removeClass('kbs-hidden');
+					$('#kbs-loading').addClass('kbs-hidden');
 					if ( window.console && window.console.log ) {
 						console.log( data );
 					}
@@ -491,11 +491,11 @@ jQuery(document).ready(function ($) {
 		
 		move : function() {
 
-			$(".kbs_sortable_table tbody").sortable({
+			$('.kbs_sortable_table tbody').sortable({
 				handle: '.kbs_draghandle', items: '.kbs_sortable_row', opacity: 0.6, cursor: 'move', axis: 'y', update: function() {
 					var order = $(this).sortable('serialize') + '&action=kbs_order_form_fields';
 						
-					$.post(ajaxurl, order, function(response)	{
+					$.post(ajaxurl, order, function()	{
 						// Success
 					});
 				}
@@ -514,7 +514,7 @@ jQuery(document).ready(function ($) {
 			customer_wrap_editable:  $( '.kbs-customer-wrapper .editable' ),
 			customer_wrap_edit_item: $( '.kbs-customer-wrapper .edit-item' ),
 			user_id: $('input[name="customerinfo[user_id]"]'),
-			note: $( '#customer-note' ),
+			note: $( '#customer-note' )
 		},
 		init : function() {
 			this.add_customer();
@@ -544,8 +544,8 @@ jQuery(document).ready(function ($) {
 				};
 
 				$.ajax({
-					type: "POST",
-					dataType: "json",
+					type: 'POST',
+					dataType: 'json',
 					data: postData,
 					url: ajaxurl,
 					beforeSend: function()	{
@@ -608,7 +608,7 @@ jQuery(document).ready(function ($) {
 					customer_id: customer_id,
 					email:       email,
 					primary:     primary,
-					_wpnonce:    nonce,
+					_wpnonce:    nonce
 				};
 
 				$.post(ajaxurl, postData, function( response ) {
@@ -644,7 +644,7 @@ jQuery(document).ready(function ($) {
 					_wpnonce:     $( '#edit-customer-info #_wpnonce' ).val()
 				};
 
-				$.post(ajaxurl, postData, function( response ) {
+				$.post(ajaxurl, postData, function() {
 					window.location.href=window.location.href;
 				}, 'json');
 
@@ -663,7 +663,7 @@ jQuery(document).ready(function ($) {
 				if( postData.customer_note ) {
 
 					$.ajax({
-						type: "POST",
+						type: 'POST',
 						data: postData,
 						url: ajaxurl,
 						success: function ( response ) {
@@ -710,7 +710,7 @@ jQuery(document).ready(function ($) {
 		}
 
 		$('.kbs-ajax').show();
-		data = {
+		var data = {
 			action: 'kbs_search_users',
 			user_name: user_search,
 			exclude: exclude
@@ -719,9 +719,9 @@ jQuery(document).ready(function ($) {
 		document.body.style.cursor = 'wait';
 
 		$.ajax({
-			type: "POST",
+			type: 'POST',
 			data: data,
-			dataType: "json",
+			dataType: 'json',
 			url: ajaxurl,
 			success: function (search_response) {
 
@@ -750,7 +750,7 @@ jQuery(document).ready(function ($) {
 	});
 
 	$(document).on('keydown', '.customer-note-input', function(e) {
-		if(e.keyCode == 13 && (e.metaKey || e.ctrlKey)) {
+		if(e.keyCode === 13 && (e.metaKey || e.ctrlKey)) {
 			$('#add-customer-note').click();
 		}
 	});
@@ -764,7 +764,7 @@ function kbs_load_ticket_replies( ticket_id, reply_id )	{
 	jQuery.post(ajaxurl, { action: 'kbs_display_ticket_replies', kbs_ticket_id: ticket_id, kbs_reply_id: reply_id },
 		function(response)	{
 			jQuery('.kbs_replies_accordion').prepend(response);
-			jQuery('.kbs_replies_accordion').accordion("refresh");
+			jQuery('.kbs_replies_accordion').accordion('refresh');
 			jQuery('#kbs-replies-loader').html('');
 		}
 	);
@@ -777,7 +777,7 @@ function kbs_load_ticket_notes( ticket_id, note_id )	{
 	jQuery.post(ajaxurl, { action: 'kbs_display_ticket_notes', kbs_ticket_id: ticket_id, kbs_note_id: note_id },
 		function(response)	{
 			jQuery('.kbs_notes_accordion').prepend(response);
-			jQuery('.kbs_notes_accordion').accordion("refresh");
+			jQuery('.kbs_notes_accordion').accordion('refresh');
 			jQuery('#kbs-notes-loader').html('');
 		}
 	);
