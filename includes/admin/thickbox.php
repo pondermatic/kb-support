@@ -35,7 +35,7 @@ function kbs_media_button()	{
 	if ( in_array( $pagenow, array( 'post.php', 'page.php', 'post-new.php', 'post-edit.php' ) ) && 'kbs_ticket' == $typenow ) {
 
 		$img = '<span class="wp-media-buttons-icon dashicons dashicons-admin-links" id="kbs-media-button"></span> ';
-		$output = '<a href="#TB_inline?width=640&inlineId=choose-article" class="thickbox button kbs-thickbox" style="padding-left: .4em;">' . $img . sprintf( __( 'Link %s', 'KB Support' ), kbs_get_article_label_singular() ) . '</a>';
+		$output = '<a href="#TB_inline?width=640&inlineId=choose-article" class="thickbox button kbs-thickbox" style="padding-left: .4em;">' . $img . sprintf( __( 'Link %s', 'kb-support' ), kbs_get_article_label_singular() ) . '</a>';
 
 	}
 	echo $output;

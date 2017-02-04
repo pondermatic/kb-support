@@ -76,13 +76,13 @@ function kbs_customers_list() {
 	?>
 	<div class="wrap">
 		<h1>
-			<?php _e( 'Customers', 'kbs-support' ); ?>
+			<?php _e( 'Customers', 'kb-support' ); ?>
             <a href="<?php echo esc_url( $add_customer_url ); ?>" class="page-title-action"><?php _e( 'Add Customer', 'kb-support' ); ?></a>
         </h1>
 		<?php do_action( 'kbs_customers_table_top' ); ?>
 		<form id="kbs-customers-filter" method="get" action="<?php echo admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-customers' ); ?>">
 			<?php
-			$customers_table->search_box( __( 'Search Customers', 'kbs-support' ), 'kbs-customers' );
+			$customers_table->search_box( __( 'Search Customers', 'kb-support' ), 'kbs-customers' );
 			$customers_table->display();
 			?>
 			<input type="hidden" name="post_type" value="kbs_ticket" />
@@ -609,7 +609,7 @@ function kbs_render_add_customer_view()	{
 	?>
     <div class="wrap">
 		<h1>
-			<?php _e( 'Add Customer', 'kbs-support' ); ?>
+			<?php _e( 'Add Customer', 'kb-support' ); ?>
         </h1>
 
 		<div id="kbs-item-wrapper" class="kbs-customer-wrapper" style="float: left">

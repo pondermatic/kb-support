@@ -1113,7 +1113,7 @@ function kbs_get_reply_html( $reply, $ticket_id = 0 ) {
 	$reply_html  ='<h3>';
 		$reply_html .= $author . '&nbsp;&ndash;&nbsp;' . date_i18n( $date_format, strtotime( $reply->post_date ) );
 		if ( $file_count )	{
-			$reply_html .= ' (' . $file_count . ' ' . _n( 'attached file', 'attached files', $file_count ) . ')';
+			$reply_html .= ' (' . $file_count . ' ' . _n( 'attached file', 'attached files', $file_count, 'kb-support' ) . ')';
 		}
 	$reply_html .= '</h3>';
 

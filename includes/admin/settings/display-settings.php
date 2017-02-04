@@ -25,7 +25,7 @@ function kbs_options_page() {
 
 	if ( ! current_user_can( 'manage_ticket_settings' ) )	{
 		wp_die(
-			'<h1>' . __( 'Cheatin&#8217; uh?' ) . '</h1>' .
+			'<h1>' . __( 'Cheatin&#8217; uh?', 'kb-support' ) . '</h1>' .
 			'<p>'  . __( 'You do not have permission to access this page.', 'kb-support' ) . '</p>',
 			403
 		);

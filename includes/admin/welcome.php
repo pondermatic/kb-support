@@ -344,7 +344,7 @@ class KBS_Welcome {
                         <p><?php _e( 'We have a growing library of <a href="https://kb-support.com/support/" target="_blank">Support Documents</a> to help new and advanced users with features and customisations.', 'kb-support' ); ?></p>
                     </div>
                     <div class="col">
-                        <h3><?php _e( 'Excellent Support' ); ?></h3>
+                        <h3><?php _e( 'Excellent Support', 'kb-support' ); ?></h3>
                         <p><?php printf( __( 'We pride ourselves on our level of support and excellent response times. If you are experiencing an issue, <a href="%s" target="_blank">submit a support ticket</a> and we will respond quickly.', 'kb-support' ), 'https://kb-support.com/support-request/' );?></p>
                     </div>
                 </div>
@@ -399,7 +399,7 @@ class KBS_Welcome {
                     <?php _e( 'View Extensions', 'kb-support' ); ?>
                 </a> |
                 <a href="<?php echo admin_url(); ?>">
-                    <?php _e( 'WordPress Dashboard' ); ?>
+                    <?php _e( 'WordPress Dashboard', 'kb-support' ); ?>
                 </a>
             </div>
 

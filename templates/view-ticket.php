@@ -108,7 +108,7 @@ if ( ! empty( $ticket->ID ) ) :
                                 <div class="major_ticket_items">
 
                                     <span class="ticket_subject info_item">
-                                        <label><?php _e( 'Subject', 'kb-support' ); ?>:</label> <?php esc_attr_e( $ticket->ticket_title ); ?>
+                                        <label><?php _e( 'Subject', 'kb-support' ); ?>:</label> <?php echo esc_attr( $ticket->ticket_title ); ?>
                                     </span>
 
 									<?php do_action( 'kbs_single_ticket_after_subject', $ticket ); ?>

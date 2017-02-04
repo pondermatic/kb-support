@@ -239,7 +239,7 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
 
             </div><!-- #minor-publishing-actions -->
             <div id="kbs-ticket-actions">
-                <p><label for="ticket_status"><?php _e( 'Status:' ); ?></label>
+                <p><label for="ticket_status"><?php _e( 'Status:', 'kb-support' ); ?></label>
                     <?php echo KBS()->html->ticket_status_dropdown( 'ticket_status', $kbs_ticket->post_status ); ?>
                 </p>
 

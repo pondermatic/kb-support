@@ -688,7 +688,7 @@ function kbs_get_registered_settings() {
 					'ticket_notification' => array(
 						'id'   => 'ticket_notification',
 						'name' => sprintf( __( '%s Notification', 'kb-support' ), $single ),
-						'desc' => sprintf( __( 'Enter the text that is sent as %s received notification email after submission of a case. HTML is accepted. Available template tags:' ), strtolower( $single ) ) . '<br />' . kbs_get_emails_tags_list(),
+						'desc' => sprintf( __( 'Enter the text that is sent as %s received notification email after submission of a case. HTML is accepted. Available template tags:', 'kb-support' ), strtolower( $single ) ) . '<br />' . kbs_get_emails_tags_list(),
 						'type' => 'rich_editor',
 						'std'  => __( 'Hey there!', 'kb-support' ) . "\n\n" .
 								  sprintf( __( 'A new %s has been logged at', 'kb-support' ), strtolower( $single ) ) . " {sitename}.\n\n" .
@@ -707,7 +707,7 @@ function kbs_get_registered_settings() {
 					'reply_notification' => array(
 						'id'   => 'reply_notification',
 						'name' => sprintf( __( '%s Reply Notification', 'kb-support' ), $single ),
-						'desc' => sprintf( __( 'Enter the text that is sent as a notification email when a customer submits a %s reply. HTML is accepted. Available template tags:' ), strtolower( $single ) ) . '<br />' . kbs_get_emails_tags_list(),
+						'desc' => sprintf( __( 'Enter the text that is sent as a notification email when a customer submits a %s reply. HTML is accepted. Available template tags:', 'kb-support' ), strtolower( $single ) ) . '<br />' . kbs_get_emails_tags_list(),
 						'type' => 'rich_editor',
 						'std'  => __( 'Hey there!', 'kb-support' ) . "\n\n" .
 								  sprintf( __( 'A new %s reply has been received at', 'kb-support' ), strtolower( $single ) ) . " {sitename}.\n\n" .
@@ -1653,7 +1653,7 @@ if ( ! function_exists( 'kbs_license_key_callback' ) ) {
 					default :
 
 						$class = 'error';
-						$error = ! empty(  $license->error ) ?  $license->error : __( 'unknown_error', 'easy-digital-downloads' );
+						$error = ! empty(  $license->error ) ?  $license->error : __( 'unknown_error', 'kb-support' );
 						$messages[] = sprintf( __( 'There was an error with this license key: %s. Please <a href="%s">contact our support team</a>.', 'kb-support' ), $error, 'https://kb-support.com/support' );
 
 						$license_status = 'license-' . $class . '-notice';
@@ -1826,24 +1826,24 @@ function kbs_get_pages( $force = false ) {
 function kbs_get_response_time_options()	{
 	
 	$response_times = array(
-		'1 hour'    => __( '1 Hour', 'mobile-dj-manager' ),
-		'2 hours'   => __( '2 Hours', 'mobile-dj-manager' ),
-		'3 hours'   => __( '3 Hours', 'mobile-dj-manager' ),
-		'4 hours'   => __( '4 Hours', 'mobile-dj-manager' ),
-		'5 hours'   => __( '5 Hours', 'mobile-dj-manager' ),
-		'6 hours'   => __( '6 Hours', 'mobile-dj-manager' ),
-		'7 hours'   => __( '7 Hours', 'mobile-dj-manager' ),
-		'8 hours'   => __( '7 Hours', 'mobile-dj-manager' ),
-		'1 day'     => __( '1 Day', 'mobile-dj-manager' ),
-		'2 days'    => __( '2 Days', 'mobile-dj-manager' ),
-		'3 days'    => __( '3 Days', 'mobile-dj-manager' ),
-		'4 days'    => __( '4 Days', 'mobile-dj-manager' ),
-		'5 days'    => __( '5 Days', 'mobile-dj-manager' ),
-		'6 days'    => __( '6 Days', 'mobile-dj-manager' ),
-		'1 week'    => __( '1 Week', 'mobile-dj-manager' ),
-		'2 weeks'   => __( '2 Weeks', 'mobile-dj-manager' ),
-		'3 weeks'   => __( '3 Weeks', 'mobile-dj-manager' ),
-		'4 weeks'   => __( '4 Weeks', 'mobile-dj-manager' )
+		'1 hour'    => __( '1 Hour', 'kb-support' ),
+		'2 hours'   => __( '2 Hours', 'kb-support' ),
+		'3 hours'   => __( '3 Hours', 'kb-support' ),
+		'4 hours'   => __( '4 Hours', 'kb-support' ),
+		'5 hours'   => __( '5 Hours', 'kb-support' ),
+		'6 hours'   => __( '6 Hours', 'kb-support' ),
+		'7 hours'   => __( '7 Hours', 'kb-support' ),
+		'8 hours'   => __( '7 Hours', 'kb-support' ),
+		'1 day'     => __( '1 Day', 'kb-support' ),
+		'2 days'    => __( '2 Days', 'kb-support' ),
+		'3 days'    => __( '3 Days', 'kb-support' ),
+		'4 days'    => __( '4 Days', 'kb-support' ),
+		'5 days'    => __( '5 Days', 'kb-support' ),
+		'6 days'    => __( '6 Days', 'kb-support' ),
+		'1 week'    => __( '1 Week', 'kb-support' ),
+		'2 weeks'   => __( '2 Weeks', 'kb-support' ),
+		'3 weeks'   => __( '3 Weeks', 'kb-support' ),
+		'4 weeks'   => __( '4 Weeks', 'kb-support' )
 	);
 	
 	return apply_filters( 'kbs_get_response_time_options', $response_times );

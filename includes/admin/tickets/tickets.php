@@ -35,7 +35,7 @@ function kbs_set_kbs_ticket_post_columns( $columns ) {
     );
 	
 	if ( kbs_track_sla() )	{
-		$columns['sla'] = __( 'SLA Status', 'kbs-support' );
+		$columns['sla'] = __( 'SLA Status', 'kb-support' );
 	}
 	
 	return apply_filters( 'kbs_ticket_post_columns', $columns );

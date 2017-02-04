@@ -71,7 +71,7 @@ function kbs_render_hidden_form_fields( $form_id )	{
 	ob_start(); ?>
 
 	<?php foreach( $hidden_fields as $key => $value ) : ?>
-    	<input type="hidden" name="<?php esc_attr_e( $key ); ?>" value="<?php esc_attr_e( $value ); ?>" />
+    	<input type="hidden" name="<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( $value ); ?>" />
     <?php endforeach; ?>
 
 	<?php wp_nonce_field( 'kbs-form-validate', 'kbs_log_ticket' ); ?>
@@ -111,7 +111,7 @@ function kbs_render_hidden_reply_fields( $ticket_id )	{
 	ob_start(); ?>
 
 	<?php foreach( $hidden_fields as $key => $value ) : ?>
-    	<input type="hidden" name="<?php esc_attr_e( $key ); ?>" value="<?php esc_attr_e( $value ); ?>" />
+    	<input type="hidden" name="<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( $value ); ?>" />
     <?php endforeach; ?>
 
 	<?php wp_nonce_field( 'kbs-reply-validate', 'kbs_ticket_reply' ); ?>

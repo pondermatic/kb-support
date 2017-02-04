@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: KB Support 0.9.2\n"
+"Project-Id-Version: KB Support 0.9.3\n"
 "Report-Msgid-Bugs-To: https://kb-support.com/\n"
-"POT-Creation-Date: 2017-01-29 17:29:41+00:00\n"
+"POT-Creation-Date: 2017-02-04 11:56:16+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,25 +24,29 @@ msgstr ""
 "X-Poedit-Bookmarks: \n"
 "X-Textdomain-Support: yes\n"
 
+#: includes/EDD_SL_Plugin_Updater.php:201
 #: includes/KBS_SL_Plugin_Updater.php:204
 msgid "There is a new version of %1$s available. %2$sView version %3$s details%4$s."
 msgstr ""
 
+#: includes/EDD_SL_Plugin_Updater.php:209
 #: includes/KBS_SL_Plugin_Updater.php:212
 msgid ""
 "There is a new version of %1$s available. %2$sView version %3$s details%4$s "
 "or %5$supdate now%6$s."
 msgstr ""
 
+#: includes/EDD_SL_Plugin_Updater.php:396
 #: includes/KBS_SL_Plugin_Updater.php:366
 msgid "You do not have permission to install plugin updates"
 msgstr ""
 
+#: includes/EDD_SL_Plugin_Updater.php:396
 #: includes/KBS_SL_Plugin_Updater.php:366
 #: includes/admin/customers/customer-actions.php:371
 #: includes/admin/customers/customer-actions.php:415
 #: includes/admin/tickets/metaboxes.php:69
-#: includes/admin/upgrades/upgrade-functions.php:101
+#: includes/admin/upgrades/upgrade-functions.php:109
 #: includes/class-kbs-license-handler.php:313
 msgid "Error"
 msgstr ""
@@ -191,7 +195,8 @@ msgstr ""
 msgid "KB Support Settings"
 msgstr ""
 
-#: includes/admin/admin-pages.php:32 includes/admin/forms/metaboxes.php:123
+#: includes/admin/admin-pages.php:32 includes/admin/admin-plugin.php:26
+#: includes/admin/forms/metaboxes.php:123
 #: includes/admin/forms/metaboxes.php:146
 msgid "Settings"
 msgstr ""
@@ -204,7 +209,22 @@ msgstr ""
 msgid "KBS Upgrades"
 msgstr ""
 
-#: includes/admin/admin-plugin.php:29
+#: includes/admin/admin-plugin.php:53 includes/admin/welcome.php:205
+msgid "Getting Started"
+msgstr ""
+
+#: includes/admin/admin-plugin.php:54
+#: includes/admin/settings/contextual-help.php:286
+#: includes/admin/settings/register-settings.php:1002
+#: includes/admin/welcome.php:368
+msgid "Extensions"
+msgstr ""
+
+#: includes/admin/admin-plugin.php:55 includes/admin/welcome.php:343
+msgid "Documentation"
+msgstr ""
+
+#: includes/admin/admin-plugin.php:78
 msgid ""
 "If <strong>KB Support</strong> is helping you support your customers, "
 "please <a href=\"%s\" target=\"_blank\">leave us a ★★★★★ rating</a>. A "
@@ -377,7 +397,7 @@ msgstr ""
 
 #: includes/admin/customers/class-kbs-customer-table.php:73
 #: includes/admin/tickets/tickets.php:31
-#: includes/tickets/ticket-functions.php:1167
+#: includes/tickets/ticket-functions.php:1171
 msgid "Customer"
 msgstr ""
 
@@ -392,7 +412,7 @@ msgstr ""
 
 #: includes/admin/customers/class-kbs-customer-table.php:159
 #: includes/admin/forms/metaboxes.php:220
-#: includes/tickets/ticket-functions.php:1294
+#: includes/tickets/ticket-functions.php:1298
 msgid "Delete"
 msgstr ""
 
@@ -646,8 +666,8 @@ msgstr ""
 
 #: includes/admin/customers/customers-page.php:348
 #: includes/admin/customers/customers-page.php:589
-#: includes/admin/forms/metaboxes.php:494
-#: includes/class-kbs-html-elements.php:761
+#: includes/admin/forms/metaboxes.php:494 includes/admin/thickbox.php:103
+#: includes/class-kbs-html-elements.php:836
 msgid "Cancel"
 msgstr ""
 
@@ -1344,12 +1364,6 @@ msgid ""
 "all other elements will be inherited from your currently active theme."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:286
-#: includes/admin/settings/register-settings.php:1002
-#: includes/admin/welcome.php:367
-msgid "Extensions"
-msgstr ""
-
 #: includes/admin/settings/contextual-help.php:288
 msgid ""
 "The configuration settings for any KB Support extensions you have installed "
@@ -1581,7 +1595,7 @@ msgid "The label for the %s reply form submit button."
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:328
-#: includes/admin/tickets/metaboxes.php:476 includes/template-functions.php:50
+#: includes/admin/tickets/metaboxes.php:478 includes/template-functions.php:50
 #: templates/view-ticket.php:217
 msgid "Reply"
 msgstr ""
@@ -1625,8 +1639,8 @@ msgstr ""
 #: includes/admin/settings/register-settings.php:363
 msgid ""
 "If enabled, Support Agents will only be able to see %1$s that are assigned "
-"to them , or %1$s that are not yet assigned. If the agent is an "
-"administrator, they will always see all %1$s."
+"to them or %1$s that are not yet assigned. If the current user is a Support "
+"Manager or an Administrator, they will always see all %1$s."
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:368
@@ -2417,6 +2431,30 @@ msgstr ""
 msgid "7 Hours"
 msgstr ""
 
+#: includes/admin/thickbox.php:38 includes/admin/thickbox.php:102
+msgid "Link %s"
+msgstr ""
+
+#: includes/admin/thickbox.php:76
+msgid "You must choose a %s."
+msgstr ""
+
+#: includes/admin/thickbox.php:92
+msgid "Complete the form below to insert a link to a %s"
+msgstr ""
+
+#: includes/admin/thickbox.php:94
+msgid "Enter Link Text"
+msgstr ""
+
+#: includes/admin/thickbox.php:96
+msgid "Leave empty to use %s title"
+msgstr ""
+
+#: includes/admin/thickbox.php:98
+msgid "Select %s"
+msgstr ""
+
 #: includes/admin/tickets/contextual-help.php:65
 msgid ""
 "<strong>Title</strong> - The %1$s title will be seen on the admin screen as "
@@ -2437,8 +2475,8 @@ msgid ""
 "and reporting."
 msgstr ""
 
-#: includes/admin/tickets/contextual-help.php:80 includes/admin/welcome.php:325
-#: includes/tickets/ticket-functions.php:1118
+#: includes/admin/tickets/contextual-help.php:80 includes/admin/welcome.php:326
+#: includes/tickets/ticket-functions.php:1122
 msgid "Create %s"
 msgstr ""
 
@@ -2556,28 +2594,28 @@ msgstr ""
 msgid "This %1$s is currently closed. <a href=\"%2$s\">Re-open %3$s.</a>"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:461
+#: includes/admin/tickets/metaboxes.php:463
 msgid "Add a New Reply"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:477
+#: includes/admin/tickets/metaboxes.php:479
 msgid "Reply and Close"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:521
+#: includes/admin/tickets/metaboxes.php:523
 msgid "Add a New Note"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:525
+#: includes/admin/tickets/metaboxes.php:527
 msgid "Notes are only visible to support workers"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:538
+#: includes/admin/tickets/metaboxes.php:540
 msgid "Add Note"
 msgstr ""
 
 #: includes/admin/tickets/tickets.php:34
-#: includes/tickets/ticket-functions.php:1160 templates/view-ticket.php:101
+#: includes/tickets/ticket-functions.php:1164 templates/view-ticket.php:101
 msgid "Agent"
 msgstr ""
 
@@ -2623,13 +2661,13 @@ msgstr ""
 msgid "Download System Info File"
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:71
+#: includes/admin/upgrades/upgrade-functions.php:79
 msgid ""
-"KB Supportneeds to complete an upgrade that was previously started. Click "
+"KB Support needs to complete an upgrade that was previously started. Click "
 "<a href=\"%s\">here</a> to resume the upgrade."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:101
+#: includes/admin/upgrades/upgrade-functions.php:109
 msgid "You do not have permission to do perform KBS upgrades"
 msgstr ""
 
@@ -2686,38 +2724,46 @@ msgstr ""
 msgid "KB Support %s is ready to make improve your support business efficiency!"
 msgstr ""
 
-#: includes/admin/welcome.php:205
-msgid "Getting Started"
+#: includes/admin/welcome.php:229
+msgid "Ooops well that's embarrasing!"
 msgstr ""
 
-#: includes/admin/welcome.php:241 includes/admin/welcome.php:272
+#: includes/admin/welcome.php:235
+msgid "Content for this page will be added during plugin updates."
+msgstr ""
+
+#: includes/admin/welcome.php:236
+msgid "For now, visit the Getting Started tab."
+msgstr ""
+
+#: includes/admin/welcome.php:242 includes/admin/welcome.php:273
 msgid "Go to KB Support Settings"
 msgstr ""
 
-#: includes/admin/welcome.php:242
+#: includes/admin/welcome.php:243
 msgid "View the Full Changelog"
 msgstr ""
 
-#: includes/admin/welcome.php:264
+#: includes/admin/welcome.php:265
 msgid "Full Changelog"
 msgstr ""
 
-#: includes/admin/welcome.php:301
+#: includes/admin/welcome.php:302
 msgid "Start Receiving &amp; Managing Support %s"
 msgstr ""
 
-#: includes/admin/welcome.php:304
+#: includes/admin/welcome.php:305
 msgid "Optimise Settings"
 msgstr ""
 
-#: includes/admin/welcome.php:305
+#: includes/admin/welcome.php:306
 msgid ""
 "KB Support will work as soon as installed and activated as we've set the "
 "default settings for you, however you should review the options and ensure "
 "they're fully optimised for your support business."
 msgstr ""
 
-#: includes/admin/welcome.php:306
+#: includes/admin/welcome.php:307
 msgid ""
 "These settings define the communication flow and content between your "
 "business and your customers, as well as determine who can submit a %s, how "
@@ -2725,21 +2771,21 @@ msgid ""
 "undertake, plus much more."
 msgstr ""
 
-#: includes/admin/welcome.php:308
+#: includes/admin/welcome.php:309
 msgid "%s &rarr; Settings"
 msgstr ""
 
-#: includes/admin/welcome.php:313
+#: includes/admin/welcome.php:314
 msgid "Customise your Submission Form(s)"
 msgstr ""
 
-#: includes/admin/welcome.php:314
+#: includes/admin/welcome.php:315
 msgid ""
 "The %s submission forms are the first point at which your customers can "
 "provide you with details regarding the issues they are experiencing."
 msgstr ""
 
-#: includes/admin/welcome.php:315
+#: includes/admin/welcome.php:316
 msgid ""
 "We created a <a href=\"%s\">default form</a> for you during install, but it "
 "is fully customisable and you should ensure it has all the fields you need "
@@ -2747,18 +2793,18 @@ msgid ""
 "customers in order to efficiently address their issue."
 msgstr ""
 
-#: includes/admin/welcome.php:317
+#: includes/admin/welcome.php:318
 msgid "%s &rarr; Submission Forms"
 msgstr ""
 
-#: includes/admin/welcome.php:326
+#: includes/admin/welcome.php:327
 msgid ""
 "%1$s provide a single document repository for your products and/or services "
 "that is readily available to support customers assisting them in resolving "
 "any issues they may be experiencing."
 msgstr ""
 
-#: includes/admin/welcome.php:327
+#: includes/admin/welcome.php:328
 msgid ""
 "Support Workers are provided with a number of prompts to quickly and easily "
 "publish new %1$s during the management of a %3$s and as soon as it is "
@@ -2766,64 +2812,60 @@ msgid ""
 "listing, and whilst they are in the process of logging a new %3$s."
 msgstr ""
 
-#: includes/admin/welcome.php:328
+#: includes/admin/welcome.php:329
 msgid ""
 "Furthermore, individual %1$s can be restricted so that only customers with "
 "an active account on your website are able to view their content."
 msgstr ""
 
-#: includes/admin/welcome.php:332
+#: includes/admin/welcome.php:333
 msgid "%1$s &rarr; New %2$s"
 msgstr ""
 
-#: includes/admin/welcome.php:339
+#: includes/admin/welcome.php:340
 msgid "We're Here to Help"
 msgstr ""
 
-#: includes/admin/welcome.php:342
-msgid "Documentation"
-msgstr ""
-
-#: includes/admin/welcome.php:343
+#: includes/admin/welcome.php:344
 msgid ""
 "We have a growing library of <a href=\"https://kb-support.com/support/\" "
 "target=\"_blank\">Support Documents</a> to help new and advanced users with "
 "features and customisations."
 msgstr ""
 
-#: includes/admin/welcome.php:346
+#: includes/admin/welcome.php:347
 msgid "Excellent Support"
 msgstr ""
 
-#: includes/admin/welcome.php:347
+#: includes/admin/welcome.php:348
 msgid ""
 "We pride ourselves on our level of support and excellent response times. If "
 "you are experiencing an issue, <a href=\"%s\" target=\"_blank\">submit a "
 "support ticket</a> and we will respond quickly."
 msgstr ""
 
-#: includes/admin/welcome.php:353
+#: includes/admin/welcome.php:354
 msgid "Get the Latest News"
 msgstr ""
 
-#: includes/admin/welcome.php:354
+#: includes/admin/welcome.php:355
 msgid ""
 "<a href=\"%s\" target=\"_blank\">Subscribe to our Newsletter</a> for all "
 "the latest news and offers from KB Support."
 msgstr ""
 
-#: includes/admin/welcome.php:357
+#: includes/admin/welcome.php:358
 msgid "Get Social"
 msgstr ""
 
-#: includes/admin/welcome.php:358
+#: includes/admin/welcome.php:359
 msgid ""
 "The <a href=\"%s\" target=\"_blank\">KB Support Facebook Page</a> and our "
 "<a href=\"%s\" target=\"_blank\">Twitter Account</a> are also great places "
 "for the latest news."
 msgstr ""
 
-#: includes/admin/welcome.php:368
+#: includes/admin/welcome.php:369
 msgid ""
 "We have an ever growing catalogue of extensions available at our <a "
 "href=\"%s\" target=\"_blank\">plugin store</a> that will extend the "
@@ -2831,11 +2873,11 @@ msgid ""
 "experience."
 msgstr ""
 
-#: includes/admin/welcome.php:371
+#: includes/admin/welcome.php:372
 msgid "Contribute to KB Support"
 msgstr ""
 
-#: includes/admin/welcome.php:372
+#: includes/admin/welcome.php:373
 msgid ""
 "Anyone is welcome to contribute to KB Support and we'd love you to get "
 "involved with our project. Please read the <a href=\"\" "
@@ -2843,57 +2885,57 @@ msgid ""
 "target=\"_blank\">GitHub repository</a>."
 msgstr ""
 
-#: includes/admin/welcome.php:373
+#: includes/admin/welcome.php:374
 msgid "There are various ways you can contribute"
 msgstr ""
 
-#: includes/admin/welcome.php:374
+#: includes/admin/welcome.php:375
 msgid "<a href=\"%s\" target=\"_blank\">Raise an Issue on GitHub</a>"
 msgstr ""
 
-#: includes/admin/welcome.php:375
+#: includes/admin/welcome.php:376
 msgid ""
 "<a href=\"%s\" target=\"_blank\">Send us a Pull Request</a> with your bug "
 "fixes and/or new features"
 msgstr ""
 
-#: includes/admin/welcome.php:376
+#: includes/admin/welcome.php:377
 msgid ""
 "<a href=\"%s\" target=\"_blank\">Translate KB Support</a> into different "
 "languages"
 msgstr ""
 
-#: includes/admin/welcome.php:377
+#: includes/admin/welcome.php:378
 msgid ""
 "Provide feedback and suggestions on <a href=\"%s\" "
 "target=\"_blank\">enhancements</a>"
 msgstr ""
 
-#: includes/admin/welcome.php:378
+#: includes/admin/welcome.php:379
 msgid "Assist with maintaining documentation"
 msgstr ""
 
-#: includes/admin/welcome.php:386
+#: includes/admin/welcome.php:387
 msgid "Configure Settings"
 msgstr ""
 
-#: includes/admin/welcome.php:389 includes/admin/welcome.php:395
+#: includes/admin/welcome.php:390 includes/admin/welcome.php:396
 msgid "Go to %s"
 msgstr ""
 
-#: includes/admin/welcome.php:392
+#: includes/admin/welcome.php:393
 msgid "Manage Submission Forms"
 msgstr ""
 
-#: includes/admin/welcome.php:398
+#: includes/admin/welcome.php:399
 msgid "View Extensions"
 msgstr ""
 
-#: includes/admin/welcome.php:401
+#: includes/admin/welcome.php:402
 msgid "WordPress Dashboard"
 msgstr ""
 
-#: includes/admin/welcome.php:419
+#: includes/admin/welcome.php:420
 msgid "No valid changelog was found."
 msgstr ""
 
@@ -2925,23 +2967,27 @@ msgstr ""
 msgid "Can't get property %s"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:192
+#: includes/class-kbs-html-elements.php:100
+msgid "Select a %s"
+msgstr ""
+
+#: includes/class-kbs-html-elements.php:267
 msgid "Select a Customer"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:206
+#: includes/class-kbs-html-elements.php:281
 msgid "No customer attached"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:212
+#: includes/class-kbs-html-elements.php:287
 msgid "No customers found"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:272
+#: includes/class-kbs-html-elements.php:347
 msgid "Select an Agent"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:746
+#: includes/class-kbs-html-elements.php:821
 msgid "Enter username"
 msgstr ""
 
@@ -3440,12 +3486,11 @@ msgstr ""
 msgid "Profile updated successfully."
 msgstr ""
 
-#. Plugin Name of the plugin/theme
-msgid "KB Support"
-msgstr ""
-
 #: includes/misc-functions.php:344
-msgid "Powered by KB Support"
+msgid ""
+"Powered by <a href=\"%s\" title=\"KB Support\" target=\"_blank\">KB "
+"Support</a>. The ultimate help desk and knowledge base support tool plugin "
+"for WordPress. <a href=\"%s\" target=\"_blank\">Download for free</a>."
 msgstr ""
 
 #: includes/post-types.php:31
@@ -3765,47 +3810,55 @@ msgstr ""
 msgid "%2$s submitted. %1$sView %2$s%3$s."
 msgstr ""
 
-#: includes/post-types.php:622 includes/post-types.php:623
+#: includes/post-types.php:619
+msgid "%1$s draft updated. <a target=\"_blank\" href=\"%2$s\">Preview %1$s</a>"
+msgstr ""
+
+#: includes/post-types.php:623 includes/post-types.php:624
 msgid "Form updated."
 msgstr ""
 
-#: includes/post-types.php:624
+#: includes/post-types.php:625
 msgid "Form published."
 msgstr ""
 
-#: includes/post-types.php:625
+#: includes/post-types.php:626
 msgid "Form saved."
 msgstr ""
 
-#: includes/post-types.php:626
+#: includes/post-types.php:627
 msgid "Form submitted."
 msgstr ""
 
-#: includes/post-types.php:650 includes/post-types.php:658
+#: includes/post-types.php:628
+msgid "Form draft updated."
+msgstr ""
+
+#: includes/post-types.php:652 includes/post-types.php:660
 msgid "%1$s %2$s updated."
 msgid_plural "%1$s %3$s updated."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/post-types.php:651 includes/post-types.php:659
+#: includes/post-types.php:653 includes/post-types.php:661
 msgid "%1$s %2$s not updated, somebody is editing it."
 msgid_plural "%1$s %3$s not updated, somebody is editing them."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/post-types.php:652 includes/post-types.php:660
+#: includes/post-types.php:654 includes/post-types.php:662
 msgid "%1$s %2$s permanently deleted."
 msgid_plural "%1$s %3$s permanently deleted."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/post-types.php:653 includes/post-types.php:661
+#: includes/post-types.php:655 includes/post-types.php:663
 msgid "%1$s %2$s moved to the Trash."
 msgid_plural "%1$s %3$s moved to the Trash."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/post-types.php:654 includes/post-types.php:662
+#: includes/post-types.php:656 includes/post-types.php:664
 msgid "%1$s %2$s restored from the Trash."
 msgid_plural "%1$s %3$s restored from the Trash."
 msgstr[0] ""
@@ -3906,25 +3959,29 @@ msgstr ""
 msgid "Other"
 msgstr ""
 
-#: includes/tickets/ticket-functions.php:969
+#: includes/tickets/ticket-functions.php:973
 msgid "%s re-opened."
 msgstr ""
 
-#: includes/tickets/ticket-functions.php:1112
+#: includes/tickets/ticket-functions.php:1116
 msgid "attached file"
 msgid_plural "attached files"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/tickets/ticket-functions.php:1154
+#: includes/tickets/ticket-functions.php:1158
 msgid "Unknown"
 msgstr ""
 
-#: includes/tickets/ticket-functions.php:1278
+#: includes/tickets/ticket-functions.php:1282
 msgid "KBS Bot"
 msgstr ""
 
-#: kb-support.php:152 kb-support.php:164
+#. Plugin Name of the plugin/theme
+msgid "KB Support"
+msgstr ""
+
+#: kb-support.php:153 kb-support.php:165
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
@@ -4065,9 +4122,7 @@ msgid "https://kb-support.com/"
 msgstr ""
 
 #. Description of the plugin/theme
-msgid ""
-"All in one Support desk and knowledge base. Easy to use, easy to manage, "
-"loved by customers"
+msgid "The ultimate help desk and knowledge base support tool plugin for WordPress."
 msgstr ""
 
 #. Author of the plugin/theme
@@ -4075,27 +4130,28 @@ msgid "Mike Howard <mike@mikesplugins.co.uk>"
 msgstr ""
 
 #. Author URI of the plugin/theme
-msgid "http://mikesplugins.co.uk"
+msgid "https://kb-support.com"
 msgstr ""
 
 #. Tags of the plugin/theme
 msgid ""
-"Support Desk, Knowledgebase, KB, Support, Ticketing System, Agents, "
-"Customers, Support Tool, Help Desk"
+"Helpdesk, Help Desk, Support, Customer Support, Service, Service Desk, "
+"ITIL, Support Helpdesk, Ticket, Ticket System, Support Tickets, Helpdesk "
+"Tickets, Knowledgebase, Knowledge Base"
 msgstr ""
 
 #: includes/class-kbs-html-elements.php:75
-#: includes/class-kbs-html-elements.php:104
+#: includes/class-kbs-html-elements.php:179
 msgctxt "plural: Example: \"All Categories\""
 msgid "All %s"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:298
+#: includes/class-kbs-html-elements.php:373
 msgctxt "all dropdown items"
 msgid "All"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:299
+#: includes/class-kbs-html-elements.php:374
 msgctxt "no dropdown items"
 msgid "None"
 msgstr ""
