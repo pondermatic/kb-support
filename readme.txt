@@ -105,6 +105,7 @@ Until we reach version 1.0+ we are still classing this plugin as in beta testing
 
 **Tweaks**
 
+* Tidied javascript code
 * Added draft updated message for articles and forms
 * Users with manage_ticket_settings capability (Administrator & Support Manager by default) can now delete tickets
 * Support Managers should always see all tickets, even when the `Restrict Agent Ticket View?` setting option is enabled
