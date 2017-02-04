@@ -611,19 +611,21 @@ function kbs_updated_messages( $messages ) {
 	);
 	
 	$messages['article'] = array(
-		1 => sprintf( __( '%2$s updated. %1$sView %2$s%3$s.', 'kb-support'   ), $url1, $url3, $url4 ),
-		4 => sprintf( __( '%2$s updated. %1$sView %2$s%3$s.', 'kb-support'   ), $url1, $url3, $url4 ),
-		6 => sprintf( __( '%2$s published. %1$sView %2$s%3$s.', 'kb-support' ), $url1, $url3, $url4 ),
-		7 => sprintf( __( '%2$s saved. %1$sView %2$s%3$s.', 'kb-support'     ), $url1, $url3, $url4 ),
-		8 => sprintf( __( '%2$s submitted. %1$sView %2$s%3$s.', 'kb-support' ), $url1, $url3, $url4 )
+		1  => sprintf( __( '%2$s updated. %1$sView %2$s%3$s.', 'kb-support'   ), $url1, $url3, $url4 ),
+		4  => sprintf( __( '%2$s updated. %1$sView %2$s%3$s.', 'kb-support'   ), $url1, $url3, $url4 ),
+		6  => sprintf( __( '%2$s published. %1$sView %2$s%3$s.', 'kb-support' ), $url1, $url3, $url4 ),
+		7  => sprintf( __( '%2$s saved. %1$sView %2$s%3$s.', 'kb-support'     ), $url1, $url3, $url4 ),
+		8  => sprintf( __( '%2$s submitted. %1$sView %2$s%3$s.', 'kb-support' ), $url1, $url3, $url4 ),
+		10 => sprintf( __( '%1$s draft updated. <a target="_blank" href="%2$s">Preview %1$s</a>', 'kb-support' ), $url3, esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) )
 	);
 	
 	$messages['kbs_form'] = array(
-		1 => __( 'Form updated.', 'kb-support'   ),
-		4 => __( 'Form updated.', 'kb-support'   ),
-		6 => __( 'Form published.', 'kb-support' ),
-		7 => __( 'Form saved.', 'kb-support'     ),
-		8 => __( 'Form submitted.', 'kb-support' )
+		1  => __( 'Form updated.', 'kb-support'   ),
+		4  => __( 'Form updated.', 'kb-support'   ),
+		6  => __( 'Form published.', 'kb-support' ),
+		7  => __( 'Form saved.', 'kb-support'     ),
+		8  => __( 'Form submitted.', 'kb-support' ),
+		10 => __( 'Form draft updated.', 'kb-support' )
 	);
 
 	return $messages;

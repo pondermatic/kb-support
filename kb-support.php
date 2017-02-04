@@ -2,16 +2,17 @@
 /**
  * Plugin Name: KB Support
  * Plugin URI: https://kb-support.com/
- * Description: All in one Support desk and knowledge base. Easy to use, easy to manage, loved by customers
- * Version: 0.9.2
- * Date: 30 January 2017
+ * Description: The ultimate help desk and knowledge base support tool plugin for WordPress.
+ * Version: 0.9.3
+ * Date: 04 February 2017
  * Author: Mike Howard <mike@mikesplugins.co.uk>
  * Author URI: https://kb-support.com
  * Text Domain: kb-support
  * Domain Path: /languages
  * License: GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Tags: Support Desk, Knowledgebase, KB, Support, Ticketing System, Agents, Customers, Support Tool, Help Desk
+ * GitHub Plugin URI: https://github.com/KB-Support/kb-support
+ * Tags:  Helpdesk, Help Desk, Support, Customer Support, Service, Service Desk, ITIL, Support Helpdesk, Ticket, Ticket System, Support Tickets, Helpdesk Tickets, Knowledgebase, Knowledge Base
  *
  *
  * KB Support is free software; you can redistribute it and/or modify
@@ -174,7 +175,7 @@ final class KB_Support {
 	private function setup_constants()	{
 
 		if ( ! defined( 'KBS_VERSION' ) )	{
-			define( 'KBS_VERSION', '0.9.2' );
+			define( 'KBS_VERSION', '0.9.3' );
 		}
 
 		if ( ! defined( 'KBS_PLUGIN_DIR' ) )	{
@@ -270,6 +271,7 @@ final class KB_Support {
 			require_once KBS_PLUGIN_DIR . 'includes/admin/forms/contextual-help.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/settings/display-settings.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/settings/contextual-help.php';
+			require_once KBS_PLUGIN_DIR . 'includes/admin/thickbox.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/tools.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/upgrades/upgrade-functions.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/upgrades/upgrades.php';

@@ -14,7 +14,7 @@ global $kbs_form;
             <?php do_action( 'kbs_ticket_form_top' ); ?>
 
             <fieldset id="kbs_ticket_form_fields">
-                <legend><?php esc_attr_e( get_the_title( $kbs_form->ID ) ); ?></legend>
+                <legend><?php echo esc_attr( get_the_title( $kbs_form->ID ) ); ?></legend>
 
 				<?php if( is_ssl() ) : ?>
                     <div id="kbs_secure_site_wrapper">
@@ -36,7 +36,7 @@ global $kbs_form;
 
                             <label for="<?php echo $field->post_name; ?>"<?php echo $label_class; ?>>
 
-                                <?php esc_attr_e( get_the_title( $field->ID ) ); ?>
+                                <?php echo esc_attr( get_the_title( $field->ID ) ); ?>
 
                                 <?php if ( $settings['required'] ) : ?>
                                     <span class="kbs-required-indicator">*</span>
@@ -81,7 +81,7 @@ global $kbs_form;
             	<?php do_action( 'kbs_ticket_form_before_submit' ); ?>
             	<?php kbs_render_hidden_form_fields( $kbs_form->ID ); ?>
 
-                <input class="button" name="kbs_ticket_submit" id="kbs_ticket_submit" type="submit" value="<?php esc_attr_e( kbs_get_form_submit_label() ); ?>" />
+                <input class="button" name="kbs_ticket_submit" id="kbs_ticket_submit" type="submit" value="<?php echo esc_attr( kbs_get_form_submit_label() ); ?>" />
 
                 <?php do_action( 'kbs_ticket_form_after_submit' ); ?>
 

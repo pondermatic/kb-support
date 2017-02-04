@@ -1,6 +1,6 @@
 === KB Support ===
 Contributors: mikeyhoward1977
-Tags: Helpdesk, Support, Service, Support Helpdesk, Ticket, Ticket System, Support Tickets, Helpdesk Tickets, SLA, Service Desk, Knowledgbase, KB, KB Articles, Forms
+Tags: Helpdesk, Help Desk, Support, Customer Support, Service, Service Desk, ITIL, Support Helpdesk, Ticket, Ticket System, Support Tickets, Helpdesk Tickets, Knowledgebase, Knowledge Base
 Requires at least: 4.1
 Tested up to: 4.7.2
 Stable tag: 0.9.2
@@ -8,7 +8,7 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
 
-KB Support is an easy to use and extremley effective Helpdesk Support System.
+The ultimate help desk and knowledge base support tool plugin for WordPress. Give your customers the support they expect directly from your WordPress site.
 
 == Description ==
 
@@ -96,6 +96,25 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 == Changelog ==
 
 Until we reach version 1.0+ we are still classing this plugin as in beta testing.
+
+= 0.9.3 =
+
+**New**
+
+* Added **Link KB Article** media button to admin ticket reply form enabling quick and easy inserting of links to KB Articles from reply form
+
+**Tweaks**
+
+* Tidied javascript code
+* Added draft updated message for articles and forms
+* Users with manage_ticket_settings capability (Administrator & Support Manager by default) can now delete tickets
+* Support Managers should always see all tickets, even when the `Restrict Agent Ticket View?` setting option is enabled
+
+**Bug Fixes**
+
+* Re-open ticket link failed to re-open ticket
+* Don't count agent views for articles
+* Support Customers should not have the upload_files capability
 
 = 0.9.2 =
 

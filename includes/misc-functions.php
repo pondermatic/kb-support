@@ -341,7 +341,7 @@ function kbs_add_credit_text()	{
 	if ( kbs_get_option( 'show_credits', false ) )	{
 		ob_start(); ?>
 
-		<span class="kbs-description"><a href="https://kb-support.com/" title="<?php _e( 'KB Support', 'kb-support' ); ?>" target="_blank"><?php _e( 'Powered by KB Support', 'kb-support' ); ?></a></span>
+		<span class="kbs-description"><?php printf( __( 'Powered by <a href="%s" title="KB Support" target="_blank">KB Support</a>. The ultimate help desk and knowledge base support tool plugin for WordPress. <a href="%s" target="_blank">Download for free</a>.', 'kb-support' ), 'https://kb-support.com/', 'https://wordpress.org/plugins/kb-support' ); ?></a></span>
 
 		<?php echo ob_get_clean();
 	}

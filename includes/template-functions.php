@@ -71,7 +71,7 @@ function kbs_render_hidden_form_fields( $form_id )	{
 	ob_start(); ?>
 
 	<?php foreach( $hidden_fields as $key => $value ) : ?>
-    	<input type="hidden" name="<?php esc_attr_e( $key ); ?>" value="<?php esc_attr_e( $value ); ?>" />
+    	<input type="hidden" name="<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( $value ); ?>" />
     <?php endforeach; ?>
 
 	<?php wp_nonce_field( 'kbs-form-validate', 'kbs_log_ticket' ); ?>
@@ -111,7 +111,7 @@ function kbs_render_hidden_reply_fields( $ticket_id )	{
 	ob_start(); ?>
 
 	<?php foreach( $hidden_fields as $key => $value ) : ?>
-    	<input type="hidden" name="<?php esc_attr_e( $key ); ?>" value="<?php esc_attr_e( $value ); ?>" />
+    	<input type="hidden" name="<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( $value ); ?>" />
     <?php endforeach; ?>
 
 	<?php wp_nonce_field( 'kbs-reply-validate', 'kbs_ticket_reply' ); ?>
@@ -176,11 +176,15 @@ add_filter( 'the_content', 'kbs_after_article_content', 100 );
  * @return	void
  */
 function kbs_article_maybe_increment_views()	{
-	if ( is_admin() && ! ( defined( 'DOING_AJAX' ) && DOING_AJAX ) )	{
+	if ( is_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) )	{
 		return;
 	}
 
 	if ( 'article' != get_post_type() || ! is_singular( 'article' ) )	{
+		return;
+	}
+
+	if ( is_user_logged_in() && kbs_is_agent( get_current_user_id() ) )	{
 		return;
 	}
 

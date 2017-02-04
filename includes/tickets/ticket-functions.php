@@ -247,7 +247,7 @@ function kbs_count_tickets( $args = array() ) {
 		$join = "LEFT JOIN $wpdb->postmeta m ON (p.ID = m.post_id)";
 		$where .= $wpdb->prepare( "
 			AND m.meta_key = %s
-			AND m.meta_value = %s",
+			AND m.meta_value = %d",
 			'_kbs_ticket_agent_id',
 			$args['agent']
 		);
@@ -951,22 +951,26 @@ function kbs_get_ticket_source( $ticket_id )	{
  * @param	arr	$data		$_GET super global.
  * @return	void.
  */
-function kbs_reopen_ticket( $data )	{
+function kbs_reopen_ticket()	{
 
-	if( ! isset( $data['kbs-ticket-nonce'] ) || ! wp_verify_nonce( $data[ 'kbs-ticket-nonce' ], 'kbs-reopen-ticket' ) )	{
+	if ( ! isset( $_GET['kbs-action'] ) || 're-open-ticket' != $_GET['kbs-action'] )	{
+		return;
+	}
+
+	if( ! isset( $_GET['kbs-ticket-nonce'] ) || ! wp_verify_nonce( $_GET[ 'kbs-ticket-nonce' ], 'kbs-reopen-ticket' ) )	{
 		$message = 'nonce_fail';
 	} else	{
 		remove_action( 'save_post_kbs_ticket', 'kbs_ticket_post_save', 10, 3 );
 	
-		if ( 'closed' == get_post_status( $data['post'] ) )	{
+		if ( 'closed' == get_post_status( $_GET['post'] ) )	{
 			$update = wp_update_post( array(
-				'ID'          => $data['post'],
+				'ID'          => $_GET['post'],
 				'post_status' => 'open'
 			) );
 			
 			if ( $update )	{
 				$message = 'ticket_reopened';
-				kbs_insert_note( $data['post'], sprintf( __( '%s re-opened.', 'kb-support' ), kbs_get_ticket_label_singular() ) ); 
+				kbs_insert_note( $_GET['post'], sprintf( __( '%s re-opened.', 'kb-support' ), kbs_get_ticket_label_singular() ) ); 
 			}
 		}
 		
@@ -983,7 +987,7 @@ function kbs_reopen_ticket( $data )	{
 	die();
 
 } // kbs_reopen_ticket
-add_action( 'kbs-re-open-ticket', 'kbs_reopen_ticket' );
+add_action( 'admin_init', 'kbs_reopen_ticket' );
 
 /**
  * Update the ticket status to open if the status is currently new.
@@ -1109,7 +1113,7 @@ function kbs_get_reply_html( $reply, $ticket_id = 0 ) {
 	$reply_html  ='<h3>';
 		$reply_html .= $author . '&nbsp;&ndash;&nbsp;' . date_i18n( $date_format, strtotime( $reply->post_date ) );
 		if ( $file_count )	{
-			$reply_html .= ' (' . $file_count . ' ' . _n( 'attached file', 'attached files', $file_count ) . ')';
+			$reply_html .= ' (' . $file_count . ' ' . _n( 'attached file', 'attached files', $file_count, 'kb-support' ) . ')';
 		}
 	$reply_html .= '</h3>';
 

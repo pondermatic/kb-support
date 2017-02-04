@@ -33,7 +33,7 @@ class KBS_Cron	{
 		// Adds once weekly to the existing schedules.
 		$schedules['weekly'] = array(
 			'interval' => 604800,
-			'display'  => __( 'Once Weekly', 'mobile-dj-manager' )
+			'display'  => __( 'Once Weekly', 'kb-support' )
 		);
 
 		return $schedules;

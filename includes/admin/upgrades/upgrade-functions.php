@@ -26,6 +26,12 @@ function kbs_do_automatic_upgrades() {
 	$did_upgrade = false;
 	$kbs_version = preg_replace( '/[^0-9.].*/', '', get_option( 'kbs_version' ) );
 
+	if( version_compare( $kbs_version, '0.9.3', '<' ) ) {
+
+		kbs_v093_upgrades();
+
+	}
+
 	if ( version_compare( $kbs_version, KBS_VERSION, '<' ) )	{
 
 		// Let us know that an upgrade has happened
@@ -151,3 +157,23 @@ function kbs_set_upgrade_complete( $upgrade_action = '' ) {
 
 	return update_option( 'kbs_completed_upgrades', $completed_upgrades );
 } // kbs_set_upgrade_complete
+
+/**
+ * Upgrade routine to remove upload_files capability from Support Customer.
+ *
+ * @since	0.9.3
+ * @return	void
+ */
+function kbs_v093_upgrades()	{
+	global $wp_roles;
+
+	if ( class_exists('WP_Roles') ) {
+		if ( ! isset( $wp_roles ) ) {
+			$wp_roles = new WP_Roles();
+		}
+	}
+
+	if ( is_object( $wp_roles ) )	{
+		$wp_roles->remove_cap( 'support_customer', 'upload_files' );
+	}
+} // kbs_v093_upgrades

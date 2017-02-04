@@ -90,11 +90,11 @@ class KBS_Customer_Table extends WP_List_Table {
 		$input_id = $input_id . '-search-input';
 
 		if ( ! empty( $_REQUEST['orderby'] ) ) : ?>
-			<input type="hidden" name="orderby" value="<?php esc_attr_e( $_REQUEST['orderby'] ); ?>" />
+			<input type="hidden" name="orderby" value="<?php echo esc_attr( $_REQUEST['orderby'] ); ?>" />
         <?php endif;
 
 		if ( ! empty( $_REQUEST['order'] ) ) : ?>
-			<input type="hidden" name="order" value="<?php esc_attr_e( $_REQUEST['order'] ); ?>" />
+			<input type="hidden" name="order" value="<?php echo esc_attr( $_REQUEST['order'] ); ?>" />
 		<?php endif; ?>
 
 		<p class="search-box">

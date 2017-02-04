@@ -35,7 +35,7 @@ function kbs_set_kbs_ticket_post_columns( $columns ) {
     );
 	
 	if ( kbs_track_sla() )	{
-		$columns['sla'] = __( 'SLA Status', 'kbs-support' );
+		$columns['sla'] = __( 'SLA Status', 'kb-support' );
 	}
 	
 	return apply_filters( 'kbs_ticket_post_columns', $columns );
@@ -232,7 +232,7 @@ function kbs_restrict_agent_ticket_view( $query )	{
 	}
 
 	// If user is admin and admins are agents, they see all.
-	if ( kbs_get_option( 'admin_agents' ) && current_user_can( 'administrator' ) )	{
+	if ( kbs_get_option( 'admin_agents' ) && ( current_user_can( 'manage_ticket_settings' ) || current_user_can( 'administrator' ) ) )	{
 		return;
 	}
 
@@ -443,10 +443,14 @@ function kbs_tickets_remove_trash_action( $actions )	{
 
 		$remove_actions = array( 'edit', 'trash', 'inline hide-if-no-js' );
 
-		foreach( $remove_actions as $remove_actions )	{
+		foreach( $remove_actions as $remove_action )	{
 
-			if ( isset( $actions[ $remove_actions ] ) )	{
-				unset( $actions[ $remove_actions ] );
+			if ( doing_filter( 'bulk_actions-edit-kbs_ticket' ) && current_user_can( 'manage_ticket_settings' ) && 'trash' == $remove_action )	{
+				continue;
+			}
+
+			if ( isset( $actions[ $remove_action ] ) )	{
+				unset( $actions[ $remove_action ] );
 			}
 
 		}

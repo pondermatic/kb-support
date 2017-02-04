@@ -1136,7 +1136,7 @@ add_action( 'kbs_form_display_file_upload_field', 'kbs_display_form_file_upload_
  */
 function kbs_display_form_field_description( $field, $settings )	{
 	if ( ! empty( $settings['description'] ) ) : ?>
-    	<span class="kbs-description"><?php esc_html_e( $settings['description'] ); ?></span>
+    	<span class="kbs-description"><?php echo esc_html( $settings['description'] ); ?></span>
     <?php endif;
 } // kbs_display_form_field_description
 

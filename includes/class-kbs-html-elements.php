@@ -78,7 +78,82 @@ class KBS_HTML_Elements {
 
 		return $output;
 	} // ticket_category_dropdown
-	
+
+	/**
+	 * Renders an HTML Dropdown of all the KB Articles
+	 *
+	 * @access	public
+	 * @since	1.0
+	 * @param	arr		$args		Arguments
+	 * @return	str		$output		Article dropdown
+	 */
+	public function article_dropdown( $args = array() ) {
+
+		$defaults = array(
+			'name'             => 'kbs_articles',
+			'id'               => '',
+			'class'            => '',
+			'multiple'         => false,
+			'chosen'           => false,
+			'show_option_all'  => false,
+			'show_option_none' => '',
+			'placeholder'      => sprintf( __( 'Select a %s', 'kb-support' ), kbs_get_article_label_singular() ),
+			'selected'         => 0,
+			'key'              => 'id',
+			'articles'         => null,
+			'author'           => null,
+			'restricted'       => null,
+			'number'           => -1,
+			'orderby'          => 'title',
+			'order'            => 'DESC'
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
+		$articles = kbs_get_articles( array(
+			'articles'    => isset( $args['articles'] )   ? $args['articles']   : null,
+			'author'      => isset( $args['author'] )     ? $args['author']     : null,
+			'restricted'  => isset( $args['restricted'] ) ? $args['restricted'] : null,
+			'number'      => $args['number'],
+			'orderby'     => $args['orderby'],
+			'order'       => $args['order']
+		) );
+
+		$args['options']    = array();
+		$args['options'][0] = '';
+
+		if ( ! empty( $articles ) )	{
+			foreach( $articles as $article )	{
+
+				switch( $args['key'] )	{
+					case 'id':
+					case 'ID':
+					default:
+						$key = (int) $article->ID;
+						break;
+					case 'url':
+						$key = get_permalink( $article );
+						break;
+					case 'name':
+					case 'slug':
+						$key = $article->post_name;
+						break;
+				}
+
+				$args['options'][ $key  ] = get_the_title( $article );
+			}
+		}
+
+		unset(
+			$args['articles'], $args['author'], $args['restricted'],
+			$args['number'], $args['orderby'], $args['order']
+		);
+
+		$output = $this->select( $args );
+
+		return $output;
+	} // article_dropdown
+
 	/**
 	 * Renders an HTML Dropdown of all the KB Categories
 	 *

@@ -83,7 +83,7 @@ class KBS_Roles {
 		add_role( 'support_customer', __( 'Support Customer', 'kb-support' ), array(
 			'read'                   => true,
 			'edit_posts'             => false,
-			'upload_files'           => true,
+			'upload_files'           => false,
 			'delete_posts'           => false
 		) );
 	}
