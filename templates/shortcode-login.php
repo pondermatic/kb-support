@@ -4,6 +4,7 @@
  */
 global $kbs_login_redirect;
 if ( ! is_user_logged_in() ) : ?>
+	<?php do_action( 'kbs_notices' ); ?>
 	<form id="kbs_login_form" class="kbs_form" action="" method="post">
 		<fieldset>
 			<legend><?php _e( 'Log into Your Account', 'kb-support' ); ?></legend>

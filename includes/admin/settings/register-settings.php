@@ -6,20 +6,21 @@
  *
  * @package     KBS
  * @subpackage  Admin/Settings
- * @copyright   Copyright (c) 2016, Mike Howard
+ * @copyright   Copyright (c) 2017, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       0.1
+ * @since       1.0
 */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) )
+	exit;
 
 /**
  * Get an option
  *
  * Looks to see if the specified setting exists, returns default if not
  *
- * @since	0.1
+ * @since	1.0
  * @return	mixed
  */
 function kbs_get_option( $key = '', $default = false ) {
@@ -36,7 +37,7 @@ function kbs_get_option( $key = '', $default = false ) {
  * Warning: Passing in an empty, false or null string value will remove
  *          the key from the kbs_options array.
  *
- * @since	0.1
+ * @since	1.0
  * @param	str				$key	The Key to update
  * @param	str|bool|int	$value	The value to set the key to
  * @return	bool			True if updated, false if not.
@@ -78,7 +79,7 @@ function kbs_update_option( $key = '', $value = false ) {
  *
  * Removes a kbs setting value in both the db and the global variable.
  *
- * @since	0.1
+ * @since	1.0
  * @param	str		$key	The Key to delete.
  * @return	bool	True if updated, false if not.
  */
@@ -115,7 +116,7 @@ function kbs_delete_option( $key = '' ) {
  *
  * Retrieves all plugin settings.
  *
- * @since	0.1
+ * @since	1.0
  * @return	arr		KBS settings.
  */
 function kbs_get_settings() {
@@ -135,7 +136,7 @@ function kbs_get_settings() {
 /**
  * Add all settings sections and fields.
  *
- * @since	0.1
+ * @since	1.0
  * @return	void
 */
 function kbs_register_settings() {
@@ -167,31 +168,34 @@ function kbs_register_settings() {
 					continue;
 				}
 
-				$name = isset( $option['name'] ) ? $option['name'] : '';
+				$args = wp_parse_args( $option, array(
+				    'section'       => $section,
+				    'id'            => null,
+				    'desc'          => '',
+				    'name'          => '',
+				    'size'          => null,
+				    'options'       => '',
+				    'std'           => '',
+				    'min'           => null,
+				    'max'           => null,
+				    'step'          => null,
+				    'chosen'        => null,
+				    'placeholder'   => null,
+				    'allow_blank'   => true,
+				    'readonly'      => false,
+				    'faux'          => false,
+				    'tooltip_title' => false,
+				    'tooltip_desc'  => false,
+				    'field_class'   => ''
+				) );
 
 				add_settings_field(
-					'kbs_settings[' . $option['id'] . ']',
-					$name,
-					function_exists( 'kbs_' . $option['type'] . '_callback' ) ? 'kbs_' . $option['type'] . '_callback' : 'kbs_missing_callback',
+					'kbs_settings[' . $args['id'] . ']',
+					$args['name'],
+					function_exists( 'kbs_' . $args['type'] . '_callback' ) ? 'kbs_' . $args['type'] . '_callback' : 'kbs_missing_callback',
 					'kbs_settings_' . $tab . '_' . $section,
 					'kbs_settings_' . $tab . '_' . $section,
-					array(
-						'section'     => $section,
-						'id'          => isset( $option['id'] )          ? $option['id']          : null,
-						'desc'        => ! empty( $option['desc'] )      ? $option['desc']        : '',
-						'name'        => isset( $option['name'] )        ? $option['name']        : null,
-						'size'        => isset( $option['size'] )        ? $option['size']        : null,
-						'options'     => isset( $option['options'] )     ? $option['options']     : '',
-						'std'         => isset( $option['std'] )         ? $option['std']         : '',
-						'min'         => isset( $option['min'] )         ? $option['min']         : null,
-						'max'         => isset( $option['max'] )         ? $option['max']         : null,
-						'step'        => isset( $option['step'] )        ? $option['step']        : null,
-						'chosen'      => isset( $option['chosen'] )      ? $option['chosen']      : null,
-						'placeholder' => isset( $option['placeholder'] ) ? $option['placeholder'] : null,
-						'allow_blank' => isset( $option['allow_blank'] ) ? $option['allow_blank'] : true,
-						'readonly'    => isset( $option['readonly'] )    ? $option['readonly']    : false,
-						'faux'        => isset( $option['faux'] )        ? $option['faux']        : false,
-					)
+					$args
 				);
 			}
 		}
@@ -207,10 +211,13 @@ add_action( 'admin_init', 'kbs_register_settings' );
 /**
  * Retrieve the array of plugin settings.
  *
- * @since	0.1
+ * @since	1.0
  * @return	arr
 */
 function kbs_get_registered_settings() {
+
+	$single = kbs_get_ticket_label_singular();
+	$plural = kbs_get_ticket_label_plural();
 
 	/**
 	 * 'Whitelisted' KBS settings, filters are provided for each settings
@@ -227,20 +234,167 @@ function kbs_get_registered_settings() {
 						'desc' => '',
 						'type' => 'header'
 					),
-					'ticket_page'   => array(
-						'id'      => 'ticket_page',
-						'name'    => sprintf( __( '%s Page', 'kb-support' ), kbs_get_ticket_label_singular() ),
-						'desc'    => sprintf( __( 'This is the page where customers will submit their %s', 'kb-support' ), kbs_get_ticket_label_plural( true ) ),
+					'submission_page'   => array(
+						'id'      => 'submission_page',
+						'name'    => __( 'Submission Page', 'kb-support' ),
+						'desc'    => sprintf( __( 'This is the page where customers will submit their %s. Should contain the <code>[kbs_submit]</code> shortcode.', 'kb-support' ), strtolower( $plural ) ),
+						'type'    => 'select',
+						'options' => kbs_get_pages()
+					),
+					'tickets_page'   => array(
+						'id'      => 'tickets_page',
+						'name'    => sprintf( __( '%s Page', 'kb-support' ), $plural ),
+						'desc'    => sprintf( __( 'This is the page where can view and reply to their %s. Should contain the <code>[kbs_tickets]</code> shortcode', 'kb-support' ), strtolower( $plural ) ),
 						'type'    => 'select',
 						'options' => kbs_get_pages()
 					)
 				)
 			)
 		),
-		/** SLA Settings */
-		'sla' => apply_filters( 'kbs_settings_sla',
+		/** Ticket Settings */
+		'tickets' => apply_filters( 'kbs_ticket_settings',
 			array(
-				'main' => array(
+				'main'   => array(
+					'ticket_settings_header' => array(
+						'id'   => 'ticket_settings_header',
+						'name' => '<h3>' . sprintf( __( '%s Settings', 'kb-support' ), $single ) . '</h3>',
+						'type' => 'header'
+					),
+					'ticket_prefix' => array(
+						'id'      => 'ticket_prefix',
+						'name'    => sprintf( __( "Prefix for %s ID's", 'kb-support' ), $single ),
+						'desc'    => '',
+						'type'    => 'text',
+						'size'    => 'small'
+					),
+					'ticket_suffix' => array(
+						'id'      => 'ticket_suffix',
+						'name'    => sprintf( __( "Suffix for %s ID's", 'kb-support' ), $single ),
+						'desc'    => '',
+						'type'    => 'text',
+						'size'    => 'small'
+					),
+					'hide_closed' => array(
+						'id'      => 'hide_closed',
+						'name'    => sprintf( __( 'Hide Closed %s?', 'kb-support' ), $plural ),
+						'desc'    => sprintf( __( 'Enable this option to remove closed %1$s from the default view on the admin %1$s screen', 'kb-support' ), strtolower( $plural ) ),
+						'type'    => 'checkbox'
+					)
+				),
+				'submit' => array(
+					'submit_settings_header' => array(
+						'id'   => 'submit_settings_header',
+						'name' => '<h3>' . __( 'Submission Settings', 'kb-support' ) . '</h3>',
+						'type' => 'header'
+					),
+					'enforce_ssl' => array(
+						'id'   => 'enforce_ssl',
+						'name' => __( 'Enforce SSL for Submissions?', 'kb-support' ),
+						'desc' => __( 'Check this to force users to be redirected to the secure ticket submission page. You must have an SSL certificate installed to use this option.', 'kb-support' ),
+						'type' => 'checkbox',
+					),
+					'logged_in_only' => array(
+						'id'      => 'logged_in_only',
+						'name'    => __( 'Disable Guest Submissions?', 'kb-support' ),
+						'desc'    => sprintf( __( 'Require that users be logged in to submit %s.', 'kb-support' ), strtolower( $plural ) ),
+						'type'    => 'checkbox',
+						'std'     => '1'
+					),
+					'show_register_form' => array(
+						'id'      => 'show_register_form',
+						'name'    => __( 'Show Register / Login Form?', 'kb-support' ),
+						'desc'    => __( 'Display the registration and login forms on the submission page for non-logged-in users.', 'kb-support' ),
+						'type'    => 'select',
+						'std'     => 'none',
+						'options' => array(
+							'both'         => __( 'Registration and Login Forms', 'kb-support' ),
+							'registration' => __( 'Registration Form Only', 'kb-support' ),
+							'login'        => __( 'Login Form Only', 'kb-support' ),
+							'none'         => __( 'None', 'kb-support' ),
+						)
+					),
+					'form_submit_label' => array(
+						'id'   => 'form_submit_label',
+						'name' => __( 'Submit Label', 'kb-support' ),
+						'desc' => sprintf( __( 'The label for the %s form submit button.', 'kb-support' ), strtolower( $single ) ),
+						'type' => 'text',
+						'std'  => sprintf( __( 'Submit %s', 'kb-support' ), $single )
+					),
+					'ticket_reply_label' => array(
+						'id'   => 'ticket_reply_label',
+						'name' => __( 'Reply Label', 'kb-support' ),
+						'desc' => sprintf( __( 'The label for the %s reply form submit button.', 'kb-support' ), strtolower( $single ) ),
+						'type' => 'text',
+						'std'  => __( 'Reply', 'kb-support' )
+					),
+					'file_uploads' => array(
+						'id'      => 'file_uploads',
+						'name'    => __( 'Allow File Uploads', 'kb-support' ),
+						'desc'    => sprintf( __( 'Maximum number of files that can be attached during %s creation or reply.', 'kb-support' ), strtolower( $single ) ),
+						'type'    => 'number',
+						'size'    => 'small',
+						'max'     => '10',
+						'std'     => '0'
+					),
+					'file_extensions' => array(
+						'id'      => 'file_extensions',
+						'name'    => __( 'Allowed File Extensions', 'kb-support' ),
+						'desc'    => sprintf( __( 'Enter a list of file extensions that a customer may upload during %s submission. Seperate each extension with a comma.', 'kb-support' ), strtolower( $single ) ),
+						'type'    => 'textarea',
+						'std'     => kbs_get_default_file_types()
+					)
+				),
+				'agents' => array(
+					'agent_settings_header' => array(
+						'id'   => 'agent_settings_header',
+						'name' => '<h3>' . __( 'Agents', 'kb-support' ) . '</h3>',
+						'type' => 'header'
+					),
+					'admin_agents' => array(
+						'id'      => 'admin_agents',
+						'name'    => __( 'Administrators are Agents?', 'kb-support' ),
+						'desc'    => __( 'If enabled, users with the <code>Administrator</code> role will also be Support Agents.', 'kb-support' ),
+						'type'    => 'checkbox',
+						'std'     => '1'
+					),
+					'restrict_agent_view' => array(
+						'id'      => 'restrict_agent_view',
+						'name'    => sprintf( __( 'Restrict Agent %s View?', 'kb-support' ), $single ),
+						'desc'    => sprintf( __( 'If enabled, Support Agents will only be able to see %1$s that are assigned to them or %1$s that are not yet assigned. If the current user is a Support Manager or an Administrator, they will always see all %1$s.', 'kb-support' ), strtolower( $plural ) ),
+						'type'    => 'checkbox'
+					),
+					'agent_status'  => array(
+						'id'      => 'agent_status',
+						'name'    => __( 'Display Agent Status?', 'kb-support' ),
+						'desc'    => sprintf( __( 'If enabled, customers will see an indicator as to whether or not the assigned agent is online when reviewing their %s.', 'kb-support' ), strtolower( $single ) ),
+						'type'    => 'checkbox',
+						'std'     => '0'
+					),
+					'assign_settings_header' => array(
+						'id'   => 'assign_settings_header',
+						'name' => '<h3>' . sprintf( __( '%s Assignment', 'kb-support' ), $single ) . '</h3>',
+						'type' => 'header'
+					),
+					'assign_on_submit' => array(
+						'id'      => 'assign_on_submit',
+						'name'    => sprintf( __( 'Auto Assign new %s?', 'kb-support' ), $plural ),
+						'desc'    => sprintf( __( 'Select an option to automatically assign a %s to an agent when it is received', 'kb-support' ), strtolower( $single ) ),
+						'type'    => 'select',
+						'options' => array(
+							'0'      => __( 'Do not Auto Assign', 'kb-support' ),
+							'least'  => sprintf( __( 'Least %s', 'kb-support' ), $plural ),
+							'random' => __( 'Random', 'kb-support' ),
+						),
+						'std'     => '0'
+					),
+					'auto_assign_agent' => array(
+						'id'      => 'auto_assign_agent',
+						'name'    => __( 'Auto Assign on Access?', 'kb-support' ),
+						'desc'    => sprintf( __( 'If enabled, unassigned %1$s will be auto assigned to an agent when they access the %2$s. The %2$s status will also update to <code>open</code> if currently <code>new</code>. Avoids agent "Cherry Picking"', 'kb-support' ), strtolower( $plural ), strtolower( $single ) ),
+						'type'        => 'checkbox'
+					)
+				),
+				'sla' => array(
 					'sla_settings_header' => array(
 						'id'   => 'sla_settings_header',
 						'name' => '<h3>' . __( 'SLA Settings', 'kb-support' ) . '</h3>',
@@ -250,7 +404,7 @@ function kbs_get_registered_settings() {
 						'id'      => 'sla_tracking',
 						'name'    => __( 'Enable SLA Tracking', 'kb-support' ),
 						'type'    => 'checkbox',
-						'std'     => '1'
+						'std'     => '0'
 					),
 					'sla_response_time' => array(
 						'id'      => 'sla_response_time',
@@ -258,6 +412,103 @@ function kbs_get_registered_settings() {
 						'type'    => 'select',
 						'options' => kbs_get_response_time_options(),
 						'std'     => '4 hours'
+					),
+					'sla_resolve_time' => array(
+						'id'      => 'sla_resolve_time',
+						'name'    => __( 'Target Resolution Time', 'kb-support' ),
+						'type'    => 'select',
+						'options' => apply_filters( 'kbs_target_resolve_time', array(
+							'1 day'    => __( '1 Day', 'kb-support' ),
+							'2 days'   => __( '2 Days', 'kb-support' ),
+							'3 days'   => __( '3 Days', 'kb-support' ),
+							'4 days'   => __( '4 Days', 'kb-support' ),
+							'5 days'   => __( '5 Days', 'kb-support' ),
+							'6 days'   => __( '6 Days', 'kb-support' ),
+							'1 week'   => __( '1 Week', 'kb-support' ),
+							'2 weeks'  => __( '2 Weeks', 'kb-support' ),
+							'3 weeks'  => __( '3 Weeks', 'kb-support' ),
+							'4 weeks'  => __( '4 Weeks', 'kb-support' )
+						) ),
+						'std'     => '2 days'
+					)
+				)
+			)
+		),
+		/** KB Settings */
+		'articles' => apply_filters( 'kbs_article_settings',
+			array(
+				'main'   => array(
+					'kb_settings_header' => array(
+						'id'   => 'kb_settings_header',
+						'name' => '<h3>' . sprintf( __( '%s Settings', 'kb-support' ), kbs_get_article_label_singular() ) . '</h3>',
+						'type' => 'header'
+					),
+					'article_restricted' => array(
+						'id'      => 'article_restricted',
+						'name'    => sprintf( __( 'Restrict %s', 'kb-support' ), kbs_get_article_label_plural() ),
+						'desc'    => sprintf( __( 'Select to make restrict %s by default. Can by changed per %s', 'kb-support' ), kbs_get_article_label_plural(), kbs_get_article_label_singular() ),
+						'type'    => 'checkbox',
+						'std'     => '0'
+					),
+					'restricted_login'    => array(
+						'id'      => 'restricted_login',
+						'name'    => __( 'Show Register / Login Form?', 'kb-support' ),
+						'desc'    => sprintf( __( 'Display the registration and/or login forms when a non-logged-in user lands on a restricted %s.', 'kb-support' ), kbs_get_article_label_singular() ),
+						'type'    => 'select',
+						'std'     => 'login',
+						'options' => array(
+							'both'         => __( 'Registration and Login Forms', 'kb-support' ),
+							'registration' => __( 'Registration Form Only', 'kb-support' ),
+							'login'        => __( 'Login Form Only', 'kb-support' ),
+							'none'         => __( 'None', 'kb-support' ),
+						)
+					),
+					'article_hide_restricted' => array(
+						'id'      => 'article_hide_restricted',
+						'name'    => sprintf( __( 'Hide Restricted %s', 'kb-support' ), kbs_get_article_label_plural() ),
+						'desc'    => sprintf( __( 'Restricted %s are always hidden from search results when a user is not logged in. Select to also hide from archives.', 'kb-support' ), kbs_get_article_label_plural() ),
+						'type'    => 'checkbox'
+					),
+					'article_hide_restricted_ajax' => array(
+						'id'      => 'article_hide_restricted_ajax',
+						'name'    => __( 'Restricted Ajax Search', 'kb-support' ),
+						'desc'    => sprintf( __( 'Same as <code>Hide Restricted %s</code> but this option manipulates Ajax search results.', 'kb-support' ), kbs_get_article_label_plural() ),
+						'type'    => 'checkbox'
+					),
+					'article_num_posts_ajax' => array(
+						'id'      => 'article_num_posts_ajax',
+						'name'    => __( 'Number of Results from Ajax', 'kb-support' ),
+						'desc'    => sprintf( __( 'Enter the number of suggested %s that should be returned from the submission form Ajax search.', 'kb-support' ), kbs_get_article_label_plural() ),
+						'type'    => 'number',
+						'step'    => '1',
+						'size'    => 'small',
+						'std'     => '5'
+					),
+					'article_excerpt_length' => array(
+						'id'      => 'article_excerpt_length',
+						'name'    => __( 'Search Excerpt Length', 'kb-support' ),
+						'desc'    => __( 'Enter the number of words that should form the excerpt length during an ajax search. i.e. on the submission form.', 'kb-support' ),
+						'type'    => 'number',
+						'step'    => '5',
+						'size'    => 'small',
+						'std'     => '55'
+					)
+				),
+				'restricted_notices' => array(
+					'kb_settings_restricted_header' => array(
+						'id'   => 'kb_settings_restricted_header',
+						'name' => '<h3>' . sprintf( __( '%s Notices', 'kb-support' ), kbs_get_article_label_singular() ) . '</h3>',
+						'type' => 'header'
+					),
+					'restricted_notice'   => array(
+						'id'   => 'restricted_notice',
+						'name' => sprintf( __( 'Single %s', 'kb-support' ), kbs_get_article_label_singular() ),
+						'desc' => sprintf( __( 'The text that will be displayed after the excerpt when a user attempts to access a restricted %s', 'kb-support' ), kbs_get_article_label_singular() ),
+						'type' => 'rich_editor',
+						'std'  => '<h3>' . __( 'Restricted Content', 'kb-support' ) . '</h3>' .
+							sprintf( __( 'The %s you are viewing is restricted. Please login below to access the full content.', 'kb-support' ),
+							kbs_get_article_label_singular()
+						)
 					)
 				)
 			)
@@ -271,17 +522,31 @@ function kbs_get_registered_settings() {
 						'name' => '<h3>' . __( 'Email Settings', 'kb-support' ) . '</h3>',
 						'type' => 'header'
 					),
+					'from_name' => array(
+						'id'   => 'from_name',
+						'name' => __( 'From Name', 'kb-support' ),
+						'desc' => __( 'The name customer emails are said to come from. This should probably be your site name.', 'kb-support' ),
+						'type' => 'text',
+						'std'  => get_bloginfo( 'name' )
+					),
+					'from_email' => array(
+						'id'   => 'from_email',
+						'name' => __( 'From Email', 'kb-support' ),
+						'desc' => __( 'Email address for sending customer emails. This will act as the "from" and "reply-to" address.', 'kb-support' ),
+						'type' => 'text',
+						'std'  => get_bloginfo( 'admin_email' )
+					),
 					'email_template' => array(
 						'id'      => 'email_template',
 						'name'    => __( 'Email Template', 'kb-support' ),
-						'desc'    => sprintf( __( 'Choose a template. Click "Save Changes" then "Preview %s Received" to see the new template.', 'kb-support' ), kbs_get_ticket_label_singular() ),
+						'desc'    => sprintf( __( 'Choose a template. Click "Save Changes" then "Preview %s Received" to see the new template.', 'kb-support' ), $single ),
 						'type'    => 'select',
 						'options' => kbs_get_email_templates()
 					),
 					'email_logo' => array(
 						'id'   => 'email_logo',
 						'name' => __( 'Logo', 'kb-support' ),
-						'desc' => sprintf( __( 'Upload or choose a logo to be displayed at the top of the %s received emails. Displayed on HTML emails only.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+						'desc' => sprintf( __( 'Upload or choose a logo to be displayed at the top of the %s received emails. Displayed on HTML emails only.', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'upload'
 					),
 					'email_settings' => array(
@@ -291,80 +556,173 @@ function kbs_get_registered_settings() {
 						'type' => 'hook'
 					)
 				),
-				'ticket_received' => array(
-					'ticket_received_settings' => array(
-						'id'   => 'ticket_received_settings',
-						'name' => '<h3>' . sprintf( __( '%s Received', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</h3>',
+				'ticket_logged' => array(
+					'ticket_logged_settings' => array(
+						'id'   => 'ticket_logged_settings',
+						'name' => '<h3>' . sprintf( __( '%s Received', 'kb-support' ), $single ) . '</h3>',
 						'type' => 'header'
 					),
-					'from_name' => array(
-						'id'   => 'from_name',
-						'name' => __( 'From Name', 'kb-support' ),
-						'desc' => sprintf( __( 'The name %s received emails are said to come from. This should probably be your site name.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
-						'type' => 'text',
-						'std'  => get_bloginfo( 'name' )
+					'ticket_received_disable_email' => array(
+						'id'   => 'ticket_received_disable_email',
+						'name' => __( 'Disable this Email', 'kb-support' ),
+						'desc' => sprintf( __( 'Select to stop emails being sent when a %s is logged.', 'kb-support' ), strtolower( $single ) ),
+						'type' => 'checkbox'
 					),
-					'from_email' => array(
-						'id'   => 'from_email',
-						'name' => __( 'From Email', 'kb-support' ),
-						'desc' => sprintf( __( 'Email to send %s received email from. This will act as the "from" and "reply-to" address.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+					'ticket_subject' => array(
+						'id'   => 'ticket_subject',
+						'name' => __( 'Email Subject', 'kb-support' ),
+						'desc' => sprintf( __( 'Enter the subject line for the %s logged email. Template tags accepted.', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'text',
-						'std'  => get_bloginfo( 'admin_email' )
+						'std'  => sprintf( __( '%s Recieved ##{ticket_id}##', 'kb-support' ), $single )
 					),
-					'received_subject' => array(
-						'id'   => 'received_subject',
-						'name' => __( 'Received Email Subject', 'kb-support' ),
-						'desc' => sprintf( __( 'Enter the subject line for the %s received email', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+					'ticket_heading' => array(
+						'id'   => 'ticket_heading',
+						'name' => __( 'Email Heading', 'kb-support' ),
+						'desc' => sprintf( __( 'Enter the heading for the %s logged email', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'text',
-						'std'  => sprintf( __( '%s Recieved', 'kb-support' ), kbs_get_ticket_label_singular() )
+						'std'  => sprintf( __( 'Support %s Details', 'kb-support' ), $single )
 					),
-					'received_heading' => array(
-						'id'   => 'received_heading',
-						'name' => __( 'Received Email Heading', 'kb-support' ),
-						'desc' => sprintf( __( 'Enter the heading for the %s received email', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
-						'type' => 'text',
-						'std'  => sprintf( __( '%s Recieved', 'kb-support' ), kbs_get_ticket_label_singular() )
-					),
-					'received_content' => array(
-						'id'   => 'received_content',
-						'name' => sprintf( __( '%s Received', 'kb-support' ), kbs_get_ticket_label_singular() ),
-						'desc' => sprintf( __( 'Enter the text that is sent as a %1$s received email to users after submission of a %1$s. HTML is accepted.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+					'ticket_content' => array(
+						'id'   => 'ticket_content',
+						'name' => __( 'Content', 'kb-support' ),
+						'desc' => sprintf( __( 'Enter the text that is sent as a %1$s received email to users after submission of a %1$s. HTML is accepted. Available template tags:', 'kb-support' ), strtolower( $single ) ) . '<br />' . kbs_get_emails_tags_list(),
 						'type' => 'rich_editor',
-						'std'  => __( "Dear", "kb-support" ) . " {name},\n\n" . __( "Thank you for logging your support ticket. Details of your ticket are displayed below.", "kb-support" ) . "\n\n" . '{ticket_details}'
+						'std'  => kbs_get_ticket_logged_email_body_content()
 					),
+				),
+				'ticket_reply' => array(
+					'ticket_reply_settings' => array(
+						'id'   => 'ticket_reply_settings',
+						'name' => '<h3>' . __( 'Reply Added', 'kb-support' ) . '</h3>',
+						'type' => 'header'
+					),
+					'ticket_reply_disable_email' => array(
+						'id'   => 'ticket_reply_disable_email',
+						'name' => __( 'Disable this Email', 'kb-support' ),
+						'desc' => sprintf( __( 'Select to stop emails being sent when a %s reply is added.', 'kb-support' ), strtolower( $single ) ),
+						'type' => 'checkbox'
+					),
+					'ticket_reply_subject' => array(
+						'id'   => 'ticket_reply_subject',
+						'name' => __( 'Email Subject', 'kb-support' ),
+						'desc' => sprintf( __( 'Enter the subject line for the %s reply email. Template tags accepted.', 'kb-support' ), strtolower( $single ) ),
+						'type' => 'text',
+						'std'  => sprintf( __( 'Your Support %s Received a Reply', 'kb-support' ), $single ) . ' ##{ticket_id}##'
+					),
+					'ticket_reply_heading' => array(
+						'id'   => 'ticket_reply_heading',
+						'name' => __( 'Email Heading', 'kb-support' ),
+						'desc' => __( 'Enter the heading for the %s reply email', 'kb-support' ),
+						'type' => 'text',
+						'std'  => sprintf( __( 'Support %s Update for', 'kb-support' ), $single ) . ' #{ticket_id}'
+					),
+					'ticket_reply_content' => array(
+						'id'   => 'ticket_reply_content',
+						'name' => __( 'Content', 'kb-support' ),
+						'desc' => sprintf( __( 'Enter the content that is sent to customers when their %1$s receives a reply. HTML is accepted. Available template tags:', 'kb-support' ), strtolower( $single ) ) . '<br/>' . kbs_get_emails_tags_list(),
+						'type' => 'rich_editor',
+						'std'  => __( "Dear", "kb-support" ) . " {name},\n\n" . 
+								  sprintf( __( 'Your support %1$s # {ticket_id} has received a reply. Click the link below to access your %1$s and review the details.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
+								  '{ticket_url}' . "\n\n" .
+								  __( 'Regards', 'kb-support' ) . "\n\n" .
+								  '{sitename}'
+					)
+				),
+				'ticket_closed' => array(
+					'ticket_closed_settings' => array(
+						'id'   => 'ticket_closed_settings',
+						'name' => '<h3>' .sprintf(  __( 'Ticket %s', 'kb-support' ), $single ) . '</h3>',
+						'type' => 'header'
+					),
+					'ticket_closed_disable_email' => array(
+						'id'   => 'ticket_closed_disable_email',
+						'name' => __( 'Disable this Email', 'kb-support' ),
+						'desc' => sprintf( __( 'Select to stop emails being sent when a %s is closed.', 'kb-support' ), strtolower( $single ) ),
+						'type' => 'checkbox'
+					),
+					'ticket_closed_subject' => array(
+						'id'   => 'ticket_closed_subject',
+						'name' => __( 'Email Subject', 'kb-support' ),
+						'desc' => sprintf( __( 'Enter the subject line for the %s closed email. Template tags accepted.', 'kb-support' ), strtolower( $single ) ),
+						'type' => 'text',
+						'std'  => sprintf( __( 'Your Support %s is Closed', 'kb-support' ), $single ) . ' ##{ticket_id}##'
+					),
+					'ticket_closed_heading' => array(
+						'id'   => 'ticket_closed_heading',
+						'name' => __( 'Email Heading', 'kb-support' ),
+						'desc' => __( 'Enter the heading for the %s closed email', 'kb-support' ),
+						'type' => 'text',
+						'std'  => sprintf( __( 'Support %s #{ticket_id} Closed', 'kb-support' ), $single )
+					),
+					'ticket_closed_content' => array(
+						'id'   => 'ticket_closed_content',
+						'name' => __( 'Content', 'kb-support' ),
+						'desc' => sprintf( __( 'Enter the content that is sent to customers when their %1$s is closed. HTML is accepted. Available template tags:', 'kb-support' ), strtolower( $single ) ) . '<br/>' . kbs_get_emails_tags_list(),
+						'type' => 'rich_editor',
+						'std'  => __( "Dear", "kb-support" ) . " {name},\n\n" . 
+								  sprintf( __( 'Your support %1$s # {ticket_id} is now closed. You can review the details of your %1$s by clicking the URL below.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
+								  '{ticket_url}' . "\n\n" .
+								  __( 'Regards', 'kb-support' ) . "\n\n" .
+								  '{sitename}'
+					)
 				),
 				'ticket_notifications' => array(
 					'ticket_notification_settings' => array(
 						'id'   => 'ticket_notification_settings',
-						'name' => '<h3>' . sprintf( __( '%s Notifications', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</h3>',
+						'name' => '<h3>' . sprintf( __( '%s Notifications', 'kb-support' ), $single ) . '</h3>',
 						'type' => 'header'
-					),
-					'ticket_notification_subject' => array(
-						'id'   => 'ticket_notification_subject',
-						'name' => sprintf( __( '%s Notification Subject', 'kb-support' ), kbs_get_ticket_label_singular() ),
-						'desc' => sprintf( __( 'Enter the subject line for the %s notification email', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
-						'type' => 'text',
-						'std'  => sprintf( __( 'New %s received - Case #{ticket_id}', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
-					),
-					'ticket_notification' => array(
-						'id'   => 'ticket_notification',
-						'name' => sprintf( __( '%s Notification', 'kb-support' ), kbs_get_ticket_label_singular() ) . "\n\n" . '{ticket_details}',
-						'desc' => sprintf( __( 'Enter the text that is sent as %s received notification email after submission of a case. HTML is accepted.' ), kbs_get_ticket_label_singular( true ) ),
-						'type' => 'rich_editor',
-						'std'  => '',//kbs_get_default_ticket_notification_email()
-					),
-					'admin_notice_emails' => array(
-						'id'   => 'admin_notice_emails',
-						'name' => sprintf( __( '%s Notification Emails', 'kb-support' ), kbs_get_ticket_label_singular() ),
-						'desc' => sprintf( __( 'Enter the email address(es) that should receive a notification anytime a %s is logged, one per line', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
-						'type' => 'textarea',
-						'std'  => get_bloginfo( 'admin_email' )
 					),
 					'disable_admin_notices' => array(
 						'id'   => 'disable_admin_notices',
-						'name' => __( 'Disable Admin Notifications', 'kb-support' ),
-						'desc' => sprintf( __( 'Check this box if you do not want to receive %s notification emails.', 'kb-support' ), kbs_get_ticket_label_singular() ),
+						'name' => __( 'Disable Notifications', 'kb-support' ),
+						'desc' => sprintf( __( 'Check this box to disable %s notification emails.', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'checkbox'
+					),
+					'ticket_notification_subject' => array(
+						'id'   => 'ticket_notification_subject',
+						'name' => sprintf( __( '%s Notification Subject', 'kb-support' ), $single ),
+						'desc' => sprintf( __( 'Enter the subject line for the %s notification email. Template tags accepted.', 'kb-support' ), strtolower( $single ) ),
+						'type' => 'text',
+						'std'  => sprintf( __( 'New %s Received - ##{ticket_id}##', 'kb-support' ), $single )
+					),
+					'ticket_notification' => array(
+						'id'   => 'ticket_notification',
+						'name' => sprintf( __( '%s Notification', 'kb-support' ), $single ),
+						'desc' => sprintf( __( 'Enter the text that is sent as %s received notification email after submission of a case. HTML is accepted. Available template tags:', 'kb-support' ), strtolower( $single ) ) . '<br />' . kbs_get_emails_tags_list(),
+						'type' => 'rich_editor',
+						'std'  => __( 'Hey there!', 'kb-support' ) . "\n\n" .
+								  sprintf( __( 'A new %s has been logged at', 'kb-support' ), strtolower( $single ) ) . " {sitename}.\n\n" .
+								  "<strong>{ticket_title} - #{ticket_id}</strong>\n\n" .
+								  "{ticket_admin_url}\n\n" .
+								  __( 'Regards', 'kb-support' ) . "\n\n" .
+								  '{sitename}'
+					),
+					'reply_notification_subject' => array(
+						'id'   => 'reply_notification_subject',
+						'name' => __( 'Reply Notification Subject', 'kb-support' ),
+						'desc' => sprintf( __( 'Enter the subject line of the notification email that is sent when a customer submits a %s reply. Template tags accepted.', 'kb-support' ), strtolower( $single ) ),
+						'type' => 'text',
+						'std'  => sprintf( __( 'New %s Reply Received - ##{ticket_id}##', 'kb-support' ), $single )
+					),
+					'reply_notification' => array(
+						'id'   => 'reply_notification',
+						'name' => sprintf( __( '%s Reply Notification', 'kb-support' ), $single ),
+						'desc' => sprintf( __( 'Enter the text that is sent as a notification email when a customer submits a %s reply. HTML is accepted. Available template tags:', 'kb-support' ), strtolower( $single ) ) . '<br />' . kbs_get_emails_tags_list(),
+						'type' => 'rich_editor',
+						'std'  => __( 'Hey there!', 'kb-support' ) . "\n\n" .
+								  sprintf( __( 'A new %s reply has been received at', 'kb-support' ), strtolower( $single ) ) . " {sitename}.\n\n" .
+								  "<strong>{ticket_title} - #{ticket_id}</strong>\n\n" .
+								  "{ticket_admin_url}\n\n" .
+								  __( 'Regards', 'kb-support' ) . "\n\n" .
+								  '{sitename}'
+					),
+					'admin_notice_emails' => array(
+						'id'   => 'admin_notice_emails',
+						'name' => sprintf( __( '%s Notification Emails', 'kb-support' ), $single ),
+						'desc' => sprintf(
+							__( 'Enter the email address(es) that should receive a notification anytime a %s is logged, one per line. Enter <code>{agent}</code> to insert the assigned agent\'s email address', 'kb-support' ), strtolower( $single ), '{agent}' ),
+						'type' => 'textarea',
+						'std'  => get_bloginfo( 'admin_email' )
 					)
 				)
 			)
@@ -381,28 +739,8 @@ function kbs_get_registered_settings() {
 					'disable_styles' => array(
 						'id'   => 'disable_styles',
 						'name' => __( 'Disable Styles', 'kb-support' ),
-						'desc' => __( 'Check this to disable all included styling of buttons, checkout fields, and all other elements.', 'kb-support' ),
+						'desc' => __( 'Check this to disable all KB Support default styling of buttons, fields, and all other elements.', 'kb-support' ),
 						'type' => 'checkbox'
-					),
-					'button_header' => array(
-						'id'   => 'button_header',
-						'name' => '<strong>' . __( 'Buttons', 'kb-support' ) . '</strong>',
-						'desc' => sprintf( __( 'Options for submit %s buttons', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
-						'type' => 'header'
-					),
-					'button_style' => array(
-						'id'      => 'button_style',
-						'name'    => __( 'Default Button Style', 'kb-support' ),
-						'desc'    => __( 'Choose the style you want to use for the buttons.', 'kb-support' ),
-						'type'    => 'select',
-						'options' => kbs_get_button_styles()
-					),
-					'checkout_color' => array(
-						'id'      => 'checkout_color',
-						'name'    => __( 'Default Button Color', 'kb-support' ),
-						'desc'    => __( 'Choose the color you want to use for the buttons.', 'kb-support' ),
-						'type'    => 'color_select',
-						'options' => kbs_get_button_colors()
 					)
 				)
 			)
@@ -424,6 +762,12 @@ function kbs_get_registered_settings() {
 						'name' => '<h3>' . __( 'Misc Settings', 'kb-support' ) . '</h3>',
 						'type' => 'header'
 					),
+					'show_credits' => array(
+						'id'      => 'show_credits',
+						'name'    => __( 'Display Credit?', 'kb-support' ),
+						'desc'    => __( 'KB Support is provided for free. If you like our plugin, consider spreading the word by displaying <code>Powered by KB Support</code> below the ticket and reply forms.', 'kb-support' ),
+						'type'    => 'checkbox'
+					),
 					'remove_on_uninstall' => array(
 						'id'      => 'remove_on_uninstall',
 						'name'    => __( 'Remove Data on Uninstall?', 'kb-support' ),
@@ -431,31 +775,43 @@ function kbs_get_registered_settings() {
 						'type'    => 'checkbox'
 					)
 				),
-				'submit' => array(
-					'submit_settings_header' => array(
-						'id'   => 'submit_settings_header',
-						'name' => '<h3>' . __( 'Submission Settings', 'kb-support' ) . '</h3>',
+				'recaptcha'     => array(
+					'recaptcha_settings' => array(
+						'id'   => 'recaptcha_settings',
+						'name' => '<h3>' . __( 'Google reCaptcha Settings', 'kb-support' ) . '</h3>',
 						'type' => 'header'
 					),
-					'logged_in_only' => array(
-						'id'      => 'logged_in_only',
-						'name'    => __( 'Disable Guest Submittions?', 'kb-support' ),
-						'desc'    => sprintf( __( 'Require that users be logged in to submit %s.', 'kb-support' ), kbs_get_ticket_label_plural( true ) ),
-						'type'    => 'checkbox'
+					'recaptcha_site_key' => array(
+						'id'   => 'recaptcha_site_key',
+						'name' => __( 'Site Key', 'kb-support' ),
+						'desc' => sprintf( __( 'Visit <a href="%s" target="_blank">Google reCaptcha</a> to register your site and obtain your site key.', 'kb-support' ), 'https://www.google.com/recaptcha/' ),
+						'type' => 'text'
 					),
-					'show_register_form' => array(
-						'id'      => 'show_register_form',
-						'name'    => __( 'Show Register / Login Form?', 'kb-support' ),
-						'desc'    => __( 'Display the registration and login forms on the submission page for non-logged-in users.', 'kb-support' ),
+					'recaptcha_theme' => array(
+						'id'      => 'recaptcha_theme',
+						'name'    => __( 'reCaptcha Theme', 'kb-support' ),
+						'desc'    => __( 'Select your preferred color scheme.', 'kb-support' ),
 						'type'    => 'select',
-						'std'     => 'none',
-						'options' => array(
-							'both'         => __( 'Registration and Login Forms', 'kb-support' ),
-							'registration' => __( 'Registration Form Only', 'kb-support' ),
-							'login'        => __( 'Login Form Only', 'kb-support' ),
-							'none'         => __( 'None', 'kb-support' ),
-						)
+						'options' => array( 'dark' => __( 'Dark', 'kb-support' ), 'light' => __( 'Light', 'kb-support' ) ),
+						'std'     => 'light'
+					),
+					'recaptcha_type' => array(
+						'id'      => 'recaptcha_type',
+						'name'    => __( 'reCaptcha Type', 'kb-support' ),
+						'desc'    => __( 'Choose to render an audio reCaptcha or an image. Default is image.', 'kb-support' ),
+						'type'    => 'select',
+						'options' => array( 'audio' => __( 'Audio', 'kb-support' ), 'image' => __( 'Image', 'kb-support' ) ),
+						'std'     => 'image'
+					),
+					'recaptcha_size' => array(
+						'id'      => 'recaptcha_size',
+						'name'    => __( 'reCaptcha Size', 'kb-support' ),
+						'desc'    => __( 'Select your preferred size for the reCaptcha.', 'kb-support' ),
+						'type'    => 'select',
+						'options' => array( 'compact' => __( 'Compact', 'kb-support' ), 'normal' => __( 'Normal', 'kb-support' ) ),
+						'std'     => 'normal'
 					)
+					
 				),
 				'site_terms'     => array(
 					'terms_settings' => array(
@@ -466,8 +822,9 @@ function kbs_get_registered_settings() {
 					'show_agree_to_terms' => array(
 						'id'   => 'show_agree_to_terms',
 						'name' => __( 'Agree to Terms', 'kb-support' ),
-						'desc' => sprintf( __( 'Check this to show an agree to terms on the submission page that users must agree to before submitting their %s.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+						'desc' => sprintf( __( 'Check this to show an agree to terms on the submission page that users must agree to before submitting their %s.', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'checkbox',
+						'std'  => false
 					),
 					'agree_label' => array(
 						'id'   => 'agree_label',
@@ -475,13 +832,24 @@ function kbs_get_registered_settings() {
 						'desc' => __( 'Label shown next to the agree to terms check box.', 'kb-support' ),
 						'type' => 'text',
 						'size' => 'regular',
+						'std'  => __( 'I have read and agree to the terms and conditions', 'kb-support' )
+					),
+					'agree_heading' => array(
+						'id'   => 'agree_heading',
+						'name' => __( 'Terms Heading', 'kb-support' ),
+						'desc' => __( 'Heading for the agree to terms thickbox.', 'kb-support' ),
+						'type' => 'text',
+						'size' => 'regular',
+						'std'  => sprintf(
+							__( 'Terms and Conditions for Support %s', 'kb-support' ), $plural
+						)
 					),
 					'agree_text' => array(
 						'id'   => 'agree_text',
 						'name' => __( 'Agreement Text', 'kb-support' ),
 						'desc' => __( 'If Agree to Terms is checked, enter the agreement terms here.', 'kb-support' ),
-						'type' => 'rich_editor',
-					),
+						'type' => 'rich_editor'
+					)
 				)
 			)
 		)
@@ -496,7 +864,7 @@ function kbs_get_registered_settings() {
  * Adds a settings error (for the updated message)
  * At some point this will validate input.
  *
- * @since	0.1
+ * @since	1.0
  *
  * @param	arr	$input	The value inputted in the field.
  *
@@ -540,8 +908,12 @@ function kbs_settings_sanitize( $input = array() ) {
 			$input[ $key ] = apply_filters( 'kbs_settings_sanitize_' . $type, $value, $key );
 		}
 
+		// Specific key filter
+		$input[ $key ] = apply_filters( 'kbs_settings_sanitize_' . $key, $value );
+
 		// General filter
 		$input[ $key ] = apply_filters( 'kbs_settings_sanitize', $input[ $key ], $key );
+
 	}
 
 	// Loop through the whitelist and unset any that are empty for the tab being saved
@@ -561,7 +933,6 @@ function kbs_settings_sanitize( $input = array() ) {
 			if ( empty( $input[ $key ] ) && isset( $kbs_options[ $key ] ) ) {
 				unset( $kbs_options[ $key ] );
 			}
-
 		}
 	}
 
@@ -576,7 +947,7 @@ function kbs_settings_sanitize( $input = array() ) {
 /**
  * Sanitize text fields
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$input	The field value
  * @return	str		$input	Sanitizied value
  */
@@ -586,25 +957,51 @@ function kbs_sanitize_text_field( $input ) {
 add_filter( 'kbs_settings_sanitize_text', 'kbs_sanitize_text_field' );
 
 /**
+ * Sanitize HTML Class Names
+ *
+ * @since	1.0
+ * @param	str|arr		$class	HTML Class Name(s)
+ * @return	str			$class
+ */
+function kbs_sanitize_html_class( $class = '' ) {
+
+	if ( is_string( $class ) )	{
+		$class = sanitize_html_class( $class );
+	} else if ( is_array( $class ) )	{
+		$class = array_values( array_map( 'sanitize_html_class', $class ) );
+		$class = implode( ' ', array_unique( $class ) );
+	}
+
+	return $class;
+
+} // kbs_sanitize_html_class
+
+/**
  * Retrieve settings tabs
  *
- * @since	0.1
+ * @since	1.0
  * @return	arr		$tabs
  */
 function kbs_get_settings_tabs() {
 
 	$settings = kbs_get_registered_settings();
 
-	$tabs             = array();
+	$tabs                 = array();
 	$tabs['general']  = __( 'General', 'kb-support' );
-	$tabs['sla']      = __( 'Service Levels', 'kb-support' );
+	$tabs['tickets']  = sprintf( __( '%s', 'kb-support' ), kbs_get_ticket_label_plural() );
+	$tabs['articles'] = sprintf( __( '%s', 'kb-support' ), kbs_get_article_label_plural() );
 	$tabs['emails']   = __( 'Emails', 'kb-support' );
+
+	$tabs = apply_filters( 'kbs_settings_tabs_before_styles', $tabs );
+
 	$tabs['styles']   = __( 'Styles', 'kb-support' );
 
-	if( ! empty( $settings['extensions'] ) ) {
+	$tabs = apply_filters( 'kbs_settings_tabs_after_styles', $tabs );
+
+	if ( ! empty( $settings['extensions'] ) ) {
 		$tabs['extensions'] = __( 'Extensions', 'kb-support' );
 	}
-	if( ! empty( $settings['licenses'] ) ) {
+	if ( ! empty( $settings['licenses'] ) ) {
 		$tabs['licenses'] = __( 'Licenses', 'kb-support' );
 	}
 	
@@ -616,7 +1013,7 @@ function kbs_get_settings_tabs() {
 /**
  * Retrieve settings tabs
  *
- * @since	0.1
+ * @since	1.0
  * @return	arr		$section
  */
 function kbs_get_settings_tab_sections( $tab = false ) {
@@ -637,7 +1034,7 @@ function kbs_get_settings_tab_sections( $tab = false ) {
  * Get the settings sections for each tab
  * Uses a static to avoid running the filters on every request to this function
  *
- * @since	0.1
+ * @since	1.0
  * @return	arr		Array of tabs and sections
  */
 function kbs_get_registered_settings_sections() {
@@ -648,18 +1045,28 @@ function kbs_get_registered_settings_sections() {
 		return $sections;
 	}
 
+	$single   = kbs_get_ticket_label_singular();
 	$sections = array(
 		'general'    => apply_filters( 'kbs_settings_sections_general', array(
 			'main'                 => __( 'General Settings', 'kb-support' ),
 			'pages'                => __( 'Pages', 'kb-support' )
 		) ),
-		'sla'        => apply_filters( 'kbs_settings_sections_sla', array(
-			'main'                 => __( 'Service Levels', 'kb-support' )
+		'tickets'        => apply_filters( 'kbs_settings_sections_tickets', array(
+			'main'                 => sprintf( __( 'General %s Settings', 'kb-support' ), $single ),
+			'submit'               => __( 'Submission Settings', 'kb-support' ),
+			'agents'               => __( 'Agent Settings', 'kb-support' ),
+			//'sla'                  => __( 'Service Levels', 'kb-support' )
+		) ),
+		'articles'        => apply_filters( 'kbs_settings_sections_articles', array(
+			'main'                 => sprintf( __( 'General %s Settings', 'kb-support' ), kbs_get_article_label_singular() ),
+			'restricted_notices'   => __( 'Restricted Content Notices', 'kb-support' )
 		) ),
 		'emails'     => apply_filters( 'kbs_settings_sections_emails', array(
-			'main'                 => __( 'Emails', 'kb-support' ),
-			'ticket_received'      => sprintf( __( '%s Received', 'kb-support' ), kbs_get_ticket_label_singular() ),
-			'ticket_notifications' => sprintf( __( '%s Notifications', 'kb-support' ), kbs_get_ticket_label_singular() )
+			'main'                 => __( 'Email Settings', 'kb-support' ),
+			'ticket_logged'        => sprintf( __( '%s Logged', 'kb-support' ), $single ),
+			'ticket_reply'         => __( 'Reply Added', 'kb-support' ),
+			'ticket_closed'        => sprintf( __( '%s Closed', 'kb-support' ), $single ),
+			'ticket_notifications' => __( 'Notifications', 'kb-support' ),
 		) ),
 		'styles'     => apply_filters( 'kbs_settings_sections_styles', array(
 			'main'                 => __( 'Styles', 'kb-support' )
@@ -670,7 +1077,7 @@ function kbs_get_registered_settings_sections() {
 		'licenses'   => apply_filters( 'kbs_settings_sections_licenses', array() ),
 		'misc'       => apply_filters( 'kbs_settings_sections_misc', array(
 			'main'                 => __( 'Misc Settings', 'kb-support' ),
-			'submit'               => __( 'Submission Settings', 'kb-support' ),
+			'recaptcha'            => __( 'Google reCaptcha', 'kb-support' ),
 			'site_terms'           => __( 'Terms and Conditions', 'kb-support' )
 		) )
 	);
@@ -681,43 +1088,16 @@ function kbs_get_registered_settings_sections() {
 } // kbs_get_registered_settings_sections
 
 /**
- * Retrieve a list of all published pages.
- *
- * On large sites this can be expensive, so only load if on the settings page or $force is set to true
- *
- * @since	0.1
- * @param	bool	$force			Force the pages to be loaded even if not on settings
- * @return	arr		$pages_options	An array of the pages
- */
-function kbs_get_pages( $force = false ) {
-
-	$pages_options = array( '' => '' ); // Blank option
-
-	if( ( ! isset( $_GET['page'] ) || 'kbs-settings' != $_GET['page'] ) && ! $force ) {
-		return $pages_options;
-	}
-
-	$pages = get_pages();
-	if ( $pages ) {
-		foreach ( $pages as $page ) {
-			$pages_options[ $page->ID ] = $page->post_title;
-		}
-	}
-
-	return $pages_options;
-} // kbs_get_pages
-
-/**
  * Header Callback
  *
  * Renders the header.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @return	void
  */
 function kbs_header_callback( $args ) {
-	echo '';
+	echo apply_filters( 'kbs_after_setting_output', '', $args );
 } // kbs_header_callback
 
 /**
@@ -725,13 +1105,13 @@ function kbs_header_callback( $args ) {
  *
  * Renders checkboxes.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @global	$kbs_options	Array of all the KBS Options
  * @return	void
  */
 function kbs_checkbox_callback( $args ) {
-	global $kbs_options;
+	$kbs_option = kbs_get_option( $args['id'] );
 
 	if ( isset( $args['faux'] ) && true === $args['faux'] ) {
 		$name = '';
@@ -739,11 +1119,13 @@ function kbs_checkbox_callback( $args ) {
 		$name = 'name="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"';
 	}
 
-	$checked = isset( $kbs_options[ $args['id'] ] ) ? checked( 1, $kbs_options[ $args['id'] ], false ) : '';
-	$html = '<input type="checkbox" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"' . $name . ' value="1" ' . $checked . '/>';
+	$class = kbs_sanitize_html_class( $args['field_class'] );
+
+	$checked = ! empty( $kbs_option ) ? checked( 1, $kbs_option, false ) : '';
+	$html = '<input type="checkbox" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"' . $name . ' value="1" ' . $checked . ' class="' . $class . '"/>';
 	$html .= '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"> '  . wp_kses_post( $args['desc'] ) . '</label>';
 
-	echo $html;
+	echo apply_filters( 'kbs_after_setting_output', $html, $args );
 } // kbs_checkbox_callback
 
 /**
@@ -751,22 +1133,35 @@ function kbs_checkbox_callback( $args ) {
  *
  * Renders multiple checkboxes.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @global	$kbs_options	Array of all the KBS Options
  * @return	void
  */
 function kbs_multicheck_callback( $args ) {
-	global $kbs_options;
+	$kbs_option = kbs_get_option( $args['id'] );
+
+	$class = kbs_sanitize_html_class( $args['field_class'] );
+
+	$html = '';
 
 	if ( ! empty( $args['options'] ) ) {
-		foreach( $args['options'] as $key => $option ):
-			if( isset( $kbs_options[$args['id']][$key] ) ) { $enabled = $option; } else { $enabled = NULL; }
-			echo '<input name="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . '][' . kbs_sanitize_key( $key ) . ']" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . '][' . kbs_sanitize_key( $key ) . ']" type="checkbox" value="' . esc_attr( $option ) . '" ' . checked($option, $enabled, false) . '/>&nbsp;';
-			echo '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . '][' . kbs_sanitize_key( $key ) . ']">' . wp_kses_post( $option ) . '</label><br/>';
-		endforeach;
-		echo '<p class="description">' . $args['desc'] . '</p>';
+		foreach( $args['options'] as $key => $option )	{
+			if ( isset( $kbs_option[ $key ] ) )	{
+				$enabled = $option;
+			} else	{
+				$enabled = NULL;
+			}
+
+			$html .= '<input name="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . '][' . kbs_sanitize_key( $key ) . ']" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . '][' . kbs_sanitize_key( $key ) . ']" class="' . $class . '" type="checkbox" value="' . esc_attr( $option ) . '" ' . checked( $option, $enabled, false ) . '/>&nbsp;';
+
+			$html .= '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . '][' . kbs_sanitize_key( $key ) . ']">' . wp_kses_post( $option ) . '</label><br/>';
+		}
+
+		$html .= '<p class="description">' . $args['desc'] . '</p>';
 	}
+
+	echo apply_filters( 'kbs_after_setting_output', $html, $args );
 } // kbs_multicheck_callback
 
 /**
@@ -774,27 +1169,35 @@ function kbs_multicheck_callback( $args ) {
  *
  * Renders radio boxes.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @global	$kbs_options	Array of all the KBS Options
  * @return	void
  */
 function kbs_radio_callback( $args ) {
-	global $kbs_options;
+	$kbs_option = kbs_get_option( $args['id'] );
 
-	foreach ( $args['options'] as $key => $option ) :
+	$html = '';
+
+	$class = kbs_sanitize_html_class( $args['field_class'] );
+
+	foreach ( $args['options'] as $key => $option )	{
 		$checked = false;
 
-		if ( isset( $kbs_options[ $args['id'] ] ) && $kbs_options[ $args['id'] ] == $key )
+		if ( $kbs_option && $key == $kbs_option )	{
 			$checked = true;
-		elseif( isset( $args['std'] ) && $args['std'] == $key && ! isset( $kbs_options[ $args['id'] ] ) )
+		} elseif ( isset( $args['std'] ) && $key == $args['std'] && ! $kbs_option )	{
 			$checked = true;
+		}
 
-		echo '<input name="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . '][' . kbs_sanitize_key( $key ) . ']" type="radio" value="' . kbs_sanitize_key( $key ) . '" ' . checked(true, $checked, false) . '/>&nbsp;';
-		echo '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . '][' . kbs_sanitize_key( $key ) . ']">' . esc_html( $option ) . '</label><br/>';
-	endforeach;
+		$html .= '<input name="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . '][' . kbs_sanitize_key( $key ) . ']" class="' . $class . '" type="radio" value="' . kbs_sanitize_key( $key ) . '" ' . checked( true, $checked, false ) . '/>&nbsp;';
 
-	echo '<p class="description">' . wp_kses_post( $args['desc'] ) . '</p>';
+		$html .= '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . '][' . kbs_sanitize_key( $key ) . ']">' . esc_html( $option ) . '</label><br/>';
+	}
+
+	$html .= '<p class="description">' . apply_filters( 'kbs_after_setting_output', wp_kses_post( $args['desc'] ), $args ) . '</p>';
+
+	echo $html;
 } // kbs_radio_callback
 
 /**
@@ -802,17 +1205,17 @@ function kbs_radio_callback( $args ) {
  *
  * Renders text fields.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @global	$kbs_options	Array of all the KBS Options
  * @return	void
  */
 function kbs_text_callback( $args ) {
-	global $kbs_options;
+	$kbs_option = kbs_get_option( $args['id'] );
 
-	if ( isset( $kbs_options[ $args['id'] ] ) ) {
-		$value = $kbs_options[ $args['id'] ];
-	} else {
+	if ( $kbs_option )	{
+		$value = $kbs_option;
+	} else	{
 		$value = isset( $args['std'] ) ? $args['std'] : '';
 	}
 
@@ -824,12 +1227,14 @@ function kbs_text_callback( $args ) {
 		$name = 'name="kbs_settings[' . esc_attr( $args['id'] ) . ']"';
 	}
 
+	$class = kbs_sanitize_html_class( $args['field_class'] );
+
 	$readonly = $args['readonly'] === true ? ' readonly="readonly"' : '';
 	$size     = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
-	$html     = '<input type="text" class="' . sanitize_html_class( $size ) . '-text" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" ' . $name . ' value="' . esc_attr( stripslashes( $value ) ) . '"' . $readonly . '/>';
+	$html     = '<input type="text" class="' . $class . ' ' . sanitize_html_class( $size ) . '-text" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" ' . $name . ' value="' . esc_attr( stripslashes( $value ) ) . '"' . $readonly . '/>';
 	$html    .= '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"> '  . wp_kses_post( $args['desc'] ) . '</label>';
 
-	echo $html;
+	echo apply_filters( 'kbs_after_setting_output', $html, $args );
 } // kbs_text_callback
 
 /**
@@ -837,16 +1242,16 @@ function kbs_text_callback( $args ) {
  *
  * Renders number fields.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @global	$kbs_options	Array of all the KBS Options
  * @return	void
  */
 function kbs_number_callback( $args ) {
-	global $kbs_options;
+	$kbs_option = kbs_get_option( $args['id'] );
 
-	if ( isset( $kbs_options[ $args['id'] ] ) ) {
-		$value = $kbs_options[ $args['id'] ];
+	if ( $kbs_option ) {
+		$value = $kbs_option;
 	} else {
 		$value = isset( $args['std'] ) ? $args['std'] : '';
 	}
@@ -859,15 +1264,17 @@ function kbs_number_callback( $args ) {
 		$name = 'name="kbs_settings[' . esc_attr( $args['id'] ) . ']"';
 	}
 
+	$class = kbs_sanitize_html_class( $args['field_class'] );
+
 	$max  = isset( $args['max'] ) ? $args['max'] : 999999;
 	$min  = isset( $args['min'] ) ? $args['min'] : 0;
 	$step = isset( $args['step'] ) ? $args['step'] : 1;
 
 	$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
-	$html = '<input type="number" step="' . esc_attr( $step ) . '" max="' . esc_attr( $max ) . '" min="' . esc_attr( $min ) . '" class="' . sanitize_html_class( $size ) . '-text" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" ' . $name . ' value="' . esc_attr( stripslashes( $value ) ) . '"/>';
+	$html = '<input type="number" step="' . esc_attr( $step ) . '" max="' . esc_attr( $max ) . '" min="' . esc_attr( $min ) . '" class="' . $class . ' ' . sanitize_html_class( $size ) . '-text" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" ' . $name . ' value="' . esc_attr( stripslashes( $value ) ) . '"/>';
 	$html .= '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"> '  . wp_kses_post( $args['desc'] ) . '</label>';
 
-	echo $html;
+	echo apply_filters( 'kbs_after_setting_output', $html, $args );
 } // kbs_number_callback
 
 /**
@@ -875,24 +1282,26 @@ function kbs_number_callback( $args ) {
  *
  * Renders textarea fields.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @global	$kbs_options	Array of all the KBS Options
  * @return	void
  */
 function kbs_textarea_callback( $args ) {
-	global $kbs_options;
+	$kbs_option = kbs_get_option( $args['id'] );
 
-	if ( isset( $kbs_options[ $args['id'] ] ) ) {
-		$value = $kbs_options[ $args['id'] ];
-	} else {
+	if ( $kbs_option )	{
+		$value = $kbs_option;
+	} else	{
 		$value = isset( $args['std'] ) ? $args['std'] : '';
 	}
 
-	$html = '<textarea class="large-text" cols="50" rows="5" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . esc_attr( $args['id'] ) . ']">' . esc_textarea( stripslashes( $value ) ) . '</textarea>';
+	$class = kbs_sanitize_html_class( $args['field_class'] );
+
+	$html = '<textarea class="' . $class . ' large-text" cols="50" rows="5" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . esc_attr( $args['id'] ) . ']">' . esc_textarea( stripslashes( $value ) ) . '</textarea>';
 	$html .= '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"> '  . wp_kses_post( $args['desc'] ) . '</label>';
 
-	echo $html;
+	echo apply_filters( 'kbs_after_setting_output', $html, $args );
 } // kbs_textarea_callback
 
 /**
@@ -900,25 +1309,27 @@ function kbs_textarea_callback( $args ) {
  *
  * Renders password fields.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @global	$kbs_options	Array of all the KBS Options
  * @return	void
  */
 function kbs_password_callback( $args ) {
-	global $kbs_options;
+	$kbs_option = kbs_get_option( $args['id'] );
 
-	if ( isset( $kbs_options[ $args['id'] ] ) ) {
-		$value = $kbs_options[ $args['id'] ];
-	} else {
+	if ( $kbs_option )	{
+		$value = $kbs_option;
+	} else	{
 		$value = isset( $args['std'] ) ? $args['std'] : '';
 	}
 
+	$class = kbs_sanitize_html_class( $args['field_class'] );
+
 	$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
-	$html = '<input type="password" class="' . sanitize_html_class( $size ) . '-text" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . esc_attr( $args['id'] ) . ']" value="' . esc_attr( $value ) . '"/>';
+	$html = '<input type="password" class="' . $class . ' ' . sanitize_html_class( $size ) . '-text" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . esc_attr( $args['id'] ) . ']" value="' . esc_attr( $value ) . '"/>';
 	$html .= '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"> ' . wp_kses_post( $args['desc'] ) . '</label>';
 
-	echo $html;
+	echo apply_filters( 'kbs_after_setting_output', $html, $args );
 } // kbs_password_callback
 
 /**
@@ -926,7 +1337,7 @@ function kbs_password_callback( $args ) {
  *
  * If a function is missing for settings callbacks alert the user.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @return	void
  */
@@ -942,17 +1353,17 @@ function kbs_missing_callback($args) {
  *
  * Renders select fields.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @global	$kbs_options	Array of all the KBS Options
  * @return	void
  */
-function kbs_select_callback($args) {
-	global $kbs_options;
+function kbs_select_callback( $args ) {
+	$kbs_option = kbs_get_option( $args['id'] );
 
-	if ( isset( $kbs_options[ $args['id'] ] ) ) {
-		$value = $kbs_options[ $args['id'] ];
-	} else {
+	if ( $kbs_option )	{
+		$value = $kbs_option;
+	} else	{
 		$value = isset( $args['std'] ) ? $args['std'] : '';
 	}
 
@@ -962,13 +1373,13 @@ function kbs_select_callback($args) {
 		$placeholder = '';
 	}
 
+	$class = kbs_sanitize_html_class( $args['field_class'] );
+
 	if ( isset( $args['chosen'] ) ) {
-		$chosen = 'class="kbs-chosen"';
-	} else {
-		$chosen = '';
+		$class .= ' kbs-chosen';
 	}
 
-	$html = '<select id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . esc_attr( $args['id'] ) . ']" ' . $chosen . 'data-placeholder="' . esc_html( $placeholder ) . '" />';
+	$html = '<select id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . esc_attr( $args['id'] ) . ']" class="' . $class . '" data-placeholder="' . esc_html( $placeholder ) . '" />';
 
 	foreach ( $args['options'] as $option => $name ) {
 		$selected = selected( $option, $value, false );
@@ -978,7 +1389,7 @@ function kbs_select_callback($args) {
 	$html .= '</select>';
 	$html .= '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"> ' . wp_kses_post( $args['desc'] ) . '</label>';
 
-	echo $html;
+	echo apply_filters( 'kbs_after_setting_output', $html, $args );
 } // kbs_select_callback
 
 /**
@@ -986,21 +1397,23 @@ function kbs_select_callback($args) {
  *
  * Renders color select fields.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @global	$kbs_options Array of all the KBS Options
  * @return	void
  */
 function kbs_color_select_callback( $args ) {
-	global $kbs_options;
+	$kbs_option = kbs_get_option( $args['id'] );
 
-	if ( isset( $kbs_options[ $args['id'] ] ) ) {
-		$value = $kbs_options[ $args['id'] ];
-	} else {
+	if ( $kbs_option )	{
+		$value = $kbs_option;
+	} else	{
 		$value = isset( $args['std'] ) ? $args['std'] : '';
 	}
 
-	$html = '<select id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . esc_attr( $args['id'] ) . ']"/>';
+	$class = kbs_sanitize_html_class( $args['field_class'] );
+
+	$html = '<select id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" class="' . $class . '" name="kbs_settings[' . esc_attr( $args['id'] ) . ']"/>';
 
 	foreach ( $args['options'] as $option => $color ) {
 		$selected = selected( $option, $value, false );
@@ -1010,7 +1423,7 @@ function kbs_color_select_callback( $args ) {
 	$html .= '</select>';
 	$html .= '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"> '  . wp_kses_post( $args['desc'] ) . '</label>';
 
-	echo $html;
+	echo apply_filters( 'kbs_after_setting_output', $html, $args );
 } // kbs_color_select_callback
 
 /**
@@ -1018,37 +1431,43 @@ function kbs_color_select_callback( $args ) {
  *
  * Renders rich editor fields.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @global	$kbs_options	Array of all the KBS Options
  * @global	$wp_version		WordPress Version
  */
 function kbs_rich_editor_callback( $args ) {
-	global $kbs_options, $wp_version;
+	$kbs_option = kbs_get_option( $args['id'] );
 
-	if ( isset( $kbs_options[ $args['id'] ] ) ) {
-		$value = $kbs_options[ $args['id'] ];
+	if ( $kbs_option )	{
+		$value = $kbs_option;
 
-		if( empty( $args['allow_blank'] ) && empty( $value ) ) {
+		if ( empty( $args['allow_blank'] ) && empty( $value ) )	{
 			$value = isset( $args['std'] ) ? $args['std'] : '';
 		}
-	} else {
+	} else	{
 		$value = isset( $args['std'] ) ? $args['std'] : '';
 	}
 
 	$rows = isset( $args['size'] ) ? $args['size'] : 20;
 
-	if ( $wp_version >= 3.3 && function_exists( 'wp_editor' ) ) {
-		ob_start();
-		wp_editor( stripslashes( $value ), 'kbs_settings_' . esc_attr( $args['id'] ), array( 'textarea_name' => 'kbs_settings[' . esc_attr( $args['id'] ) . ']', 'textarea_rows' => absint( $rows ) ) );
-		$html = ob_get_clean();
-	} else {
-		$html = '<textarea class="large-text" rows="10" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . esc_attr( $args['id'] ) . ']">' . esc_textarea( stripslashes( $value ) ) . '</textarea>';
-	}
+	$class = kbs_sanitize_html_class( $args['field_class'] );
+
+	ob_start();
+	wp_editor(
+		stripslashes( $value ),
+		'kbs_settings_' . esc_attr( $args['id'] ),
+		array(
+			'textarea_name' => 'kbs_settings[' . esc_attr( $args['id'] ) . ']',
+			'textarea_rows' => absint( $rows ),
+			'editor_class'  => $class
+		)
+	);
+	$html = ob_get_clean();
 
 	$html .= '<br/><label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"> ' . wp_kses_post( $args['desc'] ) . '</label>';
 
-	echo $html;
+	echo apply_filters( 'kbs_after_setting_output', $html, $args );
 } // kbs_rich_editor_callback
 
 /**
@@ -1056,26 +1475,28 @@ function kbs_rich_editor_callback( $args ) {
  *
  * Renders upload fields.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @global	$kbs_options	Array of all the KBS Options
  * @return	void
  */
 function kbs_upload_callback( $args ) {
-	global $kbs_options;
+	$kbs_option = kbs_get_option( $args['id'] );
 
-	if ( isset( $kbs_options[ $args['id'] ] ) ) {
-		$value = $kbs_options[ $args['id'] ];
-	} else {
-		$value = isset( $args['std'] ) ? $args['std'] : '';
+	if ( $kbs_option )	{
+		$value = $kbs_option;
+	} else	{
+		$value = isset($args['std']) ? $args['std'] : '';
 	}
 
+	$class = kbs_sanitize_html_class( $args['field_class'] );
+
 	$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
-	$html = '<input type="text" class="' . sanitize_html_class( $size ) . '-text" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . esc_attr( $args['id'] ) . ']" value="' . esc_attr( stripslashes( $value ) ) . '"/>';
+	$html = '<input type="text" "' . $class . ' ' . sanitize_html_class( $size ) . '-text" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . esc_attr( $args['id'] ) . ']" value="' . esc_attr( stripslashes( $value ) ) . '"/>';
 	$html .= '<span>&nbsp;<input type="button" class="kbs_settings_upload_button button-secondary" value="' . __( 'Upload File', 'kb-support' ) . '"/></span>';
 	$html .= '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"> ' . wp_kses_post( $args['desc'] ) . '</label>';
 
-	echo $html;
+	echo apply_filters( 'kbs_after_setting_output', $html, $args );
 } // kbs_upload_callback
 
 
@@ -1084,26 +1505,28 @@ function kbs_upload_callback( $args ) {
  *
  * Renders color picker fields.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @global	$kbs_options	Array of all the KBS Options
  * @return	void
  */
 function kbs_color_callback( $args ) {
-	global $kbs_options;
+	$kbs_option = kbs_get_option( $args['id'] );
 
-	if ( isset( $kbs_options[ $args['id'] ] ) ) {
-		$value = $kbs_options[ $args['id'] ];
-	} else {
+	if ( $kbs_option )	{
+		$value = $kbs_option;
+	} else	{
 		$value = isset( $args['std'] ) ? $args['std'] : '';
 	}
 
 	$default = isset( $args['std'] ) ? $args['std'] : '';
 
+	$class = kbs_sanitize_html_class( $args['field_class'] );
+
 	$html = '<input type="text" class="kbs-color-picker" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . esc_attr( $args['id'] ) . ']" value="' . esc_attr( $value ) . '" data-default-color="' . esc_attr( $default ) . '" />';
 	$html .= '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"> '  . wp_kses_post( $args['desc'] ) . '</label>';
 
-	echo $html;
+	echo apply_filters( 'kbs_after_setting_output', $html, $args );
 } // kbs_color_callback
 
 /**
@@ -1111,36 +1534,39 @@ function kbs_color_callback( $args ) {
  *
  * Renders descriptive text onto the settings field.
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @return	void
  */
 function kbs_descriptive_text_callback( $args ) {
-	echo wp_kses_post( $args['desc'] );
+	$html = wp_kses_post( $args['desc'] );
+
+	echo apply_filters( 'kbs_after_setting_output', $html, $args );
 } // kbs_descriptive_text_callback
 
 /**
  * Registers the license field callback for Software Licensing
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @global	$kbs_options	Array of all the KBS options
  * @return void
  */
 if ( ! function_exists( 'kbs_license_key_callback' ) ) {
-	function kbs_license_key_callback( $args ) {
-		global $kbs_options;
+	function kbs_license_key_callback( $args )	{
+
+		$kbs_option = kbs_get_option( $args['id'] );
 
 		$messages = array();
 		$license  = get_option( $args['options']['is_valid_license_option'] );
 
-		if ( isset( $kbs_options[ $args['id'] ] ) ) {
-			$value = $kbs_options[ $args['id'] ];
-		} else {
+		if ( $kbs_option )	{
+			$value = $kbs_option;
+		} else	{
 			$value = isset( $args['std'] ) ? $args['std'] : '';
 		}
 
-		if( ! empty( $license ) && is_object( $license ) ) {
+		if ( ! empty( $license ) && is_object( $license ) )	{
 
 			// activate_license 'invalid' on anything other than valid, so if there was an error capture it
 			if ( false === $license->success ) {
@@ -1149,11 +1575,23 @@ if ( ! function_exists( 'kbs_license_key_callback' ) ) {
 
 					case 'expired' :
 
-						$class = 'error';
+						$class = 'expired';
 						$messages[] = sprintf(
 							__( 'Your license key expired on %s. Please <a href="%s" target="_blank" title="Renew your license key">renew your license key</a>.', 'kb-support' ),
 							date_i18n( get_option( 'date_format' ), strtotime( $license->expires, current_time( 'timestamp' ) ) ),
 							'http://kb-support.com/checkout/?edd_license_key=' . $value
+						);
+
+						$license_status = 'license-' . $class . '-notice';
+
+						break;
+
+					case 'revoked' :
+
+						$class = 'error';
+						$messages[] = sprintf(
+							__( 'Your license key has been disabled. Please <a href="%s" target="_blank">contact support</a> for more information.', 'kb-support' ),
+							'https://kb-support.com/support'
 						);
 
 						$license_status = 'license-' . $class . '-notice';
@@ -1189,7 +1627,7 @@ if ( ! function_exists( 'kbs_license_key_callback' ) ) {
 					case 'item_name_mismatch' :
 
 						$class = 'error';
-						$messages[] = sprintf( __( 'This is not a %s.', 'kb-support' ), $args['name'] );
+						$messages[] = sprintf( __( 'This appears to be an invalid license key for %s.', 'kb-support' ), $args['name'] );
 
 						$license_status = 'license-' . $class . '-notice';
 
@@ -1202,6 +1640,23 @@ if ( ! function_exists( 'kbs_license_key_callback' ) ) {
 
 						$license_status = 'license-' . $class . '-notice';
 
+						break;
+
+					case 'license_not_activable':
+
+						$class = 'error';
+						$messages[] = __( 'The key you entered belongs to a bundle, please use the product specific license key.', 'kb-support' );
+
+						$license_status = 'license-' . $class . '-notice';
+						break;
+
+					default :
+
+						$class = 'error';
+						$error = ! empty(  $license->error ) ?  $license->error : __( 'unknown_error', 'kb-support' );
+						$messages[] = sprintf( __( 'There was an error with this license key: %s. Please <a href="%s">contact our support team</a>.', 'kb-support' ), $error, 'https://kb-support.com/support' );
+
+						$license_status = 'license-' . $class . '-notice';
 						break;
 
 				}
@@ -1251,9 +1706,18 @@ if ( ! function_exists( 'kbs_license_key_callback' ) ) {
 
 			}
 
-		} else {
+		} else	{
+			$class = 'empty';
+
+			$messages[] = sprintf(
+				__( 'To receive updates, please enter your valid %s license key.', 'kb-support' ),
+				$args['name']
+			);
+
 			$license_status = null;
 		}
+
+		$class .= ' ' . kbs_sanitize_html_class( $args['field_class'] );
 
 		$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
 		$html = '<input type="text" class="' . sanitize_html_class( $size ) . '-text" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" value="' . esc_attr( $value ) . '"/>';
@@ -1267,7 +1731,7 @@ if ( ! function_exists( 'kbs_license_key_callback' ) ) {
 		if ( ! empty( $messages ) ) {
 			foreach( $messages as $message ) {
 
-				$html .= '<div class="kbs-license-data kbs-license-' . $class . '">';
+				$html .= '<div class="kbs-license-data kbs-license-' . $class . ' ' . $license_status . '">';
 					$html .= '<p>' . $message . '</p>';
 				$html .= '</div>';
 
@@ -1276,12 +1740,9 @@ if ( ! function_exists( 'kbs_license_key_callback' ) ) {
 
 		wp_nonce_field( kbs_sanitize_key( $args['id'] ) . '-nonce', kbs_sanitize_key( $args['id'] ) . '-nonce' );
 
-		if ( isset( $license_status ) ) {
-			echo '<div class="' . $license_status . '">' . $html . '</div>';
-		} else {
-			echo '<div class="license-null">' . $html . '</div>';
-		}
+		echo $html;
 	}
+
 } // kbs_license_key_callback
 
 /**
@@ -1289,7 +1750,7 @@ if ( ! function_exists( 'kbs_license_key_callback' ) ) {
  *
  * Adds a do_action() hook in place of the field
  *
- * @since	0.1
+ * @since	1.0
  * @param	arr		$args	Arguments passed by the setting
  * @return	void
  */
@@ -1300,7 +1761,7 @@ function kbs_hook_callback( $args ) {
 /**
  * Set manage_ticket_settings as the cap required to save KBS settings pages
  *
- * @since	0.1
+ * @since	1.0
  * @return	str		Capability required
  */
 function kbs_set_settings_cap() {
@@ -1309,33 +1770,80 @@ function kbs_set_settings_cap() {
 add_filter( 'option_page_capability_kbs_settings', 'kbs_set_settings_cap' );
 
 /**
+ * Adds the tooltip after the setting field.
+ *
+ * @since	1.0
+ * @param	str		$html	HTML output
+ * @param	arr		$args	Array containing tooltip title and description
+ * @return	str		Filtered HTML output
+ */
+function kbs_add_setting_tooltip( $html, $args ) {
+
+	if ( ! empty( $args['tooltip_title'] ) && ! empty( $args['tooltip_desc'] ) ) {
+		$tooltip = '<span alt="f223" class="kbs-help-tip dashicons dashicons-editor-help" title="<strong>' . $args['tooltip_title'] . '</strong>: ' . $args['tooltip_desc'] . '"></span>';
+		$html .= $tooltip;
+	}
+
+	return $html;
+}
+add_filter( 'kbs_after_setting_output', 'kbs_add_setting_tooltip', 10, 2 );
+
+/**
+ * Retrieve a list of all published pages.
+ *
+ * On large sites this can be expensive, so only load if on the settings page or $force is set to true
+ *
+ * @since	1.0
+ * @param	bool	$force			Force the pages to be loaded even if not on settings
+ * @return	arr		$pages_options	An array of the pages
+ */
+function kbs_get_pages( $force = false ) {
+
+	$pages_options = array( '' => '' ); // Blank option
+
+	if( ( ! isset( $_GET['page'] ) || 'kbs-settings' != $_GET['page'] ) && ! $force ) {
+		return $pages_options;
+	}
+
+	$pages = get_pages();
+	if ( $pages ) {
+		foreach ( $pages as $page ) {
+			$pages_options[ $page->ID ] = $page->post_title;
+		}
+	}
+
+	return $pages_options;
+
+} // kbs_get_pages
+
+/**
  * Returns a select list for target response time option.
  *
- * @since	0.1
+ * @since	1.0
  * @param
  * @return	str		Array of selectable options for target response times.
  */
 function kbs_get_response_time_options()	{
 	
 	$response_times = array(
-		'1 hour'    => __( '1 Hour', 'mobile-dj-manager' ),
-		'2 hours'   => __( '2 Hours', 'mobile-dj-manager' ),
-		'3 hours'   => __( '3 Hours', 'mobile-dj-manager' ),
-		'4 hours'   => __( '4 Hours', 'mobile-dj-manager' ),
-		'5 hours'   => __( '5 Hours', 'mobile-dj-manager' ),
-		'6 hours'   => __( '6 Hours', 'mobile-dj-manager' ),
-		'7 hours'   => __( '7 Hours', 'mobile-dj-manager' ),
-		'1 day'     => __( '1 Day', 'mobile-dj-manager' ),
-		'1 day'     => __( '1 Day', 'mobile-dj-manager' ),
-		'2 days'    => __( '2 Days', 'mobile-dj-manager' ),
-		'3 days'    => __( '3 Days', 'mobile-dj-manager' ),
-		'4 days'    => __( '4 Days', 'mobile-dj-manager' ),
-		'5 days'    => __( '5 Days', 'mobile-dj-manager' ),
-		'6 days'    => __( '6 Days', 'mobile-dj-manager' ),
-		'1 week'    => __( '1 Week', 'mobile-dj-manager' ),
-		'2 weeks'   => __( '2 Weeks', 'mobile-dj-manager' ),
-		'3 weeks'   => __( '3 Weeks', 'mobile-dj-manager' ),
-		'4 weeks'   => __( '4 Weeks', 'mobile-dj-manager' )
+		'1 hour'    => __( '1 Hour', 'kb-support' ),
+		'2 hours'   => __( '2 Hours', 'kb-support' ),
+		'3 hours'   => __( '3 Hours', 'kb-support' ),
+		'4 hours'   => __( '4 Hours', 'kb-support' ),
+		'5 hours'   => __( '5 Hours', 'kb-support' ),
+		'6 hours'   => __( '6 Hours', 'kb-support' ),
+		'7 hours'   => __( '7 Hours', 'kb-support' ),
+		'8 hours'   => __( '7 Hours', 'kb-support' ),
+		'1 day'     => __( '1 Day', 'kb-support' ),
+		'2 days'    => __( '2 Days', 'kb-support' ),
+		'3 days'    => __( '3 Days', 'kb-support' ),
+		'4 days'    => __( '4 Days', 'kb-support' ),
+		'5 days'    => __( '5 Days', 'kb-support' ),
+		'6 days'    => __( '6 Days', 'kb-support' ),
+		'1 week'    => __( '1 Week', 'kb-support' ),
+		'2 weeks'   => __( '2 Weeks', 'kb-support' ),
+		'3 weeks'   => __( '3 Weeks', 'kb-support' ),
+		'4 weeks'   => __( '4 Weeks', 'kb-support' )
 	);
 	
 	return apply_filters( 'kbs_get_response_time_options', $response_times );

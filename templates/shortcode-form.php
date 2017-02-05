@@ -2,57 +2,96 @@
 /**
  * This template is used to display the form for submitting a ticket [kbs_form]
  */
+global $kbs_form;
 ?>
 
-<form id="kbs_ticket_form" class="kbs_form" action="" method="post">
-	<?php do_action( 'kbs_ticket_form_fields_top' ); ?>
+<div id="kbs_ticket_wrap">
+	<?php do_action( 'kbs_notices' ); ?>
+	<div id="kbs_ticket_form_wrap" class="kbs_clearfix">
+        <?php do_action( 'kbs_before_ticket_form' ); ?>
+        <form<?php kbs_maybe_set_enctype(); ?> id="kbs_ticket_form" class="kbs_form" method="post">
+    		<div class="kbs_alert kbs_alert_error kbs_hidden"></div>
+            <?php do_action( 'kbs_ticket_form_top' ); ?>
 
-	<fieldset>
-		<legend><?php _e( 'Submit a Support Ticket', 'kb-support' ); ?></legend>
+            <fieldset id="kbs_ticket_form_fields">
+                <legend><?php echo esc_attr( get_the_title( $kbs_form->ID ) ); ?></legend>
 
-		<?php do_action( 'kbs_ticket_form_fields_before' ); ?>
+				<?php if( is_ssl() ) : ?>
+                    <div id="kbs_secure_site_wrapper">
+                        <span class="padlock"></span>
+                        <span><?php _e( 'This form is secured and encrypted via SSL', 'kb-support' ); ?></span>
+                    </div>
+                <?php endif; ?>
 
-		<p>
-			<label for="kbs-firstname-ticket"><?php _e( 'Username', 'kb-support' ); ?></label>
-			<input id="kbs-firstname-ticket" class="required kbs-input" type="text" name="kbs_firstname_ticket" title="<?php esc_attr_e( 'First Name', 'kb-support' ); ?>" />
-		</p>
-        
-        <?php do_action( 'kbs_ticket_form_fields_before_lastname' ); ?>
-        
-        <p>
-			<label for="kbs-lastname-ticket"><?php _e( 'Last Name', 'kb-support' ); ?></label>
-			<input id="kbs-lastname-ticket" class="required kbs-input" type="text" name="kbs_lastname_ticket" title="<?php esc_attr_e( 'Last Name', 'kb-support' ); ?>" />
-		</p>
-        
-        <?php do_action( 'kbs_ticket_form_fields_before_email' ); ?>
+                <?php foreach( $kbs_form->fields as $field ) : ?>
 
-		<p>
-			<label for="kbs-ticket-email"><?php _e( 'Email', 'kb-support' ); ?></label>
-			<input id="kbs-ticket-email" class="required kbs-input" type="email" name="kbs_ticket_email" title="<?php esc_attr_e( 'Email Address', 'kb-support' ); ?>" />
-		</p>
+					<?php $label_class = ''; ?>
+                    <?php $settings    = $kbs_form->get_field_settings( $field->ID ); ?>
 
-		<p>
-			<label for="kbs-user-pass"><?php _e( 'Password', 'kb-support' ); ?></label>
-			<input id="kbs-user-pass" class="password required kbs-input" type="password" name="kbs_user_pass" />
-		</p>
+                    <p class="kbs-<?php echo $field->post_name; ?>">
+                        <?php if ( empty( $settings['hide_label'] ) && 'recaptcha' != $settings['type'] ) : ?>
+                            <?php if ( ! empty( $settings['label_class'] ) ) : ?>
+                                <?php $label_class = ' class="' . sanitize_html_class( $settings['label_class'] ) . '"'; ?>
+                            <?php endif; ?>
 
-		<p>
-			<label for="kbs-user-pass2"><?php _e( 'Confirm Password', 'kb-support' ); ?></label>
-			<input id="kbs-user-pass2" class="password required kbs-input" type="password" name="kbs_user_pass2" />
-		</p>
+                            <label for="<?php echo $field->post_name; ?>"<?php echo $label_class; ?>>
 
+                                <?php echo esc_attr( get_the_title( $field->ID ) ); ?>
 
-		<?php do_action( 'kbs_register_form_fields_before_submit' ); ?>
+                                <?php if ( $settings['required'] ) : ?>
+                                    <span class="kbs-required-indicator">*</span>
+                                <?php endif; ?>
 
-		<p>
-			<input type="hidden" name="kbs_honeypot" value="" />
-			<input type="hidden" name="kbs_action" value="user_register" />
-			<input type="hidden" name="kbs_redirect" value="<?php echo esc_url( $kbs_register_redirect ); ?>"/>
-			<input class="button" name="kbs_register_submit" type="submit" value="<?php esc_attr_e( 'Register', 'kb-support' ); ?>" />
-		</p>
+                            </label>
 
-		<?php do_action( 'kbs_register_form_fields_after' ); ?>
-	</fieldset>
+                            <?php if ( ! empty( $settings['description'] ) && 'label' == $settings['description_pos'] ) : ?>
+                                <?php kbs_display_form_field_description( $field, $settings ); ?>
+                            <?php endif; ?>
 
-	<?php do_action( 'kbs_register_form_fields_bottom' ); ?>
-</form>
+                        <?php endif; ?>
+
+                        <?php $kbs_form->display_field( $field, $settings ); ?>
+
+                        <?php if ( ! empty( $settings['description'] ) && 'field' == $settings['description_pos'] ) : ?>
+                            <?php kbs_display_form_field_description( $field, $settings ); ?>
+                        <?php endif; ?>
+
+                    </p>
+
+					<?php if ( ! empty( $settings['kb_search'] ) ) : ?>
+                        <div id="kbs-loading" class="kbs-loader kbs-hidden"></div>
+                        <div class="kbs_alert kbs_alert_warn kbs-article-search-results kbs_hidden">
+                            <span class="right">
+                                <a id="close-search"><?php _e( 'Close', 'kb-support' ); ?></a>
+                            </span>
+                            <strong><?php printf( __( 'Could any of the following %s help resolve your query?', 'kb-support' ), kbs_get_article_label_plural() ); ?></strong>
+                            <span id="kbs-article-results"></span>
+                        </div>
+                    <?php endif; ?>
+
+                <?php endforeach; ?>
+
+        		<?php do_action( 'kbs_ticket_form_after_fields' ); ?>
+            </fieldset>
+
+			<?php do_action( 'kbs_ticket_form_before_submit_fieldset' ); ?>
+
+            <fieldset id="kbs_ticket_form_submit">
+
+            	<?php do_action( 'kbs_ticket_form_before_submit' ); ?>
+            	<?php kbs_render_hidden_form_fields( $kbs_form->ID ); ?>
+
+                <input class="button" name="kbs_ticket_submit" id="kbs_ticket_submit" type="submit" value="<?php echo esc_attr( kbs_get_form_submit_label() ); ?>" />
+
+                <?php do_action( 'kbs_ticket_form_after_submit' ); ?>
+
+            </fieldset>
+
+        	<?php do_action( 'kbs_ticket_form_bottom' ); ?>
+
+        </form>
+
+        <?php do_action( 'kbs_after_ticket_form' ); ?>
+
+    </div><!--end #kbs_ticket_form_wrap-->
+</div><!-- end of #kbs_ticket_wrap -->

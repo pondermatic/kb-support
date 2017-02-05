@@ -4,13 +4,14 @@
  *
  * @package     KBS
  * @subpackage  Admin/Pages
- * @copyright   Copyright (c) 2016, Mike Howard
+ * @copyright   Copyright (c) 2017, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       0.1
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) )
+	exit;
 
 /**
  * Creates the admin submenu pages under the Tickets menu and assigns their
@@ -22,12 +23,20 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  */
 function kbs_add_options_link() {
 
-	global $kbs_settings_page;
+	global $kbs_customers_page, $kbs_settings_page, $kbs_upgrades_screen;
 
-	$kbs_settings_page      = add_submenu_page( 'edit.php?post_type=kbs_ticket', __( 'KB Support Settings', 'kb-support' ), __( 'Settings', 'kb-support' ), 'manage_ticket_settings', 'kbs-settings', 'kbs_options_page' );
+	$customer_view_role  = apply_filters( 'kbs_view_customers_role', 'view_ticket_reports' );
+
+	$kbs_customers_page  = add_submenu_page( 'edit.php?post_type=kbs_ticket', __( 'Customers', 'kb-support' ), __( 'Customers', 'kb-support' ), $customer_view_role, 'kbs-customers', 'kbs_customers_page' );
+
+	$kbs_settings_page   = add_submenu_page( 'edit.php?post_type=kbs_ticket', __( 'KB Support Settings', 'kb-support' ), __( 'Settings', 'kb-support' ), 'manage_ticket_settings', 'kbs-settings', 'kbs_options_page' );
+
+	$kbs_settings_page   = add_submenu_page( 'edit.php?post_type=kbs_ticket', __( 'Tools', 'kb-support' ), __( 'Tools', 'kb-support' ), 'manage_ticket_settings', 'kbs-tools', 'kbs_tools_page' );
+
+	$kbs_upgrades_screen = add_submenu_page( null, __( 'KBS Upgrades', 'kb-support' ), __( 'KBS Upgrades', 'kb-support' ), 'manage_ticket_settings', 'kbs-upgrades', 'kbs_upgrades_screen' );
 
 } // kbs_add_options_link
-add_action( 'admin_menu', 'kbs_add_options_link', 9 );
+add_action( 'admin_menu', 'kbs_add_options_link', 20 );
 
 /**
  *  Determines whether the current admin page is a specific KBS admin page.

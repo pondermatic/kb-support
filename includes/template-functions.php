@@ -4,136 +4,205 @@
  *
  * @package     KBS
  * @subpackage  Functions/Templates
- * @copyright   Copyright (c) 2016, Mike Howard
+ * @copyright   Copyright (c) 2017, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       0.1
+ * @since       1.0
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) )
+	exit;
 
 /**
- * Before Ticket Content
+ * Display front end notices.
  *
- * Adds an action to the beginning of ticket post content that can be hooked to
+ * @since	1.0
+ * @return	str
+ */
+function kbs_notices()	{
+
+	if( ! isset( $_GET, $_GET['kbs_notice'] ) )	{
+		return;
+	}
+
+	echo kbs_display_notice( $_GET['kbs_notice'] );
+
+} // kbs_display_notice
+add_action( 'kbs_notices', 'kbs_notices' );
+
+/**
+ * The form submit button label.
+ *
+ * @since	1.0
+ * @return	str		The label for the form submit button.
+ */
+function kbs_get_form_submit_label()	{
+	return kbs_get_option( 'form_submit_label', sprintf( __( 'Submit %s', 'kb-support' ), kbs_get_ticket_label_singular() ) );
+} // kbs_get_form_submit_label
+
+/**
+ * The ticket reply submit button label.
+ *
+ * @since	1.0
+ * @return	str		The label for the ticket reply form submit button.
+ */
+function kbs_get_ticket_reply_label()	{
+	return kbs_get_option( 'ticket_reply_label', __( 'Reply', 'kb-support' ) );
+} // kbs_get_ticket_reply_label
+
+/**
+ * Output the hidden form fields.
+ *
+ * @since	1.0
+ * @param	$form_id	The ID of the form on display.
+ * @return	str
+ */
+function kbs_render_hidden_form_fields( $form_id )	{
+	$hidden_fields = array(
+		'kbs_form_id'  => $form_id,
+		'kbs_honeypot' => '',
+		'redirect'     => kbs_get_current_page_url(),
+		'kbs_nonce'    => wp_create_nonce( 'kbs_submission_nonce' ),
+		'action'       => 'kbs_validate_ticket_form'
+	);
+
+	$hidden_fields = apply_filters( 'kbs_form_hidden_fields', $hidden_fields, $form_id );
+
+	ob_start(); ?>
+
+	<?php foreach( $hidden_fields as $key => $value ) : ?>
+    	<input type="hidden" name="<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( $value ); ?>" />
+    <?php endforeach; ?>
+
+	<?php wp_nonce_field( 'kbs-form-validate', 'kbs_log_ticket' ); ?>
+
+    <?php echo ob_get_clean();
+} // kbs_render_hidden_form_fields
+
+/**
+ * Output the hidden reply form fields.
+ *
+ * @since	1.0
+ * @global	obj		$current_user	If logged in, the current user object
+ * @param	int		$ticket_id		The ID of the form on display.
+ * @return	arr		Hidden form fields for reply form
+ */
+function kbs_render_hidden_reply_fields( $ticket_id )	{
+	global $current_user;
+
+	$current_page  = kbs_get_current_page_url();
+	remove_query_arg( array( 'kbs_notice', 'ticket' ), $current_page );
+
+	$hidden_fields = array(
+		'kbs_ticket_id'  => $ticket_id,
+		'kbs_honeypot'   => '',
+		'redirect'       => add_query_arg( 'ticket', $_GET['ticket'], $current_page ),
+		'action'         => 'kbs_validate_ticket_reply_form'
+	);
+
+	// If logged in we don't need to display the email input but we still need to capture it
+	// for form validation
+	if ( is_user_logged_in() )	{
+		$hidden_fields['kbs_confirm_email'] = $current_user->user_email;
+	}
+
+	$hidden_fields = apply_filters( 'kbs_reply_hidden_fields', $hidden_fields, $ticket_id );
+
+	ob_start(); ?>
+
+	<?php foreach( $hidden_fields as $key => $value ) : ?>
+    	<input type="hidden" name="<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( $value ); ?>" />
+    <?php endforeach; ?>
+
+	<?php wp_nonce_field( 'kbs-reply-validate', 'kbs_ticket_reply' ); ?>
+
+    <?php echo ob_get_clean();
+} // kbs_render_hidden_reply_fields
+
+/**
+ * Before Article Content
+ *
+ * Adds an action to the beginning of kb article post content that can be hooked to
  * by other functions.
  *
- * @since	0.1
+ * @since	1.0
  * @global	$post
  *
- * @param	str		$content	The the_content field of the download object
+ * @param	str		$content	The the_content field of the kb article object
  * @return	str		The content with any additional data attached
  */
-function kbs_before_ticket_content( $content ) {
+function kbs_before_article_content( $content ) {
 	global $post;
 
-	if ( $post && $post->post_type == 'kbs_ticket' && is_singular( 'kbs_ticket' ) && is_main_query() && ! post_password_required() ) {
+	if ( $post && $post->post_type == 'article' && is_singular( 'article' ) && is_main_query() && ! post_password_required() ) {
 		ob_start();
-		do_action( 'kbs_before_ticket_content', $post->ID );
+		do_action( 'kbs_before_article_content', $post->ID );
 		$content = ob_get_clean() . $content;
 	}
 
 	return $content;
-} // kbs_before_ticket_content
-add_filter( 'the_content', 'kbs_before_ticket_content' );
+} // kbs_before_article_content
+add_filter( 'the_content', 'kbs_before_article_content' );
 
 /**
- * After Ticket Content
+ * After Article Content
  *
- * Adds an action to the end of ticket post content that can be hooked to by
+ * Adds an action to the end of kb article post content that can be hooked to by
  * other functions.
  *
- * @since	0.1
+ * @since	1.0
  * @global	$post
  *
- * @param	str		$content	The the_content field of the download object
+ * @param	str		$content	The the_content field of the kb article object
  * @return	str		The content with any additional data attached
  */
-function kbs_after_ticket_content( $content ) {
+function kbs_after_article_content( $content ) {
 	global $post;
 
-	if ( $post && $post->post_type == 'kbs_ticket' && is_singular( 'kbs_ticket' ) && is_main_query() && !post_password_required() ) {
+	if ( $post && 'article' == $post->post_type && is_singular( 'article' ) && is_main_query() && ! post_password_required() ) {
 		ob_start();
-		do_action( 'kbs_after_ticket_content', $post->ID );
+		do_action( 'kbs_after_article_content', $post->ID );
 		$content .= ob_get_clean();
 	}
 
 	return $content;
-}
-add_filter( 'the_content', 'kbs_after_ticket_content' );
+} // kbs_after_article_content
+add_filter( 'the_content', 'kbs_after_article_content', 100 );
 
 /**
- * Get Button Colors
- *
- * Returns an array of button colors.
+ * Increment the post view count for articles when accessed.
  *
  * @since	1.0
- * @return	arr		$colors		Button colors
+ * @return	void
  */
-function kbs_get_button_colors() {
-	$colors = array(
-		'white'     => array(
-			'label' => __( 'White', 'kb-support' ),
-			'hex'   => '#ffffff'
-		),
-		'gray'      => array(
-			'label' => __( 'Gray', 'kb-support' ),
-			'hex'   => '#f0f0f0'
-		),
-		'blue'      => array(
-			'label' => __( 'Blue', 'kb-support' ),
-			'hex'   => '#428bca'
-		),
-		'red'       => array(
-			'label' => __( 'Red', 'kb-support' ),
-			'hex'   => '#d9534f'
-		),
-		'green'     => array(
-			'label' => __( 'Green', 'kb-support' ),
-			'hex'   => '#5cb85c'
-		),
-		'yellow'    => array(
-			'label' => __( 'Yellow', 'kb-support' ),
-			'hex'   => '#f0ad4e'
-		),
-		'orange'    => array(
-			'label' => __( 'Orange', 'kb-support' ),
-			'hex'   => '#ed9c28'
-		),
-		'dark-gray' => array(
-			'label' => __( 'Dark Gray', 'kb-support' ),
-			'hex'   => '#363636'
-		),
-		'inherit'	=> array(
-			'label' => __( 'Inherit', 'kb-support' ),
-			'hex'   => ''
-		)
-	);
+function kbs_article_maybe_increment_views()	{
+	if ( is_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) )	{
+		return;
+	}
 
-	return apply_filters( 'kbs_button_colors', $colors );
-} // kbs_get_button_colors
+	if ( 'article' != get_post_type() || ! is_singular( 'article' ) )	{
+		return;
+	}
 
-/**
- * Get Button Styles
- *
- * Returns an array of button styles.
- *
- * @since	0.1
- * @return	arr		$styles		Button styles
- */
-function kbs_get_button_styles() {
-	$styles = array(
-		'button'	=> __( 'Button', 'kb-support' ),
-		'plain'     => __( 'Plain Text', 'kb-support' )
-	);
+	if ( is_user_logged_in() && kbs_is_agent( get_current_user_id() ) )	{
+		return;
+	}
 
-	return apply_filters( 'kbs_button_styles', $styles );
-} // kbs_get_button_styles
+	$article_id = get_the_ID();
+
+	if ( ! kbs_article_user_can_access( $article_id ) )	{
+		return;
+	}
+
+	kbs_increment_article_view_count( $article_id );
+
+} // kbs_article_maybe_increment_views
+add_action( 'wp', 'kbs_article_maybe_increment_views' );
 
 /**
  * Returns the path to the KBS templates directory
  *
- * @since	0.1
+ * @since	1.0
  * @return 	str
  */
 function kbs_get_templates_dir() {
@@ -143,7 +212,7 @@ function kbs_get_templates_dir() {
 /**
  * Returns the URL to the KBS templates directory
  *
- * @since	0.1
+ * @since	1.0
  * @return	str
  */
 function kbs_get_templates_url() {
@@ -153,7 +222,7 @@ function kbs_get_templates_url() {
 /**
  * Retrieves a template part
  *
- * @since	0.1
+ * @since	1.0
  *
  * Taken from bbPress
  *
@@ -173,8 +242,11 @@ function kbs_get_template_part( $slug, $name = null, $load = true ) {
 
 	// Setup possible parts
 	$templates = array();
-	if ( isset( $name ) )
+
+	if ( isset( $name ) )	{
 		$templates[] = $slug . '-' . $name . '.php';
+	}
+
 	$templates[] = $slug . '.php';
 
 	// Allow template parts to be filtered
@@ -193,7 +265,7 @@ function kbs_get_template_part( $slug, $name = null, $load = true ) {
  *
  * Taken from bbPress
  *
- * @since	0.1
+ * @since	1.0
  *
  * @param	str|arr		$template_names		Template file(s) to search for, in order.
  * @param	bool		$load				If true the template file will be loaded if it is found.
@@ -224,13 +296,14 @@ function kbs_locate_template( $template_names, $load = false, $require_once = tr
 			}
 		}
 
-		if( $located ) {
+		if ( $located ) {
 			break;
 		}
 	}
 
-	if ( ( true == $load ) && ! empty( $located ) )
+	if ( ( true == $load ) && ! empty( $located ) )	{
 		load_template( $located, $require_once );
+	}
 
 	return $located;
 } // kbs_locate_template
@@ -238,7 +311,7 @@ function kbs_locate_template( $template_names, $load = false, $require_once = tr
 /**
  * Returns a list of paths to check for template locations
  *
- * @since	0.1
+ * @since	1.0
  * @return mixed|void
  */
 function kbs_get_theme_template_paths() {
@@ -246,8 +319,8 @@ function kbs_get_theme_template_paths() {
 	$template_dir = kbs_get_theme_template_dir_name();
 
 	$file_paths = array(
-		1 => trailingslashit( get_stylesheet_directory() ) . $template_dir,
-		10 => trailingslashit( get_template_directory() ) . $template_dir,
+		1   => trailingslashit( get_stylesheet_directory() ) . $template_dir,
+		10  => trailingslashit( get_template_directory() ) . $template_dir,
 		100 => kbs_get_templates_dir()
 	);
 
@@ -264,7 +337,7 @@ function kbs_get_theme_template_paths() {
  *
  * Themes can filter this by using the kbs_templates_dir filter.
  *
- * @since	0.1
+ * @since	1.0
  * @return	str
 */
 function kbs_get_theme_template_dir_name() {
@@ -274,7 +347,7 @@ function kbs_get_theme_template_dir_name() {
 /**
  * Adds KBS Version to the <head> tag
  *
- * @since	0.1
+ * @since	1.0
  * @return	void
 */
 function kbs_version_in_header(){

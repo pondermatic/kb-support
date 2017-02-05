@@ -4,13 +4,14 @@
  *
  * @package     KBS
  * @subpackage  Classes/Roles
- * @copyright   Copyright (c) 2016, Mike Howard
+ * @copyright   Copyright (c) 2017, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       0.1
+ * @since       1.0
 */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) )
+	exit;
 
 /**
  * KBS_Roles Class
@@ -20,14 +21,14 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * These roles let us have Support Agents, Support Customers, etc, each of whom can do
  * certain things within KBS Support
  *
- * @since	0,1
+ * @since	1.0
  */
 class KBS_Roles {
 
 	/**
 	 * Get things going
 	 *
-	 * @since	0.1
+	 * @since	1.0
 	 */
 	public function __construct() {
 		add_filter( 'map_meta_cap', array( $this, 'meta_caps' ), 10, 4 );
@@ -37,7 +38,7 @@ class KBS_Roles {
 	 * Add new support roles with default WP caps
 	 *
 	 * @access	public
-	 * @since	0.1
+	 * @since	1.0
 	 * @return	void
 	 */
 	public function add_roles() {
@@ -82,7 +83,7 @@ class KBS_Roles {
 		add_role( 'support_customer', __( 'Support Customer', 'kb-support' ), array(
 			'read'                   => true,
 			'edit_posts'             => false,
-			'upload_files'           => true,
+			'upload_files'           => false,
 			'delete_posts'           => false
 		) );
 	}
@@ -91,7 +92,7 @@ class KBS_Roles {
 	 * Add new support-specific capabilities
 	 *
 	 * @access	public
-	 * @since	0.1
+	 * @since	1.0
 	 * @global	WP_Roles $wp_roles
 	 * @return	void
 	 */
@@ -126,14 +127,34 @@ class KBS_Roles {
 				}
 			}
 
-			$wp_roles->add_cap( 'support_customer', 'edit_ticket' );
-			$wp_roles->add_cap( 'support_customer', 'edit_tickets' );
-			$wp_roles->add_cap( 'support_customer', 'delete_ticket' );
-			$wp_roles->add_cap( 'support_customer', 'delete_tickets' );
-			$wp_roles->add_cap( 'support_customer', 'publish_tickets' );
-			$wp_roles->add_cap( 'support_customer', 'edit_published_tickets' );
-			$wp_roles->add_cap( 'support_customer', 'upload_files' );
-			$wp_roles->add_cap( 'support_customer', 'assign_ticket_terms' );
+			$wp_roles->add_cap( 'administrator', 'edit_submission_form' );
+			$wp_roles->add_cap( 'administrator', 'read_submission_form' );
+			$wp_roles->add_cap( 'administrator', 'delete_submission_form' );
+			$wp_roles->add_cap( 'administrator', 'edit_submission_forms' );
+			$wp_roles->add_cap( 'administrator', 'edit_others_submission_forms' );
+			$wp_roles->add_cap( 'administrator', 'publish_submission_forms' );
+			$wp_roles->add_cap( 'administrator', 'read_private_submission_forms' );
+			$wp_roles->add_cap( 'administrator', 'delete_submission_forms' );
+			$wp_roles->add_cap( 'administrator', 'delete_private_submission_forms' );
+			$wp_roles->add_cap( 'administrator', 'delete_published_submission_forms' );
+			$wp_roles->add_cap( 'administrator', 'delete_others_submission_forms' );
+			$wp_roles->add_cap( 'administrator', 'edit_private_submission_forms' );
+			$wp_roles->add_cap( 'administrator', 'edit_published_submission_forms' );
+
+			$wp_roles->add_cap( 'support_manager', 'edit_submission_form' );
+			$wp_roles->add_cap( 'support_manager', 'read_submission_form' );
+			$wp_roles->add_cap( 'support_manager', 'delete_submission_form' );
+			$wp_roles->add_cap( 'support_manager', 'edit_submission_forms' );
+			$wp_roles->add_cap( 'support_manager', 'edit_others_submission_forms' );
+			$wp_roles->add_cap( 'support_manager', 'publish_submission_forms' );
+			$wp_roles->add_cap( 'support_manager', 'read_private_submission_forms' );
+			$wp_roles->add_cap( 'support_manager', 'delete_submission_forms' );
+			$wp_roles->add_cap( 'support_manager', 'delete_private_submission_forms' );
+			$wp_roles->add_cap( 'support_manager', 'delete_published_submission_forms' );
+			$wp_roles->add_cap( 'support_manager', 'delete_others_submission_forms' );
+			$wp_roles->add_cap( 'support_manager', 'edit_private_submission_forms' );
+			$wp_roles->add_cap( 'support_manager', 'edit_published_submission_forms' );
+
 		}
 
 	} // add_caps
@@ -142,14 +163,14 @@ class KBS_Roles {
 	 * Gets the core post type capabilities
 	 *
 	 * @access	public
-	 * @since	0.1
+	 * @since	1.0
 	 * @return	arr		$capabilities	Core post type capabilities
 	 */
 	public function get_core_caps() {
 
 		$capabilities = array();
 
-		$capability_types = array( 'ticket' );
+		$capability_types = array( 'ticket', 'article' );
 
 		foreach ( $capability_types as $capability_type ) {
 			$capabilities[ $capability_type ] = array(
@@ -187,7 +208,7 @@ class KBS_Roles {
 	 * Map meta caps to primitive caps
 	 *
 	 * @access	public
-	 * @since	0.1
+	 * @since	1.0
 	 * @return	arr		$caps
 	 */
 	public function meta_caps( $caps, $cap, $user_id, $args ) {
@@ -220,7 +241,7 @@ class KBS_Roles {
 	 * Remove core post type capabilities (called on uninstall)
 	 *
 	 * @access	public
-	 * @since	0.1
+	 * @since	1.0
 	 * @return	void
 	 */
 	public function remove_caps() {
@@ -257,14 +278,34 @@ class KBS_Roles {
 				}
 			}
 
-			/** Support Customer Capabilities */
-			$wp_roles->remove_cap( 'support_customer', 'edit_ticket' );
-			$wp_roles->remove_cap( 'support_customer', 'edit_tickets' );
-			$wp_roles->remove_cap( 'support_customer', 'delete_ticket' );
-			$wp_roles->remove_cap( 'support_customer', 'delete_tickets' );
-			$wp_roles->remove_cap( 'support_customer', 'publish_tickets' );
-			$wp_roles->remove_cap( 'support_customer', 'edit_published_tickets' );
-			$wp_roles->remove_cap( 'support_customer', 'upload_files' );
+			$wp_roles->remove_cap( 'administrator', 'edit_submission_form' );
+			$wp_roles->remove_cap( 'administrator', 'read_submission_form' );
+			$wp_roles->remove_cap( 'administrator', 'delete_submission_form' );
+			$wp_roles->remove_cap( 'administrator', 'edit_submission_forms' );
+			$wp_roles->remove_cap( 'administrator', 'edit_others_submission_forms' );
+			$wp_roles->remove_cap( 'administrator', 'publish_submission_forms' );
+			$wp_roles->remove_cap( 'administrator', 'read_private_submission_forms' );
+			$wp_roles->remove_cap( 'administrator', 'delete_submission_forms' );
+			$wp_roles->remove_cap( 'administrator', 'delete_private_submission_forms' );
+			$wp_roles->remove_cap( 'administrator', 'delete_published_submission_forms' );
+			$wp_roles->remove_cap( 'administrator', 'delete_others_submission_forms' );
+			$wp_roles->remove_cap( 'administrator', 'edit_private_submission_forms' );
+			$wp_roles->remove_cap( 'administrator', 'edit_published_submission_forms' );
+
+			$wp_roles->remove_cap( 'support_manager', 'edit_submission_form' );
+			$wp_roles->remove_cap( 'support_manager', 'read_submission_form' );
+			$wp_roles->remove_cap( 'support_manager', 'delete_submission_form' );
+			$wp_roles->remove_cap( 'support_manager', 'edit_submission_forms' );
+			$wp_roles->remove_cap( 'support_manager', 'edit_others_submission_forms' );
+			$wp_roles->remove_cap( 'support_manager', 'publish_submission_forms' );
+			$wp_roles->remove_cap( 'support_manager', 'read_private_submission_forms' );
+			$wp_roles->remove_cap( 'support_manager', 'delete_submission_forms' );
+			$wp_roles->remove_cap( 'support_manager', 'delete_private_submission_forms' );
+			$wp_roles->remove_cap( 'support_manager', 'delete_published_submission_forms' );
+			$wp_roles->remove_cap( 'support_manager', 'delete_others_submission_forms' );
+			$wp_roles->remove_cap( 'support_manager', 'edit_private_submission_forms' );
+			$wp_roles->remove_cap( 'support_manager', 'edit_published_submission_forms' );
+
 		}
 
 	} // remove_caps

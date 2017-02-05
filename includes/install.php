@@ -4,13 +4,14 @@
  *
  * @package     KBS
  * @subpackage  Functions/Install
- * @copyright   Copyright (c) 2016, Mike Howard
+ * @copyright   Copyright (c) 2017, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       0.1
+ * @since       1.0
 */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) )
+	exit;
 
 /**
  * Install
@@ -21,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * pages. After successful install, the user is redirected to the KBS Welcome
  * screen.
  *
- * @since	0.1
+ * @since	1.0
  * @global	$wpdb
  * @global	$kbs_options
  * @global	$wp_version
@@ -53,14 +54,20 @@ register_activation_hook( KBS_PLUGIN_FILE, 'kbs_install' );
 /**
  * Run the KBS Install process
  *
- * @since	0.1
+ * @since	1.0
  * @return	void
  */
 function kbs_run_install() {
 	global $wpdb, $kbs_options, $wp_version;
 
+	// Bail if already installed
+	$already_installed = get_option( 'kbs_installed' );
+	if ( $already_installed )	{
+		return;
+	}
+
 	// Setup the Custom Post Types
-	kbs_setup_kbs_post_types();
+	kbs_setup_post_types();
 
 	// Setup the Custom Taxonomies
 	kbs_setup_custom_taxonomies();
@@ -86,18 +93,84 @@ function kbs_run_install() {
 
 			// Check for backwards compatibility
 			$tab_sections = kbs_get_settings_tab_sections( $tab );
-			if( ! is_array( $tab_sections ) || ! array_key_exists( $section, $tab_sections ) ) {
+			if ( ! is_array( $tab_sections ) || ! array_key_exists( $section, $tab_sections ) ) {
 				$section = 'main';
 				$settings = $sections;
 			}
 
 			foreach ( $settings as $option ) {
-
-				if( 'checkbox' == $option['type'] && ! empty( $option['std'] ) ) {
-					$options[ $option['id'] ] = '1';
+				if ( ! empty( $option['std'] ) ) {
+					if ( 'checkbox' == $option['type'] )	{
+						$options[ $option['id'] ] = '1';
+					} else	{
+						$options[ $option['id'] ] = $option['std'];
+					}
+					
 				}
-
 			}
+		}
+
+	}
+
+	// Create ticket page if it has not been created
+	if ( ! array_key_exists( 'tickets_page', $current_options ) )	{
+		// Tickets page
+		$tickets_page = wp_insert_post(
+			array(
+				'post_title'     => __( 'Ticket Manager', 'kb-support' ),
+				'post_content'   => '[kbs_tickets]',
+				'post_status'    => 'publish',
+				'post_author'    => 1,
+				'post_type'      => 'page',
+				'comment_status' => 'closed'
+			)
+		);
+
+		// Store the page ID in KBS options
+		if ( ! empty( $tickets_page ) )	{
+			$options['tickets_page']  = $tickets_page;
+		}
+
+	}
+
+	$default_submission_form = get_option( 'kbs_default_submission_form_created', false );
+
+	// Create default submission form if needed
+	if ( ! $default_submission_form )	{
+
+		$submission_form_id = wp_insert_post( array(
+			'post_type'    => 'kbs_form',
+			'post_status'  => 'publish',
+			'post_title'   => __( 'Ticket Submissions', 'kb-support' ),
+			'post_content' => '',
+			'post_author'  => 1
+		) );
+
+	}
+
+	// Create ticket page if it has not been created
+	if ( ! empty( $submission_form_id ) )	{
+
+		kbs_add_default_fields_to_form( $submission_form_id );
+
+		$form = new KBS_Form( $submission_form_id );
+
+		// Tells us the default submission form was created so we don't create another
+		add_option( 'kbs_default_submission_form_created', $submission_form_id, '', 'no' );
+
+		// Add the form submission page
+		$submission_page = wp_insert_post( array(
+			'post_title'     => sprintf( __( 'Log a Support %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
+			'post_content'   => $form->get_shortcode(),
+			'post_status'    => 'publish',
+			'post_author'    => 1,
+			'post_type'      => 'page',
+			'comment_status' => 'closed'
+		) );
+
+		// Store the page ID in KBS options
+		if ( ! empty( $submission_page ) )	{
+			$options['submission_page']  = $submission_page;
 		}
 
 	}
@@ -107,11 +180,17 @@ function kbs_run_install() {
 
 	update_option( 'kbs_settings', $merged_options );
 	update_option( 'kbs_version', KBS_VERSION );
+	update_option( 'kbs_install_version', KBS_VERSION, 'no' );
+	update_option( 'kbs_installed', current_time( 'mysql' ), 'no' );
 
 	// Create KBS support roles
 	$roles = new KBS_Roles;
 	$roles->add_roles();
 	$roles->add_caps();
+
+	// Create the customer databases
+	@KBS()->customers->create_table();
+	@KBS()->customer_meta->create_table();
 
 	// Add a temporary option to note that KBS pages have been created
 	set_transient( '_kbs_installed', $merged_options, 30 );
@@ -139,7 +218,7 @@ function kbs_run_install() {
 /**
  * When a new Blog is created in multisite, see if KBS is network activated, and run the installer
  *
- * @since	0.1
+ * @since	1.0
  * @param	int		$blog_id	The Blog ID created
  * @param	int		$user_id	The User ID set as the admin
  * @param	str		$domain		The URL
@@ -167,7 +246,7 @@ add_action( 'wpmu_new_blog', 'kbs_new_blog_created', 10, 6 );
  * Runs just after plugin installation and exposes the
  * kbs_after_install hook.
  *
- * @since	0.1
+ * @since	1.0
  * @return	void
  */
 function kbs_after_install() {
@@ -192,7 +271,7 @@ add_action( 'admin_init', 'kbs_after_install' );
  *
  * Roles do not get created when KBS is network activation so we need to create them during admin_init
  *
- * @since	0.1
+ * @since	1.0
  * @return	void
  */
 function kbs_install_roles_on_network() {

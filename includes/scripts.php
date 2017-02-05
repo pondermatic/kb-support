@@ -4,40 +4,59 @@
  *
  * @package     KBS
  * @subpackage  Functions
- * @copyright   Copyright (c) 2016, Mike Howard
+ * @copyright   Copyright (c) 2017, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       0.1
+ * @since       1.0
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) )
+	exit;
 
 /**
  * Load Scripts
  *
  * Enqueues the required scripts.
  *
- * @since	0.1
+ * @since	1.0
  * @return	void
  */
 function kbs_load_scripts() {
+	global $post;
 
 	$js_dir = KBS_PLUGIN_URL . 'assets/js/';
 
 	// Use minified libraries if SCRIPT_DEBUG is turned off
 	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
-	// Load AJAX scripts, if enabled
-	if ( ! kbs_is_ajax_disabled() ) {
-		wp_register_script( 'kbs-ajax', $js_dir . 'kbs-ajax' . $suffix . '.js', array( 'jquery' ), KBS_VERSION );
-		wp_enqueue_script( 'kbs-ajax' );
+	// Load AJAX scripts
+	wp_register_script( 'kbs-ajax', $js_dir . 'kbs-ajax' . $suffix . '.js', array( 'jquery' ), KBS_VERSION );
+	wp_enqueue_script( 'kbs-ajax' );
 
-		wp_localize_script( 'kbs-ajax', 'kbs_scripts', apply_filters( 'kbs_ajax_script_vars', array(
-			'ajaxurl'                 => kbs_get_ajax_url(),
-			'permalinks'              => get_option( 'permalink_structure' ) ? '1' : '0'
-		) ) );
-
+	$is_submission = false;
+	if ( ! empty( $post ) && is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'kbs_submit') )	{
+		$is_submission = true;
 	}
+
+	wp_localize_script( 'kbs-ajax', 'kbs_scripts', apply_filters( 'kbs_ajax_script_vars', array(
+		'ajaxurl'                 => kbs_get_ajax_url(),
+		'ajax_loader'             => KBS_PLUGIN_URL . 'assets/images/loading.gif',
+		'permalinks'              => get_option( 'permalink_structure' ) ? '1' : '0',
+		'max_files'               => kbs_get_max_file_uploads(),
+		'max_files_exceeded'      => kbs_get_notices( 'max_files', true ),
+		'is_submission'           => $is_submission,
+		'submit_ticket_loading'   => __( 'Please Wait...', 'kb-support' ),
+		'submit_ticket'           => kbs_get_form_submit_label(),
+		'reply_label'             => kbs_get_ticket_reply_label(),
+		'honeypot_fail'           => __( 'Honeypot validation error', 'kb-support' )
+	) ) );
+
+	if ( ! empty( $is_submission ) )	{
+		add_thickbox();
+		wp_register_script( 'jquery-chosen', $js_dir . 'chosen.jquery' . $suffix . '.js', array( 'jquery' ), KBS_VERSION );
+		wp_enqueue_script( 'jquery-chosen' );
+	}
+
 } // kbs_load_scripts
 add_action( 'wp_enqueue_scripts', 'kbs_load_scripts' );
 
@@ -46,20 +65,22 @@ add_action( 'wp_enqueue_scripts', 'kbs_load_scripts' );
  *
  * Checks the styles option and hooks the required filter.
  *
- * @since	0.1
+ * @since	1.0
  * @return	void
  */
 function kbs_register_styles() {
+	global $post;
 
 	if ( kbs_get_option( 'disable_styles', false ) ) {
 		return;
 	}
 
 	// Use minified libraries if SCRIPT_DEBUG is turned off
-	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '';//'.min';
+	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
 	$file          = 'kbs' . $suffix . '.css';
 	$templates_dir = kbs_get_theme_template_dir_name();
+	$css_dir       = KBS_PLUGIN_URL . 'assets/css/';
 
 	$child_theme_style_sheet    = trailingslashit( get_stylesheet_directory() ) . $templates_dir . $file;
 	$child_theme_style_sheet_2  = trailingslashit( get_stylesheet_directory() ) . $templates_dir . 'kbs.css';
@@ -86,18 +107,65 @@ function kbs_register_styles() {
 		$url = trailingslashit( kbs_get_templates_url() ) . $file;
 	}
 
+	wp_register_style( 'kbs-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css', array(), KBS_VERSION, 'all' ); 
+	wp_enqueue_style( 'kbs-font-awesome' );
+
 	wp_register_style( 'kbs-styles', $url, array(), KBS_VERSION, 'all' );
 	wp_enqueue_style( 'kbs-styles' );
 
+	if ( ! empty( $post ) )	{
+		if ( is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'kbs_submit') )	{
+			wp_register_style( 'jquery-chosen-css', $css_dir . 'chosen.css', array(), KBS_VERSION );
+			wp_enqueue_style( 'jquery-chosen-css' );
+		}
+	}
+
 } // kbs_register_styles
 add_action( 'wp_enqueue_scripts', 'kbs_register_styles' );
+
+/**
+ * Load Admin Styles
+ *
+ * Enqueues the required admin scripts.
+ *
+ * @since	1.0
+ * @global	$post
+ * @param	str		$hook	Page hook
+ * @return	void
+ */
+function kbs_load_admin_styles( $hook ) {
+
+	$css_dir = KBS_PLUGIN_URL . 'assets/css/';
+	$suffix  = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+
+	$ui_style = ( 'classic' == get_user_option( 'admin_color' ) ) ? 'classic' : 'fresh';
+
+	if ( 'post.php' == $hook || 'post-new.php' == $hook )	{
+
+		if ( isset( $_GET['post'] ) && 'kbs_ticket' == get_post_type( $_GET['post'] ) )	{
+			$ui_style = 'humanity';
+		}
+		
+	}
+
+	wp_register_style( 'jquery-ui-css', $css_dir . 'jquery-ui-' . $ui_style . $suffix . '.css' );
+	wp_enqueue_style( 'jquery-ui-css' );
+
+	wp_register_style( 'kbs-admin', $css_dir . 'kbs-admin' . $suffix . '.css', array(), KBS_VERSION );
+	wp_enqueue_style( 'kbs-admin' );
+
+	wp_register_style( 'jquery-chosen-css', $css_dir . 'chosen.css', array(), KBS_VERSION );
+	wp_enqueue_style( 'jquery-chosen-css' );
+
+} // kbs_load_admin_styles
+add_action( 'admin_enqueue_scripts', 'kbs_load_admin_styles' );
 
 /**
  * Load Admin Scripts
  *
  * Enqueues the required admin scripts.
  *
- * @since	0.1
+ * @since	1.0
  * @global	$post
  * @param	str		$hook	Page hook
  * @return	void
@@ -111,10 +179,9 @@ function kbs_load_admin_scripts( $hook ) {
 	global $wp_version, $post;
 
 	$js_dir  = KBS_PLUGIN_URL . 'assets/js/';
-	$css_dir = KBS_PLUGIN_URL . 'assets/css/';
 
 	// Use minified libraries if SCRIPT_DEBUG is turned off
-	$suffix  = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '';//'.min';
+	$suffix  = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
 	$admin_deps = array();
 	if ( ! kbs_is_admin_page( $hook, 'edit' ) && ! kbs_is_admin_page( $hook, 'new' ) ) {
@@ -126,33 +193,62 @@ function kbs_load_admin_scripts( $hook ) {
 	wp_register_script( 'kbs-admin-scripts', $js_dir . 'admin-scripts' . $suffix . '.js', $admin_deps, KBS_VERSION, false );
 	wp_enqueue_script( 'kbs-admin-scripts' );
 
+	$editing_field_type = false;
+
+	if ( isset( $_GET['kbs-action'] ) && 'edit_form_field' == $_GET['kbs-action'] )	{
+		$field_settings = kbs_get_field_settings( $_GET['field_id'] );
+
+		if ( $field_settings )	{
+			$editing_field_type = $field_settings['type'];
+		}
+	}
+
 	wp_localize_script( 'kbs-admin-scripts', 'kbs_vars', array(
+		'ajax_loader'             => KBS_PLUGIN_URL . 'assets/images/loading.gif',
 		'post_id'                 => isset( $post->ID ) ? $post->ID : null,
+		'post_type'               => isset( $_GET['post'] ) ? get_post_type( $_GET['post'] ) : false,
+		'editing_ticket'          => isset( $_GET['action'] ) && 'edit' == $_GET['action'] && 'kbs_ticket' == get_post_type( $_GET['post'] ) ? true : false,
+		'admin_url'               => admin_url(),
 		'kbs_version'             => KBS_VERSION,
 		'add_new_ticket'          => sprintf( __( 'Add New %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
 		'new_media_ui'            => apply_filters( 'kbs_use_35_media_ui', 1 ),
-		'type_to_search'          => sprintf( __( 'Type to search %s', 'kb-support' ), kbs_get_kb_label_plural() ),
-		'search_placeholder'      => sprintf( __( 'Type to search all %s', 'kb-support' ), kbs_get_kb_label_plural() )
-	));
+		'no_ticket_reply_content' => __( 'There is no content in your reply', 'kb-support' ),
+		'ticket_confirm_close'    => __( 'Are you sure you wish to close this ticket? Click OK to close, or Cancel to return.', 'kb-support' ),
+		'ticket_reply_failed'     => sprintf( __( 'Could not add %s Reply', 'kb-support' ), kbs_get_ticket_label_singular() ),
+		'no_note_content'         => __( 'There is no content in your note', 'kb-support' ),
+		'note_not_added'          => __( 'Your note could not be added', 'kb-support' ),
+		'type_to_search'          => sprintf( __( 'Type to search %s', 'kb-support' ), kbs_get_article_label_plural() ),
+		'search_placeholder'      => sprintf( __( 'Type to search all %s', 'kb-support' ), kbs_get_article_label_plural() ),
+		'editing_field_type'      => $editing_field_type,
+		'field_label_missing'     => __( 'Enter a Label for your field.', 'kb-support' ),
+		'field_type_missing'      => __( 'Select the field Type', 'kb-support' )
+	) );
 
-	if( function_exists( 'wp_enqueue_media' ) && version_compare( $wp_version, '3.5', '>=' ) ) {
+	if ( function_exists( 'wp_enqueue_media' ) && version_compare( $wp_version, '3.5', '>=' ) ) {
 		// Call for new media manager
 		wp_enqueue_media();
 	}
 
+	wp_register_style( 'kbs-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css', array(), KBS_VERSION, 'all' ); 
+	wp_enqueue_style( 'kbs-font-awesome' );
+
+	wp_register_script( 'jquery-chosen', $js_dir . 'chosen.jquery' . $suffix . '.js', array( 'jquery' ), KBS_VERSION );
+	wp_enqueue_script( 'jquery-chosen' );
+
 	wp_enqueue_script( 'jquery-ui-datepicker' );
 	wp_enqueue_script( 'jquery-ui-dialog' );
-
-	$ui_style = ( 'classic' == get_user_option( 'admin_color' ) ) ? 'classic' : 'fresh';
-	wp_register_style( 'jquery-ui-css', $css_dir . 'jquery-ui-' . $ui_style . $suffix . '.css' );
-	wp_enqueue_style( 'jquery-ui-css' );
 
 	wp_enqueue_script( 'media-upload' );
 	wp_enqueue_script( 'thickbox' );
 	wp_enqueue_style( 'thickbox' );
 
-	wp_register_style( 'kbs-admin', $css_dir . 'kbs-admin' . $suffix . '.css', KBS_VERSION );
-	wp_enqueue_style( 'kbs-admin' );
+	if ( 'post.php' == $hook || 'post-new.php' == $hook )	{
+
+		if ( isset( $_GET['post'] ) && 'kbs_ticket' == get_post_type( $_GET['post'] ) )	{
+			wp_enqueue_script( 'jquery-ui-accordion' );
+		}
+		
+	}
 
 } // kbs_load_admin_scripts
-add_action( 'admin_enqueue_scripts', 'kbs_load_admin_scripts', 100 );
+add_action( 'admin_enqueue_scripts', 'kbs_load_admin_scripts' );
