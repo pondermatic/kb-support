@@ -8,7 +8,7 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
 
-The ultimate help desk and knowledge base support tool plugin for WordPress. Give your customers the support they expect directly from your WordPress site.
+The ultimate help desk and knowledge base support tool plugin for WordPress.
 
 == Description ==
 
