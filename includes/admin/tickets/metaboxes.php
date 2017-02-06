@@ -452,7 +452,6 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 			); ?>
 		</p>
 	<?php else :
-		do_action( 'kbs_ticket_metabox_before_reply_content', $ticket_id );
 
 		$settings = apply_filters( 'kbs_ticket_reply_mce_settings', array(
 			'textarea_rows'    => 5,
@@ -461,7 +460,8 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 
 		<div id="kbs-ticket-reply-wrap">
         	<p><label for="kbs_ticket_reply"><strong><?php _e( 'Add a New Reply', 'kb-support' ); ?></strong></label><br />
-				<?php wp_editor( '', 'kbs_ticket_reply', $settings ); ?>
+            	<?php do_action( 'kbs_ticket_metabox_before_reply_content', $ticket_id );
+				wp_editor( '', 'kbs_ticket_reply', $settings ); ?>
             </p>
         </div>
 
