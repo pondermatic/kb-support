@@ -3,12 +3,12 @@ Contributors: mikeyhoward1977
 Tags: Helpdesk, Help Desk, Support, Customer Support, Service, Service Desk, ITIL, Support Helpdesk, Ticket, Ticket System, Support Tickets, Helpdesk Tickets, Knowledgebase, Knowledge Base
 Requires at least: 4.1
 Tested up to: 4.8
-Stable tag: 0.9.3
+Stable tag: 0.9.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
 
-The ultimate help desk and knowledge base support tool plugin for WordPress. Give your customers the support they expect directly from your WordPress site.
+The ultimate help desk and knowledge base support tool plugin for WordPress.
 
 == Description ==
 
@@ -96,6 +96,16 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 == Changelog ==
 
 Until we reach version 1.0+ we are still classing this plugin as in beta testing.
+
+= 0.9.4 =
+
+**Bug Fix**
+
+* Fixed an issue whereby new tickets created within admin were not set the correct status
+
+**Tweaks**
+
+* Ensure the trash view is displayed at the end of all views on the edit tickets screen
 
 = 0.9.3 =
 

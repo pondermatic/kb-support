@@ -421,11 +421,18 @@ function kbs_ticket_filter_views( $views )	{
 	}
 
 	foreach( $views as $status => $link )	{
-		if ( $status != 'all' && ! in_array( $status, $all_statuses ) )	{
+		if ( 'all' != $status && 'trash' != $status && ! in_array( $status, $all_statuses ) )	{
 			unset( $views[ $status ] );
 		}
 	}
-	
+
+	// Force trash view to end
+	if ( isset( $views['trash'] ) )	{
+		$trashed = $views['trash'];
+		unset( $views['trash'] );
+		$views['trash'] = $trashed;
+	}
+
 	return apply_filters( 'kbs_ticket_views', $views );
 
 } // kbs_ticket_filter_views
@@ -486,10 +493,11 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
 		return;
 	}
 
-	if ( ! $update && is_admin() )	{
-		add_post_meta( $post_id, '_kbs_ticket_created_by', get_current_user_id(), true );
+	if ( is_admin() )	{
+		if ( isset( $_POST['_kbs_ticket_logged_by'] ) )	{
+			add_post_meta( $post_id, '_kbs_ticket_logged_by', absint( $_POST['_kbs_ticket_logged_by'] ), true );
+		}
 	}
-
 	// The default fields that get saved
 	$fields = kbs_ticket_metabox_fields();
 
@@ -517,9 +525,7 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
 	}
 
 	if ( ! empty( $_POST['ticket_status'] ) && $_POST['ticket_status'] != $post->post_status )	{
-		if ( in_array( $post->post_status, kbs_get_ticket_status_keys( false ) ) )	{
-			$ticket->__set( 'status', $_POST['ticket_status'] );
-		}
+		$ticket->__set( 'status', $_POST['ticket_status'] );
 	}
 
 	$ticket->save();

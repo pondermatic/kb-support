@@ -232,7 +232,10 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
 
 	global $kbs_ticket, $kbs_ticket_update;
 
-	?>
+	if ( ! $kbs_ticket_update ) : ?>
+    	<input type="hidden" name="_kbs_ticket_logged_by" id="kbs-ticket-logged-by" value="<?php echo get_current_user_id(); ?>" />
+    <?php endif; ?>
+
 	<div class="submitbox" id="submitpost">
 		<div id="minor-publishing">
         	<div id="minor-publishing-actions">
