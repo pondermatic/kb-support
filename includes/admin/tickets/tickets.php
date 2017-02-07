@@ -421,11 +421,18 @@ function kbs_ticket_filter_views( $views )	{
 	}
 
 	foreach( $views as $status => $link )	{
-		if ( $status != 'all' && ! in_array( $status, $all_statuses ) )	{
+		if ( 'all' != $status && 'trash' != $status && ! in_array( $status, $all_statuses ) )	{
 			unset( $views[ $status ] );
 		}
 	}
-	
+
+	// Force trash view to end
+	if ( isset( $views['trash'] ) )	{
+		$trashed = $views['trash'];
+		unset( $views['trash'] );
+		$views['trash'] = $trashed;
+	}
+
 	return apply_filters( 'kbs_ticket_views', $views );
 
 } // kbs_ticket_filter_views
