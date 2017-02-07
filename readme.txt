@@ -97,6 +97,16 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 Until we reach version 1.0+ we are still classing this plugin as in beta testing.
 
+= 1.0 =
+
+**Bug Fix**
+
+* Fixed an issue whereby new tickets created within admin were not set the correct status
+
+**Tweaks**
+
+* Ensure the trash view is displayed at the end of all views on the edit tickets screen
+
 = 0.9.3 =
 
 **New**

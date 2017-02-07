@@ -100,6 +100,14 @@ class KBS_Ticket {
 	protected $agent_id = 0;
 
 	/**
+	 * The ID of the agent who logged the ticket
+	 *
+	 * @since	1.0
+	 * @var		int
+	 */
+	protected $logged_by = 0;
+
+	/**
 	 * The date the ticket was created
 	 *
 	 * @since	1.0
@@ -393,6 +401,7 @@ class KBS_Ticket {
 		// User data
 		$this->ip              = $this->setup_ip();
 		$this->agent_id        = $this->setup_agent_id();
+		$this->logged_by       = $this->setup_logged_by();
 		$this->customer_id     = $this->setup_customer_id();
 		$this->user_id         = $this->setup_user_id();
 		$this->email           = $this->setup_email();
@@ -1012,6 +1021,16 @@ class KBS_Ticket {
 	 */
 	public function setup_agent_id()	{	
 		return $this->get_meta( '_kbs_ticket_agent_id', true );
+	} // setup_agent_id
+
+	/**
+	 * Retrieve the agent who logged the ticket.
+	 *
+	 * @since	1.0
+	 * @return	int
+	 */
+	public function setup_logged_by()	{	
+		return $this->get_meta( '_kbs_ticket_logged_by', true );
 	} // setup_agent_id
 
 	/**
