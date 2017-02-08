@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: Helpdesk, Help Desk, Support, Customer Support, Service, Service Desk, ITIL, Support Helpdesk, Ticket, Ticket System, Support Tickets, Helpdesk Tickets, Knowledgebase, Knowledge Base
 Requires at least: 4.1
 Tested up to: 4.8
-Stable tag: 0.9.4
+Stable tag: 0.9.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -96,6 +96,12 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 == Changelog ==
 
 Until we reach version 1.0+ we are still classing this plugin as in beta testing.
+
+= 0.9.5 =
+
+**IMPORTANT**
+
+* Fatal error may occur when submitting a ticket from the front end if PHP 7.1 is running
 
 = 0.9.4 =
 
