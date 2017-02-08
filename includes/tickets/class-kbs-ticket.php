@@ -874,6 +874,11 @@ class KBS_Ticket {
 		if ( 'key' == $meta_key || 'date' == $meta_key ) {
 
 			$current_meta = $this->get_meta();
+
+			if ( empty( $current_meta ) )	{
+				$current_meta = array();
+			}
+
 			$current_meta[ $meta_key ] = $meta_value;
 
 			$meta_key     = '_ticket_data';
@@ -885,9 +890,11 @@ class KBS_Ticket {
 			update_post_meta( $this->ID, '_kbs_ticket_user_email', $meta_value );
 
 			$current_meta = $this->get_meta();
+
 			if ( empty( $current_meta ) )	{
 				$current_meta = array( 'user_info' => array() );
 			}
+
 			$current_meta['user_info']['email'] = $meta_value;
 
 			$meta_key     = '_ticket_data';

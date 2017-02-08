@@ -95,7 +95,11 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 == Changelog ==
 
-Until we reach version 1.0+ we are still classing this plugin as in beta testing.
+= 1.0 =
+
+**Tweaks**
+
+* Make sure `$current_meta` array exists to avoid potential PHP notices
 
 = 0.9.5 =
 
