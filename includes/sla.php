@@ -34,9 +34,14 @@ function kbs_track_sla()	{
  */
 function kbs_calculate_sla_target_response()	{
 	$now    = current_time( 'timestamp' );
-	$target = strtotime( '+' . kbs_get_option( 'sla_response_time' ), $now );
+	$target = kbs_get_option( 'sla_response_time' );
+
+	if ( $target )	{
+		$target = strtotime( '+' . $target, $now );
+		$target = date( 'Y-m-d H:i:s', $target );
+	}
 	
-	return apply_filters( 'kbs_calculate_sla_target_response', date( 'Y-m-d H:i:s', $target ) );
+	return apply_filters( 'kbs_calculate_sla_target_response', $target );
 } // kbs_calculate_sla_target_response
 
 /**
@@ -48,9 +53,14 @@ function kbs_calculate_sla_target_response()	{
  */
 function kbs_calculate_sla_target_resolution()	{
 	$now    = current_time( 'timestamp' );
-	$target = strtotime( '+' . kbs_get_option( 'sla_resolve_time' ), $now );
+	$target = kbs_get_option( 'sla_resolve_time' );
+
+	if ( $target )	{
+		$target = strtotime( '+' . $target, $now );
+		$target = date( 'Y-m-d H:i:s', $target );
+	}
 	
-	return apply_filters( 'kbs_calculate_sla_target_resolution', date( 'Y-m-d H:i:s', $target ) );
+	return apply_filters( 'kbs_calculate_sla_target_resolution', $target );
 } // kbs_calculate_sla_target_resolution
 
 /**
