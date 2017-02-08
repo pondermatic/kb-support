@@ -542,6 +542,7 @@ class KBS_Ticket {
 
 			$this->ticket_meta = apply_filters( 'kbs_ticket_meta', $this->ticket_meta, $ticket_data );
 
+			$this->update_meta( '_kbs_ticket_version_created', KBS_VERSION );
 			$this->update_meta( '_ticket_data', $this->ticket_meta );
 			$this->new = true;
 		}

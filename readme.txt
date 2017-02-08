@@ -101,6 +101,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 * Make sure `$current_meta` array exists to avoid potential PHP notices
 * Remove all SLA related meta keys from DB as SLA's were not tracked until this version
+* Log the current KBS version number at the time each ticket was logged
 
 = 0.9.5 =
 
