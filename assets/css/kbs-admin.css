@@ -170,7 +170,6 @@ span.price_restricted:before {
 
 /* SLA Styles
 -------------------------------------------------------------- */
-.kbs_sla_status::before { content: "\f227"; }
 .kbs_sla_status { color: #46b450; }
 .kbs_sla_status_warn { color: #ffba00; }
 .kbs_sla_status_over { color: #dc3232; }

@@ -151,21 +151,19 @@ function kbs_sla_has_passed( $ticket, $sla_target = 'response' ) {
 				if ( strtotime( $ticket->first_response ) > $target )	{
 					$return = true;
 				}
-			} else	{
-				if ( current_time( 'timestamp' ) > $target )	{
-					$return = true;
-				}
+			} elseif ( $now > $target )	{
+				$return = true;
 			}
 			break;
 
 		case 'resolve':
-				if ( current_time( 'timestamp' ) > $target )	{
+				if ( $now > $target )	{
 					$return = true;
 				}
 			break;
 	}
 
-	return (bool) apply_filters( 'kbs_sla_has_passed', $return, $ticket_id, $sla_target );
+	return (bool) apply_filters( 'kbs_sla_has_passed', $return, $ticket, $sla_target );
 } // kbs_sla_has_passed
 
 /**

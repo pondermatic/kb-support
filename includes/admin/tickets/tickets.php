@@ -107,7 +107,7 @@ add_action( 'manage_kbs_ticket_posts_custom_column' , 'kbs_set_kbs_ticket_column
  *
  * @since	1.0
  * @param	int	$ticket_id	The ticket ID
- * @param	obj	$kbs_ticket	The ticket WP_Post object
+ * @param	obj	$kbs_ticket	The KBS Ticket object
  * @return	str
  */
 function kb_tickets_post_column_id( $ticket_id, $kbs_ticket )	{
@@ -127,7 +127,7 @@ function kb_tickets_post_column_id( $ticket_id, $kbs_ticket )	{
  *
  * @since	1.0
  * @param	int	$ticket_id	The ticket ID
- * @param	obj	$kbs_ticket	The ticket WP_Post object
+ * @param	obj	$kbs_ticket	The KBS Ticket object
  * @return	str
  */
 function kb_tickets_post_column_date( $ticket_id, $kbs_ticket )	{
@@ -147,7 +147,7 @@ function kb_tickets_post_column_date( $ticket_id, $kbs_ticket )	{
  *
  * @since	1.0
  * @param	int	$ticket_id	The ticket ID
- * @param	obj	$kbs_ticket	The ticket WP_Post object
+ * @param	obj	$kbs_ticket	The KBS Ticket object
  * @return	str
  */
 function kb_tickets_post_column_customer( $ticket_id, $kbs_ticket )	{
@@ -180,7 +180,7 @@ function kb_tickets_post_column_customer( $ticket_id, $kbs_ticket )	{
  *
  * @since	1.0
  * @param	int	$ticket_id	The ticket ID
- * @param	obj	$kbs_ticket	The ticket WP_Post object
+ * @param	obj	$kbs_ticket	The KBS Ticket object
  * @return	str
  */
 function kb_tickets_post_column_agent( $ticket_id, $kbs_ticket )	{
@@ -205,18 +205,102 @@ function kb_tickets_post_column_agent( $ticket_id, $kbs_ticket )	{
  *
  * @since	1.0
  * @param	int	$ticket_id	The ticket ID
- * @param	obj	$kbs_ticket	The ticket WP_Post object
+ * @param	obj	$kbs_ticket	The KBS Ticket object
  * @return	str
  */
 function kb_tickets_post_column_sla( $ticket_id, $kbs_ticket )	{
 	do_action( 'kbs_tickets_pre_column_sla', $kbs_ticket );
 
-	$output  = $kbs_ticket->get_target_respond() . '<br />';
-	$output .= $kbs_ticket->get_target_resolve();
+	$respond_class = '';
+	$resolve_class = '';
+	$output        = array();
+
+	if ( ! empty( $kbs_ticket->sla_respond ) )	{
+
+		if ( ! empty( $kbs_ticket->first_response ) )	{
+			$target   = strtotime( $kbs_ticket->sla_respond );
+			$response = strtotime( $kbs_ticket->first_response );
+			$text     = __( 'Responded', 'kb-support' );
+			$diff     = human_time_diff( $response, $target );
+
+			if ( $target < $response )	{
+				$respond_class = '_over';
+				$icon          = 'no';
+				$title         = sprintf( __( 'Missed response by %s', 'kb-support' ), $diff );
+			} else	{
+				$icon  = 'yes';
+				$title = sprintf( __( 'Responded %s before SLA expired', 'kb-support' ), $diff );
+			}
+
+		} else	{
+			$target   = strtotime( $kbs_ticket->sla_respond );
+			$now      = current_time( 'timestamp' );
+			$text     = __( 'No response', 'kb-support' );
+			$diff     = human_time_diff( $target, $now );
+			$icon     = 'clock';
+
+			if ( $now < $target )	{
+				$respond_class = '_over';
+				$title         = sprintf( __( 'Missed response by %s', 'kb-support' ), $diff );
+			} else	{
+				$title = sprintf( __( '%s left to respond', 'kb-support' ), $diff );
+			}
+
+		}
+
+		$output['respond'] = '<span class="dashicons dashicons-' . $icon . ' kbs_sla_status' . $respond_class . '" title="' . $title . '">';
+		$output['respond'] .= '</span> ';
+		$output['respond'] .= $text;
+
+	}
+
+	if ( ! empty( $kbs_ticket->sla_resolve ) )	{
+
+		if ( 'closed' == $kbs_ticket->status && ! empty( $kbs_ticket->closed_date ) )	{
+
+			$target    = strtotime( $kbs_ticket->sla_resolve );
+			$resolved  = strtotime( $kbs_ticket->closed_date );
+			$text      = __( 'Resolved', 'kb-support' );
+			$diff      = human_time_diff( $resolved, $target );
+
+			if ( $target < $resolved )	{
+				$resolve_class = '_over';
+				$icon          = 'no';
+				$title         = sprintf( __( 'Missed resolution by %s', 'kb-support' ), $diff );
+			} else	{
+				$icon  = 'yes';
+				$title = sprintf( __( 'Resolved %s before SLA expired', 'kb-support' ), $diff );
+			}
+
+		} else	{
+
+			$target   = strtotime( $kbs_ticket->sla_resolve );
+			$now      = current_time( 'timestamp' );
+			$text      = __( 'Unresolved', 'kb-support' );
+			$diff     = human_time_diff( $target, $now );
+			$icon     = 'clock';
+
+			if ( $now > $target )	{
+				$resolve_class = '_over';
+				$title         = sprintf( __( 'Missed resolution by %s', 'kb-support' ), $diff );
+			} else	{
+				$title = sprintf( __( '%s left to resolve', 'kb-support' ), $diff );
+			}
+
+		}
+
+		$output['resolve'] = '<span class="dashicons dashicons-' . $icon . ' kbs_sla_status' . $resolve_class . '" title="' . $title . '">';
+		$output['resolve'] .= '</span> ';
+		$output['resolve'] .= $text;
+
+	}
 
 	do_action( 'kbs_tickets_post_column_sla', $kbs_ticket );
 
-	return apply_filters( 'kb_tickets_post_column_sla', $output, $ticket_id );
+	$output = apply_filters( 'kb_tickets_post_column_sla', $output, $ticket_id );
+
+	return implode( '<br />', $output );
+
 } // kb_tickets_post_column_sla
 
 /**
