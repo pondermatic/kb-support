@@ -200,12 +200,10 @@ function kbs_v10_upgrades()	{
 	$wpdb->query( $wpdb->prepare(
 		"
 		DELETE FROM $wpdb->postmeta
-		WHERE meta_key = %s
-		OR meta_key = %s
+		WHERE meta_key LIKE %s
 		",
-		'_kbs_ticket_sla_target_respond',
-		'_kbs_ticket_sla_target_resolve'
+		'%_kbs_ticket_sla_%'
 	) );
-	
+
 
 } // kbs_v10_upgrades

@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: Helpdesk, Help Desk, Support, Customer Support, Service, Service Desk, ITIL, Support Helpdesk, Ticket, Ticket System, Support Tickets, Helpdesk Tickets, Knowledgebase, Knowledge Base
 Requires at least: 4.1
 Tested up to: 4.8
-Stable tag: 0.9.5
+Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -100,6 +100,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 **Tweaks**
 
 * Make sure `$current_meta` array exists to avoid potential PHP notices
+* Remove all SLA related meta keys from DB as SLA's were not tracked until this version
 
 = 0.9.5 =
 
