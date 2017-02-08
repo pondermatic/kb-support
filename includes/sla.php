@@ -117,25 +117,55 @@ function kbs_get_target_resolve( $ticket_id )	{
  * Whether or not the target SLA time has passed.
  *
  * @since	1.0
- * @param	int	$ticket_id	The ticket ID
- * @param	str	$target		The SLA target to check. 'response' or 'resolve'
+ * @param	obj|int	$ticket		The KBS Ticket object or a ticket ID
+ * @param	str		$sla_target	The SLA target to check. 'response' or 'resolve'
  * @return	bool			False if still within SLA, otherwise true.
  */
-function kbs_sla_has_passed( $ticket_id, $target = 'response' ) {
-	
-	if ( $target == 'resolve' )	{
-		$target_time = strtotime( kbs_get_target_resolve( $ticket_id ) );
-	} else	{
-		$target_time = strtotime( kbs_get_target_respond( $ticket_id ) );
+function kbs_sla_has_passed( $ticket, $sla_target = 'response' ) {
+
+	if ( ! kbs_track_sla() )	{
+		return false;
 	}
 
-	$return = true;
-
-	if ( current_time( 'timestamp' ) < $target_time )	{
-		$return = false;
+	if ( empty( $sla_target ) )	{
+		return false;
 	}
 
-	return (bool) apply_filters( 'kbs_sla_has_passed', $return, $ticket_id, $target );
+	if ( is_numeric( $ticket ) )	{
+		$ticket = new KBS_Ticket( $ticket );
+	}
+
+	$sla = 'sla_' . $sla_target;
+
+	if ( empty( $ticket->$sla ) )	{
+		return false;
+	}
+
+	$return = false;
+	$now    = current_time( 'timestamp' );
+	$target = strtotime( $ticket->$sla );
+
+	switch( $sla_target )	{
+		case 'response':
+			if ( ! empty( $ticket->first_response ) )	{
+				if ( strtotime( $ticket->first_response ) > $target )	{
+					$return = true;
+				}
+			} else	{
+				if ( current_time( 'timestamp' ) > $target )	{
+					$return = true;
+				}
+			}
+			break;
+
+		case 'resolve':
+				if ( current_time( 'timestamp' ) > $target )	{
+					$return = true;
+				}
+			break;
+	}
+
+	return (bool) apply_filters( 'kbs_sla_has_passed', $return, $ticket_id, $sla_target );
 } // kbs_sla_has_passed
 
 /**
