@@ -26,9 +26,15 @@ function kbs_do_automatic_upgrades() {
 	$did_upgrade = false;
 	$kbs_version = preg_replace( '/[^0-9.].*/', '', get_option( 'kbs_version' ) );
 
-	if( version_compare( $kbs_version, '0.9.3', '<' ) ) {
+	if ( version_compare( $kbs_version, '0.9.3', '<' ) ) {
 
 		kbs_v093_upgrades();
+
+	}
+
+	if ( version_compare( $kbs_version, '1.0', '<' ) ) {
+
+		kbs_v10_upgrades();
 
 	}
 
@@ -81,6 +87,9 @@ function kbs_show_upgrade_notice()	{
 		);
 
 	} else {
+
+		// Include all 'Stepped' upgrade process notices in this else statement,
+		// to avoid having a pending, and new upgrade suggested at the same time
 
 		/*
 		 *  NOTICE:
@@ -177,3 +186,26 @@ function kbs_v093_upgrades()	{
 		$wp_roles->remove_cap( 'support_customer', 'upload_files' );
 	}
 } // kbs_v093_upgrades
+
+/**
+ * Upgrade routine to remove all sla meta keys from tickets published prior to
+ * sla functionality being released within KBS.
+ *
+ * @since	1.0
+ * @return	void
+ */
+function kbs_v10_upgrades()	{
+	global $wpdb;
+
+	$wpdb->query( $wpdb->prepare(
+		"
+		DELETE FROM $wpdb->postmeta
+		WHERE meta_key = %s
+		OR meta_key = %s
+		",
+		'_kbs_ticket_sla_target_respond',
+		'_kbs_ticket_sla_target_resolve'
+	) );
+	
+
+} // kbs_v10_upgrades

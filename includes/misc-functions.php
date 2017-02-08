@@ -1,3 +1,4 @@
+
 <?php
 /**
  * Misc Functions
@@ -349,6 +350,20 @@ function kbs_add_credit_text()	{
 } // kbs_add_credit_text
 add_action( 'kbs_after_ticket_form', 'kbs_add_credit_text' );
 add_action( 'kbs_after_single_ticket_form', 'kbs_add_credit_text' );
+
+/**
+ * Checks whether a function is disabled.
+ *
+ * @since	1.0
+ *
+ * @param	str		$function	Name of the function.
+ * @return	bool	Whether or not function is disabled.
+ */
+function kbs_is_func_disabled( $function ) {
+	$disabled = explode( ',',  ini_get( 'disable_functions' ) );
+
+	return in_array( $function, $disabled );
+} // kbs_is_func_disabled
 
 /**
  * Get Country List
