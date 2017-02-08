@@ -27,15 +27,11 @@ function kbs_do_automatic_upgrades() {
 	$kbs_version = preg_replace( '/[^0-9.].*/', '', get_option( 'kbs_version' ) );
 
 	if ( version_compare( $kbs_version, '0.9.3', '<' ) ) {
-
 		kbs_v093_upgrades();
-
 	}
 
 	if ( version_compare( $kbs_version, '1.0', '<' ) ) {
-
 		kbs_v10_upgrades();
-
 	}
 
 	if ( version_compare( $kbs_version, KBS_VERSION, '<' ) )	{
