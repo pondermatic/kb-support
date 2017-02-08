@@ -1055,7 +1055,7 @@ function kbs_get_registered_settings_sections() {
 			'main'                 => sprintf( __( 'General %s Settings', 'kb-support' ), $single ),
 			'submit'               => __( 'Submission Settings', 'kb-support' ),
 			'agents'               => __( 'Agent Settings', 'kb-support' ),
-			//'sla'                  => __( 'Service Levels', 'kb-support' )
+			'sla'                  => __( 'Service Levels', 'kb-support' )
 		) ),
 		'articles'        => apply_filters( 'kbs_settings_sections_articles', array(
 			'main'                 => sprintf( __( 'General %s Settings', 'kb-support' ), kbs_get_article_label_singular() ),
