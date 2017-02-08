@@ -3,8 +3,8 @@
  * Plugin Name: KB Support
  * Plugin URI: https://kb-support.com/
  * Description: The ultimate help desk and knowledge base support tool plugin for WordPress.
- * Version: 0.9.4
- * Date: 07 February 2017
+ * Version: 0.9.5
+ * Date: 08 February 2017
  * Author: Mike Howard <mike@mikesplugins.co.uk>
  * Author URI: https://kb-support.com
  * Text Domain: kb-support
@@ -175,7 +175,7 @@ final class KB_Support {
 	private function setup_constants()	{
 
 		if ( ! defined( 'KBS_VERSION' ) )	{
-			define( 'KBS_VERSION', '0.9.4' );
+			define( 'KBS_VERSION', '0.9.5' );
 		}
 
 		if ( ! defined( 'KBS_PLUGIN_DIR' ) )	{
