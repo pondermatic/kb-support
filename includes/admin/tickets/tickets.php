@@ -111,13 +111,13 @@ add_action( 'manage_kbs_ticket_posts_custom_column' , 'kbs_set_kbs_ticket_column
  * @return	str
  */
 function kb_tickets_post_column_id( $ticket_id, $kbs_ticket )	{
-	do_action( 'kb_pre_tickets_column_id', $kbs_ticket );
+	do_action( 'kbs_tickets_pre_column_id', $kbs_ticket );
 
 	$output = '<a href="' . get_edit_post_link( $ticket_id ) . '">' . kbs_get_ticket_id( $ticket_id ) . '</a>';
 	$output .= '<br />';
 	$output .= get_post_status_object( $kbs_ticket->post_status )->label;
 
-	do_action( 'kb_post_tickets_column_id', $kbs_ticket );
+	do_action( 'kbs_tickets_post_column_id', $kbs_ticket );
 
 	return apply_filters( 'kb_tickets_post_column_id', $output, $ticket_id );
 } // kb_tickets_post_column_id
@@ -131,13 +131,13 @@ function kb_tickets_post_column_id( $ticket_id, $kbs_ticket )	{
  * @return	str
  */
 function kb_tickets_post_column_date( $ticket_id, $kbs_ticket )	{
-	do_action( 'kb_pre_tickets_column_date', $kbs_ticket );
+	do_action( 'kbs_tickets_pre_column_date', $kbs_ticket );
 
 	$output  = date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $kbs_ticket->date ) );
 	$output .= '<br />';
 	$output .= date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $kbs_ticket->modified_date ) );
 
-	do_action( 'kb_post_tickets_column_date', $kbs_ticket );
+	do_action( 'kbs_tickets_post_column_date', $kbs_ticket );
 
 	return apply_filters( 'kb_tickets_post_column_date', $output, $ticket_id );
 } // kb_tickets_post_column_date
@@ -151,7 +151,7 @@ function kb_tickets_post_column_date( $ticket_id, $kbs_ticket )	{
  * @return	str
  */
 function kb_tickets_post_column_customer( $ticket_id, $kbs_ticket )	{
-	do_action( 'kb_pre_tickets_column_customer', $kbs_ticket );
+	do_action( 'kbs_tickets_pre_column_customer', $kbs_ticket );
 
 	if ( ! empty( $kbs_ticket->customer_id ) )	{
 
@@ -170,7 +170,7 @@ function kb_tickets_post_column_customer( $ticket_id, $kbs_ticket )	{
 		$output = __( 'No Customer Assigned', 'kb-support' );
 	}
 
-	do_action( 'kb_post_tickets_column_customer', $kbs_ticket );
+	do_action( 'kbs_tickets_post_column_customer', $kbs_ticket );
 
 	return apply_filters( 'kb_tickets_post_column_customer', $output, $ticket_id );
 } // kb_tickets_post_column_customer
@@ -184,7 +184,7 @@ function kb_tickets_post_column_customer( $ticket_id, $kbs_ticket )	{
  * @return	str
  */
 function kb_tickets_post_column_agent( $ticket_id, $kbs_ticket )	{
-	do_action( 'kb_pre_tickets_column_agent', $kbs_ticket );
+	do_action( 'kbs_tickets_pre_column_agent', $kbs_ticket );
 
 	if ( ! empty( $kbs_ticket->agent_id ) )	{
 		$output = sprintf( '<a href="%s">%s</a>',
@@ -195,7 +195,7 @@ function kb_tickets_post_column_agent( $ticket_id, $kbs_ticket )	{
 		$output = __( 'No Agent Assigned', 'kb-support' );
 	}
 
-	do_action( 'kb_post_tickets_column_agent', $kbs_ticket );
+	do_action( 'kbs_tickets_post_column_agent', $kbs_ticket );
 
 	return apply_filters( 'kb_tickets_post_column_agent', $output, $ticket_id );
 } // kb_tickets_post_column_agent
@@ -209,12 +209,12 @@ function kb_tickets_post_column_agent( $ticket_id, $kbs_ticket )	{
  * @return	str
  */
 function kb_tickets_post_column_sla( $ticket_id, $kbs_ticket )	{
-	do_action( 'kb_pre_tickets_column_sla', $kbs_ticket );
+	do_action( 'kbs_tickets_pre_column_sla', $kbs_ticket );
 
 	$output  = $kbs_ticket->get_target_respond() . '<br />';
 	$output .= $kbs_ticket->get_target_resolve();
 
-	do_action( 'kb_post_tickets_column_sla', $kbs_ticket );
+	do_action( 'kbs_tickets_post_column_sla', $kbs_ticket );
 
 	return apply_filters( 'kb_tickets_post_column_sla', $output, $ticket_id );
 } // kb_tickets_post_column_sla
