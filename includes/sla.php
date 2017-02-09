@@ -261,6 +261,16 @@ function kbs_display_sla_response_status_icon( $ticket )	{
 				$respond_class = '_over';
 				$title         = sprintf( __( 'Missed response by %s', 'kb-support' ), $diff );
 			} else	{
+				$warn = kbs_get_option( 'sla_response_time_warn' );
+
+				if ( ! empty( $warn ) )	{
+					$remaining = $target - $now;
+					$warn      = absint( $warn ) * ( 60 * 60 );
+					if ( $remaining < $warn )	{
+						$respond_class = '_warn';
+					}
+				}
+
 				$title = sprintf( __( '%s left to respond', 'kb-support' ), $diff );
 			}
 
@@ -322,6 +332,15 @@ function kbs_display_sla_resolve_status_icon( $ticket )	{
 				$resolve_class = '_over';
 				$title         = sprintf( __( 'Missed resolution by %s', 'kb-support' ), $diff );
 			} else	{
+				$warn = kbs_get_option( 'sla_resolve_time_warn' );
+
+				if ( ! empty( $warn ) )	{
+					$remaining = $target - $now;
+					$warn      = absint( $warn ) * ( 60 * 60 );
+					if ( $remaining < $warn )	{
+						$resolve_class = '_warn';
+					}
+				}
 				$title = sprintf( __( '%s left to resolve', 'kb-support' ), $diff );
 			}
 

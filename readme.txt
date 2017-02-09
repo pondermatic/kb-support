@@ -102,7 +102,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 * Service Level Tracking
 	* Enable SLA tracking within Tickets -> Settings -> Service Levels
 	* Define your target response and resolution times
-	* The ticket edit screen will display the status of the SLA for each newly created ticket
+	* The ticket edit screen will display the status of the SLA for each newly created ticket. Green is good, amber if SLA is nearing expiry, red if expired
 
 **Tweaks**
 

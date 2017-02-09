@@ -411,7 +411,16 @@ function kbs_get_registered_settings() {
 						'name'    => __( 'Target Response Time', 'kb-support' ),
 						'type'    => 'select',
 						'options' => kbs_get_response_time_options(),
-						'std'     => '4 hours'
+						'std'     => '4 hours',
+						'desc'    => sprintf( __( 'Enter your targeted first response time for %s.', 'kb-support' ), strtolower( $plural ) )
+					),
+					'sla_response_time_warn' => array(
+						'id'      => 'sla_response_time_warn',
+						'name'    => __( 'Warn if within', 'kb-support' ),
+						'type'    => 'number',
+						'size'    => 'small',
+						'std'     => '1',
+						'desc'    => __( 'The number of hours before <code>Target Response Time</code> expires that the SLA status should be set to warn.', 'kb-support' )
 					),
 					'sla_resolve_time' => array(
 						'id'      => 'sla_resolve_time',
@@ -429,7 +438,16 @@ function kbs_get_registered_settings() {
 							'3 weeks'  => __( '3 Weeks', 'kb-support' ),
 							'4 weeks'  => __( '4 Weeks', 'kb-support' )
 						) ),
-						'std'     => '2 days'
+						'std'     => '2 days',
+						'desc'    => sprintf( __( 'Enter your targeted resolution time for %s.', 'kb-support' ), strtolower( $plural ) )
+					),
+					'sla_resolve_time_warn' => array(
+						'id'      => 'sla_resolve_time_warn',
+						'name'    => __( 'Warn if within', 'kb-support' ),
+						'type'    => 'number',
+						'size'    => 'small',
+						'std'     => '12',
+						'desc'    => __( 'The number of hours before <code>Target Resolution Time</code> expires that the SLA status should be set to warn.', 'kb-support' )
 					)
 				)
 			)
