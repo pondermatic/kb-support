@@ -97,6 +97,13 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 = 1.0 =
 
+**New**
+
+* Service Level Tracking
+	* Enable SLA tracking within Tickets -> Settings -> Service Levels
+	* Define your target response and resolution times
+	* The ticket edit screen will display the status of the SLA for each newly created ticket
+
 **Tweaks**
 
 * Make sure `$current_meta` array exists to avoid potential PHP notices
