@@ -180,8 +180,8 @@ function kbs_run_install() {
 
 	update_option( 'kbs_settings', $merged_options );
 	update_option( 'kbs_version', KBS_VERSION );
-	update_option( 'kbs_install_version', KBS_VERSION, 'no' );
-	update_option( 'kbs_installed', current_time( 'mysql' ), 'no' );
+	add_option( 'kbs_install_version', KBS_VERSION, '', 'no' );
+	add_option( 'kbs_installed', current_time( 'mysql' ), '', 'no' );
 
 	// Create KBS support roles
 	$roles = new KBS_Roles;

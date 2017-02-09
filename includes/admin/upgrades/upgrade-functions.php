@@ -201,5 +201,5 @@ function kbs_v10_upgrades()	{
 		'%_kbs_ticket_sla_%'
 	) );
 
-
+	add_option( 'kbs_install_version', KBS_VERSION, '', 'no' );
 } // kbs_v10_upgrades
