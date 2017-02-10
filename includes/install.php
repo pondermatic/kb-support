@@ -191,8 +191,6 @@ function kbs_run_install() {
 	// Create the customer databases
 	@KBS()->customers->create_table();
 	@KBS()->customer_meta->create_table();
-	@KBS()->companies->create_table();
-	@KBS()->company_meta->create_table();
 
 	// Add a temporary option to note that KBS pages have been created
 	set_transient( '_kbs_installed', $merged_options, 30 );
