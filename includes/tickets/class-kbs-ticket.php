@@ -156,7 +156,15 @@ class KBS_Ticket {
 	protected $status_nicename = '';
 
 	/**
-	 * The customer ID that made the payment
+	 * The date the ticket was closed
+	 *
+	 * @since	1.0
+	 * @var		str
+	 */
+	protected $closed_date = false;
+
+	/**
+	 * The customer ID associated with the ticket
 	 *
 	 * @since	1.0
 	 * @var		int
@@ -385,7 +393,7 @@ class KBS_Ticket {
 		// Status and Dates
 		$this->date            = $ticket->post_date;
 		$this->modified_date   = $ticket->post_modified;
-		$this->completed_date  = $this->setup_completed_date();
+		$this->closed_date     = $this->setup_closed_date();
 		$this->status          = $ticket->post_status;
 		$this->post_status     = $this->status;
 
@@ -961,6 +969,14 @@ class KBS_Ticket {
 		if ( 'closed' == $this->old_status )	{
 			return;
 		}
+
+		// Add SLA data
+		add_post_meta( $this->ID, '_kbs_ticket_closed_date', current_time( 'mysql' ), true );
+
+		if ( is_admin() )	{
+			add_post_meta( $this->ID, '_kbs_ticket_closed_by', get_current_user_id(), true );
+		}
+
 		do_action( 'kbs_close_ticket', $this->ID, $this );
 	} // process_closed
 
@@ -1007,22 +1023,22 @@ class KBS_Ticket {
 	} // attach_files
 
 	/**
-	 * Setup the ticket resolved date
+	 * Setup the ticket closed date
 	 *
 	 * @since	1.0
-	 * @return	str		The date the ticket was resolved
+	 * @return	str		The date the ticket was closed
 	 */
-	private function setup_completed_date() {
+	private function setup_closed_date() {
 		$ticket = get_post( $this->ID );
 
 		if ( 'closed' != $ticket->post_status ) {
-			return false; // This ticket was never resolved
+			return false; // This ticket was never closed
 		}
 
-		$date = ( $date = $this->get_meta( '_kbs_completed_date', true ) ) ? $date : $ticket->modified_date;
+		$date = ( $date = $this->get_meta( '_kbs_ticket_closed_date', true ) ) ? $date : $ticket->modified_date;
 
 		return $date;
-	} // setup_completed_date
+	} // setup_closed_date
 
 	/**
 	 * Retrieve the assigned agent ID.

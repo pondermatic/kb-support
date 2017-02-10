@@ -1,6 +1,6 @@
 === KB Support ===
 Contributors: mikeyhoward1977
-Tags: Helpdesk, Help Desk, Support, Customer Support, Service, Service Desk, ITIL, Support Helpdesk, Ticket, Ticket System, Support Tickets, Helpdesk Tickets, Knowledgebase, Knowledge Base
+Tags: Helpdesk, Help Desk, Support, Customer Support, Service, Service Desk, ITIL, Support Helpdesk, Ticket, Ticket System, Support Tickets, Helpdesk Tickets, Knowledgebase, Knowledge Base, Service Level, SLA
 Requires at least: 4.1
 Tested up to: 4.8
 Stable tag: 1.0
@@ -96,6 +96,13 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 == Changelog ==
 
 = 1.0 =
+
+**New**
+
+* Service Level Tracking
+	* Enable SLA tracking within Tickets -> Settings -> Service Levels
+	* Define your target response and resolution times
+	* The ticket edit screen will display the status of the SLA for each newly created ticket. Green is good, amber if SLA is nearing expiry, red if expired
 
 **Tweaks**
 

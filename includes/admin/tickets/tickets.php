@@ -107,7 +107,7 @@ add_action( 'manage_kbs_ticket_posts_custom_column' , 'kbs_set_kbs_ticket_column
  *
  * @since	1.0
  * @param	int	$ticket_id	The ticket ID
- * @param	obj	$kbs_ticket	The ticket WP_Post object
+ * @param	obj	$kbs_ticket	The KBS Ticket object
  * @return	str
  */
 function kb_tickets_post_column_id( $ticket_id, $kbs_ticket )	{
@@ -127,7 +127,7 @@ function kb_tickets_post_column_id( $ticket_id, $kbs_ticket )	{
  *
  * @since	1.0
  * @param	int	$ticket_id	The ticket ID
- * @param	obj	$kbs_ticket	The ticket WP_Post object
+ * @param	obj	$kbs_ticket	The KBS Ticket object
  * @return	str
  */
 function kb_tickets_post_column_date( $ticket_id, $kbs_ticket )	{
@@ -147,7 +147,7 @@ function kb_tickets_post_column_date( $ticket_id, $kbs_ticket )	{
  *
  * @since	1.0
  * @param	int	$ticket_id	The ticket ID
- * @param	obj	$kbs_ticket	The ticket WP_Post object
+ * @param	obj	$kbs_ticket	The KBS Ticket object
  * @return	str
  */
 function kb_tickets_post_column_customer( $ticket_id, $kbs_ticket )	{
@@ -180,7 +180,7 @@ function kb_tickets_post_column_customer( $ticket_id, $kbs_ticket )	{
  *
  * @since	1.0
  * @param	int	$ticket_id	The ticket ID
- * @param	obj	$kbs_ticket	The ticket WP_Post object
+ * @param	obj	$kbs_ticket	The KBS Ticket object
  * @return	str
  */
 function kb_tickets_post_column_agent( $ticket_id, $kbs_ticket )	{
@@ -205,18 +205,20 @@ function kb_tickets_post_column_agent( $ticket_id, $kbs_ticket )	{
  *
  * @since	1.0
  * @param	int	$ticket_id	The ticket ID
- * @param	obj	$kbs_ticket	The ticket WP_Post object
+ * @param	obj	$kbs_ticket	The KBS Ticket object
  * @return	str
  */
 function kb_tickets_post_column_sla( $ticket_id, $kbs_ticket )	{
 	do_action( 'kbs_tickets_pre_column_sla', $kbs_ticket );
 
-	$output  = $kbs_ticket->get_target_respond() . '<br />';
-	$output .= $kbs_ticket->get_target_resolve();
+	$output = kbs_display_sla_status_icons( $kbs_ticket, '<br />', false );
 
 	do_action( 'kbs_tickets_post_column_sla', $kbs_ticket );
 
-	return apply_filters( 'kb_tickets_post_column_sla', $output, $ticket_id );
+	$output = apply_filters( 'kb_tickets_post_column_sla', $output, $ticket_id );
+
+	return implode( '<br />', $output );
+
 } // kb_tickets_post_column_sla
 
 /**
