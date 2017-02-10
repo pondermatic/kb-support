@@ -1,9 +1,9 @@
 <?php
 /**
- * Customer Table Class
+ * Company Table Class
  *
  * @package     KBS
- * @subpackage  Admin/Customers
+ * @subpackage  Admin/Companies
  * @copyright   Copyright (c) 2017, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
@@ -19,13 +19,13 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 }
 
 /**
- * KBS_Customer_Table Class
+ * KBS_Company_Table Class
  *
  * Renders the Customer Reports table
  *
  * @since	1.0
  */
-class KBS_Customer_Table extends WP_List_Table {
+class KBS_Company_Table extends WP_List_Table {
 
 	/**
 	 * Number of items per page
@@ -36,7 +36,7 @@ class KBS_Customer_Table extends WP_List_Table {
 	public $per_page = 30;
 
 	/**
-	 * Number of customers found
+	 * Number of companies found
 	 *
 	 * @var		int
 	 * @since	1.0
@@ -44,7 +44,7 @@ class KBS_Customer_Table extends WP_List_Table {
 	public $count = 0;
 
 	/**
-	 * Total customers
+	 * Total companies
 	 *
 	 * @var	int
 	 * @since	1.0
@@ -70,8 +70,8 @@ class KBS_Customer_Table extends WP_List_Table {
 
 		// Set parent defaults
 		parent::__construct( array(
-			'singular' => __( 'Customer', 'kb-support' ),
-			'plural'   => __( 'Customers', 'kb-support' ),
+			'singular' => __( 'Company', 'kb-support' ),
+			'plural'   => __( 'Companies', 'kb-support' ),
 			'ajax'     => false,
 		) );
 	} // __construct
@@ -123,7 +123,7 @@ class KBS_Customer_Table extends WP_List_Table {
 	 * @access	public
 	 * @since	1.0
 	 *
-	 * @param	arr		$item			Contains all the data of the customers
+	 * @param	arr		$item			Contains all the data of the companies
 	 * @param	str		$column_name	The name of the column
 	 *
 	 * @return string Column Name
@@ -133,7 +133,7 @@ class KBS_Customer_Table extends WP_List_Table {
 
 			case 'num_tickets' :
 				$value = '<a href="' .
-					admin_url( '/edit.php?post_type=kbs_ticket&customer=' . urlencode( $item['id'] )
+					admin_url( '/edit.php?post_type=kbs_ticket&company=' . urlencode( $item['id'] )
 				) . '">' . esc_html( $item['num_tickets'] ) . '</a>';
 				break;
 
@@ -146,20 +146,18 @@ class KBS_Customer_Table extends WP_List_Table {
 				break;
 		}
 
-		return apply_filters( 'kbs_customers_column_' . $column_name, $value, $item['id'] );
+		return apply_filters( 'kbs_companies_column_' . $column_name, $value, $item['id'] );
 	} // column_default
 
 	public function column_name( $item ) {
-		$name        = '#' . $item['id'] . ' ';
-		$name       .= ! empty( $item['name'] ) ? $item['name'] : '<em>' . __( 'Unnamed Customer','kb-support' ) . '</em>';
-		$user        = ! empty( $item['user_id'] ) ? $item['user_id'] : $item['email'];
-		$view_url    = admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-customers&view=userdata&id=' . $item['id'] );
+		$name        = ! empty( $item['name'] ) ? $item['name'] : '<em>' . __( 'Unnamed Company','kb-support' ) . '</em>';
+		$view_url    = admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-companies&view=companydata&id=' . $item['id'] );
 		$actions     = array(
 			'view'   => '<a href="' . $view_url . '">' . __( 'View', 'kb-support' ) . '</a>',
-			'delete' => '<a href="' . admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-customers&view=delete&id=' . $item['id'] ) . '">' . __( 'Delete', 'kb-support' ) . '</a>'
+			'delete' => '<a href="' . admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-companies&view=delete&id=' . $item['id'] ) . '">' . __( 'Delete', 'kb-support' ) . '</a>'
 		);
 
-		$customer = new KBS_Customer( $item['id'] );
+		$company = new KBS_Company( $item['id'] );
 
 		return '<a href="' . esc_url( $view_url ) . '">' . $name . '</a>' . $this->row_actions( $actions );
 	} // column_name
@@ -174,13 +172,12 @@ class KBS_Customer_Table extends WP_List_Table {
 	public function get_columns() {
 		$columns = array(
 			'name'          => __( 'Name', 'kb-support' ),
-			'company'       => __( 'Company', 'kb-support' ),
 			'email'         => __( 'Primary Email', 'kb-support' ),
 			'num_tickets'   => kbs_get_ticket_label_plural(),
 			'date_created'  => __( 'Date Created', 'kb-support' ),
 		);
 
-		return apply_filters( 'kbs_report_customer_columns', $columns );
+		return apply_filters( 'kbs_report_company_columns', $columns );
 	} // get_columns
 
 	/**
@@ -192,13 +189,12 @@ class KBS_Customer_Table extends WP_List_Table {
 	 */
 	public function get_sortable_columns() {
 		$sortable = array(
-			'date_created'  => array( 'date_created', true ),
-			'name'          => array( 'name', true ),
-			'company'       => array( 'company', true ),
-			'num_purchases' => array( 'ticket_count', false )
+			'date_created' => array( 'date_created', true ),
+			'name'         => array( 'name', true ),
+			'num_tickets'  => array( 'ticket_count', false )
 		);
 
-		return apply_filters( 'kbs_customer_table_sortable_columns', $sortable );
+		return apply_filters( 'kbs_company_table_sortable_columns', $sortable );
 	} // get_sortable_columns
 
 	/**
@@ -239,7 +235,7 @@ class KBS_Customer_Table extends WP_List_Table {
 	 * @access	public
 	 * @since	1.0
 	 * @global	obj		$wpdb			Used to query the database using the WordPress
-	 * @return	arr		$reports_data	All the data for customer reports
+	 * @return	arr		$reports_data	All the data for company reports
 	 */
 	public function reports_data() {
 		global $wpdb;
@@ -262,29 +258,22 @@ class KBS_Customer_Table extends WP_List_Table {
 			$args['email']   = $search;
 		} elseif ( is_numeric( $search ) ) {
 			$args['id']      = $search;
-		} elseif ( strpos( $search, 'user:' ) !== false ) {
-			$args['user_id'] = trim( str_replace( 'user:', '', $search ) );
 		} else {
 			$args['name']    = $search;
 		}
 
 		$this->args = $args;
-		$customers  = KBS()->customers->get_customers( $args );
+		$companies  = KBS()->companies->get_companies( $args );
 
-		if ( $customers ) {
-			foreach ( $customers as $customer ) {
-
-				$user_id = ! empty( $customer->user_id ) ? intval( $customer->user_id ) : 0;
-				$company = kbs_get_company_name( $customer->company_id );
+		if ( $companies ) {
+			foreach ( $companies as $company ) {
 
 				$data[] = array(
-					'id'            => $customer->id,
-					'user_id'       => $user_id,
-					'name'          => $customer->name,
-					'company'       => $company ? $company : '&ndash;',
-					'email'         => $customer->email,
-					'num_tickets'   => $customer->ticket_count,
-					'date_created'  => $customer->date_created,
+					'id'            => $company->id,
+					'name'          => $company->name,
+					'email'         => $company->email,
+					'num_tickets'   => $company->ticket_count,
+					'date_created'  => $company->date_created,
 				);
 			}
 		}
@@ -297,10 +286,10 @@ class KBS_Customer_Table extends WP_List_Table {
 	 *
 	 * @access	public
 	 * @since	1.0
-	 * @uses	KBS_Customer_Table::get_columns()
+	 * @uses	KBS_Company_Table::get_columns()
 	 * @uses	WP_List_Table::get_sortable_columns()
-	 * @uses	KBS_Customer_Table::get_pagenum()
-	 * @uses	KBS_Customer_Table::get_total_customers()
+	 * @uses	KBS_Company_Table::get_pagenum()
+	 * @uses	KBS_Company_Table::get_total_companies()
 	 * @return	void
 	 */
 	public function prepare_items() {
@@ -312,7 +301,7 @@ class KBS_Customer_Table extends WP_List_Table {
 
 		$this->items = $this->reports_data();
 
-		$this->total = kbs_count_total_customers( $this->args );
+		$this->total = kbs_count_total_companies( $this->args );
 
 		$this->set_pagination_args( array(
 			'total_items' => $this->total,
@@ -320,4 +309,4 @@ class KBS_Customer_Table extends WP_List_Table {
 			'total_pages' => ceil( $this->total / $this->per_page ),
 		) );
 	} // prepare_items
-} // KBS_Customer_Table
+} // KBS_Company_Table

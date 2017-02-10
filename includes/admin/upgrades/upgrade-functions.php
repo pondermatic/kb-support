@@ -193,6 +193,7 @@ function kbs_v093_upgrades()	{
 function kbs_v10_upgrades()	{
 	global $wpdb;
 
+	// Remove SLA meta keys
 	$wpdb->query( $wpdb->prepare(
 		"
 		DELETE FROM $wpdb->postmeta
@@ -201,5 +202,13 @@ function kbs_v10_upgrades()	{
 		'%_kbs_ticket_sla_%'
 	) );
 
+	// Add company_id column to customers table and increment version
+	@KBS()->customers->create_table();
+
+	// Create company tables
+	@KBS()->companies->create_table();
+	@KBS()->company_meta->create_table();
+
+	// Add initial install version
 	add_option( 'kbs_install_version', KBS_VERSION, '', 'no' );
 } // kbs_v10_upgrades
