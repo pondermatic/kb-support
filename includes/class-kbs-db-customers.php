@@ -36,7 +36,7 @@ class KBS_DB_Customers extends KBS_DB  {
 
 		$this->table_name  = $wpdb->prefix . 'kbs_customers';
 		$this->primary_key = 'id';
-		$this->version     = '1.0';
+		$this->version     = '1.1';
 
 		add_action( 'profile_update', array( $this, 'update_customer_email_on_user_update' ), 10, 2 );
 
@@ -54,6 +54,7 @@ class KBS_DB_Customers extends KBS_DB  {
 			'user_id'      => '%d',
 			'name'         => '%s',
 			'email'        => '%s',
+			'company_id'   => '%d',
 			'ticket_ids'   => '%s',
 			'ticket_count' => '%d',
 			'notes'        => '%s',
@@ -72,6 +73,7 @@ class KBS_DB_Customers extends KBS_DB  {
 			'user_id'        => 0,
 			'email'          => '',
 			'name'           => '',
+			'company_id'     => 0,
 			'ticket_ids'     => '',
 			'ticket_count'   => 0,
 			'notes'          => '',
@@ -426,6 +428,7 @@ class KBS_DB_Customers extends KBS_DB  {
 			'number'       => 20,
 			'offset'       => 0,
 			'user_id'      => 0,
+			'company_id'   => 0,
 			'orderby'      => 'id',
 			'order'        => 'DESC',
 		);
@@ -487,6 +490,20 @@ class KBS_DB_Customers extends KBS_DB  {
 		// Specific customers by name
 		if ( ! empty( $args['name'] ) ) {
 			$where .= $wpdb->prepare( " AND `name` LIKE '%%%%" . '%s' . "%%%%' ", $args['name'] );
+		}
+
+		// Specific customers by company ID
+		if ( ! empty( $args['company_id'] ) ) {
+			$where .= $wpdb->prepare( " AND company_id LIKE '%%%%" . '%d' . "%%%%' ", $args['company_id'] );
+		}
+
+		// Specific customers by company name
+		if ( ! empty( $args['company'] ) ) {
+			$company_table  = $wpdb->prefix . 'kbs_company';
+			$customer_table = $this->table_name;
+
+			$join  .= " LEFT JOIN $meta_table ON $customer_table.company_id = $company_table.id";
+			$where .= $wpdb->prepare( " AND `name` LIKE '%%%%" . '%s' . "%%%%' ", $args['company'] );
 		}
 
 		// Customers created for a specific date or in a date range
@@ -591,7 +608,7 @@ class KBS_DB_Customers extends KBS_DB  {
 
 				$where .= $wpdb->prepare( " AND `email` IN( $emails ) ", $args['email'] );
 			} else {
-				$meta_table      = $wpdb->prefix . 'edd_customermeta';
+				$meta_table      = $wpdb->prefix . 'kbs_customermeta';
 				$customers_table = $this->table_name;
 
 				$join  .= " LEFT JOIN $meta_table ON $customers_table.id = $meta_table.kbs_customer_id";
@@ -602,6 +619,20 @@ class KBS_DB_Customers extends KBS_DB  {
 		// Specific customers by name
 		if ( ! empty( $args['name'] ) ) {
 			$where .= $wpdb->prepare( " AND `name` LIKE '%%%%" . '%s' . "%%%%' ", $args['name'] );
+		}
+
+		// Specific customers by company ID
+		if ( ! empty( $args['company_id'] ) ) {
+			$where .= $wpdb->prepare( " AND company_id LIKE '%%%%" . '%d' . "%%%%' ", $args['company_id'] );
+		}
+
+		// Specific customers by company name
+		if ( ! empty( $args['company'] ) ) {
+			$company_table  = $wpdb->prefix . 'kbs_company';
+			$customer_table = $this->table_name;
+
+			$join  .= " LEFT JOIN $meta_table ON $customer_table.company_id = $company_table.id";
+			$where .= $wpdb->prepare( " AND `name` LIKE '%%%%" . '%s' . "%%%%' ", $args['company'] );
 		}
 
 		// Customers created for a specific date or in a date range
@@ -653,7 +684,7 @@ class KBS_DB_Customers extends KBS_DB  {
 	 *
 	 * @access	public
 	 * @since	1.0
-	*/
+	 */
 	public function create_table() {
 
 		global $wpdb;
@@ -665,13 +696,15 @@ class KBS_DB_Customers extends KBS_DB  {
 		user_id bigint(20) NOT NULL,
 		email varchar(50) NOT NULL,
 		name mediumtext NOT NULL,
+		company_id bigint(20) NOT NULL,
 		ticket_count bigint(20) NOT NULL,
 		ticket_ids longtext NOT NULL,
 		notes longtext NOT NULL,
 		date_created datetime NOT NULL,
 		PRIMARY KEY  (id),
 		UNIQUE KEY email (email),
-		KEY user (user_id)
+		KEY user (user_id),
+		KEY company_id (company_id)
 		) CHARACTER SET utf8 COLLATE utf8_general_ci;";
 
 		dbDelta( $sql );

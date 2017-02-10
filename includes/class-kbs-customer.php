@@ -51,6 +51,20 @@ class KBS_Customer {
 	public $emails;
 
 	/**
+	 * The company ID
+	 *
+	 * @since 1.0
+	 */
+	public $company_id = 0;
+
+	/**
+	 * The company name
+	 *
+	 * @since 1.0
+	 */
+	public $company;
+
+	/**
 	 * The customer's primary phone number
 	 *
 	 * @since 1.0
@@ -137,7 +151,6 @@ class KBS_Customer {
 		$customer = $this->db->get_customer_by( $field, $_id_or_email );
 
 		if ( empty( $customer ) || ! is_object( $customer ) ) {
-
 			return false;
 		}
 
@@ -173,6 +186,8 @@ class KBS_Customer {
 			}
 
 		}
+
+		$this->company          = $this->get_company();
 
 		$this->emails           = (array) $this->get_meta( 'additional_email', false );
 		$this->emails[]         = $this->email;
@@ -301,6 +316,23 @@ class KBS_Customer {
 
 		return $updated;
 	} // update
+
+	/**
+	 * Retrieve the customers company
+	 *
+	 * @since	1.0
+	 * @return	str		The company name
+	 */
+	public function get_company()	{
+		if ( 0 != $this->company_id )	{
+			$company_query = KBS()->companies->get_company_by( 'id', $this->company_id );
+
+			if ( ! empty( $company_query ) )	{
+				return $company_query->name;
+			}
+
+		}
+	} // get_company
 
 	/**
 	 * Attach an email to the customer

@@ -131,6 +131,8 @@ final class KB_Support {
 			self::$instance->html          = new KBS_HTML_Elements();
 			self::$instance->customers     = new KBS_DB_Customers();
 			self::$instance->customer_meta = new KBS_DB_Customer_Meta();
+			self::$instance->companies     = new KBS_DB_Companies();
+			self::$instance->company_meta  = new KBS_DB_Company_Meta();
 
 		}
 
@@ -244,10 +246,14 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/misc-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/login-register.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-customer.php';
+		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-company.php';
 		require_once KBS_PLUGIN_DIR . 'includes/user-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/agent-functions.php';
+		require_once KBS_PLUGIN_DIR . 'includes/company-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-db-customers.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-db-customer-meta.php';
+		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-db-companies.php';
+		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-db-company-meta.php';
 		require_once KBS_PLUGIN_DIR . 'includes/shortcodes.php';
 		require_once KBS_PLUGIN_DIR . 'includes/sla.php';
 
