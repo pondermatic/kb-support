@@ -170,7 +170,7 @@ class KBS_Roles {
 
 		$capabilities = array();
 
-		$capability_types = array( 'ticket', 'article' );
+		$capability_types = array( 'ticket', 'article', 'customer' );
 
 		foreach ( $capability_types as $capability_type ) {
 			$capabilities[ $capability_type ] = array(
