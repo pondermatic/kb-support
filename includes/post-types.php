@@ -221,7 +221,7 @@ function kbs_setup_post_types() {
 		'not_found'          => __( 'No Companies found', 'kb-support' ),
 		'not_found_in_trash' => __( 'No Companies found in Trash', 'kb-support' ),
 		'parent_item_colon'  => '',
-		'menu_name'          => __( 'Submission Companies', 'kb-support' )
+		'menu_name'          => __( 'Companies', 'kb-support' )
 	);
 
 	$company_args = array(
