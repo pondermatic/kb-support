@@ -34,6 +34,16 @@ function kbs_has_companies()	{
 } // kbs_has_companies
 
 /**
+ * Counts the total number of companies.
+ *
+ * @since	1.0
+ * @return	int		The total number of companies.
+ */
+function kbs_count_total_companies( $args = array() ) {
+	return KBS()->companies->count( $args );
+} // kbs_count_total_companies
+
+/**
  * Reretrieve company name.
  *
  * @since	1.0
