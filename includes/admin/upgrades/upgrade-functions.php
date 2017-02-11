@@ -191,7 +191,7 @@ function kbs_v093_upgrades()	{
  * @return	void
  */
 function kbs_v10_upgrades()	{
-	global $wpdb;
+	global $wpdb, $wp_roles;
 
 	// Remove SLA meta keys
 	$wpdb->query( $wpdb->prepare(
@@ -205,9 +205,23 @@ function kbs_v10_upgrades()	{
 	// Add company_id column to customers table and increment version
 	@KBS()->customers->create_table();
 
-	// Create company tables
-	@KBS()->companies->create_table();
-	@KBS()->company_meta->create_table();
+	// Add the customer role to admins and managers
+	if ( class_exists('WP_Roles') )	{
+		if ( ! isset( $wp_roles ) )	{
+			$wp_roles = new WP_Roles();
+		}
+	}
+
+	if ( is_object( $wp_roles ) )	{
+		$roles = new KBS_Roles;
+		$caps  = $roles->get_core_caps();
+
+		foreach( $caps['customer'] as $cap )	{
+			$wp_roles->add_cap( 'support_manager', $cap );
+			$wp_roles->add_cap( 'administrator', $cap );
+			$wp_roles->add_cap( 'support_agent', $cap );
+		}
+	}
 
 	// Add initial install version
 	add_option( 'kbs_install_version', KBS_VERSION, '', 'no' );
