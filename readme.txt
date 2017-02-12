@@ -97,7 +97,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 = 1.0 =
 
-**New**
+**Enhancements**
 
 * Company Support
 	* You can now create companies
@@ -111,10 +111,10 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 **Bug Fixes**
 
 * Corrected descriptions for email headers in settings
+* Make sure `$current_meta` array exists to avoid potential PHP notices
 
 **Tweaks**
 
-* Make sure `$current_meta` array exists to avoid potential PHP notices
 * Remove all SLA related meta keys from DB as SLA's were not tracked until this version
 * Log the current KBS version number at the time each ticket was logged
 * Ensure that the last modified date is updated for a ticket when a reply or note is added
