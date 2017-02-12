@@ -108,12 +108,18 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 	* Define your target response and resolution times
 	* The ticket edit screen will display the status of the SLA for each newly created ticket. Green is good, amber if SLA is nearing expiry, red if expired
 
+**Bug Fixes**
+
+* Corrected descriptions for email headers in settings
+
 **Tweaks**
 
 * Make sure `$current_meta` array exists to avoid potential PHP notices
 * Remove all SLA related meta keys from DB as SLA's were not tracked until this version
 * Log the current KBS version number at the time each ticket was logged
 * Ensure that the last modified date is updated for a ticket when a reply or note is added
+* Add log entries when notes are added to tickets
+* When a ticket is deleted, make sure to delete all associated replies and log entries from the `posts` and `postmeta` database tables
 
 = 0.9.5 =
 
