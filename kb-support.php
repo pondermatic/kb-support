@@ -262,6 +262,7 @@ final class KB_Support {
 			require_once KBS_PLUGIN_DIR . 'includes/admin/customers/customer-functions.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/customers/customer-actions.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/customers/contextual-help.php';
+			require_once KBS_PLUGIN_DIR . 'includes/admin/companies/contextual-help.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/tickets/tickets.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/tickets/metaboxes.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/tickets/contextual-help.php';
