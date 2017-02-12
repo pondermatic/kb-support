@@ -630,7 +630,7 @@ function kbs_get_registered_settings() {
 					'ticket_reply_heading' => array(
 						'id'   => 'ticket_reply_heading',
 						'name' => __( 'Email Heading', 'kb-support' ),
-						'desc' => __( 'Enter the heading for the %s reply email', 'kb-support' ),
+						'desc' => sprintf( __( 'Enter the heading for the %s reply email', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'text',
 						'std'  => sprintf( __( 'Support %s Update for', 'kb-support' ), $single ) . ' #{ticket_id}'
 					),
@@ -668,7 +668,7 @@ function kbs_get_registered_settings() {
 					'ticket_closed_heading' => array(
 						'id'   => 'ticket_closed_heading',
 						'name' => __( 'Email Heading', 'kb-support' ),
-						'desc' => __( 'Enter the heading for the %s closed email', 'kb-support' ),
+						'desc' => sprintf( __( 'Enter the heading for the %s closed email', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'text',
 						'std'  => sprintf( __( 'Support %s #{ticket_id} Closed', 'kb-support' ), $single )
 					),
