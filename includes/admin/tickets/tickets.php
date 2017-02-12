@@ -66,6 +66,10 @@ function kbs_set_kbs_ticket_column_data( $column_name, $post_id ) {
 
 		case 'customer':
 			echo kb_tickets_post_column_customer( $post_id, $kbs_ticket );
+			$company = kbs_get_company_name( $kbs_ticket->company_id );
+			if ( ! empty( $company ) )	{
+				echo '<br />' . $company;
+			}
 			break;
 
 		case 'ticket_category':
@@ -339,6 +343,23 @@ function kbs_filter_customer_tickets( $query )	{
 add_action( 'pre_get_posts', 'kbs_filter_customer_tickets' );
 
 /**
+ * Filter tickets by copmany.
+ *
+ * @since	1.0
+ * @return	void
+ */
+function kbs_filter_company_tickets( $query )	{
+	if ( ! is_admin() || 'kbs_ticket' != $query->get( 'post_type' ) || ! isset( $_GET['company_id'] ) )	{
+		return;
+	}
+
+	$query->set( 'meta_key', '_kbs_ticket_company_id' );
+	$query->set( 'meta_value', $_GET['company_id'] );
+	$query->set( 'meta_type', 'NUMERIC' );
+} // kbs_filter_customer_tickets
+add_action( 'pre_get_posts', 'kbs_filter_company_tickets' );
+
+/**
  * Hide inactive tickets from the 'all' tickets list.
  *
  * @since	1.0
@@ -474,7 +495,7 @@ add_filter( 'post_row_actions', 'kbs_tickets_remove_trash_action' );
 /**
  * Save the KBS Ticket custom posts
  *
- * @since	1.3
+ * @since	1.0
  * @param	int		$post_id		The ID of the post being saved.
  * @param	obj		$post			The WP_Post object of the post being saved.
  * @param	bool	$update			Whether an existing post if being updated or not.

@@ -146,6 +146,7 @@ function kbs_count_tickets( $args = array() ) {
 		'agent'      => null,
 		'user'       => null,
 		'customer'   => null,
+		'company'    => null,
 		's'          => null,
 		'start-date' => null,
 		'end-date'   => null
@@ -240,6 +241,16 @@ function kbs_count_tickets( $args = array() ) {
 			AND m.meta_value = %s",
 			'_kbs_ticket_customer_id',
 			$args['customer']
+		);
+	}
+
+	if ( ! empty( $args['company'] ) )	{
+		$join = "LEFT JOIN $wpdb->postmeta m ON (p.ID = m.post_id)";
+		$where .= $wpdb->prepare( "
+			AND m.meta_key = %s
+			AND m.meta_value = %s",
+			'_kbs_ticket_company_id',
+			$args['company']
 		);
 	}
 
@@ -449,7 +460,6 @@ function kbs_add_ticket( $ticket_data )	{
 	$category    = array();
 
 	$ticket = new KBS_Ticket();
-
 
 	if ( ! empty( $ticket_data['post_category'] ) )	{
 		if ( ! is_array( $ticket_data['post_category'] ) )	{
@@ -1238,6 +1248,10 @@ function kbs_insert_note( $ticket_id = 0, $note = '' ) {
 	) ) );
 
 	do_action( 'kbs_insert_ticket_note', $note_id, $ticket_id, $note );
+
+	if ( $note_id )	{
+		wp_update_post( array( 'ID' => $ticket_id ) );
+	}
 
 	return $note_id;
 } // kbs_insert_note

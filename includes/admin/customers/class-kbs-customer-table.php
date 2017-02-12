@@ -174,6 +174,7 @@ class KBS_Customer_Table extends WP_List_Table {
 	public function get_columns() {
 		$columns = array(
 			'name'          => __( 'Name', 'kb-support' ),
+			'company'       => __( 'Company', 'kb-support' ),
 			'email'         => __( 'Primary Email', 'kb-support' ),
 			'num_tickets'   => kbs_get_ticket_label_plural(),
 			'date_created'  => __( 'Date Created', 'kb-support' ),
@@ -193,6 +194,7 @@ class KBS_Customer_Table extends WP_List_Table {
 		$sortable = array(
 			'date_created'  => array( 'date_created', true ),
 			'name'          => array( 'name', true ),
+			'company'       => array( 'company', true ),
 			'num_purchases' => array( 'ticket_count', false )
 		);
 
@@ -242,18 +244,20 @@ class KBS_Customer_Table extends WP_List_Table {
 	public function reports_data() {
 		global $wpdb;
 
-		$data    = array();
-		$paged   = $this->get_paged();
-		$offset  = $this->per_page * ( $paged - 1 );
-		$search  = $this->get_search();
-		$order   = isset( $_GET['order'] )   ? sanitize_text_field( $_GET['order'] )   : 'DESC';
-		$orderby = isset( $_GET['orderby'] ) ? sanitize_text_field( $_GET['orderby'] ) : 'id';
+		$data       = array();
+		$paged      = $this->get_paged();
+		$offset     = $this->per_page * ( $paged - 1 );
+		$search     = $this->get_search();
+		$order      = isset( $_GET['order'] )      ? sanitize_text_field( $_GET['order'] )   : 'DESC';
+		$orderby    = isset( $_GET['orderby'] )    ? sanitize_text_field( $_GET['orderby'] ) : 'id';
+		$company_id = isset( $_GET['company_id'] ) ? absint( $_GET['company_id'] )           : 0;
 
 		$args    = array(
-			'number'  => $this->per_page,
-			'offset'  => $offset,
-			'order'   => $order,
-			'orderby' => $orderby
+			'number'     => $this->per_page,
+			'offset'     => $offset,
+			'order'      => $order,
+			'orderby'    => $orderby,
+			'company_id' => $company_id
 		);
 
 		if ( is_email( $search ) ) {
@@ -273,11 +277,13 @@ class KBS_Customer_Table extends WP_List_Table {
 			foreach ( $customers as $customer ) {
 
 				$user_id = ! empty( $customer->user_id ) ? intval( $customer->user_id ) : 0;
+				$company = kbs_get_company_name( $customer->company_id );
 
 				$data[] = array(
 					'id'            => $customer->id,
 					'user_id'       => $user_id,
 					'name'          => $customer->name,
+					'company'       => $company ? $company : '&ndash;',
 					'email'         => $customer->email,
 					'num_tickets'   => $customer->ticket_count,
 					'date_created'  => $customer->date_created,

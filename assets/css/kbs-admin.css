@@ -312,6 +312,10 @@ a.kbs_ticket_form_data	{
 	font-size: 24px;
 	font-weight: 600;
 }
+.customer-info .customer-company {
+	font-size: 16px;
+	font-weight: 600;
+}
 .customer-edit-link a,
 .disconnect-user a {
 	font-size: 12px;
@@ -421,6 +425,9 @@ a.kbs_ticket_form_data	{
 	.customer-info .customer-name {
 		font-size: 16px;
 	}
+	.customer-info .customer-company {
+		font-size: 14px;
+	}
 	#kbs-item-wrapper .widefat td, .widefat th {
 		padding: 4px 6px;
 		max-width: 100px!important;
@@ -455,6 +462,9 @@ a.kbs_ticket_form_data	{
 	}
 	.customer-info .customer-name {
 		font-size: 16px;
+	}
+	.customer-info .customer-company {
+		font-size: 14px;
 	}
 	#kbs-item-wrapper #kbs-item-stats-wrapper {
 		padding-left: 0;
