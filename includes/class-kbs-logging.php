@@ -85,7 +85,7 @@ class KBS_Logging {
 	 */
 	public function log_types() {
 		$terms = array(
-			'submit', 'reply', 'status', 'assign'
+			'submit', 'reply', 'status', 'assign', 'note'
 		);
 
 		return apply_filters( 'kbs_log_types', $terms );

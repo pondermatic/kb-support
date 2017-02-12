@@ -662,6 +662,45 @@ function kbs_record_reply_in_log( $ticket_id = 0, $reply_id = 0, $reply_data = a
 add_action( 'kbs_reply_to_ticket', 'kbs_record_reply_in_log', 10, 4 );
 
 /**
+ * Record Ticket Note Action In Log
+ *
+ * Stores log information for a ticket notes.
+ *
+ * @since	1.0
+ * @global	$kbs_logs
+ * @param	int			$ticket_id		Ticket ID
+ * @param	int			$note_id		Note ID
+ * @param	arr			$reply_data		Note data
+ * @param	obj			$ticket			KBS_Ticket object
+ * @return	void
+*/
+function kbs_record_note_in_log( $note_id = 0, $ticket_id = 0 ) {
+	global $kbs_logs;
+
+	$note = get_comment( $note_id );
+
+	if ( $note )	{
+
+		$log_data = array(
+			'post_parent'   => $ticket_id,
+			'log_type'      => 'note',
+			'post_date'     => $note->comment_date,
+			'post_date_gmt' => $note->comment_date_gmt
+		);
+
+		$log_meta = array(
+			'note_id'  => $note_id,
+			'note_by'  => $note->user_id,
+			'reassign' => ! empty( $note_data['reassign'] )  ? $note_data['reassign']    : false
+		);
+
+		$kbs_logs->insert_log( $log_data, $log_meta );
+
+	}
+} // kbs_record_note_in_log
+add_action( 'kbs_insert_ticket_note', 'kbs_record_note_in_log', 10, 2 );
+
+/**
  * Update the status of a ticket.
  *
  * @since	1.0
