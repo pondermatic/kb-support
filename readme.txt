@@ -99,6 +99,10 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 **New**
 
+* Company Support
+	* You can now create companies
+	* Customers can be added to a company
+
 * Service Level Tracking
 	* Enable SLA tracking within Tickets -> Settings -> Service Levels
 	* Define your target response and resolution times
@@ -109,6 +113,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 * Make sure `$current_meta` array exists to avoid potential PHP notices
 * Remove all SLA related meta keys from DB as SLA's were not tracked until this version
 * Log the current KBS version number at the time each ticket was logged
+* Ensure that the last modified date is updated for a ticket when a reply or note is added
 
 = 0.9.5 =
 
