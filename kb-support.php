@@ -131,9 +131,6 @@ final class KB_Support {
 			self::$instance->html          = new KBS_HTML_Elements();
 			self::$instance->customers     = new KBS_DB_Customers();
 			self::$instance->customer_meta = new KBS_DB_Customer_Meta();
-			self::$instance->companies     = new KBS_DB_Companies();
-			self::$instance->company_meta  = new KBS_DB_Company_Meta();
-
 		}
 
 		return self::$instance;

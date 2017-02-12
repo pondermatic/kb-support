@@ -209,19 +209,22 @@ function kbs_setup_post_types() {
 
 	/** KB Company Type */
 	$company_labels = array(
-		'name'               => _x( 'Companies', 'kbs_company type general name', 'kb-support' ),
-		'singular_name'      => _x( 'Company', 'kbs_company type singular name', 'kb-support' ),
-		'add_new'            => __( 'New Company', 'kb-support' ),
-		'add_new_item'       => __( 'New Company', 'kb-support' ),
-		'edit_item'          => __( 'Edit Company', 'kb-support' ),
-		'new_item'           => __( 'New Company', 'kb-support' ),
-		'all_items'          => __( 'Companies', 'kb-support' ),
-		'view_item'          => __( 'View Company', 'kb-support' ),
-		'search_items'       => __( 'Search Forms', 'kb-support' ),
-		'not_found'          => __( 'No Companies found', 'kb-support' ),
-		'not_found_in_trash' => __( 'No Companies found in Trash', 'kb-support' ),
-		'parent_item_colon'  => '',
-		'menu_name'          => __( 'Companies', 'kb-support' )
+		'name'                  => _x( 'Companies', 'kbs_company type general name', 'kb-support' ),
+		'singular_name'         => _x( 'Company', 'kbs_company type singular name', 'kb-support' ),
+		'add_new'               => __( 'New Company', 'kb-support' ),
+		'add_new_item'          => __( 'New Company', 'kb-support' ),
+		'edit_item'             => __( 'Edit Company', 'kb-support' ),
+		'new_item'              => __( 'New Company', 'kb-support' ),
+		'all_items'             => __( 'Companies', 'kb-support' ),
+		'view_item'             => __( 'View Company', 'kb-support' ),
+		'search_items'          => __( 'Search Forms', 'kb-support' ),
+		'not_found'             => __( 'No Companies found', 'kb-support' ),
+		'not_found_in_trash'    => __( 'No Companies found in Trash', 'kb-support' ),
+		'parent_item_colon'     => '',
+		'featured_image'        => __( 'Company Logo', 'kb-support' ),
+		'set_featured_image'    => __( 'Set company logo', 'kb-support' ),
+		'remove_featured_image' => __( 'Remove company logo', 'kb-support' ),
+		'use_featured_image'    => __( 'Use as company logo', 'kb-support' )
 	);
 
 	$company_args = array(
@@ -230,10 +233,11 @@ function kbs_setup_post_types() {
 		'show_ui'            => true,
 		'rewrite'            => false,
 		'capability_type'    => 'customer',
+		'show_in_menu'       => false,
 		'map_meta_cap'       => true,
 		'has_archive'        => false,
 		'hierarchical'       => false,
-		'supports'           => apply_filters( 'kbs_company_supports', array( 'title' ) ),
+		'supports'           => apply_filters( 'kbs_company_supports', array( 'title', 'thumbnail' ) ),
 		'can_export'         => true
 	);
 

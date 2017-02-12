@@ -476,9 +476,10 @@ function kbs_ajax_add_customer()	{
 
 	$customer      = new stdClass;
 	$customer_data = array(
-		'name'    => strip_tags( stripslashes( $_POST['customer_name'] ) ),
-		'email'   => $_POST['customer_email'],
-		'user_id' => $user_id
+		'name'       => strip_tags( stripslashes( $_POST['customer_name'] ) ),
+		'company_id' => kbs_sanitize_company_id( $_POST['customer_company'] ),
+		'email'      => $_POST['customer_email'],
+		'user_id'    => $user_id
 	);
 
 	$customer_data = apply_filters( 'kbs_add_customer_info', $customer_data );

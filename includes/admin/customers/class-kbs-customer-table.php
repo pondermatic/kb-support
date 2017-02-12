@@ -244,18 +244,20 @@ class KBS_Customer_Table extends WP_List_Table {
 	public function reports_data() {
 		global $wpdb;
 
-		$data    = array();
-		$paged   = $this->get_paged();
-		$offset  = $this->per_page * ( $paged - 1 );
-		$search  = $this->get_search();
-		$order   = isset( $_GET['order'] )   ? sanitize_text_field( $_GET['order'] )   : 'DESC';
-		$orderby = isset( $_GET['orderby'] ) ? sanitize_text_field( $_GET['orderby'] ) : 'id';
+		$data       = array();
+		$paged      = $this->get_paged();
+		$offset     = $this->per_page * ( $paged - 1 );
+		$search     = $this->get_search();
+		$order      = isset( $_GET['order'] )      ? sanitize_text_field( $_GET['order'] )   : 'DESC';
+		$orderby    = isset( $_GET['orderby'] )    ? sanitize_text_field( $_GET['orderby'] ) : 'id';
+		$company_id = isset( $_GET['company_id'] ) ? absint( $_GET['company_id'] )           : 0;
 
 		$args    = array(
-			'number'  => $this->per_page,
-			'offset'  => $offset,
-			'order'   => $order,
-			'orderby' => $orderby
+			'number'     => $this->per_page,
+			'offset'     => $offset,
+			'order'      => $order,
+			'orderby'    => $orderby,
+			'company_id' => $company_id
 		);
 
 		if ( is_email( $search ) ) {

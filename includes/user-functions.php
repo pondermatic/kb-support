@@ -67,6 +67,32 @@ function kbs_get_customer_id_from_ticket( $ticket_id )	{
 } // kbs_get_customer_id_from_ticket
 
 /**
+ * Retrieve the customer company ID.
+ *
+ * @since	1.0
+ * @param	int		$customer_id	The customer ID
+ * @return	int		The customer company ID
+ */
+function kbs_get_customer_company_id( $customer_id )	{
+	global $wpdb;
+
+	$company_id = 0;
+
+	$results = $wpdb->get_col( $wpdb->prepare(
+		"SELECT company_id
+		FROM " . $wpdb->prefix . "kbs_customers
+		WHERE id = %d",
+		$customer_id
+	) );
+
+	if ( $results )	{
+		$company_id = $results[0];
+	}
+
+	return $company_id;
+} // kbs_get_customer_company_id
+
+/**
  * Retrieve customer tickets.
  *
  * @since	1.0

@@ -279,7 +279,9 @@ function kbs_customers_view( $customer ) {
                                 'selected'    => $customer->company_id,
                                 'number'      => -1,
                                 'placeholder' => __( 'Customer Company', 'kb-support' ),
-                                'data'        => array( 'key' => 'company_id' )
+                                'data'        => array(
+									'key'         => 'company_id'
+								)
                             ) ); ?>
                         </span>
 
@@ -640,6 +642,16 @@ function kbs_render_add_customer_view()	{
                         <div class="customer-main-wrapper left">
 
                             <span class="customer-name info-item"><input size="15" id="customer-name" name="customer_name" type="text" value="" placeholder="<?php _e( 'Customer Name', 'kb-support' ); ?>" /></span>
+
+							<?php if ( kbs_has_companies() ) : ?>
+                                <span class="customer-company info-item">
+                                	<?php echo KBS()->html->company_dropdown( array(
+										'name'        => 'customer_company',
+										'number'      => -1,
+										'placeholder' => __( 'Customer Company', 'kb-support' )
+									) ); ?>
+                                </span>
+                            <?php endif; ?>
 
                             <span class="customer-email info-item"><input size="20" id="customer-email" name="customer_email" type="text" value="" placeholder="<?php _e( 'Customer Email', 'kb-support' ); ?>" /></span>
 

@@ -44,15 +44,20 @@ function kbs_edit_customer()	{
 	}
 
 	$defaults = array(
-		'name'    => '',
-		'email'   => '',
-		'user_id' => 0
+		'name'       => '',
+		'email'      => '',
+		'user_id'    => 0,
+		'company_id' => 0
 	);
 
 	$customer_info = wp_parse_args( $customer_info, $defaults );
 
 	if ( ! is_email( $customer_info['email'] ) ) {
 		$error = __( 'Please enter a valid email address.', 'kb-support' );
+	}
+
+	if ( '-1' == $customer_info['company_id'] )	{
+		$customer_info['company_id'] = 0;
 	}
 
 	if ( (int) $customer_info['user_id'] != (int) $customer->user_id ) {
@@ -114,10 +119,11 @@ function kbs_edit_customer()	{
 	$additional_phone = isset( $customer_info['additional_phone'] ) ? $customer_info['additional_phone'] : '';
 
 	// Sanitize the inputs
-	$customer_data            = array();
-	$customer_data['name']    = strip_tags( stripslashes( $customer_info['name'] ) );
-	$customer_data['email']   = $customer_info['email'];
-	$customer_data['user_id'] = $customer_info['user_id'];
+	$customer_data               = array();
+	$customer_data['name']       = strip_tags( stripslashes( $customer_info['name'] ) );
+	$customer_data['email']      = $customer_info['email'];
+	$customer_data['user_id']    = absint( $customer_info['user_id'] );
+	$customer_data['company_id'] = $customer_info['company_id'];
 
 	$customer_data    = apply_filters( 'kbs_edit_customer_info', $customer_data, $customer_id );
 	$address          = apply_filters( 'kbs_edit_customer_address', $address, $customer_id );

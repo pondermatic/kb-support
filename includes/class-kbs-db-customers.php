@@ -494,7 +494,15 @@ class KBS_DB_Customers extends KBS_DB  {
 
 		// Specific customers by company ID
 		if ( ! empty( $args['company_id'] ) ) {
-			$where .= $wpdb->prepare( " AND company_id LIKE '%%%%" . '%d' . "%%%%' ", $args['company_id'] );
+
+			if ( is_array( $args['company_id'] ) ) {
+				$company_ids = implode( ',', array_map('intval', $args['company_id'] ) );
+			} else {
+				$company_ids = intval( $args['company_id'] );
+			}
+
+			$where .= " AND `company_id` IN( {$company_ids} ) ";
+
 		}
 
 		// Specific customers by company name
@@ -623,7 +631,15 @@ class KBS_DB_Customers extends KBS_DB  {
 
 		// Specific customers by company ID
 		if ( ! empty( $args['company_id'] ) ) {
-			$where .= $wpdb->prepare( " AND company_id LIKE '%%%%" . '%d' . "%%%%' ", $args['company_id'] );
+
+			if ( is_array( $args['company_id'] ) ) {
+				$company_ids = implode( ',', array_map('intval', $args['company_id'] ) );
+			} else {
+				$company_ids = intval( $args['company_id'] );
+			}
+
+			$where .= " AND `company_id` IN( {$company_ids} ) ";
+
 		}
 
 		// Specific customers by company name

@@ -21,13 +21,15 @@ if ( ! defined( 'ABSPATH' ) )
 function kbs_set_company_post_columns( $columns ) {
 
 	$columns = array(
-        'cb'               => '<input type="checkbox" />',
-		'title'            => __( 'Company', 'kb-support' ),
-		'contact'          => __( 'Contact', 'kb-support' ),
-		'phone'            => __( 'Phone', 'kb-support' ),
-		'email'            => __( 'Email', 'kb-support' ),
-		'website'          => __( 'Web URL', 'kb-support' ),
-		'customers'        => __( 'Customers', 'kb-support' )
+        'cb'        => '<input type="checkbox" />',
+		'logo'      => '',     
+		'title'     => __( 'Company', 'kb-support' ),
+		'contact'   => __( 'Contact', 'kb-support' ),
+		'email'     => __( 'Email', 'kb-support' ),
+		'phone'     => __( 'Phone', 'kb-support' ),
+		'website'   => __( 'Web URL', 'kb-support' ),
+		'tickets'   => kbs_get_ticket_label_plural(),
+		'customers' => __( 'Customers', 'kb-support' )
     );
 	
 	return apply_filters( 'kbs_company_post_columns', $columns );
@@ -48,20 +50,60 @@ function kbs_set_company_column_data( $column_name, $post_id ) {
 	$company = new KBS_Company( $post_id );
 
 	switch ( $column_name ) {
-		case 'contact':
-			echo $company->contact;
+		case 'logo':
+			echo get_avatar( 9999999999, '30', $company->logo );
 			break;
 
-		case 'phone':
-			echo $company->phone;
+		case 'contact':
+			echo $company->contact;
 			break;
 
 		case 'email':
 			echo $company->email;
 			break;
 
+		case 'phone':
+			echo $company->phone;
+			break;
+
 		case 'website':
 			echo $company->website;
+			break;
+
+		case 'tickets':
+			$company_tickets = kbs_count_company_tickets( $post_id );
+			if ( $company_tickets > 0 )	{
+				$tickets_page = add_query_arg( array(
+					'post_type'  => 'kbs_ticket',
+					'company_id' => $post_id
+				), admin_url( 'edit.php' ) );
+				echo '<a href="' . $tickets_page . '">';
+			}
+
+			echo kbs_count_company_tickets( $post_id );
+
+			if ( $company_tickets > 0 )	{
+				echo '</a>';
+			}
+			break;
+
+		case 'customers':
+			$customer_count = kbs_count_customers_in_company( $post_id );
+			$customer_page  = add_query_arg( array(
+				'post_type'  => 'kbs_ticket',
+				'page'       => 'kbs-customers',
+				'company_id' => $post_id
+			), admin_url( 'edit.php' ) );
+
+			if ( $customer_count > 0 )	{
+				echo '<a href="' . $customer_page . '">';
+			}
+
+			echo kbs_count_customers_in_company( $post_id );
+
+			if ( $customer_count > 0 )	{
+				'</a>';
+			}
 			break;
 
 		default:
@@ -116,7 +158,11 @@ function kbs_company_post_save( $post_id, $post, $update )	{
 
 		if ( ! empty( $_POST[ $field ] ) ) {
 
-			if ( is_string( $_POST[ $field ] ) )	{
+			if ( '_kbs_company_email' == $field )	{
+				$posted_value = sanitize_email( trim( $_POST[ $field ] ) );
+			} elseif ( 'kbs_company_website' == $field )	{
+				$posted_value = esc_url( $_POST[ $field ] );
+			} elseif ( is_string( $_POST[ $field ] ) )	{
 				$posted_value = sanitize_text_field( $_POST[ $field ] );
 			} elseif ( is_int( $_POST[ $field ] ) )	{
 				$posted_value = $_POST[ $field ];

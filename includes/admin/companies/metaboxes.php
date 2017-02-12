@@ -23,7 +23,6 @@ function kbs_company_metabox_fields() {
 		'_kbs_company_contact',
 		'_kbs_company_phone',
 		'_kbs_company_email',
-		'_kbs_company_logo',
 		'_kbs_company_website'
 	);
 
@@ -39,7 +38,7 @@ function kbs_company_metabox_fields() {
  */
 function kbs_company_add_meta_boxes( $post )	{
 
-	global $company, $kbs_company_update;
+	global $kbs_company, $kbs_company_update;
 
 	$kbs_company_update = false;
 	$kbs_company        = new KBS_Company( $post->ID );

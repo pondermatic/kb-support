@@ -325,12 +325,7 @@ class KBS_Customer {
 	 */
 	public function get_company()	{
 		if ( 0 != $this->company_id )	{
-			$company_query = KBS()->companies->get_company_by( 'id', $this->company_id );
-
-			if ( ! empty( $company_query ) )	{
-				return $company_query->name;
-			}
-
+			return kbs_get_company_name( $this->company_id );
 		}
 	} // get_company
 

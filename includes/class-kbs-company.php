@@ -134,7 +134,7 @@ class KBS_Company {
 		$this->contact = $this->get_meta( '_kbs_company_contact' );
 		$this->phone   = $this->get_meta( '_kbs_company_phone' );
 		$this->email   = $this->get_meta( '_kbs_company_email' );
-		$this->logo    = $this->get_meta( '_kbs_company_logo' );
+		$this->logo    = get_the_post_thumbnail_url( $this->ID );
 		$this->website = $this->get_meta( '_kbs_company_website' );
 
 		// Extensions can hook here to add items to this object
@@ -174,7 +174,7 @@ class KBS_Company {
 	 * @since	1.0
 	 */
 	public function get_meta( $meta_key = '', $single = true ) {
-		return KBS()->company_meta->get_meta( $this->id, $meta_key, $single );
+		return get_post_meta( $this->ID, $meta_key, $single );
 	} // get_meta
 
 	/**
@@ -189,7 +189,7 @@ class KBS_Company {
 	 * @since	1.0
 	 */
 	public function add_meta( $meta_key = '', $meta_value, $unique = false ) {
-		return add_post_meta( $this->id, $meta_key, $meta_value, $unique );
+		return add_post_meta( $this->ID, $meta_key, $meta_value, $unique );
 	} // add_meta
 
 	/**
@@ -204,7 +204,7 @@ class KBS_Company {
 	 * @since	1.0
 	 */
 	public function update_meta( $meta_key = '', $meta_value, $prev_value = '' ) {
-		return update_post_meta( $this->id, $meta_key, $meta_value, $prev_value );
+		return update_post_meta( $this->ID, $meta_key, $meta_value, $prev_value );
 	} // update_meta
 
 	/**
@@ -218,7 +218,7 @@ class KBS_Company {
 	 * @since	1.0
 	 */
 	public function delete_meta( $meta_key = '', $meta_value = '' ) {
-		return delete_post_meta( $this->id, $meta_key, $meta_value );
+		return delete_post_meta( $this->ID, $meta_key, $meta_value );
 	} // delete_meta
 
 } // KBS_Company

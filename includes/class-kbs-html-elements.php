@@ -331,28 +331,33 @@ class KBS_HTML_Elements {
 	public function company_dropdown( $args = array() ) {
 
 		$defaults = array(
-			'name'        => 'company_id',
-			'id'          => '',
-			'class'       => '',
-			'multiple'    => false,
-			'selected'    => 0,
-			'chosen'      => true,
-			'placeholder' => __( 'Select a Company', 'kb-support' ),
-			'number'      => 30,
-			'data'        => array( 'search-type' => 'company' ),
+			'name'             => 'company_id',
+			'id'               => '',
+			'class'            => '',
+			'multiple'         => false,
+			'selected'         => 0,
+			'chosen'           => true,
+			'placeholder'      => __( 'Select a Company', 'kb-support' ),
+			'show_option_none' => __( 'No Company', 'kb-support' ),
+			'number'           => 30,
+			'data'             => array( 'search-type' => 'company' ),
 		);
 
 		$args = wp_parse_args( $args, $defaults );
 
-		$companies = KBS()->companies->get_companies( array(
-			'number' => $args['number']
+		$companies = get_posts( array(
+			'post_type'      => 'kbs_company',
+			'post_status'    => 'publish',
+			'posts_per_page' => $args['number'],
+			'orderby'        => 'title',
+			'order'          => 'ASC'
 		) );
 
 		$options  = array();
 
 		if ( $companies ) {
 			foreach ( $companies as $company ) {
-				$options[ absint( $company->id ) ] = esc_html( $company->name );
+				$options[ absint( $company->ID ) ] = get_the_title( $company );
 			}
 		} else {
 			$options[0] = __( 'No companies found', 'kb-support' );
@@ -382,8 +387,9 @@ class KBS_HTML_Elements {
 			'options'          => $options,
 			'multiple'         => $args['multiple'],
 			'chosen'           => $args['chosen'],
+			'placeholder'      => $args['placeholder'],
 			'show_option_all'  => false,
-			'show_option_none' => false,
+			'show_option_none' => $args['show_option_none'],
 			'data'             => $args['data']
 		) );
 
