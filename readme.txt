@@ -102,6 +102,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 * Company Support
 	* You can now create companies
 	* Customers can be added to a company
+	* Email tags added for `{company}`, `{company_contact}`, `{company_email}`, `{company_phone}`, `{company_website}`, `{company_logo}`
 
 * Service Level Tracking
 	* Enable SLA tracking within Tickets -> Settings -> Service Levels

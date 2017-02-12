@@ -21,8 +21,8 @@ function kbs_company_metabox_fields() {
 
 	$fields = array(
 		'_kbs_company_contact',
-		'_kbs_company_phone',
 		'_kbs_company_email',
+		'_kbs_company_phone',
 		'_kbs_company_website'
 	);
 
@@ -131,16 +131,16 @@ function kbs_company_metabox_data( $post_id )	{
 			'value' => ! empty( $kbs_company->contact ) ? $kbs_company->contact : ''
 		) ); ?></p>
 
-		<p><label for="_kbs_company_phone"><?php _e( 'Phone Number', 'kb-support' ); ?>:</label><br />
-        <?php echo KBS()->html->text( array(
-			'name'  => '_kbs_company_phone',
-			'value' => ! empty( $kbs_company->phone ) ? $kbs_company->phone : ''
-		) ); ?></p>
-
 		<p><label for="_kbs_company_email"><?php _e( 'Email Address', 'kb-support' ); ?>:</label><br />
         <?php echo KBS()->html->text( array(
 			'name'  => '_kbs_company_email',
 			'value' => ! empty( $kbs_company->email ) ? $kbs_company->email : ''
+		) ); ?></p>
+
+		<p><label for="_kbs_company_phone"><?php _e( 'Phone Number', 'kb-support' ); ?>:</label><br />
+        <?php echo KBS()->html->text( array(
+			'name'  => '_kbs_company_phone',
+			'value' => ! empty( $kbs_company->phone ) ? $kbs_company->phone : ''
 		) ); ?></p>
 
 		<p><label for="_kbs_company_website"><?php _e( 'Website', 'kb-support' ); ?>:</label><br />

@@ -42,18 +42,18 @@ class KBS_Company {
 	public $contact;
 
 	/**
-	 * The company phone
-	 *
-	 * @since 1.0
-	 */
-	public $phone;
-
-	/**
 	 * The primary company email
 	 *
 	 * @since 1.0
 	 */
 	public $email;
+
+	/**
+	 * The company phone
+	 *
+	 * @since 1.0
+	 */
+	public $phone;
 
 	/**
 	 * The company website

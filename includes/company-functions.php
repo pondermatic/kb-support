@@ -115,3 +115,78 @@ function kbs_count_customers_in_company( $company_id = 0 ) {
 function kbs_get_company_name( $company )	{
 	return get_the_title( $company );
 } // kbs_get_company_name
+
+/**
+ * Retrieve company contact name.
+ *
+ * @since	1.0
+ * @param	obj|int		$company		WP_Post object or ID
+ * @return	str			Contact name or false if not found
+ */
+function kbs_get_company_contact( $company )	{
+	if ( is_numeric( $company ) )	{
+		$company = new KBS_Company( $company );
+	}
+	
+	return $company->contact;
+} // kbs_get_company_contact
+
+/**
+ * Retrieve company email address.
+ *
+ * @since	1.0
+ * @param	obj|int		$company		WP_Post object or ID
+ * @return	str			Company email address or false if not found
+ */
+function kbs_get_company_email( $company )	{
+	if ( is_numeric( $company ) )	{
+		$company = new KBS_Company( $company );
+	}
+	
+	return $company->email;
+} // kbs_get_company_email
+
+/**
+ * Retrieve company phone number.
+ *
+ * @since	1.0
+ * @param	obj|int		$company		WP_Post object or ID
+ * @return	str			Company phone number or false if not found
+ */
+function kbs_get_company_phone( $company )	{
+	if ( is_numeric( $company ) )	{
+		$company = new KBS_Company( $company );
+	}
+	
+	return $company->phone;
+} // kbs_get_company_phone
+
+/**
+ * Retrieve company website address.
+ *
+ * @since	1.0
+ * @param	obj|int		$company		WP_Post object or ID
+ * @return	str			Company website address or false if not found
+ */
+function kbs_get_company_website( $company )	{
+	if ( is_numeric( $company ) )	{
+		$company = new KBS_Company( $company );
+	}
+	
+	return $company->website;
+} // kbs_get_company_website
+
+/**
+ * Retrieve company logo URL.
+ *
+ * @since	1.0
+ * @param	obj|int		$company		WP_Post object or ID
+ * @return	str			Company logo URL or false if not found
+ */
+function kbs_get_company_logo( $company )	{
+	if ( is_numeric( $company ) )	{
+		$company = new KBS_Company( $company );
+	}
+	
+	return $company->logo;
+} // kbs_get_company_logo
