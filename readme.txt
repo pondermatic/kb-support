@@ -99,15 +99,15 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 **Enhancements**
 
-* Company Support
-	* You can now create companies
-	* Customers can be added to a company
-	* Email tags added for `{company}`, `{company_contact}`, `{company_email}`, `{company_phone}`, `{company_website}`, `{company_logo}`
-
 * Service Level Tracking
 	* Enable SLA tracking within Tickets -> Settings -> Service Levels
 	* Define your target response and resolution times
 	* The ticket edit screen will display the status of the SLA for each newly created ticket. Green is good, amber if SLA is nearing expiry, red if expired
+
+* Company Support
+	* You can now create companies
+	* Customers can be added to a company
+	* Email tags added for `{company}`, `{company_contact}`, `{company_email}`, `{company_phone}`, `{company_website}`, `{company_logo}`
 
 **Bug Fixes**
 
