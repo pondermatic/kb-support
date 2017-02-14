@@ -4,7 +4,7 @@ Community made patches, localisations, bug reports and contributions are always 
 
 When contributing please ensure you follow the guidelines below so that we can keep on top of things.
 
-__Please Note:__ GitHub is for bug reports and contributions only - if you have a support question or a request for a customisation don't post here, head over to our [Support page](http://kb-support.com/support-request/) instead.
+__Please Note:__ GitHub is for bug reports and contributions only - if you have a support question or a request for a customisation don't post here, head over to our [Support pages](http://kb-support.com/support/) instead.
 
 ## Getting Started
 
