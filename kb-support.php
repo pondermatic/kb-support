@@ -4,7 +4,7 @@
  * Plugin URI: https://kb-support.com/
  * Description: The ultimate help desk and knowledge base support tool plugin for WordPress.
  * Version: 1.0
- * Date: 08 February 2017
+ * Date: 14 February 2017
  * Author: Mike Howard <mike@mikesplugins.co.uk>
  * Author URI: https://kb-support.com
  * Text Domain: kb-support
