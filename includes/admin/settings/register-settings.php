@@ -411,7 +411,7 @@ function kbs_get_registered_settings() {
 						'name'    => __( 'Target Response Time', 'kb-support' ),
 						'type'    => 'select',
 						'options' => kbs_get_response_time_options(),
-						'std'     => '4 hours',
+						'std'     => 4 * HOUR_IN_SECONDS,
 						'desc'    => sprintf( __( 'Enter your targeted first response time for %s.', 'kb-support' ), strtolower( $plural ) )
 					),
 					'sla_response_time_warn' => array(
@@ -426,19 +426,8 @@ function kbs_get_registered_settings() {
 						'id'      => 'sla_resolve_time',
 						'name'    => __( 'Target Resolution Time', 'kb-support' ),
 						'type'    => 'select',
-						'options' => apply_filters( 'kbs_target_resolve_time', array(
-							'1 day'    => __( '1 Day', 'kb-support' ),
-							'2 days'   => __( '2 Days', 'kb-support' ),
-							'3 days'   => __( '3 Days', 'kb-support' ),
-							'4 days'   => __( '4 Days', 'kb-support' ),
-							'5 days'   => __( '5 Days', 'kb-support' ),
-							'6 days'   => __( '6 Days', 'kb-support' ),
-							'1 week'   => __( '1 Week', 'kb-support' ),
-							'2 weeks'  => __( '2 Weeks', 'kb-support' ),
-							'3 weeks'  => __( '3 Weeks', 'kb-support' ),
-							'4 weeks'  => __( '4 Weeks', 'kb-support' )
-						) ),
-						'std'     => '2 days',
+						'options' => kbs_get_resolve_time_options(),
+						'std'     => 2 * DAY_IN_SECONDS,
 						'desc'    => sprintf( __( 'Enter your targeted resolution time for %s.', 'kb-support' ), strtolower( $plural ) )
 					),
 					'sla_resolve_time_warn' => array(
@@ -448,7 +437,25 @@ function kbs_get_registered_settings() {
 						'size'    => 'small',
 						'std'     => '12',
 						'desc'    => __( 'The number of hours before <code>Target Resolution Time</code> expires that the SLA status should be set to warn.', 'kb-support' )
-					)
+					),
+					'support_times' => array(
+						'id'   => 'support_times',
+						'name' => '<h3>' . __( 'Support Hours', 'kb-support' ) . '</h3>',
+						'desc' => '',
+						'type' => 'header'
+					),
+					'define_support_hours'    => array(
+						'id'      => 'define_support_hours',
+						'name'    => __( 'Define Support Hours?', 'kb-support' ),
+						'desc'    => sprintf( __( 'Enable to define your Support Hours', 'kb-support' ), strtolower( $plural ) ),
+						'type'    => 'checkbox',
+						'std'     => '0'
+					),
+					'support_hours'    => array(
+						'id'      => 'support_hours',
+						'name'    => __( 'Hours of Support', 'kb-support' ),
+						'type'    => 'support_hours'
+					),
 				)
 			)
 		),
@@ -1445,6 +1452,106 @@ function kbs_color_select_callback( $args ) {
 } // kbs_color_select_callback
 
 /**
+ * Color select Callback
+ *
+ * Renders support hours callback.
+ *
+ * @since	1.0
+ * @param	arr		$args	Arguments passed by the setting
+ * @global	$kbs_options	Array of all the KBS Options
+ * @return	void
+ */
+function kbs_support_hours_callback( $args ) {
+	global $wp_locale;
+
+	$days_of_week = kbs_get_days_of_week();
+
+	$kbs_option = kbs_get_option( $args['id'] );
+
+	if ( $kbs_option )	{
+		$value = $kbs_option;
+	} else	{
+		$value = array();
+	}
+
+	$class = kbs_sanitize_html_class( $args['field_class'] );
+
+	for( $hour = '00'; $hour <= '23'; $hour++ )	{
+		$hours[] = $hour;
+	}
+
+	$mins = array( '00', '15', '30', '45' );
+	$ampm = array( 'AM', 'PM' );
+
+	$html = '<table style="width: 50%;">';
+		$html .= '<tr>';
+			$html .= '<th scope="row">' . __( 'Day of Week', 'kb-support' ) . '</th>';
+			$html .= '<th scope="row">' . __( 'Closed all Day', 'kb-support' ) . '</th>';
+			$html .= '<th scope="row">' . __( 'Open', 'kb-support' ) . '</th>';
+			$html .= '<th scope="row">' . __( 'Close', 'kb-support' ) . '</th>';
+		$html .= '</tr>';
+
+		foreach( $days_of_week as $index => $day )	{
+			$checked = ! empty( $kbs_option[ $index ]['closed'] ) ? checked( 1, $kbs_option[ $index ]['closed'], false ) : '';
+			$open    = ! empty( $kbs_option[ $index ]['open'] )  ? $kbs_option[ $index ]['open']  : '';
+			$close   = ! empty( $kbs_option[ $index ]['close'] ) ? $kbs_option[ $index ]['close'] : '';
+			$html .= '<tr>';
+				$html .= '<th scope="row">' . $day . '</th>';
+				$html .= '<td>';
+					$html .= '<input type="checkbox" name="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][closed]" value="1"' . $checked . ' />';
+				$html .= '</td>';
+
+				$html .= '<td>';
+					$html .= '<select name="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][open][hour]" id="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][open][hour]" />';
+						$selected = selected( $kbs_option[ $index ]['open']['hour'], '-1', false );
+						$html .= '<option value="-1"' . $selected . '>&mdash;</option>';
+						foreach( $hours as $hour )	{
+							$current  = ! empty( $kbs_option[ $index ]['open']['hour'] ) ? $kbs_option[ $index ]['open']['hour'] : '';
+							$selected = selected( $hour, $current, false );
+							$html .= '<option value="' . $hour . '"' . $selected . '>' . $hour . '</option>';
+						}
+					$html .= '</select>';
+
+					$html .= '<select name="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][open][min]" id="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][open][min]" />';
+						$selected = selected( $kbs_option[ $index ]['open']['min'], '-1', false );
+						$html .= '<option value="-1"' . $selected . '>&mdash;</option>';
+						foreach( $mins as $min )	{
+							$current  = ! empty( $kbs_option[ $index ]['open']['min'] ) ? $kbs_option[ $index ]['open']['min'] : '';
+							$selected = selected( $min, $current, false );
+							$html .= '<option value="' . $min . '"' . $selected . '>' . $min . '</option>';
+						}
+					$html .= '</select>';
+				$html .= '</td>';
+
+				$html .= '<td>';
+					$html .= '<select name="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][close][hour]" id="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][close][hour]" />';
+						$selected = selected( $kbs_option[ $index ]['close']['hour'], '-1', false );
+						$html .= '<option value="-1"' . $selected . '>&mdash;</option>';
+						foreach( $hours as $hour )	{
+							$current  = ! empty( $kbs_option[ $index ]['close']['hour'] ) ? $kbs_option[ $index ]['close']['hour'] : '';
+							$selected = selected( $hour, $current, false );
+							$html .= '<option value="' . $hour . '"' . $selected . '>' . $hour . '</option>';
+						}
+					$html .= '</select>';
+
+					$html .= '<select name="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][close][min]" id="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][close][min]" />';
+						$selected = selected( $kbs_option[ $index ]['close']['min'], '-1', false );
+						$html .= '<option value="-1"' . $selected . '>&mdash;</option>';
+						foreach( $mins as $min )	{
+							$current  = ! empty( $kbs_option[ $index ]['close']['min'] ) ? $kbs_option[ $index ]['close']['min'] : '';
+							$selected = selected( $min, $current, false );
+							$html .= '<option value="' . $min . '"' . $selected . '>' . $min . '</option>';
+						}
+					$html .= '</select>';
+				$html .= '</td>';
+			$html .= '</tr>';
+		}
+	$html .= '</table>';
+
+	echo apply_filters( 'kbs_after_setting_output', $html, $args );
+} // kbs_support_hours_callback
+
+/**
  * Rich Editor Callback
  *
  * Renders rich editor fields.
@@ -1835,35 +1942,58 @@ function kbs_get_pages( $force = false ) {
 } // kbs_get_pages
 
 /**
- * Returns a select list for target response time option.
+ * Returns a select list for target response time options.
  *
  * @since	1.0
  * @param
  * @return	str		Array of selectable options for target response times.
  */
 function kbs_get_response_time_options()	{
-	
 	$response_times = array(
-		'1 hour'    => __( '1 Hour', 'kb-support' ),
-		'2 hours'   => __( '2 Hours', 'kb-support' ),
-		'3 hours'   => __( '3 Hours', 'kb-support' ),
-		'4 hours'   => __( '4 Hours', 'kb-support' ),
-		'5 hours'   => __( '5 Hours', 'kb-support' ),
-		'6 hours'   => __( '6 Hours', 'kb-support' ),
-		'7 hours'   => __( '7 Hours', 'kb-support' ),
-		'8 hours'   => __( '7 Hours', 'kb-support' ),
-		'1 day'     => __( '1 Day', 'kb-support' ),
-		'2 days'    => __( '2 Days', 'kb-support' ),
-		'3 days'    => __( '3 Days', 'kb-support' ),
-		'4 days'    => __( '4 Days', 'kb-support' ),
-		'5 days'    => __( '5 Days', 'kb-support' ),
-		'6 days'    => __( '6 Days', 'kb-support' ),
-		'1 week'    => __( '1 Week', 'kb-support' ),
-		'2 weeks'   => __( '2 Weeks', 'kb-support' ),
-		'3 weeks'   => __( '3 Weeks', 'kb-support' ),
-		'4 weeks'   => __( '4 Weeks', 'kb-support' )
+		HOUR_IN_SECONDS     => __( '1 Hour', 'kb-support' ),
+		2 * HOUR_IN_SECONDS => __( '2 Hours', 'kb-support' ),
+		3 * HOUR_IN_SECONDS => __( '3 Hours', 'kb-support' ),
+		4 * HOUR_IN_SECONDS => __( '4 Hours', 'kb-support' ),
+		5 * HOUR_IN_SECONDS => __( '5 Hours', 'kb-support' ),
+		6 * HOUR_IN_SECONDS => __( '6 Hours', 'kb-support' ),
+		7 * HOUR_IN_SECONDS => __( '7 Hours', 'kb-support' ),
+		8 * HOUR_IN_SECONDS => __( '8 Hours', 'kb-support' ),
+		DAY_IN_SECONDS      => __( '1 Day', 'kb-support' ),
+		2 * DAY_IN_SECONDS  => __( '2 Days', 'kb-support' ),
+		3 * DAY_IN_SECONDS  => __( '3 Days', 'kb-support' ),
+		4 * DAY_IN_SECONDS  => __( '4 Days', 'kb-support' ),
+		5 * DAY_IN_SECONDS  => __( '5 Days', 'kb-support' ),
+		6 * DAY_IN_SECONDS  => __( '6 Days', 'kb-support' ),
+		WEEK_IN_SECONDS     => __( '1 Week', 'kb-support' ),
+		2 * WEEK_IN_SECONDS => __( '2 Weeks', 'kb-support' ),
+		3 * WEEK_IN_SECONDS => __( '3 Weeks', 'kb-support' ),
+		4 * WEEK_IN_SECONDS => __( '4 Weeks', 'kb-support' )
+	);
+
+	return apply_filters( 'kbs_get_response_time_options', $response_times );
+
+} // kbs_get_response_time_options
+
+/**
+ * Returns a select list for target resolution time options.
+ *
+ * @since	1.0
+ * @param
+ * @return	str		Array of selectable options for target resolution times.
+ */
+function kbs_get_resolve_time_options()	{
+	$resolve_times = array(
+		DAY_IN_SECONDS      => __( '1 Day', 'kb-support' ),
+		2 * DAY_IN_SECONDS  => __( '2 Days', 'kb-support' ),
+		3 * DAY_IN_SECONDS  => __( '3 Days', 'kb-support' ),
+		4 * DAY_IN_SECONDS  => __( '4 Days', 'kb-support' ),
+		5 * DAY_IN_SECONDS  => __( '5 Days', 'kb-support' ),
+		6 * DAY_IN_SECONDS  => __( '6 Days', 'kb-support' ),
+		WEEK_IN_SECONDS     => __( '1 Week', 'kb-support' ),
+		2 * WEEK_IN_SECONDS => __( '2 Weeks', 'kb-support' ),
+		3 * WEEK_IN_SECONDS => __( '3 Weeks', 'kb-support' ),
+		4 * WEEK_IN_SECONDS => __( '4 Weeks', 'kb-support' )
 	);
 	
-	return apply_filters( 'kbs_get_response_time_options', $response_times );
-	
-} // kbs_get_response_time_options
+	return apply_filters( 'kbs_target_resolve_time_options', $resolve_times );
+} // kbs_get_resolve_time_options
