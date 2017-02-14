@@ -249,8 +249,6 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/company-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-db-customers.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-db-customer-meta.php';
-		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-db-companies.php';
-		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-db-company-meta.php';
 		require_once KBS_PLUGIN_DIR . 'includes/shortcodes.php';
 		require_once KBS_PLUGIN_DIR . 'includes/sla.php';
 
@@ -262,7 +260,6 @@ final class KB_Support {
 			require_once KBS_PLUGIN_DIR . 'includes/admin/customers/customer-functions.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/customers/customer-actions.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/customers/contextual-help.php';
-			require_once KBS_PLUGIN_DIR . 'includes/admin/companies/contextual-help.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/tickets/tickets.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/tickets/metaboxes.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/tickets/contextual-help.php';
@@ -271,6 +268,7 @@ final class KB_Support {
 			require_once KBS_PLUGIN_DIR . 'includes/admin/article/contextual-help.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/companies/company.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/companies/metaboxes.php';
+			require_once KBS_PLUGIN_DIR . 'includes/admin/companies/contextual-help.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/forms/forms.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/forms/metaboxes.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/forms/form-actions.php';
