@@ -191,16 +191,14 @@ class KBS_Welcome {
 	 */
 	public function tabs()	{
 		$selected        = isset( $_GET['page'] ) ? $_GET['page'] : 'kbs-getting-started';
-		//$about_url       = esc_url( admin_url( add_query_arg( array( 'page' => 'kbs-about' ), 'index.php' ) ) );
+		$about_url       = esc_url( admin_url( add_query_arg( array( 'page' => 'kbs-about' ), 'index.php' ) ) );
 		$get_started_url = esc_url( admin_url( add_query_arg( array( 'page' => 'kbs-getting-started' ), 'index.php' ) ) );
 		?>
 
 		<h2 class="nav-tab-wrapper wp-clearfix">			
-            <?php /*
 			<a href="<?php echo $about_url; ?>" class="nav-tab <?php echo $selected == 'kbs-about' ? 'nav-tab-active' : ''; ?>">
 				<?php _e( "What's New", 'kb-support' ); ?>
 			</a>
-            */ ?>
 			<a href="<?php echo $get_started_url; ?>" class="nav-tab <?php echo $selected == 'kbs-getting-started' ? 'nav-tab-active' : ''; ?>">
 				<?php _e( 'Getting Started', 'kb-support' ); ?>
 			</a>
@@ -225,19 +223,54 @@ class KBS_Welcome {
 				$this->tabs();
 			?>
 
-			<div class="changelog">
-				<h3><?php _e( "Ooops well that's embarrasing!", 'kb-support' ); ?></h3>
-				<div class="feature-section">
-					<div class="feature-section-media">
-
-					</div>
-					<div class="feature-section-content">
-						<p><?php _e( 'Content for this page will be added during plugin updates.', 'kb-support' ); ?></p>
-                        <p><?php _e( 'For now, visit the Getting Started tab.', 'kb-support' ); ?></p>
-					</div>
-				</div>
+			<div class="feature-section two-col">
+            	<h2><?php _e( 'Service Level Tracking', 'kb-support' ); ?></h2>
+                <div class="col">
+                	<p><?php printf( __( 'A company who takes support seriously not only provides customers with targetted response and resolution times for support %s, but also measures their performance against these targets.', 'kb-support' ), strtolower( $this->ticket_plural ) ); ?></p>
+                    <p><?php printf( __( 'KB Support now allows you to specify the targeted response and resolution time for %s that are logged.', 'kb-support' ), strtolower( $this->ticket_plural ) ); ?></p>
+                    <p><?php printf( __( 'When viewing %1$s, visual indicators will now display the status of these service level targets enabling you to quickly identify any %1$s that are approaching, or have already exceeded, the defined SLA.', 'kb-support' ), strtolower( $this->ticket_plural ) ); ?></p>
+                    <div class="return-to-dashboard">
+                        <a href="<?php echo add_query_arg( array(
+							'post_type' => 'kbs_ticket',
+							'page'      => 'kbs-settings',
+							'tab'       => 'tickets',
+							'section'   => 'sla'
+							),
+							admin_url( 'edit.php' )
+						); ?>">
+                            &rarr; <?php _e( 'Enable SLA Tracking and Define Targets', 'kb-support' ); ?>
+                        </a>
+                    </div>
+                </div>
+                <div class="col">
+                
+                </div>
 			</div>
 
+			<div class="feature-section two-col">
+            	<h2><?php _e( 'Support for Companies', 'kb-support' ); ?></h2>
+                <div class="col">
+                	<p><?php printf( __( "Create companies and add your customers to the companies to enable grouping of %s and restrictions to %s for specific companies.", 'kb-support' ), strtolower( $this->ticket_plural ), $this->article_plural ); ?></p>
+                    <p><?php _e( 'Additional email tags have also been added to enable you to easily insert company specific information into emails', 'kb-support' ); ?>
+                    <ul>
+                    	<li><?php _e( '<code>{company}</code> - The name of the company', 'kb-support' ); ?></li>
+                        <li><?php _e( '<code>{company_contact}</code> - The contact name of the company', 'kb-support' ); ?></li>
+                        <li><?php _e( '<code>{company_email}</code> - The email address of the company', 'kb-support' ); ?></li>
+                        <li><?php _e( '<code>{company_phone}</code> - The phone number of the company', 'kb-support' ); ?></li>
+                        <li><?php _e( '<code>{company_website}</code> - The website URL of the company', 'kb-support' ); ?></li>
+                        <li><?php _e( '<code>{company_logo}</code> - Inserts the logo of the company', 'kb-support' ); ?></li>
+                    </ul>
+                    </p>
+                    <div class="return-to-dashboard">
+                        <a href="<?php echo admin_url( 'edit.php?post_type=kbs_company' ); ?>">
+                            &rarr; <?php _e( 'Create a Company', 'kb-support' ); ?>
+                        </a>
+                    </div>
+                </div>
+                <div class="col">
+                
+                </div>
+			</div>
 			<div class="return-to-dashboard">
 				<a href="<?php echo esc_url( admin_url( add_query_arg( array( 'page' => 'kbs-settings' ), 'admin.php' ) ) ); ?>"><?php _e( 'Go to KB Support Settings', 'kb-support' ); ?></a> &middot;
 				<a href="<?php echo esc_url( admin_url( add_query_arg( array( 'page' => 'kbs-changelog' ), 'index.php' ) ) ); ?>"><?php _e( 'View the Full Changelog', 'kb-support' ); ?></a>
@@ -306,7 +339,7 @@ class KBS_Welcome {
                     <p><?php _e( "KB Support will work as soon as installed and activated as we've set the default settings for you, however you should review the options and ensure they're fully optimised for your support business.", 'kb-support' ); ?></p>
                     <p><?php printf( __( "These settings define the communication flow and content between your business and your customers, as well as determine who can submit a %s, how %s are assigned to support workers, what tasks support workers can undertake, plus much more.", 'kb-support' ), strtolower( $this->ticket_singular ), strtolower( $this->ticket_plural ) ); ?></p>
                     <div class="return-to-dashboard">
-                    	<a href="<?php echo admin_url( 'edit.php?post_type=kbs_ticket&page-kbs-settings' ); ?>"><?php printf( __( '%s &rarr; Settings', 'kb-support' ), $this->ticket_plural ); ?></a>
+                    	<a href="<?php echo admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-settings' ); ?>"><?php printf( __( '%s &rarr; Settings', 'kb-support' ), $this->ticket_plural ); ?></a>
                     </div>
                 </div>
                 <div class="col">
@@ -383,7 +416,7 @@ class KBS_Welcome {
 			<hr />
 
 			<div class="return-to-dashboard">
-            	<a href="<?php echo admin_url( 'edit.php?post_type=kbs_ticket&page-kbs-settings' ); ?>">
+            	<a href="<?php echo admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-settings' ); ?>">
 					<?php _e( 'Configure Settings', 'kb-support' ); ?>
                 </a> |
                 <a href="<?php echo esc_url( self_admin_url( 'edit.php?post_type=kbs_ticket' ) ); ?>">

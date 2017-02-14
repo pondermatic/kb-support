@@ -1,9 +1,9 @@
 === KB Support ===
 Contributors: mikeyhoward1977
-Tags: Helpdesk, Help Desk, Support, Customer Support, Service, Service Desk, ITIL, Support Helpdesk, Ticket, Ticket System, Support Tickets, Helpdesk Tickets, Knowledgebase, Knowledge Base
+Tags: Helpdesk, Help Desk, Support, Customer Support, Service, Service Desk, ITIL, Support Helpdesk, Ticket, Ticket System, Support Tickets, Helpdesk Tickets, Knowledgebase, Knowledge Base, Service Level, SLA
 Requires at least: 4.1
 Tested up to: 4.8
-Stable tag: 0.9.5
+Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -95,7 +95,32 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 == Changelog ==
 
-Until we reach version 1.0+ we are still classing this plugin as in beta testing.
+= 1.0 =
+
+**Enhancements**
+
+* Service Level Tracking
+	* Enable SLA tracking within Tickets -> Settings -> Service Levels
+	* Define your target response and resolution times
+	* The ticket edit screen will display the status of the SLA for each newly created ticket. Green is good, amber if SLA is nearing expiry, red if expired
+
+* Company Support
+	* You can now create companies
+	* Customers can be added to a company
+	* Email tags added for `{company}`, `{company_contact}`, `{company_email}`, `{company_phone}`, `{company_website}`, `{company_logo}`
+
+**Bug Fixes**
+
+* Corrected descriptions for email headers in settings
+* Make sure `$current_meta` array exists to avoid potential PHP notices
+
+**Tweaks**
+
+* Remove all SLA related meta keys from DB as SLA's were not tracked until this version
+* Log the current KBS version number at the time each ticket was logged
+* Ensure that the last modified date is updated for a ticket when a reply or note is added
+* Add log entries when notes are added to tickets
+* When a ticket is deleted, make sure to delete all associated replies and log entries from the `posts` and `postmeta` database tables
 
 = 0.9.5 =
 

@@ -264,6 +264,7 @@ class KBS_HTML_Elements {
 			'multiple'    => false,
 			'selected'    => 0,
 			'chosen'      => true,
+			'company_id'  => null,
 			'placeholder' => __( 'Select a Customer', 'kb-support' ),
 			'number'      => 30,
 			'data'        => array( 'search-type' => 'customer' ),
@@ -318,7 +319,83 @@ class KBS_HTML_Elements {
 
 		return $output;
 	} // customer_dropdown
-	
+
+	/**
+	 * Renders an HTML Dropdown of company's
+	 *
+	 * @access	public
+	 * @since	1.0
+	 * @param	arr		$args
+	 * @return	str		Company dropdown
+	 */
+	public function company_dropdown( $args = array() ) {
+
+		$defaults = array(
+			'name'             => 'company_id',
+			'id'               => '',
+			'class'            => '',
+			'multiple'         => false,
+			'selected'         => 0,
+			'chosen'           => true,
+			'placeholder'      => __( 'Select a Company', 'kb-support' ),
+			'show_option_none' => __( 'No Company', 'kb-support' ),
+			'number'           => 30,
+			'data'             => array( 'search-type' => 'company' ),
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
+		$companies = get_posts( array(
+			'post_type'      => 'kbs_company',
+			'post_status'    => 'publish',
+			'posts_per_page' => $args['number'],
+			'orderby'        => 'title',
+			'order'          => 'ASC'
+		) );
+
+		$options  = array();
+
+		if ( $companies ) {
+			foreach ( $companies as $company ) {
+				$options[ absint( $company->ID ) ] = get_the_title( $company );
+			}
+		} else {
+			$options[0] = __( 'No companies found', 'kb-support' );
+		}
+
+		if ( ! empty( $args['selected'] ) ) {
+
+			// If a selected company has been specified, we need to ensure it's in the initial list of companies displayed
+
+			if ( ! array_key_exists( $args['selected'], $options ) ) {
+
+				$company = new KBS_Company( $args['selected'] );
+
+				if ( $company ) {
+					$options[ absint( $args['selected'] ) ] = esc_html( $company->name );
+				}
+
+			}
+
+		}
+
+		$output = $this->select( array(
+			'name'             => $args['name'],
+			'selected'         => $args['selected'],
+			'id'               => $args['id'],
+			'class'            => $args['class'] . ' kbs-company-select',
+			'options'          => $options,
+			'multiple'         => $args['multiple'],
+			'chosen'           => $args['chosen'],
+			'placeholder'      => $args['placeholder'],
+			'show_option_all'  => false,
+			'show_option_none' => $args['show_option_none'],
+			'data'             => $args['data']
+		) );
+
+		return $output;
+	} // company_dropdown
+
 	/**
 	 * Renders an HTML Dropdown of agents
 	 *

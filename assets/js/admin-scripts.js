@@ -533,12 +533,14 @@ jQuery(document).ready(function ($) {
 				var wrapper = button.parent();
 
 				var customer_name     = $('#customer-name').val();
+				var customer_company  = $('#customer_company').val();
 				var customer_email    = $('#customer-email').val();
 				var nonce             = $('add_customer_nonce').val();
 
 				var postData = {
 					action             : 'kbs_add_customer',
 					customer_name      : customer_name,
+					customer_company   : customer_company,
 					customer_email     : customer_email,
 					_wpnonce           : nonce
 				};

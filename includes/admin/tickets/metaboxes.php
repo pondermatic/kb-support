@@ -317,11 +317,9 @@ function kbs_ticket_metabox_sla_row( $ticket_id )	{
 	
 	?>
     <p><strong><?php _e( 'SLA Status', 'kb-support' ); ?></strong></p>
-    <p>&nbsp;<i class="fa fa-dot-circle-o fa-lg" aria-hidden="true"></i>&nbsp;&nbsp;<label><?php _e( 'Respond:', 'kb-support' ); ?></label>
-    	&nbsp;<span class="dashicons dashicons-flag kbs_sla_status<?php echo $sla_respond_class; ?>" title="<?php echo $respond; ?>"></span><?php echo $sla_respond_remain; ?></p>
+    <p><?php echo kbs_display_sla_response_status_icon( $kbs_ticket ); ?></p>
         
-    <p>&nbsp;<i class="fa fa-clock-o fa-lg" aria-hidden="true"></i>&nbsp;&nbsp;<label><?php _e( 'Resolve:', 'kb-support' ); ?></label>
-    	&nbsp;<span class="dashicons dashicons-flag kbs_sla_status<?php echo $sla_resolve_class; ?>" title="<?php echo $resolve; ?>"></span><?php echo $sla_resolve_remain; ?></p>
+    <p><?php echo kbs_display_sla_resolve_status_icon( $kbs_ticket ); ?></p>
     
     <?php
 } // kbs_ticket_metabox_sla_row

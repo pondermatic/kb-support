@@ -207,6 +207,42 @@ function kbs_setup_post_types() {
 
 	register_post_type( 'kbs_form_field', $field_args );
 
+	/** KB Company Type */
+	$company_labels = array(
+		'name'                  => _x( 'Companies', 'kbs_company type general name', 'kb-support' ),
+		'singular_name'         => _x( 'Company', 'kbs_company type singular name', 'kb-support' ),
+		'add_new'               => __( 'New Company', 'kb-support' ),
+		'add_new_item'          => __( 'New Company', 'kb-support' ),
+		'edit_item'             => __( 'Edit Company', 'kb-support' ),
+		'new_item'              => __( 'New Company', 'kb-support' ),
+		'all_items'             => __( 'Companies', 'kb-support' ),
+		'view_item'             => __( 'View Company', 'kb-support' ),
+		'search_items'          => __( 'Search Forms', 'kb-support' ),
+		'not_found'             => __( 'No Companies found', 'kb-support' ),
+		'not_found_in_trash'    => __( 'No Companies found in Trash', 'kb-support' ),
+		'parent_item_colon'     => '',
+		'featured_image'        => __( 'Company Logo', 'kb-support' ),
+		'set_featured_image'    => __( 'Set company logo', 'kb-support' ),
+		'remove_featured_image' => __( 'Remove company logo', 'kb-support' ),
+		'use_featured_image'    => __( 'Use as company logo', 'kb-support' )
+	);
+
+	$company_args = array(
+		'labels'             => $company_labels,
+		'public'             => false,
+		'show_ui'            => true,
+		'rewrite'            => false,
+		'capability_type'    => 'customer',
+		'show_in_menu'       => false,
+		'map_meta_cap'       => true,
+		'has_archive'        => false,
+		'hierarchical'       => false,
+		'supports'           => apply_filters( 'kbs_company_supports', array( 'title', 'thumbnail' ) ),
+		'can_export'         => true
+	);
+
+	register_post_type( 'kbs_company', $company_args );
+
 } // kbs_setup_post_types
 add_action( 'init', 'kbs_setup_post_types', 1 );
 
@@ -316,6 +352,8 @@ function kbs_change_default_title( $title ) {
 		$title = sprintf( __( 'Enter %s title here', 'kb-support' ), $label );
 	 } elseif ( 'kbs_form' == $screen->post_type )	{
 		$title = __( 'Enter form name here', 'kb-support' ); 
+	 } elseif ( 'kbs_company' == $screen->post_type )	{
+		$title = __( 'Enter company name here', 'kb-support' ); 
 	 }
 
 	 return $title;
@@ -626,6 +664,15 @@ function kbs_updated_messages( $messages ) {
 		7  => __( 'Form saved.', 'kb-support'     ),
 		8  => __( 'Form submitted.', 'kb-support' ),
 		10 => __( 'Form draft updated.', 'kb-support' )
+	);
+
+	$messages['kbs_company'] = array(
+		1  => __( 'Company updated.', 'kb-support'   ),
+		4  => __( 'Company updated.', 'kb-support'   ),
+		6  => __( 'Company published.', 'kb-support' ),
+		7  => __( 'Company saved.', 'kb-support'     ),
+		8  => __( 'Company submitted.', 'kb-support' ),
+		10 => __( 'Company draft updated.', 'kb-support' )
 	);
 
 	return $messages;

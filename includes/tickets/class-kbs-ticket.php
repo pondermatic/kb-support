@@ -156,12 +156,28 @@ class KBS_Ticket {
 	protected $status_nicename = '';
 
 	/**
-	 * The customer ID that made the payment
+	 * The date the ticket was closed
+	 *
+	 * @since	1.0
+	 * @var		str
+	 */
+	protected $closed_date = false;
+
+	/**
+	 * The customer ID associated with the ticket
 	 *
 	 * @since	1.0
 	 * @var		int
 	 */
 	protected $customer_id = null;
+
+	/**
+	 * The company ID associated with the ticket
+	 *
+	 * @since	1.0
+	 * @var		int
+	 */
+	protected $company_id = 0;
 
 	/**
 	 * The User ID (if logged in) that opened the ticket
@@ -319,8 +335,15 @@ class KBS_Ticket {
 	 */
 	public function __set( $key, $value ) {
 
-		if ( $key === 'status' ) {
+		if ( 'status' === $key ) {
 			$this->old_status = $this->status;
+		}
+
+		if ( 'customer_id' === $key )	{
+			if ( empty( $this->company_id ) )	{
+				$this->company_id = kbs_get_customer_company_id( $value );
+				$this->pending['company_id'] = $this->company_id;
+			}
 		}
 
 		$this->pending[ $key ] = $value;
@@ -385,7 +408,7 @@ class KBS_Ticket {
 		// Status and Dates
 		$this->date            = $ticket->post_date;
 		$this->modified_date   = $ticket->post_modified;
-		$this->completed_date  = $this->setup_completed_date();
+		$this->closed_date     = $this->setup_closed_date();
 		$this->status          = $ticket->post_status;
 		$this->post_status     = $this->status;
 
@@ -403,6 +426,7 @@ class KBS_Ticket {
 		$this->agent_id        = $this->setup_agent_id();
 		$this->logged_by       = $this->setup_logged_by();
 		$this->customer_id     = $this->setup_customer_id();
+		$this->company_id      = $this->setup_company_id();
 		$this->user_id         = $this->setup_user_id();
 		$this->email           = $this->setup_email();
 		$this->user_info       = $this->setup_user_info();
@@ -464,6 +488,7 @@ class KBS_Ticket {
 				'additional_phone' => isset( $this->user_info['additional_phone'] ) ? $this->user_info['additional_phone'] : '',
 				'website'          => isset( $this->user_info['website'] )          ? $this->user_info['website']          : ''
 			),
+			'company_id'   => $this->company_id,
 			'sla_respond'  => $this->sla_respond,
 			'sla_resolve'  => $this->sla_resolve,
 			'status'       => $this->status,
@@ -512,6 +537,7 @@ class KBS_Ticket {
 					'name'             => $this->first_name . ' ' . $this->last_name,
 					'email'            => $this->email,
 					'user_id'          => $this->user_id,
+					'company_id'       => $this->company_id,
 					'primary_phone'    => isset( $this->user_info['primary_phone'] )    ? $this->user_info['primary_phone']    : '',
 					'additional_phone' => isset( $this->user_info['additional_phone'] ) ? $this->user_info['additional_phone'] : '',
 					'website'          => isset( $this->user_info['website'] )          ? $this->user_info['website']          : ''
@@ -522,7 +548,9 @@ class KBS_Ticket {
 			}
 
 			$this->customer_id            = $customer->id;
+			$this->company_id             = $customer->company_id;
 			$this->pending['customer_id'] = $this->customer_id;
+			$this->pending['company_id']  = $this->company_id;
 			$customer->attach_ticket( $this->ID );
 
 			if ( ! empty( $this->agent_id ) )	{
@@ -542,6 +570,7 @@ class KBS_Ticket {
 
 			$this->ticket_meta = apply_filters( 'kbs_ticket_meta', $this->ticket_meta, $ticket_data );
 
+			$this->update_meta( '_kbs_ticket_version_created', KBS_VERSION );
 			$this->update_meta( '_ticket_data', $this->ticket_meta );
 			$this->new = true;
 		}
@@ -596,6 +625,10 @@ class KBS_Ticket {
 					case 'customer_id':
 						$this->update_meta( '_kbs_ticket_customer_id', $this->customer_id );
 						add_post_meta( $this->ID, '_kbs_ticket_created_by', $this->customer_id, true );
+						break;
+
+					case 'company_id':
+						$this->update_meta( '_kbs_ticket_company_id', $this->company_id );
 						break;
 
 					case 'agent_id':
@@ -874,6 +907,11 @@ class KBS_Ticket {
 		if ( 'key' == $meta_key || 'date' == $meta_key ) {
 
 			$current_meta = $this->get_meta();
+
+			if ( empty( $current_meta ) )	{
+				$current_meta = array();
+			}
+
 			$current_meta[ $meta_key ] = $meta_value;
 
 			$meta_key     = '_ticket_data';
@@ -885,9 +923,11 @@ class KBS_Ticket {
 			update_post_meta( $this->ID, '_kbs_ticket_user_email', $meta_value );
 
 			$current_meta = $this->get_meta();
+
 			if ( empty( $current_meta ) )	{
 				$current_meta = array( 'user_info' => array() );
 			}
+
 			$current_meta['user_info']['email'] = $meta_value;
 
 			$meta_key     = '_ticket_data';
@@ -953,6 +993,14 @@ class KBS_Ticket {
 		if ( 'closed' == $this->old_status )	{
 			return;
 		}
+
+		// Add SLA data
+		add_post_meta( $this->ID, '_kbs_ticket_closed_date', current_time( 'mysql' ), true );
+
+		if ( is_admin() )	{
+			add_post_meta( $this->ID, '_kbs_ticket_closed_by', get_current_user_id(), true );
+		}
+
 		do_action( 'kbs_close_ticket', $this->ID, $this );
 	} // process_closed
 
@@ -999,22 +1047,22 @@ class KBS_Ticket {
 	} // attach_files
 
 	/**
-	 * Setup the ticket resolved date
+	 * Setup the ticket closed date
 	 *
 	 * @since	1.0
-	 * @return	str		The date the ticket was resolved
+	 * @return	str		The date the ticket was closed
 	 */
-	private function setup_completed_date() {
+	private function setup_closed_date() {
 		$ticket = get_post( $this->ID );
 
 		if ( 'closed' != $ticket->post_status ) {
-			return false; // This ticket was never resolved
+			return false; // This ticket was never closed
 		}
 
-		$date = ( $date = $this->get_meta( '_kbs_completed_date', true ) ) ? $date : $ticket->modified_date;
+		$date = ( $date = $this->get_meta( '_kbs_ticket_closed_date', true ) ) ? $date : $ticket->modified_date;
 
 		return $date;
-	} // setup_completed_date
+	} // setup_closed_date
 
 	/**
 	 * Retrieve the assigned agent ID.
@@ -1047,6 +1095,18 @@ class KBS_Ticket {
 
 		return $customer_id;
 	} // setup_customer_id
+
+	/**
+	 * Setup the company ID
+	 *
+	 * @since	1.0
+	 * @return	int		The Company ID
+	 */
+	private function setup_company_id() {
+		$company_id = $this->get_meta( '_kbs_ticket_company_id', true );
+
+		return $company_id;
+	} // setup_company_id
 
 	/**
 	 * Setup the User ID associated with the ticket
@@ -1475,6 +1535,8 @@ class KBS_Ticket {
 		if ( $close )	{
 			$this->update_status( 'closed' );
 			$this->update_meta( '_kbs_resolution_id', $reply_id );
+		} else	{
+			wp_update_post( array( 'ID' => $reply_data['ticket_id'] ) );
 		}
 
 		do_action( 'kbs_reply_to_ticket', $this->ID, $reply_id, $reply_data, $this );

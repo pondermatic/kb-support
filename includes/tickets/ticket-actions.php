@@ -229,3 +229,98 @@ function kbs_view_ticket_action()	{
 
 } // kbs_view_ticket_action
 add_action( 'init', 'kbs_view_ticket_action' );
+
+/**
+ * Before a ticket is deleted determine what needs to be removed with it
+ * and store within transient so we can hook after the ticket is deleted.
+ *
+ * @since	1.0
+ * @param	int		$ticket_id	The ticket ID
+ * @return	void
+ */
+function kbs_before_ticket_is_deleted( $ticket_id = 0 )	{
+
+	if ( defined( 'WP_UNINSTALL_PLUGIN' ) )	{
+		exit;
+	}
+
+	if ( empty( $ticket_id ) )	{
+		return;
+	}
+
+	if ( 'kbs_ticket' != get_post_type( $ticket_id ) )	{
+		return;
+	}
+
+	global $wpdb;
+
+	$types = "'" . implode( "','", kbs_ticket_deleted_item_post_types() ) . "'";
+	$key   = '_kbs_deleted_ticket_items_' . $ticket_id;
+
+	$items = $wpdb->get_col( $wpdb->prepare(
+		"SELECT ID
+		FROM $wpdb->posts
+		WHERE post_parent = %d
+		AND post_type IN( {$types} )",
+		$ticket_id
+	) );
+
+	if ( $items )	{
+		set_transient( $key, $items, HOUR_IN_SECONDS );
+	}
+
+} // kbs_before_ticket_is_deleted
+add_action( 'delete_post', 'kbs_before_ticket_is_deleted' );
+
+/**
+ * After a ticket is deleted, perform necessary clean up tasks such as
+ * deleting associate replies and log entries.
+ *
+ * @since	1.0
+ * @param	int		$ticket_id	The ticket ID
+ * @return	void
+ */
+function kbs_cleanup_after_deleting_ticket( $ticket_id = 0 )	{
+
+	if ( defined( 'WP_UNINSTALL_PLUGIN' ) )	{
+		exit;
+	}
+
+	if ( empty( $ticket_id ) )	{
+		return;
+	}
+
+	global $wpdb;
+
+	$key   = '_kbs_deleted_ticket_items_' . $ticket_id;
+	$items = get_transient( $key );
+
+	if ( false !== $items )	{
+		$item_ids = implode( ',', array_map( 'intval', $items ) );
+
+		$wpdb->query(
+			"DELETE FROM $wpdb->posts
+			 WHERE ID IN( {$item_ids} )"
+		);
+
+		$wpdb->query(
+			"DELETE FROM $wpdb->postmeta
+			 WHERE post_id IN( {$item_ids} )"
+		);
+
+		delete_transient( $key );
+	}
+
+} // kbs_cleanup_after_deleting_ticket
+add_action( 'after_delete_post', 'kbs_cleanup_after_deleting_ticket' );
+
+/**
+ * The post types to be deleted when a ticket is deleted.
+ *
+ * @since	1.0
+ * @return	arr		Array of post types to delete when a ticket is being deleted.
+ */
+function kbs_ticket_deleted_item_post_types()	{
+	$post_types = array( 'kbs_ticket_reply', 'kbs_log' );
+	return apply_filters( 'kbs_ticket_deleted_item_post_types', $post_types );
+} // kbs_ticket_deleted_item_post_types

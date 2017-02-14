@@ -146,6 +146,7 @@ function kbs_count_tickets( $args = array() ) {
 		'agent'      => null,
 		'user'       => null,
 		'customer'   => null,
+		'company'    => null,
 		's'          => null,
 		'start-date' => null,
 		'end-date'   => null
@@ -240,6 +241,16 @@ function kbs_count_tickets( $args = array() ) {
 			AND m.meta_value = %s",
 			'_kbs_ticket_customer_id',
 			$args['customer']
+		);
+	}
+
+	if ( ! empty( $args['company'] ) )	{
+		$join = "LEFT JOIN $wpdb->postmeta m ON (p.ID = m.post_id)";
+		$where .= $wpdb->prepare( "
+			AND m.meta_key = %s
+			AND m.meta_value = %s",
+			'_kbs_ticket_company_id',
+			$args['company']
 		);
 	}
 
@@ -450,7 +461,6 @@ function kbs_add_ticket( $ticket_data )	{
 
 	$ticket = new KBS_Ticket();
 
-
 	if ( ! empty( $ticket_data['post_category'] ) )	{
 		if ( ! is_array( $ticket_data['post_category'] ) )	{
 			$ticket_data['post_category'] = array( $ticket_data['post_category'] );
@@ -650,6 +660,45 @@ function kbs_record_reply_in_log( $ticket_id = 0, $reply_id = 0, $reply_data = a
 	$kbs_logs->insert_log( $log_data, $log_meta );
 } // kbs_record_reply_in_log
 add_action( 'kbs_reply_to_ticket', 'kbs_record_reply_in_log', 10, 4 );
+
+/**
+ * Record Ticket Note Action In Log
+ *
+ * Stores log information for a ticket notes.
+ *
+ * @since	1.0
+ * @global	$kbs_logs
+ * @param	int			$ticket_id		Ticket ID
+ * @param	int			$note_id		Note ID
+ * @param	arr			$reply_data		Note data
+ * @param	obj			$ticket			KBS_Ticket object
+ * @return	void
+*/
+function kbs_record_note_in_log( $note_id = 0, $ticket_id = 0 ) {
+	global $kbs_logs;
+
+	$note = get_comment( $note_id );
+
+	if ( $note )	{
+
+		$log_data = array(
+			'post_parent'   => $ticket_id,
+			'log_type'      => 'note',
+			'post_date'     => $note->comment_date,
+			'post_date_gmt' => $note->comment_date_gmt
+		);
+
+		$log_meta = array(
+			'note_id'  => $note_id,
+			'note_by'  => $note->user_id,
+			'reassign' => ! empty( $note_data['reassign'] )  ? $note_data['reassign']    : false
+		);
+
+		$kbs_logs->insert_log( $log_data, $log_meta );
+
+	}
+} // kbs_record_note_in_log
+add_action( 'kbs_insert_ticket_note', 'kbs_record_note_in_log', 10, 2 );
 
 /**
  * Update the status of a ticket.
@@ -1238,6 +1287,10 @@ function kbs_insert_note( $ticket_id = 0, $note = '' ) {
 	) ) );
 
 	do_action( 'kbs_insert_ticket_note', $note_id, $ticket_id, $note );
+
+	if ( $note_id )	{
+		wp_update_post( array( 'ID' => $ticket_id ) );
+	}
 
 	return $note_id;
 } // kbs_insert_note
