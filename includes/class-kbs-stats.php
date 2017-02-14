@@ -445,7 +445,7 @@ class KBS_Stats {
 
 		}
 
-		return apply_filters( 'edd_stats_date', $date, $end_date, $this );
+		return apply_filters( 'kbs_stats_date', $date, $end_date, $this );
 
 	}
 

@@ -66,6 +66,10 @@ function kbs_set_kbs_ticket_column_data( $column_name, $post_id ) {
 
 		case 'customer':
 			echo kb_tickets_post_column_customer( $post_id, $kbs_ticket );
+			$company = kbs_get_company_name( $kbs_ticket->company_id );
+			if ( ! empty( $company ) )	{
+				echo '<br />' . $company;
+			}
 			break;
 
 		case 'ticket_category':
@@ -107,17 +111,17 @@ add_action( 'manage_kbs_ticket_posts_custom_column' , 'kbs_set_kbs_ticket_column
  *
  * @since	1.0
  * @param	int	$ticket_id	The ticket ID
- * @param	obj	$kbs_ticket	The ticket WP_Post object
+ * @param	obj	$kbs_ticket	The KBS Ticket object
  * @return	str
  */
 function kb_tickets_post_column_id( $ticket_id, $kbs_ticket )	{
-	do_action( 'kb_pre_tickets_column_id', $kbs_ticket );
+	do_action( 'kbs_tickets_pre_column_id', $kbs_ticket );
 
 	$output = '<a href="' . get_edit_post_link( $ticket_id ) . '">' . kbs_get_ticket_id( $ticket_id ) . '</a>';
 	$output .= '<br />';
 	$output .= get_post_status_object( $kbs_ticket->post_status )->label;
 
-	do_action( 'kb_post_tickets_column_id', $kbs_ticket );
+	do_action( 'kbs_tickets_post_column_id', $kbs_ticket );
 
 	return apply_filters( 'kb_tickets_post_column_id', $output, $ticket_id );
 } // kb_tickets_post_column_id
@@ -127,17 +131,17 @@ function kb_tickets_post_column_id( $ticket_id, $kbs_ticket )	{
  *
  * @since	1.0
  * @param	int	$ticket_id	The ticket ID
- * @param	obj	$kbs_ticket	The ticket WP_Post object
+ * @param	obj	$kbs_ticket	The KBS Ticket object
  * @return	str
  */
 function kb_tickets_post_column_date( $ticket_id, $kbs_ticket )	{
-	do_action( 'kb_pre_tickets_column_date', $kbs_ticket );
+	do_action( 'kbs_tickets_pre_column_date', $kbs_ticket );
 
 	$output  = date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $kbs_ticket->date ) );
 	$output .= '<br />';
 	$output .= date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $kbs_ticket->modified_date ) );
 
-	do_action( 'kb_post_tickets_column_date', $kbs_ticket );
+	do_action( 'kbs_tickets_post_column_date', $kbs_ticket );
 
 	return apply_filters( 'kb_tickets_post_column_date', $output, $ticket_id );
 } // kb_tickets_post_column_date
@@ -147,11 +151,11 @@ function kb_tickets_post_column_date( $ticket_id, $kbs_ticket )	{
  *
  * @since	1.0
  * @param	int	$ticket_id	The ticket ID
- * @param	obj	$kbs_ticket	The ticket WP_Post object
+ * @param	obj	$kbs_ticket	The KBS Ticket object
  * @return	str
  */
 function kb_tickets_post_column_customer( $ticket_id, $kbs_ticket )	{
-	do_action( 'kb_pre_tickets_column_customer', $kbs_ticket );
+	do_action( 'kbs_tickets_pre_column_customer', $kbs_ticket );
 
 	if ( ! empty( $kbs_ticket->customer_id ) )	{
 
@@ -170,7 +174,7 @@ function kb_tickets_post_column_customer( $ticket_id, $kbs_ticket )	{
 		$output = __( 'No Customer Assigned', 'kb-support' );
 	}
 
-	do_action( 'kb_post_tickets_column_customer', $kbs_ticket );
+	do_action( 'kbs_tickets_post_column_customer', $kbs_ticket );
 
 	return apply_filters( 'kb_tickets_post_column_customer', $output, $ticket_id );
 } // kb_tickets_post_column_customer
@@ -180,11 +184,11 @@ function kb_tickets_post_column_customer( $ticket_id, $kbs_ticket )	{
  *
  * @since	1.0
  * @param	int	$ticket_id	The ticket ID
- * @param	obj	$kbs_ticket	The ticket WP_Post object
+ * @param	obj	$kbs_ticket	The KBS Ticket object
  * @return	str
  */
 function kb_tickets_post_column_agent( $ticket_id, $kbs_ticket )	{
-	do_action( 'kb_pre_tickets_column_agent', $kbs_ticket );
+	do_action( 'kbs_tickets_pre_column_agent', $kbs_ticket );
 
 	if ( ! empty( $kbs_ticket->agent_id ) )	{
 		$output = sprintf( '<a href="%s">%s</a>',
@@ -195,7 +199,7 @@ function kb_tickets_post_column_agent( $ticket_id, $kbs_ticket )	{
 		$output = __( 'No Agent Assigned', 'kb-support' );
 	}
 
-	do_action( 'kb_post_tickets_column_agent', $kbs_ticket );
+	do_action( 'kbs_tickets_post_column_agent', $kbs_ticket );
 
 	return apply_filters( 'kb_tickets_post_column_agent', $output, $ticket_id );
 } // kb_tickets_post_column_agent
@@ -205,18 +209,20 @@ function kb_tickets_post_column_agent( $ticket_id, $kbs_ticket )	{
  *
  * @since	1.0
  * @param	int	$ticket_id	The ticket ID
- * @param	obj	$kbs_ticket	The ticket WP_Post object
+ * @param	obj	$kbs_ticket	The KBS Ticket object
  * @return	str
  */
 function kb_tickets_post_column_sla( $ticket_id, $kbs_ticket )	{
-	do_action( 'kb_pre_tickets_column_sla', $kbs_ticket );
+	do_action( 'kbs_tickets_pre_column_sla', $kbs_ticket );
 
-	$output  = $kbs_ticket->get_target_respond() . '<br />';
-	$output .= $kbs_ticket->get_target_resolve();
+	$output = kbs_display_sla_status_icons( $kbs_ticket, '<br />', false );
 
-	do_action( 'kb_post_tickets_column_sla', $kbs_ticket );
+	do_action( 'kbs_tickets_post_column_sla', $kbs_ticket );
 
-	return apply_filters( 'kb_tickets_post_column_sla', $output, $ticket_id );
+	$output = apply_filters( 'kb_tickets_post_column_sla', $output, $ticket_id );
+
+	return implode( '<br />', $output );
+
 } // kb_tickets_post_column_sla
 
 /**
@@ -335,6 +341,23 @@ function kbs_filter_customer_tickets( $query )	{
 	$query->set( 'meta_type', 'NUMERIC' );
 } // kbs_filter_customer_tickets
 add_action( 'pre_get_posts', 'kbs_filter_customer_tickets' );
+
+/**
+ * Filter tickets by copmany.
+ *
+ * @since	1.0
+ * @return	void
+ */
+function kbs_filter_company_tickets( $query )	{
+	if ( ! is_admin() || 'kbs_ticket' != $query->get( 'post_type' ) || ! isset( $_GET['company_id'] ) )	{
+		return;
+	}
+
+	$query->set( 'meta_key', '_kbs_ticket_company_id' );
+	$query->set( 'meta_value', $_GET['company_id'] );
+	$query->set( 'meta_type', 'NUMERIC' );
+} // kbs_filter_customer_tickets
+add_action( 'pre_get_posts', 'kbs_filter_company_tickets' );
 
 /**
  * Hide inactive tickets from the 'all' tickets list.
@@ -472,7 +495,7 @@ add_filter( 'post_row_actions', 'kbs_tickets_remove_trash_action' );
 /**
  * Save the KBS Ticket custom posts
  *
- * @since	1.3
+ * @since	1.0
  * @param	int		$post_id		The ID of the post being saved.
  * @param	obj		$post			The WP_Post object of the post being saved.
  * @param	bool	$update			Whether an existing post if being updated or not.
@@ -530,6 +553,7 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
 
 	$ticket->save();
 
+	add_post_meta( $post_id, '_kbs_ticket_version_created', KBS_VERSION, true );
 	do_action( 'kbs_save_ticket', $post_id, $post );
 
 } // kbs_ticket_post_save

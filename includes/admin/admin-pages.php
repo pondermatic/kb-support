@@ -23,9 +23,11 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function kbs_add_options_link() {
 
-	global $kbs_customers_page, $kbs_settings_page, $kbs_upgrades_screen;
+	global $kbs_companies_page, $kbs_customers_page, $kbs_settings_page, $kbs_upgrades_screen;
 
 	$customer_view_role  = apply_filters( 'kbs_view_customers_role', 'view_ticket_reports' );
+
+	$kbs_companies_page  = add_submenu_page( 'edit.php?post_type=kbs_ticket', __( 'Companies', 'kb-support' ), __( 'Companies', 'kb-support' ), $customer_view_role, 'edit.php?post_type=kbs_company' ); 
 
 	$kbs_customers_page  = add_submenu_page( 'edit.php?post_type=kbs_ticket', __( 'Customers', 'kb-support' ), __( 'Customers', 'kb-support' ), $customer_view_role, 'kbs-customers', 'kbs_customers_page' );
 

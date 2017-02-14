@@ -3,8 +3,8 @@
  * Plugin Name: KB Support
  * Plugin URI: https://kb-support.com/
  * Description: The ultimate help desk and knowledge base support tool plugin for WordPress.
- * Version: 0.9.5
- * Date: 08 February 2017
+ * Version: 1.0
+ * Date: 14 February 2017
  * Author: Mike Howard <mike@mikesplugins.co.uk>
  * Author URI: https://kb-support.com
  * Text Domain: kb-support
@@ -12,7 +12,7 @@
  * License: GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * GitHub Plugin URI: https://github.com/KB-Support/kb-support
- * Tags:  Helpdesk, Help Desk, Support, Customer Support, Service, Service Desk, ITIL, Support Helpdesk, Ticket, Ticket System, Support Tickets, Helpdesk Tickets, Knowledgebase, Knowledge Base
+ * Tags:  Helpdesk, Help Desk, Support, Customer Support, Service, Service Desk, ITIL, Support Helpdesk, Ticket, Ticket System, Support Tickets, Helpdesk Tickets, Knowledgebase, Knowledge Base, Service Level, SLA
  *
  *
  * KB Support is free software; you can redistribute it and/or modify
@@ -131,7 +131,6 @@ final class KB_Support {
 			self::$instance->html          = new KBS_HTML_Elements();
 			self::$instance->customers     = new KBS_DB_Customers();
 			self::$instance->customer_meta = new KBS_DB_Customer_Meta();
-
 		}
 
 		return self::$instance;
@@ -175,7 +174,7 @@ final class KB_Support {
 	private function setup_constants()	{
 
 		if ( ! defined( 'KBS_VERSION' ) )	{
-			define( 'KBS_VERSION', '0.9.5' );
+			define( 'KBS_VERSION', '1.0' );
 		}
 
 		if ( ! defined( 'KBS_PLUGIN_DIR' ) )	{
@@ -244,8 +243,10 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/misc-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/login-register.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-customer.php';
+		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-company.php';
 		require_once KBS_PLUGIN_DIR . 'includes/user-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/agent-functions.php';
+		require_once KBS_PLUGIN_DIR . 'includes/company-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-db-customers.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-db-customer-meta.php';
 		require_once KBS_PLUGIN_DIR . 'includes/shortcodes.php';
@@ -265,6 +266,9 @@ final class KB_Support {
 			require_once KBS_PLUGIN_DIR . 'includes/admin/article/article.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/article/metaboxes.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/article/contextual-help.php';
+			require_once KBS_PLUGIN_DIR . 'includes/admin/companies/company.php';
+			require_once KBS_PLUGIN_DIR . 'includes/admin/companies/metaboxes.php';
+			require_once KBS_PLUGIN_DIR . 'includes/admin/companies/contextual-help.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/forms/forms.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/forms/metaboxes.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/forms/form-actions.php';

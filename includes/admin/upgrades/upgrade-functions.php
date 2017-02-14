@@ -26,10 +26,12 @@ function kbs_do_automatic_upgrades() {
 	$did_upgrade = false;
 	$kbs_version = preg_replace( '/[^0-9.].*/', '', get_option( 'kbs_version' ) );
 
-	if( version_compare( $kbs_version, '0.9.3', '<' ) ) {
-
+	if ( version_compare( $kbs_version, '0.9.3', '<' ) ) {
 		kbs_v093_upgrades();
+	}
 
+	if ( version_compare( $kbs_version, '1.0', '<' ) ) {
+		kbs_v10_upgrades();
 	}
 
 	if ( version_compare( $kbs_version, KBS_VERSION, '<' ) )	{
@@ -81,6 +83,9 @@ function kbs_show_upgrade_notice()	{
 		);
 
 	} else {
+
+		// Include all 'Stepped' upgrade process notices in this else statement,
+		// to avoid having a pending, and new upgrade suggested at the same time
 
 		/*
 		 *  NOTICE:
@@ -177,3 +182,47 @@ function kbs_v093_upgrades()	{
 		$wp_roles->remove_cap( 'support_customer', 'upload_files' );
 	}
 } // kbs_v093_upgrades
+
+/**
+ * Upgrade routine to remove all sla meta keys from tickets published prior to
+ * sla functionality being released within KBS.
+ *
+ * @since	1.0
+ * @return	void
+ */
+function kbs_v10_upgrades()	{
+	global $wpdb, $wp_roles;
+
+	// Remove SLA meta keys
+	$wpdb->query( $wpdb->prepare(
+		"
+		DELETE FROM $wpdb->postmeta
+		WHERE meta_key LIKE %s
+		",
+		'%_kbs_ticket_sla_%'
+	) );
+
+	// Add company_id column to customers table and increment version
+	@KBS()->customers->create_table();
+
+	// Add the customer role to admins and managers
+	if ( class_exists('WP_Roles') )	{
+		if ( ! isset( $wp_roles ) )	{
+			$wp_roles = new WP_Roles();
+		}
+	}
+
+	if ( is_object( $wp_roles ) )	{
+		$roles = new KBS_Roles;
+		$caps  = $roles->get_core_caps();
+
+		foreach( $caps['customer'] as $cap )	{
+			$wp_roles->add_cap( 'support_manager', $cap );
+			$wp_roles->add_cap( 'administrator', $cap );
+			$wp_roles->add_cap( 'support_agent', $cap );
+		}
+	}
+
+	// Add initial install version
+	add_option( 'kbs_install_version', KBS_VERSION, '', 'no' );
+} // kbs_v10_upgrades

@@ -261,6 +261,11 @@ add_action( 'init', 'kbs_load_email_tags', -999 );
  */
 function kbs_setup_email_tags() {
 
+	$article_singular = kbs_get_article_label_singular();
+	$article_plural   = kbs_get_article_label_plural();
+	$ticket_singular  = kbs_get_ticket_label_singular();
+	$ticket_plural    = kbs_get_ticket_label_plural();
+
 	// Setup default tags array
 	$email_tags = array(
 		array(
@@ -282,6 +287,39 @@ function kbs_setup_email_tags() {
 			'tag'         => 'user_email',
 			'description' => __( 'The customers email address', 'kb-support' ),
 			'function'    => 'kbs_email_tag_user_email'
+		),
+		array(
+			'tag'         => 'company',
+			'description' => sprintf(
+				__( 'The name of the company to which the %s is associated', 'kb-support' ),
+				strtolower( $ticket_singular )
+			),
+			'function'    => 'kbs_email_tag_company'
+		),
+		array(
+			'tag'         => 'company_contact',
+			'description' => __( 'The contact name of the company', 'kb-support' ),
+			'function'    => 'kbs_email_tag_company_contact'
+		),
+		array(
+			'tag'         => 'company_email',
+			'description' => __( 'The email address of the company', 'kb-support' ),
+			'function'    => 'kbs_email_tag_company_email'
+		),
+		array(
+			'tag'         => 'company_phone',
+			'description' => __( 'The phone number of the company', 'kb-support' ),
+			'function'    => 'kbs_email_tag_company_phone'
+		),
+		array(
+			'tag'         => 'company_website',
+			'description' => __( 'The website URL of the company', 'kb-support' ),
+			'function'    => 'kbs_email_tag_company_website'
+		),
+		array(
+			'tag'         => 'company_logo',
+			'description' => __( 'Inserts the logo of the company', 'kb-support' ),
+			'function'    => 'kbs_email_tag_company_logo'
 		),
 		array(
 			'tag'         => 'sitename',
@@ -432,6 +470,96 @@ function kbs_email_tag_user_email( $ticket_id ) {
 
 	return $ticket->email;
 } // kbs_email_tag_user_email
+
+/**
+ * Email template tag: company
+ * The company associated with the ticket
+ *
+ * @since	1.0
+ * @param	int		$ticket_id
+ * @return	str		company
+ */
+function kbs_email_tag_company( $ticket_id ) {
+	$ticket = new KBS_Ticket( $ticket_id );
+
+	return kbs_get_company_name( $ticket->company_id );
+} // kbs_email_tag_company
+
+/**
+ * Email template tag: company_contact
+ * The company contact name
+ *
+ * @since	1.0
+ * @param	int		$ticket_id
+ * @return	str		company_contact
+ */
+function kbs_email_tag_company_contact( $ticket_id ) {
+	$ticket = new KBS_Ticket( $ticket_id );
+
+	return kbs_get_company_contact( $ticket->company_id );
+} // kbs_email_tag_company_contact
+
+/**
+ * Email template tag: company_email
+ * The company email address
+ *
+ * @since	1.0
+ * @param	int		$ticket_id
+ * @return	str		company_email
+ */
+function kbs_email_tag_company_email( $ticket_id ) {
+	$ticket = new KBS_Ticket( $ticket_id );
+
+	return kbs_get_company_email( $ticket->company_id );
+} // kbs_email_tag_company_email
+
+/**
+ * Email template tag: company_phone
+ * The company phone number
+ *
+ * @since	1.0
+ * @param	int		$ticket_id
+ * @return	str		company_phone
+ */
+function kbs_email_tag_company_phone( $ticket_id ) {
+	$ticket = new KBS_Ticket( $ticket_id );
+
+	return kbs_get_company_phone( $ticket->company_id );
+} // kbs_email_tag_company_phone
+
+/**
+ * Email template tag: company_website
+ * The company website address
+ *
+ * @since	1.0
+ * @param	int		$ticket_id
+ * @return	str		company_website
+ */
+function kbs_email_tag_company_website( $ticket_id ) {
+	$ticket = new KBS_Ticket( $ticket_id );
+
+	return kbs_get_company_website( $ticket->company_id );
+} // kbs_email_tag_company_website
+
+/**
+ * Email template tag: company_logo
+ * Inserts the company logo
+ *
+ * @since	1.0
+ * @param	int		$ticket_id
+ * @return	str		company_logo
+ */
+function kbs_email_tag_company_logo( $ticket_id ) {
+	$ticket = new KBS_Ticket( $ticket_id );
+	$return = '';
+	$logo   = kbs_get_company_logo( $ticket->company_id );
+
+	if ( $logo )	{
+		$return = sprintf( '<img src="%s" alt="%s">', $logo, kbs_get_company_name( $ticket->company_id ) );
+	}
+
+	return $return;
+} // kbs_email_tag_company_logo
 
 /**
  * Email template tag: sitename
