@@ -40,20 +40,31 @@ function kbs_calculate_sla_target_response()	{
 		$target_response = $target + $now;
 
 		if ( kbs_use_support_hours() )	{
+			$time_to_add          = $target;
 			$work_hours_remaining = kbs_get_remaining_work_time();
 
 			if ( ! $work_hours_remaining )	{
 				$work_hours_remaining = 0;
 			}
 
-			if ( $now + $hours_remaining < $target_response )	{
-				$next_working_day  = kbs_get_next_working_day();
-				$hours_in_next_day = kbs_get_working_time_in_day( $next_working_day );
+			$time_to_add = $time_to_add - $work_hours_remaining;
 
-				$hours_to_add = $target - $hours_remaining;
+			if ( $time_to_add > 0 )	{ // We need to roll over to other work days
 
-				$target_response = strtotime( '+' . $target, $next_working_day );
-				$target_response = $target_response - $hours_remaining;
+				for( $i = 0; $i <= 6; $i++ )	{
+					$next             = strtotime( '+' . $i . ' day' );
+					$next_working_day = kbs_get_next_working_day( $next );
+					$working_hours    = kbs_get_working_time_in_day( $next_working_day );
+
+					if ( $time_to_add - $working_hours <= 0 )	{
+						$target_response = $next_working_day + $time_to_add;
+						break;
+					}
+
+					$time_to_add = $time_to_add - $working_hours;
+
+				}
+
 			}
 
 		}
@@ -76,8 +87,39 @@ function kbs_calculate_sla_target_resolution()	{
 	$target = kbs_get_option( 'sla_resolve_time' );
 
 	if ( $target )	{
-		$target = $target + $now;
-		$target = date( 'Y-m-d H:i:s', $target );
+		$target_resolve = $target + $now;
+
+		if ( kbs_use_support_hours() )	{
+			$time_to_add          = $target;
+			$work_hours_remaining = kbs_get_remaining_work_time();
+
+			if ( ! $work_hours_remaining )	{
+				$work_hours_remaining = 0;
+			}
+
+			$time_to_add = $time_to_add - $work_hours_remaining;
+
+			if ( $time_to_add > 0 )	{ // We need to roll over to other work days
+
+				for( $i = 0; $i <= 30; $i++ )	{
+					$next             = strtotime( '+' . $i . ' day' );
+					$next_working_day = kbs_get_next_working_day( $next );
+					$working_hours    = kbs_get_working_time_in_day( $next_working_day );
+
+					if ( $time_to_add - $working_hours <= 0 )	{
+						$target_resolve = $next_working_day + $time_to_add;
+						break;
+					}
+
+					$time_to_add = $time_to_add - $working_hours;
+
+				}
+
+			}
+
+		}
+
+		$target = date( 'Y-m-d H:i:s', $target_resolve );
 	}
 	
 	return apply_filters( 'kbs_calculate_sla_target_resolution', $target );

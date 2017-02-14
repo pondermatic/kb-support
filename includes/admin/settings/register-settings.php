@@ -1483,7 +1483,7 @@ function kbs_support_hours_callback( $args ) {
 	$mins = array( '00', '15', '30', '45' );
 	$ampm = array( 'AM', 'PM' );
 
-	$html = '<table style="width: 50%;">';
+	$html = '<table style="width: 75%;">';
 		$html .= '<tr>';
 			$html .= '<th scope="row">' . __( 'Day of Week', 'kb-support' ) . '</th>';
 			$html .= '<th scope="row">' . __( 'Closed all Day', 'kb-support' ) . '</th>';
@@ -1950,24 +1950,25 @@ function kbs_get_pages( $force = false ) {
  */
 function kbs_get_response_time_options()	{
 	$response_times = array(
-		HOUR_IN_SECONDS     => __( '1 Hour', 'kb-support' ),
-		2 * HOUR_IN_SECONDS => __( '2 Hours', 'kb-support' ),
-		3 * HOUR_IN_SECONDS => __( '3 Hours', 'kb-support' ),
-		4 * HOUR_IN_SECONDS => __( '4 Hours', 'kb-support' ),
-		5 * HOUR_IN_SECONDS => __( '5 Hours', 'kb-support' ),
-		6 * HOUR_IN_SECONDS => __( '6 Hours', 'kb-support' ),
-		7 * HOUR_IN_SECONDS => __( '7 Hours', 'kb-support' ),
-		8 * HOUR_IN_SECONDS => __( '8 Hours', 'kb-support' ),
-		DAY_IN_SECONDS      => __( '1 Day', 'kb-support' ),
-		2 * DAY_IN_SECONDS  => __( '2 Days', 'kb-support' ),
-		3 * DAY_IN_SECONDS  => __( '3 Days', 'kb-support' ),
-		4 * DAY_IN_SECONDS  => __( '4 Days', 'kb-support' ),
-		5 * DAY_IN_SECONDS  => __( '5 Days', 'kb-support' ),
-		6 * DAY_IN_SECONDS  => __( '6 Days', 'kb-support' ),
-		WEEK_IN_SECONDS     => __( '1 Week', 'kb-support' ),
-		2 * WEEK_IN_SECONDS => __( '2 Weeks', 'kb-support' ),
-		3 * WEEK_IN_SECONDS => __( '3 Weeks', 'kb-support' ),
-		4 * WEEK_IN_SECONDS => __( '4 Weeks', 'kb-support' )
+		HOUR_IN_SECONDS      => __( '1 Hour', 'kb-support' ),
+		2 * HOUR_IN_SECONDS  => __( '2 Hours', 'kb-support' ),
+		3 * HOUR_IN_SECONDS  => __( '3 Hours', 'kb-support' ),
+		4 * HOUR_IN_SECONDS  => __( '4 Hours', 'kb-support' ),
+		5 * HOUR_IN_SECONDS  => __( '5 Hours', 'kb-support' ),
+		6 * HOUR_IN_SECONDS  => __( '6 Hours', 'kb-support' ),
+		7 * HOUR_IN_SECONDS  => __( '7 Hours', 'kb-support' ),
+		8 * HOUR_IN_SECONDS  => __( '8 Hours', 'kb-support' ),
+		12 * HOUR_IN_SECONDS => __( '12 Hours', 'kb-support' ),
+		DAY_IN_SECONDS       => __( '1 Day', 'kb-support' ),
+		2 * DAY_IN_SECONDS   => __( '2 Days', 'kb-support' ),
+		3 * DAY_IN_SECONDS   => __( '3 Days', 'kb-support' ),
+		4 * DAY_IN_SECONDS   => __( '4 Days', 'kb-support' ),
+		5 * DAY_IN_SECONDS   => __( '5 Days', 'kb-support' ),
+		6 * DAY_IN_SECONDS   => __( '6 Days', 'kb-support' ),
+		WEEK_IN_SECONDS      => __( '1 Week', 'kb-support' ),
+		2 * WEEK_IN_SECONDS  => __( '2 Weeks', 'kb-support' ),
+		3 * WEEK_IN_SECONDS  => __( '3 Weeks', 'kb-support' ),
+		4 * WEEK_IN_SECONDS  => __( '4 Weeks', 'kb-support' )
 	);
 
 	return apply_filters( 'kbs_get_response_time_options', $response_times );
@@ -1983,16 +1984,25 @@ function kbs_get_response_time_options()	{
  */
 function kbs_get_resolve_time_options()	{
 	$resolve_times = array(
-		DAY_IN_SECONDS      => __( '1 Day', 'kb-support' ),
-		2 * DAY_IN_SECONDS  => __( '2 Days', 'kb-support' ),
-		3 * DAY_IN_SECONDS  => __( '3 Days', 'kb-support' ),
-		4 * DAY_IN_SECONDS  => __( '4 Days', 'kb-support' ),
-		5 * DAY_IN_SECONDS  => __( '5 Days', 'kb-support' ),
-		6 * DAY_IN_SECONDS  => __( '6 Days', 'kb-support' ),
-		WEEK_IN_SECONDS     => __( '1 Week', 'kb-support' ),
-		2 * WEEK_IN_SECONDS => __( '2 Weeks', 'kb-support' ),
-		3 * WEEK_IN_SECONDS => __( '3 Weeks', 'kb-support' ),
-		4 * WEEK_IN_SECONDS => __( '4 Weeks', 'kb-support' )
+		HOUR_IN_SECONDS      => __( '1 Hour', 'kb-support' ),
+		2 * HOUR_IN_SECONDS  => __( '2 Hours', 'kb-support' ),
+		3 * HOUR_IN_SECONDS  => __( '3 Hours', 'kb-support' ),
+		4 * HOUR_IN_SECONDS  => __( '4 Hours', 'kb-support' ),
+		5 * HOUR_IN_SECONDS  => __( '5 Hours', 'kb-support' ),
+		6 * HOUR_IN_SECONDS  => __( '6 Hours', 'kb-support' ),
+		7 * HOUR_IN_SECONDS  => __( '7 Hours', 'kb-support' ),
+		8 * HOUR_IN_SECONDS  => __( '8 Hours', 'kb-support' ),
+		12 * HOUR_IN_SECONDS => __( '12 Hours', 'kb-support' ),
+		DAY_IN_SECONDS       => __( '1 Day', 'kb-support' ),
+		2 * DAY_IN_SECONDS   => __( '2 Days', 'kb-support' ),
+		3 * DAY_IN_SECONDS   => __( '3 Days', 'kb-support' ),
+		4 * DAY_IN_SECONDS   => __( '4 Days', 'kb-support' ),
+		5 * DAY_IN_SECONDS   => __( '5 Days', 'kb-support' ),
+		6 * DAY_IN_SECONDS   => __( '6 Days', 'kb-support' ),
+		WEEK_IN_SECONDS      => __( '1 Week', 'kb-support' ),
+		2 * WEEK_IN_SECONDS  => __( '2 Weeks', 'kb-support' ),
+		3 * WEEK_IN_SECONDS  => __( '3 Weeks', 'kb-support' ),
+		4 * WEEK_IN_SECONDS  => __( '4 Weeks', 'kb-support' )
 	);
 	
 	return apply_filters( 'kbs_target_resolve_time_options', $resolve_times );

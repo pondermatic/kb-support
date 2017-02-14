@@ -15,11 +15,6 @@
 if ( ! defined( 'ABSPATH' ) )
 	exit;
 
-function mh_test()	{
-	error_log( kbs_get_working_time_in_day() );
-}
-add_action( 'init', 'mh_test' );
-
 /**
  * Check if AJAX works as expected
  *
