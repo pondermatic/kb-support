@@ -37,8 +37,39 @@ function kbs_calculate_sla_target_response()	{
 	$target = kbs_get_option( 'sla_response_time' );
 
 	if ( $target )	{
-		$target = strtotime( '+' . $target, $now );
-		$target = date( 'Y-m-d H:i:s', $target );
+		$target_response = $target + $now;
+
+		if ( kbs_use_support_hours() )	{
+			$time_to_add          = $target;
+			$work_hours_remaining = kbs_get_remaining_work_time();
+
+			if ( ! $work_hours_remaining )	{
+				$work_hours_remaining = 0;
+			}
+
+			$time_to_add = $time_to_add - $work_hours_remaining;
+
+			if ( $time_to_add > 0 )	{ // We need to roll over to other work days
+
+				for( $i = 0; $i <= 6; $i++ )	{
+					$next             = strtotime( '+' . $i . ' day' );
+					$next_working_day = kbs_get_next_working_day( $next );
+					$working_hours    = kbs_get_working_time_in_day( $next_working_day );
+
+					if ( $time_to_add - $working_hours <= 0 )	{
+						$target_response = $next_working_day + $time_to_add;
+						break;
+					}
+
+					$time_to_add = $time_to_add - $working_hours;
+
+				}
+
+			}
+
+		}
+
+		$target = date( 'Y-m-d H:i:s', $target_response );
 	}
 	
 	return apply_filters( 'kbs_calculate_sla_target_response', $target );
@@ -56,8 +87,39 @@ function kbs_calculate_sla_target_resolution()	{
 	$target = kbs_get_option( 'sla_resolve_time' );
 
 	if ( $target )	{
-		$target = strtotime( '+' . $target, $now );
-		$target = date( 'Y-m-d H:i:s', $target );
+		$target_resolve = $target + $now;
+
+		if ( kbs_use_support_hours() )	{
+			$time_to_add          = $target;
+			$work_hours_remaining = kbs_get_remaining_work_time();
+
+			if ( ! $work_hours_remaining )	{
+				$work_hours_remaining = 0;
+			}
+
+			$time_to_add = $time_to_add - $work_hours_remaining;
+
+			if ( $time_to_add > 0 )	{ // We need to roll over to other work days
+
+				for( $i = 0; $i <= 30; $i++ )	{
+					$next             = strtotime( '+' . $i . ' day' );
+					$next_working_day = kbs_get_next_working_day( $next );
+					$working_hours    = kbs_get_working_time_in_day( $next_working_day );
+
+					if ( $time_to_add - $working_hours <= 0 )	{
+						$target_resolve = $next_working_day + $time_to_add;
+						break;
+					}
+
+					$time_to_add = $time_to_add - $working_hours;
+
+				}
+
+			}
+
+		}
+
+		$target = date( 'Y-m-d H:i:s', $target_resolve );
 	}
 	
 	return apply_filters( 'kbs_calculate_sla_target_resolution', $target );
@@ -369,3 +431,152 @@ function kbs_time_to_target( $ticket_id )	{
 	
 	return $kbs_ticket->get_sla_remain();
 } // kbs_time_to_target_response
+
+/* ------------------------------
+	SUPPORT HOURS
+-------------------------------*/
+/**
+ * Whether or not to use support hours.
+ *
+ * @since	1.0
+ * @return	bool	True if we should use support hours, otherwise false
+ */
+function kbs_use_support_hours()	{
+	$use_hours = kbs_get_option( 'define_support_hours', false );
+	return apply_filters( 'kbs_use_support_hours', $use_hours );
+} // kbs_use_support_hours
+
+/**
+ * Retrieve support hours.
+ *
+ * @since	1.0
+ * @return	arr		Array of all working times
+ */
+function kbs_get_support_hours()	{
+	if ( ! kbs_use_support_hours() )	{
+		return false;
+	}
+
+	$hours = kbs_get_option( 'support_hours', false );
+
+	return apply_filters( 'kbs_support_hours', $hours );
+} // kbs_get_support_hours
+
+/**
+ * Retrieve the amount of working time in a given day.
+ *
+ * @since	1.0
+ * @param	int|str	$date	The date to check. Can be a unix timestamp or string
+ *							See PHP `date()` function for formatting strings
+ * @return	int		Total number of seconds in working day
+ */
+function kbs_get_working_time_in_day( $date = false )	{
+
+	if ( empty( $date ) )	{
+		$date = strtotime( date( 'Y-m-d', current_time( 'timestamp' ) ) );
+	} elseif ( ! is_numeric( $date ) )	{
+		$date = strtotime( date( 'Y-m-d', $date ) );
+	}
+
+	$day           = date( 'w', $date );
+	$working_times = kbs_get_support_hours();
+	$open_hour     = ! empty( $working_times[ $day ]['open']['hour'] ) ? $working_times[ $day ]['open']['hour'] : '-1';
+	$open_minute   = ! empty( $working_times[ $day ]['open']['min'] )  ? $working_times[ $day ]['open']['min']  : '-1';
+	$close_hour    = ! empty( $working_times[ $day ]['close']['hour'] ) ? $working_times[ $day ]['close']['hour'] : '-1';
+	$close_minute  = ! empty( $working_times[ $day ]['close']['min'] )  ? $working_times[ $day ]['close']['min']  : '-1';
+
+	if ( ! empty( $working_times[ $day ]['closed'] ) )	{
+		return 0;
+	}
+
+	if ( '-1' == $open_hour || '-1' == $open_minute || '-1' == $close_hour || '-1' == $close_minute )	{
+		return 0;
+	}
+	$open  = strtotime( date( 'Y-m-d ' . $open_hour  . ':' . $open_minute  . ':00', $date ) );
+	$close = strtotime( date( 'Y-m-d ' . $close_hour . ':' . $close_minute . ':00', $date ) );
+
+	$seconds_in_work_day = $close - $open;
+
+	return apply_filters( 'kbs_remaining_work_time_in_day', $seconds_in_work_day );
+
+} // kbs_get_working_time_in_day
+
+/**
+ * Retrieve remaining working time for today.
+ *
+ * @since	1.0
+ * @return	int|bool	Number of seconds of work time remaining, or false if already closed
+ */
+function kbs_get_remaining_work_time( $day = 'w' )	{
+
+	$day = date( $day );
+	$working_times = kbs_get_support_hours();
+	$now           = date( 'Y-m-d H:i:s', current_time( 'timestamp' ) );
+	$close_hour    = ! empty( $working_times[ $day ]['close']['hour'] ) ? $working_times[ $day ]['close']['hour'] : '-1';
+	$close_minute  = ! empty( $working_times[ $day ]['close']['min'] )  ? $working_times[ $day ]['close']['min']  : '-1';
+
+	if ( ! empty( $working_times[ $day ]['closed'] ) )	{
+		return false;
+	}
+
+	if ( '-1' == $close_hour || '-1' == $close_minute )	{
+		return false;
+	}
+
+	$close         = new DateTime();
+
+	$close->setTime( $close_hour, $close_minute );
+	$close_time = $close->format( 'U' );
+	$return     = false;
+
+	if ( strtotime( $now ) < $close_time )	{
+		$return = $close_time - strtotime( $now );
+	}
+
+	return apply_filters( 'kbs_remaining_work_time', $return );
+
+} // kbs_get_remaining_work_time
+
+/**
+ * Retrieve the next working day.
+ *
+ * @since	1.0
+ * @param	int		$from	The timestamp from which to find the next working day
+ * @return	int		Unix timestamp representation of the next working day start time
+ */
+function kbs_get_next_working_day( $from = false )	{
+
+	if ( ! $from || ! is_numeric( $from ) )	{
+		$from = current_time( 'timestamp' );
+	}
+
+	$current       = date( 'Y-m-d', $from );
+	$working_times = kbs_get_support_hours();
+	$next_open     = false;
+
+	for( $i = 1; $i <= 7; $i++ )	{
+		$current = date( 'Y-m-d', strtotime( $current . ' +1 day' ) );
+		$hour    = false;
+		$min     = false;
+
+		if ( ! empty( $working_times[ date( 'w', strtotime( $current ) ) ]['closed'] ) )	{
+			continue;
+		}
+
+		if ( '-1' != $working_times[ date( 'w', strtotime( $current ) ) ]['open']['hour'] )	{
+			$hour = $working_times[ date( 'w', strtotime( $current ) ) ]['open']['hour'];
+		}
+		if ( '-1' !=  $working_times[ date( 'w', strtotime( $current ) ) ]['open']['min'] )	{
+			$min = $working_times[ date( 'w', strtotime( $current ) ) ]['open']['min'];
+		}
+
+		if ( ! empty( $hour ) && ! empty( $min ) )	{
+			$next_open = strtotime( $current . ' ' . $hour . ':' . $min );
+			break;
+		}
+
+	}
+	
+	return $next_open;
+
+} // kbs_get_next_working_day

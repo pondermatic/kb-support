@@ -332,6 +332,34 @@ function kbs_get_notices( $notice = '', $notice_only = false )	{
 } // kbs_get_notices
 
 /**
+ * Retrieve days of week.
+ *
+ * @since	1.0
+ * @return	arr		Array of days of week values. $day_number => $day_name
+ */
+function kbs_get_days_of_week()	{
+	global $wp_locale;
+
+	$days_of_week = array();
+	$week_start   = get_option( 'start_of_week' );
+
+	$days_of_week[ $week_start ] = $wp_locale->get_weekday( $week_start );
+
+	for( $day_index = 0; $day_index <= 6; $day_index++ )	{
+		if ( '1' == $week_start && '0' == $day_index )	{
+			continue;
+		}
+		$days_of_week[ $day_index ] = $wp_locale->get_weekday( $day_index );
+	}
+
+	if ( '1' == $week_start )	{
+		$days_of_week[ 0 ] = $wp_locale->get_weekday( 0 );
+	}
+
+	return $days_of_week;
+} // kbs_get_days_of_week
+
+/**
  * Adds credit information after the ticket and reply form.
  *
  * @since	1.0
