@@ -243,7 +243,7 @@ class KBS_Welcome {
                     </div>
                 </div>
                 <div class="col">
-                
+                	<img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/10-sla-settings.jpg'; ?>" style="border: none;" />
                 </div>
 			</div>
 
