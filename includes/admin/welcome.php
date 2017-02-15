@@ -254,12 +254,12 @@ class KBS_Welcome {
                     <p><?php printf( __( 'Easily identify the number of %1$s that have been opened and closed on the current day, month, and previous month. Additionally, you can see the current total number of open %1$s and how many of your Support Workers are currently available.', 'kb-support' ), strtolower( $this->ticket_plural ) ); ?></p>
                 </div>
                 <div class="col">
-					<img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/10-kbs-summary-dashboard.jpg'; ?>" style="border: none;" />                
+					<img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/10-kbs-summary-dashboard.jpg'; ?>" style="border: none;" />
                 </div>
 			</div>
 
 			<div class="feature-section two-col">
-            	<h2><?php _e( 'Support for Companies', 'kb-support' ); ?></h2>
+            	<h2><?php _e( 'Companies', 'kb-support' ); ?></h2>
                 <div class="col">
                 	<p><?php printf( __( "Create companies and add your customers to the companies to enable grouping of %s and restrictions to %s for specific companies.", 'kb-support' ), strtolower( $this->ticket_plural ), $this->article_plural ); ?></p>
                     <p><?php _e( 'Additional email tags have also been added to enable you to easily insert company specific information into emails', 'kb-support' ); ?>
@@ -279,7 +279,7 @@ class KBS_Welcome {
                     </div>
                 </div>
                 <div class="col">
-                
+                	<img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/10-company-list.jpg'; ?>" style="border: none;" />
                 </div>
 			</div>
 			<div class="return-to-dashboard">
@@ -480,7 +480,7 @@ class KBS_Welcome {
 
 	/**
 	 * Sends user to the Welcome page on first activation of KBS as well as each
-	 * time KBS is upgraded to a new version
+	 * time KBS is upgraded to a new major version
 	 *
 	 * @access	public
 	 * @since	1.0
