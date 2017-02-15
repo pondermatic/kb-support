@@ -126,7 +126,7 @@ class Tests_KBS extends KBS_UnitTestCase {
 		$this->assertFileExists( KBS_PLUGIN_DIR . 'assets/images/kbs-logo.png' );
 		$this->assertFileExists( KBS_PLUGIN_DIR . 'assets/images/loading.gif' );
 		$this->assertFileExists( KBS_PLUGIN_DIR . 'assets/images/tick.png' );
-		
+
 		$this->assertFileExists( KBS_PLUGIN_DIR . 'assets/js/admin-scripts.js' );
 		$this->assertFileExists( KBS_PLUGIN_DIR . 'assets/js/admin-scripts.min.js' );
 		$this->assertFileExists( KBS_PLUGIN_DIR . 'assets/js/chosen.jquery.js' );
@@ -135,6 +135,12 @@ class Tests_KBS extends KBS_UnitTestCase {
 		$this->assertFileExists( KBS_PLUGIN_DIR . 'assets/js/jquery.validate.min.js' );
 		$this->assertFileExists( KBS_PLUGIN_DIR . 'assets/js/kbs-ajax.js' );
 		$this->assertFileExists( KBS_PLUGIN_DIR . 'assets/js/kbs-ajax.min.js' );
+
+		$this->assertFileExists( KBS_PLUGIN_DIR . 'templates/kbs.css' );
+		$this->assertFileExists( KBS_PLUGIN_DIR . 'templates/kbs.min.css' );
+		$this->assertFileExists( KBS_PLUGIN_DIR . 'templates/images/agent_status_online.gif' );
+		$this->assertFileExists( KBS_PLUGIN_DIR . 'templates/images/agent_status_offline.gif' );
+		
 
 	}
 }
