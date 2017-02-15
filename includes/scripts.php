@@ -252,3 +252,28 @@ function kbs_load_admin_scripts( $hook ) {
 
 } // kbs_load_admin_scripts
 add_action( 'admin_enqueue_scripts', 'kbs_load_admin_scripts' );
+
+/**
+ * At a Glance Icons
+ *
+ * Echoes the CSS for the ticket and article post type icons.
+ *
+ * @since	1.0
+ * @return	void
+*/
+function kbs_admin_icons() {
+
+	$tickets_icon  = '\f524';
+	$articles_icon = '\f118';
+	?>
+	<style type="text/css" media="screen">
+		#dashboard_right_now .ticket-count:before {
+			content: '<?php echo $tickets_icon; ?>';
+		}
+		#dashboard_right_now .article-count:before {
+			content: '<?php echo $articles_icon; ?>';
+		}
+	</style>
+	<?php
+} // kbs_admin_icons
+add_action( 'admin_head-index.php','kbs_admin_icons' );

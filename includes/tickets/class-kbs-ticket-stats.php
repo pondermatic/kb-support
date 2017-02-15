@@ -34,7 +34,7 @@ class KBS_Ticket_Stats extends KBS_Stats {
 	 * @param	str|arr		$status 	The ticket status(es) to count. Only valid when retrieving global stats
 	 * @return 	float|int 	Total amount of tickets based on the passed arguments.
 	 */
-	public function get_tickets( $start_date = false, $end_date = false, $event_date = false, $status = 'publish' ) {
+	public function get_tickets( $start_date = false, $end_date = false, $status = false ) {
 
 		$this->setup_dates( $start_date, $end_date );
 
@@ -50,12 +50,12 @@ class KBS_Ticket_Stats extends KBS_Stats {
 
 		add_filter( 'kbs_count_tickets_where', array( $this, 'count_tickets_where' ) );
 
-		if( is_array( $status ) ) {
+		if ( is_array( $status ) )	{
 			$count = 0;
-			foreach( $status as $event_status ) {
-				$count += kbs_count_tickets()->$event_status;
+			foreach( $status as $ticket_status ) {
+				$count += kbs_count_tickets()->$ticket_status;
 			}
-		} else {
+		} else	{
 			$count = kbs_count_tickets()->$status;
 		}
 

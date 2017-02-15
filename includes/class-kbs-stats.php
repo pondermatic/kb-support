@@ -456,7 +456,7 @@ class KBS_Stats {
 	 * @since	1.0
 	 * @return	string
 	 */
-	public function count_where( $where = '' ) {
+	public function count_tickets_where( $where = '' ) {
 		// Only get tickets in our date range
 
 		$start_where = '';
@@ -490,16 +490,16 @@ class KBS_Stats {
 		$where .= "{$start_where}{$end_where}";
 
 		return $where;
-	} // count_where
+	} // count_tickets_where
 
 	/**
-	 * Modifies the WHERE flag for KBS post queries
+	 * Modifies the WHERE flag for KBS ticket queries
 	 *
 	 * @access	public
 	 * @since	1.0
 	 * @return	string
 	 */
-	public function posts_where( $where = '' ) {
+	public function tickets_where( $where = '' ) {
 
 		global $wpdb;
 
@@ -536,4 +536,4 @@ class KBS_Stats {
 		return $where;
 	}
 
-} // posts_where
+} // tickets_where

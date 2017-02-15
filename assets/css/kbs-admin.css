@@ -487,6 +487,42 @@ a.kbs_ticket_form_data	{
 	}
 }
 
+.kbs_dashboard_widget table thead td{
+	border-bottom: 1px solid #ececec;
+	color: #777;
+}
+.kbs_dashboard_widget .table_left {
+	float: left;
+	width: 45%;
+}
+.kbs_dashboard_widget .table_right {
+	float: right;
+	width: 45%;
+}
+.kbs_dashboard_widget .inside {
+	font-size: 12px;
+}
+.kbs_dashboard_widget td {
+	padding: 3px 0;
+}
+.kbs_dashboard_widget .b,
+.kbs_dashboard_widget .t {
+	line-height: 1.5;
+	vertical-align: middle;
+}
+.kbs_dashboard_widget .b {
+	font-size: 14px;
+	font-family: Georgia,"Times New Roman","Bitstream Charter",Times,serif;
+	padding-right: 6px;
+	width: auto;
+}
+.kbs_dashboard_widget .t {
+	font-size: 12px;
+	padding-right: 12px;
+	color: #777;
+	width: 100%;
+}
+
 /* System Info page styles
 -------------------------------------------------------------- */
 #system-info-textarea { width: 800px; height: 600px; font-family: Menlo, Monaco, monospace; background: #FFFFFF; white-space: pre; overflow: auto; display: block; }

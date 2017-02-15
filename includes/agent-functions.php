@@ -165,18 +165,18 @@ function kbs_get_random_agent()	{
  */
 function kbs_agent_ticket_count( $agent_id )	{
 	$tickets = kbs_count_tickets( array( 'agent' => $agent_id ) );
-	$count   = 0;
+	$total   = 0;
 
 	if ( ! empty( $tickets ) )	{
 		$active_statuses = kbs_get_active_ticket_status_keys();
 		foreach( $tickets as $status => $count )	{
 			if ( ! empty( $tickets->$status ) && in_array( $status, $active_statuses ) )	{
-				$count += $count;
+				$total += $count;
 			}
 		}
 	}
 
-	return $count;
+	return $total;
 } // kbs_agent_ticket_count
 
 /**
@@ -238,7 +238,6 @@ function kbs_set_agent_status()	{
 		$screen   = get_current_screen();
 
 		if ( ! empty( $agent_id ) && kbs_is_agent( $agent_id ) )	{
-
 			$transient_key = '_kbs_active_agent_' . $agent_id;
 			set_transient( $transient_key, $screen->id, $expire );
 		}
@@ -316,3 +315,22 @@ function kbs_get_agent_online_status( $agent_id )	{
 
 	return $status;
 } // kbs_get_agent_online_status
+
+/**
+ * Retrieve count of agents currently online and available.
+ *
+ * @since	1.0
+ * @return	int
+ */
+function kbs_get_online_agent_count()	{
+	$agent_ids = kbs_get_agents( true );
+	$online    = 0;
+
+	foreach( $agent_ids as $agent_id )	{
+		if ( kbs_agent_is_online( $agent_id ) )	{
+			$online++;
+		}
+	}
+
+	return (int)$online;
+} // kbs_get_online_agent_count
