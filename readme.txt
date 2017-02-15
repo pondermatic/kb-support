@@ -110,11 +110,6 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 	* Customers can be added to a company
 	* Email tags added for `{company}`, `{company_contact}`, `{company_email}`, `{company_phone}`, `{company_website}`, `{company_logo}`
 
-**Bug Fixes**
-
-* Corrected descriptions for email headers in settings
-* Make sure `$current_meta` array exists to avoid potential PHP notices
-
 **Tweaks**
 
 * Remove all SLA related meta keys from DB as SLA's were not tracked until this version
@@ -122,6 +117,13 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 * Ensure that the last modified date is updated for a ticket when a reply or note is added
 * Add log entries when notes are added to tickets
 * When a ticket is deleted, make sure to delete all associated replies and log entries from the `posts` and `postmeta` database tables
+* Added ticket and article count to the At a Glance dashboard widget
+
+**Bug Fixes**
+
+* Corrected descriptions for email headers in settings
+* Make sure `$current_meta` array exists to avoid potential PHP notices
+* `kbs_agent_ticket_count()` was not always returning the correct totals
 
 = 0.9.5 =
 
