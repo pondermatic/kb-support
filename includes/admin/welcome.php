@@ -248,18 +248,29 @@ class KBS_Welcome {
 			</div>
 
 			<div class="feature-section two-col">
+            	<h2><?php _e( 'Information at your Fingertips', 'kb-support' ); ?></h2>
+                <div class="col">
+                	<p><?php printf( __( 'The new KB Support %1$s Summary dashboard widget provides you with an overview of open and closed %2$s over varying periods of time.', 'kb-support' ), $this->ticket_singular, strtolower( $this->ticket_plural ) ); ?></p>
+                    <p><?php printf( __( 'Easily identify the number of %1$s that have been opened and closed on the current day, month, and previous month. Additionally, you can see the current total number of open %1$s and how many of your Support Workers are currently available.', 'kb-support' ), strtolower( $this->ticket_plural ) ); ?></p>
+                </div>
+                <div class="col">
+					<img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/10-kbs-summary-dashboard.jpg'; ?>" style="border: none;" />                
+                </div>
+			</div>
+
+			<div class="feature-section two-col">
             	<h2><?php _e( 'Support for Companies', 'kb-support' ); ?></h2>
                 <div class="col">
                 	<p><?php printf( __( "Create companies and add your customers to the companies to enable grouping of %s and restrictions to %s for specific companies.", 'kb-support' ), strtolower( $this->ticket_plural ), $this->article_plural ); ?></p>
                     <p><?php _e( 'Additional email tags have also been added to enable you to easily insert company specific information into emails', 'kb-support' ); ?>
-                    <ul>
-                    	<li><?php _e( '<code>{company}</code> - The name of the company', 'kb-support' ); ?></li>
-                        <li><?php _e( '<code>{company_contact}</code> - The contact name of the company', 'kb-support' ); ?></li>
-                        <li><?php _e( '<code>{company_email}</code> - The email address of the company', 'kb-support' ); ?></li>
-                        <li><?php _e( '<code>{company_phone}</code> - The phone number of the company', 'kb-support' ); ?></li>
-                        <li><?php _e( '<code>{company_website}</code> - The website URL of the company', 'kb-support' ); ?></li>
-                        <li><?php _e( '<code>{company_logo}</code> - Inserts the logo of the company', 'kb-support' ); ?></li>
-                    </ul>
+                        <ul>
+                            <li><?php _e( '<code>{company}</code> - The name of the company', 'kb-support' ); ?></li>
+                            <li><?php _e( '<code>{company_contact}</code> - The contact name of the company', 'kb-support' ); ?></li>
+                            <li><?php _e( '<code>{company_email}</code> - The email address of the company', 'kb-support' ); ?></li>
+                            <li><?php _e( '<code>{company_phone}</code> - The phone number of the company', 'kb-support' ); ?></li>
+                            <li><?php _e( '<code>{company_website}</code> - The website URL of the company', 'kb-support' ); ?></li>
+                            <li><?php _e( '<code>{company_logo}</code> - Inserts the logo of the company', 'kb-support' ); ?></li>
+                        </ul>
                     </p>
                     <div class="return-to-dashboard">
                         <a href="<?php echo admin_url( 'edit.php?post_type=kbs_company' ); ?>">
