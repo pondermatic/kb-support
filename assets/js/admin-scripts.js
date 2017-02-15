@@ -751,6 +751,19 @@ jQuery(document).ready(function ($) {
 		$('.kbs_user_search_results span').html('');
 	});
 
+	if( $('#kbs_dashboard_tickets').length ) {
+		$.ajax({
+			type: "GET",
+			data: {
+				action: 'kbs_load_dashboard_widget'
+			},
+			url: ajaxurl,
+			success: function (response) {
+				$('#kbs_dashboard_tickets .inside').html( response );
+			}
+		});
+	}
+
 	$(document).on('keydown', '.customer-note-input', function(e) {
 		if(e.keyCode === 13 && (e.metaKey || e.ctrlKey)) {
 			$('#add-customer-note').click();
