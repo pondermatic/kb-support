@@ -87,6 +87,7 @@ class Tests_KBS extends KBS_UnitTestCase {
 		$this->assertFileExists( KBS_PLUGIN_DIR . 'includes/admin/admin-pages.php' );
 		$this->assertFileExists( KBS_PLUGIN_DIR . 'includes/admin/admin-notices.php' );
 		$this->assertFileExists( KBS_PLUGIN_DIR . 'includes/admin/admin-plugin.php' );
+		$this->assertFileExists( KBS_PLUGIN_DIR . 'includes/admin/dashboard-widgets.php' );
 		$this->assertFileExists( KBS_PLUGIN_DIR . 'includes/admin/customers/customers-page.php' );
 		$this->assertFileExists( KBS_PLUGIN_DIR . 'includes/admin/customers/customer-functions.php' );
 		$this->assertFileExists( KBS_PLUGIN_DIR . 'includes/admin/customers/customer-actions.php' );
