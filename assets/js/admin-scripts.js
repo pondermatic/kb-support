@@ -753,7 +753,7 @@ jQuery(document).ready(function ($) {
 
 	if( $('#kbs_dashboard_tickets').length ) {
 		$.ajax({
-			type: "GET",
+			type: 'GET',
 			data: {
 				action: 'kbs_load_dashboard_widget'
 			},
