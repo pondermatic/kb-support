@@ -305,6 +305,33 @@ function kbs_count_tickets( $args = array() ) {
 } // kbs_count_tickets
 
 /**
+ * Retrieve Open Ticket Count
+ *
+ * @since	1.0
+ *
+ * @return	int		Total number of currently open tickets
+ */
+function kbs_get_open_ticket_count()	{
+
+	$tickets    = kbs_count_tickets();
+	$open_count = 0;
+
+	if ( ! empty( $tickets ) )	{
+		$active_statuses   = kbs_get_active_ticket_status_keys();
+		$inactive_statuses = kbs_get_inactive_ticket_statuses();
+
+		foreach( $tickets as $status => $count )	{
+			if ( ! empty( $tickets->$status ) && in_array( $status, $active_statuses ) && ! in_array( $status, $inactive_statuses ) )	{
+				$open_count += $count;
+			}
+		}
+	}
+
+	return (int) $open_count;
+
+} // kbs_get_open_ticket_count
+
+/**
  * Get Ticket Status
  *
  * @since	1.0
