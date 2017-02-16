@@ -219,6 +219,7 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-logging.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-license-handler.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/article-actions.php';
+		require_once KBS_PLUGIN_DIR . 'includes/article/class-kbs-article-stats.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/class-kbs-articles-query.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/article-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/article-restricted.php';

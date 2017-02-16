@@ -148,6 +148,92 @@ function kbs_load_dashboard_tickets_widget( ) {
 			</table>
 		</div>
 		<div style="clear: both"></div>
+        <?php do_action( 'kbs_ticket_summary_widget_after_stats', $stats ); ?>
+        <?php
+		$recent_article_query = new KBS_Articles_Query( array(
+			'number'  => 5,
+			'orderby' => 'date'
+		) );
+
+		$recent_articles = $recent_article_query->get_articles();
+
+		if ( $recent_articles )	: ?>
+		<div class="table recent_articles">
+			<table>
+				<thead>
+					<tr>
+						<td colspan="2">
+							<?php printf( __( 'Recently Published %s', 'kb-support' ), kbs_get_article_label_plural() ); ?>
+							<a href="<?php echo admin_url( 'edit.php?post_type=article' ); ?>">&nbsp;&ndash;&nbsp;<?php _e( 'View All', 'kb-support' ); ?></a>
+						</td>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+					foreach ( $recent_articles as $recent_article ) : ?>
+                    	<?php $url = get_permalink( $recent_article->ID ); ?>
+						<tr>
+							<td class="kbs_article_label">
+								<a href="<?php echo $url; ?>">
+									<?php echo get_the_title( $recent_article->ID ) ?>
+								</a>
+							</td>
+                            <td class="kbs_article_date">
+                            	<a href="<?php echo $url; ?>">
+									<?php echo get_the_date( null, $recent_article->ID ) ?>
+                                </a>
+                            </td>
+						</tr>
+						<?php
+					endforeach; ?>
+				</tbody>
+			</table>
+		</div>
+		<?php endif; ?>
+		<?php do_action( 'kbs_ticket_summary_widget_after_recent_articles', $recent_articles ); ?>
+        <?php
+		$popular_articles_query = new KBS_Articles_Query( array(
+			'number'  => 5
+		) );
+
+		$popular_articles = $popular_articles_query->get_articles();
+
+		if ( $popular_articles ) : ?>
+		<div class="table popular_articles">
+			<table>
+				<thead>
+					<tr>
+						<td colspan="2">
+							<?php printf( __( 'Most Popular %s', 'kb-support' ), kbs_get_article_label_plural() ); ?>
+							<a href="<?php echo admin_url( 'edit.php?post_type=article' ); ?>">&nbsp;&ndash;&nbsp;<?php _e( 'View All', 'kb-support' ); ?></a>
+						</td>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+					foreach ( $popular_articles as $popular_article ) : ?>
+                    	<?php
+						$url   = get_permalink( $popular_article->ID );
+						$views = kbs_get_article_view_count( $popular_article->ID );
+						?>
+						<tr>
+							<td class="kbs_article_label">
+								<a href="<?php echo $url; ?>">
+									<?php echo get_the_title( $popular_article->ID ); ?>
+                                    (<?php printf(
+										_n( '%s view', '%s views', $views, 'kb-support' ),
+										number_format_i18n( $views )
+									); ?>)
+								</a>
+							</td>
+						</tr>
+						<?php
+					endforeach; ?>
+				</tbody>
+			</table>
+		</div>
+		<?php endif; ?>
+		<?php do_action( 'kbs_ticket_summary_widget_after_popular_articles', $popular_articles ); ?>
     </div>
 
 	<?php
