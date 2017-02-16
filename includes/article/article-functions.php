@@ -245,6 +245,21 @@ function kbs_increment_article_view_count( $article_id )	{
 } // kbs_increment_article_view_count
 
 /**
+ * Retrieve article terms.
+ *
+ * @since	1.0
+ * @param	int			$article_id		The article post ID
+ * @return	arr			Array of term ids that are associated with the article
+ */
+function kbs_get_article_terms( $article_id = 0 )	{
+	if ( empty( $article_id ) || ! is_numeric( $article_id ) )	{
+		$article_id = get_the_ID();
+	}
+
+	return wp_get_post_terms( $article_id, 'article_category', array( 'fields' => 'ids' ) );
+} // kbs_get_article_terms
+
+/**
  * Retrieve the KB Article excerpt.
  *
  * @since	1.0

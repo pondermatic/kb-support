@@ -32,7 +32,7 @@ function kbs_hide_restricted_articles()	{
  */
 function kbs_article_is_restricted( $article_id = 0 )	{
 
-	if ( empty( $article_id ) || ! is_int( $article_id ) )	{
+	if ( empty( $article_id ) || ! is_numeric( $article_id ) )	{
 		$article_id = get_the_ID();
 	}
 
@@ -68,21 +68,6 @@ function kbs_get_restricted_articles()	{
 } // kbs_get_restricted_articles
 
 /**
- * Retrieve article terms.
- *
- * @since	1.0
- * @param	int			$article_id		The article post ID
- * @return	arr			Array of term ids that are associated with the article
- */
-function kbs_get_article_terms( $article_id = 0 )	{
-	if ( empty( $article_id ) || ! is_int( $article_id ) )	{
-		$article_id = get_the_ID();
-	}
-
-	return wp_get_post_terms( $article_id, 'article_category', array( 'fields' => 'ids' ) );
-} // kbs_get_article_terms
-
-/**
  * Whether or not a user can access a KB Article.
  *
  * @since	1.0
@@ -91,17 +76,21 @@ function kbs_get_article_terms( $article_id = 0 )	{
  * @return	bool		True if the user can view the KB Article.
  */
 function kbs_article_user_can_access( $article, $user_id = 0 )	{
-	if ( is_int( $article ) )	{
+	if ( is_numeric( $article ) )	{
 		$article = get_post( $article );
 	}
 
 	$can_view = true;
 
-	if ( ! is_user_logged_in() || ( kbs_hide_restricted_articles() && kbs_article_is_restricted( $article->ID ) ) )	{
+	if ( kbs_hide_restricted_articles() && kbs_article_is_restricted( $article->ID ) )	{
 		$can_view = false;
-	}
 
-	$user_id = get_current_user_id();
+		if ( is_user_logged_in() )	{
+			$user_id = get_current_user_id();
+			$can_view = true;
+		}
+
+	}
 
 	/**
 	 * Allow plugins to filter the response.
