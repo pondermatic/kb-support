@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KB Support 1.0\n"
 "Report-Msgid-Bugs-To: https://kb-support.com/\n"
-"POT-Creation-Date: 2017-02-15 11:41:01+00:00\n"
+"POT-Creation-Date: 2017-02-16 08:59:47+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -185,7 +185,8 @@ msgid ""
 "minutes."
 msgstr ""
 
-#: includes/admin/admin-pages.php:30 includes/post-types.php:218
+#: includes/admin/admin-pages.php:30 includes/admin/welcome.php:271
+#: includes/post-types.php:218
 msgid "Companies"
 msgstr ""
 
@@ -220,11 +221,11 @@ msgstr ""
 #: includes/admin/admin-plugin.php:54
 #: includes/admin/settings/contextual-help.php:286
 #: includes/admin/settings/register-settings.php:1027
-#: includes/admin/welcome.php:401
+#: includes/admin/welcome.php:449
 msgid "Extensions"
 msgstr ""
 
-#: includes/admin/admin-plugin.php:55 includes/admin/welcome.php:376
+#: includes/admin/admin-plugin.php:55 includes/admin/welcome.php:424
 msgid "Documentation"
 msgstr ""
 
@@ -2682,7 +2683,7 @@ msgid ""
 "and reporting."
 msgstr ""
 
-#: includes/admin/tickets/contextual-help.php:80 includes/admin/welcome.php:359
+#: includes/admin/tickets/contextual-help.php:80 includes/admin/welcome.php:407
 #: includes/tickets/ticket-functions.php:1198
 msgid "Create %s"
 msgstr ""
@@ -2920,7 +2921,7 @@ msgid "Thank you for updating to the latest version!"
 msgstr ""
 
 #: includes/admin/welcome.php:176
-msgid "KB Support %s is ready to make improve your support business efficiency!"
+msgid "KB Support %s is ready to make support business even more efficient."
 msgstr ""
 
 #: includes/admin/welcome.php:200
@@ -2928,105 +2929,187 @@ msgid "What's New"
 msgstr ""
 
 #: includes/admin/welcome.php:227
+msgid ""
+"With the release of KB Support version 1.0 we're not only adding even more "
+"functionality, we're also officially out of beta testing!"
+msgstr ""
+
+#: includes/admin/welcome.php:228
+msgid "Let's take a look at what KB Support version 1.0 has to offer..."
+msgstr ""
+
+#: includes/admin/welcome.php:232
 msgid "Service Level Tracking"
 msgstr ""
 
-#: includes/admin/welcome.php:229
+#: includes/admin/welcome.php:234
 msgid ""
 "A company who takes support seriously not only provides customers with "
 "targetted response and resolution times for support %s, but also measures "
 "their performance against these targets."
 msgstr ""
 
-#: includes/admin/welcome.php:230
+#: includes/admin/welcome.php:235
 msgid ""
 "KB Support now allows you to specify the targeted response and resolution "
 "time for %s that are logged."
 msgstr ""
 
-#: includes/admin/welcome.php:231
+#: includes/admin/welcome.php:236
 msgid ""
 "When viewing %1$s, visual indicators will now display the status of these "
 "service level targets enabling you to quickly identify any %1$s that are "
 "approaching, or have already exceeded, the defined SLA."
 msgstr ""
 
-#: includes/admin/welcome.php:241
+#: includes/admin/welcome.php:246
 msgid "Enable SLA Tracking and Define Targets"
 msgstr ""
 
-#: includes/admin/welcome.php:251
-msgid "Support for Companies"
+#: includes/admin/welcome.php:258
+msgid "Information at your Fingertips"
 msgstr ""
 
-#: includes/admin/welcome.php:253
+#: includes/admin/welcome.php:260
+msgid ""
+"The new KB Support %1$s Summary dashboard widget provides you with an "
+"overview of open and closed %2$s over varying periods of time."
+msgstr ""
+
+#: includes/admin/welcome.php:261
+msgid ""
+"Easily identify the number of %1$s that have been opened and closed on the "
+"current day, month, and previous month. Additionally, you can see the "
+"current total number of open %1$s and how many of your Support Workers are "
+"currently available."
+msgstr ""
+
+#: includes/admin/welcome.php:273
 msgid ""
 "Create companies and add your customers to the companies to enable grouping "
 "of %s and restrictions to %s for specific companies."
 msgstr ""
 
-#: includes/admin/welcome.php:254
+#: includes/admin/welcome.php:274
 msgid ""
 "Additional email tags have also been added to enable you to easily insert "
 "company specific information into emails"
 msgstr ""
 
-#: includes/admin/welcome.php:256
+#: includes/admin/welcome.php:276
 msgid "<code>{company}</code> - The name of the company"
 msgstr ""
 
-#: includes/admin/welcome.php:257
+#: includes/admin/welcome.php:277
 msgid "<code>{company_contact}</code> - The contact name of the company"
 msgstr ""
 
-#: includes/admin/welcome.php:258
+#: includes/admin/welcome.php:278
 msgid "<code>{company_email}</code> - The email address of the company"
 msgstr ""
 
-#: includes/admin/welcome.php:259
+#: includes/admin/welcome.php:279
 msgid "<code>{company_phone}</code> - The phone number of the company"
 msgstr ""
 
-#: includes/admin/welcome.php:260
+#: includes/admin/welcome.php:280
 msgid "<code>{company_website}</code> - The website URL of the company"
 msgstr ""
 
-#: includes/admin/welcome.php:261
+#: includes/admin/welcome.php:281
 msgid "<code>{company_logo}</code> - Inserts the logo of the company"
 msgstr ""
 
-#: includes/admin/welcome.php:266
+#: includes/admin/welcome.php:286
 msgid "Create a Company"
 msgstr ""
 
-#: includes/admin/welcome.php:275 includes/admin/welcome.php:306
+#: includes/admin/welcome.php:298
+msgid "What else has changed?"
+msgstr ""
+
+#: includes/admin/welcome.php:301
+msgid "Tweaks"
+msgstr ""
+
+#: includes/admin/welcome.php:303
+msgid ""
+"Removed all SLA related meta keys from the Database as SLA's were not "
+"tracked until this version"
+msgstr ""
+
+#: includes/admin/welcome.php:304
+msgid "Log the current KBS version number at the time each ticket was logged"
+msgstr ""
+
+#: includes/admin/welcome.php:305
+msgid ""
+"Ensure that the last modified date is updated for a ticket when a reply or "
+"note is added"
+msgstr ""
+
+#: includes/admin/welcome.php:306
+msgid "Add log entries when notes are added to tickets"
+msgstr ""
+
+#: includes/admin/welcome.php:307
+msgid ""
+"When a ticket is deleted, make sure to delete all associated replies and "
+"log entries from the <em>posts</em> and <em>postmeta</em> database tables"
+msgstr ""
+
+#: includes/admin/welcome.php:308
+msgid "Added ticket and article count to the At a Glance dashboard widget"
+msgstr ""
+
+#: includes/admin/welcome.php:312
+msgid "Bug Fixes"
+msgstr ""
+
+#: includes/admin/welcome.php:314
+msgid "Corrected descriptions for email headers in settings"
+msgstr ""
+
+#: includes/admin/welcome.php:315
+msgid ""
+"Make sure <code>$current_meta</code> array exists to avoid potential PHP "
+"notices"
+msgstr ""
+
+#: includes/admin/welcome.php:316
+msgid ""
+"<code>kbs_agent_ticket_count()</code> was not always returning the correct "
+"totalss"
+msgstr ""
+
+#: includes/admin/welcome.php:323 includes/admin/welcome.php:354
 msgid "Go to KB Support Settings"
 msgstr ""
 
-#: includes/admin/welcome.php:276
+#: includes/admin/welcome.php:324
 msgid "View the Full Changelog"
 msgstr ""
 
-#: includes/admin/welcome.php:298
+#: includes/admin/welcome.php:346
 msgid "Full Changelog"
 msgstr ""
 
-#: includes/admin/welcome.php:335
+#: includes/admin/welcome.php:383
 msgid "Start Receiving &amp; Managing Support %s"
 msgstr ""
 
-#: includes/admin/welcome.php:338
+#: includes/admin/welcome.php:386
 msgid "Optimise Settings"
 msgstr ""
 
-#: includes/admin/welcome.php:339
+#: includes/admin/welcome.php:387
 msgid ""
 "KB Support will work as soon as installed and activated as we've set the "
 "default settings for you, however you should review the options and ensure "
 "they're fully optimised for your support business."
 msgstr ""
 
-#: includes/admin/welcome.php:340
+#: includes/admin/welcome.php:388
 msgid ""
 "These settings define the communication flow and content between your "
 "business and your customers, as well as determine who can submit a %s, how "
@@ -3034,21 +3117,21 @@ msgid ""
 "undertake, plus much more."
 msgstr ""
 
-#: includes/admin/welcome.php:342
+#: includes/admin/welcome.php:390
 msgid "%s &rarr; Settings"
 msgstr ""
 
-#: includes/admin/welcome.php:347
+#: includes/admin/welcome.php:395
 msgid "Customise your Submission Form(s)"
 msgstr ""
 
-#: includes/admin/welcome.php:348
+#: includes/admin/welcome.php:396
 msgid ""
 "The %s submission forms are the first point at which your customers can "
 "provide you with details regarding the issues they are experiencing."
 msgstr ""
 
-#: includes/admin/welcome.php:349
+#: includes/admin/welcome.php:397
 msgid ""
 "We created a <a href=\"%s\">default form</a> for you during install, but it "
 "is fully customisable and you should ensure it has all the fields you need "
@@ -3056,18 +3139,18 @@ msgid ""
 "customers in order to efficiently address their issue."
 msgstr ""
 
-#: includes/admin/welcome.php:351
+#: includes/admin/welcome.php:399
 msgid "%s &rarr; Submission Forms"
 msgstr ""
 
-#: includes/admin/welcome.php:360
+#: includes/admin/welcome.php:408
 msgid ""
 "%1$s provide a single document repository for your products and/or services "
 "that is readily available to support customers assisting them in resolving "
 "any issues they may be experiencing."
 msgstr ""
 
-#: includes/admin/welcome.php:361
+#: includes/admin/welcome.php:409
 msgid ""
 "Support Workers are provided with a number of prompts to quickly and easily "
 "publish new %1$s during the management of a %3$s and as soon as it is "
@@ -3075,60 +3158,60 @@ msgid ""
 "listing, and whilst they are in the process of logging a new %3$s."
 msgstr ""
 
-#: includes/admin/welcome.php:362
+#: includes/admin/welcome.php:410
 msgid ""
 "Furthermore, individual %1$s can be restricted so that only customers with "
 "an active account on your website are able to view their content."
 msgstr ""
 
-#: includes/admin/welcome.php:366
+#: includes/admin/welcome.php:414
 msgid "%1$s &rarr; New %2$s"
 msgstr ""
 
-#: includes/admin/welcome.php:373
+#: includes/admin/welcome.php:421
 msgid "We're Here to Help"
 msgstr ""
 
-#: includes/admin/welcome.php:377
+#: includes/admin/welcome.php:425
 msgid ""
 "We have a growing library of <a href=\"https://kb-support.com/support/\" "
 "target=\"_blank\">Support Documents</a> to help new and advanced users with "
 "features and customisations."
 msgstr ""
 
-#: includes/admin/welcome.php:380
+#: includes/admin/welcome.php:428
 msgid "Excellent Support"
 msgstr ""
 
-#: includes/admin/welcome.php:381
+#: includes/admin/welcome.php:429
 msgid ""
 "We pride ourselves on our level of support and excellent response times. If "
 "you are experiencing an issue, <a href=\"%s\" target=\"_blank\">submit a "
 "support ticket</a> and we will respond quickly."
 msgstr ""
 
-#: includes/admin/welcome.php:387
+#: includes/admin/welcome.php:435
 msgid "Get the Latest News"
 msgstr ""
 
-#: includes/admin/welcome.php:388
+#: includes/admin/welcome.php:436
 msgid ""
 "<a href=\"%s\" target=\"_blank\">Subscribe to our Newsletter</a> for all "
 "the latest news and offers from KB Support."
 msgstr ""
 
-#: includes/admin/welcome.php:391
+#: includes/admin/welcome.php:439
 msgid "Get Social"
 msgstr ""
 
-#: includes/admin/welcome.php:392
+#: includes/admin/welcome.php:440
 msgid ""
 "The <a href=\"%s\" target=\"_blank\">KB Support Facebook Page</a> and our "
 "<a href=\"%s\" target=\"_blank\">Twitter Account</a> are also great places "
 "for the latest news."
 msgstr ""
 
-#: includes/admin/welcome.php:402
+#: includes/admin/welcome.php:450
 msgid ""
 "We have an ever growing catalogue of extensions available at our <a "
 "href=\"%s\" target=\"_blank\">plugin store</a> that will extend the "
@@ -3136,11 +3219,11 @@ msgid ""
 "experience."
 msgstr ""
 
-#: includes/admin/welcome.php:405
+#: includes/admin/welcome.php:453
 msgid "Contribute to KB Support"
 msgstr ""
 
-#: includes/admin/welcome.php:406
+#: includes/admin/welcome.php:454
 msgid ""
 "Anyone is welcome to contribute to KB Support and we'd love you to get "
 "involved with our project. Please read the <a href=\"\" "
@@ -3148,57 +3231,57 @@ msgid ""
 "target=\"_blank\">GitHub repository</a>."
 msgstr ""
 
-#: includes/admin/welcome.php:407
+#: includes/admin/welcome.php:455
 msgid "There are various ways you can contribute"
 msgstr ""
 
-#: includes/admin/welcome.php:408
+#: includes/admin/welcome.php:456
 msgid "<a href=\"%s\" target=\"_blank\">Raise an Issue on GitHub</a>"
 msgstr ""
 
-#: includes/admin/welcome.php:409
+#: includes/admin/welcome.php:457
 msgid ""
 "<a href=\"%s\" target=\"_blank\">Send us a Pull Request</a> with your bug "
 "fixes and/or new features"
 msgstr ""
 
-#: includes/admin/welcome.php:410
+#: includes/admin/welcome.php:458
 msgid ""
 "<a href=\"%s\" target=\"_blank\">Translate KB Support</a> into different "
 "languages"
 msgstr ""
 
-#: includes/admin/welcome.php:411
+#: includes/admin/welcome.php:459
 msgid ""
 "Provide feedback and suggestions on <a href=\"%s\" "
 "target=\"_blank\">enhancements</a>"
 msgstr ""
 
-#: includes/admin/welcome.php:412
+#: includes/admin/welcome.php:460
 msgid "Assist with maintaining documentation"
 msgstr ""
 
-#: includes/admin/welcome.php:420
+#: includes/admin/welcome.php:468
 msgid "Configure Settings"
 msgstr ""
 
-#: includes/admin/welcome.php:423 includes/admin/welcome.php:429
+#: includes/admin/welcome.php:471 includes/admin/welcome.php:477
 msgid "Go to %s"
 msgstr ""
 
-#: includes/admin/welcome.php:426
+#: includes/admin/welcome.php:474
 msgid "Manage Submission Forms"
 msgstr ""
 
-#: includes/admin/welcome.php:432
+#: includes/admin/welcome.php:480
 msgid "View Extensions"
 msgstr ""
 
-#: includes/admin/welcome.php:435
+#: includes/admin/welcome.php:483
 msgid "WordPress Dashboard"
 msgstr ""
 
-#: includes/admin/welcome.php:453
+#: includes/admin/welcome.php:501
 msgid "No valid changelog was found."
 msgstr ""
 
