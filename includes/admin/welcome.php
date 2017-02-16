@@ -173,7 +173,7 @@ class KBS_Welcome {
                     _e( 'Thank you for updating to the latest version!', 'kb-support' );
                     echo '<br />';
                     printf(
-                        __( 'KB Support %s is ready to make improve your support business efficiency!', 'kb-support' ),
+                        __( 'KB Support %s is ready to make support business even more efficient.', 'kb-support' ),
                         $display_version
                     );
             }
@@ -223,6 +223,11 @@ class KBS_Welcome {
 				$this->tabs();
 			?>
 
+			<div>
+            	<p><?php _e( "With the release of KB Support version 1.0 we're not only adding even more functionality, we're also officially out of beta testing!", 'kb-support' ); ?></p>
+                <p><?php _e( "Let's take a look at what KB Support version 1.0 has to offer...", 'kb-support' ); ?></p>
+            </div>
+
 			<div class="feature-section two-col">
             	<h2><?php _e( 'Service Level Tracking', 'kb-support' ); ?></h2>
                 <div class="col">
@@ -247,6 +252,8 @@ class KBS_Welcome {
                 </div>
 			</div>
 
+			<hr />
+
 			<div class="feature-section two-col">
             	<h2><?php _e( 'Information at your Fingertips', 'kb-support' ); ?></h2>
                 <div class="col">
@@ -257,6 +264,8 @@ class KBS_Welcome {
 					<img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/10-kbs-summary-dashboard.jpg'; ?>" style="border: none;" />
                 </div>
 			</div>
+
+			<hr />
 
 			<div class="feature-section two-col">
             	<h2><?php _e( 'Companies', 'kb-support' ); ?></h2>
@@ -282,6 +291,34 @@ class KBS_Welcome {
                 	<img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/10-company-list.jpg'; ?>" style="border: none;" />
                 </div>
 			</div>
+
+			<hr />
+
+			<div class="changelog">
+				<h2><?php _e( 'What else has changed?', 'kb-support' ); ?></h2>
+				<div class="under-the-hood two-col">
+                    <div class="col">
+                        <h3><?php _e( 'Tweaks', 'kb-support' ); ?></h3>
+                        <ul>
+							<li><?php _e( "Removed all SLA related meta keys from the Database as SLA's were not tracked until this version", 'kb-support' ); ?></li>
+							<li><?php _e( 'Log the current KBS version number at the time each ticket was logged', 'kb-support' ); ?></li>
+                            <li><?php _e( 'Ensure that the last modified date is updated for a ticket when a reply or note is added' ); ?></li>
+                            <li><?php _e( 'Add log entries when notes are added to tickets' ); ?></li>
+                            <li><?php _e( 'When a ticket is deleted, make sure to delete all associated replies and log entries from the <em>posts</em> and <em>postmeta</em> database tables' ); ?></li>
+                            <li><?php _e( 'Added ticket and article count to the At a Glance dashboard widget' ); ?></li>
+                        </ul>
+                    </div>
+                    <div class="col">
+                        <h3><?php _e( 'Bug Fixes', 'kb-support' ); ?></h3>
+                        <ul>
+							<li><?php _e( 'Corrected descriptions for email headers in settings', 'kb-support' ); ?></li>
+                            <li><?php _e( 'Make sure <code>$current_meta</code> array exists to avoid potential PHP notices', 'kb-support' ); ?></li>
+                            <li><?php _e( '<code>kbs_agent_ticket_count()</code> was not always returning the correct totalss', 'kb-support' ); ?></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
 			<div class="return-to-dashboard">
 				<a href="<?php echo esc_url( admin_url( add_query_arg( array( 'page' => 'kbs-settings' ), 'admin.php' ) ) ); ?>"><?php _e( 'Go to KB Support Settings', 'kb-support' ); ?></a> &middot;
 				<a href="<?php echo esc_url( admin_url( add_query_arg( array( 'page' => 'kbs-changelog' ), 'index.php' ) ) ); ?>"><?php _e( 'View the Full Changelog', 'kb-support' ); ?></a>

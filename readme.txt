@@ -99,6 +99,8 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 **Enhancements**
 
+* Added KB Support Ticket Summary dashboard widget providing easy to access statistics about your support business
+
 * Service Level Tracking
 	* Enable SLA tracking within Tickets -> Settings -> Service Levels
 	* Define your target response and resolution times
