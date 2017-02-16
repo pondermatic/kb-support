@@ -302,10 +302,10 @@ class KBS_Welcome {
                         <ul>
 							<li><?php _e( "Removed all SLA related meta keys from the Database as SLA's were not tracked until this version", 'kb-support' ); ?></li>
 							<li><?php _e( 'Log the current KBS version number at the time each ticket was logged', 'kb-support' ); ?></li>
-                            <li><?php _e( 'Ensure that the last modified date is updated for a ticket when a reply or note is added' ); ?></li>
-                            <li><?php _e( 'Add log entries when notes are added to tickets' ); ?></li>
-                            <li><?php _e( 'When a ticket is deleted, make sure to delete all associated replies and log entries from the <em>posts</em> and <em>postmeta</em> database tables' ); ?></li>
-                            <li><?php _e( 'Added ticket and article count to the At a Glance dashboard widget' ); ?></li>
+                            <li><?php _e( 'Ensure that the last modified date is updated for a ticket when a reply or note is added', 'kb-support' ); ?></li>
+                            <li><?php _e( 'Add log entries when notes are added to tickets', 'kb-support' ); ?></li>
+                            <li><?php _e( 'When a ticket is deleted, make sure to delete all associated replies and log entries from the <em>posts</em> and <em>postmeta</em> database tables', 'kb-support' ); ?></li>
+                            <li><?php _e( 'Added ticket and article count to the At a Glance dashboard widget', 'kb-support' ); ?></li>
                         </ul>
                     </div>
                     <div class="col">
