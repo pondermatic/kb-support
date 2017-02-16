@@ -112,7 +112,10 @@ function kbs_count_customers_in_company( $company_id = 0 ) {
  * @param	obj|int		$company		WP_Post object or ID
  * @return	str			Company name or false if not found
  */
-function kbs_get_company_name( $company )	{
+function kbs_get_company_name( $company = 0 )	{
+	if ( empty( $company ) || 'kbs_company' != get_post_type( $company ) )	{
+		return false;
+	}
 	return get_the_title( $company );
 } // kbs_get_company_name
 
