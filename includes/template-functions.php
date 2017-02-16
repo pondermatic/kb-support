@@ -176,6 +176,9 @@ add_filter( 'the_content', 'kbs_after_article_content', 100 );
  * @return	void
  */
 function kbs_article_maybe_increment_views()	{
+	// This hook causes duplicate counting!
+	remove_action( 'wp_head', 'adjacent_posts_rel_link_wp_head' );
+
 	if ( is_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) )	{
 		return;
 	}
