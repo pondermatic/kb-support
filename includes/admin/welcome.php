@@ -173,7 +173,7 @@ class KBS_Welcome {
                     _e( 'Thank you for updating to the latest version!', 'kb-support' );
                     echo '<br />';
                     printf(
-                        __( 'KB Support %s is ready to make improve your support business efficiency!', 'kb-support' ),
+                        __( 'KB Support %s is ready to make support business even more efficient.', 'kb-support' ),
                         $display_version
                     );
             }
@@ -223,6 +223,11 @@ class KBS_Welcome {
 				$this->tabs();
 			?>
 
+			<div>
+            	<p><?php _e( "With the release of KB Support version 1.0 we're not only adding even more functionality, we're also officially out of beta testing!", 'kb-support' ); ?></p>
+                <p><?php _e( "Let's take a look at what KB Support version 1.0 has to offer...", 'kb-support' ); ?></p>
+            </div>
+
 			<div class="feature-section two-col">
             	<h2><?php _e( 'Service Level Tracking', 'kb-support' ); ?></h2>
                 <div class="col">
@@ -243,23 +248,38 @@ class KBS_Welcome {
                     </div>
                 </div>
                 <div class="col">
-                
+                	<img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/10-sla-settings.jpg'; ?>" style="border: none;" />
                 </div>
 			</div>
 
+			<hr />
+
 			<div class="feature-section two-col">
-            	<h2><?php _e( 'Support for Companies', 'kb-support' ); ?></h2>
+            	<h2><?php _e( 'Information at your Fingertips', 'kb-support' ); ?></h2>
+                <div class="col">
+                	<p><?php printf( __( 'The new KB Support %1$s Summary dashboard widget provides you with an overview of open and closed %2$s over varying periods of time.', 'kb-support' ), $this->ticket_singular, strtolower( $this->ticket_plural ) ); ?></p>
+                    <p><?php printf( __( 'Easily identify the number of %1$s that have been opened and closed on the current day, month, and previous month. Additionally, you can see the current total number of open %1$s and how many of your Support Workers are currently available.', 'kb-support' ), strtolower( $this->ticket_plural ) ); ?></p>
+                </div>
+                <div class="col">
+					<img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/10-kbs-summary-dashboard.jpg'; ?>" style="border: none;" />
+                </div>
+			</div>
+
+			<hr />
+
+			<div class="feature-section two-col">
+            	<h2><?php _e( 'Companies', 'kb-support' ); ?></h2>
                 <div class="col">
                 	<p><?php printf( __( "Create companies and add your customers to the companies to enable grouping of %s and restrictions to %s for specific companies.", 'kb-support' ), strtolower( $this->ticket_plural ), $this->article_plural ); ?></p>
                     <p><?php _e( 'Additional email tags have also been added to enable you to easily insert company specific information into emails', 'kb-support' ); ?>
-                    <ul>
-                    	<li><?php _e( '<code>{company}</code> - The name of the company', 'kb-support' ); ?></li>
-                        <li><?php _e( '<code>{company_contact}</code> - The contact name of the company', 'kb-support' ); ?></li>
-                        <li><?php _e( '<code>{company_email}</code> - The email address of the company', 'kb-support' ); ?></li>
-                        <li><?php _e( '<code>{company_phone}</code> - The phone number of the company', 'kb-support' ); ?></li>
-                        <li><?php _e( '<code>{company_website}</code> - The website URL of the company', 'kb-support' ); ?></li>
-                        <li><?php _e( '<code>{company_logo}</code> - Inserts the logo of the company', 'kb-support' ); ?></li>
-                    </ul>
+                        <ul>
+                            <li><?php _e( '<code>{company}</code> - The name of the company', 'kb-support' ); ?></li>
+                            <li><?php _e( '<code>{company_contact}</code> - The contact name of the company', 'kb-support' ); ?></li>
+                            <li><?php _e( '<code>{company_email}</code> - The email address of the company', 'kb-support' ); ?></li>
+                            <li><?php _e( '<code>{company_phone}</code> - The phone number of the company', 'kb-support' ); ?></li>
+                            <li><?php _e( '<code>{company_website}</code> - The website URL of the company', 'kb-support' ); ?></li>
+                            <li><?php _e( '<code>{company_logo}</code> - Inserts the logo of the company', 'kb-support' ); ?></li>
+                        </ul>
                     </p>
                     <div class="return-to-dashboard">
                         <a href="<?php echo admin_url( 'edit.php?post_type=kbs_company' ); ?>">
@@ -268,9 +288,37 @@ class KBS_Welcome {
                     </div>
                 </div>
                 <div class="col">
-                
+                	<img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/10-company-list.jpg'; ?>" style="border: none;" />
                 </div>
 			</div>
+
+			<hr />
+
+			<div class="changelog">
+				<h2><?php _e( 'What else has changed?', 'kb-support' ); ?></h2>
+				<div class="under-the-hood two-col">
+                    <div class="col">
+                        <h3><?php _e( 'Tweaks', 'kb-support' ); ?></h3>
+                        <ul>
+							<li><?php _e( "Removed all SLA related meta keys from the Database as SLA's were not tracked until this version", 'kb-support' ); ?></li>
+							<li><?php _e( 'Log the current KBS version number at the time each ticket was logged', 'kb-support' ); ?></li>
+                            <li><?php _e( 'Ensure that the last modified date is updated for a ticket when a reply or note is added' ); ?></li>
+                            <li><?php _e( 'Add log entries when notes are added to tickets' ); ?></li>
+                            <li><?php _e( 'When a ticket is deleted, make sure to delete all associated replies and log entries from the <em>posts</em> and <em>postmeta</em> database tables' ); ?></li>
+                            <li><?php _e( 'Added ticket and article count to the At a Glance dashboard widget' ); ?></li>
+                        </ul>
+                    </div>
+                    <div class="col">
+                        <h3><?php _e( 'Bug Fixes', 'kb-support' ); ?></h3>
+                        <ul>
+							<li><?php _e( 'Corrected descriptions for email headers in settings', 'kb-support' ); ?></li>
+                            <li><?php _e( 'Make sure <code>$current_meta</code> array exists to avoid potential PHP notices', 'kb-support' ); ?></li>
+                            <li><?php _e( '<code>kbs_agent_ticket_count()</code> was not always returning the correct totalss', 'kb-support' ); ?></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
 			<div class="return-to-dashboard">
 				<a href="<?php echo esc_url( admin_url( add_query_arg( array( 'page' => 'kbs-settings' ), 'admin.php' ) ) ); ?>"><?php _e( 'Go to KB Support Settings', 'kb-support' ); ?></a> &middot;
 				<a href="<?php echo esc_url( admin_url( add_query_arg( array( 'page' => 'kbs-changelog' ), 'index.php' ) ) ); ?>"><?php _e( 'View the Full Changelog', 'kb-support' ); ?></a>
@@ -469,7 +517,7 @@ class KBS_Welcome {
 
 	/**
 	 * Sends user to the Welcome page on first activation of KBS as well as each
-	 * time KBS is upgraded to a new version
+	 * time KBS is upgraded to a new major version
 	 *
 	 * @access	public
 	 * @since	1.0
