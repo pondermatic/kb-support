@@ -95,14 +95,18 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 == Changelog ==
 
-= 1.0.1=
+= 1.0.1 =
 
 **Thursday, 16th February 2017**
 
-**Bug** - Article view count was not being incremented for non-logged in users
-**Bug** - Random text being displayed under customer name on edit tickets page if no company assigned
+**Bugs**
 
-**Tweak** - Do not display SLA Status heading on ticket screen if no targets are defined for ticket 
+* Article view count was not being incremented for non-logged in users
+* Random text being displayed under customer name on edit tickets page if no company assigned
+
+**Tweaks**
+
+* Do not display SLA Status heading on ticket screen if no targets are defined for ticket 
 
 = 1.0 =
 
