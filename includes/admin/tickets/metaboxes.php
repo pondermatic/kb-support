@@ -314,14 +314,15 @@ function kbs_ticket_metabox_sla_row( $ticket_id )	{
 		$respond = date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( kbs_calculate_sla_target_response() ) );
 		$resolve = date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( kbs_calculate_sla_target_resolution() ) );
 	}
-	
-	?>
-    <p><strong><?php _e( 'SLA Status', 'kb-support' ); ?></strong></p>
-    <p><?php echo kbs_display_sla_response_status_icon( $kbs_ticket ); ?></p>
-        
-    <p><?php echo kbs_display_sla_resolve_status_icon( $kbs_ticket ); ?></p>
+
+	if ( ! empty( $ticket->sla_respond ) || ! empty( $kbs_ticket->sla_resolve ) ) : ?>
+        <p><strong><?php _e( 'SLA Status', 'kb-support' ); ?></strong></p>
+        <p><?php echo kbs_display_sla_response_status_icon( $kbs_ticket ); ?></p>
+            
+        <p><?php echo kbs_display_sla_resolve_status_icon( $kbs_ticket ); ?></p>
     
-    <?php
+    <?php endif;
+
 } // kbs_ticket_metabox_sla_row
 add_action( 'kbs_ticket_metabox_after_agent', 'kbs_ticket_metabox_sla_row', 10 );
 
