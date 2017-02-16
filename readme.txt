@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: Helpdesk, Help Desk, Support, Customer Support, Service, Service Desk, ITIL, Support Helpdesk, Ticket, Ticket System, Support Tickets, Helpdesk Tickets, Knowledgebase, Knowledge Base, Service Level, SLA
 Requires at least: 4.1
 Tested up to: 4.8
-Stable tag: 1.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -94,6 +94,15 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.0.1=
+
+**Thursday, 16th February 2017**
+
+**Bug** - Article view count was not being incremented for non-logged in users
+**Bug** - Random text being displayed under customer name on edit tickets page if no company assigned
+
+**Tweak** - Do not display SLA Status heading on ticket screen if no targets are defined for ticket 
 
 = 1.0 =
 
