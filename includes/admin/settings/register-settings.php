@@ -471,7 +471,7 @@ function kbs_get_registered_settings() {
 					'article_restricted' => array(
 						'id'      => 'article_restricted',
 						'name'    => sprintf( __( 'Restrict %s', 'kb-support' ), kbs_get_article_label_plural() ),
-						'desc'    => sprintf( __( 'Select to make restrict %s by default. Can by changed per %s', 'kb-support' ), kbs_get_article_label_plural(), kbs_get_article_label_singular() ),
+						'desc'    => sprintf( __( 'Select to make %s restricted by default. Can by changed per %s', 'kb-support' ), kbs_get_article_label_plural(), kbs_get_article_label_singular() ),
 						'type'    => 'checkbox',
 						'std'     => '0'
 					),
