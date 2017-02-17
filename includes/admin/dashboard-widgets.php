@@ -48,7 +48,7 @@ function kbs_dashboard_tickets_widget( ) {
  * @since	1.0
  * @return	void
  */
-function kbs_load_dashboard_tickets_widget( ) {
+function kbs_load_dashboard_tickets_widget() {
 
 	if ( ! current_user_can( apply_filters( 'kbs_dashboard_stats_cap', 'view_ticket_reports' ) ) ) {
 		die();
