@@ -487,7 +487,7 @@ a.kbs_ticket_form_data	{
 	}
 }
 
-.kbs_dashboard_widget table thead td{
+.kbs_dashboard_widget table thead td {
 	border-bottom: 1px solid #ececec;
 	color: #777;
 }
@@ -521,6 +521,15 @@ a.kbs_ticket_form_data	{
 	padding-right: 12px;
 	color: #777;
 	width: 100%;
+}
+.kbs_dashboard_widget table {
+	width: 100%;
+	margin-left: 0;
+	margin-bottom: 1em;
+}
+td.kbs_article_label {
+	min-width: 30%;
+	max-width: 80%;
 }
 
 /* System Info page styles

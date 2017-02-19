@@ -274,6 +274,9 @@ class KBS_Articles_Query extends KBS_Stats {
 				$this->__set( 'meta_key', '_kbs_article_views' );
 				$this->__set( 'orderby', 'meta_value_num' );
 				break;
+
+			case 'date':
+				$this->__set( 'orderby', 'date' );
 		}
 	} // orderby
 

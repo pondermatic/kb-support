@@ -48,7 +48,7 @@ function kbs_dashboard_tickets_widget( ) {
  * @since	1.0
  * @return	void
  */
-function kbs_load_dashboard_tickets_widget( ) {
+function kbs_load_dashboard_tickets_widget() {
 
 	if ( ! current_user_can( apply_filters( 'kbs_dashboard_stats_cap', 'view_ticket_reports' ) ) ) {
 		die();
@@ -148,6 +148,50 @@ function kbs_load_dashboard_tickets_widget( ) {
 			</table>
 		</div>
 		<div style="clear: both"></div>
+        <?php do_action( 'kbs_ticket_summary_widget_after_stats', $stats ); ?>
+        <?php
+		$popular_articles_query = new KBS_Articles_Query( array(
+			'number'  => 5
+		) );
+
+		$popular_articles = $popular_articles_query->get_articles();
+
+		if ( $popular_articles ) : ?>
+		<div class="table popular_articles">
+			<table>
+				<thead>
+					<tr>
+						<td colspan="2">
+							<?php printf( __( 'Most Popular %s', 'kb-support' ), kbs_get_article_label_plural() ); ?>
+							<a href="<?php echo admin_url( 'edit.php?post_type=article' ); ?>">&nbsp;&ndash;&nbsp;<?php _e( 'View All', 'kb-support' ); ?></a>
+						</td>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+					foreach ( $popular_articles as $popular_article ) : ?>
+                    	<?php
+						$url   = get_permalink( $popular_article->ID );
+						$views = kbs_get_article_view_count( $popular_article->ID );
+						?>
+						<tr>
+							<td class="t popular">
+								<a href="<?php echo $url; ?>">
+									<?php echo get_the_title( $popular_article->ID ); ?>
+                                </a>
+								<?php printf(
+                                    _n( '(%s view)', '(%s views)', $views, 'kb-support' ),
+                                    number_format_i18n( $views )
+                                ); ?>
+							</td>
+						</tr>
+						<?php
+					endforeach; ?>
+				</tbody>
+			</table>
+		</div>
+		<?php endif; ?>
+		<?php do_action( 'kbs_ticket_summary_widget_after_popular_articles', $popular_articles ); ?>
     </div>
 
 	<?php
@@ -157,10 +201,11 @@ function kbs_load_dashboard_tickets_widget( ) {
 add_action( 'wp_ajax_kbs_load_dashboard_widget', 'kbs_load_dashboard_tickets_widget' );
 
 /**
- * Add ticket count to At a Glance widget
+ * Add ticket and article count to At a Glance widget
  *
  * @since	1.0
- * @return	void
+ * @param	arr		$items	Array of items
+ * @return	arr		Filtered Array of items
  */
 function kbs_dashboard_at_a_glance_widget( $items ) {
 

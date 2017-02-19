@@ -101,6 +101,27 @@ function kbs_article_user_can_access( $article, $user_id = 0 )	{
 } // kbs_article_user_can_access
 
 /**
+ * Agents access all articles regardless of restrictions.
+ *
+ * Hooks into kbs_article_restricted with an extremley low priority
+ * to overide all other functions that hook in.
+ *
+ * @since	1.0.2
+ * @param	bool	$can_view	Whether or not the user has access to the article
+ * @param	obj		$article	WP_Post object for the current article
+ * @param	int		$user_id	The User ID for the current user
+ * @return	bool	True if agents should have access
+ */
+function kbs_article_agents_all_access( $can_view, $article, $user_id )	{
+	if ( kbs_is_agent() )	{
+		$can_view = true;
+	}
+
+	return $can_view;
+} // kbs_article_agents_all_access
+add_filter( 'kbs_article_user_can_access', 'kbs_article_agents_all_access', 999999, 3 );
+
+/**
  * Exclude restricted posts.
  *
  * @since	1.0

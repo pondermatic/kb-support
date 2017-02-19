@@ -219,6 +219,7 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-logging.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-license-handler.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/article-actions.php';
+		require_once KBS_PLUGIN_DIR . 'includes/article/class-kbs-article-stats.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/class-kbs-articles-query.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/article-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/article-restricted.php';
@@ -251,6 +252,7 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-db-customer-meta.php';
 		require_once KBS_PLUGIN_DIR . 'includes/shortcodes.php';
 		require_once KBS_PLUGIN_DIR . 'includes/sla.php';
+		require_once KBS_PLUGIN_DIR . 'includes/widgets.php';
 
 		if ( is_admin() )	{
 			require_once KBS_PLUGIN_DIR . 'includes/admin/admin-pages.php';
