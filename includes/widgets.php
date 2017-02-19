@@ -174,7 +174,7 @@ class kbs_popular_articles_widget extends WP_Widget {
 		$instance['title']      = ( isset( $instance['title'] ) )      ? $instance['title']      : '';
 
 		$title  = apply_filters( 'widget_title', $instance['title'], $instance, $args['id'] );
-		$number = ! empty( absint( $instance['number'] ) ) ? absint( $instance['number'] ) : '0';
+		$number = ! empty( $instance['number'] ) ? absint( $instance['number'] ) : '0';
 		$views  = isset( $instance['views'] ) && $instance['views'] == 'on'           ? 1 : 0;
 
 		echo $args['before_widget'];
