@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: Helpdesk, Help Desk, Support, Customer Support, Service, Service Desk, ITIL, Support Helpdesk, Ticket, Ticket System, Support Tickets, Helpdesk Tickets, Knowledgebase, Knowledge Base, Service Level, SLA
 Requires at least: 4.1
 Tested up to: 4.8
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -94,6 +94,24 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.0.2 =
+
+**Sunday, 19th February 2017**
+
+**New**
+
+* Added KB Articles Categories front end widget
+* Added KB Popular Articles front end widget
+
+**Tweaks**
+
+* Added most popular articles to KBS Ticket Summary dahboard widget
+* Ensure agents always have access to restricted KB Articles
+
+**Bug Fixes**
+
+* Remove whitespace from start of file which may cause PHP notices with some server configurations
 
 = 1.0.1 =
 
