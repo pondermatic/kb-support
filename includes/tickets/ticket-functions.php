@@ -655,40 +655,6 @@ function kbs_record_submission_in_log( $ticket_id = 0, $form_id = 0, $submit_dat
 } // kbs_record_submission_in_log
 
 /**
- * Record Ticket Reply In Log
- *
- * Stores log information for a ticket replies.
- *
- * @since	1.0
- * @global	$kbs_logs
- * @param	int			$ticket_id		Ticket ID
- * @param	int			$reply_id		Reply ID
- * @param	arr			$reply_data		Reply data
- * @param	obj			$ticket			KBS_Ticket object
- * @return	void
-*/
-function kbs_record_reply_in_log( $ticket_id = 0, $reply_id = 0, $reply_data = array(), $ticket = null ) {
-	global $kbs_logs;
-
-	$log_data = array(
-		'post_parent'   => $ticket_id,
-		'log_type'      => 'reply',
-		'post_date'     => ! empty( $submit_date ) ? $submit_date : null,
-		'post_date_gmt' => ! empty( $submit_date ) ? get_gmt_from_date( $submit_date ) : null
-	);
-
-	$log_meta = array(
-		'reply_id'      => $reply_id,
-		'customer_id'   => isset( $reply_data['customer_id'] ) ? $reply_data['customer_id'] : $ticket->customer_id,
-		'agent_id'      => isset( $reply_data['agent_id'] )    ? $reply_data['agent_id']    : $ticket->agent_id,
-		'closed_ticket' => ! empty( $reply_data['close'] )     ? true                       : false
-	);
-
-	$kbs_logs->insert_log( $log_data, $log_meta );
-} // kbs_record_reply_in_log
-add_action( 'kbs_reply_to_ticket', 'kbs_record_reply_in_log', 10, 4 );
-
-/**
  * Record Ticket Note Action In Log
  *
  * Stores log information for a ticket notes.
@@ -1489,3 +1455,14 @@ function kbs_remove_notes_from_comment_counts( $stats, $post_id ) {
 	return $stats;
 } // kbs_remove_notes_from_comment_counts
 add_filter( 'wp_count_comments', 'kbs_remove_notes_from_comment_counts', 10, 2 );
+
+/**
+ * The post types to be deleted when a ticket is deleted.
+ *
+ * @since	1.0
+ * @return	arr		Array of post types to delete when a ticket is being deleted.
+ */
+function kbs_ticket_deleted_item_post_types()	{
+	$post_types = array( 'kbs_ticket_reply', 'kbs_log' );
+	return apply_filters( 'kbs_ticket_deleted_item_post_types', $post_types );
+} // kbs_ticket_deleted_item_post_types

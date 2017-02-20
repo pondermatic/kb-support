@@ -258,6 +258,14 @@ function kbs_get_notices( $notice = '', $notice_only = false )	{
 			'class'  => 'success',
 			'notice' => __( "Your support request has been successfully received. We'll be in touch as soon as possible.", 'kb-support' )
 		),
+		'ticket_closed' => array(
+			'class'  => 'success',
+			'notice' => sprintf( __( 'The %s was successfully closed', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
+		),
+		'ticket_close_failed' => array(
+			'class'  => 'error',
+			'notice' => sprintf( __( 'Could not close %s', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
+		),
 		'ticket_failed' => array(
 			'class'  => 'error',
 			'notice' => __( 'There was an error submitting your support request. Please try again', 'kb-support' )

@@ -73,6 +73,54 @@ function kbs_process_ticket_submission()	{
 add_action( 'init', 'kbs_process_ticket_submission' );
 
 /**
+ * When a customer closes a ticket via the {close_ticket} email tag.
+ *
+ * @since	1.0
+ * @return	void
+ */
+function kbs_customer_close_ticket_from_url()	{
+
+	if ( ! isset( $_GET['kbs_action'] ) || 'close_ticket' != $_GET['kbs_action'] )	{
+		return;
+	}
+
+	if ( empty( $_GET['key'] ) )	{
+		wp_die( __( 'Invalid action', 'kb-support' ) );
+	}
+
+	$ticket_post = kbs_get_ticket_by( 'key', $_GET['key'] );
+	if ( ! empty( $ticket_post->ID ) )	{
+		$ticket = new KBS_Ticket( $ticket_post->ID );
+	}
+
+	if ( ! empty( $ticket->ID ) )	{
+		$redirect = add_query_arg( 'ticket', $ticket->key, get_permalink( kbs_get_option( 'tickets_page' ) ) );
+
+		$reply_data = array(
+			'ticket_id'   => $ticket->ID,
+			'response'    => sprintf( __( 'Customer closed %s via URL', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+			'close'       => true,
+			'customer_id' => (int) $ticket->customer_id,
+			'author'      => 0
+		);
+
+		$reply_id = $ticket->add_reply( $reply_data );
+
+		if ( $reply_id )	{
+			$redirect = add_query_arg( 'kbs_notice', 'ticket_closed', $redirect );
+		} else	{
+			$redirect = add_query_arg( 'kbs_notice', 'ticket_close_failed', $redirect );
+		}
+
+	}
+
+	wp_safe_redirect( $redirect );
+	die();
+
+} // kbs_customer_close_ticket_from_url
+add_action( 'template_redirect', 'kbs_customer_close_ticket_from_url' );
+
+/**
  * When a reply is added by a customer.
  *
  * @since	1.0
@@ -139,6 +187,40 @@ function kbs_ticket_reply_added_action()	{
 
 } // kbs_ticket_reply_added_action
 add_action( 'init', 'kbs_ticket_reply_added_action' );
+
+/**
+ * Record Ticket Reply In Log
+ *
+ * Stores log information for a ticket replies.
+ *
+ * @since	1.0
+ * @global	$kbs_logs
+ * @param	int			$ticket_id		Ticket ID
+ * @param	int			$reply_id		Reply ID
+ * @param	arr			$reply_data		Reply data
+ * @param	obj			$ticket			KBS_Ticket object
+ * @return	void
+*/
+function kbs_record_reply_in_log( $ticket_id = 0, $reply_id = 0, $reply_data = array(), $ticket = null ) {
+	global $kbs_logs;
+
+	$log_data = array(
+		'post_parent'   => $ticket_id,
+		'log_type'      => 'reply',
+		'post_date'     => ! empty( $submit_date ) ? $submit_date : null,
+		'post_date_gmt' => ! empty( $submit_date ) ? get_gmt_from_date( $submit_date ) : null
+	);
+
+	$log_meta = array(
+		'reply_id'      => $reply_id,
+		'customer_id'   => isset( $reply_data['customer_id'] ) ? $reply_data['customer_id'] : $ticket->customer_id,
+		'agent_id'      => isset( $reply_data['agent_id'] )    ? $reply_data['agent_id']    : $ticket->agent_id,
+		'closed_ticket' => ! empty( $reply_data['close'] )     ? true                       : false
+	);
+
+	$kbs_logs->insert_log( $log_data, $log_meta );
+} // kbs_record_reply_in_log
+add_action( 'kbs_reply_to_ticket', 'kbs_record_reply_in_log', 10, 4 );
 
 /**
  * Assigns the currently logged in agent to the ticket if the current
@@ -313,14 +395,3 @@ function kbs_cleanup_after_deleting_ticket( $ticket_id = 0 )	{
 
 } // kbs_cleanup_after_deleting_ticket
 add_action( 'after_delete_post', 'kbs_cleanup_after_deleting_ticket' );
-
-/**
- * The post types to be deleted when a ticket is deleted.
- *
- * @since	1.0
- * @return	arr		Array of post types to delete when a ticket is being deleted.
- */
-function kbs_ticket_deleted_item_post_types()	{
-	$post_types = array( 'kbs_ticket_reply', 'kbs_log' );
-	return apply_filters( 'kbs_ticket_deleted_item_post_types', $post_types );
-} // kbs_ticket_deleted_item_post_types
