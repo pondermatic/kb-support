@@ -380,6 +380,11 @@ function kbs_setup_email_tags() {
 			'tag'         => 'ticket_admin_url',
 			'description' => __( 'Adds a URL so admins can access a ticket directly.', 'kb-support' ),
 			'function'    => 'kbs_email_tag_ticket_admin_url'
+		),
+		array(
+			'tag'         => 'close_ticket_url',
+			'description' => __( 'Adds a URL link that customers can click to close a ticket.', 'kb-support' ),
+			'function'    => 'kbs_email_tag_ticket_close_ticket_url'
 		)
 	);
 
@@ -671,8 +676,8 @@ function kbs_email_tag_reply_date( $ticket_id  ) {
 
 	if ( $reply )	{
 		$post_time = get_post_time( 'U', false, $reply->ID );
-	
-		return get_date_from_gmt( $post_time, get_option( 'date_format' ) );
+
+		return date_i18n( get_option( 'date_format' ), $post_time );
 	}
 } // kbs_email_tag_reply_date
 
@@ -690,7 +695,7 @@ function kbs_email_tag_reply_time( $ticket_id ) {
 	if ( $reply )	{
 		$post_time = get_post_time( 'U', false, $reply->ID );
 	
-		return get_date_from_gmt( $post_time, get_option( 'time_format' ) );
+		return date_i18n( get_option( 'time_format' ), $post_time );
 	}
 } // kbs_email_tag_reply_time
 
@@ -737,3 +742,19 @@ function kbs_email_tag_ticket_admin_url( $ticket_id ) {
 
 	return apply_filters( 'kbs_tag_ticket_url', '<a href="' . $url . '">' . $url . '</a>' );
 } // kbs_email_tag_ticket_admin_url
+
+/**
+ * Email template tag: close_ticket_url
+ * Adds a URL link so customers can close a ticket
+ *
+ * @since	1.0
+ * @param	int		$ticket_id
+ * @return	str		Close ticket URL
+ */
+function kbs_email_tag_ticket_close_ticket_url( $ticket_id ) {
+	$url = kbs_get_ticket_url( $ticket_id, false, true );
+	$url = remove_query_arg( 'kbs_action', $url );
+	$url = add_query_arg( 'kbs_action', 'close_ticket', $url );
+
+	return apply_filters( 'kbs_tag_close_ticket_url', '<a href="' . $url . '">' . $url . '</a>' );
+} // kbs_email_tag_ticket_close_ticket_url

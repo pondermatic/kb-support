@@ -547,6 +547,12 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
 
 	}
 
+	if ( empty( $ticket->key ) )	{
+		$auth_key  = defined( 'AUTH_KEY' ) ? AUTH_KEY : '';
+		$key = strtolower( md5( $ticket->email . date( 'Y-m-d H:i:s' ) . $auth_key . uniqid( 'kbs', true ) ) );
+		$ticket->__set( 'key', $key );
+	}
+
 	if ( ! empty( $_POST['ticket_status'] ) && $_POST['ticket_status'] != $post->post_status )	{
 		$ticket->__set( 'status', $_POST['ticket_status'] );
 	}
