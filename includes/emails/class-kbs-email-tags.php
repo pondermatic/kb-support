@@ -676,8 +676,8 @@ function kbs_email_tag_reply_date( $ticket_id  ) {
 
 	if ( $reply )	{
 		$post_time = get_post_time( 'U', false, $reply->ID );
-	
-		return get_date_from_gmt( $post_time, get_option( 'date_format' ) );
+
+		return date_i18n( get_option( 'date_format' ), $post_time );
 	}
 } // kbs_email_tag_reply_date
 
@@ -695,7 +695,7 @@ function kbs_email_tag_reply_time( $ticket_id ) {
 	if ( $reply )	{
 		$post_time = get_post_time( 'U', false, $reply->ID );
 	
-		return get_date_from_gmt( $post_time, get_option( 'time_format' ) );
+		return date_i18n( get_option( 'time_format' ), $post_time );
 	}
 } // kbs_email_tag_reply_time
 
