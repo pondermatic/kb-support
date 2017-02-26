@@ -456,7 +456,7 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 	<?php else :
 
 		$settings = apply_filters( 'kbs_ticket_reply_mce_settings', array(
-			'textarea_rows'    => 5,
+			'textarea_rows'    => 10,
 			'quicktags'        => true
 		) ); ?>
 
