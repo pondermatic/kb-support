@@ -23,16 +23,19 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function kbs_media_button()	{
 
-	if ( 'draft' == get_post_status() || 'auto-draft' == get_post_status() )	{
+	global $pagenow, $typenow;
+
+	if ( 'kbs_ticket' == $typenow && ( 'draft' == get_post_status() || 'auto-draft' == get_post_status() ) )	{
 		return;
 	}
 
-	global $pagenow, $typenow;
-
 	$output = '';
 
+	$post_types = array( 'kbs_ticket' );
+	$post_types = apply_filters( 'kbs_link_article_media_button_post_types', $post_types );
+
 	/** Only run in post/page creation and edit screens */
-	if ( in_array( $pagenow, array( 'post.php', 'page.php', 'post-new.php', 'post-edit.php' ) ) && 'kbs_ticket' == $typenow ) {
+	if ( in_array( $pagenow, array( 'post.php', 'page.php', 'post-new.php', 'post-edit.php' ) ) && in_array( $typenow, $post_types ) ) {
 
 		$img = '<span class="wp-media-buttons-icon dashicons dashicons-admin-links" id="kbs-media-button"></span> ';
 		$output = '<a href="#TB_inline?width=640&inlineId=choose-article" class="thickbox button kbs-thickbox" style="padding-left: .4em;">' . $img . sprintf( __( 'Link %s', 'kb-support' ), kbs_get_article_label_singular() ) . '</a>';
