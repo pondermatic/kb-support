@@ -28,7 +28,7 @@ function kbs_extensions_page()	{
 	$item           = 1;
 	$column         = 1;
 	?>
-	<div class="wrap">
+	<div class="wrap about-wrap kbs-about-wrapp">
 		<h1>
 			<?php _e( 'Extensions for KB Support', 'kb-support' ); ?>&nbsp;&nbsp;&nbsp;<a href="https://kb-support.com/extensions/" class="button-primary" target="_blank"><?php _e( 'Browse All Extensions', 'kb-support' ); ?></a>
 		</h1>
@@ -37,18 +37,8 @@ function kbs_extensions_page()	{
             <p><?php printf( __( '<em><strong>Remember</strong></em> to <a href="%s" target="_blank">sign up to our newsletter</a> and receive a 25%s discount off your next purchase from our <a href="%s" target="_blank">plugin store</a>.', 'kb-support' ), 'https://kb-support.com/#newsletter-signup', '%', $extensions_url ); ?></p>
 		</div>
 
-		<div id="kbs-extension-container">
+		<div class="kbs-extension-wrapper grid3">
 			<?php foreach ( $extensions as $key => $extension ) :
-
-				if ( $item == 5 )	{
-					$item = 1;
-				}
-
-				if ( $item == 1 )	{
-					$column = 1;
-				} elseif( $item == 3 )	{
-					$column = 2;
-				}
 
 				$slug  = $extension->info->slug;
 				$link  = 'https://kb-support.com/downloads/' . $slug .'/';
@@ -71,41 +61,26 @@ function kbs_extensions_page()	{
 				$excerpt_waste = array_pop( $the_excerpt );
 				$the_excerpt   = implode( $the_excerpt ); ?>
 
-				<?php if ( $item == 1 ) : ?>
-					<div class="kbs-extension-col-wrapper">
-				<?php endif; ?>
-
-					<?php if ( $item == 1 || $item == 3 ) : ?>
-						<div class="kbs-extension-col kbs-extension-col-<?php echo $item == 1 ? 1 : 2; ?>">
-					<?php endif; ?>
-
-						<div class="kbs-extension-item">
-							<div class="kbs-extension-item-img">
-								<a href="<?php echo $link; ?>" target="_blank"><img src="<?php echo $extension->info->thumbnail; ?>" /></a>
-							</div>
-							<div class="kbs-extension-item-desc">
-								<p class="kbs-extension-item-heading"><?php echo $extension->info->title; ?></p>
-								<p><?php echo $the_excerpt; ?></p>
-								<div class="kbs-extension-buy-now">
-                                	<?php if ( ! ( is_plugin_active( 'kbs-' . $slug . '/' . 'kbs-' . $slug . '.php' ) ) ) : ?>
-										<a href="<?php echo $link; ?>" class="button-primary" target="_blank"><?php printf( __( 'Buy Now from %s', 'kb-support' ), $price ); ?></a>
-									<?php else : ?>
-                                        <span class="button-primary"><?php _e( 'Already Installed', 'kb-support' ); ?></a>
-                                    <?php endif; ?>
-								</div>
-							</div>
-						</div>
-
-					<?php if ( $item == 2 || $item == 4 ) : // Close kbs-extension-col kbs-extension-col- ?>
-						</div>
-					<?php endif; ?>
-
-				<?php if ( $item == 4 ) : // Close kbs-extension-col-wrapper ?>
-					</div>
-				<?php endif; ?>
-
-				<?php $item++; ?>
-
+                <article class="col">
+                    <div class="kbs-extension-item">
+                        <div class="kbs-extension-item-img">
+                            <a href="<?php echo $link; ?>" target="_blank"><img src="<?php echo $extension->info->thumbnail; ?>" /></a>
+                        </div>
+                        <div class="kbs-extension-item-desc">
+                            <p class="kbs-extension-item-heading"><?php echo $extension->info->title; ?></p>
+                            <div class="kbs-extension-item-excerpt">
+                            	<p><?php echo $the_excerpt; ?></p>
+                            </div>
+                            <div class="kbs-extension-buy-now">
+                                <?php if ( ! is_plugin_active( 'kbs-' . $slug . '/' . 'kbs-' . $slug . '.php' ) ) : ?>
+                                    <a href="<?php echo $link; ?>" class="button-primary" target="_blank"><?php printf( __( 'Buy Now from %s', 'kb-support' ), $price ); ?></a>
+                                <?php else : ?>
+                                    <p class="button-primary"><?php _e( 'Already Installed', 'kb-support' ); ?></p>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                </article>
 			<?php endforeach; ?>
 		</div>
 	</div>
