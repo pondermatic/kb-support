@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) )
 function kbs_add_options_link() {
 
 	global $kbs_companies_page, $kbs_customers_page, $kbs_settings_page, $kbs_tools_page,
-	$kbs_upgrades_screen;
+	$kbs_extensions_page, $kbs_upgrades_screen;
 
 	$customer_view_role  = apply_filters( 'kbs_view_customers_role', 'view_ticket_reports' );
 
@@ -35,6 +35,8 @@ function kbs_add_options_link() {
 	$kbs_settings_page   = add_submenu_page( 'edit.php?post_type=kbs_ticket', __( 'KB Support Settings', 'kb-support' ), __( 'Settings', 'kb-support' ), 'manage_ticket_settings', 'kbs-settings', 'kbs_options_page' );
 
 	$kbs_tools_page      = add_submenu_page( 'edit.php?post_type=kbs_ticket', __( 'Tools', 'kb-support' ), __( 'Tools', 'kb-support' ), 'manage_ticket_settings', 'kbs-tools', 'kbs_tools_page' );
+
+	$kbs_extensions_page = add_submenu_page( 'edit.php?post_type=kbs_ticket', __( 'KB Support Extensions', 'kb-support' ),  __( 'Extensions', 'kb-support' ), 'manage_ticket_settings', 'kbs-extensions', 'kbs_extensions_page' );
 
 	$kbs_upgrades_screen = add_submenu_page( null, __( 'KBS Upgrades', 'kb-support' ), __( 'KBS Upgrades', 'kb-support' ), 'manage_ticket_settings', 'kbs-upgrades', 'kbs_upgrades_screen' );
 

@@ -103,10 +103,12 @@ if ( kbs_get_option( 'remove_on_uninstall' ) )	{
 
 	// Remove Cron Task Hooks
 	wp_clear_scheduled_hook( 'kbs_hourly_scheduled_events' );
+	wp_clear_scheduled_hook( 'kbs_twice_daily_scheduled_events' );
 	wp_clear_scheduled_hook( 'kbs_daily_scheduled_events' );
 	wp_clear_scheduled_hook( 'kbs_weekly_scheduled_events' );
 
 	// Remove any transients and options we've left behind
+	delete_transient( 'kbsupport_extensions_feed' );
 	$wpdb->query( "DELETE FROM $wpdb->options WHERE option_name LIKE '\_transient\_kbs\_%'" );
 	$wpdb->query( "DELETE FROM $wpdb->options WHERE option_name LIKE '\_transient\_timeout\_kbs\_%'" );
 
