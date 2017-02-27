@@ -608,29 +608,88 @@ td.kbs_article_label {
 	}
 }
 
-/* Addons page Styles
+/* Extensions page Styles
 -------------------------------------------------------------- */
-#kbs-extension-container	{
-	width: 100%;
-	position: relative;
+.kbs-extension-wrapper {
+	overflow: hidden;
 }
 
-#kbs-extension-card-container {
-    text-align: center;
+.col {
+	background: #eee;
+	float: left;
+	margin-left: 3.2%;
+	margin-bottom: 30px;
+}
+.fullwidth .col {
+	float: none;
+	margin-left: 0;
 }
 
-.kbs-extension-col-wrapper {
-  display: inline-block;
-  margin: 0 -5px 0 0;
-  width: 49%;
-  vertical-align: top;
+.grid4 .col {
+	width: 22.6%;
 }
 
-.kbs-extension-col {
-  display: inline-block;
-  margin: 0 -5px -5px 0;
-  width: 50%;
-  vertical-align: top;
+.grid3 .col {
+	width: 31.2%;
+}
+
+.grid2 .col {
+	width: 48.4%;
+}
+/* clear col */
+.grid4 .col:nth-of-type(4n+1),
+.grid3 .col:nth-of-type(3n+1),
+.grid2 .col:nth-of-type(2n+1) {
+	margin-left: 0;
+	clear: left;
+}
+
+@media screen and (max-width: 740px) {
+	.grid4 .col {
+		width: 31.2%;
+	}
+	.grid4 .col:nth-of-type(4n+1) {
+		margin-left: 3.2%;
+		clear: none;
+	}
+	.grid4 .col:nth-of-type(3n+1) {
+		margin-left: 0;
+		clear: left;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	.grid4 .col {
+		width: 48.4%;
+	}
+	.grid4 .col:nth-of-type(3n+1) {
+		margin-left: 3.2%;
+		clear: none;
+	}
+	.grid4 .col:nth-of-type(2n+1) {
+		margin-left: 0;
+		clear: left;
+	}
+
+	.grid3 .col {
+		width: 48.4%;
+	}
+	.grid3 .col:nth-of-type(3n+1) {
+		margin-left: 3.2%;
+		clear: none;
+	}
+	.grid3 .col:nth-of-type(2n+1) {
+		margin-left: 0;
+		clear: left;
+	}
+}
+
+@media screen and (max-width: 400px) {
+	.col {
+		width: 100% !important;
+		margin-left: 0 !important;
+		clear: none !important;
+	}
 }
 
 .kbs-extension-item {
@@ -674,45 +733,12 @@ td.kbs_article_label {
   font-size: 16px;
 }
 
-@media (max-width: 1550px) {
-  
-  .kbs-extension-col-wrapper {
-    width: 40%;
-  }
- 
-  .kbs-extension-col-1, .kbs-extension-col-2 {
-    width: 100%;
-    display: block;
-  }
-  
-}
-
-@media (max-width: 985px) {
-  
-  .kbs-extension-col-wrapper {
-    width: 48%;
-  }
-  
-}
-
-@media (max-width: 675px) {
-  
-  .kbs-extension-col-wrapper {
-    width: 75%;
-  }
-  
-}
-
-@media (max-width: 525px) {
-  
-  .kbs-extension-col-wrapper {
-    width: 96%;
-  }
-  
+.kbs-extension-item-excerpt	{
+	height: 100px;
 }
 
 .kbs-extension-buy-now {
-	padding-top: 8px;
+	padding-top: 20px;
 	text-align: center !important;
 	font-weight: normal;
 }
