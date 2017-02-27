@@ -59,7 +59,7 @@ class KBS_Welcome {
 		$this->article_plural   = kbs_get_article_label_plural();
 
 		add_action( 'admin_menu', array( $this, 'admin_menus') );
-		add_action( 'admin_head', array( $this, 'admin_head' ) );
+		//add_action( 'admin_head', array( $this, 'admin_head' ) );
 		add_action( 'admin_init', array( $this, 'welcome'    ) );
 	} // __construct
 
