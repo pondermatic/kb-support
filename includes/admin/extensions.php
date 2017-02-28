@@ -21,12 +21,10 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function kbs_extensions_page()	{
 	setlocale( LC_MONETARY, get_locale() );
-	$extensions_url = 'https://kb-support.com/extensions/';
+	$extensions_url = 'https://kb-support.com/downloads/';
 	$extensions     = kbs_get_extensions();
 	$tags           = '<a><em><strong><blockquote><ul><ol><li><p>';
 	$length         = 55;
-	$item           = 1;
-	$column         = 1;
 	?>
 	<div class="wrap about-wrap kbs-about-wrapp">
 		<h1>
@@ -95,9 +93,9 @@ function kbs_extensions_page()	{
  * @return	void
  */
 function kbs_get_extensions()	{
-	$extensions = get_transient( 'kbsupport_extensions_feed' );
+	$extensions = get_transient( '_kbs_extensions_feed' );
 
-	if ( false === $extensions || doing_action( 'kbs_twice_daily_scheduled_events' ) )	{
+	if ( false === $extensions || doing_action( 'kbs_daily_scheduled_events' ) )	{
 		$route    = esc_url( 'https://kb-support.com/edd-api/products/' );
 		$number   = 20;
 		$endpoint = add_query_arg( array( 'number' => $number ), $route );
@@ -108,7 +106,7 @@ function kbs_get_extensions()	{
 			$content = json_decode( $body );
 	
 			if ( is_object( $content ) && isset( $content->products ) ) {
-				set_transient( 'kbsupport_extensions_feed', $content->products, DAY_IN_SECONDS / 2 ); // Store for 12 hours
+				set_transient( '_kbs_extensions_feed', $content->products, DAY_IN_SECONDS / 2 ); // Store for 12 hours
 				$extensions = $content->products;
 			}
 		}
@@ -116,4 +114,4 @@ function kbs_get_extensions()	{
 
 	return $extensions;
 } // kbs_get_extensions
-add_action( 'kbs_twice_daily_scheduled_events', 'kbs_get_extensions' );
+add_action( 'kbs_daily_scheduled_events', 'kbs_get_extensions' );

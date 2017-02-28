@@ -593,7 +593,7 @@ td.kbs_article_label {
 	list-style-type: disc;
 	padding-left: 20px;
 }
-/* responsive */
+
 @media all and ( max-width: 782px ) {
 	.kbs-about-wrap .feature-section-content,
 	.kbs-about-wrap .feature-section-media {
@@ -636,7 +636,7 @@ td.kbs_article_label {
 .grid2 .col {
 	width: 48.4%;
 }
-/* clear col */
+
 .grid4 .col:nth-of-type(4n+1),
 .grid3 .col:nth-of-type(3n+1),
 .grid2 .col:nth-of-type(2n+1) {

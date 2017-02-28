@@ -33,7 +33,7 @@ class KBS_Cron	{
 	public function add_schedules( $schedules = array() )	{
 		// Adds once weekly to the existing schedules.
 		$schedules['weekly'] = array(
-			'interval' => 604800,
+			'interval' => WEEK_IN_SECONDS,
 			'display'  => __( 'Once Weekly', 'kb-support' )
 		);
 
@@ -48,7 +48,6 @@ class KBS_Cron	{
 	 */
 	public function schedule_events() {
 		//$this->hourly_events();
-		$this->twice_daily_events();
 		$this->daily_events();
 		$this->weekly_events();
 	} // schedule_events
@@ -61,21 +60,9 @@ class KBS_Cron	{
 	 */
 	private function hourly_events() {
 		if ( ! wp_next_scheduled( 'kbs_hourly_scheduled_events' ) )	{
-			wp_schedule_event( current_time( 'timestamp', true ), 'daily', 'kbs_hourly_scheduled_events' );
+			wp_schedule_event( current_time( 'timestamp', true ), 'hourly', 'kbs_hourly_scheduled_events' );
 		}
 	} // hourly_events
-
-	/**
-	 * Schedule twice daily events
-	 *
-	 * @since	1.0.3
-	 * @return	void
-	 */
-	private function twice_daily_events() {
-		if ( ! wp_next_scheduled( 'kbs_twice_daily_scheduled_events' ) )	{
-			wp_schedule_event( current_time( 'timestamp', true ), 'twicedaily', 'kbs_twice_daily_scheduled_events' );
-		}
-	} // twice_daily_events
 
 	/**
 	 * Schedule daily events
@@ -97,7 +84,7 @@ class KBS_Cron	{
 	 */
 	private function weekly_events() {
 		if ( ! wp_next_scheduled( 'kbs_weekly_scheduled_events' ) )	{
-			wp_schedule_event( current_time( 'timestamp', true ), 'daily', 'kbs_weekly_scheduled_events' );
+			wp_schedule_event( current_time( 'timestamp', true ), 'weekly', 'kbs_weekly_scheduled_events' );
 		}
 	} // weekly_events
 
