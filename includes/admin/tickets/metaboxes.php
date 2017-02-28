@@ -242,11 +242,26 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
 
             </div><!-- #minor-publishing-actions -->
             <div id="kbs-ticket-actions">
-                <p><label for="ticket_status"><?php _e( 'Status:', 'kb-support' ); ?></label>
+
+				<?php if ( $kbs_ticket_update ) : ?>
+
+                    <p><label><?php _e( 'Received', 'kb-support' ); ?>:</label>
+                        <?php echo date_i18n( get_option( 'date_format' ), strtotime( $kbs_ticket->date ) ); ?>
+                    </p>
+    
+                    <?php if ( $kbs_ticket->date != $kbs_ticket->modified_date ) : ?>
+                        <p><label><?php _e( 'Updated', 'kb-support' ); ?>:</label>
+                            <?php echo date_i18n( get_option( 'date_format' ), strtotime( $kbs_ticket->modified_date ) ); ?>
+                        </p>
+                    <?php endif; ?>
+
+				<?php endif; ?>
+
+                <p><label for="ticket_status"><?php _e( 'Status', 'kb-support' ); ?>:</label>
                     <?php echo KBS()->html->ticket_status_dropdown( 'ticket_status', $kbs_ticket->post_status ); ?>
                 </p>
 
-                <p><label for="kbs_customer_id"><?php _e( 'Customer:', 'kb-support' ); ?></label>
+                <p><label for="kbs_customer_id"><?php _e( 'Customer', 'kb-support' ); ?>:</label>
 					<?php echo KBS()->html->customer_dropdown( array(
                         'name'     => 'kbs_customer_id',
                         'selected' => $kbs_ticket->customer_id,
@@ -254,7 +269,7 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
                     ) ); ?>
                 </p>
 
-                <p><label for="kbs_agent_id"><?php _e( 'Agent:', 'kb-support' ); ?></label>
+                <p><label for="kbs_agent_id"><?php _e( 'Agent', 'kb-support' ); ?>:</label>
 					<?php echo KBS()->html->agent_dropdown( 'kbs_agent_id', ( ! empty( $kbs_ticket->agent_id ) ? $kbs_ticket->agent_id : get_current_user_id() ) ); ?>
                 </p>
 
