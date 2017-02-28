@@ -190,6 +190,8 @@ function kbs_get_company_logo( $company )	{
 	if ( is_numeric( $company ) )	{
 		$company = new KBS_Company( $company );
 	}
-	
-	return $company->logo;
+
+	if ( ! empty( $company ) )	{
+		return $company->logo;
+	}
 } // kbs_get_company_logo
