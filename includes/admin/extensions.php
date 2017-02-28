@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function kbs_extensions_page()	{
 	setlocale( LC_MONETARY, get_locale() );
-	$extensions_url = 'https://kb-support.com/extensions/';
+	$extensions_url = 'https://kb-support.com/downloads/';
 	$extensions     = kbs_get_extensions();
 	$tags           = '<a><em><strong><blockquote><ul><ol><li><p>';
 	$length         = 55;
