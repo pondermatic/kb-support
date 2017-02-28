@@ -293,3 +293,17 @@ function kbs_install_roles_on_network() {
 
 } // kbs_install_roles_on_network
 add_action( 'admin_init', 'kbs_install_roles_on_network' );
+
+/**
+ * Deactivate
+ *
+ * Runs on plugin deactivation to remove scheduled tasks.
+ *
+ * @since	1.0
+ * @return	void
+ */
+function kbs_deactivate_plugin()	{
+	$kbs_cron = new KBS_Cron;
+	$kbs_cron->unschedule_events();
+} // kbs_deactivate_plugin
+register_deactivation_hook( KBS_PLUGIN_FILE, 'kbs_deactivate_plugin' );

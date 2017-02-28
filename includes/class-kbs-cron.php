@@ -88,6 +88,20 @@ class KBS_Cron	{
 		}
 	} // weekly_events
 
+	/**
+	 * Unschedule events.
+	 *
+	 * Runs on plugin deactivation.
+	 *
+	 * @since	1.0.3
+	 * @return	void
+	 */
+	public function unschedule_events()	{
+		wp_clear_scheduled_hook( 'kbs_hourly_scheduled_events' );
+		wp_clear_scheduled_hook( 'kbs_daily_scheduled_events' );
+		wp_clear_scheduled_hook( 'kbs_weekly_scheduled_events' );
+	} // unschedule_events
+
 } // KBS_Cron
 
 new KBS_Cron;
