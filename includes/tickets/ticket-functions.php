@@ -496,7 +496,6 @@ function kbs_add_ticket( $ticket_data )	{
 		$category = array_map( 'intval', $ticket_data['post_category'] );
 	}
 
-
 	$ticket->status           = ! empty( $ticket_data['status'] )          ? $ticket_data['status']                : 'new';
 	$ticket->ticket_title     = $ticket_data['post_title'];
 	$ticket->ticket_content   = $ticket_data['post_content'];
