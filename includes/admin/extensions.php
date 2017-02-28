@@ -25,8 +25,6 @@ function kbs_extensions_page()	{
 	$extensions     = kbs_get_extensions();
 	$tags           = '<a><em><strong><blockquote><ul><ol><li><p>';
 	$length         = 55;
-	$item           = 1;
-	$column         = 1;
 	?>
 	<div class="wrap about-wrap kbs-about-wrapp">
 		<h1>
