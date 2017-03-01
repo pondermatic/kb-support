@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: Helpdesk, Help Desk, Support, Customer Support, Service, Service Desk, ITIL, Support Helpdesk, Ticket, Ticket System, Support Tickets, Helpdesk Tickets, Knowledgebase, Knowledge Base, Service Level, SLA
 Requires at least: 4.1
 Tested up to: 4.8
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -94,6 +94,33 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.0.3 =
+
+**Wednesday, 1st March 2017**
+
+**New**
+
+* Added logged date/time and updated date/time to update ticket metabox
+* Added template tag `{close_ticket_url}` enabling 1-click ticket closures by customers
+* Added filter `kbs_validate_customer_reply_email`
+* Validate customers by `customer->id` property rather than `customer->user_id` property
+* Search for existing WP users during submission and link to customer account if found
+* Added KB Support extensions page
+
+**Tweaks**
+
+* Increased the height of the reply editor on edit ticket screen
+* Remove scheduled task jobs during plugin deactivation
+* Use WP constants to define time periods for scheduled tasks
+* Moved welcome page CSS to kbs-admin.css file
+
+**Bug Fixes**
+
+* Ensure a ticket key is created when a ticket is submitted via admin
+* Corrected scheduled task periods
+* Potential PHP warning if company does not have a logo uploaded
+* Corrected variable name `$kbs_tools_page`
 
 = 1.0.2 =
 

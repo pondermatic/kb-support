@@ -245,13 +245,15 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
 
 				<?php if ( $kbs_ticket_update ) : ?>
 
+					<?php $date_format = get_option( 'date_format' ) . ' ' . get_option( 'time_format' ); ?>
+
                     <p><label><?php _e( 'Received', 'kb-support' ); ?>:</label>
-                        <?php echo date_i18n( get_option( 'date_format' ), strtotime( $kbs_ticket->date ) ); ?>
+                        <?php echo date_i18n( $date_format, strtotime( $kbs_ticket->date ) ); ?>
                     </p>
     
                     <?php if ( $kbs_ticket->date != $kbs_ticket->modified_date ) : ?>
                         <p><label><?php _e( 'Updated', 'kb-support' ); ?>:</label>
-                            <?php echo date_i18n( get_option( 'date_format' ), strtotime( $kbs_ticket->modified_date ) ); ?>
+                            <?php echo date_i18n( $date_format, strtotime( $kbs_ticket->modified_date ) ); ?>
                         </p>
                     <?php endif; ?>
 
