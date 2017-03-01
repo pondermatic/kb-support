@@ -543,6 +543,16 @@ class KBS_Ticket {
 					'website'          => isset( $this->user_info['website'] )          ? $this->user_info['website']          : ''
 				);
 
+				if ( empty( $customer_data['user_id'] ) )	{
+					$user = get_user_by( 'email', $this->email );
+
+					if ( $user )	{
+						$this->user_id            = $user->ID;
+						$customer_data['user_id'] = $this->user_id;
+						$this->pending['user_id'] = $this->user_id;
+					}
+				}
+
 				$customer->create( $customer_data );
 
 			}

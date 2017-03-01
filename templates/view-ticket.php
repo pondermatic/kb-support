@@ -20,17 +20,17 @@ if ( ! empty( $ticket->ID ) ) :
 
 	$ticket       = new KBS_Ticket( $ticket->ID );
 	$use_user_id  = false;
-	$user_id      = $ticket->user_id;
+	$customer_id  = $ticket->customer_id;
 	$status_class = '';
 
 	if ( is_user_logged_in() ) :
 		$use_user_id = true;
-		$user_id     = $current_user->ID;
+		$customer_id = $current_user->ID;
 	endif;
 
-	$customer = new KBS_Customer( $user_id, $use_user_id ); ?>
+	$customer = new KBS_Customer( $customer_id, $use_user_id ); ?>
 
-	<?php if ( $user_id != $ticket->user_id ) : ?>
+	<?php if ( empty( $customer->id ) || $customer->id != $ticket->customer_id ) : ?>
 
     	<?php echo kbs_display_notice( 'invalid_customer' ); ?>
 
