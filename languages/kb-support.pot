@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KB Support 1.0.2\n"
 "Report-Msgid-Bugs-To: https://kb-support.com/\n"
-"POT-Creation-Date: 2017-02-27 22:58:22+00:00\n"
+"POT-Creation-Date: 2017-03-01 00:13:13+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -504,8 +504,9 @@ msgid "Website"
 msgstr ""
 
 #: includes/admin/customers/class-kbs-customer-table.php:73
+#: includes/admin/tickets/metaboxes.php:264
 #: includes/admin/tickets/tickets.php:31
-#: includes/tickets/ticket-functions.php:1213
+#: includes/tickets/ticket-functions.php:1212
 msgid "Customer"
 msgstr ""
 
@@ -520,7 +521,7 @@ msgstr ""
 
 #: includes/admin/customers/class-kbs-customer-table.php:159
 #: includes/admin/forms/metaboxes.php:220
-#: includes/tickets/ticket-functions.php:1344
+#: includes/tickets/ticket-functions.php:1343
 msgid "Delete"
 msgstr ""
 
@@ -665,7 +666,7 @@ msgid "Nonce verification failed."
 msgstr ""
 
 #: includes/admin/customers/customer-actions.php:291
-#: includes/ajax-functions.php:466
+#: includes/ajax-functions.php:469
 msgid "Invalid email address."
 msgstr ""
 
@@ -831,7 +832,8 @@ msgstr ""
 
 #: includes/admin/customers/customers-page.php:457
 #: includes/admin/customers/customers-page.php:484
-#: templates/ticket-history.php:22 templates/view-ticket.php:85
+#: includes/admin/tickets/metaboxes.php:260 templates/ticket-history.php:22
+#: templates/view-ticket.php:85
 msgid "Status"
 msgstr ""
 
@@ -899,32 +901,32 @@ msgid_plural "(%s views)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/admin/extensions.php:33
+#: includes/admin/extensions.php:31
 msgid "Extensions for KB Support"
 msgstr ""
 
-#: includes/admin/extensions.php:33
+#: includes/admin/extensions.php:31
 msgid "Browse All Extensions"
 msgstr ""
 
-#: includes/admin/extensions.php:36
+#: includes/admin/extensions.php:34
 msgid ""
 "These extensions <em><strong>add even more functionality</strong></em> to "
 "your KB Support help desk."
 msgstr ""
 
-#: includes/admin/extensions.php:37
+#: includes/admin/extensions.php:35
 msgid ""
 "<em><strong>Remember</strong></em> to <a href=\"%s\" target=\"_blank\">sign "
 "up to our newsletter</a> and receive a 25%s discount off your next purchase "
 "from our <a href=\"%s\" target=\"_blank\">plugin store</a>."
 msgstr ""
 
-#: includes/admin/extensions.php:76
+#: includes/admin/extensions.php:74
 msgid "Buy Now from %s"
 msgstr ""
 
-#: includes/admin/extensions.php:78
+#: includes/admin/extensions.php:76
 msgid "Already Installed"
 msgstr ""
 
@@ -1772,7 +1774,7 @@ msgid "The label for the %s reply form submit button."
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:328
-#: includes/admin/tickets/metaboxes.php:480 includes/template-functions.php:50
+#: includes/admin/tickets/metaboxes.php:495 includes/template-functions.php:50
 #: templates/view-ticket.php:217
 msgid "Reply"
 msgstr ""
@@ -2731,7 +2733,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/tickets/contextual-help.php:80 includes/admin/welcome.php:407
-#: includes/tickets/ticket-functions.php:1164
+#: includes/tickets/ticket-functions.php:1163
 msgid "Create %s"
 msgstr ""
 
@@ -2788,7 +2790,7 @@ msgid "Create"
 msgstr ""
 
 #: includes/admin/tickets/metaboxes.php:82
-#: includes/admin/tickets/metaboxes.php:267
+#: includes/admin/tickets/metaboxes.php:282
 msgid "Update"
 msgstr ""
 
@@ -2800,70 +2802,67 @@ msgstr ""
 msgid "Reply to %1$s"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:245
-msgid "Status:"
+#: includes/admin/tickets/metaboxes.php:248
+msgid "Received"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:249
-msgid "Customer:"
+#: includes/admin/tickets/metaboxes.php:253
+msgid "Updated"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:257
-msgid "Agent:"
+#: includes/admin/tickets/metaboxes.php:272
+#: includes/admin/tickets/tickets.php:34
+#: includes/tickets/ticket-functions.php:1205 templates/view-ticket.php:101
+msgid "Agent"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:263
+#: includes/admin/tickets/metaboxes.php:278
 msgid "Back to %s"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:267
+#: includes/admin/tickets/metaboxes.php:282
 msgid "Add"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:319
+#: includes/admin/tickets/metaboxes.php:334
 #: includes/admin/tickets/tickets.php:38
 msgid "SLA Status"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:370
+#: includes/admin/tickets/metaboxes.php:385
 msgid "Submitted Form Data"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:370
+#: includes/admin/tickets/metaboxes.php:385
 msgid "View Form Submission Data"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:403
+#: includes/admin/tickets/metaboxes.php:418
 msgid "Attached Files"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:450
+#: includes/admin/tickets/metaboxes.php:465
 msgid "This %1$s is currently closed. <a href=\"%2$s\">Re-open %3$s.</a>"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:464
+#: includes/admin/tickets/metaboxes.php:479
 msgid "Add a New Reply"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:481
+#: includes/admin/tickets/metaboxes.php:496
 msgid "Reply and Close"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:525
+#: includes/admin/tickets/metaboxes.php:540
 msgid "Add a New Note"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:529
+#: includes/admin/tickets/metaboxes.php:544
 msgid "Notes are only visible to support workers"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:542
+#: includes/admin/tickets/metaboxes.php:557
 msgid "Add Note"
-msgstr ""
-
-#: includes/admin/tickets/tickets.php:34
-#: includes/tickets/ticket-functions.php:1206 templates/view-ticket.php:101
-msgid "Agent"
 msgstr ""
 
 #: includes/admin/tickets/tickets.php:174
@@ -3332,23 +3331,23 @@ msgstr ""
 msgid "No valid changelog was found."
 msgstr ""
 
-#: includes/ajax-functions.php:459
+#: includes/ajax-functions.php:462
 msgid "Please enter a customer name."
 msgstr ""
 
-#: includes/ajax-functions.php:494
+#: includes/ajax-functions.php:497
 msgid "Customer email address already exists for customer #%s &ndash; %s."
 msgstr ""
 
-#: includes/ajax-functions.php:503
+#: includes/ajax-functions.php:506
 msgid "Could not create customer."
 msgstr ""
 
-#: includes/ajax-functions.php:548
+#: includes/ajax-functions.php:551
 msgid "No users found"
 msgstr ""
 
-#: includes/ajax-functions.php:609
+#: includes/ajax-functions.php:612
 msgid "View all %d possible solutions."
 msgstr ""
 
@@ -4457,23 +4456,23 @@ msgstr ""
 msgid "New %s"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:868
+#: includes/tickets/class-kbs-ticket.php:878
 msgid "Show more&hellip;"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:1432
+#: includes/tickets/class-kbs-ticket.php:1442
 msgid "ago"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:1452
+#: includes/tickets/class-kbs-ticket.php:1462
 msgid "Source could not be found"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:1557
+#: includes/tickets/class-kbs-ticket.php:1567
 msgid "Form: %s"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:1576
+#: includes/tickets/class-kbs-ticket.php:1586
 msgid "Term %s no longer exists"
 msgstr ""
 
@@ -4498,21 +4497,21 @@ msgstr ""
 msgid "Other"
 msgstr ""
 
-#: includes/tickets/ticket-functions.php:1015
+#: includes/tickets/ticket-functions.php:1014
 msgid "%s re-opened."
 msgstr ""
 
-#: includes/tickets/ticket-functions.php:1158
+#: includes/tickets/ticket-functions.php:1157
 msgid "attached file"
 msgid_plural "attached files"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/tickets/ticket-functions.php:1200
+#: includes/tickets/ticket-functions.php:1199
 msgid "Unknown"
 msgstr ""
 
-#: includes/tickets/ticket-functions.php:1328
+#: includes/tickets/ticket-functions.php:1327
 msgid "KBS Bot"
 msgstr ""
 
