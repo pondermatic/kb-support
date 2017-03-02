@@ -194,6 +194,15 @@ function kbs_display_notice( $m )	{
  */
 function kbs_get_notices( $notice = '', $notice_only = false )	{
 	$notices = array(
+		'agent_cannot_submit' => array(
+			'class'  => 'info',
+			'notice' => sprintf(
+				__( 'Support Workers cannot submit %s here. Please go to your <a href="%s">admin panel</a> to open a new %s.', 'kb-support' ),
+				kbs_get_ticket_label_plural( true ),
+				admin_url( 'post-new.php?post_type=kbs_ticket' ),
+				kbs_get_ticket_label_singular( true )
+			)
+		),
 		'need_login' => array(
 			'class'  => 'info',
 			'notice' => sprintf( __( 'You must be logged in to create a support %s.', 'kb-support' ), kbs_get_ticket_label_singular( true ) )

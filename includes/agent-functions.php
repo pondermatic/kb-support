@@ -65,6 +65,29 @@ function kbs_is_agent( $agent_id = 0 )	{
 } // kbs_is_agent
 
 /**
+ * Whether or not an agent can submit a ticket from the front end.
+ *
+ * @since	1.0.4
+ * @return	bool	True if an agent can submit a ticket, otherwise false
+ */
+function kbs_agent_can_submit( $can_submit )	{
+
+	if ( kbs_is_agent() )	{
+		$can_submit = apply_filters( 'kbs_agent_can_submit', false );
+
+		add_action( 'kbs_user_cannot_submit', function() {
+			ob_start();
+			echo kbs_display_notice( 'agents_cannot_submit' );
+			echo ob_get_clean();
+		} );
+	}
+
+	return $can_submit;
+
+} // kbs_agent_can_submit
+add_filter( 'kbs_user_can_submit', 'kbs_agent_can_submit', 999 );
+
+/**
  * Whether or not an agent can view the ticket.
  *
  * @since	1.0
