@@ -194,7 +194,7 @@ function kbs_display_notice( $m )	{
  */
 function kbs_get_notices( $notice = '', $notice_only = false )	{
 	$notices = array(
-		'agent_cannot_submit' => array(
+		'agents_cannot_submit' => array(
 			'class'  => 'info',
 			'notice' => sprintf(
 				__( 'Support Workers cannot submit %s here. Please go to your <a href="%s">admin panel</a> to open a new %s.', 'kb-support' ),
