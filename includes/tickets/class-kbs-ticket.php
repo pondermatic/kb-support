@@ -516,7 +516,7 @@ class KBS_Ticket {
 
 			$customer = new stdClass;
 
-			if ( did_action( 'kbs_pre_process_ticket' ) && is_user_logged_in() ) {
+			if ( did_action( 'kbs_pre_process_ticket' ) && is_user_logged_in() && ! kbs_is_agent() ) {
 
 				$customer = new KBS_Customer( get_current_user_id(), true );
 
