@@ -754,7 +754,7 @@ function kbs_display_form_text_field( $field, $settings )	{
 		$class = 'kbs-article-search ' . $class;
 	}
 
-	if ( ! empty( $settings['mapping'] ) && is_user_logged_in() )	{
+	if ( ! empty( $settings['mapping'] ) && is_user_logged_in() && ! kbs_is_agent() )	{
 		$user_id = get_current_user_id();
 
 		if ( 'customer_first' == $settings['mapping'] )	{
