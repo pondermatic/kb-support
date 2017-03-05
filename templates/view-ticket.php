@@ -151,7 +151,7 @@ if ( ! empty( $ticket->ID ) ) :
 
                         <?php else : ?>
                             <span class="ticket-no-replies info_item">
-                                <p><?php _e( 'No replies yet', 'kb-support' ); ?></p>
+                                <?php _e( 'No replies yet', 'kb-support' ); ?>
                             </span>
                         <?php endif; ?>
 
