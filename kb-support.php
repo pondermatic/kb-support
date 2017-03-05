@@ -117,7 +117,9 @@ final class KB_Support {
 	 */
 	public static function instance() {
 
-		if ( ! isset( self::$instance ) && ! ( self::$instance instanceof KB_Support ) ) {
+		if ( ! isset( self::$instance ) && ! ( self::$instance instanceof KB_Support ) )	{
+			do_action( 'before_kbsupport_init' );
+
 			self::$instance = new KB_Support;
 			self::$instance->setup_constants();
 
@@ -131,7 +133,7 @@ final class KB_Support {
 			self::$instance->customers     = new KBS_DB_Customers();
 			self::$instance->customer_meta = new KBS_DB_Customer_Meta();
 
-			do_action( 'kbsupport_loaded' );
+			do_action( 'kbsupport_init' );
 		}
 
 		return self::$instance;
