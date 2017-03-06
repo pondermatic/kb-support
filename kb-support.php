@@ -117,7 +117,8 @@ final class KB_Support {
 	 */
 	public static function instance() {
 
-		if ( ! isset( self::$instance ) && ! ( self::$instance instanceof KB_Support ) ) {
+		if ( ! isset( self::$instance ) && ! ( self::$instance instanceof KB_Support ) )	{
+			do_action( 'before_kbsupport_init' );
 
 			self::$instance = new KB_Support;
 			self::$instance->setup_constants();
@@ -131,6 +132,8 @@ final class KB_Support {
 			self::$instance->html          = new KBS_HTML_Elements();
 			self::$instance->customers     = new KBS_DB_Customers();
 			self::$instance->customer_meta = new KBS_DB_Customer_Meta();
+
+			do_action( 'kbsupport_init' );
 		}
 
 		return self::$instance;
@@ -211,6 +214,7 @@ final class KB_Support {
 
 		require_once KBS_PLUGIN_DIR . 'includes/ajax-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/template-functions.php';
+		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-cache-helper.php';
 		require_once KBS_PLUGIN_DIR . 'includes/post-types.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-db.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-stats.php';

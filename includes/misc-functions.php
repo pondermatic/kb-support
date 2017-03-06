@@ -194,6 +194,15 @@ function kbs_display_notice( $m )	{
  */
 function kbs_get_notices( $notice = '', $notice_only = false )	{
 	$notices = array(
+		'agents_cannot_submit' => array(
+			'class'  => 'info',
+			'notice' => sprintf(
+				__( 'Support Workers cannot submit %s here. Please go to your <a href="%s">admin panel</a> to open a new %s.', 'kb-support' ),
+				kbs_get_ticket_label_plural( true ),
+				admin_url( 'post-new.php?post_type=kbs_ticket' ),
+				kbs_get_ticket_label_singular( true )
+			)
+		),
 		'need_login' => array(
 			'class'  => 'info',
 			'notice' => sprintf( __( 'You must be logged in to create a support %s.', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
@@ -377,7 +386,7 @@ function kbs_add_credit_text()	{
 	if ( kbs_get_option( 'show_credits', false ) )	{
 		ob_start(); ?>
 
-		<span class="kbs-description"><?php printf( __( 'Powered by <a href="%s" title="KB Support" target="_blank">KB Support</a>. The ultimate help desk and knowledge base support tool plugin for WordPress. <a href="%s" target="_blank">Download for free</a>.', 'kb-support' ), 'https://kb-support.com/', 'https://wordpress.org/plugins/kb-support' ); ?></a></span>
+		<span class="kbs-description"><?php printf( __( 'Powered by <a href="%s" title="KB Support" target="_blank">KB Support</a>. The ultimate help desk and knowledge base support tool plugin for WordPress. <a href="%s" target="_blank">Download for free</a>.', 'kb-support' ), 'https://kb-support.com/', 'https://wordpress.org/plugins/kb-support' ); ?></span>
 
 		<?php echo ob_get_clean();
 	}
