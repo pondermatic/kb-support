@@ -112,11 +112,11 @@ function kbs_set_articles_column_data( $column_name, $post_id ) {
 			break;
 			
 		default:
-			echo __( 'No callback found for post column', 'kb-support' );
+			$output = __( 'No callback found for post column', 'kb-support' );
+			$output = apply_filters( 'kbs_articles_column_data_' . $column_name, $output, $post_id );
+			echo $output;
 			break;
 	}
-
-	//do_action( 'kbs_article_column_' . $column_name, $post_id );
 
 } // kbs_set_articles_column_data
 add_action( 'manage_article_posts_custom_column' , 'kbs_set_articles_column_data', 10, 2 );
