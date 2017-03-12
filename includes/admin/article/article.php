@@ -214,6 +214,9 @@ function kbs_article_posts_orderby_by_custom_column( $query )	{
 			$query->set( 'meta_key', '_kbs_article_views' );
 			$query->set( 'orderby', 'meta_value_num' );
 			break;
+
+		default:
+			do_action( 'kbs_article_posts_orderby_by_custom_column_' . $orderby, $query );
 	}
 
 } // kbs_article_posts_orderby_by_custom_column
