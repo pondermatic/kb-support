@@ -201,8 +201,9 @@ add_action( 'restrict_manage_posts', 'kbs_add_article_filters', 100 );
  * @return	arr		Filtered attay of sortable columns
  */
 function kbs_article_posts_orderby_by_custom_column( $query )	{
+	global $pagenow;
 
-    if ( ! is_admin() || ! $query->is_main_query() || 'article' != $query->get( 'post_type' ) )	{
+    if ( ! is_admin() || 'edit.php' != $pagenow || ! $query->is_main_query() || 'article' != $query->get( 'post_type' ) )	{
         return;
 	}
 
