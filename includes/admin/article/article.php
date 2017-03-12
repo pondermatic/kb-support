@@ -197,8 +197,6 @@ add_action( 'restrict_manage_posts', 'kbs_add_article_filters', 100 );
  * Order posts by custom columns.
  *
  * @since	1.0.4
- * @param	arr		$columns	Array of sortable columns
- * @return	arr		Filtered attay of sortable columns
  */
 function kbs_article_posts_orderby_by_custom_column( $query )	{
 	global $pagenow;
@@ -207,7 +205,7 @@ function kbs_article_posts_orderby_by_custom_column( $query )	{
         return;
 	}
 
-    $orderby = $query->get( 'orderby');
+    $orderby = $query->get( 'orderby' );
 
 	switch ( $orderby )	{
 		case 'views':
