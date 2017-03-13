@@ -831,7 +831,7 @@ function kbs_update_ticket_meta( $ticket_id = 0, $meta_key = '', $meta_value = '
  * @return	str			The ticket ID with prefix and suffix
  */
 function kbs_get_ticket_id( $ticket )	{
-	if ( is_int( $ticket ) )	{
+	if ( is_numeric( $ticket ) )	{
 		$ticket_id = $ticket;
 	} else	{
 		$ticket_id = $ticket->ID;

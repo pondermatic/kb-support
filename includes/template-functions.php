@@ -182,7 +182,7 @@ function kbs_after_article_content( $content ) {
 
 	return $content;
 } // kbs_after_article_content
-add_filter( 'the_content', 'kbs_after_article_content', 100 );
+add_filter( 'the_content', 'kbs_after_article_content', 15 );
 
 /**
  * Increment the post view count for articles when accessed.

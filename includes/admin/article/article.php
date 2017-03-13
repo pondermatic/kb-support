@@ -41,6 +41,20 @@ function kbs_set_article_post_columns( $columns ) {
 add_filter( 'manage_article_posts_columns' , 'kbs_set_article_post_columns' );
 
 /**
+ * Define sortable columns.
+ *
+ * @since	1.0.4
+ * @param	arr		$columns	Array of sortable columns
+ * @return	arr		Filtered attay of sortable columns
+ */
+function kbs_set_article_sortable_post_columns( $columns ) {
+    $columns['views'] = 'views';
+ 
+    return $columns;
+} // kbs_set_article_sortable_post_columns
+add_filter( 'manage_edit-article_sortable_columns', 'kbs_set_article_sortable_post_columns' );
+
+/**
  * Define the data to be displayed within the Article post custom columns.
  *
  * @since	1.0
@@ -112,11 +126,11 @@ function kbs_set_articles_column_data( $column_name, $post_id ) {
 			break;
 			
 		default:
-			echo __( 'No callback found for post column', 'kb-support' );
+			$output = __( 'No callback found for post column', 'kb-support' );
+			$output = apply_filters( 'kbs_articles_column_data_' . $column_name, $output, $post_id );
+			echo $output;
 			break;
 	}
-
-	//do_action( 'kbs_article_column_' . $column_name, $post_id );
 
 } // kbs_set_articles_column_data
 add_action( 'manage_article_posts_custom_column' , 'kbs_set_articles_column_data', 10, 2 );
@@ -178,6 +192,33 @@ function kbs_add_article_filters() {
 
 } // kbs_add_article_filters
 add_action( 'restrict_manage_posts', 'kbs_add_article_filters', 100 );
+
+/**
+ * Order posts by custom columns.
+ *
+ * @since	1.0.4
+ */
+function kbs_article_posts_orderby_by_custom_column( $query )	{
+	global $pagenow;
+
+    if ( ! is_admin() || 'edit.php' != $pagenow || ! $query->is_main_query() || 'article' != $query->get( 'post_type' ) )	{
+        return;
+	}
+
+    $orderby = $query->get( 'orderby' );
+
+	switch ( $orderby )	{
+		case 'views':
+			$query->set( 'meta_key', '_kbs_article_views' );
+			$query->set( 'orderby', 'meta_value_num' );
+			break;
+
+		default:
+			do_action( 'kbs_article_posts_orderby_by_custom_column_' . $orderby, $query );
+	}
+
+} // kbs_article_posts_orderby_by_custom_column
+add_action( 'pre_get_posts', 'kbs_article_posts_orderby_by_custom_column' );
 
 /**
  * Save the Article custom posts

@@ -30,7 +30,7 @@ class KBS_Cache_Helper {
 	 * @return	arr		Array of page id/name
 	 */
 	private static function get_page_uris( $kbs_page ) {
-		$wc_page_uris = array();
+		$kbs_page_uris = array();
 
 		if ( ( $page_id = kbs_get_page_id( $kbs_page ) ) && $page_id > 0 && ( $page = get_post( $page_id ) ) )	{
 			$kbs_page_uris[] = 'p=' . $page_id;
@@ -51,7 +51,7 @@ class KBS_Cache_Helper {
 
 		if ( false === ( $kbs_page_uris = get_transient( 'kbs_cache_excluded_uris' ) ) )	{
 			$kbs_page_uris = array_filter( array_merge( self::get_page_uris( 'submission' ), self::get_page_uris( 'tickets' ) ) );
-	    	set_transient( 'kbs_cache_excluded_uris', $wc_page_uris );
+	    	set_transient( 'kbs_cache_excluded_uris', $kbs_page_uris );
 		}
 
 		if ( is_array( $kbs_page_uris ) )	{

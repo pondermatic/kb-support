@@ -67,7 +67,7 @@ function kbs_profile_editor_shortcode( $atts ) {
 
 	kbs_get_template_part( 'shortcode', 'profile-editor' );
 
-	return ob_get_clean();
+	return ob_get_clean() . '&nbsp;';
 } // kbs_profile_editor_shortcode
 add_shortcode( 'kbs_profile_editor', 'kbs_profile_editor_shortcode' );
 
@@ -136,7 +136,7 @@ function kbs_tickets_shortcode( $atts )	{
 		kbs_get_template_part( 'ticket', 'history' );
 	}
 
-	return ob_get_clean();
+	return ob_get_clean() . '&nbsp;';
 } // kbs_tickets_shortcode
 add_shortcode( 'kbs_tickets', 'kbs_tickets_shortcode' );
 
