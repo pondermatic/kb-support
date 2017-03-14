@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: Helpdesk, Help Desk, Support, Customer Support, Service, Service Desk, ITIL, Support Helpdesk, Ticket, Ticket System, Support Tickets, Helpdesk Tickets, Knowledgebase, Knowledge Base, Service Level, SLA
 Requires at least: 4.1
 Tested up to: 4.8
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -94,6 +94,33 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.0.4 =
+
+**Tuesday, 14th March 2017**
+
+**New**
+
+* Articles can now be sorted by views on the edit post screen
+* Added hook `kbs_article_posts_orderby_by_custom_column_{$orderby}` to allow for custom ordering on article post screen
+* Added cache helper to tell caching plugins not to cache the ticket submission or ticket management pages
+* Added `before_kbsupport_init` hook
+* Added `kbsupport_init` hook which is run after the main KB_Support class is initiated
+* Added `kbs_articles_column_data_{$column_name}` filter to allow for custom content within the KB Article edit screen
+* Adjusted priority for the `kbs_after_article_content` hook
+* Added `kbs_agent_can_submit` function. By default agents cannot submit tickets from the front end. Overide by hooking into the `kbs_agent_can_submit` filter
+
+**Tweaks**
+
+* Added new notice for `agents_cannot_submit` to be displayed when an agent is attempting to log a ticket from the front end, but is not allowed to
+* If an agent is submitting via the front end, do not auto complete customer name and email fields
+* Do not search for existing customer/user email if an agent is submitting from front end
+* Removed duplicate `<a>` tag from footer credits
+* Removed `<p>` tag from within `<span>` in view-tickets.php template
+
+**Bug Fixes**
+
+* Corrected output of `[kbs_ticket]` and `[kbs_profile_editor]` shortcode. In some instances it was not contained within the page container
 
 = 1.0.3 =
 
