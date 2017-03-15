@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: KB Support 1.0.3\n"
+"Project-Id-Version: KB Support 1.0.5\n"
 "Report-Msgid-Bugs-To: https://kb-support.com/\n"
-"POT-Creation-Date: 2017-03-14 00:00:02+00:00\n"
+"POT-Creation-Date: 2017-03-15 16:57:43+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -249,7 +249,7 @@ msgid "Title"
 msgstr ""
 
 #: includes/admin/article/article.php:29 includes/admin/tickets/tickets.php:29
-#: templates/view-ticket.php:73
+#: templates/view-ticket.php:79
 msgid "Date"
 msgstr ""
 
@@ -833,7 +833,7 @@ msgstr ""
 #: includes/admin/customers/customers-page.php:457
 #: includes/admin/customers/customers-page.php:484
 #: includes/admin/tickets/metaboxes.php:262 templates/ticket-history.php:22
-#: templates/view-ticket.php:85
+#: templates/view-ticket.php:91
 msgid "Status"
 msgstr ""
 
@@ -1775,7 +1775,7 @@ msgstr ""
 
 #: includes/admin/settings/register-settings.php:328
 #: includes/admin/tickets/metaboxes.php:497 includes/template-functions.php:65
-#: templates/view-ticket.php:217
+#: templates/view-ticket.php:223
 msgid "Reply"
 msgstr ""
 
@@ -2098,7 +2098,7 @@ msgstr ""
 #: includes/admin/settings/register-settings.php:612
 #: includes/admin/settings/register-settings.php:646
 #: includes/admin/settings/register-settings.php:684
-#: templates/view-ticket.php:117
+#: templates/view-ticket.php:123
 msgid "Content"
 msgstr ""
 
@@ -2812,7 +2812,7 @@ msgstr ""
 
 #: includes/admin/tickets/metaboxes.php:274
 #: includes/admin/tickets/tickets.php:34
-#: includes/tickets/ticket-functions.php:1205 templates/view-ticket.php:101
+#: includes/tickets/ticket-functions.php:1205 templates/view-ticket.php:107
 msgid "Agent"
 msgstr ""
 
@@ -2869,7 +2869,7 @@ msgstr ""
 msgid "No Customer Assigned"
 msgstr ""
 
-#: includes/admin/tickets/tickets.php:199 templates/view-ticket.php:98
+#: includes/admin/tickets/tickets.php:199 templates/view-ticket.php:104
 msgid "No Agent Assigned"
 msgstr ""
 
@@ -3351,13 +3351,13 @@ msgstr ""
 msgid "View all %d possible solutions."
 msgstr ""
 
-#: includes/class-kbs-company.php:160 includes/class-kbs-customer.php:221
-#: includes/class-kbs-form.php:101
-msgid "Can't get property %s"
-msgstr ""
-
 #: includes/class-kbs-cron.php:37
 msgid "Once Weekly"
+msgstr ""
+
+#: includes/class-kbs-customer.php:221 includes/class-kbs-form.php:101
+#: includes/companies/class-kbs-company.php:160
+msgid "Can't get property %s"
 msgstr ""
 
 #: includes/class-kbs-html-elements.php:100
@@ -3659,7 +3659,7 @@ msgstr ""
 msgid "Last Name"
 msgstr ""
 
-#: includes/form-functions.php:220 templates/view-ticket.php:111
+#: includes/form-functions.php:220 templates/view-ticket.php:117
 msgid "Subject"
 msgstr ""
 
@@ -4014,7 +4014,7 @@ msgstr ""
 msgid "New Reply"
 msgstr ""
 
-#: includes/post-types.php:81 templates/view-ticket.php:131
+#: includes/post-types.php:81 templates/view-ticket.php:137
 msgid "Replies"
 msgstr ""
 
@@ -4414,7 +4414,7 @@ msgstr ""
 msgid "Select the field Type"
 msgstr ""
 
-#: includes/shortcodes.php:272
+#: includes/shortcodes.php:287
 msgid "No %s found"
 msgstr ""
 
@@ -4573,7 +4573,7 @@ msgstr ""
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
-#: templates/shortcode-form.php:22 templates/view-ticket.php:161
+#: templates/shortcode-form.php:22 templates/view-ticket.php:167
 msgid "This form is secured and encrypted via SSL"
 msgstr ""
 
@@ -4657,47 +4657,47 @@ msgstr ""
 msgid "You have no %s yet."
 msgstr ""
 
-#: templates/view-ticket.php:49
+#: templates/view-ticket.php:55
 msgid "Support %s Details # %s"
 msgstr ""
 
-#: templates/view-ticket.php:55
+#: templates/view-ticket.php:61
 msgid "File Attachments"
 msgstr ""
 
-#: templates/view-ticket.php:79
+#: templates/view-ticket.php:85
 msgid "Logged by"
 msgstr ""
 
-#: templates/view-ticket.php:142
+#: templates/view-ticket.php:148
 msgid "by"
 msgstr ""
 
-#: templates/view-ticket.php:154
+#: templates/view-ticket.php:160
 msgid "No replies yet"
 msgstr ""
 
-#: templates/view-ticket.php:172
+#: templates/view-ticket.php:178
 msgid "Add a Reply"
 msgstr ""
 
-#: templates/view-ticket.php:186
+#: templates/view-ticket.php:192
 msgid "Attach Files"
 msgstr ""
 
-#: templates/view-ticket.php:199
+#: templates/view-ticket.php:205
 msgid "Confirm your Email Address"
 msgstr ""
 
-#: templates/view-ticket.php:200
+#: templates/view-ticket.php:206
 msgid "So we can verify your identity"
 msgstr ""
 
-#: templates/view-ticket.php:211
+#: templates/view-ticket.php:217
 msgid "This %s can be closed"
 msgstr ""
 
-#: templates/view-ticket.php:222
+#: templates/view-ticket.php:228
 msgid "This %s is closed."
 msgstr ""
 
