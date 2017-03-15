@@ -323,7 +323,7 @@ add_action( 'init', 'kbs_view_ticket_action' );
 function kbs_before_ticket_is_deleted( $ticket_id = 0 )	{
 
 	if ( defined( 'WP_UNINSTALL_PLUGIN' ) )	{
-		exit;
+		return;
 	}
 
 	if ( empty( $ticket_id ) )	{
@@ -365,7 +365,7 @@ add_action( 'delete_post', 'kbs_before_ticket_is_deleted' );
 function kbs_cleanup_after_deleting_ticket( $ticket_id = 0 )	{
 
 	if ( defined( 'WP_UNINSTALL_PLUGIN' ) )	{
-		exit;
+		return;
 	}
 
 	if ( empty( $ticket_id ) )	{
