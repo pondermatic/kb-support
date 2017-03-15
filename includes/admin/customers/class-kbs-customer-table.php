@@ -194,7 +194,6 @@ class KBS_Customer_Table extends WP_List_Table {
 		$sortable = array(
 			'date_created'  => array( 'date_created', true ),
 			'name'          => array( 'name', true ),
-			'company'       => array( 'company', true ),
 			'num_purchases' => array( 'ticket_count', false )
 		);
 
