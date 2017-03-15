@@ -456,7 +456,7 @@ function kbs_customer_save_note() {
 		wp_die( __( "Cheatin' eh?!", 'kb-support' ) );
 	}
 
-	$customer_view_role = apply_filters( 'edd_view_customers_role', 'manage_ticket_settings' );
+	$customer_view_role = apply_filters( 'kbs_view_customers_role', 'manage_ticket_settings' );
 
 	if ( ! is_admin() || ! current_user_can( $customer_view_role ) ) {
 		wp_die( __( 'You do not have permission to edit this customer.', 'kb-support' ) );

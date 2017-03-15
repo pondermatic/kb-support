@@ -16,6 +16,29 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Get Companies
+ *
+ * Retrieve companies from the database.
+ *
+ * This is a simple wrapper for KBS_Companies_Query.
+ *
+ * @since	1.0
+ * @param	arr		$args		Arguments passed to get companies
+ * @return	obj		$companies	Companies retrieved from the database
+ */
+function kbs_get_companies( $args = array() ) {
+	// Fallback to post objects to ensure backwards compatibility
+	if ( ! isset( $args['output'] ) ) {
+		$args['output'] = 'posts';
+	}
+
+	$args      = apply_filters( 'kbs_get_companies_args', $args );
+	$companies = new KBS_Companies_Query( $args );
+
+	return $companies->get_companies();
+} // kbs_get_companies
+
+/**
  * Sanitize the company id.
  *
  * @since	1.0

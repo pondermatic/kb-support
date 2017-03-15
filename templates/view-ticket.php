@@ -8,15 +8,21 @@ global $current_user;
 
 $singular = kbs_get_ticket_label_singular();
 $plural   = kbs_get_ticket_label_plural();
+$visible  = false;
 
 if ( is_numeric( $_GET['ticket'] ) )	{
-	$field = 'id';
+	$field   = 'id';
+	if ( is_user_logged_in() )	{
+		$visible = true;
+	}
 } else	{
-	$field = 'key';
+	$visible = true;
+	$field   = 'key';
 }
+
 $ticket = kbs_get_ticket_by( $field, $_GET['ticket'] );
 
-if ( ! empty( $ticket->ID ) ) :
+if ( $visible && ! empty( $ticket->ID ) ) :
 
 	$ticket       = new KBS_Ticket( $ticket->ID );
 	$use_user_id  = false;
@@ -235,6 +241,17 @@ if ( ! empty( $ticket->ID ) ) :
 
 	<?php endif; ?>
 
+<?php elseif ( ! $visible ) : ?>
+	<?php
+	$args = array();
+	if ( isset( $_GET['ticket'] ) )	{
+		$args = array( 'ticket' => $_GET['ticket'] );
+	}
+    $redirect  = add_query_arg( $args, get_permalink( kbs_get_option( 'tickets_page' ) ) );
+	
+	?>
+	<?php echo kbs_display_notice( 'ticket_login' ); ?>
+    <?php echo kbs_login_form( $redirect ); ?>
 <?php else : ?>
 	<?php echo kbs_display_notice( 'no_ticket' ); ?>
 <?php endif; ?>
