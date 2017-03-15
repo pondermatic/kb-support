@@ -283,7 +283,7 @@ class KBS_Customer_Table extends WP_List_Table {
 					'id'            => $customer->id,
 					'user_id'       => $user_id,
 					'name'          => $customer->name,
-					'company'       => $company ? $company : '&ndash;',
+					'company'       => $company ? '<a href="' . get_edit_post_link( $customer->company_id ) . '">' . $company . '</a>' : '&ndash;',
 					'email'         => $customer->email,
 					'num_tickets'   => $customer->ticket_count,
 					'date_created'  => $customer->date_created,
