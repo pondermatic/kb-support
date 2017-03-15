@@ -131,7 +131,12 @@ function kbs_tickets_shortcode( $atts )	{
 	ob_start();
 
 	if ( isset( $_GET['ticket'] ) )	{
-		kbs_get_template_part( 'view', 'ticket' );
+		if ( kbs_get_option( 'logged_in_only' ) && ! is_user_logged_in() )	{
+			$redirect = add_query_arg( array( 'ticket' => $_GET['ticket'] ), get_permalink( kbs_get_option( 'tickets_page' ) ) );
+			echo kbs_login_form( $redirect );
+		} else	{
+			kbs_get_template_part( 'view', 'ticket' );
+		}
 	} else	{
 		kbs_get_template_part( 'ticket', 'history' );
 	}
