@@ -3,7 +3,7 @@ Contributors: mikeyhoward1977
 Tags: Helpdesk, Help Desk, Support, Customer Support, Service, Service Desk, ITIL, Support Helpdesk, Ticket, Ticket System, Support Tickets, Helpdesk Tickets, Knowledgebase, Knowledge Base, Service Level, SLA
 Requires at least: 4.1
 Tested up to: 4.8
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -94,6 +94,22 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.0.5 =
+
+**Wednesday, 15th March 2017**
+
+**Bug Fixes**
+
+* Require login if accessing ticket via ID and without secure key
+* Corrected taxonomy name and post type within uninstall.php
+
+**Tweaks**
+
+* If guest submissions are disabled, require login when accessing ticket with key and display notice
+* Add link to company on customer table
+* Consolidate all company scripts within folder
+* Removed company from sortable columns on customers table
 
 = 1.0.4 =
 
