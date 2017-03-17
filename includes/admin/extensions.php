@@ -25,6 +25,12 @@ function kbs_extensions_page()	{
 	$extensions     = kbs_get_extensions();
 	$tags           = '<a><em><strong><blockquote><ul><ol><li><p>';
 	$length         = 55;
+
+	$slug_corrections = array(
+		'ratings-and-satisfaction' => 'ratings-satisfaction',
+		'easy-digital-downloads'   => 'edd'
+	);
+
 	?>
 	<div class="wrap about-wrap kbs-about-wrapp">
 		<h1>
@@ -42,6 +48,10 @@ function kbs_extensions_page()	{
 				$slug  = $extension->info->slug;
 				$link  = 'https://kb-support.com/downloads/' . $slug .'/';
 				$price = false;
+
+				if ( array_key_exists( $slug, $slug_corrections ) )	{
+					$slug = $slug_corrections[ $slug ];
+				}
 
 				if ( isset( $extension->pricing->amount ) ) {
 					$price = '&pound;' . number_format( $extension->pricing->amount, 2 );
