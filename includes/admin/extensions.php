@@ -28,9 +28,10 @@ function kbs_extensions_page()	{
 	?>
 	<div class="wrap about-wrap kbs-about-wrapp">
 		<h1>
-			<?php _e( 'Extensions for KB Support', 'kb-support' ); ?>&nbsp;&nbsp;&nbsp;<a href="https://kb-support.com/extensions/" class="button-primary" target="_blank"><?php _e( 'Browse All Extensions', 'kb-support' ); ?></a>
+			<?php _e( 'Extensions for KB Support', 'kb-support' ); ?>
 		</h1>
 		<div>
+        	<p><a href="https://kb-support.com/extensions/" class="button-primary" target="_blank"><?php _e( 'Browse All Extensions', 'kb-support' ); ?></a></p>
 			<p><?php _e( 'These extensions <em><strong>add even more functionality</strong></em> to your KB Support help desk.', 'kb-support' ); ?></p>
             <p><?php printf( __( '<em><strong>Remember</strong></em> to <a href="%s" target="_blank">sign up to our newsletter</a> and receive a 25%s discount off your next purchase from our <a href="%s" target="_blank">plugin store</a>.', 'kb-support' ), 'https://kb-support.com/#newsletter-signup', '%', $extensions_url ); ?></p>
 		</div>
