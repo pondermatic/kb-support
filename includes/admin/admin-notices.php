@@ -305,6 +305,24 @@ function kbs_admin_messages() {
 		);
 	}
 
+	if ( isset( $_GET['kbs-message'] ) && 'reset_article_views' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-reset-article-views',
+			sprintf( __( 'View count reset for %s.', 'kb-support' ), kbs_get_article_label_singular() ),
+			'updated'
+		);
+	}
+
+	if ( isset( $_GET['kbs-message'] ) && 'reset_article_views_failed' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-reset-article-views-failed',
+			sprintf( __( 'Failed to reset %s view count.', 'kb-support' ), kbs_get_article_label_singular() ),
+			'error'
+		);
+	}
+
 	settings_errors( 'kbs-notices' );
 }
 add_action( 'admin_notices', 'kbs_admin_messages' );

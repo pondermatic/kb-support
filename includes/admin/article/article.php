@@ -136,6 +136,33 @@ function kbs_set_articles_column_data( $column_name, $post_id ) {
 add_action( 'manage_article_posts_custom_column' , 'kbs_set_articles_column_data', 10, 2 );
 
 /**
+ * Adds a row action to reset view count.
+ *
+ * @since	1.0
+ * @param	arr		$actions	Array of current row actions
+ * @param	obj		$post		The article WP_Post object
+ * @return	arr		Filtered array of current row actions
+ */
+function kbs_add_article_row_actions( $actions, $post )	{
+
+	if ( 'article' == get_post_type( $post ) )	{
+		$reset_url = add_query_arg( array(
+			'kbs-action' => 'reset_article_views',
+			'article_id' => $post->ID
+		), admin_url( 'edit.php' ) );
+
+		$actions['reset_views'] = sprintf(
+			__( '<a href="%s">Reset Views</a>', 'kbs-ratings-satisfaction' ),
+			wp_nonce_url( $reset_url, 'reset_views', 'kbs-nonce' )
+		);
+	}
+
+	return $actions;
+
+} // kbs_add_article_row_actions
+add_filter( 'post_row_actions', 'kbs_add_article_row_actions', 10, 2 );
+
+/**
  * Add Article Filters
  *
  * Adds taxonomy drop down filters for articles.
