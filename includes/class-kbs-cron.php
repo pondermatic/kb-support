@@ -47,7 +47,7 @@ class KBS_Cron	{
 	 * @return	void
 	 */
 	public function schedule_events() {
-		//$this->hourly_events();
+		$this->hourly_events();
 		$this->daily_events();
 		$this->weekly_events();
 	} // schedule_events
