@@ -5,7 +5,7 @@
  * Description: The ultimate help desk and knowledge base support tool plugin for WordPress.
  * Version: 1.0.5
  * Date: 15 March 2017
- * Author: Mike Howard <mike@mikesplugins.co.uk>
+ * Author: KB Support Team
  * Author URI: https://kb-support.com
  * Text Domain: kb-support
  * Domain Path: /languages
