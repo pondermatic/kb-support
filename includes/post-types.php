@@ -389,6 +389,8 @@ function kbs_setup_custom_taxonomies() {
 	$ticket_category_args = apply_filters( 'kbs_ticket_category_args', array(
 			'hierarchical' => true,
 			'labels'       => apply_filters( 'kbs_ticket_category_labels', $ticket_category_labels),
+			'public'       => false,
+			'show_in_menu' => true,
 			'show_ui'      => true,
 			'query_var'    => 'ticket_category',
 			'rewrite'      => false,
@@ -424,6 +426,8 @@ function kbs_setup_custom_taxonomies() {
 	$ticket_tag_args = apply_filters( 'kbs_ticket_tag_args', array(
 			'hierarchical' => false,
 			'labels'       => apply_filters( 'kbs_ticket_tag_labels', $ticket_tag_labels ),
+			'public'       => false,
+			'show_in_menu' => true,
 			'show_ui'      => true,
 			'query_var'    => 'ticket_tag',
 			'rewrite'      => false,
