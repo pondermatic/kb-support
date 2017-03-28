@@ -279,7 +279,7 @@ function kbs_tools_sysinfo_get()	{
 	if ( is_dir( $dir ) && ( count( glob( "$dir/*" ) ) !== 0 ) ) {
 		$return .= "\n" . '-- KBS Template Overrides' . "\n\n";
 
-		foreach( glob( "$dir/*" ) as $file ) {
+		foreach( glob( "$dir/*.*" ) as $file ) {
 			$return .= 'Filename:                 ' . basename( $file ) . "\n";
 		}
 
