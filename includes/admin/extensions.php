@@ -44,10 +44,10 @@ function kbs_extensions_page()	{
 
 		<div class="kbs-extension-wrapper grid3">
 			<?php foreach ( $extensions as $key => $extension ) :
-
-				$slug  = $extension->info->slug;
-				$link  = 'https://kb-support.com/downloads/' . $slug .'/';
-				$price = false;
+				$the_excerpt = '';
+				$slug        = $extension->info->slug;
+				$link        = 'https://kb-support.com/downloads/' . $slug .'/';
+				$price       = false;
 
 				if ( array_key_exists( $slug, $slug_corrections ) )	{
 					$slug = $slug_corrections[ $slug ];
