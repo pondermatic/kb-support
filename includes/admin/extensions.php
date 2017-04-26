@@ -31,6 +31,13 @@ function kbs_extensions_page()	{
 		'utm_content'  => 'All Extensions'
 	), 'https://kb-support.com/downloads/' ) );
 
+	$newsletter_url = esc_url( add_query_arg( array(
+		'utm_source'   => 'plugin-extensions-page',
+		'utm_medium'   => 'newsletter',
+		'utm_campaign' => 'KBS_Extensions_Page',
+		'utm_content'  => 'newsletter_signup'
+	), 'https://kb-support.com/#newsletter-signup' ) );
+
 	$slug_corrections = array(
 		'ratings-and-satisfaction' => 'ratings-satisfaction',
 		'easy-digital-downloads'   => 'edd'
@@ -44,7 +51,7 @@ function kbs_extensions_page()	{
 		<div>
         	<p><a href="<?php echo $extensions_url; ?>" class="button-primary" target="_blank"><?php _e( 'Browse All Extensions', 'kb-support' ); ?></a></p>
 			<p><?php _e( 'These extensions <em><strong>add even more functionality</strong></em> to your KB Support help desk.', 'kb-support' ); ?></p>
-            <p><?php printf( __( '<em><strong>Remember</strong></em> to <a href="%s" target="_blank">sign up to our newsletter</a> and receive a 25%s discount off your next purchase from our <a href="%s" target="_blank">plugin store</a>.', 'kb-support' ), 'https://kb-support.com/#newsletter-signup', '%', $extensions_url ); ?></p>
+            <p><?php printf( __( '<em><strong>Remember</strong></em> to <a href="%s" target="_blank">sign up to our newsletter</a> and receive a 25%s discount off your next purchase from our <a href="%s" target="_blank">plugin store</a>.', 'kb-support' ), $newsletter_url, '%', $extensions_url ); ?></p>
 		</div>
 
 		<div class="kbs-extension-wrapper grid3">
