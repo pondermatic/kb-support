@@ -1206,7 +1206,12 @@ function kbs_get_reply_author_name( $reply, $role = false )	{
 	if ( ! empty( $reply->post_author ) ) {
 		$author      = get_userdata( $reply->post_author );
 		$author      = $author->display_name;
-		$author_role = __( 'Agent', 'kb-support' );
+
+        if ( kbs_is_agent( $reply->post_author ))   {
+            $author_role = __( 'Agent', 'kb-support' );
+        } else  {
+            $author_role = __( 'Customer', 'kb-support' );
+        }
 	} else {
 		$customer_id = get_post_meta( $reply->ID, '_kbs_reply_customer_id', true );
 		if ( $customer_id )	{
