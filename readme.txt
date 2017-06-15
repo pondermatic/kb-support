@@ -95,6 +95,25 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 == Changelog ==
 
+= 1.0.6 =
+
+**Thursday, 15th June 2017**
+
+**Tweaks**
+
+* Added row action to reset article view count
+* Enabled hourly cron schedule
+* Corrected coding on Extensions page
+
+
+**Bug Fixes**
+
+* Uninstall procedure failing due to incorrect `exit` command
+* If a reply is submitted by a logged in, admin showed the reply as from Agent
+* Corrected All Extensions link
+* Ticket categories may have appeared in sitemaps
+* Corrected output of templated files within sysinfo
+
 = 1.0.5 =
 
 **Wednesday, 15th March 2017**
