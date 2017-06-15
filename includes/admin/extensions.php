@@ -21,26 +21,55 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function kbs_extensions_page()	{
 	setlocale( LC_MONETARY, get_locale() );
-	$extensions_url = 'https://kb-support.com/downloads/';
 	$extensions     = kbs_get_extensions();
 	$tags           = '<a><em><strong><blockquote><ul><ol><li><p>';
 	$length         = 55;
+	$extensions_url = esc_url( add_query_arg( array(
+		'utm_source'   => 'plugin-extensions-page',
+		'utm_medium'   => 'plugin',
+		'utm_campaign' => 'KBS_Extensions_Page',
+		'utm_content'  => 'All Extensions'
+	), 'https://kb-support.com/downloads/' ) );
+
+	$newsletter_url = esc_url( add_query_arg( array(
+		'utm_source'   => 'plugin-extensions-page',
+		'utm_medium'   => 'newsletter',
+		'utm_campaign' => 'KBS_Extensions_Page',
+		'utm_content'  => 'newsletter_signup'
+	), 'https://kb-support.com/#newsletter-signup' ) );
+
+	$slug_corrections = array(
+		'ratings-and-satisfaction' => 'ratings-satisfaction',
+		'easy-digital-downloads'   => 'edd'
+	);
+
 	?>
 	<div class="wrap about-wrap kbs-about-wrapp">
 		<h1>
-			<?php _e( 'Extensions for KB Support', 'kb-support' ); ?>&nbsp;&nbsp;&nbsp;<a href="https://kb-support.com/extensions/" class="button-primary" target="_blank"><?php _e( 'Browse All Extensions', 'kb-support' ); ?></a>
+			<?php _e( 'Extensions for KB Support', 'kb-support' ); ?>
 		</h1>
 		<div>
+        	<p><a href="<?php echo $extensions_url; ?>" class="button-primary" target="_blank"><?php _e( 'Browse All Extensions', 'kb-support' ); ?></a></p>
 			<p><?php _e( 'These extensions <em><strong>add even more functionality</strong></em> to your KB Support help desk.', 'kb-support' ); ?></p>
-            <p><?php printf( __( '<em><strong>Remember</strong></em> to <a href="%s" target="_blank">sign up to our newsletter</a> and receive a 25%s discount off your next purchase from our <a href="%s" target="_blank">plugin store</a>.', 'kb-support' ), 'https://kb-support.com/#newsletter-signup', '%', $extensions_url ); ?></p>
+            <p><?php printf( __( '<em><strong>Remember</strong></em> to <a href="%s" target="_blank">sign up to our newsletter</a> and receive a 25%s discount off your next purchase from our <a href="%s" target="_blank">plugin store</a>.', 'kb-support' ), $newsletter_url, '%', $extensions_url ); ?></p>
 		</div>
 
 		<div class="kbs-extension-wrapper grid3">
 			<?php foreach ( $extensions as $key => $extension ) :
+				$the_excerpt = '';
+				$slug        = $extension->info->slug;
+				$price       = false;
+				$link        = 'https://kb-support.com/downloads/' . $slug .'/';
+				$link        = esc_url( add_query_arg( array(
+					'utm_source'   => 'plugin-extensions-page',
+					'utm_medium'   => 'plugin',
+					'utm_campaign' => 'KBS_Extensions_Page',
+					'utm_content'  => $extension->info->title
+				), $link ) );
 
-				$slug  = $extension->info->slug;
-				$link  = 'https://kb-support.com/downloads/' . $slug .'/';
-				$price = false;
+				if ( array_key_exists( $slug, $slug_corrections ) )	{
+					$slug = $slug_corrections[ $slug ];
+				}
 
 				if ( isset( $extension->pricing->amount ) ) {
 					$price = '&pound;' . number_format( $extension->pricing->amount, 2 );

@@ -275,11 +275,11 @@ function kbs_tools_sysinfo_get()	{
 	$return  = apply_filters( 'kbs_sysinfo_after_kbs_pages', $return );
 
 	// KBS Templates
-	$dir = get_stylesheet_directory() . '/kbs-templates/*';
+	$dir = get_stylesheet_directory() . '/kbs_templates/';
 	if ( is_dir( $dir ) && ( count( glob( "$dir/*" ) ) !== 0 ) ) {
 		$return .= "\n" . '-- KBS Template Overrides' . "\n\n";
 
-		foreach( glob( $dir ) as $file ) {
+		foreach( glob( "$dir/*.*" ) as $file ) {
 			$return .= 'Filename:                 ' . basename( $file ) . "\n";
 		}
 

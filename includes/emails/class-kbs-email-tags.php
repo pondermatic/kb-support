@@ -730,7 +730,7 @@ function kbs_email_tag_ticket_url( $ticket_id ) {
 } // kbs_email_tag_ticket_url
 
 /**
- * Email template tag: ticket_url
+ * Email template tag: ticket_admin_url
  * Adds a URL so admins can access a ticket directly
  *
  * @since	1.0
@@ -740,7 +740,7 @@ function kbs_email_tag_ticket_url( $ticket_id ) {
 function kbs_email_tag_ticket_admin_url( $ticket_id ) {
 	$url = kbs_get_ticket_url( $ticket_id, true );
 
-	return apply_filters( 'kbs_tag_ticket_url', '<a href="' . $url . '">' . $url . '</a>' );
+	return apply_filters( 'kbs_tag_ticket_admin_url', '<a href="' . $url . '">' . $url . '</a>' );
 } // kbs_email_tag_ticket_admin_url
 
 /**

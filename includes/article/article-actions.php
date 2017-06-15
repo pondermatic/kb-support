@@ -97,3 +97,40 @@ function kbs_create_article_action()	{
 
 } // kbs_create_article_action
 add_action( 'init', 'kbs_create_article_action' );
+
+/**
+ * Reset an articles view count.
+ *
+ * @since	1.0.6
+ */
+function kbs_reset_article_view_count()	{
+
+	if ( ! isset( $_GET['kbs-action'] ) || 'reset_article_views' != $_GET['kbs-action'] )	{
+		return;
+	}
+
+	if ( ! isset( $_GET['kbs-nonce'] ) || ! wp_verify_nonce( $_GET['kbs-nonce'], 'reset_views' ) )	{
+		wp_die( 'Cheatin&#8217; huh?' );
+	}
+
+	if ( ! isset( $_GET['article_id'] ) || 'article' != get_post_type( $_GET['article_id'] ) )	{
+		return;
+	}
+
+	if ( update_post_meta( $_GET['article_id'], '_kbs_article_views', 0 ) )	{
+		$message = 'reset_article_views';
+	} else	{
+		$message = 'reset_article_views_failed';
+	}
+
+	$redirect = add_query_arg( array(
+		'post_type'   => 'article',
+		'kbs-message' => $message
+	), admin_url( 'edit.php' ) );
+
+	wp_safe_redirect( $redirect );
+
+	die();
+
+} // kbs_reset_article_view_count
+add_action( 'init', 'kbs_reset_article_view_count' );

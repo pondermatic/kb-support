@@ -483,7 +483,7 @@ class KBS_Ticket {
 				'id'               => $this->user_id,
 				'email'            => $this->email,
 				'first_name'       => $this->first_name,
-				'last_name'        => $this->last_name,
+				'last_name'        => isset( $this->last_name )                     ? $this->last_name                     : '',
 				'primary_phone'    => isset( $this->user_info['primary_phone'] )    ? $this->user_info['primary_phone']    : '',
 				'additional_phone' => isset( $this->user_info['additional_phone'] ) ? $this->user_info['additional_phone'] : '',
 				'website'          => isset( $this->user_info['website'] )          ? $this->user_info['website']          : ''
