@@ -152,7 +152,7 @@ function kbs_add_article_row_actions( $actions, $post )	{
 		), admin_url( 'edit.php' ) );
 
 		$actions['reset_views'] = sprintf(
-			__( '<a href="%s">Reset Views</a>', 'kbs-ratings-satisfaction' ),
+			__( '<a href="%s">Reset Views</a>', 'kb-support' ),
 			wp_nonce_url( $reset_url, 'reset_views', 'kbs-nonce' )
 		);
 	}
