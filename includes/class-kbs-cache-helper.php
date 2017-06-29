@@ -19,7 +19,7 @@ class KBS_Cache_Helper {
 	 * Hook in methods.
 	 */
 	public static function init() {
-		add_action( 'init', array( __CLASS__, 'prevent_caching' ), 0 );
+		add_action( 'wp', array( __CLASS__, 'prevent_caching' ), 0 );
 	} // init
 
 	/**
@@ -49,6 +49,11 @@ class KBS_Cache_Helper {
 			return;
 		}
 
+        if ( 'article' == get_post_type() && kbs_article_is_restricted( get_the_ID() ) )    {
+            self::nocache();
+            return;
+        }
+
 		if ( false === ( $kbs_page_uris = get_transient( 'kbs_cache_excluded_uris' ) ) )	{
 			$kbs_page_uris = array_filter( array_merge( self::get_page_uris( 'submission' ), self::get_page_uris( 'tickets' ) ) );
 	    	set_transient( 'kbs_cache_excluded_uris', $kbs_page_uris );
@@ -61,7 +66,7 @@ class KBS_Cache_Helper {
 					break;
 				}
 			}
-		}
+		} 
 	} // prevent_caching
 
 	/**
