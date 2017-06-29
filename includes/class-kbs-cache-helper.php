@@ -20,6 +20,7 @@ class KBS_Cache_Helper {
 	 */
 	public static function init() {
 		add_action( 'wp', array( __CLASS__, 'prevent_caching' ), 0 );
+		add_action( 'update_option_kbs_settings', array( __CLASS__, 'delete_page_cache' ), 999, 2 );
 	} // init
 
 	/**
@@ -87,6 +88,30 @@ class KBS_Cache_Helper {
 		}
 		nocache_headers();
 	} // nocache
+
+	/**
+	 * Delete the page cache when settings are updated.
+	 *
+	 * @since	1.1
+	 * @param	mixed	The pre-save value of the setting
+	 * @param	mixed	The updated value of the setting
+	 * @return	void
+	 */
+	 public static function delete_page_cache( $old_value, $value )	{
+		if ( ! isset( $old_value['tickets_page'] ) )	{
+			return;
+		}
+
+		$pages = array( 'submission', 'tickets' );
+
+		foreach( $pages as $page )	{
+			if ( $value[ $page . '_page' ] != $old_value[ $page . '_page' ] )	{
+				delete_transient( 'kbs_cache_excluded_uris' );
+				break;
+			}
+		}
+
+	 } // delete_page_cache
 
 } // class KBS_Cache_Helper
 
