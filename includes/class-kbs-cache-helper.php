@@ -56,7 +56,7 @@ class KBS_Cache_Helper {
 
 		if ( false === ( $kbs_page_uris = get_transient( 'kbs_cache_excluded_uris' ) ) )	{
 			$kbs_page_uris = array_filter( array_merge( self::get_page_uris( 'submission' ), self::get_page_uris( 'tickets' ) ) );
-	    	set_transient( 'kbs_cache_excluded_uris', $kbs_page_uris );
+	    	set_transient( 'kbs_cache_excluded_uris', $kbs_page_uris, DAY_IN_SECONDS );
 		}
 
 		if ( is_array( $kbs_page_uris ) )	{
