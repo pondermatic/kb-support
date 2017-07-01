@@ -82,7 +82,7 @@ function kbs_article_user_can_access( $article, $user_id = 0 )	{
 
 	$can_view = true;
 
-	if ( kbs_hide_restricted_articles() && kbs_article_is_restricted( $article->ID ) )	{
+	if ( kbs_article_is_restricted( $article->ID ) )	{
 		$can_view = false;
 
 		if ( is_user_logged_in() )	{
