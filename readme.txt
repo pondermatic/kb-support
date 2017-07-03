@@ -104,6 +104,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 * Logged in users may have still been unable to view restricted articles
 
 **Tweaks**
+
 * Updated cache helper. Do not cache articles that are restricted
 * Updated cache helper. Refresh KBS page ID's transient after 24 hours
 
