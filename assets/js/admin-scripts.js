@@ -148,10 +148,27 @@ jQuery(document).ready(function ($) {
 	 */
 	var KBS_Tickets = {
 		init : function() {
+            this.save();
 			this.reply();
 			this.notes();
 		},
-		
+
+        save : function()   {
+            $( document.body ).on( 'click', '#save-post', function() {
+                var ticketResponse = '';
+                var tinymceActive  = (typeof tinyMCE !== 'undefined') && tinyMCE.activeEditor && ! tinyMCE.activeEditor.isHidden();
+
+				if (tinymceActive) {
+					tinyMCE.triggerSave();
+				}
+
+				ticketResponse = $('#kbs_ticket_reply' ).val();
+                if ( ticketResponse.length > 0 )	{
+                    return confirm( kbs_vars.reply_has_data );
+                }
+            });
+        },
+
 		reply : function() {
 			// Reply to ticket Requests
 			$( document.body ).on( 'click', '#kbs-reply-close, #kbs-reply-update', function(event) {

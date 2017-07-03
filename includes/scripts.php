@@ -221,7 +221,8 @@ function kbs_load_admin_scripts( $hook ) {
 		'search_placeholder'      => sprintf( __( 'Type to search all %s', 'kb-support' ), kbs_get_article_label_plural() ),
 		'editing_field_type'      => $editing_field_type,
 		'field_label_missing'     => __( 'Enter a Label for your field.', 'kb-support' ),
-		'field_type_missing'      => __( 'Select the field Type', 'kb-support' )
+		'field_type_missing'      => __( 'Select the field Type', 'kb-support' ),
+        'reply_has_data'          => sprintf( __( 'You have not submitted the reply. If you continue, the reply will not be added to the %s', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
 	) );
 
 	if ( function_exists( 'wp_enqueue_media' ) && version_compare( $wp_version, '3.5', '>=' ) ) {
