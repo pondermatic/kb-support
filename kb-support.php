@@ -307,7 +307,7 @@ final class KB_Support {
 		load_plugin_textdomain( 
 			'kb-support',
 			false, 
-			dirname( plugin_basename(__FILE__) ) . '/languages/'
+			dirname( plugin_basename(__FILE__) ) . '/languages'
 		);
 
 	} // load_textdomain
