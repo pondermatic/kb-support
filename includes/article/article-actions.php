@@ -26,8 +26,11 @@ function kbs_search_articles_action()	{
 	}
 
 	$args = array(
-		's'         => $_GET['s_article'],
-		'post_type' => 'article'
+		's'                   => $_GET['s_article'],
+		'post_type'           => 'article',
+		'ignore_sticky_posts' => true,
+		'cache_results'       => false,
+		'order_by'            => 'relevance'
 	);
 
 	$args = apply_filters( 'kbs_article_search', $args );
