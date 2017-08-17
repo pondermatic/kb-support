@@ -54,10 +54,12 @@ function kbs_admin_messages() {
 		$closed = '';
 		if ( isset( $_GET['post'] ) && 'kbs_ticket' == get_post_type( $_GET['post'] ) && 'closed' == get_post_status( $_GET['post'] ) )	{
 
-			$create_article_link = apply_filters( 'kbs_create_article_link', add_query_arg( array(
+			$create_article_link = add_query_arg( array(
 				'kbs-action' => 'create_article',
 				'ticket_id'  => $_GET['post']
-			), admin_url() ) );
+			), admin_url() );
+
+			$create_article_link = apply_filters( 'kbs_create_article_link', $create_article_link );
 
 			$closed = sprintf( __( ' and the %1$s was closed.', 'kb-support' ), kbs_get_ticket_label_singular() );
 			$closed .= ' ';
