@@ -573,8 +573,9 @@ function kbs_ajax_article_search()	{
 	$search_term = $_POST['term'];
 
 	$args = array(
-		'number' => kbs_get_option( 'article_num_posts_ajax', 5 ),
-		's'      => $search_term
+		'number'  => kbs_get_option( 'article_num_posts_ajax', 5 ),
+		's'       => $search_term,
+		'orderby' => 'relevance'
 	);
 
 	if ( ! is_user_logged_in() && kbs_get_option( 'article_hide_restricted_ajax' ) )	{

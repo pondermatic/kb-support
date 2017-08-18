@@ -276,7 +276,9 @@ class KBS_Articles_Query extends KBS_Stats {
 				break;
 
 			case 'date':
-				$this->__set( 'orderby', 'date' );
+			case 'relevance':
+				$this->__set( 'orderby', $this->args['orderby'] );
+				break;
 		}
 	} // orderby
 
