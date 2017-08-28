@@ -49,7 +49,7 @@ class KBS_Article_Stats extends KBS_Stats {
 
 		add_filter( 'kbs_count_articles_where', array( $this, 'count_articles_where' ) );
 
-		$count = wp_count_posts( 'article' );
+		$count = wp_count_posts( KBS()->KB->post_type );
 
 		remove_filter( 'kbs_count_articles_where', array( $this, 'count_articles_where' ) );
 

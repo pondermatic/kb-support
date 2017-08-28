@@ -27,7 +27,7 @@ function kbs_search_articles_action()	{
 
 	$args = array(
 		's'                   => $_GET['s_article'],
-		'post_type'           => 'article',
+		'post_type'           => KBS()->KB->post_type,
 		'ignore_sticky_posts' => true,
 		'cache_results'       => false,
 		'order_by'            => 'relevance'
@@ -116,7 +116,7 @@ function kbs_reset_article_view_count()	{
 		wp_die( 'Cheatin&#8217; huh?' );
 	}
 
-	if ( ! isset( $_GET['article_id'] ) || 'article' != get_post_type( $_GET['article_id'] ) )	{
+	if ( ! isset( $_GET['article_id'] ) || KBS()->KB->post_type != get_post_type( $_GET['article_id'] ) )	{
 		return;
 	}
 
@@ -127,7 +127,7 @@ function kbs_reset_article_view_count()	{
 	}
 
 	$redirect = add_query_arg( array(
-		'post_type'   => 'article',
+		'post_type'   => KBS()->KB->post_type,
 		'kbs-message' => $message
 	), admin_url( 'edit.php' ) );
 

@@ -163,7 +163,7 @@ function kbs_load_dashboard_tickets_widget() {
 					<tr>
 						<td colspan="2">
 							<?php printf( __( 'Most Popular %s', 'kb-support' ), kbs_get_article_label_plural() ); ?>
-							<a href="<?php echo admin_url( 'edit.php?post_type=article' ); ?>">&nbsp;&ndash;&nbsp;<?php _e( 'View All', 'kb-support' ); ?></a>
+							<a href="<?php echo admin_url( 'edit.php?post_type=' . KBS()->KB->post_type ); ?>">&nbsp;&ndash;&nbsp;<?php _e( 'View All', 'kb-support' ); ?></a>
 						</td>
 					</tr>
 				</thead>
@@ -243,7 +243,7 @@ function kbs_dashboard_at_a_glance_widget( $items ) {
 		$article_text = sprintf( $article_text, number_format_i18n( $articles->publish ) );
 
 		if ( current_user_can( 'edit_articles' ) ) {
-			$article_text = sprintf( '<a class="article-count" href="edit.php?post_type=article">%1$s</a>', $article_text );
+			$article_text = sprintf( '<a class="article-count" href="edit.php?post_type=' . KBS()->KB->post_type . '">%1$s</a>', $article_text );
 		} else {
 			$article_text = sprintf( '<span class="article-count">%1$s</span>', $article_text );
 		}

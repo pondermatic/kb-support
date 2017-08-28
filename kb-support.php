@@ -51,7 +51,7 @@ final class KB_Support {
 	 * @since	1.0
 	 */
 	private static $instance;
-	
+
 	/**
 	 * KBS Roles Object.
 	 *
@@ -101,6 +101,14 @@ final class KB_Support {
 	public $customer_meta;
 
 	/**
+	 * KBS Knowledgebase.
+	 *
+	 * @var		obj		KBS_Knowledgebase
+	 * @since	1.0
+	 */
+	public $KB;
+
+	/**
 	 * Main KB_Support Instance.
 	 *
 	 * Insures that only one instance of KB_Support exists in memory at any one
@@ -132,6 +140,7 @@ final class KB_Support {
 			self::$instance->html          = new KBS_HTML_Elements();
 			self::$instance->customers     = new KBS_DB_Customers();
 			self::$instance->customer_meta = new KBS_DB_Customer_Meta();
+			self::$instance->KB            = new KBS_Knowledgebase();
 
 			do_action( 'kbsupport_init' );
 		}
@@ -222,6 +231,7 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-cron.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-logging.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-license-handler.php';
+		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-knowledgebase.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/article-actions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/class-kbs-article-stats.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/class-kbs-articles-query.php';

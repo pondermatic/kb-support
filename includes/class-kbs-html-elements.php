@@ -105,7 +105,7 @@ class KBS_HTML_Elements {
 			'restricted'       => null,
 			'number'           => -1,
 			'orderby'          => 'title',
-			'order'            => 'DESC'
+			'order'            => 'ASC'
 		);
 
 		$args = wp_parse_args( $args, $defaults );

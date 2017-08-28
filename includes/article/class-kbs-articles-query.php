@@ -63,7 +63,7 @@ class KBS_Articles_Query extends KBS_Stats {
 	 */
 	public function __construct( $args = array() ) {
 		$defaults = array(
-			'post_type'  => array( 'article' ),
+			'post_type'  => KBS()->KB->post_type,
 			'articles'   => null,
 			'start_date' => false,
 			'end_date'   => false,
@@ -83,6 +83,7 @@ class KBS_Articles_Query extends KBS_Stats {
 		);
 
 		$this->args = wp_parse_args( $args, $defaults );
+		$this->args = apply_filters( 'kbs_get_articles_args', $this->args );
 
 		$this->init();
 	} // __construct
@@ -183,7 +184,7 @@ class KBS_Articles_Query extends KBS_Stats {
 	 * @return	void
 	 */
 	public function date_filter_post() {
-		if ( ! ( $this->args['start_date'] || $this->args['end_date'] ) ) {
+		if ( ! $this->args['start_date'] || ! $this->args['end_date'] ) {
 			return;
 		}
 
@@ -275,8 +276,13 @@ class KBS_Articles_Query extends KBS_Stats {
 				$this->__set( 'orderby', 'meta_value_num' );
 				break;
 
+			case 'author':
 			case 'date':
+			case 'modified':
+			case 'name':
+			case 'rand':
 			case 'relevance':
+			case 'title':
 				$this->__set( 'orderby', $this->args['orderby'] );
 				break;
 		}
@@ -361,7 +367,7 @@ class KBS_Articles_Query extends KBS_Stats {
 
 			$post = get_post( $search );
 
-			if ( is_object( $post ) && $post->post_type == 'article' ) {
+			if ( is_object( $post ) && $post->post_type == KBS()->KB->post_type ) {
 
 				$arr   = array();
 				$arr[] = $search;

@@ -1155,6 +1155,8 @@ function kbs_get_reply_html( $reply, $ticket_id = 0 ) {
 		'reply_id'   => $reply->ID
 	), admin_url() );
 
+	$create_article_link = apply_filters( 'kbs_create_article_link', $create_article_link, $ticket_id, $reply );
+
 	$reply_html  ='<h3>';
 		$reply_html .= $author . '&nbsp;&ndash;&nbsp;' . date_i18n( $date_format, strtotime( $reply->post_date ) );
 		if ( $file_count )	{

@@ -29,7 +29,7 @@ function kbs_filter_article_content( $content ) {
 		return $content;
 	}
 
-	if ( 'article' == $post->post_type && ! kbs_article_user_can_access( $post ) )	{
+	if ( KBS()->KB->post_type == $post->post_type && ! kbs_article_user_can_access( $post ) )	{
 
 		if ( kbs_article_is_restricted() )	{
 

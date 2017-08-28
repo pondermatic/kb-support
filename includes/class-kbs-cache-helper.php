@@ -50,7 +50,7 @@ class KBS_Cache_Helper {
 			return;
 		}
 
-        if ( 'article' == get_post_type() && kbs_article_is_restricted( get_the_ID() ) )    {
+        if ( KBS()->KB->post_type == get_post_type() && kbs_article_is_restricted( get_the_ID() ) )    {
             self::nocache();
             return;
         }

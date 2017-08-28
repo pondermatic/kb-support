@@ -145,7 +145,7 @@ add_action( 'manage_article_posts_custom_column' , 'kbs_set_articles_column_data
  */
 function kbs_add_article_row_actions( $actions, $post )	{
 
-	if ( 'article' == get_post_type( $post ) )	{
+	if ( KBS()->KB->post_type == get_post_type( $post ) )	{
 		$reset_url = add_query_arg( array(
 			'kbs-action' => 'reset_article_views',
 			'article_id' => $post->ID
@@ -228,7 +228,7 @@ add_action( 'restrict_manage_posts', 'kbs_add_article_filters', 100 );
 function kbs_article_posts_orderby_by_custom_column( $query )	{
 	global $pagenow;
 
-    if ( ! is_admin() || 'edit.php' != $pagenow || ! $query->is_main_query() || 'article' != $query->get( 'post_type' ) )	{
+    if ( ! is_admin() || 'edit.php' != $pagenow || ! $query->is_main_query() || KBS()->KB->post_type != $query->get( 'post_type' ) )	{
         return;
 	}
 

@@ -105,43 +105,47 @@ function kbs_setup_post_types() {
 
 	register_post_type( 'kbs_ticket_reply', apply_filters( 'kbs_ticket_reply_post_type_args', $ticket_reply_args ) );
 
-	/** Article Post Type */
-	$article_labels = array(
-		'name'               => _x( '%2$s', 'article type general name', 'kb-support' ),
-		'singular_name'      => _x( '%1$s', 'article type singular name', 'kb-support' ),
-		'add_new'            => __( 'New %1$s', 'kb-support' ),
-		'add_new_item'       => __( 'New %1$s', 'kb-support' ),
-		'edit_item'          => __( 'Edit %1$s', 'kb-support' ),
-		'new_item'           => __( 'New %1$s', 'kb-support' ),
-		'all_items'          => __( '%2$s', 'kb-support' ),
-		'view_item'          => __( 'View %1$s', 'kb-support' ),
-		'search_items'       => __( 'Search %2$s', 'kb-support' ),
-		'not_found'          => __( 'No %2$s found', 'kb-support' ),
-		'not_found_in_trash' => __( 'No %2$s found in Trash', 'kb-support' ),
-		'parent_item_colon'  => '',
-		'menu_name'          => __( '%2$s', 'kb-support' )
-	);
+	if ( 'article' == KBS()->KB->post_type )	{
 
-	foreach ( $article_labels as $key => $value ) {
-		$article_labels[ $key ] = sprintf( $value, kbs_get_article_label_singular(), kbs_get_article_label_plural() );
+		/** Article Post Type */
+		$article_labels = array(
+			'name'               => _x( '%2$s', 'article type general name', 'kb-support' ),
+			'singular_name'      => _x( '%1$s', 'article type singular name', 'kb-support' ),
+			'add_new'            => __( 'New %1$s', 'kb-support' ),
+			'add_new_item'       => __( 'New %1$s', 'kb-support' ),
+			'edit_item'          => __( 'Edit %1$s', 'kb-support' ),
+			'new_item'           => __( 'New %1$s', 'kb-support' ),
+			'all_items'          => __( '%2$s', 'kb-support' ),
+			'view_item'          => __( 'View %1$s', 'kb-support' ),
+			'search_items'       => __( 'Search %2$s', 'kb-support' ),
+			'not_found'          => __( 'No %2$s found', 'kb-support' ),
+			'not_found_in_trash' => __( 'No %2$s found in Trash', 'kb-support' ),
+			'parent_item_colon'  => '',
+			'menu_name'          => __( '%2$s', 'kb-support' )
+		);
+
+		foreach ( $article_labels as $key => $value ) {
+			$article_labels[ $key ] = sprintf( $value, kbs_get_article_label_singular(), kbs_get_article_label_plural() );
+		}
+
+		$article_args = array(
+			'labels'             => $article_labels,
+			'public'             => true,
+			'show_in_menu'       => true,
+			'menu_icon'          => 'dashicons-welcome-learn-more',
+			'query_var'          => true,
+			'rewrite'            => $articles_rewrite,
+			'capability_type'    => 'article',
+			'map_meta_cap'       => true,
+			'has_archive'        => $article_archives,
+			'hierarchical'       => false,
+			'supports'           => apply_filters( 'kbs_article_supports', array( 'title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'author', 'trackbacks', 'comments' ) ),
+			'can_export'         => true
+		);
+
+		register_post_type( 'article', $article_args );
+
 	}
-
-	$article_args = array(
-		'labels'             => $article_labels,
-		'public'             => true,
-		'show_in_menu'       => true,
-		'menu_icon'          => 'dashicons-welcome-learn-more',
-		'query_var'          => true,
-		'rewrite'            => $articles_rewrite,
-		'capability_type'    => 'article',
-		'map_meta_cap'       => true,
-		'has_archive'        => $article_archives,
-		'hierarchical'       => false,
-		'supports'           => apply_filters( 'kbs_article_supports', array( 'title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'author', 'trackbacks', 'comments' ) ),
-		'can_export'         => true
-	);
-
-	register_post_type( 'article', $article_args );
 	
 	/** KB Form Type */
 	$form_labels = array(

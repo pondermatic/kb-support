@@ -25,7 +25,6 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	obj		$articles	Articles retrieved from the database
  */
 function kbs_get_articles( $args = array() ) {
-	$args     = apply_filters( 'kbs_get_articles_args', $args );
 	$articles = new KBS_Articles_Query( $args );
 
 	return $articles->get_articles();
@@ -45,7 +44,7 @@ function kbs_add_article( $args = array(), $ticket = 0 )	{
 
 	$ticket_id = 0;
 	$defaults = array(
-		'post_type'    => 'article',
+		'post_type'    => KBS()->KB->post_type,
 		'post_author'  => get_current_user_id(),
 		'post_status'  => 'publish',
 		'post_title'   => '',
@@ -70,7 +69,7 @@ function kbs_add_article( $args = array(), $ticket = 0 )	{
 
 	}
 
-	$args = apply_filters( 'kbs_add_article', $args, $ticket_id );
+	$args = apply_filters( 'kbs_add_article_args', $args, $ticket_id );
 
 	do_action( 'kbs_before_add_article', $ticket_id, $args );
 
@@ -110,7 +109,7 @@ function kbs_count_articles( $args = array() ) {
 
 	$select = "SELECT p.post_status,count( * ) AS num_posts";
 	$join = '';
-	$where = "WHERE p.post_type = 'article'";
+	$where = "WHERE p.post_type = '" . KBS()->KB->post_type . "'";
 
 	// Count articles for a search
 	if( ! empty( $args['s'] ) ) {

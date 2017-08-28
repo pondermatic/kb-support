@@ -411,7 +411,7 @@ class KBS_Welcome {
                 </p>
                 <img src="<?php echo KBS_PLUGIN_URL . 'assets/images/screenshots/getting-started-kb-articles.png'; ?>" sizes="(max-width: 500px) calc(100vw - 40px), (max-width: 782px) calc(100vw - 70px), (max-width: 959px) calc(100vw - 116px), (max-width: 1290px) calc(100vw - 240px), 1050px" style="border: none;" />
                 <div class="return-to-dashboard">
-                	<a href="<?php echo admin_url( 'post-new.php?post_type=article' ); ?>"><?php printf( __( '%1$s &rarr; New %2$s', 'kb-support' ), $this->article_plural, $this->article_singular ); ?></a>
+                	<a href="<?php echo admin_url( 'post-new.php?post_type=' . KBS()->KB->post_type ); ?>"><?php printf( __( '%1$s &rarr; New %2$s', 'kb-support' ), $this->article_plural, $this->article_singular ); ?></a>
                 </div>
             </div>
 
@@ -473,7 +473,7 @@ class KBS_Welcome {
                  <a href="<?php echo esc_url( self_admin_url( 'edit.php?post_type=kbs_form' ) ); ?>">
                     <?php _e( 'Manage Submission Forms', 'kb-support' ); ?>
                 </a> |
-                <a href="<?php echo esc_url( self_admin_url( 'edit.php?post_type=article' ) ); ?>">
+                <a href="<?php echo esc_url( self_admin_url( 'edit.php?post_type=' . KBS()->KB->post_type ) ); ?>">
                     <?php printf( __( 'Go to %s', 'kb-support' ), $this->article_plural ); ?>
                 </a> |
                 <a href="https://kb-support.com/extensions/" target="_blank">

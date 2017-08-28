@@ -149,7 +149,9 @@ function kbs_render_hidden_reply_fields( $ticket_id )	{
 function kbs_before_article_content( $content ) {
 	global $post;
 
-	if ( $post && $post->post_type == 'article' && is_singular( 'article' ) && is_main_query() && ! post_password_required() ) {
+	$kb_post = KBS()->KB->post_type;
+
+	if ( $post && $post->post_type == $kb_post && is_singular( $kb_post ) && is_main_query() && ! post_password_required() ) {
 		ob_start();
 		do_action( 'kbs_before_article_content', $post->ID );
 		$content = ob_get_clean() . $content;
@@ -174,7 +176,9 @@ add_filter( 'the_content', 'kbs_before_article_content' );
 function kbs_after_article_content( $content ) {
 	global $post;
 
-	if ( $post && 'article' == $post->post_type && is_singular( 'article' ) && is_main_query() && ! post_password_required() ) {
+	$kb_post = KBS()->KB->post_type;
+
+	if ( $post && $kb_post == $post->post_type && is_singular( $kb_post ) && is_main_query() && ! post_password_required() ) {
 		ob_start();
 		do_action( 'kbs_after_article_content', $post->ID );
 		$content .= ob_get_clean();
@@ -198,7 +202,7 @@ function kbs_article_maybe_increment_views()	{
 		return;
 	}
 
-	if ( 'article' != get_post_type() || ! is_singular( 'article' ) )	{
+	if ( KBS()->KB->post_type != get_post_type() || ! is_singular( KBS()->KB->post_type ) )	{
 		return;
 	}
 

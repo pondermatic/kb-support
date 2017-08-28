@@ -47,7 +47,7 @@ function kbs_article_add_meta_boxes( $post )	{
 		'kbs-article-metabox-linked-tickets',
 		sprintf( __( 'Linked %s', 'kb-support' ), kbs_get_ticket_label_plural() ),
 		'kbs_article_metabox_linked_tickets_callback',
-		'article',
+		KBS()->KB->post_type,
 		'normal',
 		'high',
 		array()
@@ -57,7 +57,7 @@ function kbs_article_add_meta_boxes( $post )	{
 		'kbs-article-metabox-restrictions',
 		__( 'Restrictions', 'kb-support' ),
 		'kbs_article_metabox_restrictions_callback',
-		'article',
+		KBS()->KB->post_type,
 		'side',
 		'',
 		array()
@@ -159,7 +159,7 @@ function kbs_article_metabox_restrict_article_field( $post_id )	{
 	}
 
 	?>
-	<div id="kbs-kn-options">
+	<div id="kbs-kb-options">
     	<p><?php echo KBS()->html->checkbox( array(
 			'name'    => '_kbs_article_restricted',
 			'current' => $logged_in_only
