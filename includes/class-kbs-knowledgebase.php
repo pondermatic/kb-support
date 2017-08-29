@@ -104,7 +104,7 @@ class KBS_Knowledgebase {
 	 */
 	public function get_active_kb()	{
 		if ( ! isset( $this->active_kb ) )	{
-			$this->active_kb = kbs_get_option( 'active_kb', 'kb-support' );
+			$this->active_kb = apply_filters( 'kbs_active_kb', 'kb-support' );
 		}
 
 		return $this->active_kb;
