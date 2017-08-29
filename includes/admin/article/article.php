@@ -259,9 +259,6 @@ add_action( 'pre_get_posts', 'kbs_article_posts_orderby_by_custom_column' );
  */
 function kbs_article_post_save( $post_id, $post, $update )	{	
 
-	// Remove the save post action to avoid loops
-	remove_action( 'save_post_article', 'kbs_article_post_save', 10, 3 );
-
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )	{
 		return;
 	}
@@ -269,6 +266,9 @@ function kbs_article_post_save( $post_id, $post, $update )	{
 	if ( isset( $post->post_type ) && 'revision' == $post->post_type ) {
 		return;
 	}
+
+	// Remove the save post action to avoid loops
+	remove_action( 'save_post_article', 'kbs_article_post_save', 10, 3 );
 
 	if ( ! $update )	{
 		add_post_meta( $post_id, '_kbs_article_views', 0, true );
