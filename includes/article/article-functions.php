@@ -221,7 +221,7 @@ function kbs_get_article_view_count( $article_id )	{
 		$view_count = 0;
 	}
 	
-	return apply_filters( 'kbs_article_view_count', absint( $view_count ) );
+	return apply_filters( 'kbs_article_view_count', absint( $view_count ), $article_id );
 } // kbs_get_article_view_count
 
 /**
