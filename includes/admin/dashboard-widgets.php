@@ -235,7 +235,7 @@ function kbs_dashboard_at_a_glance_widget( $items ) {
 		$items[] = $ticket_text;
 	}
 
-	$articles = wp_count_posts( 'article' );
+	$articles = wp_count_posts( KBS()->KB->post_type );
 
 	if ( $articles && $articles->publish ) {
 		$article_text = _n( '%s ' . kbs_get_article_label_singular(), '%s ' . kbs_get_article_label_plural(), $articles->publish, 'kb-support' );
