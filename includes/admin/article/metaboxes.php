@@ -163,7 +163,7 @@ function kbs_article_metabox_restrict_article_field( $post_id )	{
     	<p><?php echo KBS()->html->checkbox( array(
 			'name'    => '_kbs_article_restricted',
 			'current' => $logged_in_only
-		) ); ?> <label for="_kbs_article_restricted"></label><?php _e( 'Restrict access?', 'kb-support' ); ?></label></p>
+		) ); ?> <label for="_kbs_article_restricted"></label><?php _e( 'Restrict access?', 'kb-support' ); ?></p>
     </div>
 
     <?php
