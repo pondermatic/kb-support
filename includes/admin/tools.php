@@ -63,8 +63,9 @@ function kbs_tools_page()	{
 function kbs_get_tools_page_tabs()	{
 
 	$tabs = array(
-		'general'     => __( 'General', 'kb-support' ),
-		'system_info' => __( 'System Info', 'kb-support' )
+		'general'       => __( 'General', 'kb-support' ),
+		'system_info'   => __( 'System Info', 'kb-support' ),
+        'import_export' => __( 'Import/Export', 'kb-support' )
 	);
 
 	return apply_filters( 'kbs_tools_page_tabs', $tabs );
@@ -124,7 +125,7 @@ function kbs_tools_system_info_display()	{
 
 	<form action="<?php echo esc_url( admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-tools&tab=system_info' ) ); ?>" method="post" dir="ltr">
     		<?php submit_button( __( 'Download System Info File', 'kb-support' ), 'primary', 'kbs-download-sysinfo', true ); ?>
-		<textarea readonly="readonly" onclick="this.focus(); this.select()" id="system-info-textarea" name="kbs-sysinfo" title="To copy the system info, click below then press Ctrl + C (PC) or Cmd + C (Mac)."><?php echo kbs_tools_sysinfo_get(); ?></textarea>
+		<textarea readonly onclick="this.focus(); this.select()" id="system-info-textarea" name="kbs-sysinfo" title="To copy the system info, click below then press Ctrl + C (PC) or Cmd + C (Mac)."><?php echo kbs_tools_sysinfo_get(); ?></textarea>
 		<p class="submit">
 			<input type="hidden" name="kbs-action" value="download_sysinfo" />
 			<?php submit_button( __( 'Download System Info File', 'kb-support' ), 'primary', 'kbs-download-sysinfo-2', false ); ?>
@@ -412,3 +413,146 @@ function kbs_tools_sysinfo_download() {
 	die();
 } // kbs_tools_sysinfo_download
 add_action( 'init', 'kbs_tools_sysinfo_download' );
+
+/**
+ * Display the tools import/export tab
+ *
+ * @since       1.1
+ * @return      void
+ */
+function kbs_tools_import_export_display() {
+
+	if ( ! current_user_can( 'manage_ticket_settings' ) ) {
+		return;
+	}
+
+	do_action( 'kbs_tools_import_export_before' );
+?>
+
+	<div class="postbox">
+		<h3><span><?php _e( 'Export Settings', 'kb-support' ); ?></span></h3>
+		<div class="inside">
+			<p><?php _e( 'Export the KB Support settings for this site as a .json file. This allows you to easily import the configuration into another site.', 'kb-support' ); ?></p>
+			<form method="post" action="<?php echo admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-tools&tab=import_export' ); ?>">
+				<p><input type="hidden" name="kbs-action" value="export_settings" /></p>
+				<p>
+					<?php wp_nonce_field( 'kbs_export_nonce', 'kbs_export_nonce' ); ?>
+					<?php submit_button( __( 'Export', 'kb-support' ), 'secondary', 'submit', false ); ?>
+				</p>
+			</form>
+		</div><!-- .inside -->
+	</div><!-- .postbox -->
+
+	<div class="postbox">
+		<h3><span><?php _e( 'Import Settings', 'kb-support' ); ?></span></h3>
+		<div class="inside">
+			<p><?php _e( 'Import the KB Support settings from a .json file. This file can be obtained by exporting the settings on another site using the form above.', 'kb-support' ); ?></p>
+			<form method="post" enctype="multipart/form-data" action="<?php echo admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-tools&tab=import_export' ); ?>">
+				<p>
+					<input type="file" name="import_file"/>
+				</p>
+				<p>
+					<input type="hidden" name="kbs-action" value="import_settings" />
+					<?php wp_nonce_field( 'kbs_import_nonce', 'kbs_import_nonce' ); ?>
+					<?php submit_button( __( 'Import', 'kb-support' ), 'secondary', 'submit', false ); ?>
+				</p>
+			</form>
+		</div><!-- .inside -->
+	</div><!-- .postbox -->
+<?php
+	do_action( 'kbs_tools_import_export_after' );
+} // kbs_tools_import_export_display
+add_action( 'kbs_tools_tab_import_export', 'kbs_tools_import_export_display' );
+
+
+/**
+ * Process a settings export that generates a .json file of the shop settings
+ *
+ * @since       1.1
+ * @return      void
+ */
+function kbs_tools_import_export_process_export() {
+
+    if ( ! isset( $_POST['kbs-action'] ) || 'export_settings' != $_POST['kbs-action'] )	{
+		return;
+	}
+
+	if ( empty( $_POST['kbs_export_nonce'] ) )    {
+		return;
+    }
+
+	if ( ! wp_verify_nonce( $_POST['kbs_export_nonce'], 'kbs_export_nonce' ) )    {
+		return;
+    }
+
+	if ( ! current_user_can( 'manage_ticket_settings' ) ) {
+		return;
+    }
+
+	$settings = array();
+	$settings = get_option( 'kbs_settings' );
+
+	ignore_user_abort( true );
+
+	if ( ! kbs_is_func_disabled( 'set_time_limit' ) )
+		set_time_limit( 0 );
+
+	nocache_headers();
+	header( 'Content-Type: application/json; charset=utf-8' );
+	header( 'Content-Disposition: attachment; filename=' . apply_filters( 'kbs_settings_export_filename', 'kbs-settings-export-' . date( 'd-m-Y' ) ) . '.json' );
+	header( "Expires: 0" );
+
+	echo json_encode( $settings );
+	exit;
+} // kbs_tools_import_export_process_export
+add_action( 'init', 'kbs_tools_import_export_process_export' );
+
+/**
+ * Process a settings import from a json file
+ *
+ * @since   1.1
+ * @return  void
+ */
+function kbs_tools_import_export_process_import() {
+
+    if ( ! isset( $_POST['kbs-action'] ) || 'import_settings' != $_POST['kbs-action'] )	{
+		return;
+	}
+
+	if ( empty( $_POST['kbs_import_nonce'] ) ) {
+		return;
+    }
+
+	if ( ! wp_verify_nonce( $_POST['kbs_import_nonce'], 'kbs_import_nonce' ) )   {
+		return;
+    }
+
+	if ( ! current_user_can( 'manage_ticket_settings' ) ) {
+		return;
+    }
+
+	if ( kbs_get_file_extension( $_FILES['import_file']['name'] ) != 'json' ) {
+		wp_die( __( 'Please upload a valid .json file', 'kb-support' ), __( 'Error', 'kb-support' ), array( 'response' => 400 ) );
+	}
+
+	$import_file = $_FILES['import_file']['tmp_name'];
+
+	if( empty( $import_file ) ) {
+		wp_die( __( 'Please upload a file to import', 'kb-support' ), __( 'Error', 'kb-support' ), array( 'response' => 400 ) );
+	}
+
+	// Retrieve the settings from the file and convert the json object to an array
+	$settings = kbs_object_to_array( json_decode( file_get_contents( $import_file ) ) );
+
+	update_option( 'kbs_settings', $settings );
+
+	wp_safe_redirect( add_query_arg( array(
+		'post_type'    => 'kbs_ticket',
+		'page'         => 'kbs-tools',
+		'tab'          => 'import_export',
+		'kbs-message'  => 'settings-imported'
+	), admin_url( 'edit.php' ) ) );
+	exit;
+
+} // kbs_tools_import_export_process_import
+add_action( 'init', 'kbs_tools_import_export_process_import' );

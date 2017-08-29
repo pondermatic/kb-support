@@ -155,6 +155,62 @@ function kbs_get_php_arg_separator_output() {
 } // kbs_get_php_arg_separator_output
 
 /**
+ * Get File Extension
+ *
+ * Returns the file extension of a filename.
+ *
+ * @since    1.1
+ *
+ * @param    unknown     $str    File name
+ * @return   mixed       File extension
+ */
+function kbs_get_file_extension( $str ) {
+	$parts = explode( '.', $str );
+	return end( $parts );
+} // kbs_get_file_extension
+
+/**
+ * Given an object or array of objects, convert them to arrays
+ *
+ * @since   1.1
+ * @param   object|array   $object An object or an array of objects
+ * @return  arr            An array or array of arrays, converted from the provided object(s)
+ */
+function kbs_object_to_array( $object = array() ) {
+
+	if ( empty( $object ) || ( ! is_object( $object ) && ! is_array( $object ) ) ) {
+		return $object;
+	}
+
+	if ( is_array( $object ) ) {
+		$return = array();
+		foreach ( $object as $item ) {
+			if ( is_a( $object, 'KBS_Ticket' ) ) {
+				$return[] = $object->array_convert();
+			} else {
+				$return[] = kbs_object_to_array( $item );
+			}
+
+		}
+	} else {
+		if ( is_a( $object, 'KBS_Ticket' ) ) {
+			$return = $object->array_convert();
+		} else {
+			$return = get_object_vars( $object );
+
+			// Now look at the items that came back and convert any nested objects to arrays
+			foreach ( $return as $key => $value ) {
+				$value = ( is_array( $value ) || is_object( $value ) ) ? kbs_object_to_array( $value ) : $value;
+				$return[ $key ] = $value;
+			}
+		}
+	}
+
+	return $return;
+
+} // kbs_object_to_array
+
+/**
  * Validate the form honeypot to protect against bots.
  *
  * @since	1.0
