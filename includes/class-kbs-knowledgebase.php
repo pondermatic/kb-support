@@ -57,8 +57,8 @@ class KBS_Knowledgebase {
 	 */
 	public function __construct()	{
 		add_action( 'init',            array( $this, 'setup_kb' ) );
-		add_action( 'kbs_kb_init_kbs', array( $this, 'register_post_type' ) );
-		add_action( 'kbs_kb_init_kbs', array( $this, 'register_taxonomies' ) );
+		add_action( 'kbs_kb_init_kb-support', array( $this, 'register_post_type' ) );
+		add_action( 'kbs_kb_init_kb-support', array( $this, 'register_taxonomies' ) );
 	} // __construct
 
 	/**
@@ -70,7 +70,7 @@ class KBS_Knowledgebase {
 		$this->get_registered_knowledgebases();
 		$this->get_active_kb();
 
-		if ( 'kbs' != $this->active_kb )	{
+		if ( 'kb-support' != $this->active_kb )	{
 			$this->default_kb = false;
 		}
 
@@ -85,7 +85,7 @@ class KBS_Knowledgebase {
 	public function get_registered_knowledgebases()	{
 		if ( ! isset( $this->registered_integrations ) )	{
 			$this->registered_integrations = array(
-				'kbs' => __( 'KB Support', 'kb-support' )
+				'kb-support' => __( 'KB Support', 'kb-support' )
 			);
 		}
 
@@ -104,7 +104,7 @@ class KBS_Knowledgebase {
 	 */
 	public function get_active_kb()	{
 		if ( ! isset( $this->active_kb ) )	{
-			$this->active_kb = kbs_get_option( 'active_kb', 'kbs' );
+			$this->active_kb = kbs_get_option( 'active_kb', 'kb-support' );
 		}
 
 		return $this->active_kb;
