@@ -95,6 +95,24 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 == Changelog ==
 
+= 1.0.8 =
+
+**Wednesday, 30th August 2017**
+
+**New**
+
+* Created `KBS_Knowledgebase` class which manages the setup of the knowledgebase
+* Added multiple filters during knowledgebase setup which allow for integrations of 3rd party knowledgebase tools
+* Added Export and Import options for KBS settings
+
+**Tweaks**
+
+* If there is content in the reply field, request confirmation before saving ticket in admin
+* Improvements to the article search query arguments
+* Removed stray `</label>` tag from article post
+* Fixed label alignment within article metaboxes
+* Added `$article_id` var to `kbs_article_view_count` filter
+
 = 1.0.7 =
 
 **Monday, 3rd July 2017**
