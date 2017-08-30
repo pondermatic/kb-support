@@ -6,7 +6,7 @@
  * @subpackage  Classes/Knowledgebase
  * @copyright   Copyright (c) 2017, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       1.1
+ * @since       1.0.8
 */
 
 // Exit if accessed directly
@@ -16,14 +16,14 @@ if ( ! defined( 'ABSPATH' ) )
 /**
  * KBS_Knowledgebase Class
  *
- * @since	1.1
+ * @since	1.0.8
  */
 class KBS_Knowledgebase {
 
 	/**
 	 * Registered knowledgebases
 	 *
-	 * @since	1.1
+	 * @since	1.0.8
 	 * @var		array
 	 */
 	public $registered_integrations;
@@ -31,7 +31,7 @@ class KBS_Knowledgebase {
 	/**
 	 * Default knowledgebase?
 	 *
-	 * @since	1.1
+	 * @since	1.0.8
 	 *
 	 */
 	public $default_kb = true;
@@ -39,21 +39,21 @@ class KBS_Knowledgebase {
 	/**
 	 * The article post type
 	 *
-	 * @since 1.1
+	 * @since	1.0.8
 	 */
 	public $post_type = 'article';
 
 	/**
 	 * The active knowledgebase
 	 *
-	 * @since	1.1
+	 * @since	1.0.8
 	 */
 	public $active_kb;
 
 	/**
 	 * Get things going
 	 *
-	 * @since	1.1
+	 * @since	1.0.8
 	 */
 	public function __construct()	{
 		add_action( 'init',            array( $this, 'setup_kb' ) );
@@ -64,7 +64,7 @@ class KBS_Knowledgebase {
 	/**
 	 * Setup the knowledgebase.
 	 *
-	 * @since	1.1
+	 * @since	1.0.8
 	 */
 	public function setup_kb()	{
 		$this->get_registered_knowledgebases();
@@ -80,7 +80,7 @@ class KBS_Knowledgebase {
 	/**
 	 * Retrieve the registered KBs.
 	 *
-	 * @since	1.1
+	 * @since	1.0.8
 	 */
 	public function get_registered_knowledgebases()	{
 		if ( ! isset( $this->registered_integrations ) )	{
@@ -100,7 +100,7 @@ class KBS_Knowledgebase {
 	/**
 	 * Retrieve the active KB.
 	 *
-	 * @since	1.1
+	 * @since	1.0.8
 	 */
 	public function get_active_kb()	{
 		if ( ! isset( $this->active_kb ) )	{
@@ -113,7 +113,7 @@ class KBS_Knowledgebase {
 	/**
 	 * Register the default KB Article post type.
 	 *
-	 * @since	1.1
+	 * @since	1.0.8
 	 * @return	void
 	 */
 	public function register_post_type()	{
@@ -162,7 +162,7 @@ class KBS_Knowledgebase {
 	/**
 	 * Register the default KB Article taxonomies.
 	 *
-	 * @since	1.1
+	 * @since	1.0.8
 	 * @return	void
 	 */
 	public function register_taxonomies()	{
