@@ -535,6 +535,67 @@ td.kbs_article_label {
 -------------------------------------------------------------- */
 #system-info-textarea { width: 800px; height: 600px; font-family: Menlo, Monaco, monospace; background: #FFFFFF; white-space: pre; overflow: auto; display: block; }
 
+/* Export page styles
+-------------------------------------------------------------- */
+#kbs-graphs-date-options,
+#kbs-date-range-options {
+	float: left;
+}
+#kbs-date-range-options span {
+	float: left;
+	line-height: 24px;
+	height: 24px;
+	margin-right: 6px;
+}
+.kbs-import-export-form {
+	position: relative;
+}
+.kbs-import-export-form .kbs-progress {
+	background: #ddd;
+	position: absolute;
+	bottom: 15px;
+	width: 95%;
+	height: 15px;
+}
+.kbs-import-export-form .kbs-progress div {
+	background: #ccc;
+	height: 100%;
+	width: 0;
+}
+.kbs-import-export-form .notice-wrap {
+	background-color: #f4f4f4;
+	border-style: solid;
+	border-width: 1px 0;
+	border-color: #eae9e9;
+	padding: 12px 12px 4px;
+	overflow: auto;
+	margin: 20px -12px -23px;
+}
+.kbs-import-export-form .notice-wrap .spinner {
+	margin: 4px 10px 8px;
+}
+.admin-color-fresh .kbs-import-export-form .kbs-progress div {
+	background: #0073aa;
+}
+.admin-color-light .kbs-import-export-form .kbs-progress div {
+	background: #888;
+}
+.admin-color-blue .kbs-import-export-form .kbs-progress div {
+	background: #096484;
+}
+.admin-color-coffee .kbs-import-export-form .kbs-progress div {
+	background: #c7a589;
+}
+.admin-color-ectoplasm .kbs-import-export-form .kbs-progress div {
+	background: #a3b745;
+}
+.admin-color-midnight .kbs-import-export-form .kbs-progress div {
+	background: #e14d43;
+}
+.admin-color-sunrise .kbs-import-export-form .kbs-progress div {
+	background: #dd823b;
+}
+
 /* About page styles
 -------------------------------------------------------------- */
 .kbs-about-wrap .kbs-badge {
