@@ -1,4 +1,4 @@
-<?php
+setting<?php
 /**
  * Admin Notices
  *
@@ -321,6 +321,24 @@ function kbs_admin_messages() {
 			'kbs-notices',
 			'kbs-reset-article-views-failed',
 			sprintf( __( 'Failed to reset %s view count.', 'kb-support' ), kbs_get_article_label_singular() ),
+			'error'
+		);
+	}
+
+    if ( isset( $_GET['kbs-message'] ) && 'settings-imported' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-settings-imported',
+			__( 'Settings imported.', 'kb-support' ),
+			'updated'
+		);
+	}
+
+    if ( isset( $_GET['kbs-message'] ) && 'settings-import-missing-file' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-settings-import-file-missing',
+			__( 'Please upload a valid .json file.', 'kb-support' ),
 			'error'
 		);
 	}
