@@ -1,4 +1,4 @@
-setting<?php
+<?php
 /**
  * Admin Notices
  *
