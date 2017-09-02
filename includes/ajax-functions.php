@@ -594,8 +594,11 @@ function kbs_ajax_article_search()	{
 				$output .= '<a href="' . get_post_permalink( $article->ID ) . '" target="_blank">';
 					$output .= esc_attr( $article->post_title );
 				$output .= '</a>';
-				$output .= '<br />';
-				$output .= kbs_get_article_excerpt( $article->ID );
+
+				if ( kbs_get_article_excerpt_length() > 0 )	{
+					$output .= '<br />';
+					$output .= kbs_get_article_excerpt( $article->ID );
+				}
 
 			$output .= '</li>';
 		}
