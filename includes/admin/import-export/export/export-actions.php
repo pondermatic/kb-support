@@ -29,7 +29,7 @@ function kbs_process_batch_export_download() {
 		wp_die( __( 'Nonce verification failed', 'kb-support' ), __( 'Error', 'kb-support' ), array( 'response' => 403 ) );
 	}
 
-	require_once( KBS_PLUGIN_DIR . '/includes/admin/import_export/export/class-batch-export.php' );
+	require_once( KBS_PLUGIN_DIR . '/includes/admin/import-export/export/class-batch-export.php' );
 
 	do_action( 'kbs_batch_export_class_include', $_REQUEST['class'] );
 
@@ -85,86 +85,6 @@ function kbs_tools_settings_process_export() {
 add_action( 'init', 'kbs_tools_settings_process_export' );
 
 /**
- * Process a settings import from a json file
- *
- * @since   1.1
- * @return  void
- */
-function kbs_tools_settings_process_import() {
-
-    if ( ! isset( $_POST['kbs-action'] ) || 'import_settings' != $_POST['kbs-action'] )	{
-		return;
-	}
-
-	if ( empty( $_POST['kbs_import_nonce'] ) ) {
-		return;
-    }
-
-	if ( ! wp_verify_nonce( $_POST['kbs_import_nonce'], 'kbs_import_nonce' ) )   {
-		return;
-    }
-
-	if ( ! current_user_can( 'export_ticket_reports' ) ) {
-		return;
-    }
-
-	if ( kbs_get_file_extension( $_FILES['import_file']['name'] ) != 'json' ) {
-		wp_safe_redirect( add_query_arg( array(
-            'post_type'    => 'kbs_ticket',
-            'page'         => 'kbs-tools',
-            'tab'          => 'import',
-            'kbs-message'  => 'settings-import-missing-file'
-        ), admin_url( 'edit.php' ) ) );
-        exit;
-	}
-
-	$import_file = $_FILES['import_file']['tmp_name'];
-
-	if ( empty( $import_file ) ) {
-		wp_safe_redirect( add_query_arg( array(
-            'post_type'    => 'kbs_ticket',
-            'page'         => 'kbs-tools',
-            'tab'          => 'import',
-            'kbs-message'  => 'settings-import-missing-file'
-        ), admin_url( 'edit.php' ) ) );
-        exit;
-	}
-
-	// Retrieve the settings from the file and convert the json object to an array
-	$settings = kbs_object_to_array( json_decode( file_get_contents( $import_file ) ) );
-
-	update_option( 'kbs_settings', $settings );
-
-	wp_safe_redirect( add_query_arg( array(
-		'post_type'    => 'kbs_ticket',
-		'page'         => 'kbs-tools',
-		'tab'          => 'import',
-		'kbs-message'  => 'settings-imported'
-	), admin_url( 'edit.php' ) ) );
-	exit;
-
-} // kbs_tools_settings_process_import
-add_action( 'init', 'kbs_tools_settings_process_import' );
-
-/**
- * Export all the clients to a CSV file.
- *
- * Note: The WordPress Database API is being used directly for performance
- * reasons (workaround of calling all posts and fetch data respectively)
- *
- * @since	1.1
- * @return	void
- */
-function mdjm_export_all_clients() {
-	require_once MDJM_PLUGIN_DIR . '/includes/admin/reporting/class-mdjm-clients-export.php';
-
-	$client_export = new MDJM_Clients_Export();
-
-	$client_export->export();
-} // mdjm_export_all_clients
-add_action( 'mdjm_email_export', 'mdjm_export_all_clients' );
-
-/**
  * Add a hook allowing extensions to register a hook on the batch export process
  *
  * @since	1.1
@@ -176,6 +96,28 @@ function kbs_register_batch_exporters() {
 	}
 } // kbs_register_batch_exporters
 add_action( 'plugins_loaded', 'kbs_register_batch_exporters' );
+
+/**
+ * Register the customers batch exporter
+ * @since	1.1
+ */
+function kbs_register_customers_batch_export() {
+	add_action( 'kbs_batch_export_class_include', 'kbs_include_customers_batch_processer', 10, 1 );
+} // kbs_register_customers_batch_export
+add_action( 'kbs_register_batch_exporter', 'kbs_register_customers_batch_export', 10 );
+
+/**
+ * Loads the customers batch process if needed
+ *
+ * @since 	1.1
+ * @param	str		$class	The class being requested to run for the batch export
+ * @return	void
+ */
+function kbs_include_customers_batch_processer( $class ) {
+	if ( 'KBS_Batch_Export_Customers' === $class ) {
+		require_once( KBS_PLUGIN_DIR . '/includes/admin/import-export/export/class-batch-export-customers.php' );
+	}
+} // kbs_include_customers_batch_processer
 
 /**
  * Register the events batch exporter
@@ -194,9 +136,7 @@ add_action( 'kbs_register_batch_exporter', 'kbs_register_tickets_batch_export', 
  * @return	void
  */
 function kbs_include_tickets_batch_processer( $class ) {
-
 	if ( 'KBS_Batch_Export_Tickets' === $class ) {
-		require_once( KBS_PLUGIN_DIR . '/includes/admin/import_export/export/class-batch-export-tickets.php' );
+		require_once( KBS_PLUGIN_DIR . '/includes/admin/import-export/export/class-batch-export-tickets.php' );
 	}
-
 } // kbs_include_tickets_batch_processer

@@ -466,16 +466,16 @@ function kbs_tools_export_display() {
 	do_action( 'kbs_tools_export_before' );
 ?>
 
-	<div class="postbox">
+	<div class="postbox kbs-export-settings">
 		<h3><span><?php _e( 'Export Settings', 'kb-support' ); ?></span></h3>
 		<div class="inside">
 			<p><?php _e( 'Export the KB Support settings for this site as a .json file. This allows you to easily import the configuration into another site.', 'kb-support' ); ?></p>
 			<form method="post" action="<?php echo admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-tools&tab=export' ); ?>">
-				<p><input type="hidden" name="kbs-action" value="export_settings" /></p>
-				<p>
-					<?php wp_nonce_field( 'kbs_export_nonce', 'kbs_export_nonce' ); ?>
+				<input type="hidden" name="kbs-action" value="export_settings" />
+				<?php wp_nonce_field( 'kbs_export_nonce', 'kbs_export_nonce' ); ?>
+                <span>
 					<?php submit_button( __( 'Export', 'kb-support' ), 'secondary', 'submit', false ); ?>
-				</p>
+                </span>
 			</form>
 		</div><!-- .inside -->
 	</div><!-- .postbox -->
