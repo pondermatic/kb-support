@@ -263,7 +263,6 @@ function kbs_order_admin_tickets( $query )	{
 		return;
 	}
 
-    error_log( $query->get( 'orderby' ) . ' - ' . $query->get( 'order' ) );
     return;
 
 	$orderby = '' == $query->get( 'orderby' ) ? 'date' : $query->get( 'orderby' );
