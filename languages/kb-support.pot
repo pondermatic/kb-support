@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KB Support 1.0.8\n"
 "Report-Msgid-Bugs-To: https://kb-support.com/\n"
-"POT-Creation-Date: 2017-08-30 09:03:48+00:00\n"
+"POT-Creation-Date: 2017-09-04 12:18:37+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -286,7 +286,7 @@ msgstr ""
 
 #: includes/admin/article/article.php:129
 #: includes/admin/companies/company.php:110
-#: includes/admin/tickets/tickets.php:102
+#: includes/admin/tickets/tickets.php:127
 msgid "No callback found for post column"
 msgstr ""
 
@@ -296,8 +296,8 @@ msgstr ""
 
 #: includes/admin/article/article.php:183
 #: includes/admin/article/article.php:198
-#: includes/admin/tickets/tickets.php:288
-#: includes/admin/tickets/tickets.php:303
+#: includes/admin/tickets/tickets.php:354
+#: includes/admin/tickets/tickets.php:369
 msgid "Show all %s"
 msgstr ""
 
@@ -1991,7 +1991,8 @@ msgstr ""
 #: includes/admin/settings/register-settings.php:515
 msgid ""
 "Enter the number of words that should form the excerpt length during an "
-"ajax search. i.e. on the submission form."
+"ajax search. i.e. on the submission form. Enter <code>0</code> for no "
+"excerpt."
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:525
@@ -2879,19 +2880,19 @@ msgstr ""
 msgid "Add Note"
 msgstr ""
 
-#: includes/admin/tickets/tickets.php:174
+#: includes/admin/tickets/tickets.php:199
 msgid "No Customer Assigned"
 msgstr ""
 
-#: includes/admin/tickets/tickets.php:199 templates/view-ticket.php:104
+#: includes/admin/tickets/tickets.php:224 templates/view-ticket.php:104
 msgid "No Agent Assigned"
 msgstr ""
 
-#: includes/admin/tickets/tickets.php:441
+#: includes/admin/tickets/tickets.php:507
 msgid "All"
 msgstr ""
 
-#: includes/admin/tickets/tickets.php:442
+#: includes/admin/tickets/tickets.php:508
 msgid "Active %s"
 msgstr ""
 
@@ -3401,7 +3402,7 @@ msgstr ""
 msgid "No users found"
 msgstr ""
 
-#: includes/ajax-functions.php:613
+#: includes/ajax-functions.php:616
 msgid "View all %d possible solutions."
 msgstr ""
 
@@ -3944,15 +3945,15 @@ msgstr ""
 msgid " contains an error."
 msgstr ""
 
-#: includes/install.php:120
+#: includes/install.php:124
 msgid "Ticket Manager"
 msgstr ""
 
-#: includes/install.php:144
+#: includes/install.php:148
 msgid "Ticket Submissions"
 msgstr ""
 
-#: includes/install.php:163
+#: includes/install.php:167
 msgid "Log a Support %s"
 msgstr ""
 
