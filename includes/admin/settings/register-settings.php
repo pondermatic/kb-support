@@ -984,6 +984,28 @@ function kbs_settings_sanitize( $input = array() ) {
 } // kbs_settings_sanitize
 
 /**
+ * Misc Accounting Settings Sanitization
+ *
+ * @since	1.1
+ * @param	arr		$input	The value inputted in the field
+ * @return	str		$input	Sanitized value
+ */
+function kbs_settings_sanitize_tickets_main( $input ) {
+
+	if ( ! current_user_can( 'manage_ticket_settings' ) ) {
+		return $input;
+	}
+
+	if ( ! empty( $input['enable_sequential'] ) && ! kbs_get_option( 'enable_sequential' ) )	{
+		// Shows an admin notice about upgrading previous ticket numbers
+		add_option( 'kbs_upgrade_sequential', '1' );
+	}
+
+	return $input;
+} // kbs_settings_sanitize_tickets_main
+add_filter( 'kbs_settings_tickets-main_sanitize', 'kbs_settings_sanitize_tickets_main' );
+
+/**
  * Sanitize text fields
  *
  * @since	1.0

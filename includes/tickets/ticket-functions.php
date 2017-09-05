@@ -828,28 +828,6 @@ function kbs_update_ticket_meta( $ticket_id = 0, $meta_key = '', $meta_value = '
 } // kbs_update_ticket_meta
 
 /**
- * Retrieve the ticket ID.
- *
- * @since	1.0
- * @param	int|obj		$ticket		Post object, or ID.
- * @return	str			The ticket ID with prefix and suffix
- */
-function kbs_get_ticket_id( $ticket )	{
-	if ( is_numeric( $ticket ) )	{
-		$ticket_id = $ticket;
-	} else	{
-		$ticket_id = $ticket->ID;
-	}
-
-	$prefix = kbs_get_option( 'ticket_prefix', '' );
-	$suffix = kbs_get_option( 'ticket_suffix', '' );
-
-	$ticket_id = $prefix . $ticket_id . $suffix;
-
-	return apply_filters( 'kbs_ticket_id', $ticket_id );
-} // kbs_get_ticket_id
-
-/**
  * Get the user email associated with a ticket.
  *
  * @since	1.0
@@ -937,9 +915,31 @@ function kbs_get_ticket_key( $ticket_id )	{
  * @return	str		Ticket number
  */
 function kbs_get_ticket_number( $ticket_id = 0 ) {
-	$ticket = new EDD_Payment( $ticket_id );
+	$ticket = new KBS_Ticket( $ticket_id );
+
 	return $ticket->number;
 } // kbs_get_ticket_number
+
+/**
+ * Formats the ticket number with the prefix and suffix
+ *
+ * @since	1.1
+ * @param 	int		$number		The ticket number to format
+ * @return	str		The formatted ticket number
+ */
+function kbs_format_ticket_number( $number )	{
+	if ( ! is_numeric( $number ) )	{
+		return $number;
+	}
+
+	$prefix  = kbs_get_option( 'ticket_prefix' );
+	$number  = absint( $number );
+	$postfix = kbs_get_option( 'ticket_suffix' );
+
+	$formatted_number = $prefix . $number . $postfix;
+
+	return apply_filters( 'kbs_format_ticket_number', $formatted_number, $prefix, $number, $postfix );
+} // kbs_format_ticket_number
 
 /**
  * Gets the next available ticket number

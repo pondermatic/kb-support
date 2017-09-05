@@ -78,10 +78,9 @@ function kbs_month_num_to_name( $n ) {
  * Get the current page URL
  *
  * @since	1.0
- * @param	bool	$nocache	If we should bust cache on the returned URL
  * @return	str		$page_url	Current page URL
  */
-function kbs_get_current_page_url() {
+function kbs_get_current_page_url()	{
 
 	global $wp;
 
@@ -450,6 +449,104 @@ function kbs_add_credit_text()	{
 } // kbs_add_credit_text
 add_action( 'kbs_after_ticket_form', 'kbs_add_credit_text' );
 add_action( 'kbs_after_single_ticket_form', 'kbs_add_credit_text' );
+
+/**
+ * Marks a function as deprecated and informs when it has been used.
+ *
+ * There is a hook kbs_deprecated_function_run that will be called that can be used
+ * to get the backtrace up to what file and function called the deprecated
+ * function.
+ *
+ * The current behavior is to trigger a user error if WP_DEBUG is true.
+ *
+ * This function is to be used in every function that is deprecated.
+ *
+ * @uses do_action() Calls 'kbs_deprecated_function_run' and passes the function name, what to use instead,
+ *   and the version the function was deprecated in.
+ * @uses apply_filters() Calls 'kbs_deprecated_function_trigger_error' and expects boolean value of true to do
+ *   trigger or false to not trigger error.
+ *
+ * @param string  $function    The function that was called
+ * @param string  $version     The version of KB Support that deprecated the function
+ * @param string  $replacement Optional. The function that should have been called
+ * @param array   $backtrace   Optional. Contains stack backtrace of deprecated function
+ */
+function _kbs_deprecated_function( $function, $version, $replacement = null, $backtrace = null ) {
+	do_action( 'kbs_deprecated_function_run', $function, $replacement, $version );
+
+	$show_errors = current_user_can( 'manage_options' );
+
+	// Allow plugin to filter the output error trigger
+	if ( WP_DEBUG && apply_filters( 'kbs_deprecated_function_trigger_error', $show_errors ) ) {
+		if ( ! is_null( $replacement ) ) {
+			trigger_error( sprintf(
+				__( '%1$s is <strong>deprecated</strong> since KB Support version %2$s! Use %3$s instead.', 'kb-support' ),
+				$function,
+				$version,
+				$replacement
+			) );
+			trigger_error(  print_r( $backtrace, 1 ) ); // Limited to previous 1028 characters, but since we only need to move back 1 in stack that should be fine.
+			// Alternatively we could dump this to a file.
+		} else {
+			trigger_error( sprintf(
+				__( '%1$s is <strong>deprecated</strong> since KB Support version %2$s with no alternative available.', 'kb-support' ),
+				$function,
+				$version
+			) );
+			trigger_error( print_r( $backtrace, 1 ) );// Limited to previous 1028 characters, but since we only need to move back 1 in stack that should be fine.
+			// Alternatively we could dump this to a file.
+		}
+	}
+} // _kbs_deprecated_function
+
+/**
+ * Marks an argument in a function deprecated and informs when it's been used
+ *
+ * There is a hook kbs_deprecated_argument_run that will be called that can be used
+ * to get the backtrace up to what file and function called the deprecated
+ * function.
+ *
+ * The current behavior is to trigger a user error if WP_DEBUG is true.
+ *
+ * This function is to be used in every function that has an argument being deprecated.
+ *
+ * @uses do_action() Calls 'kbs_deprecated_argument_run' and passes the argument, function name, what to use instead,
+ *   and the version the function was deprecated in.
+ * @uses apply_filters() Calls 'kbs_deprecated_argument_trigger_error' and expects boolean value of true to do
+ *   trigger or false to not trigger error.
+ *
+ * @param	str		$argument		The argument that is being deprecated
+ * @param	str		$function		The function that was called
+ * @param	str		$version		The version of WordPress that deprecated the function
+ * @param	str		$replacement	Optional. The function that should have been called
+ * @param	arr		$backtrace		Optional. Contains stack backtrace of deprecated function
+ */
+function _kbs_deprected_argument( $argument, $function, $version, $replacement = null, $backtrace = null )	{
+	do_action( 'kbs_deprecated_argument_run', $argument, $function, $replacement, $version );
+
+	$show_errors = current_user_can( 'manage_options' );
+
+	// Allow plugin to filter the output error trigger
+	if ( WP_DEBUG && apply_filters( 'kbs_deprecated_argument_trigger_error', $show_errors ) )	{
+		if ( ! is_null( $replacement ) )	{
+			trigger_error( sprintf(
+				__( 'The %1$s argument of %2$s is <strong>deprecated</strong> since KB Support version %3$s! Please use %4$s instead.', 'kb-support' ),
+				$argument, $function, $version, $replacement
+			) );
+			trigger_error( print_r( $backtrace, 1 ) ); // Limited to previous 1028 characters, but since we only need to move back 1 in stack that should be fine.
+			// Alternatively we could dump this to a file.
+		} else	{
+			trigger_error( sprintf(
+				__( 'The %1$s argument of %2$s is <strong>deprecated</strong> since KB Support version %3$s with no alternative available.', 'kb-support' ),
+				$argument,
+				$function,
+				$version
+			) );
+			trigger_error( print_r( $backtrace, 1 ) );// Limited to previous 1028 characters, but since we only need to move back 1 in stack that should be fine.
+			// Alternatively we could dump this to a file.
+		}
+	}
+} // _kbs_deprected_argument
 
 /**
  * Checks whether a function is disabled.

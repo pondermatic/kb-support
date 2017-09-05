@@ -85,6 +85,7 @@ if ( kbs_get_option( 'remove_on_uninstall' ) )	{
 	}
 
 	// Delete all Plugin Options
+	delete_option( 'kbs_last_ticket_number' );
 	delete_option( 'kbs_settings' );
 	delete_option( 'kbs_version' );
 

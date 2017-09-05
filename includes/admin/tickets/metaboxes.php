@@ -86,7 +86,7 @@ function kbs_ticket_add_meta_boxes( $post )	{
 
 	add_meta_box(
 		'kbs-ticket-metabox-save',
-		sprintf( '%1$s %2$s # %3$s', $save, $single_label, kbs_get_ticket_id( $kbs_ticket->ID ) ),
+		sprintf( '%1$s %2$s # %3$s', $save, $single_label, kbs_get_ticket_number( $kbs_ticket->ID ) ),
 		'kbs_ticket_metabox_save_callback',
 		'kbs_ticket',
 		'side',

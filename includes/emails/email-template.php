@@ -50,7 +50,7 @@ function kbs_email_template_tags( $message, $ticket_id ) {
 function kbs_email_preview_template_tags( $message ) {
 
 	$user      = wp_get_current_user();
-	$ticket_id = kbs_get_ticket_id( rand( 1, 100 ) );
+	$ticket_id = kbs_get_ticket_number( rand( 1, 100 ) );
 
 	$search  = array(
 		'{name}', '{fullname}', '{username}', '{user_email}', '{sitename}',
@@ -64,7 +64,7 @@ function kbs_email_preview_template_tags( $message ) {
 		get_bloginfo( 'name' ),
 		get_date_from_gmt( current_time( 'timestamp' ), get_option( 'date_format' ) ),
 		get_date_from_gmt( current_time( 'timestamp' ), get_option( 'time_format' ) ),
-		kbs_get_ticket_id( $ticket_id ),
+		kbs_get_ticket_number( $ticket_id ),
 		kbs_get_ticket_url( $ticket_id ),
 		sprintf( __( 'This is where your %s content would be displayed.', 'kb-support' ), kbs_get_ticket_label_plural( true ) )
 	);

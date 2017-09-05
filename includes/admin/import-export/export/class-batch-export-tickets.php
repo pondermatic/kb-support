@@ -41,7 +41,7 @@ class KBS_Batch_Export_Tickets extends KBS_Batch_Export {
 
 		$cols = array(
 			'id'         => __( 'ID', 'kb-support' ),
-			'ticket_id'  => sprintf( __( '%s ID',   'kb-support' ), kbs_get_ticket_label_singular() ),
+			'ticket_id'  => sprintf( __( '%s Number',   'kb-support' ), kbs_get_ticket_label_singular() ),
 			'date'       => __( 'Log Date', 'kb-support' ),
 			'status'     => __( 'Status', 'kb-support' ),
 			'categories' => __( 'Categories', 'kb-support' ),
@@ -110,7 +110,7 @@ class KBS_Batch_Export_Tickets extends KBS_Batch_Export {
 
 			$data[] = array(
 				'id'           => $ticket->ID,
-				'ticket_id'    => kbs_get_ticket_id( $ticket->ID ),
+				'ticket_id'    => kbs_get_ticket_number( $ticket->ID ),
 				'date'         => $ticket->date,
 				'status'       => $ticket->status_nicename,
 				'categories'   => strip_tags( get_the_term_list( $ticket->ID, 'ticket_category', '', ', ', '') ),

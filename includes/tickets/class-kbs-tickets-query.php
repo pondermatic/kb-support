@@ -390,18 +390,55 @@ class KBS_Tickets_Query extends KBS_Stats {
 		$is_email = is_email( $search ) || strpos( $search, '@' ) !== false;
 		$is_user  = strpos( $search, strtolower( 'user:' ) ) !== false;
 
-		if ( $is_email ) {
+		if ( $is_email || strlen( $search ) == 32 ) {
 
-			$user_data = get_user_by( 'email', $search );
-
-			if ( $user_data )	{
-				$search = $user_data->ID;
-			}
-
-			$key = '_kbs_ticket_client';
+			$key = $is_email ? '_kbs_ticket_user_email' : '_kbs_ticket_key';
 			$search_meta = array(
 				'key'     => $key,
-				'value'   => $search
+				'value'   => $search,
+				'compare' => 'LIKE'
+			);
+
+			$this->__set( 'meta_query', $search_meta );
+			$this->__unset( 's' );
+
+		} elseif ( $is_user )	{
+
+			$search_meta = array(
+				'key'   => '_kbs_ticket_user_id',
+				'value' => trim( str_replace( 'user:', '', strtolower( $search ) ) )
+			);
+
+			$this->__set( 'meta_query', $search_meta );
+
+			if ( kbs_get_option( 'enable_sequential' ) )	{
+
+				$search_meta = array(
+					'key'     => '_kbs_ticket_number',
+					'value'   => $search,
+					'compare' => 'LIKE'
+				);
+
+				$this->__set( 'meta_query', $search_meta );
+
+				$this->args['meta_query']['relation'] = 'OR';
+
+			}
+
+			$this->__unset( 's' );
+
+		} elseif (
+			kbs_get_option( 'enable_sequential' ) &&
+			(
+				false !== strpos( $search, kbs_get_option( 'ticket_prefix' ) ) ||
+				false !== strpos( $search, kbs_get_option( 'ticket_suffix' ) )
+			)
+		) {
+
+			$search_meta = array(
+				'key'     => '_kbs_ticket_number',
+				'value'   => $search,
+				'compare' => 'LIKE'
 			);
 
 			$this->__set( 'meta_query', $search_meta );
@@ -411,20 +448,13 @@ class KBS_Tickets_Query extends KBS_Stats {
 
 			$post = get_post( $search );
 
-			if( is_object( $post ) && $post->post_type == 'kbs_ticket' ) {
+			if ( is_object( $post ) && $post->post_type == 'kbs_ticket' )	{
 
 				$arr   = array();
 				$arr[] = $search;
 				$this->__set( 'post__in', $arr );
 				$this->__unset( 's' );
 			}
-
-		} elseif ( '#' == substr( $search, 0, 1 ) ) {
-
-			$search = str_replace( '#:', '', $search );
-			$search = str_replace( '#', '', $search );
-			$this->__set( 'event', $search );
-			$this->__unset( 's' );
 
 		} else {
 			$this->__set( 's', $search );
