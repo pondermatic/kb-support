@@ -928,6 +928,106 @@ function kbs_get_ticket_key( $ticket_id )	{
 } // kbs_get_ticket_key
 
 /**
+ * Get the ticket number
+ *
+ * This will return the ticket ID if sequential numbers are not enabled or the ticket number does not exist
+ *
+ * @since	1.1
+ * @param	int		$ticket_id		Ticket ID
+ * @return	str		Ticket number
+ */
+function kbs_get_ticket_number( $ticket_id = 0 ) {
+	$ticket = new EDD_Payment( $ticket_id );
+	return $ticket->number;
+} // kbs_get_ticket_number
+
+/**
+ * Gets the next available ticket number
+ *
+ * This is used when inserting a new ticket
+ *
+ * @since	1.1
+ * @return	str		$number		The next available ticket number
+ */
+function kbs_get_next_ticket_number()	{
+
+	if ( ! kbs_get_option( 'enable_sequential' ) )	{
+		return false;
+	}
+
+	$number           = get_option( 'kbs_last_ticket_number' );
+	$start            = kbs_get_option( 'sequential_start', 1 );
+	$increment_number = true;
+
+	if ( false !== $number )	{
+
+		if ( empty( $number ) )	{
+			$number = $start;
+			$increment_number = false;
+		}
+
+	} else	{
+
+		// This case handles the first addition of the new option, as well as if it get's deleted for any reason
+		$tickets     = new KBS_Tickets_Query( array(
+			'number'  => 1,
+			'order'   => 'DESC',
+			'orderby' => 'ID',
+			'output'  => 'posts',
+			'fields'  => 'ids'
+		) );
+		$last_ticket = $tickets->get_payments();
+
+		if ( ! empty( $last_payment ) ) {
+			$number = kbs_get_ticket_number( $last_payment[0] );
+		}
+
+		if ( ! empty( $number ) && $number !== (int) $last_payment[0] )	{
+			$number = kbs_remove_ticket_prefix_postfix( $number );
+		} else	{
+			$number = $start;
+			$increment_number = false;
+		}
+
+	}
+
+	$increment_number = apply_filters( 'kbs_increment_ticket_number', $increment_number, $number );
+
+	if ( $increment_number )	{
+		$number++;
+	}
+
+	return apply_filters( 'kbs_get_next_ticket_number', $number );
+} // kbs_get_next_ticket_number
+
+/**
+ * Given a given a number, remove the pre/suffix
+ *
+ * @since	1.1
+ * @param 	str		$number  The formatted Current Number to increment
+ * @return	str		The new Ticket number without prefix and suffix
+ */
+function kbs_remove_ticket_prefix_postfix( $number )	{
+	$prefix = kbs_get_option( 'ticket_prefix' );
+	$suffix = kbs_get_option( 'ticket_suffix' );
+
+	// Remove prefix
+	$number = preg_replace( '/' . $prefix . '/', '', $number, 1 );
+
+	// Remove the suffix
+	$length     = strlen( $number );
+	$suffix_pos = strrpos( $number, $suffix );
+	if ( false !== $suffix_pos )	{
+		$number = substr_replace( $number, '', $suffix_pos, $length );
+	}
+
+	// Ensure it's a whole number
+	$number = intval( $number );
+
+	return apply_filters( 'kbs_remove_ticket_prefix_postfix', $number, $prefix, $suffix );
+} // kbs_remove_ticket_prefix_postfix
+
+/**
  * Assigns an agent to the ticket.
  *
  * @since	1.0

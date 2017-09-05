@@ -260,6 +260,20 @@ function kbs_get_registered_settings() {
 						'name' => '<h3>' . sprintf( __( '%s Settings', 'kb-support' ), $single ) . '</h3>',
 						'type' => 'header'
 					),
+					'enable_sequential' => array(
+						'id'      => 'enable_sequential',
+						'name'    => sprintf( __( 'Sequential %s Numbers?', 'kb-support' ), $single ),
+						'desc'    => sprintf( __( 'Check this box to enable sequential %s numbers', 'kb-support' ), strtolower( $single ) ),
+						'type'    => 'checkbox'
+					),
+					'sequential_start' => array(
+						'id'      => 'sequential_start',
+						'name'    => __( 'Sequential Starting Number', 'kb-support' ),
+						'desc'    => __( 'The number at which the sequence should begin', 'kb-support' ),
+						'type'    => 'number',
+						'size'    => 'small',
+						'std'     => '1'
+					),
 					'ticket_prefix' => array(
 						'id'      => 'ticket_prefix',
 						'name'    => sprintf( __( "Prefix for %s ID's", 'kb-support' ), $single ),

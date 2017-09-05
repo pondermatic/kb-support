@@ -36,6 +36,14 @@ class KBS_Ticket {
 	protected $new = false;
 
 	/**
+	 * The Ticket number (for use with sequential payments)
+	 *
+	 * @since	1.0
+	 * @var		str
+	 */
+	protected $number = '';
+
+	/**
 	 * The ticket title
 	 *
 	 * @since	1.0
@@ -439,6 +447,7 @@ class KBS_Ticket {
 		$this->first_response  = $this->setup_first_response();
 
 		$this->key             = $this->setup_ticket_key();
+		$this->number          = $this->setup_ticket_number();
 		$this->form_data       = $this->setup_form_data();
 
 		// Extensions can hook here to add items to this object
@@ -582,6 +591,14 @@ class KBS_Ticket {
 
 			$this->update_meta( '_kbs_ticket_version_created', KBS_VERSION );
 			$this->update_meta( '_ticket_data', $this->ticket_meta );
+
+			if ( kbs_get_option( 'enable_sequential' ) )	{
+				$number       = kbs_get_next_ticket_number();
+				$this->number = kbs_format_ticket_number( $number );
+				$this->update_meta( '_kbs_ticket_number', $this->number );
+				update_option( 'kbs_last_ticket_number', $number );
+			}
+
 			$this->new = true;
 		}
 
@@ -727,6 +744,10 @@ class KBS_Ticket {
 
 					case 'source':
 						$this->update_meta( '_kbs_ticket_source', $this->source );
+						break;
+
+					case 'number':
+						$this->update_meta( '_kbs_ticket_number', $this->number );
 						break;
 
 					default:
@@ -1263,6 +1284,26 @@ class KBS_Ticket {
 	} // setup_ticket_key
 
 	/**
+	 * Setup the ticket number
+	 *
+	 * @since	1.1
+	 * @return	int|str		Integer by default, or string if sequential order numbers is enabled
+	 */
+	private function setup_ticket_number()	{
+		$number = $this->ID;
+
+		if ( kbs_get_option( 'enable_sequential' ) )	{
+			$number = $this->get_meta( '_kbs_ticket_number', true );
+
+			if ( ! $number ) {
+				$number = $this->ID;
+			}
+		}
+
+		return $number;
+	} // setup_ticket_number
+
+	/**
 	 * Setup the SLA target data for the ticket
 	 *
 	 * @since	1.0
@@ -1307,6 +1348,16 @@ class KBS_Ticket {
 
 		return $form_data;
 	} // setup_form_data
+
+	/**
+	 * Retrieve ticket number
+	 *
+	 * @since	1.1
+	 * @return	int|str		Ticket number
+	 */
+	private function get_number() {
+		return apply_filters( 'kbs_ticket_number', $this->number, $this->ID, $this );
+	} // get_number
 
 	/**
 	 * Retrieve the ticket replies
