@@ -108,7 +108,7 @@ function kbs_show_upgrade_notice()	{
 
 		if ( get_option( 'kbs_upgrade_sequential' ) && kbs_get_tickets() ) {
 			printf(
-				'<div class="updated"><p>' . __( 'KB Support needs to upgrade past %s numbers to make them sequential, click <a href="%s">here</a> to start the upgrade.', 'kb-support' ) . '</p></div>',
+				'<div class="updated"><p>' . __( 'KB Support needs to upgrade existing %s numbers to make them sequential, click <a href="%s">here</a> to start the upgrade.', 'kb-support' ) . '</p></div>',
 				kbs_get_ticket_label_singular( true ),
 				admin_url( 'index.php?page=kbs-upgrades&kbs-upgrade-action=upgrade_sequential_ticket_numbers' )
 			);

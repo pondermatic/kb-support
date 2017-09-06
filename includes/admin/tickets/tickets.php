@@ -553,6 +553,16 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
 		$ticket->__set( 'key', $key );
 	}
 
+    $ticket_number = get_post_meta( $post_id, '_kbs_ticket_number', true );
+    if ( ! $ticket_number ) {
+        $number = kbs_get_next_ticket_number();
+        if ( $number ) {
+            $number = kbs_format_ticket_number( $number );
+            $ticket->__set( 'number', $number );
+            update_option( 'kbs_last_ticket_number', $number );
+        }
+    }
+
 	if ( ! empty( $_POST['ticket_status'] ) && $_POST['ticket_status'] != $post->post_status )	{
 		$ticket->__set( 'status', $_POST['ticket_status'] );
 	}

@@ -959,7 +959,7 @@ function kbs_get_next_ticket_number()	{
 	$start            = kbs_get_option( 'sequential_start', 1 );
 	$increment_number = true;
 
-	if ( false !== $number )	{
+	if ( $number )	{
 
 		if ( empty( $number ) )	{
 			$number = $start;
