@@ -339,7 +339,7 @@ function kbs_get_open_ticket_count()	{
  * @param	mixed	WP_Post|KBS_Ticket|TicketID		$ticket		Ticket post object, KB_Ticket object, or ticket ID
  * @param	bool	$return_label					Whether to return the ticket status or not
  *
- * @return	bool|mixed	If payment status exists, false otherwise
+ * @return	bool|mixed	If ticket status exists, false otherwise
  */
 function kbs_get_ticket_status( $ticket, $return_label = false ) {
 
@@ -976,13 +976,13 @@ function kbs_get_next_ticket_number()	{
 			'output'  => 'posts',
 			'fields'  => 'ids'
 		) );
-		$last_ticket = $tickets->get_payments();
+		$last_ticket = $tickets->get_tickets();
 
-		if ( ! empty( $last_payment ) ) {
-			$number = kbs_get_ticket_number( $last_payment[0] );
+		if ( ! empty( $last_ticket ) ) {
+			$number = kbs_get_ticket_number( $last_ticket[0] );
 		}
 
-		if ( ! empty( $number ) && $number !== (int) $last_payment[0] )	{
+		if ( ! empty( $number ) && $number !== (int) $last_ticket[0] )	{
 			$number = kbs_remove_ticket_prefix_postfix( $number );
 		} else	{
 			$number = $start;

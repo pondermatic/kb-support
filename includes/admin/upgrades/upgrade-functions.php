@@ -16,6 +16,25 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Processes all KBS upgrade actions sent via POST and GET by looking for the 'kbs-upgrade-action'
+ * request and running do_action() to call the function
+ *
+ * @since 1.1
+ * @return void
+ */
+function kbs_process_upgrade_actions() {
+	if ( isset( $_POST['kbs-upgrade-action'] ) ) {
+		do_action( 'kbs-upgrade-' . $_POST['kbs-upgrade-action'], $_POST );
+	}
+
+	if ( isset( $_GET['kbs-upgrade-action'] ) ) {
+		do_action( 'kbs-upgrade-' . $_GET['kbs-upgrade-action'], $_GET );
+	}
+
+} // kbs_process_upgrade_actions
+add_action( 'admin_init', 'kbs_process_upgrade_actions' );
+
+/**
  * Perform automatic database upgrades when necessary
  *
  * @since	1.0
@@ -91,7 +110,7 @@ function kbs_show_upgrade_notice()	{
 			printf(
 				'<div class="updated"><p>' . __( 'KB Support needs to upgrade past %s numbers to make them sequential, click <a href="%s">here</a> to start the upgrade.', 'kb-support' ) . '</p></div>',
 				kbs_get_ticket_label_singular( true ),
-				admin_url( 'index.php?page=kbs-upgrades&kbs-upgrade=upgrade_sequential_ticket_numbers' )
+				admin_url( 'index.php?page=kbs-upgrades&kbs-upgrade-action=upgrade_sequential_ticket_numbers' )
 			);
 		}
 
@@ -256,15 +275,15 @@ function kbs_v11_upgrade_sequential_ticket_numbers()	{
 	$step   = isset( $_GET['step'] )  ? absint( $_GET['step'] )  : 1;
 	$total  = isset( $_GET['total'] ) ? absint( $_GET['total'] ) : false;
 
-	if( empty( $total ) || $total <= 1 ) {
+	if ( empty( $total ) || $total <= 1 ) {
 		$tickets = kbs_count_tickets();
-		foreach( $tickets as $ticket ) {
+		foreach( $tickets as $status ) {
 			$total += $status;
 		}
 	}
 
 	$args = array(
-		'number' => 100,
+		'number' => 50,
 		'page'   => $step,
 		'status' => 'any',
 		'order'  => 'ASC'
@@ -287,29 +306,30 @@ function kbs_v11_upgrade_sequential_ticket_numbers()	{
 			kbs_update_ticket_meta( $ticket->ID, '_kbs_ticket_number', $ticket_number );
 
 			// Increment the ticket number
+            update_option( 'kbs_last_ticket_number', $number );
 			$number++;
-
 		}
 
 		// Tickets found so upgrade them
 		$step++;
 		$redirect = add_query_arg( array(
-			'page'        => 'kbs-upgrades',
-			'kbs-upgrade' => 'upgrade_sequential_ticket_numbers',
-			'step'        => $step,
-			'custom'      => $number,
-			'total'       => $total
+			'page'               => 'kbs-upgrades',
+			'kbs-upgrade'        => 'upgrade_sequential_ticket_numbers',
+			'step'               => $step,
+			'custom'             => $number,
+			'total'              => $total
 		), admin_url( 'index.php' ) );
-		wp_redirect( $redirect ); exit;
+		wp_redirect( $redirect );
+        exit;
 
 	} else {
 		// No more tickets found, finish up
 		delete_option( 'kbs_upgrade_sequential' );
 		delete_option( 'kbs_doing_upgrade' );
 
-		wp_redirect( admin_url() );
+		wp_redirect( add_query_arg( 'post_type', 'kbs_ticket', admin_url( 'edit.php' ) ) );
 		exit;
 	}
 
 } // kbs_v11_upgrade_sequential_ticket_numbers
-add_action( 'kbs_upgrade_sequential_ticket_numbers', 'kbs_v11_upgrade_sequential_ticket_numbers' );
+add_action( 'kbs-upgrade-upgrade_sequential_ticket_numbers', 'kbs_v11_upgrade_sequential_ticket_numbers' );

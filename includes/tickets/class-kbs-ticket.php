@@ -36,7 +36,7 @@ class KBS_Ticket {
 	protected $new = false;
 
 	/**
-	 * The Ticket number (for use with sequential payments)
+	 * The Ticket number (for use with sequential tickets)
 	 *
 	 * @since	1.0
 	 * @var		str
@@ -905,7 +905,7 @@ class KBS_Ticket {
 	} // get_the_excerpt
 
 	/**
-	 * Get a post meta item for the payment
+	 * Get a post meta item for the ticket
 	 *
 	 * @since	1.0
 	 * @param	str		$meta_key		The Meta Key
@@ -1182,7 +1182,7 @@ class KBS_Ticket {
 	 * Setup the user info
 	 *
 	 * @since	1.0
-	 * @return	arr		The user info associated with the payment
+	 * @return	arr		The user info associated with the ticket
 	 */
 	private function setup_user_info() {
 		$defaults = array(
