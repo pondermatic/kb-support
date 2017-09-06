@@ -82,7 +82,7 @@ function kbs_ticket_add_meta_boxes( $post )	{
 	if ( 'draft' != $post->post_status && 'auto-draft' != $post->post_status )	{
 		$save              = __( 'Update', 'kb-support' );
 		$kbs_ticket_update = true;
-        $ticket_number     = '# ' . $kbs_ticket->number;
+        $ticket_number     = '# ' . kbs_format_ticket_number( $kbs_ticket->number );
 		remove_post_type_support( $post->post_type, 'editor' );
 	}
 
