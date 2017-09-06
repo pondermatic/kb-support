@@ -77,16 +77,18 @@ function kbs_ticket_add_meta_boxes( $post )	{
 	$kbs_ticket_update = false;
 	$kbs_ticket        = new KBS_Ticket( $post->ID );
 	$single_label      = kbs_get_ticket_label_singular();
+    $ticket_number     = '';
 
 	if ( 'draft' != $post->post_status && 'auto-draft' != $post->post_status )	{
 		$save              = __( 'Update', 'kb-support' );
 		$kbs_ticket_update = true;
+        $ticket_number     = '# ' . $kbs_ticket->number;
 		remove_post_type_support( $post->post_type, 'editor' );
 	}
 
 	add_meta_box(
 		'kbs-ticket-metabox-save',
-		sprintf( '%1$s %2$s # %3$s', $save, $single_label, kbs_get_ticket_number( $kbs_ticket->ID ) ),
+		sprintf( '%1$s %2$s %3$s', $save, $single_label, $ticket_number ),
 		'kbs_ticket_metabox_save_callback',
 		'kbs_ticket',
 		'side',
