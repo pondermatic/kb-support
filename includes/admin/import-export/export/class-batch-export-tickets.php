@@ -40,16 +40,16 @@ class KBS_Batch_Export_Tickets extends KBS_Batch_Export {
 	public function csv_cols() {
 
 		$cols = array(
-			'id'         => __( 'ID', 'kb-support' ),
-			'ticket_id'  => sprintf( __( '%s Number',   'kb-support' ), kbs_get_ticket_label_singular() ),
-			'date'       => __( 'Log Date', 'kb-support' ),
-			'status'     => __( 'Status', 'kb-support' ),
-			'categories' => __( 'Categories', 'kb-support' ),
-			'company'    => __( 'Company', 'kb-support' ),
-			'customer'   => __( 'Customer', 'kb-support' ),
-			'agent'      => __( 'Agent', 'kb-support' ),
-			'title'      => __( 'Title', 'kb-support' ),
-			'content'    => __( 'Content', 'kb-support' )
+			'id'            => __( 'ID', 'kb-support' ),
+			'ticket_number' => sprintf( __( '%s Number',   'kb-support' ), kbs_get_ticket_label_singular() ),
+			'date'          => __( 'Log Date', 'kb-support' ),
+			'status'        => __( 'Status', 'kb-support' ),
+			'categories'    => __( 'Categories', 'kb-support' ),
+			'company'       => __( 'Company', 'kb-support' ),
+			'customer'      => __( 'Customer', 'kb-support' ),
+			'agent'         => __( 'Agent', 'kb-support' ),
+			'title'         => __( 'Title', 'kb-support' ),
+			'content'       => __( 'Content', 'kb-support' )
 		);
 
 		return $cols;
@@ -109,16 +109,16 @@ class KBS_Batch_Export_Tickets extends KBS_Batch_Export {
 			}
 
 			$data[] = array(
-				'id'           => $ticket->ID,
-				'ticket_id'    => kbs_get_ticket_number( $ticket->ID ),
-				'date'         => $ticket->date,
-				'status'       => $ticket->status_nicename,
-				'categories'   => strip_tags( get_the_term_list( $ticket->ID, 'ticket_category', '', ', ', '') ),
-				'company'      => kbs_get_company_name( $ticket->company_id ),
-				'customer'     => $ticket->first_name . ' ' . $ticket->last_name,
-				'agent'        => $agent ? $agent->display_name : __( 'Unassigned', 'kb-support' ),
-				'title'        => $ticket->ticket_title,
-				'content'      => $ticket->ticket_content
+				'id'            => $ticket->ID,
+				'ticket_number' => kbs_format_ticket_number( kbs_get_ticket_number( $ticket->ID ) ),
+				'date'          => $ticket->date,
+				'status'        => $ticket->status_nicename,
+				'categories'    => strip_tags( get_the_term_list( $ticket->ID, 'ticket_category', '', ', ', '') ),
+				'company'       => kbs_get_company_name( $ticket->company_id ),
+				'customer'      => $ticket->first_name . ' ' . $ticket->last_name,
+				'agent'         => $agent ? $agent->display_name : __( 'Unassigned', 'kb-support' ),
+				'title'         => $ticket->ticket_title,
+				'content'       => $ticket->ticket_content
 			);
 
 			$data = apply_filters( 'kbs_export_get_data', $data );

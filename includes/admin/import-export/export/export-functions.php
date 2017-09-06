@@ -113,28 +113,6 @@ function kbs_export_customers_display()	{
 add_action( 'kbs_tools_export_after', 'kbs_export_customers_display', 10 );
 
 /**
- * Display the employee export.
- *
- * @since	1.1
- */
-function kbs_export_employees_display()	{
-	?>
-	<div class="postbox kbs-export-employees">
-		<h3><span><?php _e( 'Export Employees','kb-support' ); ?></span></h3>
-		<div class="inside">
-			<p><?php _e( 'Download a CSV of employees.', 'kb-support' ); ?></p>
-			<form id="kbs-export-employees" class="kbs-export-form kbs-import-export-form" method="post">
-				<?php wp_nonce_field( 'kbs_ajax_export', 'kbs_ajax_export' ); ?>
-				<input type="hidden" name="kbs-export-class" value="KBS_Batch_Export_Employees"/>
-				<?php submit_button( __( 'Generate CSV', 'kb-support' ), 'secondary', 'submit', false ); ?>
-			</form>
-		</div><!-- .inside -->
-	</div><!-- .postbox -->
-    <?php
-} // kbs_export_employees_display
-add_action( 'kbs_tools_export_after', 'kbs_export_employees_display', 20 );
-
-/**
  * Display the ticket export.
  *
  * @since	1.1
