@@ -343,6 +343,15 @@ function kbs_admin_messages() {
 		);
 	}
 
+    if ( isset( $_GET['kbs-message'] ) && 'sequential-numbers-updated' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-sequential-numbers-updated',
+			sprintf( __( '%s numbers have been successfully upgraded.', 'kb-support' ), kbs_get_ticket_label_singular() ),
+			'updated'
+		);
+	}
+
 	settings_errors( 'kbs-notices' );
 }
 add_action( 'admin_notices', 'kbs_admin_messages' );

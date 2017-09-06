@@ -327,7 +327,10 @@ function kbs_v11_upgrade_sequential_ticket_numbers()	{
 		delete_option( 'kbs_upgrade_sequential' );
 		delete_option( 'kbs_doing_upgrade' );
 
-		wp_redirect( add_query_arg( 'post_type', 'kbs_ticket', admin_url( 'edit.php' ) ) );
+		wp_redirect( add_query_arg( array(
+            'post_type'   => 'kbs_ticket',
+            'kbs-message' => 'sequential-numbers-updated'
+            ), admin_url( 'edit.php' ) ) );
 		exit;
 	}
 
