@@ -80,6 +80,14 @@ function kbs_settings_contextual_help() {
 			'<p>' . sprintf( __( '<strong>%s Settings</strong>', 'kb-support' ), $ticket_singular ) . '</p>' .
 			'<ul>' .
 				'<li>' . sprintf( 
+					__( "<strong>Sequential %s Numbers?</strong> - Enable sequential ticket numbers instead of WordPress post ID's.", 'kb-support' ),
+					$ticket_singular
+				) . '</li>' .
+				'<li>' . sprintf( 
+					__( '<strong>Sequential Starting Number</strong> - Enter the number that should be used as the first sequential %s number.', 'kb-support' ),
+					strtolower( $ticket_singular )
+				) . '</li>' .
+				'<li>' . sprintf( 
 					__( '<strong>Prefix for %1$s ID\'s</strong> - Enter what you would like your %2$s ID\'s to be prefixed with.', 'kb-support' ),
 					$ticket_singular,
 					strtolower( $ticket_singular )
@@ -149,6 +157,30 @@ function kbs_settings_contextual_help() {
 					__( '<strong>Auto Assign on Access?</strong> - Unassigned %1$s can be automatically assigned to agents on access. Can be useful in stopping agents selectively choosing which %1$s to work on.', 'kb-support' ),
 					strtolower( $ticket_plural )
 				) . '</li>' .
+			'</ul>' .
+			'<p>' . __( '<strong>Service Levels</strong>', 'kb-support' ) . '</p>' .
+			'<ul>' .
+				'<li>' . sprintf(
+					__( '<strong>Enable SLA Tracking?</strong> - Select this option to enable Service Level tracking on all %s.', 'kb-support' ),
+					strtolower( $ticket_plural )
+				) . '</li>' .
+				'<li>' . sprintf(
+					__( '<strong>Target Response Time</strong> - Select the time within which you are targeting an initial response to new %s.', 'kb-support' ),
+					strtolower( $ticket_plural )
+				) . '</li>' .
+				'<li>' . __( '<strong>Warn if within</strong> - Enter the number of hours before the target response time is due to expire that a warning should be displayed if no initial response has been provided.', 'kb-support' )
+				. '</li>' .
+				'<li>' . sprintf(
+					__( '<strong>Target Resolution Time</strong> - Select the time within which you expecting to resolve %s.', 'kb-support' ),
+					strtolower( $ticket_plural )
+				) . '</li>' .
+				'<li>' . sprintf( __( '<strong>Warn if within</strong> - Enter the number of hours before the target resolution time is due to expire that a warning should be displayed if the %s remains open.', 'kb-support' ),
+				strtolower( $ticket_singular )
+				) . '</li>' .
+				'<li>' . sprintf(
+					__( '<strong>Define Support Hours?</strong> - Select to enable support hours. You can then enter the days and times that your business is available to work on support %s. Target response and resolution times take into consideration your working hours.', 'kb-support' ),
+					strtolower( $ticket_plural )
+				) . '</li>' .
 			'</ul>'
 	) );
 
@@ -178,7 +210,7 @@ function kbs_settings_contextual_help() {
 					strtolower( $ticket_singular )
 				) . '</li>' .
 				'<li>' . sprintf( 
-					__( '<strong>Search Excerpt Length</strong> - Enter the number of characters that should be displayed from a %1$s during an ajax search.', 'kb-support' ),
+					__( '<strong>Search Excerpt Length</strong> - Enter the number of characters that should be displayed from a %1$s during an ajax search. Enter <code>0</code> if you do not want an excerpt to be displayed.', 'kb-support' ),
 					strtolower( $ticket_singular )
 				) . '</li>' .
 			'</ul>'
