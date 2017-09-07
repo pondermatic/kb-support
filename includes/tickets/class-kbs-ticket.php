@@ -966,6 +966,10 @@ class KBS_Ticket {
 
 		}
 
+        if ( empty( $prev_value ) ) {
+            $prev_value = $this->get_meta( $meta_key );
+        }
+
 		$meta_value = apply_filters( 'kbs_update_ticket_meta_' . $meta_key, $meta_value, $this->ID );
 
         do_action( 'kbs_update_ticket_meta', $meta_key, $meta_value, $prev_value, $this->ID );
