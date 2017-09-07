@@ -107,6 +107,14 @@ class KBS_Ticket {
 	 */
 	protected $agent_id = 0;
 
+    /**
+	 * Array of additional agent IDs assigned to the ticket
+	 *
+	 * @since	1.1
+	 * @var		arr
+	 */
+	protected $agents = array();
+
 	/**
 	 * The ID of the agent who logged the ticket
 	 *
@@ -432,6 +440,7 @@ class KBS_Ticket {
 		// User data
 		$this->ip              = $this->setup_ip();
 		$this->agent_id        = $this->setup_agent_id();
+        $this->agents          = $this->setup_agents();
 		$this->logged_by       = $this->setup_logged_by();
 		$this->customer_id     = $this->setup_customer_id();
 		$this->company_id      = $this->setup_company_id();
@@ -487,6 +496,7 @@ class KBS_Ticket {
 		$ticket_data = array(
 			'date'         => $this->date,
 			'agent_id'     => $this->agent_id,
+            'agents'       => $this->agents,
 			'user_email'   => $this->email,
 			'user_info'    => array(
 				'id'               => $this->user_id,
@@ -576,6 +586,10 @@ class KBS_Ticket {
 				$this->pending['agent_id'] = $this->agent_id;
 			}
 
+            if ( ! empty( $this->agents ) )	{
+				$this->pending['agents'] = $this->agents;
+			}
+
 			if ( ! empty( $this->ticket_category ) )	{
 				$this->pending['ticket_category'] = $this->ticket_category;
 			}
@@ -663,6 +677,22 @@ class KBS_Ticket {
 						$this->update_meta( '_kbs_ticket_agent_id', $this->agent_id );
 						kbs_record_agent_change_in_log( $this->ID, $this->agent_id, $current_agent );
 						break;
+
+                    case 'agents':
+                        if ( ! is_array( $this->agents ) )  {
+                            $this->agents = array( $this->agents );
+                        }
+
+                        if ( in_array( $this->agent_id, $this->agents ) )   {
+                            if ( ( $key = array_search( $this->agent_id, $this->agents ) ) !== false ) {
+                                unset( $this->agents[ $key ] );
+                            }
+                        }
+
+                        if ( kbs_multiple_agents() )    {
+                            $this->update_meta( '_kbs_ticket_agents', $this->agents );
+                        }
+                        break;
 
 					case 'user_id':
 						$this->update_meta( '_kbs_ticket_user_id', $this->user_id );
@@ -763,6 +793,7 @@ class KBS_Ticket {
 
 			$new_meta = array(
 				'agent_id'      => $this->agent_id,
+                'agents'        => $this->agents,
 				'source'        => $this->source,
 				'sla'           => array( 'respond' => $this->sla_respond, 'resolve' => $this->sla_resolve ),
 				'user_info'     => is_array( $this->user_info ) ? $this->user_info : array(),
@@ -1111,6 +1142,25 @@ class KBS_Ticket {
 		return $this->get_meta( '_kbs_ticket_agent_id', true );
 	} // setup_agent_id
 
+    /**
+	 * Retrieve the IDs of additional agents assigned to the ticket.
+	 *
+	 * @since	1.0
+	 * @return	arr
+	 */
+	public function setup_agents()	{
+        if ( ! kbs_multiple_agents() )   {
+            return array();
+        }
+
+		$agents = $this->get_meta( '_kbs_ticket_agents', true );
+        if ( ! $agents )    {
+            return array();
+        }
+
+        return $agents;
+	} // setup_agents
+
 	/**
 	 * Retrieve the agent who logged the ticket.
 	 *
@@ -1119,7 +1169,7 @@ class KBS_Ticket {
 	 */
 	public function setup_logged_by()	{	
 		return $this->get_meta( '_kbs_ticket_logged_by', true );
-	} // setup_agent_id
+	} // setup_logged_by
 
 	/**
 	 * Setup the customer ID

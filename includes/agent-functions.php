@@ -88,6 +88,16 @@ function kbs_agent_can_submit( $can_submit )	{
 add_filter( 'kbs_user_can_submit', 'kbs_agent_can_submit', 999 );
 
 /**
+ * Whether or not an multiple agent is enabled.
+ *
+ * @since	1.1
+ * @return	bool	True if enabled, otherwise false
+ */
+function kbs_multiple_agents()  {
+    return kbs_get_option( 'multiple_agents', false );
+} // kbs_multiple_agents
+
+/**
  * Whether or not an agent can view the ticket.
  *
  * @since	1.0
@@ -126,6 +136,12 @@ function kbs_agent_can_access_ticket( $ticket = '', $agent_id = '' )	{
 	if ( empty( $ticket->agent_id ) || $agent_id == $ticket->agent_id )	{
 		$return = true;
 	}
+
+    if ( kbs_multiple_agents() )    {
+        if ( in_array( $agent_id, $ticket->agents ) )   {
+            $return = true;
+        }
+    }
 
 	$allowed_statuses = array( 'new', 'auto-draft', 'draft' );
 	if ( in_array( get_post_status( $ticket->ID ), $allowed_statuses ) )	{

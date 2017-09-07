@@ -245,23 +245,34 @@ function kbs_restrict_agent_ticket_view( $query )	{
 	if ( kbs_get_option( 'restrict_agent_view', false ) )	{
 		$agent_id = get_current_user_id();
 
-		$query->set( 'meta_query', array(
-			'relation' => 'OR',
-			array(
-				'key'     => '_kbs_ticket_agent_id',
-				'value'   => $agent_id,
-				'type'    => 'NUMERIC'
-			),
-			array(
-				'key'     => '_kbs_ticket_agent_id',
-				'value'   => ''
-			),
-			array(
-				'key'     => '_kbs_ticket_agent_id',
-				'value'   => 'anything',
-				'compare' => 'NOT EXISTS'
-			)
-	   ) );
+        $meta_query = array(
+            'relation' => 'OR',
+            array(
+                'key'     => '_kbs_ticket_agent_id',
+                'value'   => $agent_id,
+                'type'    => 'NUMERIC'
+            ),
+            array(
+                'key'     => '_kbs_ticket_agent_id',
+                'value'   => ''
+            ),
+            array(
+                'key'     => '_kbs_ticket_agent_id',
+                'value'   => 'anything',
+                'compare' => 'NOT EXISTS'
+            )
+        );
+
+        if ( kbs_multiple_agents() )    {
+            $meta_query[] = array(
+                'key'     => '_kbs_ticket_agents',
+                'value'   => sprintf( ':%d;', $agent_id ),
+                'compare' => 'LIKE'
+            );
+        }
+
+        $query->set( 'meta_query', $meta_query );
+
   }
 
 } // kbs_restrict_agent_ticket_view
