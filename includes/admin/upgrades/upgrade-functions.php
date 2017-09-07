@@ -53,6 +53,10 @@ function kbs_do_automatic_upgrades() {
 		kbs_v10_upgrades();
 	}
 
+    if ( version_compare( $kbs_version, '1.1', '<' ) ) {
+		kbs_v11_upgrades();
+	}
+
 	if ( version_compare( $kbs_version, KBS_VERSION, '<' ) )	{
 
 		// Let us know that an upgrade has happened
@@ -255,7 +259,38 @@ function kbs_v10_upgrades()	{
 } // kbs_v10_upgrades
 
 /**
- * Upgrades for KBS v1.1 and sequential ticket numbers
+ * Upgrade routine for version 1.1.
+ *
+ * - Default settings for agent assignment emails
+ * - Default settings for sequential ticket numbers
+ *
+ * @since	1.1
+ * @return	void
+ */
+function kbs_v11_upgrades()	{
+
+    // New setting options
+    $new_options = array(
+        'sequential_start'          => '1',
+        'agent_notices'             => '1',
+        'agent_assigned_subject'    => sprintf( __( 'A %s Has Been Assigned to You - ##{ticket_id}##', 'kb-support' ), kbs_get_ticket_label_singular() ),
+        'agent_assign_notification' => __( 'Hey there!', 'kb-support' ) . "\n\n" .
+                                      sprintf( __( 'A %s has been assigned to you at {sitename}.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
+                                      "<strong>{ticket_title} - #{ticket_id}</strong>\n\n" .
+                                      sprintf( __( 'Please login to view and update the %s.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
+                                      "{ticket_admin_url}\n\n" .
+                                      __( 'Regards', 'kb-support' ) . "\n\n" .
+                                      '{sitename}'
+    );
+
+    foreach( $new_options as $option => $value )    {
+        kbs_update_option( $option, $value );
+    }
+
+} // kbs_v11_upgrades
+
+/**
+ * Upgrades for KBS v1.1 and sequential ticket numbers.
  *
  * @since	1.1
  * @return	void
@@ -272,8 +307,8 @@ function kbs_v11_upgrade_sequential_ticket_numbers()	{
 		set_time_limit( 0 );
 	}
 
-	$step   = isset( $_GET['step'] )  ? absint( $_GET['step'] )  : 1;
-	$total  = isset( $_GET['total'] ) ? absint( $_GET['total'] ) : false;
+	$step  = isset( $_GET['step'] )  ? absint( $_GET['step'] )  : 1;
+	$total = isset( $_GET['total'] ) ? absint( $_GET['total'] ) : false;
 
 	if ( empty( $total ) || $total <= 1 ) {
 		$tickets = kbs_count_tickets();
@@ -313,12 +348,13 @@ function kbs_v11_upgrade_sequential_ticket_numbers()	{
 		// Tickets found so upgrade them
 		$step++;
 		$redirect = add_query_arg( array(
-			'page'               => 'kbs-upgrades',
-			'kbs-upgrade'        => 'upgrade_sequential_ticket_numbers',
-			'step'               => $step,
-			'custom'             => $number,
-			'total'              => $total
+			'page'        => 'kbs-upgrades',
+			'kbs-upgrade' => 'upgrade_sequential_ticket_numbers',
+			'step'        => $step,
+			'custom'      => $number,
+			'total'       => $total
 		), admin_url( 'index.php' ) );
+
 		wp_redirect( $redirect );
         exit;
 
