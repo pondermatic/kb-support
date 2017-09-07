@@ -16,6 +16,16 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Whether or not a multiple agents is enabled.
+ *
+ * @since	1.1
+ * @return	bool	True if enabled, otherwise false
+ */
+function kbs_multiple_agents()  {
+    return kbs_get_option( 'multiple_agents', false );
+} // kbs_multiple_agents
+
+/**
  * Retrieve the agent ID from a ticket.
  *
  * @since	1.0
@@ -25,6 +35,24 @@ if ( ! defined( 'ABSPATH' ) )
 function kbs_get_agent_id_from_ticket( $ticket_id )	{
 	return get_post_meta( $ticket_id, '_kbs_ticket_agent_id', true );
 } // kbs_get_agent_id_from_ticket
+
+/**
+ * Retrieve the additional agents from a ticket.
+ *
+ * @since	1.1
+ * @param	int		$ticket_id	The ticket ID
+ * @return	arr		Array of secondary agents assigned to a ticket
+ */
+function kbs_get_workers_of_ticket( $ticket_id )	{
+
+	$agents = array();
+
+	if ( kbs_multiple_agents() )	{
+		$agents = get_post_meta( $ticket_id, '_kbs_ticket_agents', true );
+	}
+
+	return apply_filters( 'kbs_workers_of_ticket', $agents );
+} // kbs_get_workers_of_ticket
 
 /**
  * Retrieve all agents.
@@ -86,16 +114,6 @@ function kbs_agent_can_submit( $can_submit )	{
 
 } // kbs_agent_can_submit
 add_filter( 'kbs_user_can_submit', 'kbs_agent_can_submit', 999 );
-
-/**
- * Whether or not an multiple agent is enabled.
- *
- * @since	1.1
- * @return	bool	True if enabled, otherwise false
- */
-function kbs_multiple_agents()  {
-    return kbs_get_option( 'multiple_agents', false );
-} // kbs_multiple_agents
 
 /**
  * Whether or not an agent can view the ticket.
