@@ -269,11 +269,13 @@ function kbs_v10_upgrades()	{
  */
 function kbs_v11_upgrades()	{
 
+    $single = kbs_get_ticket_label_singular();
+
     // New setting options
     $new_options = array(
         'sequential_start'          => '1',
         'agent_notices'             => '1',
-        'agent_assigned_subject'    => sprintf( __( 'A %s Has Been Assigned to You - ##{ticket_id}##', 'kb-support' ), kbs_get_ticket_label_singular() ),
+        'agent_assigned_subject'    => sprintf( __( 'A %s Has Been Assigned to You - ##{ticket_id}##', 'kb-support' ), $single ),
         'agent_assign_notification' => __( 'Hey there!', 'kb-support' ) . "\n\n" .
                                       sprintf( __( 'A %s has been assigned to you at {sitename}.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
                                       "<strong>{ticket_title} - #{ticket_id}</strong>\n\n" .
