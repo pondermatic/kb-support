@@ -49,7 +49,7 @@ function kbs_trigger_agent_assigned_email( $meta_key, $meta_value, $prev_value, 
         return;
     }
 
-    kbs_email_agent_assigned_to_ticket( $ticket_id );
+    kbs_email_agent_assigned_to_ticket( $ticket_id, $prev_value );
 } // kbs_trigger_agent_assigned_email
 add_action( 'kbs_update_ticket_meta', 'kbs_trigger_agent_assigned_email', 999, 4 );
 
