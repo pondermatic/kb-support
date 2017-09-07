@@ -143,6 +143,11 @@ function kbs_settings_contextual_help() {
 					$ticket_singular,
 					strtolower( $ticket_plural )
 				) . '</li>' .
+                '<li>' . sprintf( 
+					__( '<strong>Multiple Agents per %1$s?</strong> - Enabling this option allows for multiple support workers to be assigned to a ticket. All assigned agents will be able to work on the %2$s and, if configured, will also receive all relevant notifications regarding the %2$s.', 'kb-support' ),
+					$ticket_singular,
+					strtolower( $ticket_singular )
+				) . '</li>' .
 				'<li>' . sprintf( 
 					__( '<strong>Display Agent Status?</strong> - If selected, customers will be able to see an indicator that shows whether the agent assigned to their %1$s is actively online or not when looking at their %1$s details.', 'kb-support' ),
 					strtolower( $ticket_singular )

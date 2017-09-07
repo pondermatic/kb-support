@@ -377,6 +377,12 @@ function kbs_get_registered_settings() {
 						'desc'    => sprintf( __( 'If enabled, Support Agents will only be able to see %1$s that are assigned to them or %1$s that are not yet assigned. If the current user is a Support Manager or an Administrator, they will always see all %1$s.', 'kb-support' ), strtolower( $plural ) ),
 						'type'    => 'checkbox'
 					),
+                    'multiple_agents' => array(
+						'id'      => 'multiple_agents',
+						'name'    => sprintf( __( 'Multiple Agents per %s?', 'kb-support' ), $single ),
+						'desc'    => sprintf( __( 'If enabled, multiple agents can be assigned to a %s and work collaboraively towards resolution.', 'kb-support' ), strtolower( $single ) ),
+						'type'    => 'checkbox'
+					),
 					'agent_status'  => array(
 						'id'      => 'agent_status',
 						'name'    => __( 'Display Agent Status?', 'kb-support' ),

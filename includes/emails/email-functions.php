@@ -403,7 +403,7 @@ function kbs_email_agent_assigned_to_ticket( $ticket_id = 0, $previous = 0 ) {
 	$emails->__set( 'headers', $headers );
 
 	$emails->send( $to_email, $subject, $message, $attachments );
-error_log( $to_email . ' - ' . $subject . ' - ' . $message );
+
 } // kbs_email_agent_assigned_to_ticket
 
 /**
