@@ -340,6 +340,73 @@ function kbs_admin_email_reply_notice( $reply_id = 0, $data = array() ) {
 add_action( 'kbs_ticket_customer_reply', 'kbs_admin_email_reply_notice', 10, 2 );
 
 /**
+ * Sends agents notification of ticket assignment.
+ *
+ * @since	1.1
+ * @param	int		$ticket_id		Ticket ID
+ * @param	int		$previous		Previously assigned agent
+ * @return	void
+ */
+function kbs_email_agent_assigned_to_ticket( $ticket_id = 0, $previous = 0 ) {
+
+	if ( ! kbs_agent_assignment_notices_enabled( $ticket_id ) )	{
+		return;
+	}
+
+	$single = kbs_get_ticket_label_singular();
+	$ticket = new KBS_Ticket( $ticket_id );
+
+	// Make sure we have an agent assigned.
+	if ( empty( $ticket->agent_id ) )	{
+		return;
+	}
+
+    $agent = get_userdata( $ticket->agent_id );
+
+    if ( ! $agent || ! is_email( $agent->user_email ) ) {
+        return;
+    }
+
+	$ticket_data  = $ticket->get_meta();
+
+    // Place the previously assigned agent into the $ticket_data array so it can be referenced within hooks/filters
+    if ( ! empty( $previous ) ) {
+        $ticket_data['previous_agent'] = $previous;
+    }
+
+	$from_name    = kbs_get_option( 'from_name', wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) );
+	$from_name    = apply_filters( 'kbs_agent_assigned_from_name', $from_name, $ticket_id, $ticket_data );
+
+	$from_email   = kbs_get_option( 'from_email', get_bloginfo( 'admin_email' ) );
+	$from_email   = apply_filters( 'kbs_agent_assigned_from_address', $from_email, $ticket_id, $ticket_data );
+
+	$to_email     = $agent->user_email;
+
+	$subject      = kbs_get_option( 'agent_assigned_subject', sprintf( __( 'Your Support %s is Closed ##{ticket_id}##', 'kb-support' ), $single ) );
+	$subject      = apply_filters( 'kbs_agent_assigned_subject', wp_strip_all_tags( $subject ), $ticket_id );
+	$subject      = kbs_do_email_tags( $subject, $ticket_id );
+
+	$heading      = sprintf( __( 'Support %s #{ticket_id} Assigned', 'kb-support' ), $single );
+	$heading      = apply_filters( 'kbs_agent_assigned_heading', $heading, $ticket_id, $ticket_data );
+	$heading      = kbs_do_email_tags( $heading, $ticket_id );
+
+	$attachments  = apply_filters( 'kbs_agent_assigned_attachments', array(), $ticket_id, $ticket_data );
+	$message      = kbs_do_email_tags( kbs_get_agent_assigned_notification_email_body_content( $ticket_id, $ticket_data ), $ticket_id );
+
+	$emails       = KBS()->emails;
+
+	$emails->__set( 'from_name', $from_name );
+	$emails->__set( 'from_email', $from_email );
+	$emails->__set( 'heading', $heading );
+
+	$headers = apply_filters( 'kbs_agent_assigned_headers', $emails->get_headers(), $ticket_id, $ticket_data );
+	$emails->__set( 'headers', $headers );
+
+	$emails->send( $to_email, $subject, $message, $attachments );
+error_log( $to_email . ' - ' . $subject . ' - ' . $message );
+} // kbs_email_agent_assigned_to_ticket
+
+/**
  * Retrieves the emails for which admin notifications are sent to (these can be
  * changed in the KBS Settings)
  *
@@ -379,6 +446,19 @@ function kbs_admin_notices_disabled( $ticket_id = 0 ) {
 	$ret = kbs_get_option( 'disable_admin_notices', false );
 	return (bool) apply_filters( 'kbs_admin_notices_disabled', $ret, $ticket_id );
 } // kbs_admin_notices_disabled
+
+/**
+ * Checks whether agent assignment ticket notices are disabled
+ *
+ * @since	1.1
+ *
+ * @param	int		$ticket_id
+ * @return	mixed
+ */
+function kbs_agent_assignment_notices_enabled( $ticket_id = 0 ) {
+	$ret = kbs_get_option( 'agent_notices', false );
+	return (bool) apply_filters( 'kbs_agent_assignment_notices_disabled', $ret, $ticket_id );
+} // kbs_agent_assignment_notices_enabled
 
 /**
  * Get various correctly formatted names used in emails

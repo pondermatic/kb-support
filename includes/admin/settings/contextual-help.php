@@ -277,21 +277,21 @@ function kbs_settings_contextual_help() {
 				) . '</li>' .
 			'</ul>' .
 			'<p>' . __( '<strong>Notifications</strong>', 'kb-support' ) . '<br />' .
-				sprintf( __( '<em>Adjust the settings for emails that are sent to Support Workers when a new %1$s is logged.</em>', 'kb-support' ), strtolower( $ticket_singular ) ) . '</p>' .
+				sprintf( __( '<em>Adjust the settings for emails that are sent to Support Workers when a new %1$s is logged or a reply is received.</em>', 'kb-support' ), strtolower( $ticket_singular ) ) . '</p>' .
 			'<ul>' .
 				'<li>' . sprintf( __( '<strong>Disable Admin Notifications</strong> - Select to stop emails being sent to Support Workers when a new %1$s is logged.', 'kb-support' ),
 				strtolower( $ticket_singular )
 				) . '</li>' .
-				'<li>' . sprintf( __( '<strong>%1$s Notification Subject</strong> - Enter the subject for the email sent to Support Workers a new %2$s is logged.', 'kb-support' ),
+				'<li>' . sprintf( __( '<strong>%1$s Notification Subject</strong> - Enter the subject for the email sent to Support Workers when a new %2$s is logged.', 'kb-support' ),
 				$ticket_singular,
 				strtolower( $ticket_singular )
 				) . '</li>' .
-				'<li>' . sprintf( __( '<strong>%1$s Notification</strong> - Enter the content of the email that is sent to Support Workers when a %2$s reply is submitted from the a customer. A list of email tags you can use are displayed under the textarea.', 'kb-support' ),
+				'<li>' . sprintf( __( '<strong>%1$s Notification</strong> - Enter the content of the email that is sent to Support Workers when a %2$s is submitted from the a customer. A list of email tags you can use are displayed under the textarea.', 'kb-support' ),
 				$ticket_singular,
 				strtolower( $ticket_singular )
 				) . '</li>' .
-				'<li>' . __( '<strong>Notification Subject</strong> - Enter the subject for the email sent to Support Workers a new reply is added to a %2$s.', 'kb-support' ) . '</li>' .
-				'<li>' . sprintf( __( '<strong>%1$s Reply Notification</strong> - Enter the content of the email that is sent to Support Workers when a %2$s is logged. A list of email tags you can use are displayed under the textarea.', 'kb-support' ),
+				'<li>' . __( '<strong>Reply Notification Subject</strong> - Enter the subject for the email sent to Support Workers a new reply is added to an existing %2$s.', 'kb-support' ) . '</li>' .
+				'<li>' . sprintf( __( '<strong>%1$s Reply Notification</strong> - Enter the content of the email that is sent to Support Workers when a %2$s reply is received from the customer. A list of email tags you can use are displayed under the textarea.', 'kb-support' ),
 				$ticket_singular,
 				strtolower( $ticket_singular )
 				) . '</li>' .
@@ -299,6 +299,15 @@ function kbs_settings_contextual_help() {
 				$ticket_singular,
 				strtolower( $ticket_singular ),
 				'{agent}'
+				) . '</li>' .
+                '<li>' . sprintf( __( '<strong>Assignment Notices</strong> - If enabled, agents will receive email notifications when a %s is assigned to them.', 'kb-support' ),
+				strtolower( $ticket_singular )
+				) . '</li>' .
+				'<li>' . sprintf( __( '<strong>Agent Assignment Subject</strong> - Enter the subject for the email sent to Support Workers when a %s is assigned to them.', 'kb-support' ),
+				strtolower( $ticket_singular )
+				) . '</li>' .
+				'<li>' . sprintf( __( '<strong>Agent Assigned Notification</strong> - Enter the content of the email that is sent to Support Workers when a %s is assigned to them. A list of email tags you can use are displayed under the textarea.', 'kb-support' ),
+				strtolower( $ticket_singular )
 				) . '</li>' .
 			'</ul>'
 	) );

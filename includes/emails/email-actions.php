@@ -31,6 +31,29 @@ function kbs_trigger_ticket_received( $ticket_id ) {
 add_action( 'kbs_add_ticket',  'kbs_trigger_ticket_received', 999, 1 );
 
 /**
+ * Trigger the agent assigned email
+ *
+ * @since   1.1
+ * @param   str     $meta_key   The meta key being updated
+ * @param   int     $meta_value The new value of the meta key
+ * @param   int     $prev_value The previous value of the meta key
+ * @param   int     $ticket_id  The ticket ID
+ * @return  void
+ */
+function kbs_trigger_agent_assigned_email( $meta_key, $meta_value, $prev_value, $ticket_id ) {
+    if ( '_kbs_ticket_agent_id' != $meta_key )  {
+        return;
+    }
+
+    if ( $prev_value == $meta_value )   {
+        return;
+    }
+
+    kbs_email_agent_assigned_to_ticket( $ticket_id, $prev_value );
+} // kbs_trigger_agent_assigned_email
+add_action( 'kbs_update_ticket_meta', 'kbs_trigger_agent_assigned_email', 999, 4 );
+
+/**
  * Trigger the sending of a Test Email
  *
  * @since	1.0
