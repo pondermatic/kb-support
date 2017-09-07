@@ -41,15 +41,22 @@ add_action( 'kbs_add_ticket',  'kbs_trigger_ticket_received', 999, 1 );
  * @return  void
  */
 function kbs_trigger_agent_assigned_email( $meta_key, $meta_value, $prev_value, $ticket_id ) {
-    if ( '_kbs_ticket_agent_id' != $meta_key )  {
+    if ( '_kbs_ticket_agent_id' != $meta_key && '_kbs_ticket_agents' != $meta_key )  {
         return;
     }
 
-    if ( $prev_value == $meta_value )   {
-        return;
-    }
+	if ( '_kbs_ticket_agent_id' == $meta_key && $prev_value != $meta_value )	{
+		kbs_email_agent_assigned_to_ticket( $ticket_id, $meta_value, $prev_value );
+	}
 
-    kbs_email_agent_assigned_to_ticket( $ticket_id, $prev_value );
+	if ( '_kbs_ticket_agents' == $meta_key )	{
+		foreach( $meta_value as $agent_id )	{
+			if ( empty( $prev_value ) || ! in_array( $agent_id, $prev_value ) )	{
+				kbs_email_agent_assigned_to_ticket( $ticket_id, $agent_id, $prev_value );
+			}
+		}
+	}
+
 } // kbs_trigger_agent_assigned_email
 add_action( 'kbs_update_ticket_meta', 'kbs_trigger_agent_assigned_email', 999, 4 );
 

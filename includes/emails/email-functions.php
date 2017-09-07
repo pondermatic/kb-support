@@ -344,10 +344,11 @@ add_action( 'kbs_ticket_customer_reply', 'kbs_admin_email_reply_notice', 10, 2 )
  *
  * @since	1.1
  * @param	int		$ticket_id		Ticket ID
+ * @param	int		$agent_id		The user ID of the agent
  * @param	int		$previous		Previously assigned agent
  * @return	void
  */
-function kbs_email_agent_assigned_to_ticket( $ticket_id = 0, $previous = 0 ) {
+function kbs_email_agent_assigned_to_ticket( $ticket_id = 0, $agent_id = 0, $previous = 0 ) {
 
 	if ( ! kbs_agent_assignment_notices_enabled( $ticket_id ) )	{
 		return;
@@ -357,13 +358,13 @@ function kbs_email_agent_assigned_to_ticket( $ticket_id = 0, $previous = 0 ) {
 	$ticket = new KBS_Ticket( $ticket_id );
 
 	// Make sure we have an agent assigned.
-	if ( empty( $ticket->agent_id ) )	{
+	if ( empty( $ticket->agent_id ) && empty( $ticket->agents ) && empty( $agent_id ) )	{
 		return;
 	}
 
-    $agent = get_userdata( $ticket->agent_id );
+    $agent = get_userdata( $agent_id );
 
-    if ( ! $agent || ! is_email( $agent->user_email ) ) {
+    if ( ! $agent ) {
         return;
     }
 
