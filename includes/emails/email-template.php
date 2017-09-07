@@ -22,7 +22,7 @@ if ( !defined( 'ABSPATH' ) )
  * @since	1.0
  * @return	arr		$templates	All the registered email templates
  */
-function kbs_get_email_templates() {
+function kbs_get_email_templates()   {
 	$templates = new KBS_Emails;
 	return $templates->get_templates();
 } // kbs_get_email_templates
@@ -36,7 +36,7 @@ function kbs_get_email_templates() {
  * @param	int		$ticket_id		Ticket ID
  * @return	str		$message		Fully formatted message
  */
-function kbs_email_template_tags( $message, $ticket_id ) {
+function kbs_email_template_tags( $message, $ticket_id )     {
 	return kbs_do_email_tags( $message, $ticket_id );
 } // kbs_email_template_tags
 
@@ -47,7 +47,7 @@ function kbs_email_template_tags( $message, $ticket_id ) {
  * @param	str		$message	Email message with template tags
  * @return	str		$message	Fully formatted message
  */
-function kbs_email_preview_template_tags( $message ) {
+function kbs_email_preview_template_tags( $message )     {
 
 	$user      = wp_get_current_user();
 	$ticket_id = kbs_get_ticket_number( rand( 1, 100 ) );
@@ -140,7 +140,7 @@ add_action( 'template_redirect', 'kbs_display_email_template_preview' );
  * @param	arr		$ticket_data	Ticket Data
  * @return	str		$email_body		Body of the email
  */
-function kbs_get_ticket_logged_email_body_content( $ticket_id = 0, $ticket_data = array() )	{
+function kbs_get_ticket_logged_email_body_content( $ticket_id = 0, $ticket_data = array() ) 	{
 
 	$logged_email_body = __( 'Dear', 'kb-support' ) . " {name},\n\n";
 	$logged_email_body .= sprintf( __( 'Thank you for logging your support %s.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ) . "\n\n";
@@ -175,7 +175,7 @@ function kbs_get_ticket_logged_email_body_content( $ticket_id = 0, $ticket_data 
  * @param	arr		$ticket_data	Ticket Data
  * @return	str		$email_body		Body of the email
  */
-function kbs_get_ticket_reply_email_body_content( $ticket_id = 0, $ticket_data = array() ) {
+function kbs_get_ticket_reply_email_body_content( $ticket_id = 0, $ticket_data = array() )   {
 
 	$logged_email_body = __( 'Dear', 'kb-support' ) . " {name},\n\n";
 	$logged_email_body .= sprintf( __( 'Your support %s # {ticket_id} has received a reply.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ) . "\n\n";
@@ -204,7 +204,7 @@ function kbs_get_ticket_reply_email_body_content( $ticket_id = 0, $ticket_data =
  * @param	arr		$ticket_data	Ticket Data
  * @return	str		$email_body		Body of the email
  */
-function kbs_get_ticket_closed_email_body_content( $ticket_id = 0, $ticket_data = array() ) {
+function kbs_get_ticket_closed_email_body_content( $ticket_id = 0, $ticket_data = array() )  {
 
 	$logged_email_body = __( 'Dear', 'kb-support' ) . " {name},\n\n";
 	$logged_email_body .= sprintf( __( 'Your support %s # {ticket_id} is now closed.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ) . "\n\n";
@@ -233,7 +233,7 @@ function kbs_get_ticket_closed_email_body_content( $ticket_id = 0, $ticket_data 
  * @param	arr		$ticket_data	Ticket Data
  * @return	str		$email_body		Body of the email
  */
-function kbs_get_ticket_notification_email_body_content( $ticket_id = 0, $ticket_data = array() ) {
+function kbs_get_ticket_notification_email_body_content( $ticket_id = 0, $ticket_data = array() )    {
 
 	$single = kbs_get_ticket_label_singular();
 	$plural = kbs_get_ticket_label_plural();
@@ -268,7 +268,7 @@ function kbs_get_ticket_notification_email_body_content( $ticket_id = 0, $ticket
  * @param	arr		$ticket_data	Ticket Data
  * @return	str		$email_body		Body of the email
  */
-function kbs_get_reply_notification_email_body_content( $ticket_id = 0, $ticket_data = array() ) {
+function kbs_get_reply_notification_email_body_content( $ticket_id = 0, $ticket_data = array() )     {
 
 	$single = kbs_get_ticket_label_singular();
 	$plural = kbs_get_ticket_label_plural();
@@ -286,9 +286,40 @@ function kbs_get_reply_notification_email_body_content( $ticket_id = 0, $ticket_
 	$email = $email ? stripslashes( $email ) : $default_email_body;
 
 	$email_body = kbs_email_template_tags( $email, $ticket_id );
-
 	$email_body = apply_filters( 'kbs_ticket_reply_notification_email_template_wpautop', true ) ? wpautop( $email_body ) : $email_body;
 
 	return apply_filters( 'kbs_ticket_reply_notification_email', $email_body, $ticket_id, $ticket_data );
 
 } // kbs_get_reply_notification_email_body_content
+
+/**
+ * Agent Assignment Notification Template Body
+ *
+ * This is the default notification content sent to agents when a ticket is assigned to them.
+ *
+ * @since	1.1
+ * @param	int		$ticket_id		Ticket ID
+ * @param	arr		$ticket_data	Ticket Data
+ * @return	str		$email_body		Body of the email
+ */
+function kbs_get_agent_assigned_notification_email_body_content( $ticket_id = 0, $ticket_data = array() )    {
+
+    $single = kbs_get_ticket_label_singular();
+
+	$default_email_body = __( 'Hey there!', 'kb-support' ) . "\n\n";
+	$default_email_body .= sprintf( __( 'A %s has been assigned to you at {sitename}.', 'kb-support' ), strtolower( $single ) ) . "\n\n";
+	$default_email_body .= "<strong>{ticket_title} - #{ticket_id}</strong>\n\n";
+	$default_email_body .= sprintf( __( 'Please login to view and update the %s.', 'kb-support' ), strtolower( $single ) ) . "\n\n";
+    $default_email_body .= "{ticket_admin_url}\n\n";
+	$default_email_body .= __( 'Regards', 'kb-support' ) . "\n\n";
+	$default_email_body .= '{sitename}';
+
+	$email = kbs_get_option( 'agent_assign_notification', false );
+	$email = $email ? stripslashes( $email ) : $default_email_body;
+
+	$email_body = kbs_email_template_tags( $email, $ticket_id );
+	$email_body = apply_filters( 'kbs_agent_assigned_notification_email_template_wpautop', true ) ? wpautop( $email_body ) : $email_body;
+
+	return apply_filters( 'kbs_agent_assigned_notification_email', $email_body, $ticket_id, $ticket_data );
+
+} // kbs_get_agent_assigned_notification_email_body_content
