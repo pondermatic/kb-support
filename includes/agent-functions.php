@@ -206,9 +206,7 @@ function kbs_agent_ticket_count( $agent_id )	{
  * Auto assigns an agent to a ticket.
  *
  * @since	1.0
- * @param	int		$ticket_id		The ticket ID
  * @param	arr		$ticket_data	Data passed to ticket
- * @param	obj		$ticket			KBS_Ticket object
  * @return	void
  */
 function kbs_auto_assign_agent( $ticket_data )	{
@@ -225,7 +223,7 @@ function kbs_auto_assign_agent( $ticket_data )	{
 				break;
 	
 			default:
-				do_action( 'kbs_auto_assign_agent', $ticket );
+				do_action( 'kbs_auto_assign_agent', $ticket_data );
 				break;
 		}
 	

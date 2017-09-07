@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2017, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
-*/
+ */
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) )
@@ -762,6 +762,33 @@ function kbs_get_registered_settings() {
 							__( 'Enter the email address(es) that should receive a notification anytime a %s is logged, one per line. Enter <code>{agent}</code> to insert the assigned agent\'s email address', 'kb-support' ), strtolower( $single ), '{agent}' ),
 						'type' => 'textarea',
 						'std'  => get_bloginfo( 'admin_email' )
+					),
+                    'agent_notices' => array(
+						'id'   => 'agent_notices',
+						'name' => __( 'Assignment Notices', 'kb-support' ),
+						'desc' => sprintf( __( 'Check this box to enable notifications to agents when a %s is assigned to them.', 'kb-support' ), strtolower( $single ) ),
+						'type' => 'checkbox',
+                        'std'  => '1'
+					),
+					'agent_assigned_subject' => array(
+						'id'   => 'agent_assigned_subject',
+						'name' => __( 'Agent Assignment Subject', 'kb-support' ),
+						'desc' => __( 'Enter the subject line for the agent assignment notification email. Template tags accepted.', 'kb-support' ),
+						'type' => 'text',
+						'std'  => sprintf( __( 'A %s Has Been Assigned to You - ##{ticket_id}##', 'kb-support' ), $single )
+					),
+                    'agent_assign_notification' => array(
+						'id'   => 'agent_assign_notification',
+						'name' => __( 'Agent Assigned Notification', 'kb-support' ),
+						'desc' => sprintf( __( 'Enter the text that is sent as a notification to an agent when a %s has been assigned to them. HTML is accepted. Available template tags:', 'kb-support' ), strtolower( $single ) ) . '<br />' . kbs_get_emails_tags_list(),
+						'type' => 'rich_editor',
+						'std'  => __( 'Hey there!', 'kb-support' ) . "\n\n" .
+								  sprintf( __( 'A %s has been assigned to you at {sitename}.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
+								  "<strong>{ticket_title} - #{ticket_id}</strong>\n\n" .
+								  sprintf( __( 'Please login to view and update the %s.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
+                                  "{ticket_admin_url}\n\n" .
+								  __( 'Regards', 'kb-support' ) . "\n\n" .
+								  '{sitename}'
 					)
 				)
 			)
