@@ -673,6 +673,9 @@ class KBS_Ticket {
 						break;
 
 					case 'agent_id':
+                        if ( '-1' === $this->agent_id ) {
+                            $this->agent_id = 0;
+                        }
 						$current_agent = $this->get_meta( '_kbs_ticket_agent_id' );
 						$this->update_meta( '_kbs_ticket_agent_id', $this->agent_id );
 						kbs_record_agent_change_in_log( $this->ID, $this->agent_id, $current_agent );

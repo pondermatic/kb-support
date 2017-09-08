@@ -410,8 +410,8 @@ class KBS_HTML_Elements {
         $defaults = array(
 			'options'          => array(),
 			'name'             => 'kbs_agent',
-			'show_option_all'  => __( 'Select an Agent', 'kb-support' ),
-			'show_option_none' => false,
+			'show_option_all'  => false,
+			'show_option_none' => __( 'Select an Agent', 'kb-support' ),
             'exclude'          => array()
 		);
 
