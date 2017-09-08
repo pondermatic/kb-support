@@ -401,29 +401,40 @@ class KBS_HTML_Elements {
 	 *
 	 * @access	public
 	 * @since	1.0
-	 * @param	str		$name		Name attribute of the dropdown
-	 * @param	int		$selected	Agent to select automatically
+	 * @param	arr		$args
 	 * @return	str		$output		Agent dropdown
 	 */
-	public function agent_dropdown( $name = 'kbs_agent', $selected = 0 ) {
+	public function agent_dropdown( $args = array() ) {
 		$options  = array();
-		$selected = empty( $selected ) ? 0 : $selected;
+
+        $defaults = array(
+			'options'          => array(),
+			'name'             => 'kbs_agent',
+			'show_option_all'  => __( 'Select an Agent', 'kb-support' ),
+			'show_option_none' => false,
+            'exclude'          => array()
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
+        if ( ! is_array( $args['exclude'] ) )   {
+            $args['exclude'] = array( $args['exclude'] );
+        }
 
 		$agents = kbs_get_agents();
-		
+
 		if ( $agents )	{
 			foreach( $agents as $agent )	{
+                if ( in_array( $agent->ID, $args['exclude'] ) ) {
+                    continue;
+                }
 				$options[ $agent->ID ] = $agent->display_name;
 			}
+
+            $args['options'] = $options;
 		}
 
-		$output = $this->select( array(
-			'name'             => $name,
-			'selected'         => $selected,
-			'options'          => $options,
-			'show_option_all'  => __( 'Select an Agent', 'kb-support' ),
-			'show_option_none' => false
-		) );
+		$output = $this->select( $args );
 
 		return $output;
 	} // agent_dropdown

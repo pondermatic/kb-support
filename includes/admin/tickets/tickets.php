@@ -12,6 +12,38 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Remove the post lock for tickets.
+ *
+ * By default this function does not run unless the
+ * `kbs_disable_ticket_post_lock` is filtered.
+ *
+ * @since	1.1
+ * @return	void
+ */
+function kbs_disable_ticket_post_lock()	{
+
+	/**
+	 * Allow developers to override the default setting
+	 * which is NOT to disable the post lock
+	 *
+	 */
+	if ( ! apply_filters( 'kbs_disable_ticket_post_lock', false ) )	{
+		return;
+	}
+
+    if ( 'kbs_ticket' != get_current_screen()->post_type ) {
+		return;
+	}
+
+	add_filter( 'show_post_locked_dialog', '__return_false' );
+	add_filter( 'wp_check_post_lock_window', '__return_false' );
+	wp_deregister_script('heartbeat');
+
+} // kbs_disable_ticket_post_lock
+add_action( 'load-edit.php', 'kbs_disable_ticket_post_lock' );
+add_action( 'load-post.php', 'kbs_disable_ticket_post_lock' );
+
+/**
  * Define the columns that should be displayed for the KBS ticket post lists screen
  *
  * @since	1.0
@@ -190,10 +222,10 @@ function kb_tickets_post_column_customer( $ticket_id, $kbs_ticket )	{
 function kb_tickets_post_column_agent( $ticket_id, $kbs_ticket )	{
 	do_action( 'kbs_tickets_pre_column_agent', $kbs_ticket );
 
-	if ( ! empty( $kbs_ticket->agent_id ) )	{
+	if ( ! empty( $kbs_ticket->agent_id ) && $agent = get_userdata( $kbs_ticket->agent_id ) )	{
 		$output = sprintf( '<a href="%s">%s</a>',
 			get_edit_user_link( $kbs_ticket->agent_id ),
-			get_userdata( $kbs_ticket->agent_id )->display_name
+			$agent->display_name
 		);
 	} else	{
 		$output = __( 'No Agent Assigned', 'kb-support' );
@@ -245,23 +277,34 @@ function kbs_restrict_agent_ticket_view( $query )	{
 	if ( kbs_get_option( 'restrict_agent_view', false ) )	{
 		$agent_id = get_current_user_id();
 
-		$query->set( 'meta_query', array(
-			'relation' => 'OR',
-			array(
-				'key'     => '_kbs_ticket_agent_id',
-				'value'   => $agent_id,
-				'type'    => 'NUMERIC'
-			),
-			array(
-				'key'     => '_kbs_ticket_agent_id',
-				'value'   => ''
-			),
-			array(
-				'key'     => '_kbs_ticket_agent_id',
-				'value'   => 'anything',
-				'compare' => 'NOT EXISTS'
-			)
-	   ) );
+        $meta_query = array(
+            'relation' => 'OR',
+            array(
+                'key'     => '_kbs_ticket_agent_id',
+                'value'   => $agent_id,
+                'type'    => 'NUMERIC'
+            ),
+            array(
+                'key'     => '_kbs_ticket_agent_id',
+                'value'   => ''
+            ),
+            array(
+                'key'     => '_kbs_ticket_agent_id',
+                'value'   => 'anything',
+                'compare' => 'NOT EXISTS'
+            )
+        );
+
+        if ( kbs_multiple_agents() )    {
+            $meta_query[] = array(
+                'key'     => '_kbs_ticket_agents',
+                'value'   => sprintf( ':%d;', $agent_id ),
+                'compare' => 'LIKE'
+            );
+        }
+
+        $query->set( 'meta_query', $meta_query );
+
   }
 
 } // kbs_restrict_agent_ticket_view
