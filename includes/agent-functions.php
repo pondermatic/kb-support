@@ -140,18 +140,22 @@ function kbs_agent_can_access_ticket( $ticket = '', $agent_id = '' )	{
 		return false;
 	}
 
+    if ( current_user_can( 'manage_ticket_settings' ) ) {
+        return true;
+    }
+
 	if ( empty( $agent_id ) )	{
 		$agent_id = get_current_user_id();
 	}
 
-	$return   = false;
+    $return   = false;
 	$restrict = kbs_get_option( 'restrict_agent_view' );
 
-	if ( ! $restrict )	{
+    if ( empty( $ticket->agent_id ) || $agent_id == $ticket->agent_id )	{
 		$return = true;
 	}
 
-	if ( empty( $ticket->agent_id ) || $agent_id == $ticket->agent_id )	{
+	if ( ! $restrict )	{
 		$return = true;
 	}
 
