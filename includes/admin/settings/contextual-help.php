@@ -124,7 +124,7 @@ function kbs_settings_contextual_help() {
 					strtolower( $ticket_singular )
 				) . '</li>' .
 				'<li>' . sprintf( 
-					__( '<strong>Allow File Uploads</strong> - Enter the number of files a customer can upload when submitting a %1$s. Set to <code>0</code> to disable file uploads.', 'kb-support' ),
+					__( '<strong>Allow File Uploads</strong> - Enter the number of files a customer can upload when submitting a %1$s. Set to <code>0</code> to disable file uploads. You will need to add a File Upload field to your submission form if enabling file uploads.', 'kb-support' ),
 					$ticket_singular
 				) . '</li>' .
 				'<li>' . sprintf( 
