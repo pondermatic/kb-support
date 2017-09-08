@@ -1646,6 +1646,13 @@ class KBS_Ticket {
 			$args['meta_input']['_kbs_reply_resolution'] = true;
 		}
 
+        /*
+         * Allow developers to filter the reply args
+         *
+         * @since   1.1
+         */
+        $args = apply_filters( 'kbs_ticket_add_reply_args', $args, $reply_data );
+
 		$reply_id = wp_insert_post( $args );
 
 		if ( empty( $reply_id ) )	{
