@@ -313,7 +313,7 @@ class KBS_DB_Customers extends KBS_DB  {
 				$success = $this->update( $customer->id, array( 'email' => $user->user_email ) );
 
 				if ( $success ) {
-					// Update some payment meta if we need to
+					// Update some ticket meta if we need to
 					$tickets_array = explode( ',', $customer->ticket_ids );
 
 					if ( ! empty( $tickets_array ) ) {

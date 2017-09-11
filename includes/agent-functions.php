@@ -16,6 +16,16 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Whether or not a multiple agents is enabled.
+ *
+ * @since	1.1
+ * @return	bool	True if enabled, otherwise false
+ */
+function kbs_multiple_agents()  {
+    return kbs_get_option( 'multiple_agents', false );
+} // kbs_multiple_agents
+
+/**
  * Retrieve the agent ID from a ticket.
  *
  * @since	1.0
@@ -25,6 +35,24 @@ if ( ! defined( 'ABSPATH' ) )
 function kbs_get_agent_id_from_ticket( $ticket_id )	{
 	return get_post_meta( $ticket_id, '_kbs_ticket_agent_id', true );
 } // kbs_get_agent_id_from_ticket
+
+/**
+ * Retrieve the additional agents from a ticket.
+ *
+ * @since	1.1
+ * @param	int		$ticket_id	The ticket ID
+ * @return	arr		Array of secondary agents assigned to a ticket
+ */
+function kbs_get_workers_of_ticket( $ticket_id )	{
+
+	$agents = array();
+
+	if ( kbs_multiple_agents() )	{
+		$agents = get_post_meta( $ticket_id, '_kbs_ticket_agents', true );
+	}
+
+	return apply_filters( 'kbs_workers_of_ticket', $agents );
+} // kbs_get_workers_of_ticket
 
 /**
  * Retrieve all agents.
@@ -112,20 +140,30 @@ function kbs_agent_can_access_ticket( $ticket = '', $agent_id = '' )	{
 		return false;
 	}
 
+    if ( current_user_can( 'manage_ticket_settings' ) ) {
+        return true;
+    }
+
 	if ( empty( $agent_id ) )	{
 		$agent_id = get_current_user_id();
 	}
 
-	$return   = false;
+    $return   = false;
 	$restrict = kbs_get_option( 'restrict_agent_view' );
+
+    if ( empty( $ticket->agent_id ) || $agent_id == $ticket->agent_id )	{
+		$return = true;
+	}
 
 	if ( ! $restrict )	{
 		$return = true;
 	}
 
-	if ( empty( $ticket->agent_id ) || $agent_id == $ticket->agent_id )	{
-		$return = true;
-	}
+    if ( kbs_multiple_agents() )    {
+        if ( in_array( $agent_id, $ticket->agents ) )   {
+            $return = true;
+        }
+    }
 
 	$allowed_statuses = array( 'new', 'auto-draft', 'draft' );
 	if ( in_array( get_post_status( $ticket->ID ), $allowed_statuses ) )	{
@@ -206,9 +244,7 @@ function kbs_agent_ticket_count( $agent_id )	{
  * Auto assigns an agent to a ticket.
  *
  * @since	1.0
- * @param	int		$ticket_id		The ticket ID
  * @param	arr		$ticket_data	Data passed to ticket
- * @param	obj		$ticket			KBS_Ticket object
  * @return	void
  */
 function kbs_auto_assign_agent( $ticket_data )	{
@@ -225,7 +261,7 @@ function kbs_auto_assign_agent( $ticket_data )	{
 				break;
 	
 			default:
-				do_action( 'kbs_auto_assign_agent', $ticket );
+				do_action( 'kbs_auto_assign_agent', $ticket_data );
 				break;
 		}
 	

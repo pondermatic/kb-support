@@ -123,7 +123,7 @@ function kbs_article_metabox_linked_tickets_fields( $post_id )	{
 
     	<?php foreach( $linked_tickets as $linked_ticket ) : ?>
 			<p><a href="#TB_inline?width=600&height=550&inlineId=kbs-ticket-content-<?php echo $linked_ticket; ?>" class="thickbox" title="<?php echo get_the_title( $linked_ticket ); ?>">
-            	# <?php echo kbs_get_ticket_id( $linked_ticket) . '</a> - ' . get_the_title( $linked_ticket ); ?>
+            	# <?php echo kbs_get_ticket_number( $linked_ticket ) . '</a> - ' . get_the_title( $linked_ticket ); ?>
             </p>
 
 			<div id="kbs-ticket-content-<?php echo $linked_ticket; ?>" class="kbs-hidden">

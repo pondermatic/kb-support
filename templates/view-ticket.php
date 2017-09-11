@@ -52,7 +52,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 
                     <div class="kbs_item_info ticket_info">
                         <fieldset id="kbs_ticket_info_details">
-                        <legend><?php printf( __( 'Support %s Details # %s', 'kb-support' ), $singular, kbs_get_ticket_id( $ticket->ID ) ); ?></legend>
+                        <legend><?php printf( __( 'Support %s Details # %s', 'kb-support' ), $singular, kbs_format_ticket_number( kbs_get_ticket_number( $ticket->ID ) ) ); ?></legend>
                             <div class="ticket_files_wrapper right">
 
                                 <?php do_action( 'kbs_before_single_ticket_form_files', $ticket ); ?>

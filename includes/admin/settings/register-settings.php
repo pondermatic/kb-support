@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2017, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
-*/
+ */
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) )
@@ -260,6 +260,20 @@ function kbs_get_registered_settings() {
 						'name' => '<h3>' . sprintf( __( '%s Settings', 'kb-support' ), $single ) . '</h3>',
 						'type' => 'header'
 					),
+					'enable_sequential' => array(
+						'id'      => 'enable_sequential',
+						'name'    => sprintf( __( 'Sequential %s Numbers?', 'kb-support' ), $single ),
+						'desc'    => sprintf( __( 'Check this box to enable sequential %s numbers', 'kb-support' ), strtolower( $single ) ),
+						'type'    => 'checkbox'
+					),
+					'sequential_start' => array(
+						'id'      => 'sequential_start',
+						'name'    => __( 'Sequential Starting Number', 'kb-support' ),
+						'desc'    => __( 'The number at which the sequence should begin', 'kb-support' ),
+						'type'    => 'number',
+						'size'    => 'small',
+						'std'     => '1'
+					),
 					'ticket_prefix' => array(
 						'id'      => 'ticket_prefix',
 						'name'    => sprintf( __( "Prefix for %s ID's", 'kb-support' ), $single ),
@@ -361,6 +375,12 @@ function kbs_get_registered_settings() {
 						'id'      => 'restrict_agent_view',
 						'name'    => sprintf( __( 'Restrict Agent %s View?', 'kb-support' ), $single ),
 						'desc'    => sprintf( __( 'If enabled, Support Agents will only be able to see %1$s that are assigned to them or %1$s that are not yet assigned. If the current user is a Support Manager or an Administrator, they will always see all %1$s.', 'kb-support' ), strtolower( $plural ) ),
+						'type'    => 'checkbox'
+					),
+                    'multiple_agents' => array(
+						'id'      => 'multiple_agents',
+						'name'    => sprintf( __( 'Multiple Agents per %s?', 'kb-support' ), $single ),
+						'desc'    => sprintf( __( 'If enabled, multiple agents can be assigned to a %s and work collaboraively towards resolution.', 'kb-support' ), strtolower( $single ) ),
 						'type'    => 'checkbox'
 					),
 					'agent_status'  => array(
@@ -748,6 +768,33 @@ function kbs_get_registered_settings() {
 							__( 'Enter the email address(es) that should receive a notification anytime a %s is logged, one per line. Enter <code>{agent}</code> to insert the assigned agent\'s email address', 'kb-support' ), strtolower( $single ), '{agent}' ),
 						'type' => 'textarea',
 						'std'  => get_bloginfo( 'admin_email' )
+					),
+                    'agent_notices' => array(
+						'id'   => 'agent_notices',
+						'name' => __( 'Assignment Notices', 'kb-support' ),
+						'desc' => sprintf( __( 'Check this box to enable notifications to agents when a %s is assigned to them.', 'kb-support' ), strtolower( $single ) ),
+						'type' => 'checkbox',
+                        'std'  => '1'
+					),
+					'agent_assigned_subject' => array(
+						'id'   => 'agent_assigned_subject',
+						'name' => __( 'Agent Assignment Subject', 'kb-support' ),
+						'desc' => __( 'Enter the subject line for the agent assignment notification email. Template tags accepted.', 'kb-support' ),
+						'type' => 'text',
+						'std'  => sprintf( __( 'A %s Has Been Assigned to You - ##{ticket_id}##', 'kb-support' ), $single )
+					),
+                    'agent_assign_notification' => array(
+						'id'   => 'agent_assign_notification',
+						'name' => __( 'Agent Assigned Notification', 'kb-support' ),
+						'desc' => sprintf( __( 'Enter the text that is sent as a notification to an agent when a %s has been assigned to them. HTML is accepted. Available template tags:', 'kb-support' ), strtolower( $single ) ) . '<br />' . kbs_get_emails_tags_list(),
+						'type' => 'rich_editor',
+						'std'  => __( 'Hey there!', 'kb-support' ) . "\n\n" .
+								  sprintf( __( 'A %s has been assigned to you at {sitename}.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
+								  "<strong>{ticket_title} - #{ticket_id}</strong>\n\n" .
+								  sprintf( __( 'Please login to view and update the %s.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
+                                  "{ticket_admin_url}\n\n" .
+								  __( 'Regards', 'kb-support' ) . "\n\n" .
+								  '{sitename}'
 					)
 				)
 			)
@@ -968,6 +1015,28 @@ function kbs_settings_sanitize( $input = array() ) {
 
 	return $output;
 } // kbs_settings_sanitize
+
+/**
+ * Misc Accounting Settings Sanitization
+ *
+ * @since	1.1
+ * @param	arr		$input	The value inputted in the field
+ * @return	str		$input	Sanitized value
+ */
+function kbs_settings_sanitize_tickets_main( $input ) {
+
+	if ( ! current_user_can( 'manage_ticket_settings' ) ) {
+		return $input;
+	}
+
+	if ( ! empty( $input['enable_sequential'] ) && ! kbs_get_option( 'enable_sequential' ) )	{
+		// Shows an admin notice about upgrading previous ticket numbers
+		add_option( 'kbs_upgrade_sequential', '1' );
+	}
+
+	return $input;
+} // kbs_settings_sanitize_tickets_main
+add_filter( 'kbs_settings_tickets-main_sanitize', 'kbs_settings_sanitize_tickets_main' );
 
 /**
  * Sanitize text fields

@@ -325,6 +325,33 @@ function kbs_admin_messages() {
 		);
 	}
 
+    if ( isset( $_GET['kbs-message'] ) && 'settings-imported' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-settings-imported',
+			__( 'Settings imported.', 'kb-support' ),
+			'updated'
+		);
+	}
+
+    if ( isset( $_GET['kbs-message'] ) && 'settings-import-missing-file' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-settings-import-file-missing',
+			__( 'Please upload a valid .json file.', 'kb-support' ),
+			'error'
+		);
+	}
+
+    if ( isset( $_GET['kbs-message'] ) && 'sequential-numbers-updated' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-sequential-numbers-updated',
+			sprintf( __( '%s numbers have been successfully upgraded.', 'kb-support' ), kbs_get_ticket_label_singular() ),
+			'updated'
+		);
+	}
+
 	settings_errors( 'kbs-notices' );
 }
 add_action( 'admin_notices', 'kbs_admin_messages' );

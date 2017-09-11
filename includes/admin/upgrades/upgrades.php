@@ -22,20 +22,20 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	void
 */
 function kbs_upgrades_screen() {
-	$action = isset( $_GET['kbs-upgrade'] ) ? sanitize_text_field( $_GET['kbs-upgrade'] ) : '';
-	$step   = isset( $_GET['step'] )         ? absint( $_GET['step'] )                      : 1;
-	$total  = isset( $_GET['total'] )        ? absint( $_GET['total'] )                     : false;
-	$custom = isset( $_GET['custom'] )       ? absint( $_GET['custom'] )                    : 0;
-	$number = isset( $_GET['number'] )       ? absint( $_GET['number'] )                    : 100;
+	$action = isset( $_GET['kbs-upgrade'] )        ? sanitize_text_field( $_GET['kbs-upgrade'] )        : '';
+	$step   = isset( $_GET['step'] )               ? absint( $_GET['step'] )                            : 1;
+	$total  = isset( $_GET['total'] )              ? absint( $_GET['total'] )                           : false;
+	$custom = isset( $_GET['custom'] )             ? absint( $_GET['custom'] )                          : 0;
+	$number = isset( $_GET['number'] )             ? absint( $_GET['number'] )                          : 100;
 	$steps  = round( ( $total / $number ), 0 );
 
 	$doing_upgrade_args = array(
-		'page'        => 'kbs-upgrades',
-		'kbs-upgrade' => $action,
-		'step'        => $step,
-		'total'       => $total,
-		'custom'      => $custom,
-		'steps'       => $steps
+		'page'               => 'kbs-upgrades',
+		'kbs-upgrade'        => $action,
+		'step'               => $step,
+		'total'              => $total,
+		'custom'             => $custom,
+		'steps'              => $steps
 	);
 	update_option( 'kbs_doing_upgrade', $doing_upgrade_args );
 	if ( $step > $steps ) {
@@ -58,7 +58,7 @@ function kbs_upgrades_screen() {
 				<?php endif; ?>
 			</div>
 			<script type="text/javascript">
-				setTimeout(function() { document.location.href = "index.php?kbs-action=<?php echo $action; ?>&step=<?php echo $step; ?>&total=<?php echo $total; ?>&custom=<?php echo $custom; ?>"; }, 250);
+				setTimeout(function() { document.location.href = "index.php?kbs-upgrade-action=<?php echo $action; ?>&step=<?php echo $step; ?>&total=<?php echo $total; ?>&custom=<?php echo $custom; ?>"; }, 250);
 			</script>
 
 		<?php else : ?>

@@ -463,7 +463,7 @@ function kbs_customers_view( $customer ) {
 					<?php foreach ( $tickets as $ticket ) : ?>
 						<tr>
 							<td><a href="<?php echo admin_url( 'post.php?post=' . $ticket->ID . '&action=edit' ); ?>">
-									<?php echo kbs_get_ticket_id( $ticket->ID ); ?>
+									<?php echo kbs_format_ticket_number( kbs_get_ticket_number( $ticket->ID ) ); ?>
 								</a>
                             </td>
 							<td class="date"><?php echo date_i18n( get_option( 'date_format' ), strtotime( $ticket->post_date ) ); ?></td>

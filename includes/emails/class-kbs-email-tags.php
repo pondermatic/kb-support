@@ -615,7 +615,7 @@ function kbs_email_tag_time( $ticket_id ) {
  * @return	int		ticket_id
  */
 function kbs_email_tag_ticket_id( $ticket_id ) {
-	return kbs_get_ticket_id( $ticket_id );
+	return kbs_get_ticket_number( $ticket_id );
 } // kbs_email_tag_ticket_id
 
 /**

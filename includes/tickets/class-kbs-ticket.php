@@ -36,6 +36,14 @@ class KBS_Ticket {
 	protected $new = false;
 
 	/**
+	 * The Ticket number (for use with sequential tickets)
+	 *
+	 * @since	1.0
+	 * @var		str
+	 */
+	protected $number = '';
+
+	/**
 	 * The ticket title
 	 *
 	 * @since	1.0
@@ -98,6 +106,14 @@ class KBS_Ticket {
 	 * @var		int
 	 */
 	protected $agent_id = 0;
+
+    /**
+	 * Array of additional agent IDs assigned to the ticket
+	 *
+	 * @since	1.1
+	 * @var		arr
+	 */
+	protected $agents = array();
 
 	/**
 	 * The ID of the agent who logged the ticket
@@ -424,6 +440,7 @@ class KBS_Ticket {
 		// User data
 		$this->ip              = $this->setup_ip();
 		$this->agent_id        = $this->setup_agent_id();
+        $this->agents          = $this->setup_agents();
 		$this->logged_by       = $this->setup_logged_by();
 		$this->customer_id     = $this->setup_customer_id();
 		$this->company_id      = $this->setup_company_id();
@@ -439,6 +456,7 @@ class KBS_Ticket {
 		$this->first_response  = $this->setup_first_response();
 
 		$this->key             = $this->setup_ticket_key();
+		$this->number          = $this->setup_ticket_number();
 		$this->form_data       = $this->setup_form_data();
 
 		// Extensions can hook here to add items to this object
@@ -478,6 +496,7 @@ class KBS_Ticket {
 		$ticket_data = array(
 			'date'         => $this->date,
 			'agent_id'     => $this->agent_id,
+            'agents'       => $this->agents,
 			'user_email'   => $this->email,
 			'user_info'    => array(
 				'id'               => $this->user_id,
@@ -567,6 +586,10 @@ class KBS_Ticket {
 				$this->pending['agent_id'] = $this->agent_id;
 			}
 
+            if ( ! empty( $this->agents ) )	{
+				$this->pending['agents'] = $this->agents;
+			}
+
 			if ( ! empty( $this->ticket_category ) )	{
 				$this->pending['ticket_category'] = $this->ticket_category;
 			}
@@ -582,6 +605,14 @@ class KBS_Ticket {
 
 			$this->update_meta( '_kbs_ticket_version_created', KBS_VERSION );
 			$this->update_meta( '_ticket_data', $this->ticket_meta );
+
+			if ( kbs_get_option( 'enable_sequential' ) )	{
+				$number       = kbs_get_next_ticket_number();
+				$this->number = kbs_format_ticket_number( $number );
+				$this->update_meta( '_kbs_ticket_number', $this->number );
+				update_option( 'kbs_last_ticket_number', $number );
+			}
+
 			$this->new = true;
 		}
 
@@ -642,10 +673,31 @@ class KBS_Ticket {
 						break;
 
 					case 'agent_id':
+                        if ( '-1' === $this->agent_id ) {
+                            $this->agent_id = 0;
+                        }
 						$current_agent = $this->get_meta( '_kbs_ticket_agent_id' );
 						$this->update_meta( '_kbs_ticket_agent_id', $this->agent_id );
 						kbs_record_agent_change_in_log( $this->ID, $this->agent_id, $current_agent );
 						break;
+
+                    case 'agents':
+                        if ( ! is_array( $this->agents ) )  {
+                            $this->agents = array( $this->agents );
+                        }
+
+                        if ( in_array( $this->agent_id, $this->agents ) )   {
+                            if ( ( $key = array_search( $this->agent_id, $this->agents ) ) !== false ) {
+                                unset( $this->agents[ $key ] );
+                            }
+                        }
+
+                        if ( kbs_multiple_agents() )    {
+                            $current_agents = $this->get_meta( '_kbs_ticket_agents' );
+                            $this->update_meta( '_kbs_ticket_agents', $this->agents );
+                            kbs_record_additional_agents_change_in_log( $ticket_id = 0, $this->agents, $current_agents );
+                        }
+                        break;
 
 					case 'user_id':
 						$this->update_meta( '_kbs_ticket_user_id', $this->user_id );
@@ -729,6 +781,10 @@ class KBS_Ticket {
 						$this->update_meta( '_kbs_ticket_source', $this->source );
 						break;
 
+					case 'number':
+						$this->update_meta( '_kbs_ticket_number', $this->number );
+						break;
+
 					default:
 						do_action( 'kbs_ticket_save', $this, $key );
 						break;
@@ -743,6 +799,7 @@ class KBS_Ticket {
 
 			$new_meta = array(
 				'agent_id'      => $this->agent_id,
+                'agents'        => $this->agents,
 				'source'        => $this->source,
 				'sla'           => array( 'respond' => $this->sla_respond, 'resolve' => $this->sla_resolve ),
 				'user_info'     => is_array( $this->user_info ) ? $this->user_info : array(),
@@ -885,7 +942,7 @@ class KBS_Ticket {
 	} // get_the_excerpt
 
 	/**
-	 * Get a post meta item for the payment
+	 * Get a post meta item for the ticket
 	 *
 	 * @since	1.0
 	 * @param	str		$meta_key		The Meta Key
@@ -946,18 +1003,22 @@ class KBS_Ticket {
 
 		}
 
+    if ( empty( $prev_value ) ) {
+        $prev_value = $this->get_meta( $meta_key );
+    }
+
 		$meta_value = apply_filters( 'kbs_update_ticket_meta_' . $meta_key, $meta_value, $prev_value, $this->ID );
 
-        /**
-         * Enable developers to hook into the meta update.
-         *
-         * @since   1.0.9
-         * @param   str     The meta key name
-         * @param   mixed   The new meta key value
-         * @param   mixed   The previous meta value
-         * @param   int     Ticket ID
-         */
-        do_action( 'kbs_update_ticket_meta_key', $meta_key, $meta_value, $prev_value, $this->ID );
+    /**
+     * Enable developers to hook into the meta update.
+     *
+     * @since   1.0.9
+     * @param   str     The meta key name
+     * @param   mixed   The new meta key value
+     * @param   mixed   The previous meta value
+     * @param   int     Ticket ID
+     */
+    do_action( 'kbs_update_ticket_meta_key', $meta_key, $meta_value, $prev_value, $this->ID );
 
 		if ( ! empty( $meta_value ) )	{
 			return update_post_meta( $this->ID, $meta_key, $meta_value, $prev_value );
@@ -1096,6 +1157,25 @@ class KBS_Ticket {
 		return $this->get_meta( '_kbs_ticket_agent_id', true );
 	} // setup_agent_id
 
+    /**
+	 * Retrieve the IDs of additional agents assigned to the ticket.
+	 *
+	 * @since	1.0
+	 * @return	arr
+	 */
+	public function setup_agents()	{
+        if ( ! kbs_multiple_agents() )   {
+            return array();
+        }
+
+		$agents = $this->get_meta( '_kbs_ticket_agents', true );
+        if ( ! $agents )    {
+            return array();
+        }
+
+        return $agents;
+	} // setup_agents
+
 	/**
 	 * Retrieve the agent who logged the ticket.
 	 *
@@ -1104,7 +1184,7 @@ class KBS_Ticket {
 	 */
 	public function setup_logged_by()	{	
 		return $this->get_meta( '_kbs_ticket_logged_by', true );
-	} // setup_agent_id
+	} // setup_logged_by
 
 	/**
 	 * Setup the customer ID
@@ -1173,7 +1253,7 @@ class KBS_Ticket {
 	 * Setup the user info
 	 *
 	 * @since	1.0
-	 * @return	arr		The user info associated with the payment
+	 * @return	arr		The user info associated with the ticket
 	 */
 	private function setup_user_info() {
 		$defaults = array(
@@ -1275,6 +1355,26 @@ class KBS_Ticket {
 	} // setup_ticket_key
 
 	/**
+	 * Setup the ticket number
+	 *
+	 * @since	1.1
+	 * @return	int|str		Integer by default, or string if sequential order numbers is enabled
+	 */
+	private function setup_ticket_number()	{
+		$number = $this->ID;
+
+		if ( kbs_get_option( 'enable_sequential' ) )	{
+			$number = $this->get_meta( '_kbs_ticket_number', true );
+
+			if ( ! $number ) {
+				$number = $this->ID;
+			}
+		}
+
+		return $number;
+	} // setup_ticket_number
+
+	/**
 	 * Setup the SLA target data for the ticket
 	 *
 	 * @since	1.0
@@ -1319,6 +1419,16 @@ class KBS_Ticket {
 
 		return $form_data;
 	} // setup_form_data
+
+	/**
+	 * Retrieve ticket number
+	 *
+	 * @since	1.1
+	 * @return	int|str		Ticket number
+	 */
+	private function get_number() {
+		return apply_filters( 'kbs_ticket_number', $this->number, $this->ID, $this );
+	} // get_number
 
 	/**
 	 * Retrieve the ticket replies
@@ -1547,6 +1657,13 @@ class KBS_Ticket {
 		if ( $close )	{
 			$args['meta_input']['_kbs_reply_resolution'] = true;
 		}
+
+        /*
+         * Allow developers to filter the reply args
+         *
+         * @since   1.1
+         */
+        $args = apply_filters( 'kbs_ticket_add_reply_args', $args, $reply_data );
 
 		$reply_id = wp_insert_post( $args );
 

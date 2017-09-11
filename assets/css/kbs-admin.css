@@ -228,7 +228,7 @@ a.kbs_ticket_form_data	{
 	float: right;
 	width: auto;
 }
-#kbs-ticket-actions input:not([type='checkbox'])not:[type="submit"],
+#kbs-ticket-actions input:not([type='checkbox']):not([type="submit"]),
 #kbs-ticket-actions select,
 #kbs-kb-options input,
 #kbs-kb-options select {
@@ -535,76 +535,169 @@ td.kbs_article_label {
 -------------------------------------------------------------- */
 #system-info-textarea { width: 800px; height: 600px; font-family: Menlo, Monaco, monospace; background: #FFFFFF; white-space: pre; overflow: auto; display: block; }
 
-/* About page styles
+/* Export page styles
 -------------------------------------------------------------- */
-.kbs-about-wrap .kbs-badge {
-	float: right;
-	border-radius: 4px;
-	margin: 0 0 15px 15px;
-	max-width: 200px;
-	position: absolute;
-	top: 0px;
-	right: 0px;
-	text-align: right;
-}
-.kbs-about-wrap .kbs-badge img {
-	border: none;
-}
-.kbs-about-wrap .kbs-badge .kbs-version {
-	font-size: 14px;
-}
-.kbs-about-wrap #kbs-header {
-	margin-bottom: 15px;
-}
-.kbs-about-wrap #kbs-header h1 {
-	margin-bottom: 15px !important;
-}
-.kbs-about-wrap .about-text {
-	margin: 0 0 15px; max-width: 670px;
-}
-.kbs-about-wrap .feature-section {
-	margin-top: 5px;
-}
-.kbs-about-wrap .feature-section-content,
-.kbs-about-wrap .feature-section-media {
-	width: 50%;
-	box-sizing: border-box;
-}
-.kbs-about-wrap .feature-section-content {
+#kbs-graphs-date-options,
+#kbs-date-range-options {
 	float: left;
-	padding-right: 50px;
 }
-.kbs-about-wrap .feature-section-content h4 {
-	margin: 0 0 1em;
+#kbs-date-range-options span {
+	float: left;
+	line-height: 24px;
+	height: 24px;
+	margin-right: 6px;
 }
-.kbs-about-wrap .feature-section-media {
-	float: right;
-	text-align: right;
-	margin-bottom: 5px;
+.kbs-import-export-form {
+	position: relative;
 }
-.kbs-about-wrap .feature-section-media img {
-	border: 1px solid #ddd;
+.kbs-import-export-form .kbs-progress {
+	background: #ddd;
+	position: absolute;
+	bottom: 15px;
+	width: 95%;
+	height: 15px;
 }
-.kbs-about-wrap .feature-section:not(.under-the-hood) .col {
-	margin-top: 0;
+.kbs-import-export-form .kbs-progress div {
+	background: #ccc;
+	height: 100%;
+	width: 0;
 }
-.kbs-about-wrap ul {
-	list-style-type: disc;
-	padding-left: 20px;
+.kbs-import-export-form .notice-wrap {
+	background-color: #f4f4f4;
+	border-style: solid;
+	border-width: 1px 0;
+	border-color: #eae9e9;
+	padding: 12px 12px 4px;
+	overflow: auto;
+	margin: 20px -12px -23px;
+}
+.kbs-import-export-form .notice-wrap .spinner {
+    margin: 4px 10px 8px;
+}
+.admin-color-fresh .kbs-import-export-form .kbs-progress div {
+	background: #0073aa;
+}
+.admin-color-light .kbs-import-export-form .kbs-progress div {
+	background: #888;
+}
+.admin-color-blue .kbs-import-export-form .kbs-progress div {
+	background: #096484;
+}
+.admin-color-coffee .kbs-import-export-form .kbs-progress div {
+	background: #c7a589;
+}
+.admin-color-ectoplasm .kbs-import-export-form .kbs-progress div {
+	background: #a3b745;
+}
+.admin-color-midnight .kbs-import-export-form .kbs-progress div {
+	background: #e14d43;
+}
+.admin-color-sunrise .kbs-import-export-form .kbs-progress div {
+	background: #dd823b;
 }
 
-@media all and ( max-width: 782px ) {
-	.kbs-about-wrap .feature-section-content,
-	.kbs-about-wrap .feature-section-media {
-		float: none;
-		padding-right: 0;
-		width: 100%;
-		text-align: left;
-	}
-	.kbs-about-wrap .feature-section-media img {
-		float: none;
-		margin: 0 0 20px;
-	}
+/* About page styles
+-------------------------------------------------------------- */
+.welcome-h1 {
+    display: inline-block;
+    margin-right: 15px !important;
+}
+
+.about-wrap h3 {
+    margin: 1.5em 0 .6em;
+}
+
+.about-wrap img {
+    border: none;
+}
+
+.kbs-badge {
+    padding-top: 150px;
+    height: 52px;
+    width: 185px;
+    color: #05aae8;
+    font-weight: bold;
+    font-size: 14px;
+    margin: 0 -5px;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.introduction {
+    padding: 0 0 20px;
+    margin: 0 0 20px;
+}
+
+.feature-section {
+    margin-top: 40px;
+}
+
+.feature-section span.dashicons {
+    width: 16px;
+    height: 16px;
+    font-size: 14px;
+    margin: 6px 0 0 0;
+}
+.feature-section .feature-section-item {
+    width: 48%;
+    float: left;
+}
+.feature-section div.last-feature {
+    margin-right: 0;
+    margin-left: 4%;
+}
+
+[class^="dashboard_page_kbs-"] .about-text,
+[class*="dashboard_page_kbs-"] .about-text {
+    min-height: 0;
+}
+
+.social-items-wrap {
+    display: inline-block;
+}
+.social-items-wrap > div {
+    display: inline-block;
+}
+.social-items-wrap .twitter-item-wrap {
+    margin: 0 20px 10px 0;
+}
+
+.wp-person img {
+    border-radius: 50%;
+}
+
+.wp-person a.web {
+    margin: 17px 0 0;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.newsletter-intro {
+    font-size: 13px;
+    font-style: italic;
+    color: #777;
+}
+
+.kbs-newsletter-form-wrap {
+    margin: 10px 0 20px -5px;
+    max-width: 700px;
+}
+.kbs-newsletter-form-wrap td {
+    padding: 3px;
+}
+.kbs-newsletter-form-wrap div.kbs-newsletter-confirmation {
+    background: #fff;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+    margin: 5px 10px 4px 5px;
+    padding: 1px 12px;
+    border-left: 4px solid #7ad03a;
+    display: none;
+}
+.kbs-newsletter-form-wrap div.kbs-newsletter-confirmation > p {
+    margin: 0.5em 0;
+    padding: 2px;
 }
 
 /* Extensions page Styles

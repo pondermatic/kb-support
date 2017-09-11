@@ -22,7 +22,8 @@ function kbs_ticket_metabox_fields() {
 	// Format is KBS_Ticket key => field name
 	$fields = array(
 		'customer_id' => 'kbs_customer_id',
-		'agent_id'    => 'kbs_agent_id'
+		'agent_id'    => 'kbs_agent_id',
+        'agents'      => 'kbs_assigned_agents'
 	);
 
 	return apply_filters( 'kbs_ticket_metabox_fields_save', $fields );
@@ -77,17 +78,29 @@ function kbs_ticket_add_meta_boxes( $post )	{
 	$kbs_ticket_update = false;
 	$kbs_ticket        = new KBS_Ticket( $post->ID );
 	$single_label      = kbs_get_ticket_label_singular();
+    $ticket_number     = '';
 
 	if ( 'draft' != $post->post_status && 'auto-draft' != $post->post_status )	{
 		$save              = __( 'Update', 'kb-support' );
 		$kbs_ticket_update = true;
+        $ticket_number     = '# ' . kbs_format_ticket_number( $kbs_ticket->number );
 		remove_post_type_support( $post->post_type, 'editor' );
 	}
 
 	add_meta_box(
 		'kbs-ticket-metabox-save',
-		sprintf( '%1$s %2$s # %3$s', $save, $single_label, kbs_get_ticket_id( $kbs_ticket->ID ) ),
+		sprintf( '%1$s %2$s %3$s', $save, $single_label, $ticket_number ),
 		'kbs_ticket_metabox_save_callback',
+		'kbs_ticket',
+		'side',
+		'high',
+		array()
+	);
+
+    add_meta_box(
+		'kbs-ticket-metabox-agents',
+		__( 'Assignment', 'kb-support' ),
+		'kbs_ticket_metabox_agents_callback',
 		'kbs_ticket',
 		'side',
 		'high',
@@ -155,6 +168,27 @@ function kbs_ticket_metabox_save_callback()	{
 	 */
 	do_action( 'kbs_ticket_status_fields', $post->ID );
 } // kbs_ticket_metabox_save_callback
+
+/**
+ * The callback function for the agent assignment metabox.
+ *
+ * @since	1.0
+ * @global	obj		$post				WP_Post object
+ * @global	obj		$kbs_ticket			KBS_Ticket class object
+ * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new
+ * @param
+ * @return
+ */
+function kbs_ticket_metabox_agents_callback()	{
+	global $post, $kbs_ticket, $kbs_ticket_update;
+
+	/*
+	 * Output the items for the save metabox
+	 * @since	1.0
+	 * @param	int	$post_id	The Ticket post ID
+	 */
+	do_action( 'kbs_ticket_agent_fields', $post->ID );
+} // kbs_ticket_metabox_agents_callback
 
 /**
  * The callback function for the original ticket details metabox.
@@ -243,6 +277,8 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
             </div><!-- #minor-publishing-actions -->
             <div id="kbs-ticket-actions">
 
+                <?php do_action( 'kbs_ticket_metabox_save_top', $ticket_id ); ?>
+
 				<?php if ( $kbs_ticket_update ) : ?>
 
 					<?php $date_format = get_option( 'date_format' ) . ' ' . get_option( 'time_format' ); ?>
@@ -259,9 +295,13 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
 
 				<?php endif; ?>
 
+                <?php do_action( 'kbs_ticket_metabox_save_before_status', $ticket_id ); ?>
+
                 <p><label for="ticket_status"><?php _e( 'Status', 'kb-support' ); ?>:</label>
                     <?php echo KBS()->html->ticket_status_dropdown( 'ticket_status', $kbs_ticket->post_status ); ?>
                 </p>
+
+                <?php do_action( 'kbs_ticket_metabox_save_after_status', $ticket_id ); ?>
 
                 <p><label for="kbs_customer_id"><?php _e( 'Customer', 'kb-support' ); ?>:</label>
 					<?php echo KBS()->html->customer_dropdown( array(
@@ -271,11 +311,7 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
                     ) ); ?>
                 </p>
 
-                <p><label for="kbs_agent_id"><?php _e( 'Agent', 'kb-support' ); ?>:</label>
-					<?php echo KBS()->html->agent_dropdown( 'kbs_agent_id', ( ! empty( $kbs_ticket->agent_id ) ? $kbs_ticket->agent_id : get_current_user_id() ) ); ?>
-                </p>
-
-                <?php do_action( 'kbs_ticket_metabox_after_agent', $ticket_id ); ?>
+                <?php do_action( 'kbs_ticket_metabox_save_after_customer', $ticket_id ); ?>
 
                 <p><a href="<?php echo wp_get_referer(); ?>"><?php printf( __( 'Back to %s', 'kb-support' ), kbs_get_ticket_label_plural() ); ?></a>
 
@@ -290,6 +326,9 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
                         array( 'id' => 'save-post' )
                     ); ?>
                 </p>
+
+                <?php do_action( 'kbs_ticket_metabox_save_bottom', $ticket_id ); ?>
+
             </div><!-- #kbs-ticket-actions -->
         </div><!-- #minor-publishing -->
     </div><!-- #submitpost -->
@@ -341,7 +380,72 @@ function kbs_ticket_metabox_sla_row( $ticket_id )	{
     <?php endif;
 
 } // kbs_ticket_metabox_sla_row
-add_action( 'kbs_ticket_metabox_after_agent', 'kbs_ticket_metabox_sla_row', 10 );
+add_action( 'kbs_ticket_metabox_save_after_customer', 'kbs_ticket_metabox_sla_row', 10 );
+
+/**
+ * Display the agent ticket metabox row.
+ *
+ * @since	1.0
+ * @global	obj		$kbs_ticket			KBS_Ticket class object
+ * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
+ * @param	int		$ticket_id			The ticket post ID.
+ * @return	str
+ */
+function kbs_ticket_metabox_agent_row( $ticket_id )	{
+
+	global $kbs_ticket, $kbs_ticket_update;
+
+    ?>
+    <div id="kbs-agent-options">
+        <p><label for="kbs_agent_id"><?php _e( 'Agent', 'kb-support' ); ?>:</label>
+            <?php echo KBS()->html->agent_dropdown( array(
+                'name'     => 'kbs_agent_id',
+                'selected' => ( ! empty( $kbs_ticket->agent_id ) ? $kbs_ticket->agent_id : get_current_user_id() )
+            ) ); ?>
+        </p>
+    </div>
+    <?php
+
+} // kbs_ticket_metabox_agent_row
+add_action( 'kbs_ticket_agent_fields', 'kbs_ticket_metabox_agent_row', 10 );
+
+/**
+ * Display the additional agents ticket metabox row.
+ *
+ * @since	1.0
+ * @global	obj		$kbs_ticket			KBS_Ticket class object
+ * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
+ * @param	int		$ticket_id			The ticket post ID.
+ * @return	str
+ */
+function kbs_ticket_metabox_additional_agents_row( $ticket_id )	{
+
+	global $kbs_ticket, $kbs_ticket_update;
+
+    if ( ! kbs_multiple_agents() )  {
+        return;
+    }
+
+    ?>
+    <div id="kbs-agent-options">
+        <p><label for="kbs_assigned_agents"><?php _e( 'Additional Agents', 'kb-support' ); ?>:</label>
+            <?php echo KBS()->html->agent_dropdown( array(
+                'name'            => 'kbs_assigned_agents',
+                'selected'        => $kbs_ticket->agents,
+                'chosen'          => true,
+                'multiple'        => true,
+                'show_option_all' => false,
+                'placeholder'     => __( 'Select Additional Agents', 'kb-support' ),
+                'exclude'         => array( $kbs_ticket->agent_id )
+            ) ); ?>
+        </p>
+
+        <?php do_action( 'kbs_ticket_metabox_after_agent', $ticket_id ); ?>
+    </div>
+    <?php
+
+} // kbs_ticket_metabox_additional_agents_row
+add_action( 'kbs_ticket_agent_fields', 'kbs_ticket_metabox_additional_agents_row', 50 );
 
 /**
  * Display the original ticket details row.
