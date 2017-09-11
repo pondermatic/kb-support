@@ -1003,22 +1003,22 @@ class KBS_Ticket {
 
 		}
 
-    if ( empty( $prev_value ) ) {
-        $prev_value = $this->get_meta( $meta_key );
-    }
+        if ( empty( $prev_value ) ) {
+            $prev_value = $this->get_meta( $meta_key );
+        }
 
 		$meta_value = apply_filters( 'kbs_update_ticket_meta_' . $meta_key, $meta_value, $prev_value, $this->ID );
 
-    /**
-     * Enable developers to hook into the meta update.
-     *
-     * @since   1.0.9
-     * @param   str     The meta key name
-     * @param   mixed   The new meta key value
-     * @param   mixed   The previous meta value
-     * @param   int     Ticket ID
-     */
-    do_action( 'kbs_update_ticket_meta_key', $meta_key, $meta_value, $prev_value, $this->ID );
+        /**
+         * Enable developers to hook into the meta update.
+         *
+         * @since   1.0.9
+         * @param   str     The meta key name
+         * @param   mixed   The new meta key value
+         * @param   mixed   The previous meta value
+         * @param   int     Ticket ID
+         */
+        do_action( 'kbs_update_ticket_meta_key', $meta_key, $meta_value, $prev_value, $this->ID );
 
 		if ( ! empty( $meta_value ) )	{
 			return update_post_meta( $this->ID, $meta_key, $meta_value, $prev_value );
