@@ -1467,13 +1467,21 @@ function kbs_select_callback( $args ) {
 		$placeholder = '';
 	}
 
+	if ( $args['multiple'] ) {
+		$multiple   = ' MULTIPLE';
+		$name_array = '[]';
+	} else {
+		$multiple   = '';
+		$name_array = '';
+	}
+
 	$class = kbs_sanitize_html_class( $args['field_class'] );
 
 	if ( isset( $args['chosen'] ) ) {
 		$class .= ' kbs-chosen';
 	}
 
-	$html = '<select id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . esc_attr( $args['id'] ) . ']" class="' . $class . '" data-placeholder="' . esc_html( $placeholder ) . '" />';
+	$html = '<select id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . esc_attr( $args['id'] ) . ']" class="' . $class . '"' . $multiple . ' data-placeholder="' . esc_html( $placeholder ) . '" />';
 
 	foreach ( $args['options'] as $option => $name ) {
 		$selected = selected( $option, $value, false );
