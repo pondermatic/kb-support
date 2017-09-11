@@ -532,11 +532,11 @@ function kbs_get_registered_settings() {
 					'article_excerpt_length' => array(
 						'id'      => 'article_excerpt_length',
 						'name'    => __( 'Search Excerpt Length', 'kb-support' ),
-						'desc'    => __( 'Enter the number of words that should form the excerpt length during an ajax search. i.e. on the submission form.', 'kb-support' ),
+						'desc'    => __( 'Enter the number of words that should form the excerpt length during an ajax search. i.e. on the submission form. Enter <code>0</code> for no excerpt.', 'kb-support' ),
 						'type'    => 'number',
 						'step'    => '5',
 						'size'    => 'small',
-						'std'     => '55'
+						'std'     => '0'
 					)
 				),
 				'restricted_notices' => array(

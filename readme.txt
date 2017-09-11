@@ -3,7 +3,7 @@ Contributors: kbsupport, mikeyhoward1977
 Tags: Helpdesk, Help Desk, Support, Customer Support, Service, Service Desk, ITIL, Support Helpdesk, Ticket, Ticket System, Support Tickets, Helpdesk Tickets, Knowledgebase, Knowledge Base, Service Level, SLA
 Requires at least: 4.1
 Tested up to: 4.9
-Stable tag: 1.0.8
+Stable tag: 1.0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -94,6 +94,24 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.0.9 =
+
+**Monday, 4th September 2017**
+
+**Tweaks**
+
+* Enabled sorting of tickets by ID and date as well as title
+* Added option to set `Search Excerpt Length` to `0` to have excerpts excluded from search results
+* Filter ticket list by category/tag when a category or tag is clicked
+* Removed duplicate `kbs_article_excerpt_length` filter
+* Added `kbs_update_ticket_meta_key` hook for developers to hook in during ticket meta update
+* Added the previous meta value to the `kbs_update_ticket_meta_{$meta_key}` filter
+
+**Bug Fixes**
+
+* HTML characters were not always correctly encoded during Ajax search which prevented all relevant results from being displayed
+* Corrected option name which was preventing changes to excerpt length
 
 = 1.0.8 =
 
