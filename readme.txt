@@ -3,7 +3,7 @@ Contributors: kbsupport, mikeyhoward1977
 Tags: Helpdesk, Help Desk, Support, Customer Support, Service, Service Desk, ITIL, Support Helpdesk, Ticket, Ticket System, Support Tickets, Helpdesk Tickets, Knowledgebase, Knowledge Base, Service Level, SLA
 Requires at least: 4.1
 Tested up to: 4.9
-Stable tag: 1.0.9
+Stable tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -94,6 +94,24 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.1 =
+
+**Monday, 11th September 2017**
+
+**New**
+
+* Sequential ticket numbers to ensure your tickets are always sequential with no gaps in the numbers
+* Assign multiple agents to a ticket proving them with access to view and update
+* Option to send agent notifications to all assigned agents when a customer reply is received
+* Export tickets and customers to a CSV file
+
+**Tweaks**
+
+* Added `kbs_update_ticket_meta_key` filter that fires during ticket meta updates
+* Filter the display of tickets when a category or tag is clicked within the ticket list
+* Enabled removal of article excerpts during Ajax search
+* Removed duplicated `kbs_article_excerpt_length` filter
 
 = 1.0.9 =
 
