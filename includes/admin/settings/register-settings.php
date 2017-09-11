@@ -1467,7 +1467,7 @@ function kbs_select_callback( $args ) {
 		$placeholder = '';
 	}
 
-	if ( $args['multiple'] ) {
+	if ( ! empty( $args['multiple'] ) ) {
 		$multiple   = ' MULTIPLE';
 		$name_array = '[]';
 	} else {
@@ -1478,7 +1478,7 @@ function kbs_select_callback( $args ) {
 	$class = kbs_sanitize_html_class( $args['field_class'] );
 
 	if ( isset( $args['chosen'] ) ) {
-		$class .= ' kbs-chosen';
+		$class .= ' kbs_select_chosen';
 	}
 
 	$html = '<select id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . esc_attr( $args['id'] ) . ']" class="' . $class . '"' . $multiple . ' data-placeholder="' . esc_html( $placeholder ) . '" />';
