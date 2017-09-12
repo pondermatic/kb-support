@@ -217,7 +217,7 @@ jQuery(document).ready(function ($) {
 					success: function (response) {
 						if (response.reply_id)	{
 							kbs_load_ticket_replies(ticket_id, response.reply_id);
-							window.location.href = kbs_vars.admin_url + '?kbs-action=' + kbs_vars.ticket_reply_added + '&ticket_id=' + ticket_id;
+							window.location.href = kbs_vars.admin_url + '?kbs-action=ticket_reply_added&ticket_id=' + ticket_id;
 							return true;
 						} else	{
 							window.alert(kbs_vars.reply_not_added);
