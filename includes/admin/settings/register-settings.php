@@ -1481,10 +1481,14 @@ function kbs_select_callback( $args ) {
 		$class .= ' kbs_select_chosen';
 	}
 
-	$html = '<select id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . esc_attr( $args['id'] ) . ']" class="' . $class . '"' . $multiple . ' data-placeholder="' . esc_html( $placeholder ) . '" />';
+	$html = '<select id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . esc_attr( $args['id'] ) . ']' . $name_array . '" class="' . $class . '"' . $multiple . ' data-placeholder="' . esc_html( $placeholder ) . '" />';
 
 	foreach ( $args['options'] as $option => $name ) {
-		$selected = selected( $option, $value, false );
+		if ( ! empty( $multiple ) && is_array( $value ) ) {
+			$selected = selected( true, in_array( $option, $value ), false );
+		} else	{
+			$selected = selected( $option, $value, false );
+		}
 		$html .= '<option value="' . esc_attr( $option ) . '" ' . $selected . '>' . esc_html( $name ) . '</option>';
 	}
 
