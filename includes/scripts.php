@@ -203,7 +203,7 @@ function kbs_load_admin_scripts( $hook ) {
 		}
 	}
 
-	wp_localize_script( 'kbs-admin-scripts', 'kbs_vars', apply_filters( 'kbs_admin_scripts_kbs_vars', array(
+	wp_localize_script( 'kbs-admin-scripts', 'kbs_vars', array(
 		'ajax_loader'             => KBS_PLUGIN_URL . 'assets/images/loading.gif',
 		'post_id'                 => isset( $post->ID ) ? $post->ID : null,
 		'post_type'               => isset( $_GET['post'] ) ? get_post_type( $_GET['post'] ) : false,
@@ -224,7 +224,7 @@ function kbs_load_admin_scripts( $hook ) {
 		'field_label_missing'     => __( 'Enter a Label for your field.', 'kb-support' ),
 		'field_type_missing'      => __( 'Select the field Type', 'kb-support' ),
         'reply_has_data'          => sprintf( __( 'You have not submitted the reply. If you continue, the reply will not be added to the %s', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
-	) ) );
+	) );
 
 	if ( function_exists( 'wp_enqueue_media' ) && version_compare( $wp_version, '3.5', '>=' ) ) {
 		// Call for new media manager
