@@ -203,7 +203,7 @@ function kbs_load_admin_scripts( $hook ) {
 		}
 	}
 
-	wp_localize_script( 'kbs-admin-scripts', 'kbs_vars', array(
+	wp_localize_script( 'kbs-admin-scripts', 'kbs_vars', apply_filters( 'kbs_admin_scripts_kbs_vars', array(
 		'ajax_loader'             => KBS_PLUGIN_URL . 'assets/images/loading.gif',
 		'post_id'                 => isset( $post->ID ) ? $post->ID : null,
 		'post_type'               => isset( $_GET['post'] ) ? get_post_type( $_GET['post'] ) : false,
@@ -215,6 +215,7 @@ function kbs_load_admin_scripts( $hook ) {
 		'no_ticket_reply_content' => __( 'There is no content in your reply', 'kb-support' ),
 		'ticket_confirm_close'    => __( 'Are you sure you wish to close this ticket? Click OK to close, or Cancel to return.', 'kb-support' ),
 		'ticket_reply_failed'     => sprintf( __( 'Could not add %s Reply', 'kb-support' ), kbs_get_ticket_label_singular() ),
+		'ticket_reply_added'      => 'ticket_reply_added',
 		'no_note_content'         => __( 'There is no content in your note', 'kb-support' ),
 		'note_not_added'          => __( 'Your note could not be added', 'kb-support' ),
 		'type_to_search'          => sprintf( __( 'Type to search %s', 'kb-support' ), kbs_get_article_label_plural() ),
@@ -223,7 +224,7 @@ function kbs_load_admin_scripts( $hook ) {
 		'field_label_missing'     => __( 'Enter a Label for your field.', 'kb-support' ),
 		'field_type_missing'      => __( 'Select the field Type', 'kb-support' ),
         'reply_has_data'          => sprintf( __( 'You have not submitted the reply. If you continue, the reply will not be added to the %s', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
-	) );
+	) ) );
 
 	if ( function_exists( 'wp_enqueue_media' ) && version_compare( $wp_version, '3.5', '>=' ) ) {
 		// Call for new media manager
