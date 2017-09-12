@@ -3,7 +3,7 @@ Contributors: kbsupport, mikeyhoward1977
 Tags: Helpdesk, Help Desk, Support, Customer Support, Service, Service Desk, ITIL, Support Helpdesk, Ticket, Ticket System, Support Tickets, Helpdesk Tickets, Knowledgebase, Knowledge Base, Service Level, SLA
 Requires at least: 4.1
 Tested up to: 4.9
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -94,6 +94,18 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.1.2 =
+
+**Tuesday, 12th September 2017**
+
+**Bug Fix**
+
+* Agents assigned as additional agents may not receive email notifications when a customer replies to a ticket
+
+**Tweaks**
+
+* Enable multiple select list argument when outputting a select field within settings API
 
 = 1.1 =
 
