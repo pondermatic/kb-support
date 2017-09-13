@@ -773,8 +773,7 @@ function kbs_get_registered_settings() {
 						'id'   => 'agent_notices',
 						'name' => __( 'Assignment Notices', 'kb-support' ),
 						'desc' => sprintf( __( 'Check this box to enable notifications to agents when a %s is assigned to them.', 'kb-support' ), strtolower( $single ) ),
-						'type' => 'checkbox',
-                        'std'  => '1'
+						'type' => 'checkbox'
 					),
 					'agent_assigned_subject' => array(
 						'id'   => 'agent_assigned_subject',
