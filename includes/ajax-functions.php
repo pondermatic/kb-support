@@ -179,6 +179,25 @@ function kbs_ajax_display_ticket_replies()	{
 add_action( 'wp_ajax_kbs_display_ticket_replies', 'kbs_ajax_display_ticket_replies' );
 
 /**
+ * Mark a reply as read.
+ *
+ * @since   1.2
+ * @return  void
+ */
+function kbs_ajax_mark_reply_as_read() {
+
+    $reply_id = isset( $_POST['reply_id'] )    ? $_POST['reply_id']    : 0;
+    
+    if ( ! empty( $reply_id ) )   {
+        kbs_mark_reply_as_read( $reply_id );
+    }
+
+    wp_send_json_success();
+} // kbs_ajax_mark_reply_as_read
+add_action( 'wp_ajax_kbs_read_ticket_reply', 'kbs_ajax_mark_reply_as_read' );
+add_action( 'wp_ajax_nopriv_kbs_read_ticket_reply', 'kbs_ajax_mark_reply_as_read' );
+
+/**
  * Validate a ticket reply form.
  *
  * @since	1.0

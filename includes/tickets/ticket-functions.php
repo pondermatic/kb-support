@@ -1370,6 +1370,70 @@ function kbs_get_reply_author_name( $reply, $role = false )	{
 } // kbs_get_reply_author_name
 
 /**
+ * Retrieve ticket ID from reply.
+ *
+ * @since   1.2
+ * @param   int     $reply_id
+ * @return  int|false
+ */
+function kbs_get_ticket_id_from_reply( $reply_id )  {
+    $ticket_id = get_post_field( 'post_parent', $reply_id );
+    return apply_filters( 'kbs_ticket_id_from_reply', $ticket_id );
+} // kbs_get_ticket_id_from_reply
+
+/**
+ * Mark a reply as read.
+ *
+ * @since   1.2
+ * @param   int     $reply_id
+ * @return  int|false
+ */
+function kbs_mark_reply_as_read( $reply_id )  {
+
+    $ticket_id = kbs_get_ticket_id_from_reply( $reply_id );
+
+    if ( empty( $ticket_id) )   {
+        return false;
+    }
+
+    $ticket      = new KBS_Ticket( $ticket_id );
+    $customer_id = $ticket->customer_id;
+
+    if ( ! empty( $customer_id ) )  {
+        $user_id = get_current_user_id();
+        if ( ! empty( $user_id ) )  {
+            if ( $user_id !== $customer_id )    {
+                $mark_read = false;
+            }
+        }
+    }
+
+    $mark_read = apply_filters( 'kbs_mark_reply_as_read', true, $reply_id, $ticket );
+
+    if ( ! $mark_read ) {
+        return false;
+    }
+
+    do_action( 'kbs_customer_read_reply', $reply_id, $ticket );
+
+    return add_post_meta( $reply_id, '_kbs_reply_customer_read_' . $customer_id, current_time( 'mysql'), true );
+
+} // kbs_mark_reply_as_read
+
+/**
+ * Whether or not a reply has been read.
+ *
+ * @since   1.2
+ * @param   int         $reply_id
+ * @return  str|false   false if unread, otherwise the datetime the reply was read.
+ */
+function kbs_reply_is_read( $reply_id ) {
+    $read = get_post_meta( $reply_id, 'kbs_customer_read_reply', true );
+
+    return apply_filters( 'kbs_customer_read_reply', $read, $reply_id );
+} // kbs_reply_is_read
+
+/**
  * Retrieve all notes attached to a ticket.
  *
  * @since	1.0
