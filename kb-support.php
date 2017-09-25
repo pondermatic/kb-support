@@ -316,11 +316,17 @@ final class KB_Support {
 	 */
 	public function load_textdomain()	{
 
-		load_plugin_textdomain( 
-			'kb-support',
-			false, 
-			dirname( plugin_basename(__FILE__) ) . '/languages'
-		);
+        // Set filter for plugin's languages directory.
+		$kbs_lang_dir  = dirname( plugin_basename( KBS_PLUGIN_FILE ) ) . '/languages/';
+		$kbs_lang_dir  = apply_filters( 'kbs_languages_directory', $kbs_lang_dir );
+
+		// Traditional WordPress plugin locale filter.
+        $locale = is_admin() && function_exists( 'get_user_locale' ) ? get_user_locale() : get_locale();
+        $locale = apply_filters( 'plugin_locale', $locale, 'kb-support' );
+
+        unload_textdomain( 'kb-support' );
+        load_textdomain( 'kb-support', WP_LANG_DIR . '/kb-support/kb-support-' . $locale . '.mo' );
+        load_plugin_textdomain( 'kb-support', false, $kbs_lang_dir );
 
 	} // load_textdomain
 	
