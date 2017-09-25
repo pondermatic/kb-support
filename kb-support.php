@@ -324,7 +324,6 @@ final class KB_Support {
         $locale = is_admin() && function_exists( 'get_user_locale' ) ? get_user_locale() : get_locale();
         $locale = apply_filters( 'plugin_locale', $locale, 'kb-support' );
 
-        unload_textdomain( 'kb-support' );
         load_textdomain( 'kb-support', WP_LANG_DIR . '/kb-support/kb-support-' . $locale . '.mo' );
         load_plugin_textdomain( 'kb-support', false, $kbs_lang_dir );
 
