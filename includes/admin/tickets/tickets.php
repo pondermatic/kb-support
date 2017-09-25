@@ -122,12 +122,17 @@ function kbs_set_kbs_ticket_column_data( $column_name, $post_id ) {
 		case 'ticket_category':
             $terms = wp_get_post_terms( $post_id, 'ticket_category' );
 			if ( $terms )	{
+				$output = array();
+
                 foreach( $terms as $term )  {
-                    printf(
+                    $output[] = sprintf(
                         '<a href="%s">' . $term->name . '</a>',
                         add_query_arg( 'ticket_category', $term->slug )
                     );
                 }
+
+				echo implode( ', ', $output );
+
 			} else	{
 				echo '&mdash;';
 			}
@@ -136,12 +141,18 @@ function kbs_set_kbs_ticket_column_data( $column_name, $post_id ) {
 		case 'ticket_tag':
 			$terms = wp_get_post_terms( $post_id, 'ticket_tag' );
 			if ( $terms )	{
+				$output = array();
+
                 foreach( $terms as $term )  {
-                    printf(
+                    $output[] = sprintf(
                         '<a href="%s">' . $term->name . '</a>',
                         add_query_arg( 'ticket_tag', $term->slug )
                     );
+
                 }
+
+				echo implode( ', ', $output );
+
 			} else	{
 				echo '&mdash;';
 			}
