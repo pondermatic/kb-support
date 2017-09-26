@@ -3,6 +3,7 @@ Contributors: kbsupport, mikeyhoward1977
 Tags: Helpdesk, Help Desk, Support, Customer Support, Service, Service Desk, ITIL, Support Helpdesk, Ticket, Ticket System, Support Tickets, Helpdesk Tickets, Knowledgebase, Knowledge Base, Service Level, SLA
 Requires at least: 4.1
 Tested up to: 4.9
+Requires PHP: 5.4
 Stable tag: 1.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -18,21 +19,42 @@ From the moment your customers begin to log a ticket, KB Support will search you
 
 From your own experience in running a helpdesk for your product(s) you will know that in a busy environment, documenting solutions and making them readily available to your customers always seems to take a back seat. KB Support makes this process much easier and encourages your support desk agents to produce articles when working through resolution of a customers ticket. Those articles are then immediately available on your website, and automatically referenced during a support ticket submission as a potential solution.
 
-Key Features of KB Support include:
+**Key FREE Features of KB Support include**:
 
 * Easily manage and customise submission forms. No coding required, multiple forms can be created and utilised
-* Guest submission is fully supported. Customers do not need an account to create or manage support tickets.
+* Guest submission is fully supported. Customers do not need an account to create or manage support tickets
+* Sequential ticket numbers
+* Email notifications keep customers, admins and agents up to date with recent ticket events
+* Restricted access ensures that only agents and the assigned customer are able to view tickets and correspondance
 * A fully responsive and clean front end design where customers can manage their tickets, including viewing and creating replies
 * Integrated Knowledge Base Articles can be easily created and referenced to try and offer solutions without tickets being created
 * Ability to restrict access to individual knowledge base articles to logged in users only
 * Auto assign new tickets to agents based on current ticket count, or randomly
 * Tracks an agents status so you can see if they are online or offline
+* Ability to assignt tickets to multiple agents
 * A number of useful shortcodes to display submission forms, KB Article lists, ticket history, login/registration forms, profile editor, KB Article search form - and more
-* Private notes that are visible to agents only
+* Numerous template tags enable you to easily add ticket related content into email notifications
+* Private ticket notes that are visible to agents only
 * Restrict which tickets an agent can view. i.e. Just those to which they are assigned
-* A bunch of hooks and filters for our developer friends
+* Group customers within a company
+* Uses templates that allow for easy customisation of front end pages, shortcodes and CSS styles
+* Ajax based ticket submissions provide a powerful, reliable and friendly interface for customers
+* Built in SPAM protection
+* Customer portal enabling access to existing and historic tickets
+* Truly versatile - A bunch of hooks and filters for our developer friends
+* A growing number of [extensions](https://kb-support.com/extensions/) providing even more functionality and customisation options
 
 More information can be found at [https://kb-support.com/](https://kb-support.com/).
+
+**Further enhance the features and functionality of KB Support with paid [extensions](https://kb-support.com/extensions/) such as**:
+
+* **Easy Digital Downloads Integration** - Integrate your EDD store into KB Support providing a seamless support solution
+* **Knowledge Base Integrations** - Fully integrate KB Support into your existing knowledge base solution
+* **Ratings & Satisfaction** - Enables customers and visitors to provide feedback on their support experience as well as the quality of your KB articles
+* **Canned Replies** - Instantly reply to tickets with a single click using pre-defined replies to questions you receive the most
+* **Custom Ticket Status** - Define your own ticket statuses and enable email notifications when a ticket enters the status
+* **Email Signatures** - Enables support workers to register a custom signature which can be auto inserted into email notifications sent to customers
+* **MailChimp Integration** - Grow your subscriptions by enabling quick and seamless customer sign-ups to your MailChimp newsletter lists via KB Support
 
 **Follow this plugin on [GitHub](https://github.com/KB-Support/kb-support)**
 
