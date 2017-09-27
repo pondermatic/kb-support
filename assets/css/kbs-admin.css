@@ -348,6 +348,13 @@ a.kbs_ticket_form_data	{
 	width: 150px;
 }
 
+#kbs-ticket-actions select,
+#kbs-agent-options select,
+#kbs-multi-agent-options select	{
+	float: right;
+	min-width: 150px;
+}
+
 .kbs_default_side_wrapper { width: 100px; }
 #kbs-delete-post { padding-top: 3px; }
 
