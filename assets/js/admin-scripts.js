@@ -286,6 +286,23 @@ jQuery(document).ready(function ($) {
 			}
 		}
 	};
+
+    // Toggle display of entire custom settings section for a price option
+	$( document.body ).on( 'click', '.toggle-view-reply-option-section', function(e) {
+		e.preventDefault();
+		var show = $(this).html() === kbs_vars.view_reply ? true : false;
+
+		if ( show ) {
+			$(this).html( kbs_vars.close_reply );
+		} else {
+			$(this).html( kbs_vars.view_reply );
+		}
+
+		var header = $(this).parents('.kbs-replies-row-header');
+		header.siblings('.kbs-replies-content-wrap').slideToggle();
+
+	});
+
 	KBS_Tickets.init();
 	
 	/**
@@ -894,8 +911,8 @@ function kbs_load_ticket_replies( ticket_id, reply_id )	{
 
 	jQuery.post(ajaxurl, { action: 'kbs_display_ticket_replies', kbs_ticket_id: ticket_id, kbs_reply_id: reply_id },
 		function(response)	{
-			jQuery('.kbs_replies_accordion').prepend(response);
-			jQuery('.kbs_replies_accordion').accordion('refresh');
+			jQuery('.kbs-historic-reply-option-fields').prepend(response);
+			//jQuery('.kbs_replies_accordion').accordion('refresh');
 			jQuery('#kbs-replies-loader').html('');
 		}
 	);
