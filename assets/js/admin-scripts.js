@@ -293,7 +293,7 @@ jQuery(document).ready(function ($) {
 		var show = $(this).html() === kbs_vars.view_reply ? true : false;
 
 		if ( show ) {
-			$(this).html( kbs_vars.close_reply );
+			$(this).html( kbs_vars.hide_reply );
 		} else {
 			$(this).html( kbs_vars.view_reply );
 		}

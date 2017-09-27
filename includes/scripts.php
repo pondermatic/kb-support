@@ -225,7 +225,7 @@ function kbs_load_admin_scripts( $hook ) {
 		'field_type_missing'      => __( 'Select the field Type', 'kb-support' ),
         'reply_has_data'          => sprintf( __( 'You have not submitted the reply. If you continue, the reply will not be added to the %s', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
         'view_reply'              => __( 'View Reply', 'kb-support' ),
-		'close_reply'             => __( 'Close Reply', 'kb-support' ),
+		'hide_reply'              => __( 'Hide Reply', 'kb-support' ),
 	) );
 
 	if ( function_exists( 'wp_enqueue_media' ) && version_compare( $wp_version, '3.5', '>=' ) ) {

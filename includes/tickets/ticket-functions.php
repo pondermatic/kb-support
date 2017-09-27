@@ -1331,36 +1331,35 @@ function kbs_get_reply_html( $reply, $ticket_id = 0 ) {
 
     ob_start(); ?>
 
-        <div class="kbs-replies-row-header">
-            <span class="kbs-replies-row-title">
-                <?php echo apply_filters( 'kbs_replies_title', sprintf( __( '%s by %s', 'kb-support' ), date_i18n( $date_format, strtotime( $reply->post_date ) ), $author ), $reply ); ?>
-            </span>
+    <div class="kbs-replies-row-header">
+        <span class="kbs-replies-row-title">
+            <?php echo apply_filters( 'kbs_replies_title', sprintf( __( '%s by %s', 'kb-support' ), date_i18n( $date_format, strtotime( $reply->post_date ) ), $author ), $reply ); ?>
+        </span>
 
-            <span class="kbs-replies-row-actions">
-                <?php echo implode( '&nbsp;&#124;&nbsp;', $actions ); ?>
-            </span>
-        </div>
+        <span class="kbs-replies-row-actions">
+            <?php echo implode( '&nbsp;&#124;&nbsp;', $actions ); ?>
+        </span>
+    </div>
 
-        <div class="kbs-replies-content-wrap">
-            <div class="kbs-replies-content-sections">
-                <div class="kbs-replies-content-section">
-                    <?php do_action( 'kbs_replies_before_content', $reply ); ?>
-                    <?php echo wpautop( $reply->post_content ); ?>
-                    <?php do_action( 'kbs_replies_content', $reply ); ?>
-                </div>
-                <?php if ( $files ) : ?>
-                    <div class="kbs-replies-files-section">
-                       <span class="kbs-replies-content-section-title"><?php _e( 'Attached Files', 'kb-support' ); ?></span>
-                        <ol>
-                            <?php foreach( $files as $file ) : ?>
-                                <li><a href="<?php echo wp_get_attachment_url( $file->ID ); ?>" target="_blank"><?php echo basename( get_attached_file( $file->ID ) ); ?></a></li>
-                            <?php endforeach; ?>
-                        </ol>
-                    </div>
-                <?php endif; ?>
-                <?php do_action( 'kbs_replies_reply', $reply ); ?>
+    <div class="kbs-replies-content-wrap">
+        <div class="kbs-replies-content-sections">
+            <div class="kbs-replies-content-section">
+                <?php do_action( 'kbs_replies_before_content', $reply ); ?>
+                <?php echo wpautop( $reply->post_content ); ?>
+                <?php do_action( 'kbs_replies_content', $reply ); ?>
             </div>
+            <?php if ( $files ) : ?>
+                <div class="kbs-replies-files-section">
+                    <ol>
+                        <?php foreach( $files as $file ) : ?>
+                            <li><a href="<?php echo wp_get_attachment_url( $file->ID ); ?>" target="_blank"><?php echo basename( get_attached_file( $file->ID ) ); ?></a></li>
+                        <?php endforeach; ?>
+                    </ol>
+                </div>
+            <?php endif; ?>
+            <?php do_action( 'kbs_replies_reply', $reply ); ?>
         </div>
+    </div>
 
     <?php
 
