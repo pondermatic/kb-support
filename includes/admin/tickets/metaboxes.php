@@ -546,14 +546,11 @@ function kbs_ticket_metabox_existing_replies_row( $ticket_id )	{
 	global $kbs_ticket, $kbs_ticket_update;
 
 	?>
-
     <div id="kbs-replies-loader"></div>
 
     <div id="kbs_historic_reply_fields" class="kbs_meta_table_wrap">
         <div class="widefat">
-            <div class="kbs-historic-reply-option-fields">
-                
-            </div>
+            <div class="kbs-historic-reply-option-fields"></div>
         </div>
     </div>
 	<?php

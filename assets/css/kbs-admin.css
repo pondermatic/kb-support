@@ -251,7 +251,8 @@ a.kbs_ticket_form_data	{
 
 .kbs-replies-row-title {
 	float: left;
-	font-weight: 600;
+	font-size: 12px;
+    font-weight: 600;
 }
 
 .kbs-replies-row-title,
@@ -288,7 +289,8 @@ a.kbs_ticket_form_data	{
 	width: 100%;
 }
 
-.kbs-replies-content-section {
+.kbs-replies-content-section,
+.kbs-replies-files-section {
 	display: block;
 	padding: 10px 8px;
 	border-bottom: 1px solid rgba( 222, 222, 222, 0.3 );
@@ -297,7 +299,8 @@ a.kbs_ticket_form_data	{
 	border-bottom: none;
 }
 
-.kbs-replies-content-section-title {
+.kbs-replies-content-section-title,
+.kbs-replies-files-section-title {
 	display: block;
 	font-size: 14px;
 	font-weight: 600;

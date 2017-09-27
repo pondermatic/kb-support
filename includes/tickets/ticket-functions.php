@@ -1300,15 +1300,40 @@ function kbs_get_reply_html( $reply, $ticket_id = 0 ) {
 
     $actions = apply_filters( 'kbs_ticket_replies_actions', $actions, $reply );
 
+    $icons   = array();
+
+    if ( false === strpos( $author, __( 'Customer', 'kb-support' ) ) )  {
+        $is_read = kbs_reply_is_read( $reply->ID );
+        if ( $is_read )  {
+            $icons['is_read'] = sprintf(
+                '<span class="dashicons dashicons-visibility" title="%s %s"></span>',
+                __( 'Read by customer on', 'kb-support' ),
+                ' ' . date_i18n( $date_format, strtotime( $is_read ) )
+            );
+        } else  {
+            $icons['not_read'] = sprintf(
+                '<span class="dashicons dashicons-hidden" title="%s"></span>',
+                __( 'Unread', 'kb-support' )
+            );
+        }
+    }
+
+    if ( $file_count )  {
+        $icons['files'] = sprintf(
+            '<span class="dashicons dashicons-media-document" title="%s"></span>',
+            $file_count . ' ' . _n( 'attached file', 'attached files', $file_count, 'kb-support' )
+        );
+    }
+
+    $icons   = apply_filters( 'kbs_ticket_replies_icons', $icons, $reply );
+
+    $actions = array_merge( $icons, $actions );
+
     ob_start(); ?>
 
         <div class="kbs-replies-row-header">
-            <span class="kbs-replies-row-title" title="<?php _e( 'Click and drag to re-order price options', 'kb-support' ); ?>">
-                <?php echo $author . '&nbsp;&ndash;&nbsp;' . date_i18n( $date_format, strtotime( $reply->post_date ) ); ?>
-                <?php if ( $file_count ) : ?>
-                    <?php $files_title = $file_count . ' ' . _n( 'attached file', 'attached files', $file_count, 'kb-support' ); ?>
-                    <span class="dashicons dashicons-media-document" title="<?php echo $files_title; ?>"></span>
-                <?php endif; ?>
+            <span class="kbs-replies-row-title">
+                <?php printf( __( '%s by %s', 'kb-support' ), date_i18n( $date_format, strtotime( $reply->post_date ) ), $author ); ?>
             </span>
 
             <span class="kbs-replies-row-actions">
@@ -1321,19 +1346,16 @@ function kbs_get_reply_html( $reply, $ticket_id = 0 ) {
                 <div class="kbs-replies-content-section">
                     <?php echo wpautop( $reply->post_content ); ?>
                 </div>
-
                 <?php if ( $files ) : ?>
                     <div class="kbs-replies-files-section">
-                        <span class="kbs-replies-row-title"><?php _e( 'Attached Files', 'kb-support' ); ?></span>
-                        <span class="kbs-reply-files">
-                            <ul>
-                                <?php foreach( $files as $file ) : ?>
-                                    <a href="<?php echo wp_get_attachment_url( $file->ID ); ?>" target="_blank"><?php echo basename( get_attached_file( $file->ID ) ); ?></a>
-                                <?php endforeach; ?>
-                            </ul>
-                        </span>
+                       <span class="kbs-replies-content-section-title"><?php _e( 'Attached Files', 'kb-support' ); ?></span>
+                        <ol>
+                            <?php foreach( $files as $file ) : ?>
+                                <li><a href="<?php echo wp_get_attachment_url( $file->ID ); ?>" target="_blank"><?php echo basename( get_attached_file( $file->ID ) ); ?></a></li>
+                            <?php endforeach; ?>
+                        </ol>
                     </div>
-                    <?php endif; ?>
+                <?php endif; ?>
             <!--do_action( 'edd_download_price_option_row', $post_id, $key, $args ); -->
             </div>
         </div>
@@ -1465,7 +1487,7 @@ function kbs_mark_reply_as_read( $reply_id )  {
 
     do_action( 'kbs_customer_read_reply', $reply_id, $ticket );
 
-    return add_post_meta( $reply_id, '_kbs_reply_customer_read_' . $customer_id, current_time( 'mysql'), true );
+    return add_post_meta( $reply_id, '_kbs_reply_customer_read', current_time( 'mysql'), true );
 
 } // kbs_mark_reply_as_read
 
@@ -1477,9 +1499,9 @@ function kbs_mark_reply_as_read( $reply_id )  {
  * @return  str|false   false if unread, otherwise the datetime the reply was read.
  */
 function kbs_reply_is_read( $reply_id ) {
-    $read = get_post_meta( $reply_id, 'kbs_customer_read_reply', true );
+    $read = get_post_meta( $reply_id, '_kbs_reply_customer_read', true );
 
-    return apply_filters( 'kbs_customer_read_reply', $read, $reply_id );
+    return apply_filters( 'kbs_reply_is_read', $read, $reply_id );
 } // kbs_reply_is_read
 
 /**
