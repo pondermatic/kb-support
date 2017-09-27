@@ -1319,19 +1319,21 @@ function kbs_get_reply_html( $reply, $ticket_id = 0 ) {
         <div class="kbs-replies-content-wrap">
             <div class="kbs-replies-content-sections">
                 <div class="kbs-replies-content-section">
-                    <?php
-                    echo wpautop( $reply->post_content );
-                    if ( $files ) : ?>
-                        <p><ul>
-                            <?php foreach( $files as $file ) : ?>
-                                <li>
-                                    <a href="<?php echo wp_get_attachment_url( $file->ID ); ?>" target="_blank"><?php echo basename( get_attached_file( $file->ID ) ); ?></a>
-                                </li>
-                            <?php endforeach; ?>
-
-                    </ul></p>
-                    <?php endif; ?>
+                    <?php echo wpautop( $reply->post_content ); ?>
                 </div>
+
+                <?php if ( $files ) : ?>
+                    <div class="kbs-replies-files-section">
+                        <span class="kbs-replies-row-title"><?php _e( 'Attached Files', 'kb-support' ); ?></span>
+                        <span class="kbs-reply-files">
+                            <ul>
+                                <?php foreach( $files as $file ) : ?>
+                                    <a href="<?php echo wp_get_attachment_url( $file->ID ); ?>" target="_blank"><?php echo basename( get_attached_file( $file->ID ) ); ?></a>
+                                <?php endforeach; ?>
+                            </ul>
+                        </span>
+                    </div>
+                    <?php endif; ?>
             <!--do_action( 'edd_download_price_option_row', $post_id, $key, $args ); -->
             </div>
         </div>
