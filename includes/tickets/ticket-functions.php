@@ -1327,8 +1327,6 @@ function kbs_get_reply_html( $reply, $ticket_id = 0 ) {
 
     $icons   = apply_filters( 'kbs_ticket_replies_icons', $icons, $reply );
 
-    $actions = array_merge( $icons, $actions );
-
     ob_start(); ?>
 
     <div class="kbs-replies-row-header">
@@ -1337,7 +1335,8 @@ function kbs_get_reply_html( $reply, $ticket_id = 0 ) {
         </span>
 
         <span class="kbs-replies-row-actions">
-            <?php echo implode( '&nbsp;&#124;&nbsp;', $actions ); ?>
+            <?php echo implode( ' ', $icons ); ?>
+			<?php echo implode( '&nbsp;&#124;&nbsp;', $actions ); ?>
         </span>
     </div>
 

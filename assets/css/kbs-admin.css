@@ -224,6 +224,7 @@ a.kbs_ticket_form_data	{
 	cursor: pointer;
 	vertical-align: middle;
 }
+
 .kbs-replies-row-actions .toggle-view-reply-option-section,
 .kbs-replies-row-actions .toggle-reply-option-create-article {
 	color: #777;
@@ -310,6 +311,7 @@ a.kbs_ticket_form_data	{
 	font-size: 14px;
 	font-weight: 600;
 	padding: 0 0 10px;
+	text-align: center;
 }
 .kbs-replies-content-section > *:not(.kbs-replies-content-section-title) {
 	padding-right: 20px;

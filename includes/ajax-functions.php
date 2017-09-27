@@ -167,7 +167,7 @@ function kbs_ajax_display_ticket_replies()	{
 	
 		if ( ! empty( $replies ) )	{
 			foreach( $replies as $reply )	{
-                $output .= ' <div class="kbs_historic_replies_wrapper">';
+                $output .= '<div class="kbs_historic_replies_wrapper">';
                     $output .= kbs_get_reply_html( $reply, $_POST['kbs_ticket_id'] );
                 $output .= '</div>';
 			}
