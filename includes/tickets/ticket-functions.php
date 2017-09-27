@@ -1293,7 +1293,54 @@ function kbs_get_reply_html( $reply, $ticket_id = 0 ) {
 
 	$create_article_link = apply_filters( 'kbs_create_article_link', $create_article_link, $ticket_id, $reply );
 
-	$reply_html  ='<h3>';
+    $actions = array(
+        'read_reply'     => '<a href="#" class="toggle-read-reply-option-section">' . __( 'Read Reply', 'kb-support' ) . '</a>',
+        'create_article' => '<a href="' . $create_article_link . '" class="toggle-reply-option-create-article">' . sprintf( __( 'Create %s', 'kb-support' ), kbs_get_article_label_singular() ) . '</a>'
+    );
+
+    $actions = apply_filters( 'kbs_ticket_replies_actions', $actions, $reply );
+
+    ob_start(); ?>
+
+        <div class="kbs-replies-row-header">
+            <span class="kbs-replies-row-title" title="<?php _e( 'Click and drag to re-order price options', 'kb-support' ); ?>">
+                <?php echo $author . '&nbsp;&ndash;&nbsp;' . date_i18n( $date_format, strtotime( $reply->post_date ) ); ?>
+                <?php if ( $file_count ) : ?>
+                    <?php $files_title = $file_count . ' ' . _n( 'attached file', 'attached files', $file_count, 'kb-support' ); ?>
+                    <span class="dashicons dashicons-media-document" title="<?php echo $files_title; ?>"></span>
+                <?php endif; ?>
+            </span>
+
+            <span class="kbs-replies-row-actions">
+                <?php echo implode( '&nbsp;&#124;&nbsp;', $actions ); ?>
+            </span>
+        </div>
+
+        <div class="kbs-replies-content-wrap">
+            <div class="kbs-replies-content-sections">
+                <div class="kbs-replies-content-section">
+                    <?php
+                    echo wpautop( $reply->post_content );
+                    if ( $files ) : ?>
+                        <p><ul>
+                            <?php foreach( $files as $file ) : ?>
+                                <li>
+                                    <a href="<?php echo wp_get_attachment_url( $file->ID ); ?>" target="_blank"><?php echo basename( get_attached_file( $file->ID ) ); ?></a>
+                                </li>
+                            <?php endforeach; ?>
+
+                    </ul></p>
+                    <?php endif; ?>
+                </div>
+            <!--do_action( 'edd_download_price_option_row', $post_id, $key, $args ); -->
+            </div>
+        </div>
+
+    <?php
+
+    return ob_get_clean();
+
+	/*$reply_html  ='<h3>';
 		$reply_html .= $author . '&nbsp;&ndash;&nbsp;' . date_i18n( $date_format, strtotime( $reply->post_date ) );
 		if ( $file_count )	{
 			$reply_html .= ' (' . $file_count . ' ' . _n( 'attached file', 'attached files', $file_count, 'kb-support' ) . ')';
@@ -1321,7 +1368,7 @@ function kbs_get_reply_html( $reply, $ticket_id = 0 ) {
 
 	$reply_html .= '</div>';
 
-	return $reply_html;
+	return $reply_html;*/
 
 } // kbs_get_reply_html
 

@@ -533,6 +533,35 @@ function kbs_ticket_metabox_files_row( $ticket_id )	{
 add_action( 'kbs_ticket_data_fields', 'kbs_ticket_metabox_files_row', 30 );
 
 /**
+ * Display the ticket replies row.
+ *
+ * @since	1.0
+ * @global	obj		$kbs_ticket			KBS_Ticket class object
+ * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
+ * @param	int		$ticket_id			The ticket post ID.
+ * @return	str
+ */
+function kbs_ticket_metabox_existing_replies_row( $ticket_id )	{
+
+	global $kbs_ticket, $kbs_ticket_update;
+
+	?>
+
+    <div id="kbs-replies-loader"></div>
+
+    <div id="kbs_historic_reply_fields" class="kbs_meta_table_wrap">
+        <div class="widefat">
+            <div class="kbs-historic-reply-option-fields">
+                
+            </div>
+        </div>
+    </div>
+	<?php
+
+} // kbs_ticket_metabox_replies_row
+add_action( 'kbs_ticket_reply_fields', 'kbs_ticket_metabox_existing_replies_row', 10 );
+
+/**
  * Display the ticket reply row.
  *
  * @since	1.0
@@ -551,7 +580,7 @@ function kbs_ticket_metabox_replies_row( $ticket_id )	{
 	<?php
 
 } // kbs_ticket_metabox_replies_row
-add_action( 'kbs_ticket_reply_fields', 'kbs_ticket_metabox_replies_row', 10 );
+//add_action( 'kbs_ticket_reply_fields', 'kbs_ticket_metabox_replies_row', 10 );
 
 /**
  * Display the ticket reply row.
