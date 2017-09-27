@@ -288,14 +288,14 @@ jQuery(document).ready(function ($) {
 	};
 
     // Toggle display of entire custom settings section for a price option
-	$( document.body ).on( 'click', '.toggle-read-reply-option-section', function(e) {
+	$( document.body ).on( 'click', '.toggle-view-reply-option-section', function(e) {
 		e.preventDefault();
-		var show = $(this).html() == kbs_vars.read_reply ? true : false;
+		var show = $(this).html() === kbs_vars.view_reply ? true : false;
 
 		if ( show ) {
 			$(this).html( kbs_vars.close_reply );
 		} else {
-			$(this).html( kbs_vars.read_reply );
+			$(this).html( kbs_vars.view_reply );
 		}
 
 		var header = $(this).parents('.kbs-replies-row-header');

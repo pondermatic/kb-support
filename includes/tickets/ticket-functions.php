@@ -1294,7 +1294,7 @@ function kbs_get_reply_html( $reply, $ticket_id = 0 ) {
 	$create_article_link = apply_filters( 'kbs_create_article_link', $create_article_link, $ticket_id, $reply );
 
     $actions = array(
-        'read_reply'     => '<a href="#" class="toggle-read-reply-option-section">' . __( 'Read Reply', 'kb-support' ) . '</a>',
+        'read_reply'     => '<a href="#" class="toggle-view-reply-option-section">' . __( 'View Reply', 'kb-support' ) . '</a>',
         'create_article' => '<a href="' . $create_article_link . '" class="toggle-reply-option-create-article">' . sprintf( __( 'Create %s', 'kb-support' ), kbs_get_article_label_singular() ) . '</a>'
     );
 
@@ -1308,12 +1308,12 @@ function kbs_get_reply_html( $reply, $ticket_id = 0 ) {
             $icons['is_read'] = sprintf(
                 '<span class="dashicons dashicons-visibility" title="%s %s"></span>',
                 __( 'Read by customer on', 'kb-support' ),
-                ' ' . date_i18n( $date_format, strtotime( $is_read ) )
+                date_i18n( $date_format, strtotime( $is_read ) )
             );
         } else  {
             $icons['not_read'] = sprintf(
                 '<span class="dashicons dashicons-hidden" title="%s"></span>',
-                __( 'Unread', 'kb-support' )
+                __( 'Customer has not read', 'kb-support' )
             );
         }
     }
@@ -1333,7 +1333,7 @@ function kbs_get_reply_html( $reply, $ticket_id = 0 ) {
 
         <div class="kbs-replies-row-header">
             <span class="kbs-replies-row-title">
-                <?php printf( __( '%s by %s', 'kb-support' ), date_i18n( $date_format, strtotime( $reply->post_date ) ), $author ); ?>
+                <?php echo apply_filters( 'kbs_replies_title', sprintf( __( '%s by %s', 'kb-support' ), date_i18n( $date_format, strtotime( $reply->post_date ) ), $author ), $reply ); ?>
             </span>
 
             <span class="kbs-replies-row-actions">
@@ -1344,7 +1344,9 @@ function kbs_get_reply_html( $reply, $ticket_id = 0 ) {
         <div class="kbs-replies-content-wrap">
             <div class="kbs-replies-content-sections">
                 <div class="kbs-replies-content-section">
+                    <?php do_action( 'kbs_replies_before_content', $reply ); ?>
                     <?php echo wpautop( $reply->post_content ); ?>
+                    <?php do_action( 'kbs_replies_content', $reply ); ?>
                 </div>
                 <?php if ( $files ) : ?>
                     <div class="kbs-replies-files-section">
@@ -1356,7 +1358,7 @@ function kbs_get_reply_html( $reply, $ticket_id = 0 ) {
                         </ol>
                     </div>
                 <?php endif; ?>
-            <!--do_action( 'edd_download_price_option_row', $post_id, $key, $args ); -->
+                <?php do_action( 'kbs_replies_reply', $reply ); ?>
             </div>
         </div>
 

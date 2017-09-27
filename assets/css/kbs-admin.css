@@ -224,11 +224,11 @@ a.kbs_ticket_form_data	{
 	cursor: pointer;
 	vertical-align: middle;
 }
-.kbs-replies-row-actions .toggle-read-reply-option-section,
+.kbs-replies-row-actions .toggle-view-reply-option-section,
 .kbs-replies-row-actions .toggle-reply-option-create-article {
 	color: #777;
 }
-.kbs-replies-row-actions .toggle-read-reply-option-section:hover,
+.kbs-replies-row-actions .toggle-view-reply-option-section:hover,
 .kbs-replies-row-actions .toggle-reply-option-create-article:hover {
 	color: #444;
 }
@@ -307,7 +307,6 @@ a.kbs_ticket_form_data	{
 	padding: 0 0 10px;
 }
 .kbs-replies-content-section > *:not(.kbs-replies-content-section-title) {
-	display: inline-block;
 	padding-right: 20px;
 	vertical-align: top;
 	margin-bottom: 4px;
