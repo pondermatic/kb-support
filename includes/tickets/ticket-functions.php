@@ -1366,36 +1366,6 @@ function kbs_get_reply_html( $reply, $ticket_id = 0 ) {
 
     return ob_get_clean();
 
-	/*$reply_html  ='<h3>';
-		$reply_html .= $author . '&nbsp;&ndash;&nbsp;' . date_i18n( $date_format, strtotime( $reply->post_date ) );
-		if ( $file_count )	{
-			$reply_html .= ' (' . $file_count . ' ' . _n( 'attached file', 'attached files', $file_count, 'kb-support' ) . ')';
-		}
-	$reply_html .= '</h3>';
-
-	$reply_html .= '<div>';
-		$reply_html .= '<p class="right">';
-			$reply_html .= '<a class="create_article" href="' . $create_article_link . '">' . sprintf( __( 'Create %s', 'kb-support' ), kbs_get_article_label_singular() ) . '</a>';
-		$reply_html .= '</p>';
-		$reply_html .= wpautop( $reply->post_content );
-
-		if ( $files )	{
-
-			$reply_html .= '<ul>';
-
-			foreach( $files as $file )	{
-				$reply_html .= '<li>';
-					$reply_html .= '<a href="' . wp_get_attachment_url( $file->ID ) . '" target="_blank">' . basename( get_attached_file( $file->ID ) ) . '</a>';
-				$reply_html .= '</li>';
-			}
-
-			$reply_html .= '</ul>';
-		}
-
-	$reply_html .= '</div>';
-
-	return $reply_html;*/
-
 } // kbs_get_reply_html
 
 /**
