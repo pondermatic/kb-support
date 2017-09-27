@@ -427,7 +427,7 @@ function kbs_ticket_metabox_additional_agents_row( $ticket_id )	{
     }
 
     ?>
-    <div id="kbs-agent-options">
+    <div id="kbs-multi-agent-options">
         <p><label for="kbs_assigned_agents"><?php _e( 'Additional Agents', 'kb-support' ); ?>:</label>
             <?php echo KBS()->html->agent_dropdown( array(
                 'name'            => 'kbs_assigned_agents',
