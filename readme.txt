@@ -117,6 +117,25 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 == Changelog ==
 
+= 1.1.3 =
+
+**Tweaks**
+
+* Ticket replies metabox overhaul
+* Register when a customer views an agent reply
+* Private ticket notes metabox overhaul
+* Only a note author, or an agent with the `manage_ticket_settings` capability should be able to delete a note
+* Better input field alignment within ticket metaboxes
+* Added support for locally shipped translation files
+* Added required PHP version to readme.txt
+* Removed underscore from transient name
+
+**Bug Fixes**
+
+* Select fields that allow multiple selections within settings pages needed to store values as arrays
+* Added spacing between ticket categories and tags
+* Removed duplicate CSS ID
+
 = 1.1.2 =
 
 **Tuesday, 12th September 2017**
