@@ -1579,7 +1579,8 @@ function kbs_get_note_html( $note, $ticket_id = 0 ) {
 		$user = __( 'KBS Bot', 'kb-support' );
 	}
 
-	$date_format = get_option( 'date_format' ) . ', ' . get_option( 'time_format' );
+	$delete_note_cap = apply_filters( 'kbs_delete_note_cap', 'manage_ticket_settings', $note, $user );
+	$date_format     = get_option( 'date_format' ) . ', ' . get_option( 'time_format' );
 
 	$delete_note_url = wp_nonce_url( add_query_arg( array(
 		'kbs-action' => 'delete_ticket_note',
@@ -1587,16 +1588,43 @@ function kbs_get_note_html( $note, $ticket_id = 0 ) {
 		'ticket_id'  => $ticket_id
 	), admin_url() ), 'kbs_delete_ticket_note_' . $note->comment_ID, 'kbs_note_nonce' );
 
-	$note_html  ='<h3>';
-		$note_html .= date_i18n( $date_format, strtotime( $note->comment_date ) ) . '&nbsp;&ndash;&nbsp;' . $user;
-	$note_html .= '</h3>';
+	$actions = array(
+        'read_note'   => '<a href="#" class="toggle-view-note-option-section">' . __( 'View Note', 'kb-support' ) . '</a>',
+        'delete_note' => '<a href="' . $delete_note_url . '" class="kbs-remove-row kbs-delete">' . __( 'Delete Note', 'kb-support' ) . '</a>'
+    );
 
-	$note_html .= '<div>';
-		$note_html .= '<p class="kbs-delete"><a href="' . esc_url( $delete_note_url ) . '" class="kbs-delete">' . __( 'Delete', 'kb-support' ) . '</a></p>';
-		$note_html .= wpautop( $note->comment_content );
-	$note_html .= '</div>';
+	if ( $note->user_id != get_current_user_id() && ! current_user_can( $delete_note_cap ) )	{
+		unset( $actions['delete_note'] );
+	}
 
-	return $note_html;
+	$actions = apply_filters( 'kbs_ticket_notes_actions', $actions, $note );
+
+	ob_start(); ?>
+
+    <div class="kbs-notes-row-header">
+        <span class="kbs-notes-row-title">
+            <?php echo apply_filters( 'kbs_notes_title', sprintf( __( '%s by %s', 'kb-support' ), date_i18n( $date_format, strtotime( $note->comment_date ) ), $user ), $note ); ?>
+        </span>
+
+        <span class="kbs-notes-row-actions">
+			<?php echo implode( '&nbsp;&#124;&nbsp;', $actions ); ?>
+        </span>
+    </div>
+
+    <div class="kbs-notes-content-wrap">
+        <div class="kbs-notes-content-sections">
+            <div class="kbs-notes-content-section">
+                <?php do_action( 'kbs_ticket_notes_before_content', $note ); ?>
+                <?php echo wpautop( $note->comment_content ); ?>
+                <?php do_action( 'kbs_ticket_notes_content', $note ); ?>
+            </div>
+            <?php do_action( 'kbs_ticket_notes_note', $note ); ?>
+        </div>
+    </div>
+
+    <?php
+
+    return ob_get_clean();
 
 } // kbs_get_note_html
 

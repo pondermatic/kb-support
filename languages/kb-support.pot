@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KB Support 1.1.2\n"
 "Report-Msgid-Bugs-To: https://kb-support.com/\n"
-"POT-Creation-Date: 2017-09-29 21:35:56+00:00\n"
+"POT-Creation-Date: 2017-09-30 15:26:10+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -556,7 +556,6 @@ msgstr ""
 
 #: includes/admin/customers/class-kbs-customer-table.php:159
 #: includes/admin/forms/metaboxes.php:220
-#: includes/tickets/ticket-functions.php:1595
 msgid "Delete"
 msgstr ""
 
@@ -702,7 +701,7 @@ msgid "Nonce verification failed."
 msgstr ""
 
 #: includes/admin/customers/customer-actions.php:291
-#: includes/ajax-functions.php:490
+#: includes/ajax-functions.php:492
 msgid "Invalid email address."
 msgstr ""
 
@@ -3147,15 +3146,15 @@ msgstr ""
 msgid "Reply and Close"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:647
+#: includes/admin/tickets/metaboxes.php:654
 msgid "Add a New Note"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:651
+#: includes/admin/tickets/metaboxes.php:658
 msgid "Notes are only visible to support workers"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:664
+#: includes/admin/tickets/metaboxes.php:671
 msgid "Add Note"
 msgstr ""
 
@@ -3567,23 +3566,23 @@ msgstr ""
 msgid "Follow %s"
 msgstr ""
 
-#: includes/ajax-functions.php:483
+#: includes/ajax-functions.php:485
 msgid "Please enter a customer name."
 msgstr ""
 
-#: includes/ajax-functions.php:518
+#: includes/ajax-functions.php:520
 msgid "Customer email address already exists for customer #%s &ndash; %s."
 msgstr ""
 
-#: includes/ajax-functions.php:527
+#: includes/ajax-functions.php:529
 msgid "Could not create customer."
 msgstr ""
 
-#: includes/ajax-functions.php:572
+#: includes/ajax-functions.php:574
 msgid "No users found"
 msgstr ""
 
-#: includes/ajax-functions.php:637
+#: includes/ajax-functions.php:639
 msgid "View all %d possible solutions."
 msgstr ""
 
@@ -4710,6 +4709,14 @@ msgstr ""
 msgid "Hide Reply"
 msgstr ""
 
+#: includes/scripts.php:229 includes/tickets/ticket-functions.php:1592
+msgid "View Note"
+msgstr ""
+
+#: includes/scripts.php:230
+msgid "Hide Note"
+msgstr ""
+
 #: includes/shortcodes.php:287
 msgid "No %s found"
 msgstr ""
@@ -4818,6 +4825,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: includes/tickets/ticket-functions.php:1334
+#: includes/tickets/ticket-functions.php:1606
 msgid "%s by %s"
 msgstr ""
 
@@ -4827,6 +4835,10 @@ msgstr ""
 
 #: includes/tickets/ticket-functions.php:1579
 msgid "KBS Bot"
+msgstr ""
+
+#: includes/tickets/ticket-functions.php:1593
+msgid "Delete Note"
 msgstr ""
 
 #: includes/widgets.php:41

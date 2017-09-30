@@ -226,6 +226,8 @@ function kbs_load_admin_scripts( $hook ) {
         'reply_has_data'          => sprintf( __( 'You have not submitted the reply. If you continue, the reply will not be added to the %s', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
         'view_reply'              => __( 'View Reply', 'kb-support' ),
 		'hide_reply'              => __( 'Hide Reply', 'kb-support' ),
+		'view_note'               => __( 'View Note', 'kb-support' ),
+		'hide_note'               => __( 'Hide Note', 'kb-support' )
 	) );
 
 	if ( function_exists( 'wp_enqueue_media' ) && version_compare( $wp_version, '3.5', '>=' ) ) {
@@ -245,14 +247,6 @@ function kbs_load_admin_scripts( $hook ) {
 	wp_enqueue_script( 'media-upload' );
 	wp_enqueue_script( 'thickbox' );
 	wp_enqueue_style( 'thickbox' );
-
-	if ( 'post.php' == $hook || 'post-new.php' == $hook )	{
-
-		if ( isset( $_GET['post'] ) && 'kbs_ticket' == get_post_type( $_GET['post'] ) )	{
-			wp_enqueue_script( 'jquery-ui-accordion' );
-		}
-		
-	}
 
 } // kbs_load_admin_scripts
 add_action( 'admin_enqueue_scripts', 'kbs_load_admin_scripts' );

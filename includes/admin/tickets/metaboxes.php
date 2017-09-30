@@ -622,9 +622,16 @@ function kbs_ticket_metabox_notes_row( $ticket_id )	{
 
 	global $kbs_ticket, $kbs_ticket_update;
 
+	global $kbs_ticket, $kbs_ticket_update;
+
 	?>
     <div id="kbs-notes-loader"></div>
-    <div id="kbs-notes-history" class="kbs_notes_accordion"></div>
+
+    <div id="kbs_notes_fields" class="kbs_meta_table_wrap">
+        <div class="widefat">
+            <div class="kbs-notes-option-fields"></div>
+        </div>
+    </div>
 	<?php
 
 } // kbs_ticket_metabox_notes_row

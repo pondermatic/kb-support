@@ -290,10 +290,12 @@ function kbs_ajax_display_ticket_notes()	{
 	} else	{
 
 		$notes  = kbs_get_notes( $_POST['kbs_ticket_id'] );
-	
+
 		if ( ! empty( $notes ) )	{
 			foreach( $notes as $note )	{
-				$output .= kbs_get_note_html( $note, $_POST['kbs_ticket_id'] );
+				$output .= '<div class="kbs_ticket_notes_wrapper">';
+					$output .= kbs_get_note_html( $note, $_POST['kbs_ticket_id'] );
+				$output .= '</div>';
 			}
 		}
 
