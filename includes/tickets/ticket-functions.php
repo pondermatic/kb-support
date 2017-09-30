@@ -1342,21 +1342,29 @@ function kbs_get_reply_html( $reply, $ticket_id = 0 ) {
 
     <div class="kbs-replies-content-wrap">
         <div class="kbs-replies-content-sections">
+        	<?php do_action( 'kbs_before_reply_content_section', $reply ); ?>
             <div class="kbs-replies-content-section">
                 <?php do_action( 'kbs_replies_before_content', $reply ); ?>
                 <?php echo wpautop( $reply->post_content ); ?>
                 <?php do_action( 'kbs_replies_content', $reply ); ?>
             </div>
+            <?php do_action( 'kbs_after_reply_content_section', $reply ); ?>
             <?php if ( $files ) : ?>
                 <div class="kbs-replies-files-section">
+                	<?php do_action( 'kbs_replies_before_files', $reply ); ?>
                     <ol>
                         <?php foreach( $files as $file ) : ?>
-                            <li><a href="<?php echo wp_get_attachment_url( $file->ID ); ?>" target="_blank"><?php echo basename( get_attached_file( $file->ID ) ); ?></a></li>
+                            <li>
+                            	<a href="<?php echo wp_get_attachment_url( $file->ID ); ?>" target="_blank">
+									<?php echo basename( get_attached_file( $file->ID ) ); ?>
+                                </a>
+                            </li>
                         <?php endforeach; ?>
                     </ol>
+                    <?php do_action( 'kbs_replies_after_files', $reply ); ?>
                 </div>
             <?php endif; ?>
-            <?php do_action( 'kbs_replies_reply', $reply ); ?>
+            <?php do_action( 'kbs_aw_after_reply_content_section', $reply ); ?>
         </div>
     </div>
 
