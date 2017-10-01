@@ -1343,7 +1343,7 @@ function kbs_get_reply_html( $reply, $ticket_id = 0 ) {
     <div class="kbs-replies-content-wrap">
         <div class="kbs-replies-content-sections">
         	<?php do_action( 'kbs_before_reply_content_section', $reply ); ?>
-            <div id="#kbs-reply-option-section-<?php echo $reply->ID; ?>" class="kbs-replies-content-section">
+            <div id="kbs-reply-option-section-<?php echo $reply->ID; ?>" class="kbs-replies-content-section">
                 <?php do_action( 'kbs_replies_before_content', $reply ); ?>
                 <?php echo wpautop( $reply->post_content ); ?>
                 <?php do_action( 'kbs_replies_content', $reply ); ?>
