@@ -4,7 +4,7 @@ Tags: Helpdesk, Help Desk, Support, Customer Support, Service, Service Desk, ITI
 Requires at least: 4.1
 Tested up to: 4.9
 Requires PHP: 5.4
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -121,10 +121,10 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 **Tweaks**
 
-* Ticket replies metabox overhaul
+* Ticket replies metabox overhaul with icon notifications and action links
 * Register when a customer views an agent reply
+* Numerous new hooks and filters for the reply fields enabling developers to extend functionality
 * Private ticket notes metabox overhaul
-* Only a note author, or an agent with the `manage_ticket_settings` capability should be able to delete a note
 * Better input field alignment within ticket metaboxes
 * Added support for locally shipped translation files
 * Added required PHP version to readme.txt
@@ -133,8 +133,9 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 **Bug Fixes**
 
 * Select fields that allow multiple selections within settings pages needed to store values as arrays
-* Added spacing between ticket categories and tags
-* Removed duplicate CSS ID
+* Added spacing between ticket categories and tags within the tickets table
+* Only a note author, or an agent with the `manage_ticket_settings` capability should be able to delete a note
+* Removed duplicate CSS ID within admin CSS
 
 = 1.1.2 =
 
