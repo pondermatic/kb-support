@@ -12,7 +12,7 @@
  * License: GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * GitHub Plugin URI: https://github.com/KB-Support/kb-support
- * Tags:  Helpdesk, Help Desk, Support, Customer Support, Service, Service Desk, ITIL, Support Helpdesk, Ticket, Ticket System, Support Tickets, Helpdesk Tickets, Knowledgebase, Knowledge Base, Service Level, SLA
+ * Tags:  Helpdesk, Support, Customer Support, Support Desk, Ticket System, Knowledge Base, Tickets, Service, Service Desk, ITIL, Support Helpdesk, Ticket, Support Tickets, Helpdesk Tickets, Knowledgebase, Service Level, SLA, Help Desk
  *
  *
  * KB Support is free software; you can redistribute it and/or modify
