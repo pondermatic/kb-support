@@ -605,7 +605,7 @@ function kbs_get_newsletter()    {
 					<td>
 					    <?php submit_button(
                             __( 'Subscribe', 'kb-support' ),
-                            'primary',
+                            'secondary',
                             'subscribe',
                             false,
                             array( 'id' => 'mc-embedded-subscribe' )
