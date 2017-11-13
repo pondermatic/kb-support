@@ -12,7 +12,8 @@ jQuery(document).ready(function ($) {
 
 	// Setup Chosen menus
 	$('.kbs_select_chosen').chosen({
-		inherit_select_classes: true
+		inherit_select_classes: true,
+        search_contains: true
 	});
 
 	/**
