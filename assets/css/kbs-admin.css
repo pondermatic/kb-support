@@ -43,6 +43,39 @@ a.kbs-delete:hover { color: #f00; }
 .kbs_ticket_page_kbs-settings .form-table tr > th > h3
 { font-size: 1.2em; font-weight: 600; margin: 0 auto; }
 
+.kbs-form-error,
+.kbs-select-chosen .kbs-form-error {
+	color: #F00;
+	font-weight: bold;
+}
+input.kbs-form-error {
+	border: solid 1px #F00;
+	box-shadow: 0 0 5px #F00;
+	color: #000000;
+	font-weight: normal;
+}
+select.kbs-form-error {
+	border: solid 1px #F00;
+	box-shadow: 0 0 5px #F00;
+	color: #000000;
+	font-weight: normal;
+}
+textarea.kbs-form-error {
+	border: solid 1px #F00;
+	box-shadow: 0 0 5px #F00;
+	color: #000000;
+	font-weight: normal;
+}
+checkbox.kbs-form-error {
+	border: solid 1px #F00;
+	box-shadow: 0 0 5px #F00;
+	color: #000000;
+	font-weight: normal;
+}
+.kbs-form-valid {
+	color: #000000;
+}
+
 .wrap-licenses .form-table,
 .wrap-licenses thead,
 .wrap-licenses tbody,
