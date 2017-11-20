@@ -886,6 +886,8 @@ class KBS_Ticket {
 					do_action( 'kbs_ticket_status_' . $status, $this->ID, $old_status );
 			}
 
+			update_post_meta( $this->ID, '_kbs_ticket_last_status_change', current_time( 'timestamp' ) );
+
 		}
 
 		do_action( 'kbs_update_ticket_status', $this->ID, $status, $old_status );
