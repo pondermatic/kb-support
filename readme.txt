@@ -4,7 +4,7 @@ Tags: Helpdesk, Support, Customer Support, Support Desk, Ticket System, Knowledg
 Requires at least: 4.1
 Tested up to: 4.9
 Requires PHP: 5.4
-Stable tag: 1.1.4
+Stable tag: 1.1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -116,6 +116,21 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.1.5 =
+
+**Monday, 27th November 2017**
+
+**Bug Fixes**
+
+* **IMPORTANT**: Support Agents unable to access admin when WooCommerce is installed
+
+**Tweaks**
+
+* Added filter `kbs_ticket_closed_by`
+* Changed newsletter subscription button to secondary class on extensions page
+* Added compatability for users utilising All in One WordPress Security who had renamed the login page
+* Added admin form CSS classes
 
 = 1.1.4 =
 
