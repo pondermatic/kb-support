@@ -13,6 +13,30 @@
 if ( ! defined( 'ABSPATH' ) )
         exit;
 
+/**
+ * Enables admin access for Support Workers when WooCommerce is installed.
+ *
+ * @see     https://github.com/KB-Support/kb-support/issues/54
+ * @since   1.1.5
+ * @param   bool    $prevent_access     Whether or not the user can access admin
+ * @return  Whether or not the user can access admin
+ */
+function kbs_agent_woocommerce_admin_access( $prevent_access )  {
+    if ( $prevent_access && kbs_is_agent() )    {
+        $prevent_access = false;
+    }
+
+    return $prevent_access;
+} // kbs_agent_woocommerce_admin_access
+add_filter( 'woocommerce_prevent_admin_access', 'kbs_agent_woocommerce_admin_access', 900 );
+
+/**
+ * Enables URL generation for All in One WP Security
+ * who have the change login page feature enabled.
+ *
+ * @since   1.1.5
+ *
+ */
 function kbs_filter_aiowps_url()    {
 
     if ( ! function_exists( 'is_plugin_active' ) ) {
