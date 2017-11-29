@@ -1364,7 +1364,7 @@ function kbs_get_reply_html( $reply, $ticket_id = 0 ) {
                     <?php do_action( 'kbs_replies_after_files', $reply ); ?>
                 </div>
             <?php endif; ?>
-            <?php do_action( 'kbs_aw_after_reply_content_section', $reply ); ?>
+            <?php do_action( 'kbs_after_reply_content_section', $reply ); ?>
         </div>
     </div>
 
