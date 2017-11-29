@@ -1126,51 +1126,6 @@ function kbs_get_ticket_source( $ticket_id )	{
 } // kbs_get_ticket_source
 
 /**
- * Re-open a closed ticket.
- *
- * @since	1.0
- * @param	arr	$data		$_GET super global.
- * @return	void.
- */
-function kbs_reopen_ticket()	{
-
-	if ( ! isset( $_GET['kbs-action'] ) || 're-open-ticket' != $_GET['kbs-action'] )	{
-		return;
-	}
-
-	if( ! isset( $_GET['kbs-ticket-nonce'] ) || ! wp_verify_nonce( $_GET[ 'kbs-ticket-nonce' ], 'kbs-reopen-ticket' ) )	{
-		$message = 'nonce_fail';
-	} else	{
-		remove_action( 'save_post_kbs_ticket', 'kbs_ticket_post_save', 10, 3 );
-	
-		if ( 'closed' == get_post_status( $_GET['post'] ) )	{
-			$update = wp_update_post( array(
-				'ID'          => $_GET['post'],
-				'post_status' => 'open'
-			) );
-			
-			if ( $update )	{
-				$message = 'ticket_reopened';
-				kbs_insert_note( $_GET['post'], sprintf( __( '%s re-opened.', 'kb-support' ), kbs_get_ticket_label_singular() ) ); 
-			}
-		}
-		
-		if ( ! isset( $message ) )	{
-			$message = 'ticket_not_closed';
-		}
-		
-	}
-	
-	$url = remove_query_arg( array( 'kbs-action', 'kbs-message', 'kbs-ticket-nonce' ) );
-	
-	wp_redirect( add_query_arg( 'kbs-message', $message, $url ) );
-
-	die();
-
-} // kbs_reopen_ticket
-add_action( 'admin_init', 'kbs_reopen_ticket' );
-
-/**
  * Update the ticket status to open if the status is currently new.
  *
  * This function is called from the `kbs_post_assign_agent` hook which is fired
