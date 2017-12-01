@@ -651,7 +651,9 @@ class KBS_HTML_Elements {
 					$output .= $value . '&nbsp';
 				}
 
-				$output = '<input type="radio" name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['name'] ) . '-' . $key . '" class="' . $class . ' ' . esc_attr( $args['name'] ) . '" />';
+                $checked = checked( $args['current'], $key, false );
+
+				$output .= '<input type="radio" name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['name'] ) . '-' . $key . '" class="' . $class . ' ' . esc_attr( $args['name'] ) . '" value="' . $key . '"' . $checked . ' />';
 
 				if ( $args['label_pos'] == 'after' )	{
 					$output .= '&nbsp' . $value;
