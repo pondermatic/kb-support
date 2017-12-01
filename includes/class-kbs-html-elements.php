@@ -647,13 +647,13 @@ class KBS_HTML_Elements {
 
 			foreach( $args['options'] as $key => $value )	{
 
-				if ( $label_pos == 'before' )	{
+				if ( $args['label_pos'] == 'before' )	{
 					$output .= $value . '&nbsp';
 				}
 
 				$output = '<input type="radio" name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['name'] ) . '-' . $key . '" class="' . $class . ' ' . esc_attr( $args['name'] ) . '" />';
 
-				if ( $label_pos == 'after' )	{
+				if ( $args['label_pos'] == 'after' )	{
 					$output .= '&nbsp' . $value;
 				}
 
