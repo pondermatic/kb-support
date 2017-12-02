@@ -332,7 +332,7 @@ function kbs_admin_email_reply_notice( $reply_id = 0, $data = array() ) {
 	$emails->__set( 'from_name', $from_name );
 	$emails->__set( 'from_email', $from_email );
 	$emails->__set( 'headers', $headers );
-	$emails->__set( 'heading', sprintf( __( 'New %s Received', 'kb-support' ), $single ) );
+	$emails->__set( 'heading', sprintf( __( 'New %s Reply Received', 'kb-support' ), $single ) );
 
 	$emails->send( kbs_get_admin_notice_emails( $ticket_id ), $subject, $message, $attachments );
 
