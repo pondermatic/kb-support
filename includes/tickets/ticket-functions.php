@@ -716,7 +716,7 @@ function kbs_set_ticket_status( $ticket_id, $status = 'open' )	{
 		return;
 	}
 
-	return $ticket->update_status( 'open' );
+	return $ticket->update_status( $status );
 
 } // kbs_set_ticket_status
 
