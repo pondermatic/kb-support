@@ -80,7 +80,7 @@ function kbs_email_ticket_received( $ticket_id, $admin_notice = true ) {
  */
 function kbs_email_ticket_reply( $ticket_id ) {
 
-	if ( ! is_admin() )	{
+	if ( ! is_admin() && ! wp_doing_cron() )	{
 		return;
 	}
 
@@ -291,7 +291,7 @@ add_action( 'kbs_admin_ticket_notice', 'kbs_admin_email_ticket_notice', 10, 2 );
  */
 function kbs_admin_email_reply_notice( $reply_id = 0, $data = array() ) {
 
-	if ( is_admin() || kbs_admin_notices_disabled( $reply_id ) )	{
+	if ( ( is_admin() && ! wp_doing_cron() ) || kbs_admin_notices_disabled( $reply_id ) )	{
 		return;
 	}
 
