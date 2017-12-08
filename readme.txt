@@ -31,7 +31,7 @@ From your own experience in running a helpdesk for your product(s) you will know
 * Ability to restrict access to individual knowledge base articles to logged in users only
 * Auto assign new tickets to agents based on current ticket count, or randomly
 * Tracks an agents status so you can see if they are online or offline
-* Ability to assignt tickets to multiple agents
+* Ability to assign tickets to multiple agents
 * A number of useful shortcodes to display submission forms, KB Article lists, ticket history, login/registration forms, profile editor, KB Article search form - and more
 * Numerous template tags enable you to easily add ticket related content into email notifications
 * Private ticket notes that are visible to agents only
@@ -48,13 +48,14 @@ More information can be found at [https://kb-support.com/](https://kb-support.co
 
 **Further enhance the features and functionality of KB Support with paid [extensions](https://kb-support.com/extensions/) such as**:
 
-* **Easy Digital Downloads Integration** - Integrate your EDD store into KB Support providing a seamless support solution
-* **Knowledge Base Integrations** - Fully integrate KB Support into your existing knowledge base solution
-* **Ratings & Satisfaction** - Enables customers and visitors to provide feedback on their support experience as well as the quality of your KB articles
-* **Canned Replies** - Instantly reply to tickets with a single click using pre-defined replies to questions you receive the most
-* **Custom Ticket Status** - Define your own ticket statuses and enable email notifications when a ticket enters the status
-* **Email Signatures** - Enables support workers to register a custom signature which can be auto inserted into email notifications sent to customers
-* **MailChimp Integration** - Grow your subscriptions by enabling quick and seamless customer sign-ups to your MailChimp newsletter lists via KB Support
+* [Easy Digital Downloads Integration](https://kb-support.com/downloads/easy-digital-downloads/) - Integrate your EDD store into KB Support providing a seamless support solution
+* [Knowledge Base Integrations](https://kb-support.com/downloads/knowledge-base-integrations/) - Fully integrate KB Support into your existing knowledge base solution
+* [Ratings & Satisfaction](https://kb-support.com/downloads/ratings-and-satisfaction/) - Enables customers and visitors to provide feedback on their support experience as well as the quality of your KB articles
+* [Reply Approvals](https://kb-support.com/downloads/reply-approvals/) - Adds an approval process to ticket replies created by selected agents forcing a four-eyed approach to ticket replies
+* [Canned Replies](https://kb-support.com/downloads/canned-replies/) - Instantly reply to tickets with a single click using pre-defined replies to questions you receive the most
+* [Custom Ticket Status](https://kb-support.com/downloads/custom-ticket-status/) - Define your own ticket statuses and enable email notifications when a ticket enters the status
+* [Email Signatures](https://kb-support.com/downloads/email-signatures/) - Enables support workers to register a custom signature which can be auto inserted into email notifications sent to customers
+* [MailChimp Integration](https://kb-support.com/downloads/mailchimp-integration/) - Grow your subscriptions by enabling quick and seamless customer sign-ups to your MailChimp newsletter lists via KB Support
 
 **Follow this plugin on [GitHub](https://github.com/KB-Support/kb-support)**
 
@@ -69,7 +70,7 @@ Would you like to help translate the plugin into more languages? [Join our WP-Tr
 1. Activate the plugin
 1. Go to Tickets > Settings and configure the options
 1. Insert form shortcode into the ticket submission page
-1. For detailed setup instructions, vist the official [Documentation](https://kb-support.com/articles/category/getting-started/)
+1. For detailed setup instructions, vist the official [Documentation](https://kb-support.com/articles/category/configuration/getting-started/)
 
 **Manual Installation**
 
