@@ -154,7 +154,6 @@ class KBS_Form {
 					$select_options[ $option ] = $option;
 				}
 			}
-
 		}
 
 		$settings = array(
@@ -218,6 +217,18 @@ class KBS_Form {
 
 		do_action( 'kbs_pre_save_form_field', $data );
 
+        $select_options = array();
+
+		if ( ! empty( $data['select_options'] ) )	{
+			$options = explode( "\n", $data['select_options'] );
+
+			if ( ! empty( $options ) )	{
+				foreach( $options as $option )	{
+					$select_options[ $option ] = $option;
+				}
+			}
+		}
+
 		$settings = array(
 			'type'            => $data['type'],
 			'mapping'         => ! empty( $data['mapping'] )         ? $data['mapping']                            : '',
@@ -225,7 +236,7 @@ class KBS_Form {
 			'required'        => ! empty( $data['required'] )        ? true                                        : false,
 			'label_class'     => ! empty( $data['label_class'] )     ? $data['label_class']                        : '',
 			'input_class'     => ! empty( $data['input_class'] )     ? $data['input_class']                        : '',
-			'select_options'  => ! empty( $data['select_options'] )  ? explode( "\n", $data['select_options'] )    : '',
+			'select_options'  => $select_options,
 			'select_multiple' => ! empty( $data['select_multiple'] ) ? true                                        : false,
 			'selected'        => ! empty( $data['selected'] )        ? true                                        : false,
 			'chosen'          => ! empty( $data['chosen'] )          ? true                                        : false,
