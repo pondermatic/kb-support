@@ -343,7 +343,8 @@ function kbs_render_field_type_row( $post_id, $args )	{
 				'class'            => 'kbs_field_type',
 				'show_option_all'  => false,
 				'show_option_none' => __( 'Select Type', 'kb-support' ),
-				'options'          => kbs_get_field_types()
+				'options'          => kbs_get_field_types(),
+                'chosen'           => true
 			) ); ?>
 		</label></p>
 	</div>
