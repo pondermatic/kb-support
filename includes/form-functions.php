@@ -863,10 +863,6 @@ function kbs_display_form_select_field( $field, $settings )	{
 		$class .= 'kbs-select-chosen';
 	}
 
-	if ( ! empty( $settings['placeholder'] ) )	{
-		$options['0'] = esc_html( $settings['placeholder'] );
-	}
-
 	$class   = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $class ) ) );
 	$options = apply_filters( 'kbs_form_select_field_options', $settings['select_options'], $settings );
 
@@ -876,7 +872,11 @@ function kbs_display_form_select_field( $field, $settings )	{
 		$multiple
 	);
 
-	$selected = ! empty( $settings['selected'] ) ? $settings['selected'] : '';
+    if ( ! empty( $settings['placeholder'] ) )	{
+		$output .= '<option value="0">';
+        $output .= esc_html( $settings['placeholder'] );
+        $output .= '</option>';
+	}
 
 	if ( ! empty( $options ) )	{
 		foreach( $options as $key => $value )	{
