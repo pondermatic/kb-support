@@ -60,7 +60,8 @@ function kbs_form_new_contextual_help() {
 		'id'      => 'kbs-form-add',
 		'title'   => __( 'Add Form', 'kb-support' ),
 		'content' =>
-			'<p>' . __( 'Enter a title for your new submission form and then publish it to begin adding fields.', 'kb-support' ) . '</p>'
+			'<p>' . __( 'Enter a title for your new submission form and then publish it to begin adding fields.', 'kb-support' ) . '</p>' .
+            '<p>' . sprintf( __( 'By default, when a customer submits the form, they will be redirected to the %s manager page. To have them redirected to an alternative page you can set the <em>Redirect after submission to</em> option within the <strong>Publish</strong> meta box. Note however, that in doing so, the messages that appear after submitting a form, may no longer be visible. i.e. <em>Your support request has been successfully received. We\'ll be in touch as soon as possible.</em>', 'kb-support' ), $ticket_singular ) . '</p>'
 	) );
 
 } // kbs_form_new_contextual_help
@@ -123,7 +124,11 @@ function kbs_form_contextual_help() {
 			'</p>' .
 			'<p>' .
 				__( 'We\'ve created the default fields for you. These cannot be deleted, but you can edit them to rename or adjust their settings.', 'kb-support' ) .
-			'</p>'
+			'</p>' .
+            '<p>' . sprintf(
+                __( 'By default, when a customer submits the form, they will be redirected to the %s manager page. To have them redirected to an alternative page you can set the <em>Redirect after submission to</em> option within the <strong>Publish</strong> meta box. Note however, that in doing so, the messages that appear after submitting a form, may no longer be visible. i.e. <em>Your support request has been successfully received. We\'ll be in touch as soon as possible.</em>', 'kb-support' ),
+                $ticket_singular
+            ) . '</p>'
 	) );
 
 	do_action( 'kbs_form_before_add_field_contextual_help' );

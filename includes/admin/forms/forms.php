@@ -80,6 +80,10 @@ function kbs_form_post_save( $post_id, $post, $update )	{
 		do_action( 'kbs_form_before_save', $post_id, $post, $update );
 	}
 
+    $redirect = isset( $_POST['kbs_form_redirect'] ) ? $_POST['kbs_form_redirect'] : kbs_get_option( 'tickets_page' );
+
+    update_post_meta( $post_id, '_redirect_page', $redirect );
+
 	// Fire the after save action
 	do_action( 'kbs_form_after_save', $post_id, $post, $update );
 
@@ -141,7 +145,7 @@ function kbs_form_edit_form_after_title()	{
 
 	if ( 'kbs_form' == get_post_type() ) : ?>
     	<?php $kbs_form = new KBS_Form( $post->ID ); ?>
-		<input type="text" readonly="readonly" size="25" onclick="this.focus(); this.select()" id="kbs-form-shortcode" name="kbs_form_shortcode" value='<?php echo $kbs_form->get_shortcode(); ?>' title="<?php _e( 'To copy the shortcode, click here then press Ctrl + C (PC) or Cmd + C (Mac).', 'kb-support' ); ?>" />
+		<input type="text" readonly size="25" onclick="this.focus(); this.select()" id="kbs-form-shortcode" name="kbs_form_shortcode" value='<?php echo $kbs_form->get_shortcode(); ?>' title="<?php _e( 'To copy the shortcode, click here then press Ctrl + C (PC) or Cmd + C (Mac).', 'kb-support' ); ?>" />
 	<?php endif;
 
 } // kbs_form_edit_form_after_title

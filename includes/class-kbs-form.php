@@ -39,6 +39,13 @@ class KBS_Form {
 	 */
 	public $mapped_fields;
 
+    /**
+	 * The redirect target.
+	 *
+	 * @since	1.0
+	 */
+	public $redirect_to;
+
 	/**
 	 * Get things going
 	 *
@@ -324,6 +331,20 @@ class KBS_Form {
 		}
 
 	} // mapped_fields
+
+    /**
+	 * Get the redirect target.
+	 *
+	 * @since	1.0
+	 * @return	int
+	 */
+	function get_redirect_target()	{
+		if ( empty( $this->redirect_to ) )	{
+            $this->redirect_to = kbs_get_form_redirect_target( $this->ID );
+        }
+
+		return $this->redirect_to;
+	} // get_redirect_target
 
 	/*
 	 * Get the next positional order for the field.

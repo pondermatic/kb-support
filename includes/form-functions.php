@@ -139,6 +139,25 @@ function kbs_get_form( $form_id )	{
 } // kbs_get_form
 
 /**
+ * Retrieve a forms redirection page.
+ *
+ * @since	1.0
+ * @param	int		$form_id	Post ID.
+ * @return	int		The page ID to which the form should redirect
+ */
+function kbs_get_form_redirect_target( $form_id )	{
+
+	$redirect = get_post_meta( $form_id, '_redirect_page', true );
+
+    if ( ! $redirect )  {
+        $redirect = kbs_get_option( 'tickets_page' );
+    }
+
+	return apply_filters( 'kbs_form_redirect_target', $redirect, $form_id );
+
+} // kbs_get_form_redirect_target
+
+/**
  * Retrieve the form shortcode.
  *
  * @since	1.0

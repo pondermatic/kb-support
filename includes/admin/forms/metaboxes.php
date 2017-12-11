@@ -13,6 +13,33 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Render the option for setting the redirect on submission setting.
+ *
+ * @since   1.1.6
+ * @param   obj     $post   WP_Post object
+ * @return  void
+ */
+function kbs_render_form_field_redirect_setting( $post )    {
+    $selected = get_post_meta( $post->ID, '_redirect_page', true );
+    ?>
+    <div class="misc-pub-section curtime misc-pub-redirect">
+        <label for="kbs_form_redirect" class="screen-reader-text"><?php _e( 'Redirect to' ) ?></label>
+        <?php _e( 'Redirect after submission to:', 'kb-support' ); ?><br>
+        <?php echo KBS()->html->select( array(
+            'name'             => 'kbs_form_redirect',
+            'selected'         => 0,
+            'chosen'           => true,
+            'show_option_all'  => false,
+            'show_option_none' => false,
+            'options'          => kbs_get_pages( true ),
+            'selected'         => kbs_get_form_redirect_target( $post->ID )
+        ) ); ?>
+    </div>
+    <?php
+} // kbs_render_form_field_redirect_setting
+add_action( 'post_submitbox_misc_actions', 'kbs_render_form_field_redirect_setting' );
+
+/**
  * Define and add the metaboxes for the kbs_form post type.
  * Uses function_exists to verify the callback function exists.
  *

@@ -56,7 +56,7 @@ function kbs_process_ticket_submission()	{
 		$message  = 'ticket_submitted';
 		$redirect = add_query_arg( array(
 			'ticket' => kbs_get_ticket_key( $ticket_id )
-			), get_permalink( kbs_get_option( 'tickets_page' ) )
+			), get_permalink( kbs_get_form_redirect_target( $form_id ) )
 		);
 	} else	{
 		$message = 'ticket_failed';
