@@ -58,18 +58,16 @@ function kbs_customers_contextual_help() {
 
 	if ( 'add' == $_GET['view'] )	{
 
-		do_action( 'kbs_before_customer_add_contextual_help' );
-		$screen->add_help_tab( array(
+		$screen->add_help_tab( apply_filters( 'kbs_customer_add_contextual_help', array(
 			'id'      => 'kbs-customer-add',
 			'title'   => __( 'Add Customer', 'kb-support' ),
 			'content' =>
 				'<p>' . __( 'To add a new customer, simply enter their name and email address before clicking <em>Add Customer</em>.', 'kb-support' ) . '</p>'
-		) );
+		) ) );
 
 	} else	{
 
-		do_action( 'kbs_customer_before_profile_contextual_help' );
-		$screen->add_help_tab( array(
+		$screen->add_help_tab( apply_filters( 'kbs_customer_profile_contextual_help', array(
 			'id'      => 'kbs-customer-profile',
 			'title'   => __( 'Customer Profile', 'kb-support' ),
 			'content' =>
@@ -85,25 +83,23 @@ function kbs_customers_contextual_help() {
 					$ticket_plural,
 					strtolower( $ticket_plural )
 				) . '</p>'
-		) );
+		) ) );
 	
-		do_action( 'kbs_customer_before_notes_contextual_help' );
-		$screen->add_help_tab( array(
+		$screen->add_help_tab( apply_filters( 'kbs_customer_notes_contextual_help', array(
 			'id'      => 'kbs-customer-notes',
 			'title'   => __( 'Customer Notes', 'kb-support' ),
 			'content' =>
 				'<p>' . __( 'Enter notes regarding your customer here. These notes are not visible to the customers themselves.', 'kb-support' ) . '</p>' .
 				'<p>' . __( 'Under the textarea that enables you to add a new note, existing notes are displayed.', 'kb-support' )  . '</p>'
-		) );
+		) ) );
 	
-		do_action( 'kbs_customer_before_delete_contextual_help' );
-		$screen->add_help_tab( array(
+		$screen->add_help_tab( apply_filters( 'kbs_customer_delete_contextual_help', array(
 			'id'      => 'kbs-customer-delete',
 			'title'   => __( 'Delete Customer', 'kb-support' ),
 			'content' =>
 				'<p>' . __( 'This tab enables you to delete a customer from the database.', 'kb-support' ) . '</p>' .
 				'<p>' . __( 'To proceed select the <em>Are you sure you want to delete this customer?</em> checkbox to enable the <em>Delete Customer</em> button. Click the button to delete the customer.', 'kb-support' ) . '</p>'
-		) );
+		) ) );
 
 	}
 	do_action( 'kbs_customers_contextual_help' );

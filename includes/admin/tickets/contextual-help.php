@@ -56,8 +56,7 @@ function kbs_ticket_contextual_help() {
 		) . '</p>'
 	);
 
-	do_action( 'kbs_ticket_before_general_contextual_help' );
-	$screen->add_help_tab( array(
+	$screen->add_help_tab( apply_filters( 'kbs_ticket_general_contextual_help', array(
 		'id'      => 'kbs-ticket-general',
 		'title'   => __( 'General', 'kb-support' ),
 		'content' =>
@@ -72,10 +71,9 @@ function kbs_ticket_contextual_help() {
 			'<p>' . sprintf( 
 				__( '<strong>Catgories & Tags</strong> - Help you to group %1$s for reference and reporting.', 'kb-support' ), strtolower( $ticket_plural ) ) .
 			'</p>'
-	) );
+	) ) );
 
-	do_action( 'kbs_ticket_before_create_contextual_help' );
-	$screen->add_help_tab( array(
+	$screen->add_help_tab( apply_filters( 'kbs_ticket_create_contextual_help', array(
 		'id'      => 'kbs-ticket-create',
 		'title'   => sprintf( __( 'Create %s', 'kb-support' ), $ticket_singular ),
 		'content' =>
@@ -91,10 +89,9 @@ function kbs_ticket_contextual_help() {
 				__( '<strong>Agent</strong> - Select the agent who is assigned to work on the %1$s.', 'kb-support' ),
 				strtolower( $ticket_singular )
 			) . '</p>'
-	) );
+	) ) );
 
-	do_action( 'kbs_ticket_before_reply_contextual_help' );
-	$screen->add_help_tab( array(
+	$screen->add_help_tab( apply_filters( 'kbs_ticket_reply_contextual_help', array(
 		'id'      => 'kbs-ticket-reply',
 		'title'   => sprintf( __( 'Reply to %s', 'kb-support' ), $ticket_singular ),
 		'content' =>
@@ -107,15 +104,14 @@ function kbs_ticket_contextual_help() {
 				__( 'When the reply is ready, click <strong>Reply</strong> to submit and send to the customer, or <strong>Reply and Close</strong> to submit and close the %1$s.', 'kb-support' ),
 				$ticket_singular
 			) . '</p>'
-	) );
+	) ) );
 
-	do_action( 'kbs_ticket_before_notes_contextual_help' );
-	$screen->add_help_tab( array(
+	$screen->add_help_tab( apply_filters( 'kbs_ticket_notes_contextual_help', array(
 		'id'      => 'kbs-ticket-notes',
 		'title'   => __( 'Private Notes', 'kb-support' ),
 		'content' =>
 			'<p>' . __( 'Agents can add private notes to exchange information with other Support Workers. Customers will never see this information.', 'kb-support' ) . '</p>'
-	) );
+	) ) );
 
 	do_action( 'kbs_ticket_contextual_help' );
 

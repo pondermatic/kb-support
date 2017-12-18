@@ -56,13 +56,13 @@ function kbs_form_new_contextual_help() {
 		) . '</p>'
 	);
 
-	$screen->add_help_tab( array(
+	$screen->add_help_tab( apply_filters( 'kbs_form_add_new_contextual_help', array(
 		'id'      => 'kbs-form-add',
 		'title'   => __( 'Add Form', 'kb-support' ),
 		'content' =>
 			'<p>' . __( 'Enter a title for your new submission form and then publish it to begin adding fields.', 'kb-support' ) . '</p>' .
             '<p>' . sprintf( __( 'By default, when a customer submits the form, they will be redirected to the %s manager page. To have them redirected to an alternative page you can set the <em>Redirect after submission to</em> option within the <strong>Publish</strong> meta box. Note however, that in doing so, the messages that appear after submitting a form, may no longer be visible. i.e. <em>Your support request has been successfully received. We\'ll be in touch as soon as possible.</em>', 'kb-support' ), $ticket_singular ) . '</p>'
-	) );
+	) ) );
 
 } // kbs_form_new_contextual_help
 add_action( 'load-post-new.php', 'kbs_form_new_contextual_help' );
@@ -110,8 +110,7 @@ function kbs_form_contextual_help() {
 		) . '</p>'
 	);
 
-	do_action( 'kbs_form_before_general_contextual_help' );
-	$screen->add_help_tab( array(
+	$screen->add_help_tab( apply_filters( 'kbs_form_general_contextual_help', array(
 		'id'      => 'kbs-ticket-general',
 		'title'   => __( 'General', 'kb-support' ),
 		'content' =>
@@ -129,10 +128,9 @@ function kbs_form_contextual_help() {
                 __( 'By default, when a customer submits the form, they will be redirected to the %s manager page. To have them redirected to an alternative page you can set the <em>Redirect after submission to</em> option within the <strong>Publish</strong> meta box. Note however, that in doing so, the messages that appear after submitting a form, may no longer be visible. i.e. <em>Your support request has been successfully received. We\'ll be in touch as soon as possible.</em>', 'kb-support' ),
                 $ticket_singular
             ) . '</p>'
-	) );
+	) ) );
 
-	do_action( 'kbs_form_before_add_field_contextual_help' );
-	$screen->add_help_tab( array(
+	$screen->add_help_tab( apply_filters( 'kbs_form_add_field_contextual_help', array(
 		'id'      => 'kbs-ticket-add-field',
 		'title'   => __( 'Add a New Field', 'kb-support' ),
 		'content' =>
@@ -183,7 +181,7 @@ function kbs_form_contextual_help() {
 			'<li>' .
 				__( '<strong>Hide Label?</strong> - Choose to hide the field label. Perhaps use a placeholder instead.', 'kb-support' ) .
 			'</li>'
-	) );
+	) ) );
 
 	do_action( 'kbs_form_contextual_help' );
 

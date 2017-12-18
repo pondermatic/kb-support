@@ -56,8 +56,7 @@ function kbs_company_contextual_help() {
 		) . '</p>'
 	);
 
-	do_action( 'kbs_company_before_general_contextual_help' );
-	$screen->add_help_tab( array(
+	$screen->add_help_tab( apply_filters( 'kbs_company_general_contextual_help', array(
 		'id'      => 'kbs-company-general',
 		'title'   => __( 'Manage Company Profiles', 'kb-support' ),
 		'content' =>
@@ -86,7 +85,7 @@ function kbs_company_contextual_help() {
 					__( '<strong>Company Logo</strong> - Optionally upload the company logo .', 'kb-support' ) .
 				'</li>' .
 			'</ul>'
-	) );
+	) ) );
 
 	do_action( 'kbs_company_contextual_help' );
 

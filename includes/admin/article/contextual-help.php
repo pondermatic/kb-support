@@ -56,8 +56,7 @@ function kbs_article_contextual_help() {
 		) . '</p>'
 	);
 
-	do_action( 'kbs_article_before_general_contextual_help' );
-	$screen->add_help_tab( array(
+	$screen->add_help_tab( apply_filters( 'kbs_article_general_contextual_help', array(
 		'id'      => 'kbs-article-general',
 		'title'   => __( 'General', 'kb-support' ),
 		'content' =>
@@ -77,10 +76,9 @@ function kbs_article_contextual_help() {
 			'<p>' . sprintf( 
 				__( '<strong>Excerpt</strong> - Excerpts take precedence over content when %1$s are displayed following a search or listed by the <code>[kbs_articles]</code>.', 'kb-support' ), $article_plural ) .
 			'</p>'
-	) );
+	) ) );
 
-	do_action( 'kbs_article_before_linked_contextual_help' );
-	$screen->add_help_tab( array(
+	$screen->add_help_tab( apply_filters( 'kbs_article_linked_contextual_help', array(
 		'id'      => 'kbs-article-linked',
 		'title'   => sprintf( __( 'Linked %s', 'kb-support' ), $ticket_plural ),
 		'content' =>
@@ -89,10 +87,9 @@ function kbs_article_contextual_help() {
 				$ticket_plural,
 				$article_singular
 			) . '</p>'
-	) );
+	) ) );
 
-	do_action( 'kbs_article_before_options_contextual_help' );
-	$screen->add_help_tab( array(
+	$screen->add_help_tab( apply_filters( 'kbs_article_options_contextual_help', array(
 		'id'      => 'kbs-article-optons',
 		'title'   => __( 'Options', 'kb-support' ),
 		'content' =>
@@ -100,7 +97,7 @@ function kbs_article_contextual_help() {
 				__( '<strong>Restrict Access</strong> - Select to restrict access to this %1$s to logged in users only.', 'kb-support' ),
 				$article_singular
 			) . '</p>'
-	) );
+	) ) );
 
 	do_action( 'kbs_article_contextual_help' );
 
