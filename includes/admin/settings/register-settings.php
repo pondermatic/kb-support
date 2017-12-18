@@ -297,7 +297,7 @@ function kbs_get_registered_settings() {
                     'customer_can_repoen' => array(
 						'id'      => 'customer_can_repoen',
 						'name'    => sprintf( __( 'Re-open %s?', 'kb-support' ), $plural ),
-						'desc'    => sprintf( __( 'If enabled, by repling to a closed %1$s, customers can re-open the %1$s', 'kb-support' ), strtolower( $single ) ),
+						'desc'    => sprintf( __( 'If enabled, by replying to a closed %1$s, customers can re-open the %1$s', 'kb-support' ), strtolower( $single ) ),
 						'type'    => 'checkbox',
                         'std'     => '0'
 					)
