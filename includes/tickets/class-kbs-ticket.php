@@ -1678,7 +1678,17 @@ class KBS_Ticket {
 			$this->update_status( 'closed' );
 			$this->update_meta( '_kbs_resolution_id', $reply_id );
 		} else	{
-			wp_update_post( array( 'ID' => $reply_data['ticket_id'] ) );
+            $update_args = array( 'ID' => $reply_data['ticket_id'] );
+
+            if ( 'closed' == $this->post_status )	{
+                $update_args['post_status'] = apply_filters( 'kbs_set_ticket_status_when_reopened', 'open', $this->ID );
+            }
+
+			$update = wp_update_post( $update_args );
+
+            if ( isset( $update_args['post_status'] ) && $update )	{
+                kbs_insert_note( $reply_data['ticket_id'], sprintf( __( '%s re-opened by customer reply.', 'kbs-email-support' ), kbs_get_ticket_label_singular() ) ); 
+            }
 		}
 
 		do_action( 'kbs_reply_to_ticket', $this->ID, $reply_id, $reply_data, $this );
