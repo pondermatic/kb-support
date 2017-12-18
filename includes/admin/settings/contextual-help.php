@@ -28,35 +28,12 @@ function kbs_settings_contextual_help() {
 	$ticket_plural    = kbs_get_ticket_label_plural();
 	$settings         = kbs_get_registered_settings();
 
-	$screen->set_help_sidebar(
-		'<p><strong>' . __( 'More Information:', 'kb-support' ) . '</strong></p>' .
-		'<p>' . sprintf( 
-			__( '<a href="%s" target="_blank">Documentation</a>', 'kb-support' ), 
-			esc_url( 'https://kb-support.com/support/' )
-		) . '</p>' .
-		'<p>' . sprintf( 
-			__( '<a href="%s" target="_blank">Twitter</a>', 'kb-support' ), 
-			esc_url( 'https://twitter.com/kbsupport_wp/' )
-		) . '</p>' .
-		'<p>' . sprintf( 
-			__( '<a href="%s" target="_blank">Facebook</a>', 'kb-support' ), 
-			esc_url( 'https://www.facebook.com/kbsupport/' )
-		) . '</p>' .
-		'<p>' . sprintf(
-			__( '<a href="%s" target="_blank">Post an issue</a> on <a href="%s" target="_blank">GitHub</a>', 'kb-support' ),
-			esc_url( 'https://github.com/KB-Support/kb-support/issues' ),
-			esc_url( 'https://github.com/KB-Support/kb-support' )
-		) . '</p>' .
-		'<p>' . sprintf(
-			__( '<a href="%s" target="_blank">Extensions</a>', 'kb-support' ),
-			esc_url( 'https://kb-support.com/extensions/' )
-		) . '</p>'
-	);
+	$screen->set_help_sidebar( kbs_get_contextual_help_sidebar_text() );
 
-	$screen->add_help_tab( apply_filters( 'kbs_settings_general_contextual_help', array(
+	$screen->add_help_tab( array(
 		'id'      => 'kbs-settings-general',
 		'title'   => __( 'General', 'kb-support' ),
-		'content' =>
+		'content' => apply_filters( 'kbs_settings_general_contextual_help',
 			'<p>' . __( '<strong>Page Settings</strong>', 'kb-support' ) . '</p>' .
 			'<ul>' .
 				'<li>' . sprintf( 
@@ -69,12 +46,14 @@ function kbs_settings_contextual_help() {
 					strtolower( $ticket_plural )
 				) . '</li>' .
 			'</ul>'
-	) ) );
+        )
+	) );
 
-	$screen->add_help_tab( apply_filters( 'kbs_settings_tickets_contextual_help', array(
+    do_action( 'kbs_settings_before_tickets_contextual_help', $screen );
+	$screen->add_help_tab( array(
 		'id'      => 'kbs-settings-tickets',
 		'title'   => $ticket_plural,
-		'content' =>
+		'content' => apply_filters( 'kbs_settings_tickets_contextual_help',
 			'<p>' . sprintf( __( '<strong>%s Settings</strong>', 'kb-support' ), $ticket_singular ) . '</p>' .
 			'<ul>' .
 				'<li>' . sprintf( 
@@ -190,12 +169,14 @@ function kbs_settings_contextual_help() {
 					strtolower( $ticket_plural )
 				) . '</li>' .
 			'</ul>'
-	) ) );
+        )
+	) );
 
-	$screen->add_help_tab( apply_filters( 'kbs_settings_articles_contextual_help', array(
+    do_action( 'kbs_settings_before_articles_contextual_help', $screen );
+	$screen->add_help_tab( array(
 		'id'      => 'kbs-settings-articles',
 		'title'   => $article_plural,
-		'content' =>
+		'content' => apply_filters( 'kbs_settings_articles_contextual_help',
 			'<p>' . sprintf( __( '<strong>%s Settings</strong>', 'kb-support' ), $article_singular ) . '</p>' .
 			'<ul>' .
 				'<li>' . sprintf( 
@@ -232,12 +213,14 @@ function kbs_settings_contextual_help() {
 					$article_singular
 				) . '</li>' .
 			'</ul>'
-	) ) );
+        )
+	) );
 
-	$screen->add_help_tab( apply_filters( 'kbs_settings_emails_contextual_help', array(
+    do_action( 'kbs_settings_before_emails_contextual_help', $screen );
+	$screen->add_help_tab( array(
 		'id'      => 'kbs-settings-emails',
 		'title'   => __( 'Emails', 'kb-support' ),
-		'content' =>
+		'content' => apply_filters( 'kbs_settings_emails_contextual_help',
 			'<p>' . __( '<strong>Email Settings</strong>', 'kb-support' ) . '</p>' .
 			'<ul>' .
 				'<li>' . __( '<strong>From Name</strong> - Enter the name you want KB Support generated emails to come from.', 'kb-support' ) . '</li>' .
@@ -327,41 +310,48 @@ function kbs_settings_contextual_help() {
 				strtolower( $ticket_singular )
 				) . '</li>' .
 			'</ul>'
-	) ) );
+        )
+	) );
 
-	$screen->add_help_tab( apply_filters( 'kbs_settings_styles_contextual_help', array(
+    do_action( 'kbs_settings_before_styles_contextual_help', $screen );
+	$screen->add_help_tab( array(
 		'id'      => 'kbs-settings-styles',
 		'title'   => __( 'Styles', 'kb-support' ),
-		'content' =>
+		'content' => apply_filters( 'kbs_settings_styles_contextual_help',
 			'<p>' . __( '<strong>Disable Styles</strong> - Select this option to stop KB Support loading its CSS style sheet. All default formatting of forms, fields and all other elements will be inherited from your currently active theme.', 'kb-support' ) . '</p>'
-	) ) );
+        )
+	) );
 
 	if ( ! empty( $settings['extensions'] ) )	{
-		$screen->add_help_tab( apply_filters( 'kbs_settings_extensions_contextual_help', array(
+        do_action( 'kbs_settings_before_extensions_contextual_help', $screen );
+		$screen->add_help_tab( array(
 			'id'      => 'kbs-settings-extensions',
 			'title'   => __( 'Extensions', 'kb-support' ),
 			'content' => apply_filters( 'kbs_settings_extensions_contextual_help',
 				'<p>' . __( 'The configuration settings for any KB Support extensions you have installed are controlled here.', 'kb-support' ) . '</p>'
 			)
-		) ) );
+		) );
 	}
 
 	if ( ! empty( $settings['licenses'] ) )	{
-		$screen->add_help_tab( apply_filters( 'kbs_settings_licenses_contextual_help', array(
+        do_action( 'kbs_settings_before_licenses_contextual_help', $screen );
+		$screen->add_help_tab( array(
 			'id'      => 'kbs-settings-licenses',
 			'title'   => __( 'Licenses', 'kb-support' ),
-			'content' =>
+			'content' => apply_filters( 'kbs_settings_licenses_contextual_help',
 				'<p>' . sprintf(
                     __( 'If you have any of the KB Support <a target="blank" href="%s">premium extensions</a> installed, you should enter their license keys here to ensure you receive the latest product updates.', 'kb-support' ),
                     'https://kb-support.com/extensions/'
                 ) . '</p>'
-		) ) );
+            )
+		) );
 	}
 
-	$screen->add_help_tab( apply_filters( 'kbs_settings_misc_contextual_help', array(
+    do_action( 'kbs_settings_before_misc_contextual_help', $screen );
+	$screen->add_help_tab( array(
 		'id'      => 'kbs-settings-misc',
 		'title'   => __( 'Misc', 'kb-support' ),
-		'content' =>
+		'content' => apply_filters( 'kbs_settings_misc_contextual_help',
 			'<p>' . __( '<strong>Misc Settings</strong>', 'kb-support' ) . '</p>' .
 			'<ul>' .
                 '<li>' .
@@ -389,7 +379,8 @@ function kbs_settings_contextual_help() {
 				'<li>' . __( '<strong>Terms Heading</strong> - Enter a heading that will appear at the top of the Terms and Conditions pop-up window.', 'kb-support' ) . '</li>' .
 				'<li>' . __( '<strong>Agreement Text</strong> - Enter your Terms and Conditions here.', 'kb-support' ) . '</li>' .
 			'</ul>'
-	) ) );
+        )
+	) );
 
 	do_action( 'kbs_settings_contextual_help', $screen );
 

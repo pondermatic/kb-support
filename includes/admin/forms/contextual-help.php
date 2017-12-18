@@ -31,38 +31,17 @@ function kbs_form_new_contextual_help() {
 	$ticket_singular  = kbs_get_ticket_label_singular();
 	$ticket_plural    = kbs_get_ticket_label_plural();
 
-	$screen->set_help_sidebar(
-		'<p><strong>' . __( 'More Information:', 'kb-support' ) . '</strong></p>' .
-		'<p>' . sprintf( 
-			__( '<a href="%s" target="_blank">Documentation</a>', 'kb-support' ), 
-			esc_url( 'https://kb-support.com/support/' )
-		) . '</p>' .
-		'<p>' . sprintf( 
-			__( '<a href="%s" target="_blank">Twitter</a>', 'kb-support' ), 
-			esc_url( 'https://twitter.com/kbsupport_wp/' )
-		) . '</p>' .
-		'<p>' . sprintf( 
-			__( '<a href="%s" target="_blank">Facebook</a>', 'kb-support' ), 
-			esc_url( 'https://www.facebook.com/kbsupport/' )
-		) . '</p>' .
-		'<p>' . sprintf(
-			__( '<a href="%s" target="_blank">Post an issue</a> on <a href="%s" target="_blank">GitHub</a>', 'kb-support' ),
-			esc_url( 'https://github.com/KB-Support/kb-support/issues' ),
-			esc_url( 'https://github.com/KB-Support/kb-support' )
-		) . '</p>' .
-		'<p>' . sprintf(
-			__( '<a href="%s" target="_blank">Extensions</a>', 'kb-support' ),
-			esc_url( 'https://kb-support.com/extensions/' )
-		) . '</p>'
-	);
+	$screen->set_help_sidebar( kbs_get_contextual_help_sidebar_text() );
 
-	$screen->add_help_tab( apply_filters( 'kbs_form_add_new_contextual_help', array(
+    do_action( 'kbs_form_before_add_new_contextual_help', $screen );
+	$screen->add_help_tab( array(
 		'id'      => 'kbs-form-add',
 		'title'   => __( 'Add Form', 'kb-support' ),
-		'content' =>
+		'content' => apply_filters( 'kbs_form_add_new_contextual_help',
 			'<p>' . __( 'Enter a title for your new submission form and then publish it to begin adding fields.', 'kb-support' ) . '</p>' .
             '<p>' . sprintf( __( 'By default, when a customer submits the form, they will be redirected to the %s manager page. To have them redirected to an alternative page you can set the <em>Redirect after submission to</em> option within the <strong>Publish</strong> meta box. Note however, that in doing so, the messages that appear after submitting a form, may no longer be visible. i.e. <em>Your support request has been successfully received. We\'ll be in touch as soon as possible.</em>', 'kb-support' ), $ticket_singular ) . '</p>'
-	) ) );
+        )
+	) );
 
 } // kbs_form_new_contextual_help
 add_action( 'load-post-new.php', 'kbs_form_new_contextual_help' );
@@ -85,35 +64,13 @@ function kbs_form_contextual_help() {
 	$ticket_singular  = kbs_get_ticket_label_singular();
 	$ticket_plural    = kbs_get_ticket_label_plural();
 
-	$screen->set_help_sidebar(
-		'<p><strong>' . __( 'More Information:', 'kb-support' ) . '</strong></p>' .
-		'<p>' . sprintf( 
-			__( '<a href="%s" target="_blank">Documentation</a>', 'kb-support' ), 
-			esc_url( 'https://kb-support.com/support/' )
-		) . '</p>' .
-		'<p>' . sprintf( 
-			__( '<a href="%s" target="_blank">Twitter</a>', 'kb-support' ), 
-			esc_url( 'https://twitter.com/kbsupport_wp/' )
-		) . '</p>' .
-		'<p>' . sprintf( 
-			__( '<a href="%s" target="_blank">Facebook</a>', 'kb-support' ), 
-			esc_url( 'https://www.facebook.com/kbsupport/' )
-		) . '</p>' .
-		'<p>' . sprintf(
-			__( '<a href="%s" target="_blank">Post an issue</a> on <a href="%s" target="_blank">GitHub</a>', 'kb-support' ),
-			esc_url( 'https://github.com/KB-Support/kb-support/issues' ),
-			esc_url( 'https://github.com/KB-Support/kb-support' )
-		) . '</p>' .
-		'<p>' . sprintf(
-			__( '<a href="%s" target="_blank">Extensions</a>', 'kb-support' ),
-			esc_url( 'https://kb-support.com/extensions/' )
-		) . '</p>'
-	);
+	$screen->set_help_sidebar( kbs_get_contextual_help_sidebar_text() );
 
-	$screen->add_help_tab( apply_filters( 'kbs_form_general_contextual_help', array(
+    do_action( 'kbs_form_before_general_contextual_help', $screen );
+	$screen->add_help_tab( array(
 		'id'      => 'kbs-ticket-general',
 		'title'   => __( 'General', 'kb-support' ),
-		'content' =>
+		'content' => apply_filters( 'kbs_form_general_contextual_help',
 			'<p>' . sprintf(
 				__( 'Manage your submission field here by adding the fields you require. Once you\'re ready, add the shortcode %1$s to your submission page.', 'kb-support' ),
 				'<code>' . kbs_get_form_shortcode( $_GET['post'] ) . '</code>'
@@ -128,12 +85,14 @@ function kbs_form_contextual_help() {
                 __( 'By default, when a customer submits the form, they will be redirected to the %s manager page. To have them redirected to an alternative page you can set the <em>Redirect after submission to</em> option within the <strong>Publish</strong> meta box. Note however, that in doing so, the messages that appear after submitting a form, may no longer be visible. i.e. <em>Your support request has been successfully received. We\'ll be in touch as soon as possible.</em>', 'kb-support' ),
                 $ticket_singular
             ) . '</p>'
-	) ) );
+        )
+	) );
 
-	$screen->add_help_tab( apply_filters( 'kbs_form_add_field_contextual_help', array(
+    do_action( 'kbs_form_before_add_field_contextual_help', $screen );
+	$screen->add_help_tab( array(
 		'id'      => 'kbs-ticket-add-field',
 		'title'   => __( 'Add a New Field', 'kb-support' ),
-		'content' =>
+		'content' => apply_filters( 'kbs_form_add_field_contextual_help',
 			'<ul>' .
 				'<li>' .
 					__( '<strong>Label</strong> - This will be the label for the field when displayed on your form.', 'kb-support' ) .
@@ -181,7 +140,8 @@ function kbs_form_contextual_help() {
 			'<li>' .
 				__( '<strong>Hide Label?</strong> - Choose to hide the field label. Perhaps use a placeholder instead.', 'kb-support' ) .
 			'</li>'
-	) ) );
+        )
+	) );
 
 	do_action( 'kbs_form_contextual_help' );
 
