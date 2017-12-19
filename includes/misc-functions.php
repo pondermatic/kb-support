@@ -647,6 +647,19 @@ function kbs_get_newsletter()    {
 					</td>
 				</tr>
 			</table>
+
+            <div style="display:none">
+                <label>
+                    <input name="INTERESTS[8c1bfb91ad][]" type="checkbox" value="8602e8ce43" checked="true"> <span>News &amp; Offers</span>
+                </label>
+                <label>
+                    <input name="INTERESTS[8c1bfb91ad][]" type="checkbox" value="821af70c50" checked="true"> <span>New Extension Releases</span>
+                </label>
+                <label>
+                    <input name="INTERESTS[8c1bfb91ad][]" type="checkbox" value="83c8e2e21f" checked="true"> <span>New Knowledge Base Articles</span>
+                </label>
+            </div>
+
 		</form>
 
 		<div style="position: absolute; left: -5000px;">
