@@ -23,7 +23,7 @@ function kbs_render_form_field_redirect_setting( $post )    {
     $selected = get_post_meta( $post->ID, '_redirect_page', true );
     ?>
     <div class="misc-pub-section curtime misc-pub-redirect">
-        <label for="kbs_form_redirect" class="screen-reader-text"><?php _e( 'Redirect to' ) ?></label>
+        <label for="kbs_form_redirect" class="screen-reader-text"><?php _e( 'Redirect to', 'kb-support' ) ?></label>
         <?php _e( 'Redirect after submission to:', 'kb-support' ); ?><br>
         <?php echo KBS()->html->select( array(
             'name'             => 'kbs_form_redirect',
