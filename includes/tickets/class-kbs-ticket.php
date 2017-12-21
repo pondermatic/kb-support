@@ -241,7 +241,7 @@ class KBS_Ticket {
 	 * @since	1.0
 	 * @var		str
 	 */
-	protected $source = 'website';
+	protected $source = 1;
 
 	/**
 	 * Array of items that have changed since the last save() was run.
@@ -1583,10 +1583,8 @@ class KBS_Ticket {
 	public function get_source() {
 		$sources = kbs_get_ticket_log_sources();
 
-		$ticket_source = $this->ticket_meta['source'];
-
-		if ( array_key_exists( $ticket_source, $sources ) )	{
-			$return = $sources[ $ticket_source ];
+		if ( array_key_exists( $source, $sources ) )	{
+			$return = $sources[ $this->source ];
 		} else	{
 			$return = __( 'Source could not be found', 'kb-support' );
 		}
@@ -1653,7 +1651,7 @@ class KBS_Ticket {
 			'meta_input'   => array()
 		);
 
-		$args['meta_input']['_kbs_reply_source'] = ! empty( $reply_data['source'] ) ? $reply_data['source'] : 'ticket-manager';
+		$args['meta_input']['_kbs_reply_source'] = ! empty( $reply_data['source'] ) ? $reply_data['source'] : 1;
 
 		if ( isset( $reply_data['customer_id'] ) )	{
 			$args['meta_input']['_kbs_reply_customer_id'] = $reply_data['customer_id'];
