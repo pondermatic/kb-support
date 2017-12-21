@@ -241,7 +241,7 @@ class KBS_Ticket {
 	 * @since	1.0
 	 * @var		str
 	 */
-	protected $source = '';
+	protected $source = 'website';
 
 	/**
 	 * Array of items that have changed since the last save() was run.
@@ -588,6 +588,10 @@ class KBS_Ticket {
 
             if ( ! empty( $this->agents ) )	{
 				$this->pending['agents'] = $this->agents;
+			}
+
+			if ( ! empty( $this->source ) )	{
+				$this->pending['source'] = $this->source;
 			}
 
 			if ( ! empty( $this->ticket_category ) )	{
@@ -1648,6 +1652,8 @@ class KBS_Ticket {
 			'post_author'  => ! empty( $reply_data['author'] ) ? (int) $reply_data['author'] : get_current_user_id(),
 			'meta_input'   => array()
 		);
+
+		$args['meta_input']['_kbs_reply_source'] = ! empty( $reply_data['source'] ) ? $reply_data['source'] : 'ticket-manager';
 
 		if ( isset( $reply_data['customer_id'] ) )	{
 			$args['meta_input']['_kbs_reply_customer_id'] = $reply_data['customer_id'];
