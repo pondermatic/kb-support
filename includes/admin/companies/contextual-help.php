@@ -31,36 +31,13 @@ function kbs_company_contextual_help() {
 	$ticket_singular  = kbs_get_ticket_label_singular();
 	$ticket_plural    = kbs_get_ticket_label_plural();
 
-	$screen->set_help_sidebar(
-		'<p><strong>' . __( 'More Information:', 'kb-support' ) . '</strong></p>' .
-		'<p>' . sprintf( 
-			__( '<a href="%s" target="_blank">Documentation</a>', 'kb-support' ), 
-			esc_url( 'https://kb-support.com/support/' )
-		) . '</p>' .
-		'<p>' . sprintf( 
-			__( '<a href="%s" target="_blank">Twitter</a>', 'kb-support' ), 
-			esc_url( 'https://twitter.com/kbsupport_wp/' )
-		) . '</p>' .
-		'<p>' . sprintf( 
-			__( '<a href="%s" target="_blank">Facebook</a>', 'kb-support' ), 
-			esc_url( 'https://www.facebook.com/kbsupport/' )
-		) . '</p>' .
-		'<p>' . sprintf(
-			__( '<a href="%s" target="_blank">Post an issue</a> on <a href="%s" target="_blank">GitHub</a>', 'kb-support' ),
-			esc_url( 'https://github.com/KB-Support/kb-support/issues' ),
-			esc_url( 'https://github.com/KB-Support/kb-support' )
-		) . '</p>' .
-		'<p>' . sprintf(
-			__( '<a href="%s" target="_blank">Extensions</a>', 'kb-support' ),
-			esc_url( 'https://kb-support.com/extensions/' )
-		) . '</p>'
-	);
+	$screen->set_help_sidebar( kbs_get_contextual_help_sidebar_text() );
 
-	do_action( 'kbs_company_before_general_contextual_help' );
+    do_action( 'kbs_company_before_general_contextual_help', $screen );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-company-general',
 		'title'   => __( 'Manage Company Profiles', 'kb-support' ),
-		'content' =>
+		'content' => apply_filters( 'kbs_company_general_contextual_help',
 			'<p>' . sprintf( 
 				__( 'Creating companies enables you to identify all support %s that have been created for a single business customer.', 'kb-support' ),
 				strtolower( $ticket_plural )
@@ -86,6 +63,7 @@ function kbs_company_contextual_help() {
 					__( '<strong>Company Logo</strong> - Optionally upload the company logo .', 'kb-support' ) .
 				'</li>' .
 			'</ul>'
+        )
 	) );
 
 	do_action( 'kbs_company_contextual_help' );

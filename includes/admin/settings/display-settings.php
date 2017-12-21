@@ -90,9 +90,11 @@ function kbs_options_page() {
 			foreach( kbs_get_settings_tabs() as $tab_id => $tab_name ) {
 
 				$tab_url = add_query_arg( array(
+					'post_type'        => 'kbs_ticket',
+					'page'             => 'kbs-settings',
 					'settings-updated' => false,
-					'tab'              => $tab_id,
-				) );
+					'tab'              => $tab_id
+				), admin_url( 'edit.php' ) );
 
 				// Remove the section from the tabs so we always end up at the main section
 				$tab_url = remove_query_arg( 'section', $tab_url );
@@ -115,10 +117,12 @@ function kbs_options_page() {
 				echo '<li>';
 				$number++;
 				$tab_url = add_query_arg( array(
+					'post_type'        => 'kbs_ticket',
+					'page'             => 'kbs-settings',
 					'settings-updated' => false,
-					'tab' => $active_tab,
-					'section' => $section_id
-				) );
+					'tab'              => $active_tab,
+					'section'          => $section_id
+				), admin_url( 'edit.php' ) );
 				$class = '';
 				if ( $section == $section_id ) {
 					$class = 'current';

@@ -13,6 +13,40 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
+ * Default contextual help sidebar text
+ *
+ * @since	1.1.6
+ * @return	str      The text that makes up the contextual help sidebar
+ */
+function kbs_get_contextual_help_sidebar_text() {
+    $sidebar_text = '
+        <p><strong>' . __( 'More Information:', 'kb-support' ) . '</strong></p>' .
+		'<p>' . sprintf( 
+			__( '<a href="%s" target="_blank">Documentation</a>', 'kb-support' ), 
+			esc_url( 'https://kb-support.com/support/' )
+		) . '</p>' .
+		'<p>' . sprintf( 
+			__( '<a href="%s" target="_blank">Twitter</a>', 'kb-support' ), 
+			esc_url( 'https://twitter.com/kbsupport_wp/' )
+		) . '</p>' .
+		'<p>' . sprintf( 
+			__( '<a href="%s" target="_blank">Facebook</a>', 'kb-support' ), 
+			esc_url( 'https://www.facebook.com/kbsupport/' )
+		) . '</p>' .
+		'<p>' . sprintf(
+			__( '<a href="%s" target="_blank">Post an issue</a> on <a href="%s" target="_blank">GitHub</a>', 'kb-support' ),
+			esc_url( 'https://github.com/KB-Support/kb-support/issues' ),
+			esc_url( 'https://github.com/KB-Support/kb-support' )
+		) . '</p>' .
+		'<p>' . sprintf(
+			__( '<a href="%s" target="_blank">Extensions</a>', 'kb-support' ),
+			esc_url( 'https://kb-support.com/extensions/' )
+		) . '</p>';
+
+    return $sidebar_text;
+} // kbs_get_contextual_help_sidebar_text
+
+/**
  * Checks if Guest checkout is enabled
  *
  * @since	1.0
@@ -613,6 +647,19 @@ function kbs_get_newsletter()    {
 					</td>
 				</tr>
 			</table>
+
+            <div style="display:none">
+                <label>
+                    <input name="INTERESTS[8c1bfb91ad][]" type="checkbox" value="8602e8ce43" checked="true"> <span>News &amp; Offers</span>
+                </label>
+                <label>
+                    <input name="INTERESTS[8c1bfb91ad][]" type="checkbox" value="821af70c50" checked="true"> <span>New Extension Releases</span>
+                </label>
+                <label>
+                    <input name="INTERESTS[8c1bfb91ad][]" type="checkbox" value="83c8e2e21f" checked="true"> <span>New Knowledge Base Articles</span>
+                </label>
+            </div>
+
 		</form>
 
 		<div style="position: absolute; left: -5000px;">

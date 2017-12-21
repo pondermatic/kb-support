@@ -2,7 +2,7 @@
 /**
  * User Functions
  *
- * Functions related to users / customers
+ * Functions related to users
  *
  * @package     KBS
  * @subpackage  Functions
@@ -56,127 +56,6 @@ add_action( 'show_user_profile', 'kbs_output_user_profile_fields' );
 add_action( 'edit_user_profile', 'kbs_output_user_profile_fields' );
 
 /**
- * Retrieve the customer ID from a ticket.
- *
- * @since	1.0
- * @param	int		$ticket_id	The ticket ID
- * @return	int		The customer ID
- */
-function kbs_get_customer_id_from_ticket( $ticket_id )	{
-	return get_post_meta( $ticket_id, '_kbs_ticket_customer_id', true );
-} // kbs_get_customer_id_from_ticket
-
-/**
- * Retrieve the customer company ID.
- *
- * @since	1.0
- * @param	int		$customer_id	The customer ID
- * @return	int		The customer company ID
- */
-function kbs_get_customer_company_id( $customer_id )	{
-	global $wpdb;
-
-	$company_id = 0;
-
-	$results = $wpdb->get_col( $wpdb->prepare(
-		"SELECT company_id
-		FROM " . $wpdb->prefix . "kbs_customers
-		WHERE id = %d",
-		$customer_id
-	) );
-
-	if ( $results )	{
-		$company_id = $results[0];
-	}
-
-	return $company_id;
-} // kbs_get_customer_company_id
-
-/**
- * Retrieve customer tickets.
- *
- * @since	1.0
- * @param	int|obj		$customer	The customer ID or a KBS_Customer object.
- * @param	arr			$args		Args that can be passed to kbs_get_tickets()
- * @param	bool		$can_select	True to only return selectable status. False for all.
- * @return	obj			Array of customer ticket objects.
- */
-function kbs_get_customer_tickets( $customer, $args = array(), $can_select = true, $pagination = false )	{
-
-	$customer_id = $customer;
-
-	if ( is_object( $customer ) )	{
-		$customer_id = $customer->id;
-	}
-
-	if ( empty( $customer_id ) )	{
-		return false;
-	}
-
-	$ticket_statuses = kbs_get_ticket_statuses( $can_select );
-
-	if ( $pagination )	{
-		if ( get_query_var( 'paged' ) )	{
-			$paged = get_query_var('paged');
-		} else if ( get_query_var( 'page' ) )	{
-			$paged = get_query_var( 'page' );
-		} else	{
-			$paged = 1;
-		}
-	}
-
-	$defaults = array(
-		'customer' => $customer_id,
-		'status'   => array_keys( $ticket_statuses ),
-		'number'   => 10
-	);
-
-	$args = wp_parse_args( $args, $defaults );
-
-	if ( $pagination )	{
-		$args['page'] = $paged;
-	} else	{
-		$args['nopaging'] = true;
-	}
-
-	return kbs_get_tickets( $args );
-
-} // kbs_get_customer_tickets
-
-/**
- * Retrieve customer ticket count.
- *
- * @since	1.0
- * @param	int|obj		$customer	The customer ID or a KBS_Customer object.
- * @return	int			Array of customer ticket objects.
- */
-function kbs_get_customer_ticket_count( $customer )	{
-
-	$customer_id = $customer;
-
-	if ( is_object( $customer ) )	{
-		$customer_id = $customer->id;
-	}
-
-	if ( empty( $customer_id ) )	{
-		return false;
-	}
-
-	$tickets = kbs_count_tickets( array( 'customer' => $customer_id ) );
-	$count   = 0;
-
-	if ( ! empty( $tickets ) )	{
-		foreach( $tickets as $status )	{
-			if ( ! empty( $status ) )	{
-				$count += $status;
-			}
-		}
-	}
-
-	return $count;
-} // kbs_get_customer_ticket_count
-
-/**
  * Retrieve users by role.
  *
  * @since	1.0
@@ -204,32 +83,6 @@ function kbs_get_users_by_role( $role = array( 'support_agent', 'support_manager
 	
 	return $users;
 } // kbs_get_users_by_role
-
-/**
- * Retrieve all customers.
- *
- * @since	1.0
- * @param	bool	$ids	True to return array of IDs, false for array of user objects
- * @return	mixed
- */
-function kbs_get_customers( $ids = false )	{
-	$role = array( 'support_customer' );
-	$role = apply_filters( 'kbs_customer_roles', $role );
-
-	$customers = kbs_get_users_by_role( $role, $ids );
-	
-	return apply_filters( 'kbs_customers', $customers );
-} // kbs_get_customers
-
-/**
- * Counts the total number of customers.
- *
- * @since	1.0
- * @return	int		The total number of customers.
- */
-function kbs_count_total_customers( $args = array() ) {
-	return KBS()->customers->count( $args );
-} // kbs_count_total_customers
 
 /**
  * Validate a potential username

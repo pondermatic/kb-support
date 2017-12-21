@@ -31,36 +31,13 @@ function kbs_article_contextual_help() {
 	$ticket_singular  = kbs_get_ticket_label_singular();
 	$ticket_plural    = kbs_get_ticket_label_plural();
 
-	$screen->set_help_sidebar(
-		'<p><strong>' . __( 'More Information:', 'kb-support' ) . '</strong></p>' .
-		'<p>' . sprintf( 
-			__( '<a href="%s" target="_blank">Documentation</a>', 'kb-support' ), 
-			esc_url( 'https://kb-support.com/support/' )
-		) . '</p>' .
-		'<p>' . sprintf( 
-			__( '<a href="%s" target="_blank">Twitter</a>', 'kb-support' ), 
-			esc_url( 'https://twitter.com/kbsupport_wp/' )
-		) . '</p>' .
-		'<p>' . sprintf( 
-			__( '<a href="%s" target="_blank">Facebook</a>', 'kb-support' ), 
-			esc_url( 'https://www.facebook.com/kbsupport/' )
-		) . '</p>' .
-		'<p>' . sprintf(
-			__( '<a href="%s" target="_blank">Post an issue</a> on <a href="%s" target="_blank">GitHub</a>', 'kb-support' ),
-			esc_url( 'https://github.com/KB-Support/kb-support/issues' ),
-			esc_url( 'https://github.com/KB-Support/kb-support' )
-		) . '</p>' .
-		'<p>' . sprintf(
-			__( '<a href="%s" target="_blank">Extensions</a>', 'kb-support' ),
-			esc_url( 'https://kb-support.com/extensions/' )
-		) . '</p>'
-	);
+	$screen->set_help_sidebar( kbs_get_contextual_help_sidebar_text() );
 
-	do_action( 'kbs_article_before_general_contextual_help' );
+    do_action( 'kbs_article_before_general_contextual_help', $screen );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-article-general',
 		'title'   => __( 'General', 'kb-support' ),
-		'content' =>
+		'content' => apply_filters( 'kbs_article_general_contextual_help',
 			'<p>' . sprintf( 
 				__( 'In general you should write your %1$s in the same way you would a normal post. You can assign categories and tags as required, and these can be used within the <code>[kbs_articles]</code> shortcode to filter the %2$s to display.', 'kb-support' ),
 				$article_singular,
@@ -77,29 +54,32 @@ function kbs_article_contextual_help() {
 			'<p>' . sprintf( 
 				__( '<strong>Excerpt</strong> - Excerpts take precedence over content when %1$s are displayed following a search or listed by the <code>[kbs_articles]</code>.', 'kb-support' ), $article_plural ) .
 			'</p>'
+        )
 	) );
 
-	do_action( 'kbs_article_before_linked_contextual_help' );
+    do_action( 'kbs_article_before_linked_contextual_help', $screen );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-article-linked',
 		'title'   => sprintf( __( 'Linked %s', 'kb-support' ), $ticket_plural ),
-		'content' =>
+		'content' => apply_filters( 'kbs_article_linked_contextual_help',
 			'<p>' . sprintf( 
 				__( '%1$s that have a reference to this %2$s will be displayed here.', 'kb-support' ),
 				$ticket_plural,
 				$article_singular
 			) . '</p>'
+        )
 	) );
 
-	do_action( 'kbs_article_before_options_contextual_help' );
+    do_action( 'kbs_article_before_options_contextual_help', $screen );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-article-optons',
 		'title'   => __( 'Options', 'kb-support' ),
-		'content' =>
+		'content' => apply_filters( 'kbs_article_options_contextual_help',
 			'<p>' . sprintf( 
 				__( '<strong>Restrict Access</strong> - Select to restrict access to this %1$s to logged in users only.', 'kb-support' ),
 				$article_singular
 			) . '</p>'
+        )
 	) );
 
 	do_action( 'kbs_article_contextual_help' );

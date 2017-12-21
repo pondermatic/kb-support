@@ -28,36 +28,12 @@ function kbs_settings_contextual_help() {
 	$ticket_plural    = kbs_get_ticket_label_plural();
 	$settings         = kbs_get_registered_settings();
 
-	$screen->set_help_sidebar(
-		'<p><strong>' . __( 'More Information:', 'kb-support' ) . '</strong></p>' .
-		'<p>' . sprintf( 
-			__( '<a href="%s" target="_blank">Documentation</a>', 'kb-support' ), 
-			esc_url( 'https://kb-support.com/support/' )
-		) . '</p>' .
-		'<p>' . sprintf( 
-			__( '<a href="%s" target="_blank">Twitter</a>', 'kb-support' ), 
-			esc_url( 'https://twitter.com/kbsupport_wp/' )
-		) . '</p>' .
-		'<p>' . sprintf( 
-			__( '<a href="%s" target="_blank">Facebook</a>', 'kb-support' ), 
-			esc_url( 'https://www.facebook.com/kbsupport/' )
-		) . '</p>' .
-		'<p>' . sprintf(
-			__( '<a href="%s" target="_blank">Post an issue</a> on <a href="%s" target="_blank">GitHub</a>', 'kb-support' ),
-			esc_url( 'https://github.com/KB-Support/kb-support/issues' ),
-			esc_url( 'https://github.com/KB-Support/kb-support' )
-		) . '</p>' .
-		'<p>' . sprintf(
-			__( '<a href="%s" target="_blank">Extensions</a>', 'kb-support' ),
-			esc_url( 'https://kb-support.com/extensions/' )
-		) . '</p>'
-	);
+	$screen->set_help_sidebar( kbs_get_contextual_help_sidebar_text() );
 
-	do_action( 'kbs_settings_before_general_contextual_help', $screen );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-settings-general',
 		'title'   => __( 'General', 'kb-support' ),
-		'content' =>
+		'content' => apply_filters( 'kbs_settings_general_contextual_help',
 			'<p>' . __( '<strong>Page Settings</strong>', 'kb-support' ) . '</p>' .
 			'<ul>' .
 				'<li>' . sprintf( 
@@ -70,13 +46,14 @@ function kbs_settings_contextual_help() {
 					strtolower( $ticket_plural )
 				) . '</li>' .
 			'</ul>'
+        )
 	) );
 
-	do_action( 'kbs_settings_before_tickets_contextual_help', $screen );
+    do_action( 'kbs_settings_before_tickets_contextual_help', $screen );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-settings-tickets',
 		'title'   => $ticket_plural,
-		'content' =>
+		'content' => apply_filters( 'kbs_settings_tickets_contextual_help',
 			'<p>' . sprintf( __( '<strong>%s Settings</strong>', 'kb-support' ), $ticket_singular ) . '</p>' .
 			'<ul>' .
 				'<li>' . sprintf( 
@@ -102,6 +79,11 @@ function kbs_settings_contextual_help() {
 					$ticket_plural,
 					strtolower( $ticket_singular ),
 					strtolower( $ticket_plural )
+				) . '</li>' .
+                '<li>' . sprintf( 
+					__( '<strong>Re-open %1$s</strong> - By enabling this option, a customer will be able to add a reply to a %2$s that is closed. When adding the reply, the %2$s will be reopened unless the customer also checks the <strong>This %2$s can be closed</strong> option within the reply form. By default, this option is not enabled.', 'kb-support' ),
+					$ticket_plural,
+					strtolower( $ticket_singular )
 				) . '</li>' .
 			'</ul>' .
 			'<p>' . __( '<strong>Submission Settings</strong>', 'kb-support' ) . '</p>' .
@@ -187,13 +169,14 @@ function kbs_settings_contextual_help() {
 					strtolower( $ticket_plural )
 				) . '</li>' .
 			'</ul>'
+        )
 	) );
 
-	do_action( 'kbs_settings_before_articles_contextual_help', $screen );
+    do_action( 'kbs_settings_before_articles_contextual_help', $screen );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-settings-articles',
 		'title'   => $article_plural,
-		'content' =>
+		'content' => apply_filters( 'kbs_settings_articles_contextual_help',
 			'<p>' . sprintf( __( '<strong>%s Settings</strong>', 'kb-support' ), $article_singular ) . '</p>' .
 			'<ul>' .
 				'<li>' . sprintf( 
@@ -202,11 +185,15 @@ function kbs_settings_contextual_help() {
 					$article_singular
 				) . '</li>' .
 				'<li>' . sprintf( 
+					__( '<strong>Show Register / Login Form?</strong> - Select to display the login form, registration form, or both if the customer is not logged in and they attempt to access a restricted %s.', 'kb-support' ),
+					$article_singular
+				) . '</li>' .
+                '<li>' . sprintf( 
 					__( '<strong>Hide Restricted %1$s</strong> - Select to hide restricted %1$s from archives if the user is logged out. They are always hidden from website search results.', 'kb-support' ),
 					$article_plural
 				) . '</li>' .
 				'<li>' . sprintf( 
-					__( '<strong>Restrict %1$s Search</strong> - If selected, restricted %1$s will be hidden from ajax search results - i.e on the %2$s submission form.', 'kb-support' ),
+					__( '<strong>Restricted Ajax Search</strong> - If selected, restricted %1$s will be hidden from ajax search results - i.e on the %2$s submission form.', 'kb-support' ),
 					$article_plural,
 					strtolower( $ticket_singular )
 				) . '</li>' .
@@ -218,14 +205,22 @@ function kbs_settings_contextual_help() {
 					__( '<strong>Search Excerpt Length</strong> - Enter the number of characters that should be displayed from a %1$s during an ajax search. Enter <code>0</code> if you do not want an excerpt to be displayed.', 'kb-support' ),
 					strtolower( $ticket_singular )
 				) . '</li>' .
+			'</ul>' .
+            '<p>' . __( '<strong>Restricted Content Notices</strong>', 'kb-support' ) . '</p>' .
+			'<ul>' .
+				'<li>' . sprintf(
+					__( '<strong>Single %1$s</strong> - Enter the text that is displayed to a user when they attempt to access a restricted %1$s.', 'kb-support' ),
+					$article_singular
+				) . '</li>' .
 			'</ul>'
+        )
 	) );
 
-	do_action( 'kbs_settings_before_emails_contextual_help', $screen );
+    do_action( 'kbs_settings_before_emails_contextual_help', $screen );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-settings-emails',
 		'title'   => __( 'Emails', 'kb-support' ),
-		'content' =>
+		'content' => apply_filters( 'kbs_settings_emails_contextual_help',
 			'<p>' . __( '<strong>Email Settings</strong>', 'kb-support' ) . '</p>' .
 			'<ul>' .
 				'<li>' . __( '<strong>From Name</strong> - Enter the name you want KB Support generated emails to come from.', 'kb-support' ) . '</li>' .
@@ -284,7 +279,7 @@ function kbs_settings_contextual_help() {
 			'<p>' . __( '<strong>Notifications</strong>', 'kb-support' ) . '<br />' .
 				sprintf( __( '<em>Adjust the settings for emails that are sent to Support Workers when a new %1$s is logged or a reply is received.</em>', 'kb-support' ), strtolower( $ticket_singular ) ) . '</p>' .
 			'<ul>' .
-				'<li>' . sprintf( __( '<strong>Disable Admin Notifications</strong> - Select to stop emails being sent to Support Workers when a new %1$s is logged.', 'kb-support' ),
+				'<li>' . sprintf( __( '<strong>Disable Notifications</strong> - Select to stop emails being sent to Support Workers when a new %1$s is logged.', 'kb-support' ),
 				strtolower( $ticket_singular )
 				) . '</li>' .
 				'<li>' . sprintf( __( '<strong>%1$s Notification Subject</strong> - Enter the subject for the email sent to Support Workers when a new %2$s is logged.', 'kb-support' ),
@@ -315,18 +310,20 @@ function kbs_settings_contextual_help() {
 				strtolower( $ticket_singular )
 				) . '</li>' .
 			'</ul>'
+        )
 	) );
 
-	do_action( 'kbs_settings_before_styles_contextual_help', $screen );
+    do_action( 'kbs_settings_before_styles_contextual_help', $screen );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-settings-styles',
 		'title'   => __( 'Styles', 'kb-support' ),
-		'content' =>
+		'content' => apply_filters( 'kbs_settings_styles_contextual_help',
 			'<p>' . __( '<strong>Disable Styles</strong> - Select this option to stop KB Support loading its CSS style sheet. All default formatting of forms, fields and all other elements will be inherited from your currently active theme.', 'kb-support' ) . '</p>'
+        )
 	) );
 
 	if ( ! empty( $settings['extensions'] ) )	{
-		do_action( 'kbs_settings_before_extensions_contextual_help', $screen );
+        do_action( 'kbs_settings_before_extensions_contextual_help', $screen );
 		$screen->add_help_tab( array(
 			'id'      => 'kbs-settings-extensions',
 			'title'   => __( 'Extensions', 'kb-support' ),
@@ -337,26 +334,34 @@ function kbs_settings_contextual_help() {
 	}
 
 	if ( ! empty( $settings['licenses'] ) )	{
-		do_action( 'kbs_settings_before_licenses_contextual_help', $screen );
+        do_action( 'kbs_settings_before_licenses_contextual_help', $screen );
 		$screen->add_help_tab( array(
 			'id'      => 'kbs-settings-licenses',
 			'title'   => __( 'Licenses', 'kb-support' ),
-			'content' =>
-				'<p>' . __( 'If you have any of the KB Support premium extensions installed, you should enter their license keys here to ensure you receive the latest product updates.', 'kb-support' ) . '</p>'
+			'content' => apply_filters( 'kbs_settings_licenses_contextual_help',
+				'<p>' . sprintf(
+                    __( 'If you have any of the KB Support <a target="blank" href="%s">premium extensions</a> installed, you should enter their license keys here to ensure you receive the latest product updates.', 'kb-support' ),
+                    'https://kb-support.com/extensions/'
+                ) . '</p>'
+            )
 		) );
-		do_action( 'kbs_settings_licenses_contextual_help', $screen );
 	}
 
-	do_action( 'kbs_settings_before_misc_contextual_help', $screen );
+    do_action( 'kbs_settings_before_misc_contextual_help', $screen );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-settings-misc',
 		'title'   => __( 'Misc', 'kb-support' ),
-		'content' =>
+		'content' => apply_filters( 'kbs_settings_misc_contextual_help',
 			'<p>' . __( '<strong>Misc Settings</strong>', 'kb-support' ) . '</p>' .
 			'<ul>' .
-				'<li>' . sprintf( __( '<strong>Remove Data on Uninstall?</strong> - Select to remove all KB Support data when the plugin is uninstalled. All %1$s, %2$s, Submission Forms, Customers and settings will be permanently deleted.', 'kb-support' ),
-				$ticket_plural,
-				$article_plural ) . '</li>' .
+                '<li>' .
+                    __( '<strong>Display Credit?</strong> - Enable this option to give credit for this free plugin by displaying <code>Powered by KB Support</code> on the KB Support front end pages.', 'kb-support' ) .
+                '</li>' .
+				'<li>' . sprintf(
+                    __( '<strong>Remove Data on Uninstall?</strong> - Select to remove all KB Support data when the plugin is uninstalled. All %1$s, %2$s, Submission Forms, Customers and settings will be permanently deleted.', 'kb-support' ),
+                    $ticket_plural,
+                    $article_plural
+                ) . '</li>' .
 			'</ul>' .
 			'<p>' . __( '<strong>Google reCaptcha</strong>', 'kb-support' ) . '<br />' .
 				sprintf( __( '<em>If you want to use a Google reCaptcha within your %1$s submission form, you\'ll need to enter the settings here.</em>', 'kb-support' ), $ticket_singular ) . '</p>' .
@@ -374,6 +379,7 @@ function kbs_settings_contextual_help() {
 				'<li>' . __( '<strong>Terms Heading</strong> - Enter a heading that will appear at the top of the Terms and Conditions pop-up window.', 'kb-support' ) . '</li>' .
 				'<li>' . __( '<strong>Agreement Text</strong> - Enter your Terms and Conditions here.', 'kb-support' ) . '</li>' .
 			'</ul>'
+        )
 	) );
 
 	do_action( 'kbs_settings_contextual_help', $screen );

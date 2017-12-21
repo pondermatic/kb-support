@@ -170,9 +170,14 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 
                         <?php do_action( 'kbs_before_single_ticket_reply', $ticket ); ?>
 
-                        <?php if ( 'closed' != $ticket->status ) : ?>
+                        <?php if ( 'closed' != $ticket->status || kbs_customer_can_repoen_ticket( $customer->id, $ticket->ID ) ) : ?>
 
                             <div class="kbs_alert kbs_alert_error kbs_hidden"></div>
+
+                            <?php if ( 'closed' == $ticket->status ) : ?>
+                                <div class="kbs_alert kbs_alert_info"><?php printf( __( 'This %s has been closed. If you enter a new reply, it will be reopened.', 'kb-support' ), strtolower( $singular ) ); ?></div>
+                            <?php endif; ?>
+
                             <div class="ticket_reply_fields">
 
                                 <strong><?php _e( 'Add a Reply', 'kb-support' ); ?></strong>
