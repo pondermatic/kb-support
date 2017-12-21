@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: KB Support 1.1.5\n"
+"Project-Id-Version: KB Support 1.1.6\n"
 "Report-Msgid-Bugs-To: https://kb-support.com/\n"
-"POT-Creation-Date: 2017-12-20 17:15:59+00:00\n"
+"POT-Creation-Date: 2017-12-21 15:39:05+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -224,8 +224,8 @@ msgid "KB Support Settings"
 msgstr ""
 
 #: includes/admin/admin-pages.php:35 includes/admin/admin-plugin.php:26
-#: includes/admin/forms/metaboxes.php:150
-#: includes/admin/forms/metaboxes.php:173
+#: includes/admin/forms/metaboxes.php:152
+#: includes/admin/forms/metaboxes.php:175
 msgid "Settings"
 msgstr ""
 
@@ -357,7 +357,7 @@ msgid "%1$s that have a reference to this %2$s will be displayed here."
 msgstr ""
 
 #: includes/admin/article/contextual-help.php:76
-#: includes/admin/forms/metaboxes.php:558
+#: includes/admin/forms/metaboxes.php:560
 msgid "Options"
 msgstr ""
 
@@ -493,7 +493,7 @@ msgid "View"
 msgstr ""
 
 #: includes/admin/customers/class-kbs-customer-table.php:159
-#: includes/admin/forms/metaboxes.php:247
+#: includes/admin/forms/metaboxes.php:249
 msgid "Delete"
 msgstr ""
 
@@ -754,7 +754,7 @@ msgstr ""
 
 #: includes/admin/customers/customers-page.php:367
 #: includes/admin/customers/customers-page.php:608
-#: includes/admin/forms/metaboxes.php:522 includes/admin/thickbox.php:106
+#: includes/admin/forms/metaboxes.php:524 includes/admin/thickbox.php:106
 #: includes/class-kbs-html-elements.php:926
 msgid "Cancel"
 msgstr ""
@@ -764,8 +764,8 @@ msgid "Customer Emails"
 msgstr ""
 
 #: includes/admin/customers/customers-page.php:401
-#: includes/admin/forms/metaboxes.php:151
-#: includes/admin/forms/metaboxes.php:174 templates/ticket-history.php:23
+#: includes/admin/forms/metaboxes.php:153
+#: includes/admin/forms/metaboxes.php:176 templates/ticket-history.php:23
 msgid "Actions"
 msgstr ""
 
@@ -940,7 +940,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/forms/contextual-help.php:94
-#: includes/admin/forms/metaboxes.php:63
+#: includes/admin/forms/metaboxes.php:65
 msgid "Add a New Field"
 msgstr ""
 
@@ -1055,107 +1055,107 @@ msgstr ""
 msgid "To copy the shortcode, click here then press Ctrl + C (PC) or Cmd + C (Mac)."
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:26
+#: includes/admin/forms/metaboxes.php:27
 msgid "Redirect to"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:27
+#: includes/admin/forms/metaboxes.php:28
 msgid "Redirect after submission to:"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:54
+#: includes/admin/forms/metaboxes.php:56
 msgid "Form Fields"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:126
+#: includes/admin/forms/metaboxes.php:128
 msgid "Please save or publish your form before adding fields."
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:148
-#: includes/admin/forms/metaboxes.php:171
+#: includes/admin/forms/metaboxes.php:150
+#: includes/admin/forms/metaboxes.php:173
 msgid "Field Label"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:149
-#: includes/admin/forms/metaboxes.php:172
-#: includes/admin/forms/metaboxes.php:338
+#: includes/admin/forms/metaboxes.php:151
+#: includes/admin/forms/metaboxes.php:174
+#: includes/admin/forms/metaboxes.php:340
 msgid "Type"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:164
+#: includes/admin/forms/metaboxes.php:166
 msgid "No fields exist for this form"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:244
-#: includes/admin/forms/metaboxes.php:521
+#: includes/admin/forms/metaboxes.php:246
+#: includes/admin/forms/metaboxes.php:523
 msgid "Edit"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:271
+#: includes/admin/forms/metaboxes.php:273
 msgid "Label"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:308 includes/form-functions.php:248
+#: includes/admin/forms/metaboxes.php:310 includes/form-functions.php:248
 msgid "Description"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:316
+#: includes/admin/forms/metaboxes.php:318
 msgid "After Label"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:318
+#: includes/admin/forms/metaboxes.php:320
 msgid "After Field"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:345
+#: includes/admin/forms/metaboxes.php:347
 msgid "Select Type"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:375
+#: includes/admin/forms/metaboxes.php:377
 msgid "Maps to"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:420
+#: includes/admin/forms/metaboxes.php:422
 msgid "Required?"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:445
+#: includes/admin/forms/metaboxes.php:447
 msgid "Label Class"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:472
+#: includes/admin/forms/metaboxes.php:474
 msgid "Input Class"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:511
+#: includes/admin/forms/metaboxes.php:513
 msgid "Add Field"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:553
+#: includes/admin/forms/metaboxes.php:555
 msgid "Enable %s Ajax Search?"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:563
+#: includes/admin/forms/metaboxes.php:565
 msgid "One entry per line"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:575
+#: includes/admin/forms/metaboxes.php:577
 msgid "Multiple Select?"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:585
+#: includes/admin/forms/metaboxes.php:587
 msgid "Initially Selected?"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:595
+#: includes/admin/forms/metaboxes.php:597
 msgid "Searchable?"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:600
+#: includes/admin/forms/metaboxes.php:602
 msgid "Placeholder"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:616
+#: includes/admin/forms/metaboxes.php:618
 msgid "Hide Label?"
 msgstr ""
 

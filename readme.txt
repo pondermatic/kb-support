@@ -4,7 +4,7 @@ Tags: Helpdesk, Support, Customer Support, Support Desk, Ticket System, Knowledg
 Requires at least: 4.1
 Tested up to: 4.9
 Requires PHP: 5.4
-Stable tag: 1.1.5
+Stable tag: 1.1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -117,6 +117,30 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.1.6 =
+
+**Thursday, 21st December 2017**
+
+**New**
+
+* Enable submission form redirections per form
+* Added option to allow customers to be able to reopen tickets by adding a reply
+
+**Bug Fixes**
+
+* Select fields did not display the placeholder field within submission form
+* Make sure the `checked` param is honoured for radio fields
+* Corrected email heading for admin reply notifications
+* Don't allow a zero array key value for select fields
+* Corrected filter name for after reply content
+* Corrected missing array key
+
+**Tweaks**
+
+* Enable customer ticket reply email notification if cron is running
+* Field type select field is now searchable
+* Added various hooks and filters to contextual help
 
 = 1.1.5 =
 
