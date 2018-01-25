@@ -86,7 +86,7 @@ function kbs_admin_footer_for_thickbox() {
 				}
 
 				// Send the shortcode to the editor
-				window.send_to_editor('<a href="' + url + '">' + text + '</a>');
+				window.send_to_editor('<a href="' + url + '" target="_blank">' + text + '</a>');
 			}
 		</script>
 
@@ -94,12 +94,16 @@ function kbs_admin_footer_for_thickbox() {
 			<div class="wrap" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
 				<h3><?php echo sprintf( __( 'Complete the form below to insert a link to a %s', 'kb-support' ), $single_article ); ?></h3>
 
-				<p><label for="kbs-text"><strong><?php _e( 'Enter Link Text', 'kb-support' ); ?></strong>:</label><br>
+				<p>
+                    <label for="kbs-text"><strong><?php _e( 'Enter Link Text', 'kb-support' ); ?></strong>:</label><br>
                 	<input type="text" class="regular-text" size="30" id="kbs-text" value="" /><br>
-					<span class="description"><?php printf( __( 'Leave empty to use %s title', 'kb-support' ), $single_article ); ?></span></p>
+					<span class="description"><?php printf( __( 'Leave empty to use %s title', 'kb-support' ), $single_article ); ?></span>
+				</p>
 
-				<p><label for="articles"><strong><?php printf( __( 'Select %s', 'kb-support' ), $single_article ); ?></strong>:</label><br>
-					<?php echo KBS()->html->article_dropdown( array( 'name' => 'articles', 'key' => 'url', 'chosen' => true ) ); ?></p>
+				<p>
+				    <label for="articles"><strong><?php printf( __( 'Select %s', 'kb-support' ), $single_article ); ?></strong>:</label><br>
+					<?php echo KBS()->html->article_dropdown( array( 'name' => 'articles', 'key' => 'url', 'chosen' => true ) ); ?>
+				</p>
 
 				<p class="submit">
 					<input type="button" id="kbs-insert-link" class="button-primary" value="<?php echo sprintf( __( 'Link %s', 'kb-support' ), $single_article ); ?>" onclick="linkArticle();" />
