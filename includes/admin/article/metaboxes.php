@@ -152,10 +152,10 @@ add_action( 'kbs_article_linked_tickets_fields', 'kbs_article_metabox_linked_tic
 function kbs_article_metabox_restrict_article_field( $post_id )	{
 	global $kbs_article_update;
 
-	if ( $kbs_article_update )	{
-		$logged_in_only = get_post_meta( $post_id, '_kbs_article_restricted', true );
-	} else	{	
+	if ( 'auto-draft' == get_post_status( $post_id ) )	{
 		$logged_in_only = kbs_get_option( 'article_restricted', false );
+	} else	{	
+		$logged_in_only = get_post_meta( $post_id, '_kbs_article_restricted', true );
 	}
 
 	?>
