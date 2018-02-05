@@ -4,7 +4,7 @@ Tags: Helpdesk, Support, Customer Support, Support Desk, Ticket System, Knowledg
 Requires at least: 4.1
 Tested up to: 5.0
 Requires PHP: 5.4
-Stable tag: 1.1.7
+Stable tag: 1.1.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -118,6 +118,22 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.1.8 =
+
+**Monday, 5th February 2018**
+
+**This update includes changes to a template page. If you are using a customised version of the template, you can [review the changes here](https://github.com/KB-Support/kb-support/commit/d1d7e506dfc38c0231bdd4f158b92b42319fa820).**
+
+**Bug Fixes**
+
+* Updated the `view-ticket.php` template file to correctly list file attachments
+* Fixed ticket count for customers
+
+**Tweaks**
+
+* Tickets column is now sortable on the customers table
+* Forced the Tools and Extensions items to the bottom of the Tickets menu
 
 = 1.1.7 =
 
