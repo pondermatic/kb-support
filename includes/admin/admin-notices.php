@@ -59,7 +59,7 @@ function kbs_admin_messages() {
 				'ticket_id'  => $_GET['post']
 			), admin_url() );
 
-			$create_article_link = apply_filters( 'kbs_create_article_link', $create_article_link );
+			$create_article_link = apply_filters( 'kbs_create_article_link', $create_article_link, $_GET['post'] );
 
 			$closed = sprintf( __( ' and the %1$s was closed.', 'kb-support' ), kbs_get_ticket_label_singular() );
 			$closed .= ' ';
