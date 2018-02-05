@@ -74,7 +74,7 @@ class KBS_Batch_Export_Customers extends KBS_Batch_Export {
 			$data[$i]['name']    = $customer->name;
 			$data[$i]['email']   = $customer->email;
 			$data[$i]['company'] = kbs_get_company_name( $customer->company_id );
-			$data[$i]['tickets'] = $customer->ticket_count;
+			$data[$i]['tickets'] = kbs_get_customer_ticket_count( $customer->id );
 			$data[$i]['notes']   = $customer->notes;
 
 			$i++;

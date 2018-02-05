@@ -194,7 +194,7 @@ class KBS_Customer_Table extends WP_List_Table {
 		$sortable = array(
 			'date_created'  => array( 'date_created', true ),
 			'name'          => array( 'name', true ),
-			'num_purchases' => array( 'ticket_count', false )
+			'num_tickets'   => array( 'ticket_count', false )
 		);
 
 		return apply_filters( 'kbs_customer_table_sortable_columns', $sortable );
@@ -284,7 +284,7 @@ class KBS_Customer_Table extends WP_List_Table {
 					'name'          => $customer->name,
 					'company'       => $company ? '<a href="' . get_edit_post_link( $customer->company_id ) . '">' . $company . '</a>' : '&ndash;',
 					'email'         => $customer->email,
-					'num_tickets'   => $customer->ticket_count,
+					'num_tickets'   => kbs_get_customer_ticket_count( $customer->id ),
 					'date_created'  => $customer->date_created,
 				);
 			}
