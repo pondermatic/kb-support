@@ -139,8 +139,12 @@ if ( $visible && ! empty( $ticket->ID ) ) :
                             <ul>
                             <?php foreach( $ticket->replies as $reply ) : ?>
 
-                                <?php $reply_content = apply_filters( 'the_content', $reply->post_content );
-                                $reply_content = str_replace( ']]>', ']]&gt;', $reply_content ); ?>
+                                <?php
+                                $reply_content = apply_filters( 'the_content', $reply->post_content );
+                                $reply_content = str_replace( ']]>', ']]&gt;', $reply_content );
+                                $files         = kbs_ticket_has_files( $reply->ID );
+                                $file_count    = ( $files ? count( $files ) : false );
+                                ?>
     
                                 <li id="kbs_ticket_reply-<?php echo $reply->ID; ?>" class="kbs-ticket-reply-head" data-item="reply-<?php echo $reply->ID; ?>">
                                     <span class="ticket_reply info-item">
@@ -149,6 +153,20 @@ if ( $visible && ! empty( $ticket->ID ) ) :
                                         <?php echo kbs_get_reply_author_name( $reply->ID, true ); ?></a>
                                         <div id="ticket_response_<?php echo $reply->ID; ?>" class="single_reply kbs_hidden">
                                             <?php echo $reply_content; ?>
+                                            <?php if ( $files ) : ?>
+                                                <div class="kbs_ticket_reply_files">
+                                                    <strong><?php _e( 'Attached Files', 'kb-support' ); ?></strong>
+                                                    <ol>
+                                                        <?php foreach( $files as $file ) : ?>
+                                                            <li>
+                                                                <a href="<?php echo wp_get_attachment_url( $file->ID ); ?>" target="_blank">
+                                                                    <?php echo basename( get_attached_file( $file->ID ) ); ?>
+                                                                </a>
+                                                            </li>
+                                                        <?php endforeach; ?>
+                                                    </ol>
+                                                </div>
+                                            <?php endif; ?>
                                         </div>
                                     </span>
                                 </li>
