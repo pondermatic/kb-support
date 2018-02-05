@@ -2,9 +2,9 @@
 Contributors: kbsupport, mikeyhoward1977
 Tags: Helpdesk, Support, Customer Support, Support Desk, Ticket System, Knowledge Base, Tickets, Service, Service Desk, ITIL, Support Helpdesk, Ticket, Support Tickets, Helpdesk Tickets, Knowledgebase, Service Level, SLA, Help Desk
 Requires at least: 4.1
-Tested up to: 4.9
+Tested up to: 5.0
 Requires PHP: 5.4
-Stable tag: 1.1.6
+Stable tag: 1.1.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -117,6 +117,20 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.1.7 =
+
+**Monday, 5th February 2018**
+
+**Bug Fixes**
+
+* Fixed width of the checkbox for the `Restricted Access` option
+* Make sure the ticket ID is passed within the `kbs_create_article_link` filter to stop KB Integrations throwing PHP errors
+
+**Tweaks**
+
+* Force article links to open in a new tab to avoid navigation away from frontend tickets page
+* Always capture the source by which a ticket is logged. Default to 'website'
 
 = 1.1.6 =
 
