@@ -49,6 +49,7 @@ More information can be found at [https://kb-support.com/](https://kb-support.co
 **Further enhance the features and functionality of KB Support with paid [extensions](https://kb-support.com/extensions/) such as**:
 
 * [Easy Digital Downloads Integration](https://kb-support.com/downloads/easy-digital-downloads/) - Integrate your EDD store into KB Support providing a seamless support solution
+* [Email Support](https://kb-support.com/downloads/email-support/) - Management of tickets via email for agents and customers. Automation via email for agents.
 * [Knowledge Base Integrations](https://kb-support.com/downloads/knowledge-base-integrations/) - Fully integrate KB Support into your existing knowledge base solution
 * [Ratings & Satisfaction](https://kb-support.com/downloads/ratings-and-satisfaction/) - Enables customers and visitors to provide feedback on their support experience as well as the quality of your KB articles
 * [Reply Approvals](https://kb-support.com/downloads/reply-approvals/) - Adds an approval process to ticket replies created by selected agents forcing a four-eyed approach to ticket replies
