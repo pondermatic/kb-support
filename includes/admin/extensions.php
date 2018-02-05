@@ -14,6 +14,22 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Creates the admin submenu page for extensions and pin it to the bottom
+ * of the Tickets menu
+ *
+ * @since	1.1.8
+ * @return	void
+ */
+function kbs_add_extensions_menu_link() {
+
+	global $kbs_extensions_page;
+
+	$kbs_extensions_page = add_submenu_page( 'edit.php?post_type=kbs_ticket', __( 'KB Support Extensions', 'kb-support' ),  __( 'Extensions', 'kb-support' ), 'manage_ticket_settings', 'kbs-extensions', 'kbs_extensions_page' );
+
+} // kbs_add_options_link
+add_action( 'admin_menu', 'kbs_add_extensions_menu_link', 100 );
+
+/**
  * Display the extensions page.
  *
  * @since	1.0.3

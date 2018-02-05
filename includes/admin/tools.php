@@ -13,7 +13,22 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) )
 	exit;
-	
+
+/**
+ * Creates the admin submenu page for tools
+ *
+ * @since	1.1.8
+ * @return	void
+ */
+function kbs_add_tools_menu_link() {
+
+	global $kbs_tools_page;
+
+	$kbs_tools_page = add_submenu_page( 'edit.php?post_type=kbs_ticket', __( 'Tools', 'kb-support' ), __( 'Tools', 'kb-support' ), 'manage_ticket_settings', 'kbs-tools', 'kbs_tools_page' );
+
+} // kbs_add_tools_menu_link
+add_action( 'admin_menu', 'kbs_add_tools_menu_link', 99 );
+
 /**
  * Tools
  *
