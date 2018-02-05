@@ -181,7 +181,7 @@ function kbs_customers_view( $customer ) {
 	$customer_edit_role = apply_filters( 'kbs_edit_customers_role', 'manage_ticket_settings' );
 
 	$tickets      = kbs_get_customer_tickets( $customer->id, array(), false );
-	$ticket_count = count( $tickets );
+	$ticket_count = ! empty( $tickets ) ? count( $tickets ) : 0;
 
 	?>
 
