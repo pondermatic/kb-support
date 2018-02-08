@@ -371,6 +371,11 @@ function kbs_setup_email_tags() {
 			'description' => __( 'Content of the most recent reply', 'kb-support' ),
 			'function'    => 'kbs_email_tag_reply_content'
 		),
+        array(
+			'tag'         => 'reply_files',
+			'description' => __( 'List of files attached to the latest ticket reply with links', 'kb-support' ),
+			'function'    => 'kbs_email_tag_reply_files'
+		),
 		array(
 			'tag'         => 'ticket_url',
 			'description' => __( 'Adds a URL so customers can view their ticket directly on your website.', 'kb-support' ),
@@ -648,7 +653,7 @@ function kbs_email_tag_ticket_content( $ticket_id )	{
  *
  * @since	1.0
  * @param	int		$ticket_id
- * @return	str		Ticket content
+ * @return	str		Links to files
  */
 function kbs_email_tag_ticket_files( $ticket_id )	{
 	$files = kbs_ticket_has_files( $ticket_id );
@@ -705,7 +710,7 @@ function kbs_email_tag_reply_time( $ticket_id ) {
  *
  * @since	1.0
  * @param	int		$ticket_id
- * @return	str		Reply content
+ * @return	str		Links to files
  */
 function kbs_email_tag_reply_content( $ticket_id )	{
 	$reply = kbs_get_last_reply( $ticket_id );
@@ -714,6 +719,31 @@ function kbs_email_tag_reply_content( $ticket_id )	{
 		return get_post_field( 'post_content', $reply->ID, 'raw' );
 	}
 } // kbs_email_tag_reply_content
+
+/**
+ * Email template tag: reply_files
+ * List of files attached to the reply with links to open.
+ *
+ * @since	1.1.9
+ * @param	int		$ticket_id
+ * @return	str		Ticket content
+ */
+function kbs_email_tag_reply_files( $ticket_id )	{
+    $last_reply = kbs_get_last_reply( $ticket_id );
+
+    if ( $last_reply )  {
+        $files = kbs_ticket_has_files( $last_reply->ID );
+
+        if ( $files )	{
+            $output = '';
+            foreach( $files as $file )	{
+                $output .= '<p><a href="' . wp_get_attachment_url( $file->ID ) . '">' . basename( get_attached_file( $file->ID ) ) . '</a></p>';
+            }
+
+            return $output;
+        }
+    }
+} // kbs_email_tag_reply_files
 
 /**
  * Email template tag: ticket_url
