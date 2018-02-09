@@ -102,6 +102,35 @@ function kbs_add_additional_agents_to_reply_notifications( $headers, $ticket_id,
 add_action( 'kbs_admin_reply_notification_headers', 'kbs_add_additional_agents_to_reply_notifications', 10, 3 );
 
 /**
+ * Adds attachments to ticket emails.
+ *
+ * This action is usually hooked via the {ticket_files} email tag.
+ *
+ * @since   1.1.9
+ * @param   arr     $attachments    Array of files to attach to email
+ * @param   int     $ticket_id      The ticket or reply ID
+ * @return  arr     Array of files to attach to email.
+ */
+function kbs_maybe_attach_files_to_email_action( $attachments, $ticket_id, $data, $reply_id = false ) {
+
+    // These actions to not parse a reply ID so we need to determine if replies exist
+    if ( doing_action( 'kbs_ticket_closed_attachments' ) || doing_action( 'kbs_agent_assigned_attachments' ) )    {
+        $last_reply = kbs_get_last_reply( $ticket_id );
+
+        if ( $last_reply )  {
+            $reply_id = $last_reply->ID;
+        }
+    }
+
+    if ( $reply_id )    {
+        $ticket_id = $reply_id;
+    }
+
+    return $attachments + kbs_maybe_attach_files_to_email( $ticket_id );
+
+} // kbs_maybe_attach_files_to_email_action
+
+/**
  * Trigger the sending of a Test Email
  *
  * @since	1.0

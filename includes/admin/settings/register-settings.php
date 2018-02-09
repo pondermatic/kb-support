@@ -601,6 +601,13 @@ function kbs_get_registered_settings() {
 						'desc' => sprintf( __( 'Upload or choose a logo to be displayed at the top of the %s received emails. Displayed on HTML emails only.', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'upload'
 					),
+                    'attach_files' => array(
+						'id'      => 'attach_files',
+						'name'    => __( 'Attach Files?', 'kb-support' ),
+						'desc'    => sprintf( __( 'Enable this option if you want %s files attached to emails when using the <code>{ticket_files}</code> or <code>{reply_files}</code> email tags. If not enabled, links to the files will be listed within the email content.', 'kb-support' ), strtolower( $single ) ),
+						'type'    => 'checkbox',
+                        'std'     => '1'
+					),
 					'email_settings' => array(
 						'id'   => 'email_settings',
 						'name' => '',

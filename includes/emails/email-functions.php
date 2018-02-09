@@ -78,7 +78,7 @@ function kbs_email_ticket_received( $ticket_id, $admin_notice = true ) {
  * @param	int		$ticket_id		Ticket ID
  * @return	void
  */
-function kbs_email_ticket_reply( $ticket_id ) {
+function kbs_email_ticket_reply( $ticket_id, $reply_id ) {
 
 	if ( ! is_admin() && ! wp_doing_cron() )	{
 		return;
@@ -102,22 +102,22 @@ function kbs_email_ticket_reply( $ticket_id ) {
 	$ticket_data  = $ticket->get_meta();
 
 	$from_name    = kbs_get_option( 'from_name', wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) );
-	$from_name    = apply_filters( 'kbs_ticket_reply_from_name', $from_name, $ticket_id, $ticket_data );
+	$from_name    = apply_filters( 'kbs_ticket_reply_from_name', $from_name, $ticket_id, $ticket_data, $reply_id );
 
 	$from_email   = kbs_get_option( 'from_email', get_bloginfo( 'admin_email' ) );
-	$from_email   = apply_filters( 'kbs_ticket_reply_from_address', $from_email, $ticket_id, $ticket_data );
+	$from_email   = apply_filters( 'kbs_ticket_reply_from_address', $from_email, $ticket_id, $ticket_data, $reply_id );
 
 	$to_email     = $ticket->email;
 
 	$subject      = kbs_get_option( 'ticket_reply_subject', sprintf( __( 'Your Support %s Received a Reply - ##{ticket_id}##', 'kb-support' ), $single ) );
-	$subject      = apply_filters( 'kbs_ticket_reply_subject', wp_strip_all_tags( $subject ), $ticket_id );
+	$subject      = apply_filters( 'kbs_ticket_reply_subject', wp_strip_all_tags( $subject ), $ticket_id, $reply_id );
 	$subject      = kbs_do_email_tags( $subject, $ticket_id );
 
 	$heading      = kbs_get_option( 'ticket_reply_heading', sprintf( __( 'Support %s Update for #{ticket_id}', 'kb-support' ), $single ) );
-	$heading      = apply_filters( 'kbs_ticket_reply_heading', $heading, $ticket_id, $ticket_data );
+	$heading      = apply_filters( 'kbs_ticket_reply_heading', $heading, $ticket_id, $ticket_data, $reply_id );
 	$heading      = kbs_do_email_tags( $heading, $ticket_id );
 
-	$attachments  = apply_filters( 'kbs_ticket_reply_attachments', array(), $ticket_id, $ticket_data );
+	$attachments  = apply_filters( 'kbs_ticket_reply_attachments', array(), $ticket_id, $ticket_data, $reply_id );
 	$message      = kbs_do_email_tags( kbs_get_ticket_reply_email_body_content( $ticket_id, $ticket_data ), $ticket_id );
 
 	$emails       = KBS()->emails;
@@ -126,13 +126,13 @@ function kbs_email_ticket_reply( $ticket_id ) {
 	$emails->__set( 'from_email', $from_email );
 	$emails->__set( 'heading', $heading );
 
-	$headers = apply_filters( 'kbs_ticket_reply_headers', $emails->get_headers(), $ticket_id, $ticket_data );
+	$headers = apply_filters( 'kbs_ticket_reply_headers', $emails->get_headers(), $ticket_id, $ticket_data, $reply_id );
 	$emails->__set( 'headers', $headers );
 
 	$emails->send( $to_email, $subject, $message, $attachments );
 
 } // kbs_email_ticket_reply
-add_action( 'kbs_reply_to_ticket', 'kbs_email_ticket_reply', 999 );
+add_action( 'kbs_reply_to_ticket', 'kbs_email_ticket_reply', 999, 2 );
 
 /**
  * Email to customer when a ticket is closed.
@@ -312,19 +312,19 @@ function kbs_admin_email_reply_notice( $reply_id = 0, $data = array() ) {
 	$from_name   = apply_filters( 'kbs_notification_reply_from_name', $from_name, $ticket_id, $data );
 
 	$from_email  = kbs_get_option( 'from_email', get_bloginfo( 'admin_email' ) );
-	$from_email  = apply_filters( 'kbs_notification_reply_from_address', $from_email, $ticket_id, $data );
+	$from_email  = apply_filters( 'kbs_notification_reply_from_address', $from_email, $ticket_id, $data, $reply_id );
 
 	$subject     = kbs_get_option( 'reply_notification_subject', sprintf( __( 'New %1Ss Reply Received - %1$s #%1$s', 'kb-support' ), $single, $ticket_id ) );
-	$subject     = apply_filters( 'kbs_admin_reply_notification_subject', wp_strip_all_tags( $subject ), $ticket_id );
+	$subject     = apply_filters( 'kbs_admin_reply_notification_subject', wp_strip_all_tags( $subject ), $ticket_id, $reply_id );
 	$subject     = kbs_do_email_tags( $subject, $ticket_id );
 
 	$headers     = "From: " . stripslashes_deep( html_entity_decode( $from_name, ENT_COMPAT, 'UTF-8' ) ) . " <$from_email>\r\n";
 	$headers    .= "Reply-To: ". $from_email . "\r\n";
 	//$headers  .= "MIME-Version: 1.0\r\n";
 	$headers    .= "Content-Type: text/html; charset=utf-8\r\n";
-	$headers     = apply_filters( 'kbs_admin_reply_notification_headers', $headers, $ticket_id, $data );
+	$headers     = apply_filters( 'kbs_admin_reply_notification_headers', $headers, $ticket_id, $data, $reply_id );
 
-	$attachments = apply_filters( 'kbs_admin_reply_notification_attachments', array(), $ticket_id, $data );
+	$attachments = apply_filters( 'kbs_admin_reply_notification_attachments', array(), $ticket_id, $data, $reply_id );
 
 	$message     = kbs_get_reply_notification_email_body_content( $ticket_id, $data );
 

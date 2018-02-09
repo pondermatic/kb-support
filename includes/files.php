@@ -189,6 +189,16 @@ function kbs_has_files_to_upload( $name )	{
 } // kbs_has_files_to_upload
 
 /**
+ * Whether or not files should be attached to emails.
+ *
+ * @since   1.1.9
+ * @return  bool
+ */
+function kbs_send_files_as_attachments()    {
+    return kbs_get_option( 'attach_files', false );
+} // kbs_send_files_as_attachments
+
+/**
  * Attach files to a ticket or reply.
  *
  * @since	1.0
@@ -270,3 +280,39 @@ function kbs_ticket_has_files( $ticket_id )	{
 	return apply_filters( 'kbs_ticket_has_files', $files, $ticket_id );
 	
 } // kbs_ticket_has_files
+
+/**
+ * Adds attachments to ticket emails.
+ *
+ * @since   1.1.9
+ * @param   int     id              Ticket or Reply ID
+ * @return  arr     Array of files to attach to email.
+ */
+function kbs_maybe_attach_files_to_email( $id ) {
+
+    $attachments = array();
+
+    if ( kbs_send_files_as_attachments() )    {
+
+        $files = kbs_ticket_has_files( $id );
+
+        if ( $files )   {
+            foreach ( $files as $file ) {
+                $attachments[] =  get_attached_file( $file->ID );
+            }
+        }
+
+    }
+
+    return $attachments;
+
+} // kbs_maybe_attach_files_to_email
+
+add_filter( 'kbs_ticket_attachments', 'kbs_maybe_attach_files_to_email_action', 10, 3 );
+add_filter( 'kbs_ticket_reply_attachments', 'kbs_maybe_attach_files_to_email_action', 10, 4 );
+add_filter( 'kbs_admin_ticket_notification_attachments', 'kbs_maybe_attach_files_to_email_action', 10, 3 );
+add_filter( 'kbs_admin_reply_notification_attachments', 'kbs_maybe_attach_files_to_email_action', 10, 4 );
+
+//add_filter( 'kbs_ticket_closed_attachments', 'kbs_maybe_attach_files_to_email_action', 10, 2 );
+
+//add_filter( 'kbs_agent_assigned_attachments', 'kbs_maybe_attach_files_to_email_action', 10, 2 );

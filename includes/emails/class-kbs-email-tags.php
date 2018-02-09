@@ -328,42 +328,42 @@ function kbs_setup_email_tags() {
 		),
 		array(
 			'tag'         => 'date',
-			'description' => __( 'The date of the ticket', 'kb-support' ),
+			'description' => sprintf( __( 'The date of the %s', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_date'
 		),
 		array(
 			'tag'         => 'time',
-			'description' => __( 'The time of the ticket', 'kb-support' ),
+			'description' => sprintf( __( 'The time of the %s', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_time'
 		),
 		array(
 			'tag'         => 'ticket_id',
-			'description' => __( 'The unique ID number for this ticket', 'kb-support' ),
+			'description' => sprintf( __( 'The unique ID number for this %s', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_ticket_id'
 		),
 		array(
 			'tag'         => 'ticket_title',
-			'description' => __( 'Title of the ticket', 'kb-support' ),
+			'description' => sprintf( __( 'Title of the %s', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_ticket_title'
 		),
 		array(
 			'tag'         => 'ticket_content',
-			'description' => __( 'Content of the ticket', 'kb-support' ),
+			'description' => sprintf( __( 'Content of the %s', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_ticket_content'
 		),
 		array(
 			'tag'         => 'ticket_files',
-			'description' => __( 'List of files attached to the ticket with links', 'kb-support' ),
+			'description' => sprintf( __( 'Attach or list files attached to the %s', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_ticket_files'
 		),
 		array(
 			'tag'         => 'reply_date',
-			'description' => __( 'The date of the most recent ticket reply', 'kb-support' ),
+			'description' => sprintf( __( 'The date of the most recent %s reply', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_reply_date'
 		),
 		array(
 			'tag'         => 'reply_time',
-			'description' => __( 'The time of the most recent ticket reply', 'kb-support' ),
+			'description' => sprintf( __( 'The time of the most recent %s reply', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_reply_time'
 		),
 		array(
@@ -373,22 +373,22 @@ function kbs_setup_email_tags() {
 		),
         array(
 			'tag'         => 'reply_files',
-			'description' => __( 'List of files attached to the latest ticket reply with links', 'kb-support' ),
+			'description' => sprintf( __( 'Attach or list files attached to the %s reply', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_reply_files'
 		),
 		array(
 			'tag'         => 'ticket_url',
-			'description' => __( 'Adds a URL so customers can view their ticket directly on your website.', 'kb-support' ),
+			'description' => sprintf( __( 'Adds a URL so customers can view their %s directly on your website.', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_ticket_url'
 		),
 		array(
 			'tag'         => 'ticket_admin_url',
-			'description' => __( 'Adds a URL so admins can access a ticket directly.', 'kb-support' ),
+			'description' => sprintf( __( 'Adds a URL so admins can access a %s directly.', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_ticket_admin_url'
 		),
 		array(
 			'tag'         => 'close_ticket_url',
-			'description' => __( 'Adds a URL link that customers can click to close a ticket.', 'kb-support' ),
+			'description' => sprintf( __( 'Adds a URL link that customers can click to close a ticket.', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_ticket_close_ticket_url'
 		)
 	);
@@ -656,16 +656,28 @@ function kbs_email_tag_ticket_content( $ticket_id )	{
  * @return	str		Links to files
  */
 function kbs_email_tag_ticket_files( $ticket_id )	{
-	$files = kbs_ticket_has_files( $ticket_id );
 
-	if ( $files )	{
-		$output = '';
-		foreach( $files as $file )	{
-			$output .= '<p><a href="' . wp_get_attachment_url( $file->ID ) . '">' . basename( get_attached_file( $file->ID ) ) . '</a></p>';
-		}
+    if ( kbs_send_files_as_attachments() )  {
 
-		return $output;
-	}
+        add_filter( 'kbs_ticket_attachments', 'kbs_maybe_attach_files_to_email_action', 10, 3 );
+        add_filter( 'kbs_ticket_reply_attachments', 'kbs_maybe_attach_files_to_email_action', 10, 4 );
+        add_filter( 'kbs_admin_ticket_notification_attachments', 'kbs_maybe_attach_files_to_email_action', 10, 3 );
+        add_filter( 'kbs_admin_reply_notification_attachments', 'kbs_maybe_attach_files_to_email_action', 10, 4 );
+        add_filter( 'kbs_ticket_closed_attachments', 'kbs_maybe_attach_files_to_email_action', 10, 2 );
+        add_filter( 'kbs_agent_assigned_attachments', 'kbs_maybe_attach_files_to_email_action', 10, 2 );
+
+    } else  {
+        $files = kbs_ticket_has_files( $ticket_id );
+
+        if ( $files )	{
+            $output = '';
+            foreach( $files as $file )	{
+                $output .= '<p><a href="' . wp_get_attachment_url( $file->ID ) . '">' . basename( get_attached_file( $file->ID ) ) . '</a></p>';
+            }
+
+            return $output;
+        }
+    }
 } // kbs_email_tag_ticket_files
 
 /**
@@ -732,16 +744,7 @@ function kbs_email_tag_reply_files( $ticket_id )	{
     $last_reply = kbs_get_last_reply( $ticket_id );
 
     if ( $last_reply )  {
-        $files = kbs_ticket_has_files( $last_reply->ID );
-
-        if ( $files )	{
-            $output = '';
-            foreach( $files as $file )	{
-                $output .= '<p><a href="' . wp_get_attachment_url( $file->ID ) . '">' . basename( get_attached_file( $file->ID ) ) . '</a></p>';
-            }
-
-            return $output;
-        }
+        return kbs_email_tag_ticket_files( $last_reply->ID );
     }
 } // kbs_email_tag_reply_files
 
