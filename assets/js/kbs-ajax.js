@@ -25,7 +25,7 @@ jQuery(document).ready(function ($) {
         $('.kbs-article-search-results').hide('slow');
     });
 
-	$('.kbs-article-search').focusout(function()	{
+	$('.kbs-article-search').keyup(function()	{
 
 		$('#kbs-article-results').html('');
 
