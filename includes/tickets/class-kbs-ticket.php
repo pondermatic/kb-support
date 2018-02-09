@@ -489,7 +489,7 @@ class KBS_Ticket {
 			$this->pending['key'] = $this->key;
 		}
 
-		if ( ! empty( $this->form_data ) )	{
+		if ( ! empty( $this->form_data ) && is_array( $this->form_data ) )	{
 			$this->pending['form_data'] = $this->form_data;
 		}
 

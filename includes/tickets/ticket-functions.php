@@ -512,7 +512,7 @@ function kbs_add_ticket( $ticket_data )	{
 	$ticket->sla_resolve      = kbs_calculate_sla_target_resolution();
 	$ticket->source           = '';
 	$ticket->new_files        = $ticket_data['attachments'];
-	$ticket->form_data        = ! empty( $ticket_data['form_data'] ) ? $ticket_data['form_data'] : '';
+	$ticket->form_data        = ! empty( $ticket_data['form_data'] ) ? $ticket_data['form_data'] : array();
 
     if ( ! empty( $ticket_data['user_info']['last_name'] ) )  {
         $ticket->last_name = ucfirst( sanitize_text_field( $ticket_data['user_info']['last_name'] ) );
