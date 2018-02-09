@@ -60,6 +60,10 @@ function kbs_do_automatic_upgrades() {
         set_transient( '_kbs_activation_redirect', true, 30 );
 	}
 
+    if ( version_compare( $kbs_version, '1.1.9', '<' ) ) {
+		kbs_v119_upgrades();
+	}
+
 	if ( version_compare( $kbs_version, KBS_VERSION, '<' ) )	{
 
 		// Let us know that an upgrade has happened
@@ -377,3 +381,24 @@ function kbs_v11_upgrade_sequential_ticket_numbers()	{
 
 } // kbs_v11_upgrade_sequential_ticket_numbers
 add_action( 'kbs-upgrade-upgrade_sequential_ticket_numbers', 'kbs_v11_upgrade_sequential_ticket_numbers' );
+
+/**
+ * Upgrade routine for version 1.1.9.
+ *
+ * - Add setting for attach files. Default to false for existing users.
+ *
+ * @since	1.1.9
+ * @return	void
+ */
+function kbs_v119_upgrades()	{
+
+    // New setting options
+    $new_options = array(
+        'attach_files' => '0',
+    );
+
+    foreach( $new_options as $option => $value )    {
+        kbs_update_option( $option, $value );
+    }
+
+} // kbs_v119_upgrades
