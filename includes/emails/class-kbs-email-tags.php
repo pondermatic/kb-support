@@ -594,7 +594,7 @@ function kbs_email_tag_sitename( $ticket_id ) {
 function kbs_email_tag_date( $ticket_id  ) {
 	$post_time = get_post_time( 'U', false, $ticket_id );
 
-	return get_date_from_gmt( $post_time, get_option( 'date_format' ) );
+	return date_i18n( get_option( 'date_format' ), $post_time );
 } // kbs_email_tag_date
 
 /**
@@ -608,7 +608,7 @@ function kbs_email_tag_date( $ticket_id  ) {
 function kbs_email_tag_time( $ticket_id ) {
 	$post_time = get_post_time( 'U', false, $ticket_id );
 
-	return get_date_from_gmt( $post_time, get_option( 'time_format' ) );
+	return date_i18n( get_option( 'time_format' ), $post_time );
 } // kbs_email_tag_time
 
 /**
