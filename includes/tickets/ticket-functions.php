@@ -1467,17 +1467,16 @@ function kbs_get_notes( $ticket_id = 0, $search = '' ) {
  * @since	1.0
  * @param	int		$ticket_id	The ticket ID to store a note for
  * @param	str		$note		The note to store
+ * @param	arr		$args		Array of arguments to pass the wp_insert_comment function
  * @return	int		The new note ID
  */
-function kbs_insert_note( $ticket_id = 0, $note = '' ) {
+function kbs_insert_note( $ticket_id = 0, $note = '', $args = array() ) {
 
 	if ( empty( $ticket_id ) )	{
 		return false;
 	}
 
-	do_action( 'kbs_pre_insert_ticket_note', $ticket_id, $note );
-
-	$note_id = wp_insert_comment( wp_filter_comment( array(
+	$defaults = array(
 		'comment_post_ID'      => $ticket_id,
 		'comment_content'      => $note,
 		'user_id'              => is_admin() ? get_current_user_id() : 0,
@@ -1490,8 +1489,13 @@ function kbs_insert_note( $ticket_id = 0, $note = '' ) {
 		'comment_author_url'   => '',
 		'comment_author_email' => '',
 		'comment_type'         => 'kbs_ticket_note'
+	);
 
-	) ) );
+	$args = wp_parse_args( $args, $defaults );
+
+	do_action( 'kbs_pre_insert_ticket_note', $ticket_id, $note, $args );
+
+	$note_id = wp_insert_comment( wp_filter_comment( $args ) );
 
 	do_action( 'kbs_insert_ticket_note', $note_id, $ticket_id, $note );
 

@@ -1597,9 +1597,10 @@ class KBS_Ticket {
 	 *
 	 * @since	1.0
 	 * @param	str		$note	The note to add
+	 * @param	arr		$args	Arguments to pass to the wp_insert_comment function
 	 * @return	int		The ID of the note added
 	 */
-	public function add_note( $note = false ) {
+	public function add_note( $note = false, $args = array() ) {
 		// Return if no note specified
 		if ( empty( $note ) ) {
 			return false;
