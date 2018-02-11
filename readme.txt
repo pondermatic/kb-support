@@ -4,7 +4,7 @@ Tags: Helpdesk, Support, Customer Support, Support Desk, Ticket System, Knowledg
 Requires at least: 4.1
 Tested up to: 5.0
 Requires PHP: 5.4
-Stable tag: 1.1.8
+Stable tag: 1.1.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -118,6 +118,27 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.1.9 =
+
+** Sunday, 11th February 2018**
+
+**New**
+
+* Added the **Attach Files** setting within the **Emails** tab. If enabled, files will be attached to emails rather than listed as clickable links when using the `{ticket_files}` or `{reply_files}` email tags
+* Added the `{reply_files}` email tag to attach/insert files from the latest reply into emails
+
+**Tweaks**
+
+* Changed trigger for submission form article search to `keyup`. String must be 3 or greater in length
+* Added `$args` parameter to the `kbs_insert_comment()` function to override default args
+* Corrected comment in email header template file
+
+**Bug Fixes**
+
+* Corrected output from the `{date}` email tag
+* Corrected output from the `{time}` email tag
+* Validate the `$form_data` variable is an array
 
 = 1.1.8 =
 

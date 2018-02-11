@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: KB Support 1.1.8\n"
+"Project-Id-Version: KB Support 1.1.9\n"
 "Report-Msgid-Bugs-To: https://kb-support.com/\n"
-"POT-Creation-Date: 2018-02-05 22:49:36+00:00\n"
+"POT-Creation-Date: 2018-02-11 15:14:31+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -49,8 +49,8 @@ msgstr ""
 #: includes/admin/import-export/export/class-kbs-export.php:192
 #: includes/admin/import-export/export/export-actions.php:29
 #: includes/admin/tickets/metaboxes.php:70
-#: includes/admin/upgrades/upgrade-functions.php:148
-#: includes/admin/upgrades/upgrade-functions.php:306
+#: includes/admin/upgrades/upgrade-functions.php:152
+#: includes/admin/upgrades/upgrade-functions.php:310
 #: includes/class-kbs-license-handler.php:313
 msgid "Error"
 msgstr ""
@@ -238,8 +238,8 @@ msgid "Getting Started"
 msgstr ""
 
 #: includes/admin/admin-plugin.php:54 includes/admin/extensions.php:27
-#: includes/admin/settings/contextual-help.php:329
-#: includes/admin/settings/register-settings.php:1102
+#: includes/admin/settings/contextual-help.php:332
+#: includes/admin/settings/register-settings.php:1109
 #: includes/admin/welcome.php:133
 msgid "Extensions"
 msgstr ""
@@ -312,7 +312,7 @@ msgstr ""
 #: includes/admin/article/contextual-help.php:39
 #: includes/admin/forms/contextual-help.php:72
 #: includes/admin/settings/contextual-help.php:35
-#: includes/admin/settings/register-settings.php:1090
+#: includes/admin/settings/register-settings.php:1097
 #: includes/admin/tickets/contextual-help.php:39 includes/admin/tools.php:81
 msgid "General"
 msgstr ""
@@ -1191,9 +1191,9 @@ msgid "Additional Agents"
 msgstr ""
 
 #: includes/admin/import-export/export/class-batch-export-tickets.php:53
-#: includes/admin/settings/register-settings.php:639
-#: includes/admin/settings/register-settings.php:673
-#: includes/admin/settings/register-settings.php:711
+#: includes/admin/settings/register-settings.php:646
+#: includes/admin/settings/register-settings.php:680
+#: includes/admin/settings/register-settings.php:718
 #: templates/view-ticket.php:123
 msgid "Content"
 msgstr ""
@@ -1519,7 +1519,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/contextual-help.php:222
-#: includes/admin/settings/register-settings.php:1093
+#: includes/admin/settings/register-settings.php:1100
 msgid "Emails"
 msgstr ""
 
@@ -1551,157 +1551,171 @@ msgid ""
 "all KB Support generated HTML emails."
 msgstr ""
 
+#: includes/admin/settings/contextual-help.php:230
+msgid ""
+"<strong>Attach Files</strong> - This setting determines how files are "
+"inserted into emails when using the <code>{ticket_files}</code> or "
+"<code>{reply_files}</code> email tags."
+msgstr ""
+
 #: includes/admin/settings/contextual-help.php:231
+msgid ""
+"When enabled, the files will be attached to the email. Otherwise, the files "
+"will be listed within the content as links to view, or download, the files "
+"online"
+msgstr ""
+
+#: includes/admin/settings/contextual-help.php:234
 msgid "<strong>%s Logged</strong>"
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:232
+#: includes/admin/settings/contextual-help.php:235
 msgid ""
 "<em>Adjust the settings for emails that are sent to a customer when they "
 "have logged a %1$s via a submission form.</em>"
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:234
+#: includes/admin/settings/contextual-help.php:237
 msgid ""
 "<strong>Disable this Email</strong> - Select to stop emails being sent to "
 "the customer when they have logged a %1$s."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:237
+#: includes/admin/settings/contextual-help.php:240
 msgid ""
 "<strong>Email Subject</strong> - Enter the subject for the email sent to "
 "customers when a %1$s is logged by them."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:240
+#: includes/admin/settings/contextual-help.php:243
 msgid ""
 "<strong>Email Heading</strong> - Enter the heading to be displayed at the "
 "top of the email content for the email sent to customers when a %1$s is "
 "logged by them."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:243
+#: includes/admin/settings/contextual-help.php:246
 msgid ""
 "<strong>Content</strong> - Enter the content of the email that is sent to a "
 "customer when they have logged a %1$s. A list of email tags you can use are "
 "displayed under the textarea."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:247
+#: includes/admin/settings/contextual-help.php:250
 msgid "<strong>Reply Added</strong>"
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:248
+#: includes/admin/settings/contextual-help.php:251
 msgid ""
 "<em>Adjust the settings for emails that are sent to a customer when a "
 "Support Worker adds a reply to their %1$s.</em>"
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:250
+#: includes/admin/settings/contextual-help.php:253
 msgid ""
 "<strong>Disable this Email</strong> - Select to stop emails being sent to "
 "the customer when they receive a reply to their %1$s."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:253
+#: includes/admin/settings/contextual-help.php:256
 msgid ""
 "<strong>Email Subject</strong> - Enter the subject for the email sent to "
 "customers when a Support Worker has added a reply to their %1$s."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:256
+#: includes/admin/settings/contextual-help.php:259
 msgid ""
 "<strong>Email Heading</strong> - Enter the heading to be displayed at the "
 "top of the email content for the email sent to customers when a reply is "
 "added to their %1$s."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:259
+#: includes/admin/settings/contextual-help.php:262
 msgid ""
 "<strong>Content</strong> - Enter the content of the email that is sent to a "
 "customer when they receive a reply to their %1$s. A list of email tags you "
 "can use are displayed under the textarea."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:263
+#: includes/admin/settings/contextual-help.php:266
 msgid "<strong>%1$s Closed</strong>"
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:264
+#: includes/admin/settings/contextual-help.php:267
 msgid ""
 "<em>Adjust the settings for emails that are sent to a customer when a "
 "Support Worker closes their %1$s.</em>"
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:266
+#: includes/admin/settings/contextual-help.php:269
 msgid ""
 "<strong>Disable this Email</strong> - Select to stop emails being sent to "
 "the customer when their %1$s is closed."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:269
+#: includes/admin/settings/contextual-help.php:272
 msgid ""
 "<strong>Email Subject</strong> - Enter the subject for the email sent to "
 "customers when a Support Worker has closed their %1$s."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:272
+#: includes/admin/settings/contextual-help.php:275
 msgid ""
 "<strong>Email Heading</strong> - Enter the heading to be displayed at the "
 "top of the email content for the email sent to customers when a their %1$s "
 "is closed."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:275
+#: includes/admin/settings/contextual-help.php:278
 msgid ""
 "<strong>Content</strong> - Enter the content of the email that is sent to a "
 "customer when their %1$s is closed. A list of email tags you can use are "
 "displayed under the textarea."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:279
+#: includes/admin/settings/contextual-help.php:282
 msgid "<strong>Notifications</strong>"
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:280
+#: includes/admin/settings/contextual-help.php:283
 msgid ""
 "<em>Adjust the settings for emails that are sent to Support Workers when a "
 "new %1$s is logged or a reply is received.</em>"
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:282
+#: includes/admin/settings/contextual-help.php:285
 msgid ""
 "<strong>Disable Notifications</strong> - Select to stop emails being sent "
 "to Support Workers when a new %1$s is logged."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:285
+#: includes/admin/settings/contextual-help.php:288
 msgid ""
 "<strong>%1$s Notification Subject</strong> - Enter the subject for the "
 "email sent to Support Workers when a new %2$s is logged."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:289
+#: includes/admin/settings/contextual-help.php:292
 msgid ""
 "<strong>%1$s Notification</strong> - Enter the content of the email that is "
 "sent to Support Workers when a %2$s is submitted from the a customer. A "
 "list of email tags you can use are displayed under the textarea."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:293
+#: includes/admin/settings/contextual-help.php:296
 msgid ""
 "<strong>Reply Notification Subject</strong> - Enter the subject for the "
 "email sent to Support Workers a new reply is added to an existing %2$s."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:294
+#: includes/admin/settings/contextual-help.php:297
 msgid ""
 "<strong>%1$s Reply Notification</strong> - Enter the content of the email "
 "that is sent to Support Workers when a %2$s reply is received from the "
 "customer. A list of email tags you can use are displayed under the textarea."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:298
+#: includes/admin/settings/contextual-help.php:301
 msgid ""
 "<strong>%1$s Notification Emails</strong> - Enter a list of email addresses "
 "(one per line) that should be notified when a new %2$s is logged by a "
@@ -1709,141 +1723,141 @@ msgid ""
 "address."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:303
+#: includes/admin/settings/contextual-help.php:306
 msgid ""
 "<strong>Assignment Notices</strong> - If enabled, agents will receive email "
 "notifications when a %s is assigned to them."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:306
+#: includes/admin/settings/contextual-help.php:309
 msgid ""
 "<strong>Agent Assignment Subject</strong> - Enter the subject for the email "
 "sent to Support Workers when a %s is assigned to them."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:309
+#: includes/admin/settings/contextual-help.php:312
 msgid ""
 "<strong>Agent Assigned Notification</strong> - Enter the content of the "
 "email that is sent to Support Workers when a %s is assigned to them. A list "
 "of email tags you can use are displayed under the textarea."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:319
-#: includes/admin/settings/register-settings.php:1097
-#: includes/admin/settings/register-settings.php:1172
+#: includes/admin/settings/contextual-help.php:322
+#: includes/admin/settings/register-settings.php:1104
+#: includes/admin/settings/register-settings.php:1179
 msgid "Styles"
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:321
+#: includes/admin/settings/contextual-help.php:324
 msgid ""
 "<strong>Disable Styles</strong> - Select this option to stop KB Support "
 "loading its CSS style sheet. All default formatting of forms, fields and "
 "all other elements will be inherited from your currently active theme."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:331
+#: includes/admin/settings/contextual-help.php:334
 msgid ""
 "The configuration settings for any KB Support extensions you have installed "
 "are controlled here."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:340
-#: includes/admin/settings/register-settings.php:1105
+#: includes/admin/settings/contextual-help.php:343
+#: includes/admin/settings/register-settings.php:1112
 msgid "Licenses"
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:343
+#: includes/admin/settings/contextual-help.php:346
 msgid ""
 "If you have any of the KB Support <a target=\"blank\" href=\"%s\">premium "
 "extensions</a> installed, you should enter their license keys here to "
 "ensure you receive the latest product updates."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:353
-#: includes/admin/settings/register-settings.php:1108
+#: includes/admin/settings/contextual-help.php:356
+#: includes/admin/settings/register-settings.php:1115
 msgid "Misc"
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:355
+#: includes/admin/settings/contextual-help.php:358
 msgid "<strong>Misc Settings</strong>"
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:358
+#: includes/admin/settings/contextual-help.php:361
 msgid ""
 "<strong>Display Credit?</strong> - Enable this option to give credit for "
 "this free plugin by displaying <code>Powered by KB Support</code> on the KB "
 "Support front end pages."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:361
+#: includes/admin/settings/contextual-help.php:364
 msgid ""
 "<strong>Remove Data on Uninstall?</strong> - Select to remove all KB "
 "Support data when the plugin is uninstalled. All %1$s, %2$s, Submission "
 "Forms, Customers and settings will be permanently deleted."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:366
+#: includes/admin/settings/contextual-help.php:369
 msgid "<strong>Google reCaptcha</strong>"
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:367
+#: includes/admin/settings/contextual-help.php:370
 msgid ""
 "<em>If you want to use a Google reCaptcha within your %1$s submission form, "
 "you'll need to enter the settings here.</em>"
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:369
+#: includes/admin/settings/contextual-help.php:372
 msgid ""
 "<strong>Site Key</strong> - Enter your Google reCaptcha site key here "
 "otherwise your reCaptcha field will not work."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:370
+#: includes/admin/settings/contextual-help.php:373
 msgid ""
 "<strong>reCaptcha Theme</strong> - Select a theme for your reCaptcha that "
 "fits in best with your website."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:371
+#: includes/admin/settings/contextual-help.php:374
 msgid "<strong>reCaptcha Type</strong> - Choose between a reCaptcha image or audio."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:372
+#: includes/admin/settings/contextual-help.php:375
 msgid ""
 "<strong>reCaptcha Size</strong> - Select a compact or normal sized "
 "reCaptcha."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:374
+#: includes/admin/settings/contextual-help.php:377
 msgid "<strong>Terms and Conditions</strong>"
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:375
+#: includes/admin/settings/contextual-help.php:378
 msgid ""
 "<em>You may choose to display a terms and conditions agreement field on "
 "your %1$s submission forms. You can define the settings here.</em>"
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:377
+#: includes/admin/settings/contextual-help.php:380
 msgid ""
 "<strong>Agree to Terms</strong> - Select this option to insert a field into "
 "your %1$s submission form that customers must select to indicate they have "
 "read and agreed to your Terms and Conditions."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:378
+#: includes/admin/settings/contextual-help.php:381
 msgid ""
 "<strong>Agree to Terms Label</strong> - This is the label that will "
 "accompany the checkbox for terms agreement."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:379
+#: includes/admin/settings/contextual-help.php:382
 msgid ""
 "<strong>Terms Heading</strong> - Enter a heading that will appear at the "
 "top of the Terms and Conditions pop-up window."
 msgstr ""
 
-#: includes/admin/settings/contextual-help.php:380
+#: includes/admin/settings/contextual-help.php:383
 msgid "<strong>Agreement Text</strong> - Enter your Terms and Conditions here."
 msgstr ""
 
@@ -1927,7 +1941,7 @@ msgid "If enabled, by replying to a closed %1$s, customers can re-open the %1$s"
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:308
-#: includes/admin/settings/register-settings.php:1156
+#: includes/admin/settings/register-settings.php:1163
 msgid "Submission Settings"
 msgstr ""
 
@@ -2245,7 +2259,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:574
-#: includes/admin/settings/register-settings.php:1165
+#: includes/admin/settings/register-settings.php:1172
 msgid "Email Settings"
 msgstr ""
 
@@ -2289,109 +2303,120 @@ msgid ""
 "emails. Displayed on HTML emails only."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:614
+#: includes/admin/settings/register-settings.php:606
+msgid "Attach Files?"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:607
+msgid ""
+"Enable this option if you want %s files attached to emails when using the "
+"<code>{ticket_files}</code> or <code>{reply_files}</code> email tags. If "
+"not enabled, links to the files will be listed within the email content."
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:621
 #: includes/emails/email-template.php:124
 msgid "%s Received"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:619
-#: includes/admin/settings/register-settings.php:653
-#: includes/admin/settings/register-settings.php:691
+#: includes/admin/settings/register-settings.php:626
+#: includes/admin/settings/register-settings.php:660
+#: includes/admin/settings/register-settings.php:698
 msgid "Disable this Email"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:620
+#: includes/admin/settings/register-settings.php:627
 msgid "Select to stop emails being sent when a %s is logged."
-msgstr ""
-
-#: includes/admin/settings/register-settings.php:625
-#: includes/admin/settings/register-settings.php:659
-#: includes/admin/settings/register-settings.php:697
-msgid "Email Subject"
-msgstr ""
-
-#: includes/admin/settings/register-settings.php:626
-msgid "Enter the subject line for the %s logged email. Template tags accepted."
-msgstr ""
-
-#: includes/admin/settings/register-settings.php:628
-msgid "%s Recieved ##{ticket_id}##"
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:632
 #: includes/admin/settings/register-settings.php:666
 #: includes/admin/settings/register-settings.php:704
-msgid "Email Heading"
+msgid "Email Subject"
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:633
-msgid "Enter the heading for the %s logged email"
+msgid "Enter the subject line for the %s logged email. Template tags accepted."
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:635
+msgid "%s Recieved ##{ticket_id}##"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:639
+#: includes/admin/settings/register-settings.php:673
+#: includes/admin/settings/register-settings.php:711
+msgid "Email Heading"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:640
+msgid "Enter the heading for the %s logged email"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:642
 #: includes/emails/email-functions.php:47
 #: includes/emails/email-functions.php:51
 #: includes/emails/email-functions.php:216
 msgid "Support %s Details"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:640
+#: includes/admin/settings/register-settings.php:647
 msgid ""
 "Enter the text that is sent as a %1$s received email to users after "
 "submission of a %1$s. HTML is accepted. Available template tags:"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:648
-#: includes/admin/settings/register-settings.php:1167
+#: includes/admin/settings/register-settings.php:655
+#: includes/admin/settings/register-settings.php:1174
 msgid "Reply Added"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:654
+#: includes/admin/settings/register-settings.php:661
 msgid "Select to stop emails being sent when a %s reply is added."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:660
+#: includes/admin/settings/register-settings.php:667
 msgid "Enter the subject line for the %s reply email. Template tags accepted."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:662
+#: includes/admin/settings/register-settings.php:669
 msgid "Your Support %s Received a Reply"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:667
+#: includes/admin/settings/register-settings.php:674
 msgid "Enter the heading for the %s reply email"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:669
+#: includes/admin/settings/register-settings.php:676
 msgid "Support %s Update for"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:674
+#: includes/admin/settings/register-settings.php:681
 msgid ""
 "Enter the content that is sent to customers when their %1$s receives a "
 "reply. HTML is accepted. Available template tags:"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:676
-#: includes/admin/settings/register-settings.php:714
+#: includes/admin/settings/register-settings.php:683
+#: includes/admin/settings/register-settings.php:721
 #: includes/emails/email-template.php:145
 #: includes/emails/email-template.php:180
 #: includes/emails/email-template.php:209
 msgid "Dear"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:677
+#: includes/admin/settings/register-settings.php:684
 msgid ""
 "Your support %1$s # {ticket_id} has received a reply. Click the link below "
 "to access your %1$s and review the details."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:679
-#: includes/admin/settings/register-settings.php:717
-#: includes/admin/settings/register-settings.php:749
-#: includes/admin/settings/register-settings.php:768
-#: includes/admin/settings/register-settings.php:802
-#: includes/admin/upgrades/upgrade-functions.php:287
+#: includes/admin/settings/register-settings.php:686
+#: includes/admin/settings/register-settings.php:724
+#: includes/admin/settings/register-settings.php:756
+#: includes/admin/settings/register-settings.php:775
+#: includes/admin/settings/register-settings.php:809
+#: includes/admin/upgrades/upgrade-functions.php:291
 #: includes/emails/email-template.php:148
 #: includes/emails/email-template.php:247
 #: includes/emails/email-template.php:282
@@ -2399,578 +2424,578 @@ msgstr ""
 msgid "Regards"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:686
+#: includes/admin/settings/register-settings.php:693
 msgid "Ticket %s"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:692
+#: includes/admin/settings/register-settings.php:699
 msgid "Select to stop emails being sent when a %s is closed."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:698
+#: includes/admin/settings/register-settings.php:705
 msgid "Enter the subject line for the %s closed email. Template tags accepted."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:700
+#: includes/admin/settings/register-settings.php:707
 msgid "Your Support %s is Closed"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:705
+#: includes/admin/settings/register-settings.php:712
 msgid "Enter the heading for the %s closed email"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:707
+#: includes/admin/settings/register-settings.php:714
 #: includes/emails/email-functions.php:175
 msgid "Support %s #{ticket_id} Closed"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:712
+#: includes/admin/settings/register-settings.php:719
 msgid ""
 "Enter the content that is sent to customers when their %1$s is closed. HTML "
 "is accepted. Available template tags:"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:715
+#: includes/admin/settings/register-settings.php:722
 msgid ""
 "Your support %1$s # {ticket_id} is now closed. You can review the details "
 "of your %1$s by clicking the URL below."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:724
+#: includes/admin/settings/register-settings.php:731
 msgid "%s Notifications"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:729
+#: includes/admin/settings/register-settings.php:736
 msgid "Disable Notifications"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:730
+#: includes/admin/settings/register-settings.php:737
 msgid "Check this box to disable %s notification emails."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:735
+#: includes/admin/settings/register-settings.php:742
 msgid "%s Notification Subject"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:736
+#: includes/admin/settings/register-settings.php:743
 msgid ""
 "Enter the subject line for the %s notification email. Template tags "
 "accepted."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:738
+#: includes/admin/settings/register-settings.php:745
 msgid "New %s Received - ##{ticket_id}##"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:742
+#: includes/admin/settings/register-settings.php:749
 msgid "%s Notification"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:743
+#: includes/admin/settings/register-settings.php:750
 msgid ""
 "Enter the text that is sent as %s received notification email after "
 "submission of a case. HTML is accepted. Available template tags:"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:745
-#: includes/admin/settings/register-settings.php:764
-#: includes/admin/settings/register-settings.php:797
-#: includes/admin/upgrades/upgrade-functions.php:282
+#: includes/admin/settings/register-settings.php:752
+#: includes/admin/settings/register-settings.php:771
+#: includes/admin/settings/register-settings.php:804
+#: includes/admin/upgrades/upgrade-functions.php:286
 #: includes/emails/email-template.php:243
 #: includes/emails/email-template.php:278
 #: includes/emails/email-template.php:309
 msgid "Hey there!"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:746
+#: includes/admin/settings/register-settings.php:753
 #: includes/emails/email-template.php:244
 msgid "A new %s has been logged at"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:754
+#: includes/admin/settings/register-settings.php:761
 msgid "Reply Notification Subject"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:755
+#: includes/admin/settings/register-settings.php:762
 msgid ""
 "Enter the subject line of the notification email that is sent when a "
 "customer submits a %s reply. Template tags accepted."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:757
+#: includes/admin/settings/register-settings.php:764
 msgid "New %s Reply Received - ##{ticket_id}##"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:761
+#: includes/admin/settings/register-settings.php:768
 msgid "%s Reply Notification"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:762
+#: includes/admin/settings/register-settings.php:769
 msgid ""
 "Enter the text that is sent as a notification email when a customer submits "
 "a %s reply. HTML is accepted. Available template tags:"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:765
+#: includes/admin/settings/register-settings.php:772
 msgid "A new %s reply has been received at"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:773
+#: includes/admin/settings/register-settings.php:780
 msgid "%s Notification Emails"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:775
+#: includes/admin/settings/register-settings.php:782
 msgid ""
 "Enter the email address(es) that should receive a notification anytime a %s "
 "is logged, one per line. Enter <code>{agent}</code> to insert the assigned "
 "agent's email address"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:781
+#: includes/admin/settings/register-settings.php:788
 msgid "Assignment Notices"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:782
+#: includes/admin/settings/register-settings.php:789
 msgid ""
 "Check this box to enable notifications to agents when a %s is assigned to "
 "them."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:787
+#: includes/admin/settings/register-settings.php:794
 msgid "Agent Assignment Subject"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:788
+#: includes/admin/settings/register-settings.php:795
 msgid ""
 "Enter the subject line for the agent assignment notification email. "
 "Template tags accepted."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:790
-#: includes/admin/upgrades/upgrade-functions.php:281
+#: includes/admin/settings/register-settings.php:797
+#: includes/admin/upgrades/upgrade-functions.php:285
 msgid "A %s Has Been Assigned to You - ##{ticket_id}##"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:794
+#: includes/admin/settings/register-settings.php:801
 msgid "Agent Assigned Notification"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:795
+#: includes/admin/settings/register-settings.php:802
 msgid ""
 "Enter the text that is sent as a notification to an agent when a %s has "
 "been assigned to them. HTML is accepted. Available template tags:"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:798
-#: includes/admin/upgrades/upgrade-functions.php:283
+#: includes/admin/settings/register-settings.php:805
+#: includes/admin/upgrades/upgrade-functions.php:287
 #: includes/emails/email-template.php:310
 msgid "A %s has been assigned to you at {sitename}."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:800
-#: includes/admin/upgrades/upgrade-functions.php:285
+#: includes/admin/settings/register-settings.php:807
+#: includes/admin/upgrades/upgrade-functions.php:289
 #: includes/emails/email-template.php:312
 msgid "Please login to view and update the %s."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:814
+#: includes/admin/settings/register-settings.php:821
 msgid "Style Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:819
+#: includes/admin/settings/register-settings.php:826
 msgid "Disable Styles"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:820
+#: includes/admin/settings/register-settings.php:827
 msgid ""
 "Check this to disable all KB Support default styling of buttons, fields, "
 "and all other elements."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:840
-#: includes/admin/settings/register-settings.php:1179
+#: includes/admin/settings/register-settings.php:847
+#: includes/admin/settings/register-settings.php:1186
 msgid "Misc Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:845
+#: includes/admin/settings/register-settings.php:852
 msgid "Display Credit?"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:846
+#: includes/admin/settings/register-settings.php:853
 msgid ""
 "KB Support is provided for free. If you like our plugin, consider spreading "
 "the word by displaying <code>Powered by KB Support</code> below the ticket "
 "and reply forms."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:851
+#: includes/admin/settings/register-settings.php:858
 msgid "Remove Data on Uninstall?"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:852
+#: includes/admin/settings/register-settings.php:859
 msgid ""
 "Check this box if you would like KBS to completely remove all of its data "
 "when the plugin is deleted."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:859
+#: includes/admin/settings/register-settings.php:866
 msgid "Google reCaptcha Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:864
+#: includes/admin/settings/register-settings.php:871
 msgid "Site Key"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:865
+#: includes/admin/settings/register-settings.php:872
 msgid ""
 "Visit <a href=\"%s\" target=\"_blank\">Google reCaptcha</a> to register "
 "your site and obtain your site key."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:870
+#: includes/admin/settings/register-settings.php:877
 msgid "reCaptcha Theme"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:871
+#: includes/admin/settings/register-settings.php:878
 msgid "Select your preferred color scheme."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:873
+#: includes/admin/settings/register-settings.php:880
 msgid "Dark"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:873
+#: includes/admin/settings/register-settings.php:880
 msgid "Light"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:878
+#: includes/admin/settings/register-settings.php:885
 msgid "reCaptcha Type"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:879
+#: includes/admin/settings/register-settings.php:886
 msgid "Choose to render an audio reCaptcha or an image. Default is image."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:881
+#: includes/admin/settings/register-settings.php:888
 msgid "Audio"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:881
+#: includes/admin/settings/register-settings.php:888
 msgid "Image"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:886
+#: includes/admin/settings/register-settings.php:893
 msgid "reCaptcha Size"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:887
+#: includes/admin/settings/register-settings.php:894
 msgid "Select your preferred size for the reCaptcha."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:889
+#: includes/admin/settings/register-settings.php:896
 msgid "Compact"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:889
+#: includes/admin/settings/register-settings.php:896
 msgid "Normal"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:897
+#: includes/admin/settings/register-settings.php:904
 msgid "Agreement Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:902
+#: includes/admin/settings/register-settings.php:909
 msgid "Agree to Terms"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:903
+#: includes/admin/settings/register-settings.php:910
 msgid ""
 "Check this to show an agree to terms on the submission page that users must "
 "agree to before submitting their %s."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:909
+#: includes/admin/settings/register-settings.php:916
 msgid "Agree to Terms Label"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:910
+#: includes/admin/settings/register-settings.php:917
 msgid "Label shown next to the agree to terms check box."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:913
+#: includes/admin/settings/register-settings.php:920
 msgid "I have read and agree to the terms and conditions"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:917
+#: includes/admin/settings/register-settings.php:924
 msgid "Terms Heading"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:918
+#: includes/admin/settings/register-settings.php:925
 msgid "Heading for the agree to terms thickbox."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:922
+#: includes/admin/settings/register-settings.php:929
 #: includes/form-functions.php:971
 msgid "Terms and Conditions for Support %s"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:927
+#: includes/admin/settings/register-settings.php:934
 msgid "Agreement Text"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:928
+#: includes/admin/settings/register-settings.php:935
 msgid "If Agree to Terms is checked, enter the agreement terms here."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1020
+#: includes/admin/settings/register-settings.php:1027
 msgid "Settings updated."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1091
-#: includes/admin/settings/register-settings.php:1092
+#: includes/admin/settings/register-settings.php:1098
+#: includes/admin/settings/register-settings.php:1099
 msgid "%s"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1151
+#: includes/admin/settings/register-settings.php:1158
 msgid "General Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1152
+#: includes/admin/settings/register-settings.php:1159
 msgid "Pages"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1155
-#: includes/admin/settings/register-settings.php:1161
+#: includes/admin/settings/register-settings.php:1162
+#: includes/admin/settings/register-settings.php:1168
 msgid "General %s Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1157
+#: includes/admin/settings/register-settings.php:1164
 msgid "Agent Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1158
+#: includes/admin/settings/register-settings.php:1165
 msgid "Service Levels"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1162
+#: includes/admin/settings/register-settings.php:1169
 msgid "Restricted Content Notices"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1166
+#: includes/admin/settings/register-settings.php:1173
 msgid "%s Logged"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1168
+#: includes/admin/settings/register-settings.php:1175
 msgid "%s Closed"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1169
+#: includes/admin/settings/register-settings.php:1176
 msgid "Notifications"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1175
+#: includes/admin/settings/register-settings.php:1182
 msgid "Main"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1180
+#: includes/admin/settings/register-settings.php:1187
 #: includes/form-functions.php:487
 msgid "Google reCaptcha"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1181
+#: includes/admin/settings/register-settings.php:1188
 msgid "Terms and Conditions"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1446
+#: includes/admin/settings/register-settings.php:1453
 msgid "The callback function used for the %s setting is missing."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1575
+#: includes/admin/settings/register-settings.php:1582
 msgid "Day of Week"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1576
+#: includes/admin/settings/register-settings.php:1583
 msgid "Closed all Day"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1577
+#: includes/admin/settings/register-settings.php:1584
 msgid "Open"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1578
+#: includes/admin/settings/register-settings.php:1585
 #: templates/shortcode-form.php:65
 msgid "Close"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1708
+#: includes/admin/settings/register-settings.php:1715
 msgid "Upload File"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1792
+#: includes/admin/settings/register-settings.php:1799
 msgid ""
 "Your license key expired on %s. Please <a href=\"%s\" target=\"_blank\" "
 "title=\"Renew your license key\">renew your license key</a>."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1805
+#: includes/admin/settings/register-settings.php:1812
 msgid ""
 "Your license key has been disabled. Please <a href=\"%s\" "
 "target=\"_blank\">contact support</a> for more information."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1817
+#: includes/admin/settings/register-settings.php:1824
 msgid ""
 "Invalid license. Please <a href=\"%s\" target=\"_blank\" title=\"Visit "
 "account page\">visit your account page</a> and verify it."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1830
+#: includes/admin/settings/register-settings.php:1837
 msgid ""
 "Your %s is not active for this URL. Please <a href=\"%s\" target=\"_blank\" "
 "title=\"Visit account page\">visit your account page</a> to manage your "
 "license key URLs."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1842
+#: includes/admin/settings/register-settings.php:1849
 msgid "This appears to be an invalid license key for %s."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1851
+#: includes/admin/settings/register-settings.php:1858
 msgid ""
 "Your license key has reached its activation limit. <a href=\"%s\">View "
 "possible upgrades</a> now."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1860
+#: includes/admin/settings/register-settings.php:1867
 msgid ""
 "The key you entered belongs to a bundle, please use the product specific "
 "license key."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1868
+#: includes/admin/settings/register-settings.php:1875
 msgid "unknown_error"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1869
+#: includes/admin/settings/register-settings.php:1876
 msgid ""
 "There was an error with this license key: %s. Please <a href=\"%s\">contact "
 "our support team</a>."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1890
+#: includes/admin/settings/register-settings.php:1897
 msgid "License key never expires."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1897
+#: includes/admin/settings/register-settings.php:1904
 msgid ""
 "Your license key expires soon! It expires on %s. <a href=\"%s\" "
 "target=\"_blank\" title=\"Renew license\">Renew your license key</a>."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1907
+#: includes/admin/settings/register-settings.php:1914
 msgid "Your license key expires on %s."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1925
+#: includes/admin/settings/register-settings.php:1932
 msgid "To receive updates, please enter your valid %s license key."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1938
+#: includes/admin/settings/register-settings.php:1945
 msgid "Deactivate License"
-msgstr ""
-
-#: includes/admin/settings/register-settings.php:2040
-#: includes/admin/settings/register-settings.php:2074
-msgid "1 Hour"
-msgstr ""
-
-#: includes/admin/settings/register-settings.php:2041
-#: includes/admin/settings/register-settings.php:2075
-msgid "2 Hours"
-msgstr ""
-
-#: includes/admin/settings/register-settings.php:2042
-#: includes/admin/settings/register-settings.php:2076
-msgid "3 Hours"
-msgstr ""
-
-#: includes/admin/settings/register-settings.php:2043
-#: includes/admin/settings/register-settings.php:2077
-msgid "4 Hours"
-msgstr ""
-
-#: includes/admin/settings/register-settings.php:2044
-#: includes/admin/settings/register-settings.php:2078
-msgid "5 Hours"
-msgstr ""
-
-#: includes/admin/settings/register-settings.php:2045
-#: includes/admin/settings/register-settings.php:2079
-msgid "6 Hours"
-msgstr ""
-
-#: includes/admin/settings/register-settings.php:2046
-#: includes/admin/settings/register-settings.php:2080
-msgid "7 Hours"
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:2047
 #: includes/admin/settings/register-settings.php:2081
-msgid "8 Hours"
+msgid "1 Hour"
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:2048
 #: includes/admin/settings/register-settings.php:2082
-msgid "12 Hours"
+msgid "2 Hours"
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:2049
 #: includes/admin/settings/register-settings.php:2083
-msgid "1 Day"
+msgid "3 Hours"
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:2050
 #: includes/admin/settings/register-settings.php:2084
-msgid "2 Days"
+msgid "4 Hours"
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:2051
 #: includes/admin/settings/register-settings.php:2085
-msgid "3 Days"
+msgid "5 Hours"
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:2052
 #: includes/admin/settings/register-settings.php:2086
-msgid "4 Days"
+msgid "6 Hours"
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:2053
 #: includes/admin/settings/register-settings.php:2087
-msgid "5 Days"
+msgid "7 Hours"
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:2054
 #: includes/admin/settings/register-settings.php:2088
-msgid "6 Days"
+msgid "8 Hours"
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:2055
 #: includes/admin/settings/register-settings.php:2089
-msgid "1 Week"
+msgid "12 Hours"
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:2056
 #: includes/admin/settings/register-settings.php:2090
-msgid "2 Weeks"
+msgid "1 Day"
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:2057
 #: includes/admin/settings/register-settings.php:2091
-msgid "3 Weeks"
+msgid "2 Days"
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:2058
 #: includes/admin/settings/register-settings.php:2092
+msgid "3 Days"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:2059
+#: includes/admin/settings/register-settings.php:2093
+msgid "4 Days"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:2060
+#: includes/admin/settings/register-settings.php:2094
+msgid "5 Days"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:2061
+#: includes/admin/settings/register-settings.php:2095
+msgid "6 Days"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:2062
+#: includes/admin/settings/register-settings.php:2096
+msgid "1 Week"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:2063
+#: includes/admin/settings/register-settings.php:2097
+msgid "2 Weeks"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:2064
+#: includes/admin/settings/register-settings.php:2098
+msgid "3 Weeks"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:2065
+#: includes/admin/settings/register-settings.php:2099
 msgid "4 Weeks"
 msgstr ""
 
@@ -3228,23 +3253,23 @@ msgid ""
 "you to easily import the configuration into another site."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:107
+#: includes/admin/upgrades/upgrade-functions.php:111
 msgid ""
 "KB Support needs to complete an upgrade that was previously started. Click "
 "<a href=\"%s\">here</a> to resume the upgrade."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:118
+#: includes/admin/upgrades/upgrade-functions.php:122
 msgid ""
 "KB Support needs to upgrade existing %s numbers to make them sequential, "
 "click <a href=\"%s\">here</a> to start the upgrade."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:148
+#: includes/admin/upgrades/upgrade-functions.php:152
 msgid "You do not have permission to do perform KBS upgrades"
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:306
+#: includes/admin/upgrades/upgrade-functions.php:310
 msgid "You do not have permission to perform upgrades"
 msgstr ""
 
@@ -3855,35 +3880,35 @@ msgid "Your site name"
 msgstr ""
 
 #: includes/emails/class-kbs-email-tags.php:331
-msgid "The date of the ticket"
+msgid "The date of the %s"
 msgstr ""
 
 #: includes/emails/class-kbs-email-tags.php:336
-msgid "The time of the ticket"
+msgid "The time of the %s"
 msgstr ""
 
 #: includes/emails/class-kbs-email-tags.php:341
-msgid "The unique ID number for this ticket"
+msgid "The unique ID number for this %s"
 msgstr ""
 
 #: includes/emails/class-kbs-email-tags.php:346
-msgid "Title of the ticket"
+msgid "Title of the %s"
 msgstr ""
 
 #: includes/emails/class-kbs-email-tags.php:351
-msgid "Content of the ticket"
+msgid "Content of the %s"
 msgstr ""
 
 #: includes/emails/class-kbs-email-tags.php:356
-msgid "List of files attached to the ticket with links"
+msgid "Attach or list files attached to the %s"
 msgstr ""
 
 #: includes/emails/class-kbs-email-tags.php:361
-msgid "The date of the most recent ticket reply"
+msgid "The date of the most recent %s reply"
 msgstr ""
 
 #: includes/emails/class-kbs-email-tags.php:366
-msgid "The time of the most recent ticket reply"
+msgid "The time of the most recent %s reply"
 msgstr ""
 
 #: includes/emails/class-kbs-email-tags.php:371
@@ -3891,14 +3916,18 @@ msgid "Content of the most recent reply"
 msgstr ""
 
 #: includes/emails/class-kbs-email-tags.php:376
-msgid "Adds a URL so customers can view their ticket directly on your website."
+msgid "Attach or list files attached to the %s reply"
 msgstr ""
 
 #: includes/emails/class-kbs-email-tags.php:381
-msgid "Adds a URL so admins can access a ticket directly."
+msgid "Adds a URL so customers can view their %s directly on your website."
 msgstr ""
 
 #: includes/emails/class-kbs-email-tags.php:386
+msgid "Adds a URL so admins can access a %s directly."
+msgstr ""
+
+#: includes/emails/class-kbs-email-tags.php:391
 msgid "Adds a URL link that customers can click to close a ticket."
 msgstr ""
 
@@ -4737,7 +4766,7 @@ msgstr ""
 msgid "Hide Reply"
 msgstr ""
 
-#: includes/scripts.php:229 includes/tickets/ticket-functions.php:1555
+#: includes/scripts.php:229 includes/tickets/ticket-functions.php:1559
 msgid "View Note"
 msgstr ""
 
@@ -4805,15 +4834,15 @@ msgstr ""
 msgid "Source could not be found"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:1694
+#: includes/tickets/class-kbs-ticket.php:1695
 msgid "%s re-opened by customer reply."
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:1713
+#: includes/tickets/class-kbs-ticket.php:1714
 msgid "Form: %s"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:1732
+#: includes/tickets/class-kbs-ticket.php:1733
 msgid "Term %s no longer exists"
 msgstr ""
 
@@ -4857,7 +4886,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: includes/tickets/ticket-functions.php:1289
-#: includes/tickets/ticket-functions.php:1569
+#: includes/tickets/ticket-functions.php:1573
 msgid "%s by %s"
 msgstr ""
 
@@ -4865,11 +4894,11 @@ msgstr ""
 msgid "Unknown"
 msgstr ""
 
-#: includes/tickets/ticket-functions.php:1542
+#: includes/tickets/ticket-functions.php:1546
 msgid "KBS Bot"
 msgstr ""
 
-#: includes/tickets/ticket-functions.php:1556
+#: includes/tickets/ticket-functions.php:1560
 msgid "Delete Note"
 msgstr ""
 
