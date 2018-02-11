@@ -121,7 +121,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 = 1.1.9 =
 
-** Sunday, 11th February 2018**
+**Sunday, 11th February 2018**
 
 **New**
 
