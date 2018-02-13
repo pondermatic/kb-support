@@ -14,13 +14,26 @@ if ( !defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Retrieve the current email template.
+ *
+ * This is simply a wrapper to KBS_Email_Templates->get_template()
+ *
+ * @since	1.1.10
+ * return	str
+ */
+function kbs_get_email_template()	{
+	$template = new KBS_Emails;
+	return $template->get_template();
+} // kbs_get_email_template
+
+/**
  * Gets all the email templates that have been registerd. The list is extendable
  * and more templates can be added.
  *
  * This is simply a wrapper to KBS_Email_Templates->get_templates()
  *
  * @since	1.0
- * @return	arr		$templates	All the registered email templates
+ * @return	arr		All the registered email templates
  */
 function kbs_get_email_templates()   {
 	$templates = new KBS_Emails;
