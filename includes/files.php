@@ -307,12 +307,3 @@ function kbs_maybe_attach_files_to_email( $id ) {
     return $attachments;
 
 } // kbs_maybe_attach_files_to_email
-
-add_filter( 'kbs_ticket_attachments', 'kbs_maybe_attach_files_to_email_action', 10, 3 );
-add_filter( 'kbs_ticket_reply_attachments', 'kbs_maybe_attach_files_to_email_action', 10, 4 );
-add_filter( 'kbs_admin_ticket_notification_attachments', 'kbs_maybe_attach_files_to_email_action', 10, 3 );
-add_filter( 'kbs_admin_reply_notification_attachments', 'kbs_maybe_attach_files_to_email_action', 10, 4 );
-
-//add_filter( 'kbs_ticket_closed_attachments', 'kbs_maybe_attach_files_to_email_action', 10, 2 );
-
-//add_filter( 'kbs_agent_assigned_attachments', 'kbs_maybe_attach_files_to_email_action', 10, 2 );
