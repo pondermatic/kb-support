@@ -336,7 +336,7 @@ function kbs_maybe_attach_files_to_email( $id ) {
 function kbs_get_attachments_from_inline_content( $id )	{
 
 	$attachments = false;
-	$content     = get_post_field( 'post_content', '338', 'raw' );
+	$content     = get_post_field( 'post_content', $id, 'raw' );
 
 	if ( ! empty( $content ) )	{
 
@@ -364,7 +364,7 @@ function kbs_get_attachments_from_inline_content( $id )	{
 
 	return $attachments;
 } // kbs_get_attachments_from_inline_content
-add_action('init', 'kbs_get_attachments_from_inline_content' );
+add_action( 'init', 'kbs_get_attachments_from_inline_content' );
 
 /**
  * Retrieve an attachment's full path from its URL.
