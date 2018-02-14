@@ -294,13 +294,25 @@ function kbs_maybe_attach_files_to_email( $id ) {
 
     if ( kbs_send_files_as_attachments() )    {
 
-        $files = kbs_ticket_has_files( $id );
+		if ( 'none' === kbs_get_email_template() )	{
 
-        if ( $files )   {
-            foreach ( $files as $file ) {
-                $attachments[] =  get_attached_file( $file->ID );
-            }
-        }
+			$files = kbs_get_attachments_from_inline_content( $id );
+
+			if ( $files )	{
+				$attachments = $files;
+			}
+
+		} else	{
+
+			$files = kbs_ticket_has_files( $id );
+
+			if ( $files )   {
+				foreach ( $files as $file ) {
+					$attachments[] =  get_attached_file( $file->ID );
+				}
+			}
+
+		}
 
     }
 
@@ -308,11 +320,106 @@ function kbs_maybe_attach_files_to_email( $id ) {
 
 } // kbs_maybe_attach_files_to_email
 
-add_filter( 'kbs_ticket_attachments', 'kbs_maybe_attach_files_to_email_action', 10, 3 );
-add_filter( 'kbs_ticket_reply_attachments', 'kbs_maybe_attach_files_to_email_action', 10, 4 );
-add_filter( 'kbs_admin_ticket_notification_attachments', 'kbs_maybe_attach_files_to_email_action', 10, 3 );
-add_filter( 'kbs_admin_reply_notification_attachments', 'kbs_maybe_attach_files_to_email_action', 10, 4 );
+/**
+ * Retrieves inline images and links within email content when plain text emails are defined.
+ *
+ * Plain text emails have all HTML tags stripped and therefore inline images etc. are lost during email.
+ * This function searches the content and checks for images and other links. It then verifies they exist
+ * within the WordPress media gallery and attaches them as files to the outgoing email.
+ *
+ * We rely upon the removal of the content from KBS_Email->build_email.
+ *
+ * @since	1.1.10
+ * @param	int			$id		Ticket or Reply ID
+ * @return	bool|arr	false or an array of files to attach
+ */
+function kbs_get_attachments_from_inline_content( $id )	{
 
-//add_filter( 'kbs_ticket_closed_attachments', 'kbs_maybe_attach_files_to_email_action', 10, 2 );
+	$attachments = false;
+	$content     = get_post_field( 'post_content', '338', 'raw' );
 
-//add_filter( 'kbs_agent_assigned_attachments', 'kbs_maybe_attach_files_to_email_action', 10, 2 );
+	if ( ! empty( $content ) )	{
+
+		$pattern = '/<img.*?src="([^"]*)".*?\/?>|<a.*?href="([^"]*)".*?\/?>/';
+		$pattern = apply_filters( 'kbs_get_attachments_from_inline_content_pattern', $pattern );
+
+		preg_match_all( $pattern, $content, $urls, PREG_PATTERN_ORDER );
+		
+		if ( ! empty( $urls ) )	{
+			$all_urls = array_merge( $urls[1], $urls[2] );
+			$all_urls = array_filter( $all_urls );
+		}
+
+		if ( ! empty( $all_urls ) )	{
+			foreach( $all_urls as $url )	{
+				$file_path = kbs_get_attachment_path_from_url( $url );
+
+				if ( $file_path )	{
+					$attachments[] = $file_path;
+				}
+			}
+		}
+
+	}
+
+	return $attachments;
+} // kbs_get_attachments_from_inline_content
+add_action('init', 'kbs_get_attachments_from_inline_content' );
+
+/**
+ * Retrieve an attachment's full path from its URL.
+ *
+ * @since	1.1.10
+ * @param	str		$url	The URL path to the file
+ * @return	int		The attachment path
+ */
+function kbs_get_attachment_path_from_url( $url )	{
+
+	$file_path   = false;
+	$upload_dirs = array( kbs_get_upload_dir(), wp_upload_dir() );
+
+	foreach ( $upload_dirs as $upload_dir )	{
+
+		if ( false !== strpos( $url, $upload_dir['baseurl'] . '/' ) )	{ // Is URL in uploads directory?
+
+			$file = basename( $url );
+
+			$query_args = array(
+				'post_type'   => 'attachment',
+				'post_status' => 'inherit',
+				'fields'      => 'ids',
+				'meta_query'  => array(
+					array(
+						'value'   => $file,
+						'compare' => 'LIKE',
+						'key'     => '_wp_attachment_metadata',
+					),
+				)
+			);
+
+			$query = new WP_Query( $query_args );
+
+			if ( $query->have_posts() ) {
+
+				foreach ( $query->posts as $post_id ) {
+
+					$meta = wp_get_attachment_metadata( $post_id );
+
+					$original_file       = basename( $meta['file'] );
+					$cropped_image_files = wp_list_pluck( $meta['sizes'], 'file' );
+
+					if ( $original_file === $file || in_array( $file, $cropped_image_files ) ) {
+						$file_path = $meta['file'];
+						return $file_path;
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+	return $file_path;
+} // kbs_get_attachment_path_from_url
