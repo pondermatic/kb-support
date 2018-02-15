@@ -298,7 +298,7 @@ function kbs_maybe_attach_files_to_email( $id ) {
 
 			$files = kbs_get_attachments_from_inline_content( $id );
 
-			if ( $files )	{
+			if ( ! empty( $files ) )	{
 				$attachments = $files;
 			}
 
@@ -308,7 +308,7 @@ function kbs_maybe_attach_files_to_email( $id ) {
 
 			if ( $files )   {
 				foreach ( $files as $file ) {
-					$attachments[] =  get_attached_file( $file->ID );
+					$attachments[] = get_attached_file( $file->ID );
 				}
 			}
 
@@ -331,11 +331,11 @@ function kbs_maybe_attach_files_to_email( $id ) {
  *
  * @since	1.1.10
  * @param	int			$id		Ticket or Reply ID
- * @return	bool|arr	false or an array of files to attach
+ * @return	arr			Array of files to attach
  */
 function kbs_get_attachments_from_inline_content( $id )	{
 
-	$attachments = false;
+	$attachments = array();
 	$content     = get_post_field( 'post_content', $id, 'raw' );
 
 	if ( ! empty( $content ) )	{
@@ -364,7 +364,6 @@ function kbs_get_attachments_from_inline_content( $id )	{
 
 	return $attachments;
 } // kbs_get_attachments_from_inline_content
-add_action( 'init', 'kbs_get_attachments_from_inline_content' );
 
 /**
  * Retrieve an attachment's full path from its URL.
@@ -410,6 +409,7 @@ function kbs_get_attachment_path_from_url( $url )	{
 
 					if ( $original_file === $file || in_array( $file, $cropped_image_files ) ) {
 						$file_path = $meta['file'];
+						$file_path = trailingslashit( WP_CONTENT_DIR ) . $file_path;
 						return $file_path;
 					}
 
