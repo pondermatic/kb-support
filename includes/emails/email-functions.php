@@ -117,8 +117,8 @@ function kbs_email_ticket_reply( $ticket_id, $reply_id ) {
 	$heading      = apply_filters( 'kbs_ticket_reply_heading', $heading, $ticket_id, $ticket_data, $reply_id );
 	$heading      = kbs_do_email_tags( $heading, $ticket_id );
 
-	$attachments  = apply_filters( 'kbs_ticket_reply_attachments', array(), $ticket_id, $ticket_data, $reply_id );
 	$message      = kbs_do_email_tags( kbs_get_ticket_reply_email_body_content( $ticket_id, $ticket_data ), $ticket_id );
+	$attachments  = apply_filters( 'kbs_ticket_reply_attachments', array(), $ticket_id, $ticket_data, $reply_id );
 
 	$emails       = KBS()->emails;
 
