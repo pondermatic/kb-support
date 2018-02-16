@@ -29,6 +29,7 @@ function kbs_trigger_ticket_received( $ticket_id ) {
 	kbs_email_ticket_received( $ticket_id );
 } // kbs_trigger_ticket_received
 add_action( 'kbs_add_ticket',  'kbs_trigger_ticket_received', 999, 1 );
+add_action( 'kbs_save_ticket', 'kbs_trigger_ticket_received', 999, 1 );
 
 /**
  * Trigger the agent assigned email
