@@ -609,6 +609,7 @@ class KBS_Ticket {
 
 			$this->update_meta( '_kbs_ticket_version_created', KBS_VERSION );
 			$this->update_meta( '_ticket_data', $this->ticket_meta );
+            $this->update_meta( '_kbs_pending_ticket_created_email', true );
 
 			if ( kbs_get_option( 'enable_sequential' ) )	{
 				$number       = kbs_get_next_ticket_number();

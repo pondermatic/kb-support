@@ -21,9 +21,10 @@ if ( ! defined( 'ABSPATH' ) )
  * @since	1.0
  * @param	int		$ticket_id		Ticket ID
  * @param	bool	$admin_notice	Whether to send the admin email notification or not (default: true)
+ * @param   bool    $resend         Whether or not we should be resending the email
  * @return	void
  */
-function kbs_email_ticket_received( $ticket_id, $admin_notice = true ) {
+function kbs_email_ticket_received( $ticket_id, $admin_notice = true, $resend = false ) {
 
 	$disable = kbs_get_option( 'ticket_received_disable_email', false );
 	$disable = apply_filters( 'kbs_ticket_received_disable_email', $disable );
@@ -31,6 +32,12 @@ function kbs_email_ticket_received( $ticket_id, $admin_notice = true ) {
 	if ( ! empty( $disable ) )	{
 		return;
 	}
+
+    $pending = get_post_meta( $ticket_id, '_kbs_pending_ticket_created_email', true );
+
+    if ( ! $pending && ! $resend )  {
+        return;
+    }
 
 	$single       = kbs_get_ticket_label_singular();
 	$ticket       = new KBS_Ticket( $ticket_id );
@@ -69,6 +76,9 @@ function kbs_email_ticket_received( $ticket_id, $admin_notice = true ) {
 	if ( $admin_notice && ! kbs_admin_notices_disabled( $ticket_id ) ) {
 		do_action( 'kbs_admin_ticket_notice', $ticket_id, $ticket_data );
 	}
+
+    delete_post_meta( $ticket_id, '_kbs_pending_ticket_created_email' );
+
 } // kbs_email_ticket_received
 
 /**

@@ -692,6 +692,11 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
 	$ticket->save();
 
 	add_post_meta( $post_id, '_kbs_ticket_version_created', KBS_VERSION, true );
+
+    if ( isset( $_POST['_kbs_pending_ticket_created_email'] ) )   {
+        add_post_meta( $post_id, '_kbs_pending_ticket_created_email', 1 );
+    }
+
 	do_action( 'kbs_save_ticket', $post_id, $post );
 
 } // kbs_ticket_post_save

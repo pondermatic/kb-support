@@ -289,6 +289,14 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
                         </p>
                     <?php endif; ?>
 
+                <?php elseif ( ! kbs_get_option( 'ticket_received_disable_email', false ) ) : ?>
+
+                    <?php echo KBS()->html->hidden( array(
+                        'id'           => 'kbs-pending-ticket-created-email',
+                        'name'         => '_kbs_pending_ticket_created_email',
+                        'value'        => '1'
+                    ) ); ?>
+
 				<?php endif; ?>
 
                 <?php do_action( 'kbs_ticket_metabox_save_before_status', $ticket_id ); ?>
