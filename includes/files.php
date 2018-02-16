@@ -292,7 +292,7 @@ function kbs_maybe_attach_files_to_email( $id ) {
 
     $attachments = array();
 
-    if ( kbs_send_files_as_attachments() )    {
+    if ( ! empty( $id ) && kbs_send_files_as_attachments() )    {
 
         $files = kbs_ticket_has_files( $id );
 

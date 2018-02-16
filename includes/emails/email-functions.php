@@ -204,20 +204,20 @@ function kbs_email_test_ticket_received() {
 	$single = kbs_get_ticket_label_singular();
 
 	$from_name   = kbs_get_option( 'from_name', wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) );
-	$from_name   = apply_filters( 'kbs_ticket_from_name', $from_name, 0, array() );
+	$from_name   = apply_filters( 'kbs_test_ticket_from_name', $from_name, 0, array() );
 
 	$from_email  = kbs_get_option( 'from_email', get_bloginfo( 'admin_email' ) );
 	$from_email  = apply_filters( 'kbs_test_ticket_from_address', $from_email, 0, array() );
 
 	$subject     = kbs_get_option( 'ticket_subject', sprintf( __( 'Support %s Submitted', 'kb-support' ), $single ) );
-	$subject     = apply_filters( 'kbs_ticket_subject', wp_strip_all_tags( $subject ), 0 );
+	$subject     = apply_filters( 'kbs_test_ticket_subject', wp_strip_all_tags( $subject ), 0 );
 	$subject     = kbs_do_email_tags( $subject, 0 );
 
 	$heading     = kbs_get_option( 'ticket_heading', sprintf( __( 'Support %s Details', 'kb-support' ), $single ) );
-	$heading     = apply_filters( 'kbs_ticket_heading', $heading, 0, array() );
+	$heading     = apply_filters( 'kbs_test_ticket_heading', $heading, 0, array() );
 	$heading     = kbs_do_email_tags( $heading, 0 );
 
-	$attachments = apply_filters( 'kbs_ticket_attachments', array(), 0, array() );
+	$attachments = apply_filters( 'kbs_test_ticket_attachments', array(), 0, array() );
 
 	$message     = kbs_do_email_tags( kbs_get_ticket_logged_email_body_content( 0, array() ), 0 );
 
@@ -226,7 +226,7 @@ function kbs_email_test_ticket_received() {
 	$emails->__set( 'from_email', $from_email );
 	$emails->__set( 'heading'   , $heading );
 
-	$headers = apply_filters( 'kbs_receipt_headers', $emails->get_headers(), 0, array() );
+	$headers = apply_filters( 'kbs_test_ticket_headers', $emails->get_headers(), 0, array() );
 	$emails->__set( 'headers', $headers );
 
 	$emails->send( kbs_get_admin_notice_emails(), $subject, $message, $attachments );
