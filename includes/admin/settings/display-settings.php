@@ -49,7 +49,6 @@ function kbs_options_page() {
 	$all_settings = kbs_get_registered_settings();
 
 	// Let's verify we have a 'main' section to show
-	// Let's verify we have a 'main' section to show
 	$has_main_settings = true;
 	if ( empty( $all_settings[ $active_tab ]['main'] ) )	{
 		$has_main_settings = false;
