@@ -636,6 +636,8 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
 		return;
 	}
 
+    remove_action( 'save_post_kbs_ticket', 'kbs_ticket_post_save', 10, 3 );
+
 	if ( is_admin() )	{
 		if ( isset( $_POST['_kbs_ticket_logged_by'] ) )	{
 			add_post_meta( $post_id, '_kbs_ticket_logged_by', absint( $_POST['_kbs_ticket_logged_by'] ), true );
