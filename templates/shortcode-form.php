@@ -28,7 +28,7 @@ global $kbs_form;
 					<?php $label_class = ''; ?>
                     <?php $settings    = $kbs_form->get_field_settings( $field->ID ); ?>
 
-                    <p class="kbs-<?php echo $field->post_name; ?>">
+                    <p class="<?php echo $field->post_name; ?>">
                         <?php if ( empty( $settings['hide_label'] ) && 'recaptcha' != $settings['type'] ) : ?>
                             <?php if ( ! empty( $settings['label_class'] ) ) : ?>
                                 <?php $label_class = ' class="' . sanitize_html_class( $settings['label_class'] ) . '"'; ?>
