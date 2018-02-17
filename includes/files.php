@@ -388,11 +388,17 @@ function kbs_get_attachment_path_from_url( $url )	{
 				'post_status' => 'inherit',
 				'fields'      => 'ids',
 				'meta_query'  => array(
+					'relation' => 'OR',
 					array(
 						'value'   => $file,
 						'compare' => 'LIKE',
 						'key'     => '_wp_attachment_metadata',
 					),
+					array(
+						'value'   => $file,
+						'compare' => 'LIKE',
+						'key'     => '_wp_attached_file',
+					)
 				)
 			);
 
@@ -404,8 +410,13 @@ function kbs_get_attachment_path_from_url( $url )	{
 
 					$meta = wp_get_attachment_metadata( $post_id );
 
-					$original_file       = basename( $meta['file'] );
-					$cropped_image_files = wp_list_pluck( $meta['sizes'], 'file' );
+					if ( $meta )	{
+						$original_file       = basename( $meta['file'] );
+						$cropped_image_files = wp_list_pluck( $meta['sizes'], 'file' );
+					} else	{
+						$original_file       = basename( get_attached_file( $post_id ) );
+						$cropped_image_files = array();
+					}
 
 					if ( $original_file === $file || in_array( $file, $cropped_image_files ) ) {
 						$file_path = $original_file;
