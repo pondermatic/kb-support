@@ -119,7 +119,7 @@ function kbs_email_ticket_reply( $ticket_id, $reply_id ) {
 
 	$message      = kbs_do_email_tags( kbs_get_ticket_reply_email_body_content( $ticket_id, $ticket_data ), $ticket_id );
 	$attachments  = apply_filters( 'kbs_ticket_reply_attachments', array(), $ticket_id, $ticket_data, $reply_id );
-error_log( 'att: ' . var_export( $attachments, true ) );
+
 	$emails       = KBS()->emails;
 
 	$emails->__set( 'from_name', $from_name );

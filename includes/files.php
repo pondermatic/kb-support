@@ -408,8 +408,8 @@ function kbs_get_attachment_path_from_url( $url )	{
 					$cropped_image_files = wp_list_pluck( $meta['sizes'], 'file' );
 
 					if ( $original_file === $file || in_array( $file, $cropped_image_files ) ) {
-						$file_path = $meta['file'];
-						$file_path = trailingslashit( WP_CONTENT_DIR ) . $file_path;
+						$file_path = $original_file;
+						$file_path = trailingslashit( $upload_dir['path'] ) . $file_path;
 						return $file_path;
 					}
 
