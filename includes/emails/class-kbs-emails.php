@@ -161,6 +161,7 @@ class KBS_Emails {
 	public function get_templates() {
 		$templates = array(
 			'default' => __( 'Default Template', 'kb-support' ),
+			'basic'   => __( 'Basic HTML, no formatting', 'kb-support' ),
 			'none'    => __( 'No template, plain text only', 'kb-support' )
 		);
 
