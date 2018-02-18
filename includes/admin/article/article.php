@@ -176,7 +176,7 @@ function kbs_add_article_filters() {
 	if ( 'article' == $typenow ) {
 		$terms = get_terms( 'article_category' );
 
-		if ( count( $terms ) > 0 )	{
+		if ( is_array( $terms ) && count( $terms ) > 0 )	{
 			$category_labels = kbs_get_taxonomy_labels( 'article_category' );
 
 			echo "<select name='article_category' id='article_category' class='postform'>";
@@ -191,7 +191,7 @@ function kbs_add_article_filters() {
 		}
 
 		$terms = get_terms( 'article_tag' );
-		if ( count( $terms ) > 0 )	{
+		if ( is_array( $terms ) && count( $terms ) > 0 )	{
 			$tag_labels = kbs_get_taxonomy_labels( 'article_tag' );
 
 			echo "<select name='article_tag' id='article_tag' class='postform'>";

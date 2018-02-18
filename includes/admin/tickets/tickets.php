@@ -401,7 +401,7 @@ function kbs_add_ticket_filters() {
 	if ( 'kbs_ticket' == $typenow ) {
 		$terms = get_terms( 'ticket_category' );
 
-		if ( count( $terms ) > 0 )	{
+		if ( is_array( $terms ) && count( $terms ) > 0 )	{
 			$category_labels = kbs_get_taxonomy_labels( 'ticket_category' );
 
 			echo "<select name='ticket_category' id='ticket_category' class='postform'>";
@@ -416,7 +416,7 @@ function kbs_add_ticket_filters() {
 		}
 
 		$terms = get_terms( 'ticket_tag' );
-		if ( count( $terms ) > 0 )	{
+		if ( is_array( $terms ) && count( $terms ) > 0 )	{
 			$tag_labels = kbs_get_taxonomy_labels( 'ticket_tag' );
 
 			echo "<select name='ticket_tag' id='ticket_tag' class='postform'>";

@@ -678,10 +678,15 @@ class KBS_Customer {
 	 */
 	public function get_notes_count() {
 
-		$all_notes = $this->get_raw_notes();
-		$notes_array = array_reverse( array_filter( explode( "\n\n", $all_notes ) ) );
+		$all_notes   = $this->get_raw_notes();
+		$notes_count = 0;
 
-		return count( $notes_array );
+		if ( ! empty( $all_notes ) )	{
+			$notes_array = array_reverse( array_filter( explode( "\n\n", $all_notes ) ) );
+			$notes_count = count( $notes_array );
+		}
+
+		return $notes_count;
 
 	} // get_notes_count
 
