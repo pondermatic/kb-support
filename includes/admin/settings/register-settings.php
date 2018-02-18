@@ -390,7 +390,7 @@ function kbs_get_registered_settings() {
                     'multiple_agents' => array(
 						'id'      => 'multiple_agents',
 						'name'    => sprintf( __( 'Multiple Agents per %s?', 'kb-support' ), $single ),
-						'desc'    => sprintf( __( 'If enabled, multiple agents can be assigned to a %s and work collaboraively towards resolution.', 'kb-support' ), strtolower( $single ) ),
+						'desc'    => sprintf( __( 'If enabled, multiple agents can be assigned to a %s and work collaboratively towards resolution.', 'kb-support' ), strtolower( $single ) ),
 						'type'    => 'checkbox'
 					),
 					'agent_status'  => array(
