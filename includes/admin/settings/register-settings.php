@@ -328,7 +328,6 @@ function kbs_get_registered_settings() {
 						'name'    => __( 'Show Register / Login Form?', 'kb-support' ),
 						'desc'    => __( 'Display the registration and login forms on the submission page for non-logged-in users.', 'kb-support' ),
 						'type'    => 'select',
-						'chosen'  => true,
 						'std'     => 'none',
 						'options' => array(
 							'both'         => __( 'Registration and Login Forms', 'kb-support' ),
@@ -410,7 +409,6 @@ function kbs_get_registered_settings() {
 						'name'    => sprintf( __( 'Auto Assign new %s?', 'kb-support' ), $plural ),
 						'desc'    => sprintf( __( 'Select an option to automatically assign a %s to an agent when it is received', 'kb-support' ), strtolower( $single ) ),
 						'type'    => 'select',
-						'chosen'  => true,
 						'options' => array(
 							'0'      => __( 'Do not Auto Assign', 'kb-support' ),
 							'least'  => sprintf( __( 'Least %s', 'kb-support' ), $plural ),
@@ -513,7 +511,6 @@ function kbs_get_registered_settings() {
 						'name'    => __( 'Show Register / Login Form?', 'kb-support' ),
 						'desc'    => sprintf( __( 'Display the registration and/or login forms when a non-logged-in user lands on a restricted %s.', 'kb-support' ), kbs_get_article_label_singular() ),
 						'type'    => 'select',
-						'chosen'  => true,
 						'std'     => 'login',
 						'options' => array(
 							'both'         => __( 'Registration and Login Forms', 'kb-support' ),
@@ -600,7 +597,6 @@ function kbs_get_registered_settings() {
 						'name'    => __( 'Email Template', 'kb-support' ),
 						'desc'    => sprintf( __( 'Choose a template. Click "Save Changes" then "Preview %s Received" to see the new template.', 'kb-support' ), $single ),
 						'type'    => 'select',
-						'chosen'  => true,
 						'options' => kbs_get_email_templates()
 					),
 					'email_logo' => array(
@@ -885,7 +881,6 @@ function kbs_get_registered_settings() {
 						'name'    => __( 'reCaptcha Theme', 'kb-support' ),
 						'desc'    => __( 'Select your preferred color scheme.', 'kb-support' ),
 						'type'    => 'select',
-						'chosen'  => true,
 						'options' => array( 'dark' => __( 'Dark', 'kb-support' ), 'light' => __( 'Light', 'kb-support' ) ),
 						'std'     => 'light'
 					),
@@ -894,7 +889,6 @@ function kbs_get_registered_settings() {
 						'name'    => __( 'reCaptcha Type', 'kb-support' ),
 						'desc'    => __( 'Choose to render an audio reCaptcha or an image. Default is image.', 'kb-support' ),
 						'type'    => 'select',
-						'chosen'  => true,
 						'options' => array( 'audio' => __( 'Audio', 'kb-support' ), 'image' => __( 'Image', 'kb-support' ) ),
 						'std'     => 'image'
 					),
@@ -903,7 +897,6 @@ function kbs_get_registered_settings() {
 						'name'    => __( 'reCaptcha Size', 'kb-support' ),
 						'desc'    => __( 'Select your preferred size for the reCaptcha.', 'kb-support' ),
 						'type'    => 'select',
-						'chosen'  => true,
 						'options' => array( 'compact' => __( 'Compact', 'kb-support' ), 'normal' => __( 'Normal', 'kb-support' ) ),
 						'std'     => 'normal'
 					)
