@@ -122,6 +122,20 @@ function kbs_options_page() {
 					'tab'              => $active_tab,
 					'section'          => $section_id
 				), admin_url( 'edit.php' ) );
+
+				/**
+				 * Allow filtering of the section URL.
+				 *
+				 * Enables plugin authors to insert links to non-setting pages as sections.
+				 *
+				 * @since	1.1.10
+				 * @param	str		The section URL
+				 * @param	str		The section ID (array key)
+				 * @param	str		The current active tab
+				 * @return	str
+				 */
+				$tab_url = apply_filters( 'kbs_options_page_section_url', $tab_url, $section_id, $active_tab );
+
 				$class = '';
 				if ( $section == $section_id ) {
 					$class = 'current';
