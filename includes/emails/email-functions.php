@@ -28,7 +28,7 @@ function kbs_email_ticket_received( $ticket_id, $admin_notice = true, $resend = 
 
 	$disable = kbs_get_option( 'ticket_received_disable_email', false );
 	$disable = apply_filters( 'kbs_ticket_received_disable_email', $disable );
-	
+
 	if ( ! empty( $disable ) )	{
 		return;
 	}
