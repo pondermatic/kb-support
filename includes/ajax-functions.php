@@ -504,7 +504,7 @@ function kbs_ajax_add_customer()	{
     $company_id    = isset( $_POST['customer_company'] ) ? $_POST['customer_company'] : 0;
 	$customer_data = array(
 		'name'       => strip_tags( stripslashes( $_POST['customer_name'] ) ),
-		'company_id' => kbs_sanitize_company_id( $_POST['customer_company'] ),
+		'company_id' => kbs_sanitize_company_id( $company_id ),
 		'email'      => $_POST['customer_email'],
 		'user_id'    => $user_id
 	);
