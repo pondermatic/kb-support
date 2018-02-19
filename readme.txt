@@ -133,6 +133,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 * Generating a test email was adding a large number of attachments
 * Manually adding a customer via the admin interface may generate a PHP warning notice due to expectation of `company` array key
 * Ensure we only `count()` countable items as PHP 7.2 generates a warning otherwise
+* Removed duplicate string within CSS class name for submission form fields
 
 **Tweaks**
 
