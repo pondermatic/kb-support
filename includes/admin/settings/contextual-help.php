@@ -225,7 +225,7 @@ function kbs_settings_contextual_help() {
 			'<ul>' .
 				'<li>' . __( '<strong>From Name</strong> - Enter the name you want KB Support generated emails to come from.', 'kb-support' ) . '</li>' .
 				'<li>' . __( '<strong>From Email</strong> - Enter the email address KB Support generated emails should come from.', 'kb-support' ) . '</li>' .
-				'<li>' . __( '<strong>Email Template</strong> - Select <code>Default Template</code> to send HTML emails, or select plain text only (no formatting).', 'kb-support' ) . '</li>' .
+				'<li>' . __( '<strong>Email Template</strong> - Select <code>Default Template</code> to send formatted or basic HTML emails, or select plain text only (no formatting).', 'kb-support' ) . '</li>' .
 				'<li>' . __( '<strong>Logo</strong> - Upload your logo and it will appear at the top of all KB Support generated HTML emails.', 'kb-support' ) . '</li>' .
                 '<li>' . __( '<strong>Attach Files</strong> - This setting determines how files are inserted into emails when using the <code>{ticket_files}</code> or <code>{reply_files}</code> email tags.', 'kb-support' ) . ' ' .
                          __( 'When enabled, the files will be attached to the email. Otherwise, the files will be listed within the content as links to view, or download, the files online', 'kb-support' ) . 
