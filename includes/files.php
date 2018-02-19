@@ -292,18 +292,145 @@ function kbs_maybe_attach_files_to_email( $id ) {
 
     $attachments = array();
 
-    if ( kbs_send_files_as_attachments() )    {
+    if ( ! empty( $id ) && kbs_send_files_as_attachments() )    {
 
-        $files = kbs_ticket_has_files( $id );
+		if ( 'none' === kbs_get_email_template() )	{
 
-        if ( $files )   {
-            foreach ( $files as $file ) {
-                $attachments[] =  get_attached_file( $file->ID );
-            }
-        }
+			$files = kbs_get_attachments_from_inline_content( $id );
+
+			if ( ! empty( $files ) )	{
+				$attachments = $files;
+			}
+
+		} else	{
+
+			$files = kbs_ticket_has_files( $id );
+
+			if ( $files )   {
+				foreach ( $files as $file ) {
+					$attachments[] = get_attached_file( $file->ID );
+				}
+			}
+
+		}
 
     }
 
     return $attachments;
 
 } // kbs_maybe_attach_files_to_email
+
+/**
+ * Retrieves inline images and links within email content when plain text emails are defined.
+ *
+ * Plain text emails have all HTML tags stripped and therefore inline images etc. are lost during email.
+ * This function searches the content and checks for images and other links. It then verifies they exist
+ * within the WordPress media gallery and attaches them as files to the outgoing email.
+ *
+ * We rely upon the removal of the content from KBS_Email->build_email.
+ *
+ * @since	1.1.10
+ * @param	int			$id		Ticket or Reply ID
+ * @return	arr			Array of files to attach
+ */
+function kbs_get_attachments_from_inline_content( $id )	{
+
+	$attachments = array();
+	$content     = get_post_field( 'post_content', $id, 'raw' );
+
+	if ( ! empty( $content ) )	{
+
+		$pattern = '/<img.*?src="([^"]*)".*?\/?>|<a.*?href="([^"]*)".*?\/?>/';
+		$pattern = apply_filters( 'kbs_get_attachments_from_inline_content_pattern', $pattern );
+
+		preg_match_all( $pattern, $content, $urls, PREG_PATTERN_ORDER );
+		
+		if ( ! empty( $urls ) )	{
+			$all_urls = array_merge( $urls[1], $urls[2] );
+			$all_urls = array_filter( $all_urls );
+		}
+
+		if ( ! empty( $all_urls ) )	{
+			foreach( $all_urls as $url )	{
+				$file_path = kbs_get_attachment_path_from_url( $url );
+
+				if ( $file_path )	{
+					$attachments[] = $file_path;
+				}
+			}
+		}
+
+	}
+
+	return $attachments;
+} // kbs_get_attachments_from_inline_content
+
+/**
+ * Retrieve an attachment's full path from its URL.
+ *
+ * @since	1.1.10
+ * @param	str		$url	The URL path to the file
+ * @return	int		The attachment path
+ */
+function kbs_get_attachment_path_from_url( $url )	{
+
+	$file_path   = false;
+	$upload_dirs = array( kbs_get_upload_dir(), wp_upload_dir() );
+
+	foreach ( $upload_dirs as $upload_dir )	{
+
+		if ( false !== strpos( $url, $upload_dir['baseurl'] . '/' ) )	{ // Is URL in uploads directory?
+
+			$file = basename( $url );
+
+			$query_args = array(
+				'post_type'   => 'attachment',
+				'post_status' => 'inherit',
+				'fields'      => 'ids',
+				'meta_query'  => array(
+					'relation' => 'OR',
+					array(
+						'value'   => $file,
+						'compare' => 'LIKE',
+						'key'     => '_wp_attachment_metadata',
+					),
+					array(
+						'value'   => $file,
+						'compare' => 'LIKE',
+						'key'     => '_wp_attached_file',
+					)
+				)
+			);
+
+			$query = new WP_Query( $query_args );
+
+			if ( $query->have_posts() ) {
+
+				foreach ( $query->posts as $post_id ) {
+
+					$meta = wp_get_attachment_metadata( $post_id );
+
+					if ( $meta )	{
+						$original_file       = basename( $meta['file'] );
+						$cropped_image_files = wp_list_pluck( $meta['sizes'], 'file' );
+					} else	{
+						$original_file       = basename( get_attached_file( $post_id ) );
+						$cropped_image_files = array();
+					}
+
+					if ( $original_file === $file || in_array( $file, $cropped_image_files ) ) {
+						$file_path = $original_file;
+						$file_path = trailingslashit( $upload_dir['path'] ) . $file_path;
+						return $file_path;
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+	return $file_path;
+} // kbs_get_attachment_path_from_url

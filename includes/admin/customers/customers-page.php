@@ -544,7 +544,7 @@ function kbs_customer_notes_view( $customer ) {
 		?>
 
 		<div id="kbs-customer-notes">
-		<?php if ( count( $customer_notes ) > 0 ) : ?>
+		<?php if ( is_array( $customer_notes ) && count( $customer_notes ) > 0 ) : ?>
 			<?php foreach( $customer_notes as $key => $note ) : ?>
 				<div class="customer-note-wrapper dashboard-comment-wrap comment-item">
 					<span class="note-content-wrap">

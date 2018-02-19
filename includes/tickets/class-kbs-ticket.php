@@ -609,6 +609,7 @@ class KBS_Ticket {
 
 			$this->update_meta( '_kbs_ticket_version_created', KBS_VERSION );
 			$this->update_meta( '_ticket_data', $this->ticket_meta );
+            $this->update_meta( '_kbs_pending_ticket_created_email', true );
 
 			if ( kbs_get_option( 'enable_sequential' ) )	{
 				$number       = kbs_get_next_ticket_number();
@@ -1692,7 +1693,12 @@ class KBS_Ticket {
 			$update = wp_update_post( $update_args );
 
             if ( isset( $update_args['post_status'] ) && $update )	{
-                kbs_insert_note( $reply_data['ticket_id'], sprintf( __( '%s re-opened by customer reply.', 'kb-support' ), kbs_get_ticket_label_singular() ) ); 
+                if ( kbs_is_agent( $args['post_author'] ) ) {
+                    $customer_or_agent = 'agent';
+                } else  {
+                    $customer_or_agent = 'customer';
+                }
+                kbs_insert_note( $reply_data['ticket_id'], sprintf( __( '%s re-opened by %s reply.', 'kb-support' ), kbs_get_ticket_label_singular(), $customer_or_agent ) ); 
             }
 		}
 

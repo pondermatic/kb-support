@@ -401,7 +401,7 @@ function kbs_add_ticket_filters() {
 	if ( 'kbs_ticket' == $typenow ) {
 		$terms = get_terms( 'ticket_category' );
 
-		if ( count( $terms ) > 0 )	{
+		if ( is_array( $terms ) && count( $terms ) > 0 )	{
 			$category_labels = kbs_get_taxonomy_labels( 'ticket_category' );
 
 			echo "<select name='ticket_category' id='ticket_category' class='postform'>";
@@ -416,7 +416,7 @@ function kbs_add_ticket_filters() {
 		}
 
 		$terms = get_terms( 'ticket_tag' );
-		if ( count( $terms ) > 0 )	{
+		if ( is_array( $terms ) && count( $terms ) > 0 )	{
 			$tag_labels = kbs_get_taxonomy_labels( 'ticket_tag' );
 
 			echo "<select name='ticket_tag' id='ticket_tag' class='postform'>";
@@ -636,6 +636,8 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
 		return;
 	}
 
+    remove_action( 'save_post_kbs_ticket', 'kbs_ticket_post_save', 10, 3 );
+
 	if ( is_admin() )	{
 		if ( isset( $_POST['_kbs_ticket_logged_by'] ) )	{
 			add_post_meta( $post_id, '_kbs_ticket_logged_by', absint( $_POST['_kbs_ticket_logged_by'] ), true );
@@ -690,6 +692,11 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
 	$ticket->save();
 
 	add_post_meta( $post_id, '_kbs_ticket_version_created', KBS_VERSION, true );
+
+    if ( isset( $_POST['_kbs_pending_ticket_created_email'] ) )   {
+        add_post_meta( $post_id, '_kbs_pending_ticket_created_email', 1 );
+    }
+
 	do_action( 'kbs_save_ticket', $post_id, $post );
 
 } // kbs_ticket_post_save

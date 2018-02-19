@@ -239,14 +239,16 @@ function kbs_get_registered_settings() {
 						'name'    => __( 'Submission Page', 'kb-support' ),
 						'desc'    => sprintf( __( 'This is the page where customers will submit their %s. Should contain the <code>[kbs_submit]</code> shortcode.', 'kb-support' ), strtolower( $plural ) ),
 						'type'    => 'select',
-						'options' => kbs_get_pages()
+						'chosen'  => true,
+						'options' => kbs_get_pages(),
 					),
 					'tickets_page'   => array(
 						'id'      => 'tickets_page',
 						'name'    => sprintf( __( '%s Page', 'kb-support' ), $plural ),
 						'desc'    => sprintf( __( 'This is the page where can view and reply to their %s. Should contain the <code>[kbs_tickets]</code> shortcode', 'kb-support' ), strtolower( $plural ) ),
 						'type'    => 'select',
-						'options' => kbs_get_pages()
+						'chosen'  => true,
+						'options' => kbs_get_pages(),
 					)
 				)
 			)
@@ -332,7 +334,7 @@ function kbs_get_registered_settings() {
 							'registration' => __( 'Registration Form Only', 'kb-support' ),
 							'login'        => __( 'Login Form Only', 'kb-support' ),
 							'none'         => __( 'None', 'kb-support' ),
-						)
+						),
 					),
 					'form_submit_label' => array(
 						'id'   => 'form_submit_label',
@@ -387,7 +389,7 @@ function kbs_get_registered_settings() {
                     'multiple_agents' => array(
 						'id'      => 'multiple_agents',
 						'name'    => sprintf( __( 'Multiple Agents per %s?', 'kb-support' ), $single ),
-						'desc'    => sprintf( __( 'If enabled, multiple agents can be assigned to a %s and work collaboraively towards resolution.', 'kb-support' ), strtolower( $single ) ),
+						'desc'    => sprintf( __( 'If enabled, multiple agents can be assigned to a %s and work collaboratively towards resolution.', 'kb-support' ), strtolower( $single ) ),
 						'type'    => 'checkbox'
 					),
 					'agent_status'  => array(
@@ -437,6 +439,7 @@ function kbs_get_registered_settings() {
 						'id'      => 'sla_response_time',
 						'name'    => __( 'Target Response Time', 'kb-support' ),
 						'type'    => 'select',
+						'chosen'  => true,
 						'options' => kbs_get_response_time_options(),
 						'std'     => 4 * HOUR_IN_SECONDS,
 						'desc'    => sprintf( __( 'Enter your targeted first response time for %s.', 'kb-support' ), strtolower( $plural ) )
@@ -453,6 +456,7 @@ function kbs_get_registered_settings() {
 						'id'      => 'sla_resolve_time',
 						'name'    => __( 'Target Resolution Time', 'kb-support' ),
 						'type'    => 'select',
+						'chosen'  => true,
 						'options' => kbs_get_resolve_time_options(),
 						'std'     => 2 * DAY_IN_SECONDS,
 						'desc'    => sprintf( __( 'Enter your targeted resolution time for %s.', 'kb-support' ), strtolower( $plural ) )

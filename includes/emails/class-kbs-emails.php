@@ -148,6 +148,7 @@ class KBS_Emails {
 			$this->headers  = "From: {$this->get_from_name()} <{$this->get_from_address()}>\r\n";
 			$this->headers .= "Reply-To: {$this->get_from_address()}\r\n";
 			$this->headers .= "Content-Type: {$this->get_content_type()}; charset=utf-8\r\n";
+			$this->headers .= 'X-Mailer: ' . sprintf( __( 'KB Support version %s (https://kb-support.com)', 'kb-support' ), KBS_VERSION );
 		}
 
 		return apply_filters( 'kbs_email_headers', $this->headers, $this );
@@ -161,6 +162,7 @@ class KBS_Emails {
 	public function get_templates() {
 		$templates = array(
 			'default' => __( 'Default Template', 'kb-support' ),
+			'basic'   => __( 'Basic HTML, no formatting', 'kb-support' ),
 			'none'    => __( 'No template, plain text only', 'kb-support' )
 		);
 
