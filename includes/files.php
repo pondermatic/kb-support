@@ -375,7 +375,8 @@ function kbs_get_attachments_from_inline_content( $id )	{
 function kbs_get_attachment_path_from_url( $url )	{
 
 	$file_path   = false;
-	$upload_dirs = array( kbs_get_upload_dir(), wp_upload_dir() );
+	$upload_dirs = array( wp_upload_dir(), kbs_get_upload_dir() );
+    $upload_dirs = apply_filters( 'kbs_get_attachment_upload_dirs', $upload_dirs, $url );
 
 	foreach ( $upload_dirs as $upload_dir )	{
 
