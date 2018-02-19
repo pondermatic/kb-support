@@ -4,7 +4,7 @@ Tags: Helpdesk, Support, Customer Support, Support Desk, Ticket System, Knowledg
 Requires at least: 4.1
 Tested up to: 5.0
 Requires PHP: 5.4
-Stable tag: 1.1.9
+Stable tag: 1.1.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -119,6 +119,29 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 == Changelog ==
 
+= 1.1.10 =
+
+**Monday, 19th February 2018**
+
+**New**
+
+* Generate customer and notification emails when a ticket is created via admin
+* Added HTML Basic email template with no formatting
+
+**Bug Fixes**
+
+* Generating a test email was adding a large number of attachments
+* Manually adding a customer via the admin interface may generate a PHP warning notice due to expectation of `company` array key
+* Ensure we only `count()` countable items as PHP 7.2 generates a warning otherwise
+
+**Tweaks**
+
+* Use chosen select fields within settings pages when there are a larger number of options to select from
+* Improved CSS for chosen fields
+* Run the email attachments filter after generating message content
+* Added the `kbs_options_page_section_url` filter
+* New wrapper function `kbs_get_email_template()` to retrieve the currently selected email template
+
 = 1.1.9 =
 
 **Sunday, 11th February 2018**
@@ -133,6 +156,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 * Changed trigger for submission form article search to `keyup`. String must be 3 or greater in length
 * Added `$args` parameter to the `kbs_insert_comment()` function to override default args
 * Corrected comment in email header template file
+* Updated contextual help file for settings pages
 
 **Bug Fixes**
 
