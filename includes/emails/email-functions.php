@@ -59,8 +59,8 @@ function kbs_email_ticket_received( $ticket_id, $admin_notice = true, $resend = 
 	$heading      = apply_filters( 'kbs_ticket_heading', $heading, $ticket_id, $ticket_data );
 	$heading      = kbs_do_email_tags( $heading, $ticket_id );
 
-	$attachments  = apply_filters( 'kbs_ticket_attachments', array(), $ticket_id, $ticket_data );
 	$message      = kbs_do_email_tags( kbs_get_ticket_logged_email_body_content( $ticket_id, $ticket_data ), $ticket_id );
+    $attachments  = apply_filters( 'kbs_ticket_attachments', array(), $ticket_id, $ticket_data );
 
 	$emails       = KBS()->emails;
 
@@ -186,8 +186,8 @@ function kbs_email_ticket_closed( $ticket_id ) {
 	$heading      = apply_filters( 'kbs_ticket_closed_heading', $heading, $ticket_id, $ticket_data );
 	$heading      = kbs_do_email_tags( $heading, $ticket_id );
 
-	$attachments  = apply_filters( 'kbs_ticket_closed_attachments', array(), $ticket_id, $ticket_data );
 	$message      = kbs_do_email_tags( kbs_get_ticket_closed_email_body_content( $ticket_id, $ticket_data ), $ticket_id );
+    $attachments  = apply_filters( 'kbs_ticket_closed_attachments', array(), $ticket_id, $ticket_data );
 
 	$emails       = KBS()->emails;
 
@@ -227,9 +227,8 @@ function kbs_email_test_ticket_received() {
 	$heading     = apply_filters( 'kbs_test_ticket_heading', $heading, 0, array() );
 	$heading     = kbs_do_email_tags( $heading, 0 );
 
-	$attachments = apply_filters( 'kbs_test_ticket_attachments', array(), 0, array() );
-
 	$message     = kbs_do_email_tags( kbs_get_ticket_logged_email_body_content( 0, array() ), 0 );
+    $attachments = apply_filters( 'kbs_test_ticket_attachments', array(), 0, array() );
 
 	$emails = KBS()->emails;
 	$emails->__set( 'from_name' , $from_name );
@@ -276,9 +275,8 @@ function kbs_admin_email_ticket_notice( $ticket_id = 0, $ticket_data = array() )
 	$headers    .= "Content-Type: text/html; charset=utf-8\r\n";
 	$headers     = apply_filters( 'kbs_admin_ticket_notification_headers', $headers, $ticket_id, $ticket_data );
 
-	$attachments = apply_filters( 'kbs_admin_ticket_notification_attachments', array(), $ticket_id, $ticket_data );
-
 	$message     = kbs_get_ticket_notification_email_body_content( $ticket_id, $ticket_data );
+    $attachments = apply_filters( 'kbs_admin_ticket_notification_attachments', array(), $ticket_id, $ticket_data );
 
 	$emails = KBS()->emails;
 	$emails->__set( 'from_name', $from_name );
@@ -334,9 +332,8 @@ function kbs_admin_email_reply_notice( $reply_id = 0, $data = array() ) {
 	$headers    .= "Content-Type: text/html; charset=utf-8\r\n";
 	$headers     = apply_filters( 'kbs_admin_reply_notification_headers', $headers, $ticket_id, $data, $reply_id );
 
-	$attachments = apply_filters( 'kbs_admin_reply_notification_attachments', array(), $ticket_id, $data, $reply_id );
-
 	$message     = kbs_get_reply_notification_email_body_content( $ticket_id, $data );
+    $attachments = apply_filters( 'kbs_admin_reply_notification_attachments', array(), $ticket_id, $data, $reply_id );
 
 	$emails = KBS()->emails;
 	$emails->__set( 'from_name', $from_name );
@@ -401,8 +398,8 @@ function kbs_email_agent_assigned_to_ticket( $ticket_id = 0, $agent_id = 0, $pre
 	$heading      = apply_filters( 'kbs_agent_assigned_heading', $heading, $ticket_id, $ticket_data );
 	$heading      = kbs_do_email_tags( $heading, $ticket_id );
 
-	$attachments  = apply_filters( 'kbs_agent_assigned_attachments', array(), $ticket_id, $ticket_data );
 	$message      = kbs_do_email_tags( kbs_get_agent_assigned_notification_email_body_content( $ticket_id, $ticket_data ), $ticket_id );
+    $attachments  = apply_filters( 'kbs_agent_assigned_attachments', array(), $ticket_id, $ticket_data );
 
 	$emails       = KBS()->emails;
 
