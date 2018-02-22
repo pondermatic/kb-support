@@ -148,7 +148,6 @@ class KBS_Emails {
 			$this->headers  = "From: {$this->get_from_name()} <{$this->get_from_address()}>\r\n";
 			$this->headers .= "Reply-To: {$this->get_from_address()}\r\n";
 			$this->headers .= "Content-Type: {$this->get_content_type()}; charset=utf-8\r\n";
-			$this->headers .= 'X-Mailer: ' . sprintf( __( 'KB Support version %s (https://kb-support.com)', 'kb-support' ), KBS_VERSION );
 		}
 
 		return apply_filters( 'kbs_email_headers', $this->headers, $this );
@@ -328,9 +327,10 @@ class KBS_Emails {
 	 * @since	1.0
 	 */
 	public function send_before() {
-		add_filter( 'wp_mail_from', array( $this, 'get_from_address' ) );
-		add_filter( 'wp_mail_from_name', array( $this, 'get_from_name' ) );
+		add_filter( 'wp_mail_from',         array( $this, 'get_from_address' ) );
+		add_filter( 'wp_mail_from_name',    array( $this, 'get_from_name' ) );
 		add_filter( 'wp_mail_content_type', array( $this, 'get_content_type' ) );
+		add_filter( 'kbs_email_headers',    array( $this, 'set_xmailer' ) );
 	} // send_before
 
 	/**
@@ -339,8 +339,8 @@ class KBS_Emails {
 	 * @since	1.0
 	 */
 	public function send_after() {
-		remove_filter( 'wp_mail_from', array( $this, 'get_from_address' ) );
-		remove_filter( 'wp_mail_from_name', array( $this, 'get_from_name' ) );
+		remove_filter( 'wp_mail_from',         array( $this, 'get_from_address' ) );
+		remove_filter( 'wp_mail_from_name',    array( $this, 'get_from_name' ) );
 		remove_filter( 'wp_mail_content_type', array( $this, 'get_content_type' ) );
 
 		// Reset heading to an empty string
@@ -360,5 +360,16 @@ class KBS_Emails {
 
 		return $message;
 	} // text_to_html
+
+	/**
+	 * Sets the X-Mailer header
+	 *
+	 * @since	1.0.11
+	 */
+	public function set_xmailer( $headers )	{
+		$headers .= 'X-Mailer: ' . sprintf( __( 'KB Support version %s (https://kb-support.com)', 'kb-support' ), KBS_VERSION );
+
+		return $headers;
+	} // set_xmailer
 
 }
