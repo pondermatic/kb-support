@@ -1115,7 +1115,7 @@ function kbs_assign_agent( $ticket_id, $agent_id = 0 )	{
 /**
  * Assigns additional agents to a ticket.
  *
- * @since	1.0.11
+ * @since	1.1.11
  * @param	int|obj  $ticket      The ticket ID or object to update.
  * @param	int|arr  $agent_ids   The agent user ID's to add to the ticket.
  * @return	bool     True on success, false on failure
@@ -1182,7 +1182,7 @@ function kbs_add_agents_to_ticket( $ticket, $agent_ids )	{
 /**
  * Removes additional agents from a ticket.
  *
- * @since	1.0.11
+ * @since	1.1.11
  * @param	int|obj  $ticket      The ticket ID or object to update.
  * @param	int|arr  $agent_ids   The agent user ID's to remove from the ticket.
  * @return	bool     True on success, false on failure

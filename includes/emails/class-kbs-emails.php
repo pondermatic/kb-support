@@ -364,7 +364,7 @@ class KBS_Emails {
 	/**
 	 * Sets the X-Mailer header
 	 *
-	 * @since	1.0.11
+	 * @since	1.1.11
 	 */
 	public function set_xmailer( $headers )	{
 		$headers .= 'X-Mailer: ' . sprintf( __( 'KB Support version %s (https://kb-support.com)', 'kb-support' ), KBS_VERSION );
