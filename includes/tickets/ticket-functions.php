@@ -1113,6 +1113,133 @@ function kbs_assign_agent( $ticket_id, $agent_id = 0 )	{
 } // kbs_assign_agent
 
 /**
+ * Assigns additional agents to a ticket.
+ *
+ * @since	1.0.11
+ * @param	int|obj  $ticket      The ticket ID or object to update.
+ * @param	int|arr  $agent_ids   The agent user ID's to add to the ticket.
+ * @return	bool     True on success, false on failure
+ */
+function kbs_add_agents_to_ticket( $ticket, $agent_ids )	{
+
+    if ( ! is_array( $agent_ids ) )	{
+		$agent_ids = array( $agent_ids );
+	}
+
+    $new_agents = array();
+
+    foreach( $agent_ids as $agent_id )  {
+
+        if ( ! kbs_is_agent( $agent_id ) )	{
+            continue;
+        }
+
+        $new_agents[] = $agent_id;
+
+    }
+
+    if ( empty( $new_agents ) ) {
+        return false;
+    }
+
+    if ( is_numeric( $ticket ) ) {
+        $ticket = new KBS_Ticket( $ticket );
+    }
+
+	if ( empty( $ticket->ID ) )	{
+		return false;
+	}
+
+    $current_agents = $ticket->agents;
+    $new_agents     = array_merge( $new_agents, $current_agents );
+
+    /**
+	 * Fires immediately before adding agents
+	 *
+	 * @since	1.0
+	 * @param	obj	$ticket  		The ticket object
+	 * @param	arr	$new_agents		The agent user IDs
+	 */
+	do_action( 'kbs_pre_add_agents_to_ticket', $ticket, $new_agents );
+
+    $ticket->__set( 'agents', $new_agents );
+    $return = $ticket->save();
+
+    /**
+	 * Fires immediately after adding agents
+	 *
+	 * @since	1.0
+	 * @param	obj      $ticket  		The ticket object
+	 * @param	arr  	 $new_agents	The agent user IDs
+     * @param   bool     $return        Whether or not the ticket was saved
+	 */
+	do_action( 'kbs_post_add_agents_to_ticket', $ticket, $new_agents, $return );
+
+    return $return;
+
+} // kbs_add_agents_to_ticket
+
+/**
+ * Removes additional agents from a ticket.
+ *
+ * @since	1.0.11
+ * @param	int|obj  $ticket      The ticket ID or object to update.
+ * @param	int|arr  $agent_ids   The agent user ID's to remove from the ticket.
+ * @return	bool     True on success, false on failure
+ */
+function kbs_remove_agents_from_ticket( $ticket, $agent_ids )   {
+
+    if ( empty( $agent_ids ) )  {
+        return false;
+    }
+
+    if ( ! is_array( $agent_ids ) )	{
+		$agent_ids = array( $agent_ids );
+	}
+
+    if ( is_numeric( $ticket ) ) {
+        $ticket = new KBS_Ticket( $ticket );
+    }
+
+	if ( empty( $ticket->ID ) )	{
+		return false;
+	}
+
+    $agents = $ticket->agents;
+
+    foreach( $agents as $agent_id ) {
+        if ( ( $key = array_search( $agent_id, $agents ) ) !== false )  {
+            unset( $agents[ $key ] );
+        }
+    }
+
+    /**
+	 * Fires immediately before adding agents
+	 *
+	 * @since	1.0
+	 * @param	obj	$ticket  		The ticket object
+	 * @param	arr	$new_agents		The agent user IDs
+	 */
+	do_action( 'kbs_pre_remove_agents_from_ticket', $ticket, $agent_ids );
+
+    $ticket->__set( 'agents', $agents );
+    $return = $ticket->save();
+
+    /**
+	 * Fires immediately after adding agents
+	 *
+	 * @since	1.0
+	 * @param	obj      $ticket  		The ticket object
+	 * @param	arr  	 $new_agents	The agent user IDs
+     * @param   bool     $return        Whether or not the ticket was saved
+	 */
+	do_action( 'kbs_post_remove_agents_from_ticket', $ticket, $agents, $return );
+
+    return $return;
+
+} // kbs_remove_agents_from_ticket
+
+/**
  * Retrieve the source used for logging the ticket.
  *
  * @since	1.0
