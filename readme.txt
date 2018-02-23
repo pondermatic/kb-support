@@ -4,7 +4,7 @@ Tags: Helpdesk, Support, Customer Support, Support Desk, Ticket System, Knowledg
 Requires at least: 4.1
 Tested up to: 5.0
 Requires PHP: 5.4
-Stable tag: 1.1.10
+Stable tag: 1.1.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -118,6 +118,16 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.1.11 =
+
+**Friday, 23rd February 2018**
+
+**Tweak**
+
+* Added `kbs_add_agents_to_ticket()` function
+* Added `kbs_remove_agents_from_ticket()` function
+* Additional filter for email headers
 
 = 1.1.10 =
 

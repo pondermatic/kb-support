@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: KB Support 1.1.10\n"
+"Project-Id-Version: KB Support 1.1.11\n"
 "Report-Msgid-Bugs-To: https://kb-support.com/\n"
-"POT-Creation-Date: 2018-02-19 11:42:01+00:00\n"
+"POT-Creation-Date: 2018-02-23 00:10:22+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -469,9 +469,9 @@ msgstr ""
 #: includes/admin/import-export/export/class-batch-export-tickets.php:49
 #: includes/admin/tickets/metaboxes.php:310
 #: includes/admin/tickets/tickets.php:63
-#: includes/tickets/ticket-functions.php:1260
-#: includes/tickets/ticket-functions.php:1355
-#: includes/tickets/ticket-functions.php:1363
+#: includes/tickets/ticket-functions.php:1387
+#: includes/tickets/ticket-functions.php:1482
+#: includes/tickets/ticket-functions.php:1490
 msgid "Customer"
 msgstr ""
 
@@ -1181,7 +1181,7 @@ msgstr ""
 #: includes/admin/import-export/export/class-batch-export-tickets.php:50
 #: includes/admin/tickets/metaboxes.php:404
 #: includes/admin/tickets/tickets.php:66
-#: includes/tickets/ticket-functions.php:1353 templates/view-ticket.php:107
+#: includes/tickets/ticket-functions.php:1480 templates/view-ticket.php:107
 msgid "Agent"
 msgstr ""
 
@@ -3045,7 +3045,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/tickets/contextual-help.php:58
-#: includes/tickets/ticket-functions.php:1253
+#: includes/tickets/ticket-functions.php:1380
 msgid "Create %s"
 msgstr ""
 
@@ -3932,33 +3932,33 @@ msgstr ""
 msgid "Adds a URL link that customers can click to close a ticket."
 msgstr ""
 
-#: includes/emails/class-kbs-emails.php:151
-msgid "KB Support version %s (https://kb-support.com)"
-msgstr ""
-
-#: includes/emails/class-kbs-emails.php:164
+#: includes/emails/class-kbs-emails.php:163
 msgid "Default Template"
 msgstr ""
 
-#: includes/emails/class-kbs-emails.php:165
+#: includes/emails/class-kbs-emails.php:164
 msgid "Basic HTML, no formatting"
 msgstr ""
 
-#: includes/emails/class-kbs-emails.php:166
+#: includes/emails/class-kbs-emails.php:165
 msgid "No template, plain text only"
 msgstr ""
 
-#: includes/emails/class-kbs-emails.php:278
+#: includes/emails/class-kbs-emails.php:277
 msgid "You cannot send email with KBS_Emails until init/admin_init has been reached"
 msgstr ""
 
-#: includes/emails/class-kbs-emails.php:305
+#: includes/emails/class-kbs-emails.php:304
 msgid ""
 "Email from KB Support failed to send.\n"
 "Send time: %s\n"
 "To: %s\n"
 "Subject: %s\n"
 "\n"
+msgstr ""
+
+#: includes/emails/class-kbs-emails.php:370
+msgid "KB Support version %s (https://kb-support.com)"
 msgstr ""
 
 #: includes/emails/email-functions.php:122
@@ -4445,7 +4445,7 @@ msgid "New Reply"
 msgstr ""
 
 #: includes/post-types.php:78 includes/scripts.php:227
-#: includes/tickets/ticket-functions.php:1252
+#: includes/tickets/ticket-functions.php:1379
 msgid "View Reply"
 msgstr ""
 
@@ -4775,7 +4775,7 @@ msgstr ""
 msgid "Hide Reply"
 msgstr ""
 
-#: includes/scripts.php:229 includes/tickets/ticket-functions.php:1559
+#: includes/scripts.php:229 includes/tickets/ticket-functions.php:1686
 msgid "View Note"
 msgstr ""
 
@@ -4880,34 +4880,34 @@ msgstr ""
 msgid "Other"
 msgstr ""
 
-#: includes/tickets/ticket-functions.php:1265
+#: includes/tickets/ticket-functions.php:1392
 msgid "Read by customer on"
 msgstr ""
 
-#: includes/tickets/ticket-functions.php:1271
+#: includes/tickets/ticket-functions.php:1398
 msgid "Customer has not read"
 msgstr ""
 
-#: includes/tickets/ticket-functions.php:1279
+#: includes/tickets/ticket-functions.php:1406
 msgid "attached file"
 msgid_plural "attached files"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/tickets/ticket-functions.php:1289
-#: includes/tickets/ticket-functions.php:1573
+#: includes/tickets/ticket-functions.php:1416
+#: includes/tickets/ticket-functions.php:1700
 msgid "%s by %s"
 msgstr ""
 
-#: includes/tickets/ticket-functions.php:1345
+#: includes/tickets/ticket-functions.php:1472
 msgid "Unknown"
 msgstr ""
 
-#: includes/tickets/ticket-functions.php:1546
+#: includes/tickets/ticket-functions.php:1673
 msgid "KBS Bot"
 msgstr ""
 
-#: includes/tickets/ticket-functions.php:1560
+#: includes/tickets/ticket-functions.php:1687
 msgid "Delete Note"
 msgstr ""
 
