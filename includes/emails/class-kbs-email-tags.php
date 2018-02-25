@@ -758,8 +758,9 @@ function kbs_email_tag_reply_files( $ticket_id )	{
  */
 function kbs_email_tag_ticket_url( $ticket_id ) {
 	$url = kbs_get_ticket_url( $ticket_id, false, true );
+	$url = apply_filters( 'kbs_tag_ticket_url', $url, $ticket_id );
 
-	return apply_filters( 'kbs_tag_ticket_url', '<a href="' . $url . '">' . $url . '</a>' );
+	return '<a href="' . $url . '">' . $url . '</a>';
 } // kbs_email_tag_ticket_url
 
 /**
@@ -772,8 +773,9 @@ function kbs_email_tag_ticket_url( $ticket_id ) {
  */
 function kbs_email_tag_ticket_admin_url( $ticket_id ) {
 	$url = kbs_get_ticket_url( $ticket_id, true );
+	$url = apply_filters( 'kbs_tag_ticket_admin_url', $url, $ticket_id );
 
-	return apply_filters( 'kbs_tag_ticket_admin_url', '<a href="' . $url . '">' . $url . '</a>' );
+	return '<a href="' . $url . '">' . $url . '</a>';
 } // kbs_email_tag_ticket_admin_url
 
 /**
@@ -788,6 +790,7 @@ function kbs_email_tag_ticket_close_ticket_url( $ticket_id ) {
 	$url = kbs_get_ticket_url( $ticket_id, false, true );
 	$url = remove_query_arg( 'kbs_action', $url );
 	$url = add_query_arg( 'kbs_action', 'close_ticket', $url );
+	$url = apply_filters( 'kbs_tag_close_ticket_url', $url, $ticket_id );
 
-	return apply_filters( 'kbs_tag_close_ticket_url', '<a href="' . $url . '">' . $url . '</a>' );
+	return '<a href="' . $url . '">' . $url . '</a>';
 } // kbs_email_tag_ticket_close_ticket_url
