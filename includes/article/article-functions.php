@@ -294,3 +294,21 @@ function kbs_get_article_excerpt( $article_id ) {
 function kbs_get_linked_tickets( $article_id )	{
 	return get_post_meta( $article_id, '_kbs_article_linked_tickets', true );
 } // kbs_get_linked_tickets
+
+/**
+ * Retrieve the article URL.
+ *
+ * @since	1.1.12
+ * @param	obj|int		$article	The article ID or post object
+ * @return	str			The URL to the article
+ */
+function kbs_get_article_url( $article )	{
+	if ( is_numeric ( $article ) )	{
+		$article = get_post( $article );
+	}
+
+	$url = get_permalink( $article );
+	$url = apply_filters( 'kbs_article_url', $url, $article->ID );
+
+	return $url;
+} // kbs_get_article_url
