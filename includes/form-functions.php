@@ -497,7 +497,7 @@ function kbs_get_field_types()	{
 		unset( $field_types['file_uploads'] );
 	}
 	
-	if ( ! kbs_get_option( 'recaptcha_site_key', false ) )	{
+	if ( ! kbs_get_option( 'recaptcha_site_key' ) || ! kbs_get_option( 'recaptcha_secret' ) )	{
 		unset( $field_types['recaptcha'] );
 	}
 	
@@ -687,10 +687,11 @@ function kbs_display_form( $form_id = 0 ) {
 function kbs_form_submission_errors( $field_id, $error )	{
 
 	$errors = array(
-		'process_error'  => __( 'An internal error has occurred, please try again or contact support.', 'kb-support' ),
-		'required'       => get_the_title( $field_id ) . __( ' is a required field.', 'kb-support' ),
-		'invalid_email'  => get_the_title( $field_id ) . __( ' requires a valid email address.', 'kb-support' ),
-		'agree_to_terms' => __( 'You must agree to the terms and conditions', 'kb-support' )
+		'process_error'    => __( 'An internal error has occurred, please try again or contact support.', 'kb-support' ),
+		'required'         => get_the_title( $field_id ) . __( ' is a required field.', 'kb-support' ),
+		'invalid_email'    => get_the_title( $field_id ) . __( ' requires a valid email address.', 'kb-support' ),
+		'agree_to_terms'   => __( 'You must agree to the terms and conditions', 'kb-support' ),
+		'google_recaptcha' => get_the_title( $field_id ) . __( ' validation failed', 'kb-support' )
 	);
 
 	$errors = apply_filters( 'kbs_form_submission_errors', $errors, $field_id );
@@ -1086,9 +1087,10 @@ add_action( 'kbs_form_display_radio_field', 'kbs_display_form_radio_field', 10, 
  */
 function kbs_display_form_recaptcha_field( $field, $settings )	{
 
-	$site_key = kbs_get_option( 'recaptcha_site_key', false );
+	$site_key = kbs_get_option( 'recaptcha_site_key' );
+	$secret   = kbs_get_option( 'recaptcha_secret' );
 
-	if ( ! $site_key )	{
+	if ( ! $site_key || ! $secret )	{
 		return;
 	}
 
@@ -1144,6 +1146,37 @@ function kbs_display_form_file_upload_field( $field, $settings )	{
 
 } // kbs_display_form_file_upload_field
 add_action( 'kbs_form_display_file_upload_field', 'kbs_display_form_file_upload_field', 10, 2 );
+
+/**
+ * Validate reCaptcha.
+ *
+ * @since	1.1.12
+ * @param	str		$response	reCaptcha response.
+ * @return	bool    True if verified, otherwise false
+ */
+function kbs_validate_recaptcha( $response )	{
+	$post_data = http_build_query( array(
+        'secret'   => kbs_get_option( 'recaptcha_secret' ),
+        'response' => $response,
+        'remoteip' => $_SERVER['REMOTE_ADDR']
+    ) );
+
+    $options = array( 'http' => array(
+        'method'  => 'POST',
+        'header'  => 'Content-type: application/x-www-form-urlencoded',
+        'content' => $post_data
+    ) );
+
+    $context  = stream_context_create( $options );
+    $response = file_get_contents( 'https://www.google.com/recaptcha/api/siteverify', false, $context );
+    $result   = json_decode( $response );
+
+    if ( ! empty( $result ) && true == $result->success )	{
+		return $result->success;
+    }
+
+    return false;
+} // kbs_validate_recaptcha
 
 /**
  * Output a fields description.
