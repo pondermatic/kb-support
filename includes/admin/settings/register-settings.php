@@ -878,7 +878,7 @@ function kbs_get_registered_settings() {
 					),
 					'recaptcha_secret' => array(
 						'id'      => 'recaptcha_secret',
-						'name'    => __( 'Secret Key', 'kb-support' ),
+						'name'    => __( 'Secret', 'kb-support' ),
 						'desc'    => sprintf( __( 'Visit <a href="%s" target="_blank">Google reCaptcha</a> to register your site and obtain your secret key.', 'kb-support' ), 'https://www.google.com/recaptcha/' ),
 						'type'    => 'text'
 					),
