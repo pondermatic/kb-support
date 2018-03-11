@@ -132,7 +132,7 @@ class KBS_HTML_Elements {
 						$key = (int) $article->ID;
 						break;
 					case 'url':
-						$key = get_permalink( $article );
+						$key = kbs_get_article_url( $article );
 						break;
 					case 'name':
 					case 'slug':

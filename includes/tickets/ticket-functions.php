@@ -908,9 +908,9 @@ function kbs_get_ticket_url( $ticket_id, $admin = false, $key = false )	{
 
 		$url = add_query_arg( $args, site_url( '' ) );
 
-		$url = apply_filters( 'kbs_ticket_url', $url, $ticket_id );
-
 	}
+
+	$url = apply_filters( 'kbs_ticket_url', $url, $ticket_id, $admin, $key );
 
 	return $url;
 } // kbs_get_ticket_url

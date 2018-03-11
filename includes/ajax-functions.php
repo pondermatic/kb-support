@@ -424,6 +424,11 @@ function kbs_ajax_validate_form_submission()	{
 				$field = $field->post_name;
 			}
 
+		} elseif ( 'recaptcha' == $settings['type'] && ! kbs_validate_recaptcha( $_POST['g-recaptcha-response'] ) )	{
+
+			$error = kbs_form_submission_errors( $field->ID, 'google_recaptcha' );
+			$field = $field->post_name;
+
 		} else	{
 			/**
 			 * Allow plugins to perform additional validation on individual field types.
