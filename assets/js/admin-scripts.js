@@ -13,7 +13,24 @@ jQuery(document).ready(function ($) {
 	// Setup Chosen menus
 	$('.kbs_select_chosen').chosen({
 		inherit_select_classes: true,
-        search_contains: true
+		placeholder_text_single: kbs_vars.one_option,
+		placeholder_text_multiple: kbs_vars.one_or_more_option
+	});
+
+	$('.kbs_select_chosen .chosen-search input').each( function() {
+		var selectElem = $(this).parent().parent().parent().prev('select.kbs_select_chosen'),
+			type = selectElem.data('search-type'),
+			placeholder = selectElem.data('search-placeholder');
+		$(this).attr( 'placeholder', placeholder );
+	});
+
+	// Add placeholders for Chosen input fields
+	$( '.chosen-choices' ).on( 'click', function () {
+		var placeholder = $(this).parent().prev().data('search-placeholder');
+		if ( typeof placeholder === "undefined" ) {
+			placeholder = kbs_vars.type_to_search;
+		}
+		$(this).children('li').children('input').attr( 'placeholder', placeholder );
 	});
 
 	/**

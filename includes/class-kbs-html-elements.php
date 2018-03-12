@@ -99,6 +99,10 @@ class KBS_HTML_Elements {
 			'show_option_none' => '',
 			'placeholder'      => sprintf( __( 'Select a %s', 'kb-support' ), kbs_get_article_label_singular() ),
 			'selected'         => 0,
+			'data'        => array(
+				'search-type'        => 'article',
+				'search-placeholder' => sprintf( __( 'Type to search all %s', 'kb-support' ), kbs_get_article_label_plural() )
+			),
 			'key'              => 'id',
 			'articles'         => null,
 			'author'           => null,
@@ -267,7 +271,10 @@ class KBS_HTML_Elements {
 			'company_id'  => null,
 			'placeholder' => __( 'Select a Customer', 'kb-support' ),
 			'number'      => 30,
-			'data'        => array( 'search-type' => 'customer' ),
+			'data'        => array(
+				'search-type'        => 'customer',
+				'search-placeholder' => __( 'Type to search all customers', 'kb-support' )
+			)
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -311,6 +318,7 @@ class KBS_HTML_Elements {
 			'class'            => $args['class'] . ' kbs-customer-select',
 			'options'          => $options,
 			'multiple'         => $args['multiple'],
+			'placeholder'      => $args['placeholder'],
 			'chosen'           => $args['chosen'],
 			'show_option_all'  => false,
 			'show_option_none' => false,
@@ -340,7 +348,10 @@ class KBS_HTML_Elements {
 			'placeholder'      => __( 'Select a Company', 'kb-support' ),
 			'show_option_none' => __( 'No Company', 'kb-support' ),
 			'number'           => 30,
-			'data'             => array( 'search-type' => 'company' ),
+			'data'        => array(
+				'search-type'        => 'company',
+				'search-placeholder' => __( 'Type to search all companies', 'kb-support' )
+			)
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -412,7 +423,11 @@ class KBS_HTML_Elements {
 			'name'             => 'kbs_agent',
 			'show_option_all'  => false,
 			'show_option_none' => __( 'Select an Agent', 'kb-support' ),
-            'exclude'          => array()
+            'exclude'          => array(),
+			'data'        => array(
+				'search-type'        => 'agent',
+				'search-placeholder' => __( 'Type to search all agents', 'kb-support' )
+			)
 		);
 
 		$args = wp_parse_args( $args, $defaults );
