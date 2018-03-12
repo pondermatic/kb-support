@@ -425,6 +425,9 @@ a.kbs_ticket_form_data	{
 	display: inline-block;
 	width: 100px;
 }
+#kbs-ticket-actions a.chosen-single	{
+	min-width: 200px;
+}
 #kbs-ticket-actions input[type=submit],
 #kbs-kb-options input[type=submit] {
 	float: right;
