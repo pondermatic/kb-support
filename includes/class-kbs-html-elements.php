@@ -329,6 +329,82 @@ class KBS_HTML_Elements {
 	} // customer_dropdown
 
 	/**
+	 * Renders an HTML Dropdown of all the Users
+	 *
+	 * @access	public
+	 * @since	1.2
+	 * @param	arr		$args
+	 * @return	str		$output	User dropdown
+	 */
+	public function user_dropdown( $args = array() ) {
+
+		$defaults = array(
+			'name'        => 'users',
+			'id'          => 'users',
+			'class'       => '',
+			'multiple'    => false,
+			'selected'    => 0,
+			'chosen'      => true,
+			'placeholder' => __( 'Select a User', 'kb-support' ),
+			'number'      => 30,
+			'data'        => array(
+				'search-type'        => 'user',
+				'search-placeholder' => __( 'Type to search all Users', 'kb-support' ),
+			),
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
+
+		$user_args = array(
+			'number' => $args['number'],
+		);
+		$users   = get_users( $user_args );
+		$options = array();
+
+		if ( $users ) {
+			foreach ( $users as $user ) {
+				$options[ $user->ID ] = esc_html( $user->display_name );
+			}
+		} else {
+			$options[0] = __( 'No users found', 'kb-support' );
+		}
+
+		// If a selected user has been specified, we need to ensure it's in the initial list of user displayed
+		if( ! empty( $args['selected'] ) ) {
+
+			if( ! array_key_exists( $args['selected'], $options ) ) {
+
+				$user = get_userdata( $args['selected'] );
+
+				if( $user ) {
+
+					$options[ absint( $args['selected'] ) ] = esc_html( $user->display_name );
+
+				}
+
+			}
+
+		}
+
+		$output = $this->select( array(
+			'name'             => $args['name'],
+			'selected'         => $args['selected'],
+			'id'               => $args['id'],
+			'class'            => $args['class'] . ' kbs-user-select',
+			'options'          => $options,
+			'multiple'         => $args['multiple'],
+			'placeholder'      => $args['placeholder'],
+			'chosen'           => $args['chosen'],
+			'show_option_all'  => false,
+			'show_option_none' => false,
+			'data'             => $args['data'],
+		) );
+
+		return $output;
+	} // user_dropdown
+
+	/**
 	 * Renders an HTML Dropdown of company's
 	 *
 	 * @access	public
