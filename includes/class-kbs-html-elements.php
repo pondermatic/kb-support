@@ -31,7 +31,26 @@ class KBS_HTML_Elements {
 	 * @param	str		$selected	Status to select automatically
 	 * @return	str		$output		Status dropdown
 	 */
-	public function ticket_status_dropdown( $name = 'post_status', $selected = 0 ) {
+	public function ticket_status_dropdown( $args ) {
+
+        $defaults = array(
+			'name'             => 'post_status',
+			'id'               => '',
+			'class'            => '',
+			'multiple'         => false,
+			'chosen'           => false,
+			'show_option_all'  => false,
+			'show_option_none' => false,
+			'placeholder'      => sprintf( __( 'Select a %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
+			'selected'         => 0,
+			'data'        => array(
+				'search-type'        => 'ticket_status',
+				'search-placeholder' => sprintf( __( 'Type to search all %s statuses', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
+			)
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
 		$ticket_statuses = kbs_get_post_statuses( 'labels', true );
 		$options         = array();
 		
@@ -40,11 +59,16 @@ class KBS_HTML_Elements {
 		}
 
 		$output = $this->select( array(
-			'name'             => $name,
-			'selected'         => $selected,
+			'name'             => $args['name'],
+			'selected'         => $args['selected'],
 			'options'          => $options,
-			'show_option_all'  => '',
-			'show_option_none' => false
+            'multiple'         => $args['multiple'],
+            'chosen'           => $args['chosen'],
+			'show_option_all'  => $args['show_option_all'],
+			'show_option_none' => $args['show_option_none'],
+            'placeholder'      => $args['placeholder'],
+            'data'             => $args['data'],
+            
 		) );
 
 		return $output;
@@ -262,16 +286,18 @@ class KBS_HTML_Elements {
 	public function customer_dropdown( $args = array() ) {
 
 		$defaults = array(
-			'name'        => 'customers',
-			'id'          => '',
-			'class'       => '',
-			'multiple'    => false,
-			'selected'    => 0,
-			'chosen'      => true,
-			'company_id'  => null,
-			'placeholder' => __( 'Select a Customer', 'kb-support' ),
-			'number'      => 30,
-			'data'        => array(
+			'name'             => 'customers',
+			'id'               => '',
+			'class'            => '',
+			'multiple'         => false,
+			'selected'         => 0,
+			'chosen'           => true,
+			'company_id'       => null,
+			'placeholder'      => __( 'Select a Customer', 'kb-support' ),
+			'number'           => -1,
+            'show_option_all'  => false,
+            'show_option_none' => __( 'Select a Customer', 'kb-support' ),
+			'data'             => array(
 				'search-type'        => 'customer',
 				'search-placeholder' => __( 'Type to search all customers', 'kb-support' )
 			)
@@ -320,8 +346,8 @@ class KBS_HTML_Elements {
 			'multiple'         => $args['multiple'],
 			'placeholder'      => $args['placeholder'],
 			'chosen'           => $args['chosen'],
-			'show_option_all'  => false,
-			'show_option_none' => false,
+			'show_option_all'  => $args['show_option_all'],
+			'show_option_none' => $args['show_option_none'],
 			'data'             => $args['data']
 		) );
 
@@ -334,9 +360,10 @@ class KBS_HTML_Elements {
 	 * @access	public
 	 * @since	1.2
 	 * @param	arr		$args
+     * @param   arr     $user_args
 	 * @return	str		$output	User dropdown
 	 */
-	public function user_dropdown( $args = array() ) {
+	public function user_dropdown( $args = array(), $user_args = array() ) {
 
 		$defaults = array(
 			'name'             => 'users',
@@ -346,7 +373,7 @@ class KBS_HTML_Elements {
 			'selected'         => 0,
 			'chosen'           => true,
 			'placeholder'      => __( 'Select a User', 'kb-support' ),
-			'number'           => 30,
+			'number'           => -1,
 			'show_option_all'  => false,
 			'show_option_none' => false,
 			'data'             => array(
@@ -355,12 +382,13 @@ class KBS_HTML_Elements {
 			),
 		);
 
-		$args = wp_parse_args( $args, $defaults );
+        $user_defaults = array(
+            'number' => -1
+        );
 
+		$args      = wp_parse_args( $args, $defaults );
+        $user_args = wp_parse_args( $user_args, $user_defaults );
 
-		$user_args = array(
-			'number' => $args['number'],
-		);
 		$users   = get_users( $user_args );
 		$options = array();
 
