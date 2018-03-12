@@ -577,7 +577,11 @@ class KBS_HTML_Elements {
 			'show_option_all'  => false,
 			'show_option_none' => __( 'Select an Agent', 'kb-support' ),
             'exclude'          => array(),
-			'data'        => array(
+            'selected'         => 0,
+            'chosen'           => false,
+            'multiple'         => false,
+            'placeholder'      => __( 'Select an Agent', 'kb-support' ),
+			'data'             => array(
 				'search-type'        => 'agent',
 				'search-placeholder' => __( 'Type to search all agents', 'kb-support' )
 			)

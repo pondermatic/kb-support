@@ -407,10 +407,11 @@ function kbs_ticket_metabox_agent_row( $ticket_id )	{
 
     ?>
     <div id="kbs-agent-options">
-        <p><label for="kbs_agent_id"><?php _e( 'Agent', 'kb-support' ); ?>:</label>
+        <p>
             <?php echo KBS()->html->agent_dropdown( array(
                 'name'     => 'kbs_agent_id',
-                'selected' => ( ! empty( $kbs_ticket->agent_id ) ? $kbs_ticket->agent_id : get_current_user_id() )
+                'selected' => ( ! empty( $kbs_ticket->agent_id ) ? $kbs_ticket->agent_id : get_current_user_id() ),
+                'chosen'   => true
             ) ); ?>
         </p>
     </div>
