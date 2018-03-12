@@ -339,17 +339,19 @@ class KBS_HTML_Elements {
 	public function user_dropdown( $args = array() ) {
 
 		$defaults = array(
-			'name'        => 'users',
-			'id'          => 'users',
-			'class'       => '',
-			'multiple'    => false,
-			'selected'    => 0,
-			'chosen'      => true,
-			'placeholder' => __( 'Select a User', 'kb-support' ),
-			'number'      => 30,
-			'data'        => array(
+			'name'             => 'users',
+			'id'               => 'users',
+			'class'            => '',
+			'multiple'         => false,
+			'selected'         => 0,
+			'chosen'           => true,
+			'placeholder'      => __( 'Select a User', 'kb-support' ),
+			'number'           => 30,
+			'show_option_all'  => false,
+			'show_option_none' => false,
+			'data'             => array(
 				'search-type'        => 'user',
-				'search-placeholder' => __( 'Type to search all Users', 'kb-support' ),
+				'search-placeholder' => __( 'Type to search all users', 'kb-support' ),
 			),
 		);
 
@@ -396,13 +398,60 @@ class KBS_HTML_Elements {
 			'multiple'         => $args['multiple'],
 			'placeholder'      => $args['placeholder'],
 			'chosen'           => $args['chosen'],
-			'show_option_all'  => false,
-			'show_option_none' => false,
+			'show_option_all'  => $args['show_option_all'],
+			'show_option_none' => $args['show_option_none'],
 			'data'             => $args['data'],
 		) );
 
 		return $output;
 	} // user_dropdown
+
+	/**
+	 * Renders an HTML Dropdown of all the form field types
+	 *
+	 * @access	public
+	 * @since	1.2
+	 * @param	arr		$args
+	 * @return	str		$output	User dropdown
+	 */
+	public function field_types_dropdown( $args = array() ) {
+
+		$defaults = array(
+			'name'             => 'kbs_field_type',
+			'id'               => 'kbs_field_type',
+			'class'            => 'kbs_field_type',
+			'multiple'         => false,
+			'selected'         => 0,
+			'chosen'           => true,
+			'placeholder'      => __( 'Choose a Field Type', 'kb-support' ),
+			'show_option_all'  => false,
+			'show_option_none' => __( 'Choose a Field Type', 'kb-support' ),
+			'data'             => array(
+				'search-type'        => 'fields',
+				'search-placeholder' => __( 'Type to search all fields', 'kb-support' ),
+			)
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
+		$options = kbs_get_field_types();
+
+		$output = $this->select( array(
+			'name'             => $args['name'],
+			'selected'         => $args['selected'],
+			'id'               => $args['id'],
+			'class'            => $args['class'] . ' kbs-user-select',
+			'options'          => $options,
+			'multiple'         => $args['multiple'],
+			'placeholder'      => $args['placeholder'],
+			'chosen'           => $args['chosen'],
+			'show_option_all'  => $args['show_option_all'],
+			'show_option_none' => $args['show_option_none'],
+			'data'             => $args['data'],
+		) );
+
+		return $output;
+	} // field_types_dropdown
 
 	/**
 	 * Renders an HTML Dropdown of company's

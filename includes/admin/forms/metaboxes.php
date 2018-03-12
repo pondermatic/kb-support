@@ -33,7 +33,11 @@ function kbs_render_form_field_redirect_setting( $post )    {
 				'show_option_all'  => false,
 				'show_option_none' => false,
 				'options'          => kbs_get_pages( true ),
-				'selected'         => kbs_get_form_redirect_target( $post->ID )
+				'selected'         => kbs_get_form_redirect_target( $post->ID ),
+				'data'             => array(
+					'search-type'        => 'pages',
+					'search-placeholder' => __( 'Type to search all pages', 'kb-support' ),
+				)
 			) ); ?>
 		</div>
 		<?php
@@ -339,14 +343,8 @@ function kbs_render_field_type_row( $post_id, $args )	{
 	<div id="kbs_meta_field_type_wrap">
 		<p><strong><?php _e( 'Type', 'kb-support' ); ?></strong><br />
 		<label for="kbs_field_type">
-			<?php echo KBS()->html->select( array(
-				'name'             => 'kbs_field_type',
-				'selected'         => ! empty( $kbs_edit_field ) ? $kbs_edit_field->settings['type'] : 0,
-				'class'            => 'kbs_field_type',
-				'show_option_all'  => false,
-				'show_option_none' => __( 'Select Type', 'kb-support' ),
-				'options'          => kbs_get_field_types(),
-                'chosen'           => true
+			<?php echo KBS()->html->field_types_dropdown( array(
+				'selected'         => ! empty( $kbs_edit_field ) ? $kbs_edit_field->settings['type'] : 0
 			) ); ?>
 		</label></p>
 	</div>
