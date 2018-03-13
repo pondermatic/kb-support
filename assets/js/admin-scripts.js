@@ -19,7 +19,6 @@ jQuery(document).ready(function ($) {
 
 	$('.kbs_select_chosen .chosen-search input').each( function() {
 		var selectElem = $(this).parent().parent().parent().prev('select.kbs_select_chosen'),
-			type = selectElem.data('search-type'),
 			placeholder = selectElem.data('search-placeholder');
 		$(this).attr( 'placeholder', placeholder );
 	});
@@ -27,7 +26,7 @@ jQuery(document).ready(function ($) {
 	// Add placeholders for Chosen input fields
 	$( '.chosen-choices' ).on( 'click', function () {
 		var placeholder = $(this).parent().prev().data('search-placeholder');
-		if ( typeof placeholder === "undefined" ) {
+		if ( typeof placeholder === 'undefined' ) {
 			placeholder = kbs_vars.type_to_search;
 		}
 		$(this).children('li').children('input').attr( 'placeholder', placeholder );
@@ -166,7 +165,7 @@ jQuery(document).ready(function ($) {
 					tinyMCE.triggerSave();
 				}
 
-				ticketResponse = $('#kbs_ticket_reply' ).val();
+				ticketResponse = $('#kbs_ticket_reply').val();
                 if ( ticketResponse.length > 0 )	{
                     return confirm( kbs_vars.reply_has_data );
                 }

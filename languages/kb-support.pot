@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: KB Support 1.1.11\n"
+"Project-Id-Version: KB Support 1.1.12\n"
 "Report-Msgid-Bugs-To: https://kb-support.com/\n"
-"POT-Creation-Date: 2018-03-11 13:33:17+00:00\n"
+"POT-Creation-Date: 2018-03-13 21:24:02+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -224,8 +224,8 @@ msgid "KB Support Settings"
 msgstr ""
 
 #: includes/admin/admin-pages.php:33 includes/admin/admin-plugin.php:26
-#: includes/admin/forms/metaboxes.php:152
-#: includes/admin/forms/metaboxes.php:175
+#: includes/admin/forms/metaboxes.php:156
+#: includes/admin/forms/metaboxes.php:179
 msgid "Settings"
 msgstr ""
 
@@ -349,7 +349,7 @@ msgid "%1$s that have a reference to this %2$s will be displayed here."
 msgstr ""
 
 #: includes/admin/article/contextual-help.php:76
-#: includes/admin/forms/metaboxes.php:560
+#: includes/admin/forms/metaboxes.php:558
 msgid "Options"
 msgstr ""
 
@@ -467,7 +467,6 @@ msgstr ""
 
 #: includes/admin/customers/class-kbs-customer-table.php:73
 #: includes/admin/import-export/export/class-batch-export-tickets.php:49
-#: includes/admin/tickets/metaboxes.php:310
 #: includes/admin/tickets/tickets.php:63
 #: includes/tickets/ticket-functions.php:1387
 #: includes/tickets/ticket-functions.php:1482
@@ -485,7 +484,7 @@ msgid "View"
 msgstr ""
 
 #: includes/admin/customers/class-kbs-customer-table.php:159
-#: includes/admin/forms/metaboxes.php:249
+#: includes/admin/forms/metaboxes.php:253
 msgid "Delete"
 msgstr ""
 
@@ -746,8 +745,8 @@ msgstr ""
 
 #: includes/admin/customers/customers-page.php:367
 #: includes/admin/customers/customers-page.php:608
-#: includes/admin/forms/metaboxes.php:524 includes/admin/thickbox.php:110
-#: includes/class-kbs-html-elements.php:926
+#: includes/admin/forms/metaboxes.php:522 includes/admin/thickbox.php:110
+#: includes/class-kbs-html-elements.php:1098
 msgid "Cancel"
 msgstr ""
 
@@ -756,8 +755,8 @@ msgid "Customer Emails"
 msgstr ""
 
 #: includes/admin/customers/customers-page.php:401
-#: includes/admin/forms/metaboxes.php:153
-#: includes/admin/forms/metaboxes.php:176 templates/ticket-history.php:23
+#: includes/admin/forms/metaboxes.php:157
+#: includes/admin/forms/metaboxes.php:180 templates/ticket-history.php:23
 msgid "Actions"
 msgstr ""
 
@@ -799,8 +798,7 @@ msgstr ""
 #: includes/admin/customers/customers-page.php:457
 #: includes/admin/customers/customers-page.php:484
 #: includes/admin/import-export/export/class-batch-export-tickets.php:46
-#: includes/admin/tickets/metaboxes.php:304 templates/ticket-history.php:22
-#: templates/view-ticket.php:91
+#: templates/ticket-history.php:22 templates/view-ticket.php:91
 msgid "Status"
 msgstr ""
 
@@ -936,7 +934,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/forms/contextual-help.php:94
-#: includes/admin/forms/metaboxes.php:65
+#: includes/admin/forms/metaboxes.php:69
 msgid "Add a New Field"
 msgstr ""
 
@@ -1059,99 +1057,99 @@ msgstr ""
 msgid "Redirect after submission to:"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:56
+#: includes/admin/forms/metaboxes.php:39
+msgid "Type to search all pages"
+msgstr ""
+
+#: includes/admin/forms/metaboxes.php:60
 msgid "Form Fields"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:128
+#: includes/admin/forms/metaboxes.php:132
 msgid "Please save or publish your form before adding fields."
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:150
-#: includes/admin/forms/metaboxes.php:173
+#: includes/admin/forms/metaboxes.php:154
+#: includes/admin/forms/metaboxes.php:177
 msgid "Field Label"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:151
-#: includes/admin/forms/metaboxes.php:174
-#: includes/admin/forms/metaboxes.php:340
+#: includes/admin/forms/metaboxes.php:155
+#: includes/admin/forms/metaboxes.php:178
+#: includes/admin/forms/metaboxes.php:344
 msgid "Type"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:166
+#: includes/admin/forms/metaboxes.php:170
 msgid "No fields exist for this form"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:246
-#: includes/admin/forms/metaboxes.php:523
+#: includes/admin/forms/metaboxes.php:250
+#: includes/admin/forms/metaboxes.php:521
 msgid "Edit"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:273
+#: includes/admin/forms/metaboxes.php:277
 msgid "Label"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:310 includes/form-functions.php:248
+#: includes/admin/forms/metaboxes.php:314 includes/form-functions.php:248
 msgid "Description"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:318
+#: includes/admin/forms/metaboxes.php:322
 msgid "After Label"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:320
+#: includes/admin/forms/metaboxes.php:324
 msgid "After Field"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:347
-msgid "Select Type"
-msgstr ""
-
-#: includes/admin/forms/metaboxes.php:377
+#: includes/admin/forms/metaboxes.php:375
 msgid "Maps to"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:422
+#: includes/admin/forms/metaboxes.php:420
 msgid "Required?"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:447
+#: includes/admin/forms/metaboxes.php:445
 msgid "Label Class"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:474
+#: includes/admin/forms/metaboxes.php:472
 msgid "Input Class"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:513
+#: includes/admin/forms/metaboxes.php:511
 msgid "Add Field"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:555
+#: includes/admin/forms/metaboxes.php:553
 msgid "Enable %s Ajax Search?"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:565
+#: includes/admin/forms/metaboxes.php:563
 msgid "One entry per line"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:577
+#: includes/admin/forms/metaboxes.php:575
 msgid "Multiple Select?"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:587
+#: includes/admin/forms/metaboxes.php:585
 msgid "Initially Selected?"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:597
+#: includes/admin/forms/metaboxes.php:595
 msgid "Searchable?"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:602
+#: includes/admin/forms/metaboxes.php:600
 msgid "Placeholder"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:618
+#: includes/admin/forms/metaboxes.php:616
 msgid "Hide Label?"
 msgstr ""
 
@@ -1179,14 +1177,13 @@ msgid "Categories"
 msgstr ""
 
 #: includes/admin/import-export/export/class-batch-export-tickets.php:50
-#: includes/admin/tickets/metaboxes.php:404
 #: includes/admin/tickets/tickets.php:66
 #: includes/tickets/ticket-functions.php:1480 templates/view-ticket.php:107
 msgid "Agent"
 msgstr ""
 
 #: includes/admin/import-export/export/class-batch-export-tickets.php:51
-#: includes/admin/tickets/metaboxes.php:435
+#: includes/admin/tickets/metaboxes.php:442
 msgid "Additional Agents"
 msgstr ""
 
@@ -2024,7 +2021,7 @@ msgid "The label for the %s reply form submit button."
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:351
-#: includes/admin/tickets/metaboxes.php:610 includes/template-functions.php:65
+#: includes/admin/tickets/metaboxes.php:617 includes/template-functions.php:65
 #: templates/view-ticket.php:246
 msgid "Reply"
 msgstr ""
@@ -3118,7 +3115,7 @@ msgid "Create"
 msgstr ""
 
 #: includes/admin/tickets/metaboxes.php:84
-#: includes/admin/tickets/metaboxes.php:324
+#: includes/admin/tickets/metaboxes.php:330
 msgid "Update"
 msgstr ""
 
@@ -3142,56 +3139,56 @@ msgstr ""
 msgid "Updated"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:320
+#: includes/admin/tickets/metaboxes.php:326
 msgid "Back to %s"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:324
+#: includes/admin/tickets/metaboxes.php:330
 msgid "Add"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:379
+#: includes/admin/tickets/metaboxes.php:385
 #: includes/admin/tickets/tickets.php:70
 msgid "SLA Status"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:442
+#: includes/admin/tickets/metaboxes.php:449
 msgid "Select Additional Agents"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:495
+#: includes/admin/tickets/metaboxes.php:502
 msgid "Submitted Form Data"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:495
+#: includes/admin/tickets/metaboxes.php:502
 msgid "View Form Submission Data"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:528 templates/view-ticket.php:158
+#: includes/admin/tickets/metaboxes.php:535 templates/view-ticket.php:158
 msgid "Attached Files"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:580
+#: includes/admin/tickets/metaboxes.php:587
 msgid "This %1$s is currently closed. <a href=\"%2$s\">Re-open %3$s.</a>"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:594
+#: includes/admin/tickets/metaboxes.php:601
 msgid "Add a New Reply"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:611
+#: includes/admin/tickets/metaboxes.php:618
 msgid "Reply and Close"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:662
+#: includes/admin/tickets/metaboxes.php:669
 msgid "Add a New Note"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:666
+#: includes/admin/tickets/metaboxes.php:673
 msgid "Notes are only visible to support workers"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:679
+#: includes/admin/tickets/metaboxes.php:686
 msgid "Add Note"
 msgstr ""
 
@@ -3619,7 +3616,7 @@ msgstr ""
 msgid "Could not create customer."
 msgstr ""
 
-#: includes/ajax-functions.php:580
+#: includes/ajax-functions.php:580 includes/class-kbs-html-elements.php:400
 msgid "No users found"
 msgstr ""
 
@@ -3636,39 +3633,79 @@ msgstr ""
 msgid "Can't get property %s"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:100
+#: includes/class-kbs-html-elements.php:44
+#: includes/class-kbs-html-elements.php:124
 msgid "Select a %s"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:268
+#: includes/class-kbs-html-elements.php:48
+msgid "Type to search all %s statuses"
+msgstr ""
+
+#: includes/class-kbs-html-elements.php:128 includes/scripts.php:227
+msgid "Type to search all %s"
+msgstr ""
+
+#: includes/class-kbs-html-elements.php:296
+#: includes/class-kbs-html-elements.php:299
 msgid "Select a Customer"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:282
+#: includes/class-kbs-html-elements.php:302
+msgid "Type to search all customers"
+msgstr ""
+
+#: includes/class-kbs-html-elements.php:315
 msgid "No customer attached"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:288
+#: includes/class-kbs-html-elements.php:321
 msgid "No customers found"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:340
+#: includes/class-kbs-html-elements.php:375
+msgid "Select a User"
+msgstr ""
+
+#: includes/class-kbs-html-elements.php:381
+msgid "Type to search all users"
+msgstr ""
+
+#: includes/class-kbs-html-elements.php:454
+#: includes/class-kbs-html-elements.php:456
+msgid "Choose a Field Type"
+msgstr ""
+
+#: includes/class-kbs-html-elements.php:459
+msgid "Type to search all fields"
+msgstr ""
+
+#: includes/class-kbs-html-elements.php:501
 msgid "Select a Company"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:341
+#: includes/class-kbs-html-elements.php:502
 msgid "No Company"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:363
+#: includes/class-kbs-html-elements.php:506
+msgid "Type to search all companies"
+msgstr ""
+
+#: includes/class-kbs-html-elements.php:527
 msgid "No companies found"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:414
+#: includes/class-kbs-html-elements.php:578
+#: includes/class-kbs-html-elements.php:583
 msgid "Select an Agent"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:911
+#: includes/class-kbs-html-elements.php:586
+msgid "Type to search all agents"
+msgstr ""
+
+#: includes/class-kbs-html-elements.php:1083
 msgid "Enter username"
 msgstr ""
 
@@ -4464,7 +4501,7 @@ msgstr ""
 msgid "New Reply"
 msgstr ""
 
-#: includes/post-types.php:78 includes/scripts.php:227
+#: includes/post-types.php:78 includes/scripts.php:233
 #: includes/tickets/ticket-functions.php:1379
 msgid "View Reply"
 msgstr ""
@@ -4743,22 +4780,24 @@ msgstr ""
 msgid "Honeypot validation error"
 msgstr ""
 
-#: includes/scripts.php:213
+#: includes/scripts.php:207
 msgid "Add New %s"
 msgstr ""
 
+#: includes/scripts.php:213
+msgid "Enter a Label for your field."
+msgstr ""
+
+#: includes/scripts.php:214
+msgid "Select the field Type"
+msgstr ""
+
 #: includes/scripts.php:215
-msgid "There is no content in your reply"
+msgid "Hide Note"
 msgstr ""
 
 #: includes/scripts.php:216
-msgid ""
-"Are you sure you wish to close this ticket? Click OK to close, or Cancel to "
-"return."
-msgstr ""
-
-#: includes/scripts.php:217
-msgid "Could not add %s Reply"
+msgid "Hide Reply"
 msgstr ""
 
 #: includes/scripts.php:219
@@ -4766,23 +4805,19 @@ msgid "There is no content in your note"
 msgstr ""
 
 #: includes/scripts.php:220
-msgid "Your note could not be added"
+msgid "There is no content in your reply"
 msgstr ""
 
 #: includes/scripts.php:221
-msgid "Type to search %s"
+msgid "Your note could not be added"
 msgstr ""
 
 #: includes/scripts.php:222
-msgid "Type to search all %s"
+msgid "Choose a %s"
 msgstr ""
 
-#: includes/scripts.php:224
-msgid "Enter a Label for your field."
-msgstr ""
-
-#: includes/scripts.php:225
-msgid "Select the field Type"
+#: includes/scripts.php:223
+msgid "Choose one or more %s"
 msgstr ""
 
 #: includes/scripts.php:226
@@ -4792,15 +4827,25 @@ msgid ""
 msgstr ""
 
 #: includes/scripts.php:228
-msgid "Hide Reply"
+msgid "Send closure email?"
 msgstr ""
 
-#: includes/scripts.php:229 includes/tickets/ticket-functions.php:1686
+#: includes/scripts.php:229
+msgid ""
+"Are you sure you wish to close this ticket? Click OK to close, or Cancel to "
+"return."
+msgstr ""
+
+#: includes/scripts.php:231
+msgid "Could not add %s Reply"
+msgstr ""
+
+#: includes/scripts.php:232
+msgid "Type to search %s"
+msgstr ""
+
+#: includes/scripts.php:234 includes/tickets/ticket-functions.php:1686
 msgid "View Note"
-msgstr ""
-
-#: includes/scripts.php:230
-msgid "Hide Note"
 msgstr ""
 
 #: includes/shortcodes.php:287
@@ -5135,18 +5180,18 @@ msgid ""
 "Desk"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:75
-#: includes/class-kbs-html-elements.php:179
+#: includes/class-kbs-html-elements.php:99
+#: includes/class-kbs-html-elements.php:207
 msgctxt "plural: Example: \"All Categories\""
 msgid "All %s"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:461
+#: includes/class-kbs-html-elements.php:633
 msgctxt "all dropdown items"
 msgid "All"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:462
+#: includes/class-kbs-html-elements.php:634
 msgctxt "no dropdown items"
 msgid "None"
 msgstr ""
