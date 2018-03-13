@@ -171,6 +171,18 @@ jQuery(document).ready(function ($) {
                     return confirm( kbs_vars.reply_has_data );
                 }
             });
+
+            $( document.body ).on( 'change', '#ticket_status', function() {
+                if ( 'closed' === $(this).val() && ! kbs_vars.disable_closure_email ) {
+                    $(this).parent().append('<br id="kbs-closure-option">');
+                    $(this).parent().append('<input type="checkbox" id="kbs-closure-email" name="kbs_closure_email" value="1" style="margin-top:0; margin-left: 4px;">');
+                    $(this).parent().append('<label for="kbs-closure-email">' + kbs_vars.send_closure_email + '</label>');
+                } else {
+                    $('#kbs-closure-option').remove();
+                    $('#kbs-closure-email').remove();
+                    $('label[for="kbs-closure-email"]').remove();
+                }
+            });
         },
 
 		reply : function() {

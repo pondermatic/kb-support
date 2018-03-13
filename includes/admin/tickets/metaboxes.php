@@ -307,24 +307,6 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
                         'selected' => $kbs_ticket->post_status,
                         'chosen'   => true
                     ) ); ?>
-
-                    <?php if ( 'closed' != $kbs_ticket->post_status ) : ?>
-                        <script type="text/javascript">
-                            jQuery(document).ready(function($) {
-                                $('#ticket_status').change(function() {
-                                    if ( 'closed' == $(this).val() ) {
-                                        $(this).parent().append('<br id="kbs-closure-option">');
-                                        $(this).parent().append('<input type="checkbox" id="kbs-closure-email" name="kbs_closure_email" value="1" style="margin-top:0; margin-left: 4px;">');
-                                        $(this).parent().append('<label for="kbs-closure-email"><?php _e( 'Send closure email?', 'kb-support' ); ?></label>');
-                                    } else {
-                                        $('#kbs-closure-option').remove();
-                                        $('#kbs-closure-email').remove();
-                                        $('label[for="kbs-closure-email"]').remove();
-                                    }
-                                });
-                            });
-                        </script>
-                    <?php endif; ?>
                 </p>
 
                 <?php do_action( 'kbs_ticket_metabox_save_after_status', $ticket_id ); ?>
