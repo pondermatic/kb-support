@@ -590,7 +590,8 @@ function kbs_form_ignore_fields()	{
 		'kbs_action',
 		'kbs_redirect',
 		'kbs_honeypot',
-		'kbs_ticket_submit'
+		'kbs_ticket_submit',
+		'g-recaptcha-response'
 	);
 
 	return apply_filters( 'kbs_ignore_ticket_fields', $ignore );
