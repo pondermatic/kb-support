@@ -179,7 +179,9 @@
 }
 
 #kbs_ticket_wrap input.kbs-input,
-#kbs_ticket_form_wrap input.kbs-input	{
+#kbs_ticket_form_wrap input.kbs-input,
+#kbs_ticket_form_wrap select,
+#kbs_ticket_form_wrap .kbs-select-chosen	{
 	display: inline-block;
 	width: 70%;
 }
