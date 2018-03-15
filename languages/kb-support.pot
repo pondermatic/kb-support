@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KB Support 1.1.12\n"
 "Report-Msgid-Bugs-To: https://kb-support.com/\n"
-"POT-Creation-Date: 2018-03-13 21:24:02+00:00\n"
+"POT-Creation-Date: 2018-03-15 23:19:58+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -452,7 +452,7 @@ msgstr ""
 
 #: includes/admin/companies/metaboxes.php:134
 #: includes/admin/customers/customers-page.php:433
-#: includes/form-functions.php:230 templates/shortcode-register.php:24
+#: includes/forms/form-functions.php:234 templates/shortcode-register.php:24
 msgid "Email Address"
 msgstr ""
 
@@ -705,17 +705,17 @@ msgstr ""
 
 #: includes/admin/customers/customers-page.php:292
 #: includes/admin/customers/customers-page.php:656
-#: includes/form-functions.php:530
+#: includes/forms/form-functions.php:535
 msgid "Customer Email"
 msgstr ""
 
 #: includes/admin/customers/customers-page.php:296
-#: includes/form-functions.php:531
+#: includes/forms/form-functions.php:536
 msgid "Customer Primary Phone"
 msgstr ""
 
 #: includes/admin/customers/customers-page.php:300
-#: includes/form-functions.php:532
+#: includes/forms/form-functions.php:537
 msgid "Customer Additional Phone"
 msgstr ""
 
@@ -1093,7 +1093,7 @@ msgstr ""
 msgid "Label"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:314 includes/form-functions.php:248
+#: includes/admin/forms/metaboxes.php:314 includes/forms/form-functions.php:252
 msgid "Description"
 msgstr ""
 
@@ -1146,10 +1146,18 @@ msgid "Searchable?"
 msgstr ""
 
 #: includes/admin/forms/metaboxes.php:600
+msgid "Search Text"
+msgstr ""
+
+#: includes/admin/forms/metaboxes.php:606
+msgid "Optional search text"
+msgstr ""
+
+#: includes/admin/forms/metaboxes.php:612
 msgid "Placeholder"
 msgstr ""
 
-#: includes/admin/forms/metaboxes.php:616
+#: includes/admin/forms/metaboxes.php:628
 msgid "Hide Label?"
 msgstr ""
 
@@ -1995,7 +2003,7 @@ msgstr ""
 
 #: includes/admin/settings/register-settings.php:336
 #: includes/admin/settings/register-settings.php:519
-#: includes/form-functions.php:548
+#: includes/forms/form-functions.php:553
 msgid "None"
 msgstr ""
 
@@ -2749,7 +2757,7 @@ msgid "Heading for the agree to terms thickbox."
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:939
-#: includes/form-functions.php:972
+#: includes/forms/form-functions.php:1005
 msgid "Terms and Conditions for Support %s"
 msgstr ""
 
@@ -2812,7 +2820,7 @@ msgid "Main"
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:1197
-#: includes/form-functions.php:487
+#: includes/forms/form-functions.php:492
 msgid "Google reCaptcha"
 msgstr ""
 
@@ -3628,8 +3636,9 @@ msgstr ""
 msgid "Once Weekly"
 msgstr ""
 
-#: includes/class-kbs-customer.php:221 includes/class-kbs-form.php:108
+#: includes/class-kbs-customer.php:221
 #: includes/companies/class-kbs-company.php:160
+#: includes/forms/class-kbs-form.php:108
 msgid "Can't get property %s"
 msgstr ""
 
@@ -3642,7 +3651,7 @@ msgstr ""
 msgid "Type to search all %s statuses"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:128 includes/scripts.php:227
+#: includes/class-kbs-html-elements.php:128 includes/scripts.php:228
 msgid "Type to search all %s"
 msgstr ""
 
@@ -4091,137 +4100,141 @@ msgstr ""
 msgid "A new reply has been received for a support %s."
 msgstr ""
 
-#: includes/form-functions.php:212 includes/misc-functions.php:632
+#: includes/forms/form-functions.php:216 includes/misc-functions.php:632
 #: includes/misc-functions.php:633 templates/shortcode-profile-editor.php:29
 msgid "First Name"
 msgstr ""
 
-#: includes/form-functions.php:221 includes/misc-functions.php:636
+#: includes/forms/form-functions.php:225 includes/misc-functions.php:636
 #: includes/misc-functions.php:637 templates/shortcode-profile-editor.php:36
 msgid "Last Name"
 msgstr ""
 
-#: includes/form-functions.php:239 templates/view-ticket.php:117
+#: includes/forms/form-functions.php:243 templates/view-ticket.php:117
 msgid "Subject"
 msgstr ""
 
-#: includes/form-functions.php:479
+#: includes/forms/form-functions.php:484
 msgid "Checkbox"
 msgstr ""
 
-#: includes/form-functions.php:480
+#: includes/forms/form-functions.php:485
 msgid "Checkbox List"
 msgstr ""
 
-#: includes/form-functions.php:481
+#: includes/forms/form-functions.php:486
 msgid "Date Field"
 msgstr ""
 
-#: includes/form-functions.php:482
+#: includes/forms/form-functions.php:487
 msgid "Email Field"
 msgstr ""
 
-#: includes/form-functions.php:483
+#: includes/forms/form-functions.php:488
 msgid "File Upload"
 msgstr ""
 
-#: includes/form-functions.php:484
+#: includes/forms/form-functions.php:489
 msgid "Hidden Field"
 msgstr ""
 
-#: includes/form-functions.php:485
+#: includes/forms/form-functions.php:490
 msgid "Number Field"
 msgstr ""
 
-#: includes/form-functions.php:486
+#: includes/forms/form-functions.php:491
 msgid "Radio Buttons"
 msgstr ""
 
-#: includes/form-functions.php:488
+#: includes/forms/form-functions.php:493
 msgid "Rich Text Editor"
 msgstr ""
 
-#: includes/form-functions.php:489
+#: includes/forms/form-functions.php:494
 msgid "Select List"
 msgstr ""
 
-#: includes/form-functions.php:490
+#: includes/forms/form-functions.php:495
 msgid "Text Field"
 msgstr ""
 
-#: includes/form-functions.php:491
+#: includes/forms/form-functions.php:496
 msgid "Textarea"
 msgstr ""
 
-#: includes/form-functions.php:492
+#: includes/forms/form-functions.php:497
 msgid "%s Categories"
 msgstr ""
 
-#: includes/form-functions.php:493
+#: includes/forms/form-functions.php:498
 msgid "URL Field"
 msgstr ""
 
-#: includes/form-functions.php:528
+#: includes/forms/form-functions.php:533
 msgid "Customer First Name"
 msgstr ""
 
-#: includes/form-functions.php:529
+#: includes/forms/form-functions.php:534
 msgid "Customer Last Name"
 msgstr ""
 
-#: includes/form-functions.php:533
+#: includes/forms/form-functions.php:538
 msgid "Customer Website"
 msgstr ""
 
-#: includes/form-functions.php:534
+#: includes/forms/form-functions.php:539
 msgid "Ticket Title"
 msgstr ""
 
-#: includes/form-functions.php:535
+#: includes/forms/form-functions.php:540
 msgid "Ticket Content"
 msgstr ""
 
-#: includes/form-functions.php:614
+#: includes/forms/form-functions.php:620
 msgid "Label Hidden"
 msgstr ""
 
-#: includes/form-functions.php:620
+#: includes/forms/form-functions.php:626
 msgid "Required Field"
 msgstr ""
 
-#: includes/form-functions.php:626
+#: includes/forms/form-functions.php:632
 msgid "Placeholder: %s"
 msgstr ""
 
-#: includes/form-functions.php:632
+#: includes/forms/form-functions.php:638
 msgid "Maps to %s"
 msgstr ""
 
-#: includes/form-functions.php:657 includes/form-functions.php:667
+#: includes/forms/form-functions.php:644
+msgid "Searchable"
+msgstr ""
+
+#: includes/forms/form-functions.php:669 includes/forms/form-functions.php:679
 msgid "Submission form not found"
 msgstr ""
 
-#: includes/form-functions.php:690
+#: includes/forms/form-functions.php:702
 msgid "An internal error has occurred, please try again or contact support."
 msgstr ""
 
-#: includes/form-functions.php:691
+#: includes/forms/form-functions.php:703
 msgid " is a required field."
 msgstr ""
 
-#: includes/form-functions.php:692
+#: includes/forms/form-functions.php:704
 msgid " requires a valid email address."
 msgstr ""
 
-#: includes/form-functions.php:693
+#: includes/forms/form-functions.php:705
 msgid "You must agree to the terms and conditions"
 msgstr ""
 
-#: includes/form-functions.php:694
+#: includes/forms/form-functions.php:706
 msgid " validation failed"
 msgstr ""
 
-#: includes/form-functions.php:700
+#: includes/forms/form-functions.php:712
 msgid " contains an error."
 msgstr ""
 
@@ -4501,7 +4514,7 @@ msgstr ""
 msgid "New Reply"
 msgstr ""
 
-#: includes/post-types.php:78 includes/scripts.php:233
+#: includes/post-types.php:78 includes/scripts.php:234
 #: includes/tickets/ticket-functions.php:1379
 msgid "View Reply"
 msgstr ""
@@ -4772,79 +4785,83 @@ msgid_plural "%1$s %3$s restored from the Trash."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/scripts.php:48
-msgid "Please Wait..."
-msgstr ""
-
-#: includes/scripts.php:51
+#: includes/scripts.php:44
 msgid "Honeypot validation error"
 msgstr ""
 
-#: includes/scripts.php:207
-msgid "Add New %s"
-msgstr ""
-
-#: includes/scripts.php:213
-msgid "Enter a Label for your field."
-msgstr ""
-
-#: includes/scripts.php:214
-msgid "Select the field Type"
-msgstr ""
-
-#: includes/scripts.php:215
-msgid "Hide Note"
-msgstr ""
-
-#: includes/scripts.php:216
-msgid "Hide Reply"
-msgstr ""
-
-#: includes/scripts.php:219
-msgid "There is no content in your note"
-msgstr ""
-
-#: includes/scripts.php:220
-msgid "There is no content in your reply"
-msgstr ""
-
-#: includes/scripts.php:221
-msgid "Your note could not be added"
-msgstr ""
-
-#: includes/scripts.php:222
+#: includes/scripts.php:48 includes/scripts.php:223
 msgid "Choose a %s"
 msgstr ""
 
-#: includes/scripts.php:223
+#: includes/scripts.php:49 includes/scripts.php:224
 msgid "Choose one or more %s"
 msgstr ""
 
-#: includes/scripts.php:226
+#: includes/scripts.php:52
+msgid "Type to search all options"
+msgstr ""
+
+#: includes/scripts.php:54
+msgid "Please Wait..."
+msgstr ""
+
+#: includes/scripts.php:55 includes/scripts.php:233
+msgid "Type to search %s"
+msgstr ""
+
+#: includes/scripts.php:208
+msgid "Add New %s"
+msgstr ""
+
+#: includes/scripts.php:214
+msgid "Enter a Label for your field."
+msgstr ""
+
+#: includes/scripts.php:215
+msgid "Select the field Type"
+msgstr ""
+
+#: includes/scripts.php:216
+msgid "Hide Note"
+msgstr ""
+
+#: includes/scripts.php:217
+msgid "Hide Reply"
+msgstr ""
+
+#: includes/scripts.php:220
+msgid "There is no content in your note"
+msgstr ""
+
+#: includes/scripts.php:221
+msgid "There is no content in your reply"
+msgstr ""
+
+#: includes/scripts.php:222
+msgid "Your note could not be added"
+msgstr ""
+
+#: includes/scripts.php:227
 msgid ""
 "You have not submitted the reply. If you continue, the reply will not be "
 "added to the %s"
 msgstr ""
 
-#: includes/scripts.php:228
+#: includes/scripts.php:229
 msgid "Send closure email?"
 msgstr ""
 
-#: includes/scripts.php:229
+#: includes/scripts.php:230
 msgid ""
 "Are you sure you wish to close this ticket? Click OK to close, or Cancel to "
 "return."
 msgstr ""
 
-#: includes/scripts.php:231
+#: includes/scripts.php:232
 msgid "Could not add %s Reply"
 msgstr ""
 
-#: includes/scripts.php:232
-msgid "Type to search %s"
-msgstr ""
-
-#: includes/scripts.php:234 includes/tickets/ticket-functions.php:1686
+#: includes/scripts.php:235 includes/tickets/ticket-functions.php:1686
 msgid "View Note"
 msgstr ""
 
