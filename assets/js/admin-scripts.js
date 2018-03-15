@@ -431,6 +431,14 @@ jQuery(document).ready(function ($) {
 				}
 			});
 
+			$( document.body ).on('change', $('#kbs_field_select_chosen'), function()	{
+				if( $('#kbs_field_select_chosen').is(':checked') )	{
+					$('#kbs_meta_field_select_search_text_wrap').show('fast');
+				} else	{
+					$('#kbs_meta_field_select_search_text_wrap').hide('fast');
+				}
+			});
+
 			// Send Add New Field Requests
 			$( document.body ).on( 'click', '#kbs-add-form-field', function(event) {
 				
