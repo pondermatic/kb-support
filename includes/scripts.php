@@ -111,9 +111,6 @@ function kbs_register_styles() {
 		$url = trailingslashit( kbs_get_templates_url() ) . $file;
 	}
 
-	wp_register_style( 'kbs-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css', array(), KBS_VERSION, 'all' ); 
-	wp_enqueue_style( 'kbs-font-awesome' );
-
 	wp_register_style( 'kbs-styles', $url, array(), KBS_VERSION, 'all' );
 	wp_enqueue_style( 'kbs-styles' );
 
@@ -243,8 +240,8 @@ function kbs_load_admin_scripts( $hook ) {
 		wp_enqueue_media();
 	}
 
-	wp_register_style( 'kbs-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css', array(), KBS_VERSION, 'all' ); 
-	wp_enqueue_style( 'kbs-font-awesome' );
+    wp_register_script( 'kbs-font-awesome', '//use.fontawesome.com/releases/v5.0.8/js/all.js', array(), KBS_VERSION ); 
+	wp_enqueue_script( 'kbs-font-awesome' );
 
 	wp_register_script( 'jquery-chosen', $js_dir . 'chosen.jquery' . $suffix . '.js', array( 'jquery' ), KBS_VERSION );
 	wp_enqueue_script( 'jquery-chosen' );
@@ -258,6 +255,21 @@ function kbs_load_admin_scripts( $hook ) {
 
 } // kbs_load_admin_scripts
 add_action( 'admin_enqueue_scripts', 'kbs_load_admin_scripts' );
+
+/**
+ * Filter the HTML script tag of an enqueued script.
+ *
+ * @since   1.0
+ * @param   str     $tag    The HTML script tag
+ * @param   str     $handle The script handle name
+ */
+function kbs_filter_enqueued_script_tags( $tag, $handle )   {
+    if ( 'kbs-font-awesome5' == $handle )    {
+        $tag = str_replace( ' src', ' defer="defer" src', $tag );
+    }
+
+    return $tag;
+} // kbs_filter_enqueued_script_tags
 
 /**
  * At a Glance Icons

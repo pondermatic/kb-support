@@ -613,31 +613,31 @@ function kbs_display_field_setting_icons( $field_id )	{
 	
 	if ( $settings )	{
 		if ( ! empty( $settings['hide_label'] ) )	{
-			$output[] = '<i title="' . __( 'Label Hidden', 'kb-support' ) . '" class="fa fa-tag" aria-hidden="true"></i>';
+			$output[] = '<i title="' . __( 'Label Hidden', 'kb-support' ) . '" class="fas fa-tag" aria-hidden="true"></i>';
 		} else	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
 
 		if ( ! empty( $settings['required'] ) )	{
-			$output[] = '<i title="' . __( 'Required Field', 'kb-support' ) . '" class="fa fa-asterisk" aria-hidden="true"></i>';
+			$output[] = '<i title="' . __( 'Required Field', 'kb-support' ) . '" class="fas fa-asterisk" aria-hidden="true"></i>';
 		} else	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
 		
 		if ( ! empty( $settings['placeholder'] ) )	{
-			$output[] = '<i title="' . sprintf( __( 'Placeholder: %s', 'kb-support' ), stripslashes( $settings['placeholder'] ) ) . '" class="fa fa-info-circle" aria-hidden="true"></i>';
+			$output[] = '<i title="' . sprintf( __( 'Placeholder: %s', 'kb-support' ), stripslashes( $settings['placeholder'] ) ) . '" class="fas fa-info-circle" aria-hidden="true"></i>';
 		} else	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
 		
 		if ( ! empty( $settings['mapping'] ) && 'post_category' != $settings['mapping'] )	{
-			$output[] = '<i title="' . sprintf( __( 'Maps to %s', 'kb-support' ), stripslashes( $mappings[ $settings['mapping'] ] ) ) . '" class="fa fa-map-marker" aria-hidden="true"></i>';
+			$output[] = '<i title="' . sprintf( __( 'Maps to %s', 'kb-support' ), stripslashes( $mappings[ $settings['mapping'] ] ) ) . '" class="fas fa-map-marker-alt" aria-hidden="true"></i>';
 		} else	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
 
         if ( ! empty( $settings['chosen'] ) )	{
-			$output[] = '<i title="' . __( 'Searchable', 'kb-support' ) . '" class="fa fa-search" aria-hidden="true"></i>';
+			$output[] = '<i title="' . __( 'Searchable', 'kb-support' ) . '" class="fas fa-search" aria-hidden="true"></i>';
 		} else	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}

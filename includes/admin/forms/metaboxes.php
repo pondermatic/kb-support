@@ -129,7 +129,7 @@ function kbs_form_add_field_mb_callback( $post, $args )	{
 function kbs_form_not_ready_mb_callback( $post, $args )	{
 	
 	?>
-   <p><i class="fa fa-exclamation" aria-hidden="true"></i> <?php _e( 'Please save or publish your form before adding fields.', 'kb-support' ); ?></p>
+   <p><i class="fas fa-exclamation-circle" aria-hidden="true"></i> <?php _e( 'Please save or publish your form before adding fields.', 'kb-support' ); ?></p>
     <?php
 	
 } // kbs_form_not_ready_mb_callback
