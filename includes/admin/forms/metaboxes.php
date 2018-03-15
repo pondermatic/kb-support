@@ -595,7 +595,19 @@ function kbs_render_field_options_rows( $post_id )	{
 			<strong><?php _e( 'Searchable?', 'kb-support' ); ?></strong></label>
         </p>
     </div>
-    
+
+    <div id="kbs_meta_field_select_search_text_wrap">
+    	<p><strong><?php _e( 'Search Text', 'kb-support' ); ?></strong><br>
+        <label for="kbs_field_select_chosen_search">
+			<?php echo KBS()->html->text( array(
+				'name'  => 'kbs_field_select_chosen_search',
+				'value' => ! empty( $kbs_edit_field->settings['chosen_search'] ) ? $kbs_edit_field->settings['chosen_search'] : null,
+                'class' => 'kbs_input',
+                'placeholder' => __( 'Optional search text', 'kb-support' )
+			) ); ?>
+        </label></p>
+    </div>
+
     <div id="kbs_meta_field_placeholder_wrap">
     	<p><strong><?php _e( 'Placeholder', 'kb-support' ); ?></strong><br />
 		<label for="kbs_field_placeholder">

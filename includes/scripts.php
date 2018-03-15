@@ -39,16 +39,20 @@ function kbs_load_scripts() {
 	}
 
 	wp_localize_script( 'kbs-ajax', 'kbs_scripts', apply_filters( 'kbs_ajax_script_vars', array(
-		'ajaxurl'                 => kbs_get_ajax_url(),
-		'ajax_loader'             => KBS_PLUGIN_URL . 'assets/images/loading.gif',
-		'permalinks'              => get_option( 'permalink_structure' ) ? '1' : '0',
-		'max_files'               => kbs_get_max_file_uploads(),
-		'max_files_exceeded'      => kbs_get_notices( 'max_files', true ),
-		'is_submission'           => $is_submission,
-		'submit_ticket_loading'   => __( 'Please Wait...', 'kb-support' ),
-		'submit_ticket'           => kbs_get_form_submit_label(),
-		'reply_label'             => kbs_get_ticket_reply_label(),
-		'honeypot_fail'           => __( 'Honeypot validation error', 'kb-support' )
+        'ajax_loader'           => KBS_PLUGIN_URL . 'assets/images/loading.gif',
+		'ajaxurl'               => kbs_get_ajax_url(),
+        'honeypot_fail'         => __( 'Honeypot validation error', 'kb-support' ),
+        'is_submission'         => $is_submission,
+		'max_files'             => kbs_get_max_file_uploads(),
+		'max_files_exceeded'    => kbs_get_notices( 'max_files', true ),
+        'one_option'            => sprintf( __( 'Choose a %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
+		'one_or_more_option'    => sprintf( __( 'Choose one or more %s', 'kb-support' ), kbs_get_ticket_label_plural() ),
+        'permalinks'            => get_option( 'permalink_structure' ) ? '1' : '0',
+        'reply_label'           => kbs_get_ticket_reply_label(),
+        'search_placeholder'    => __( 'Type to search all options', 'kb-support' ),
+        'submit_ticket'         => kbs_get_form_submit_label(),
+		'submit_ticket_loading' => __( 'Please Wait...', 'kb-support' ),
+        'type_to_search'        => __( 'Type to search %s', 'kb-support' ),
 	) ) );
 
 	if ( ! empty( $is_submission ) )	{

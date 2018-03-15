@@ -285,6 +285,7 @@ function kbs_add_default_fields_to_form( $form_id )	{
 				'select_multiple' => false,
 				'selected'        => false,
 				'chosen'          => false,
+                'chosen_search'   => '',
 				'placeholder'     => '',
 				'description'     => '',
 				'hide_label'      => false,
@@ -882,23 +883,38 @@ add_action( 'kbs_form_display_rich_editor_field', 'kbs_display_form_textarea_fie
  */
 function kbs_display_form_select_field( $field, $settings )	{
 
-	$class    = ! empty( $settings['input_class'] )     ? esc_attr( $settings['input_class'] ) : '';
-	$multiple = ! empty( $settings['select_multiple'] ) ? ' ' . ' multiple'                    : false;
-	$options  = array();
+	$class         = ! empty( $settings['input_class'] )     ? esc_attr( $settings['input_class'] )   : '';
+	$multiple      = ! empty( $settings['select_multiple'] ) ? ' ' . ' multiple'                      : false;
+    $chosen        = ! empty( $settings['chosen'] )          ? true                                   : false;
+    $chosen_search = ! empty( $settings['chosen_search'] )   ? esc_html( $settings['chosen_search'] ) : false;
+    $data_array    = ! empty( $settings['data'] )            ? $settings['data']                      : array();
+    $data_elements = '';
+	$options       = array();
 
-	if ( ! empty( $settings['chosen'] ) )	{
+	if ( $chosen )	{
         wp_enqueue_script( 'jquery-chosen' );
         wp_enqueue_style( 'jquery-chosen-css' );
+
 		$class .= 'kbs-select-chosen';
+
+        if ( $chosen_search && ! isset( $data_array['search-placeholder'] ) )    {
+            $data_array['search-type']        = 'general';
+            $data_array['search-placeholder'] = $chosen_search;
+        }
 	}
 
 	$class   = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $class ) ) );
 	$options = apply_filters( 'kbs_form_select_field_options', $settings['select_options'], $settings );
 
-	$output = sprintf( '<select name="%1$s" id="%1$s"%2$s%3$s>',
+    foreach ( $data_array as $key => $value ) {
+        $data_elements .= ' data-' . esc_attr( $key ) . '="' . esc_attr( $value ) . '"';
+    }
+
+	$output = sprintf( '<select name="%1$s" id="%1$s"%2$s%3$s%4$s>',
 		esc_attr( $field->post_name ),
 		' class="' . $class . ' kbs-input"',
-		$multiple
+		$multiple,
+        $data_elements
 	);
 
     if ( ! empty( $settings['placeholder'] ) )	{

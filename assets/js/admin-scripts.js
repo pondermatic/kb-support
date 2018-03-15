@@ -420,9 +420,7 @@ jQuery(document).ready(function ($) {
 			var kbs_field_type = $('.kbs_field_type');
 
 			$( document.body ).on('change', kbs_field_type, function()	{
-
 				toggleFieldOptions(kbs_field_type.val());
-
 			});
 
 			$( document.body ).on('change', $('#kbs_field_mapping'), function()	{
@@ -462,6 +460,7 @@ jQuery(document).ready(function ($) {
 					select_multiple  : ( $('#kbs_field_select_multiple').is(':checked') ) ? $('#kbs_field_select_multiple').val() : 0,
 					selected         : ( $('#kbs_field_option_selected').is(':checked') ) ? $('#kbs_field_option_selected').val() : 0,
 					chosen           : ( $('#kbs_field_select_chosen').is(':checked') )   ? $('#kbs_field_select_chosen').val()   : 0,
+                    chosen_search    : $('#kbs_field_select_chosen_search').val(),
 					description      : $('#kbs_field_description').val(),
 					description_pos  : $('input[name=kbs_field_description_pos]').filter(':checked').val(),
 					placeholder      : $('#kbs_field_placeholder').val(),
@@ -522,6 +521,7 @@ jQuery(document).ready(function ($) {
 					select_multiple  : ( $('#kbs_field_select_multiple').is(':checked') ) ? $('#kbs_field_select_multiple').val() : 0,
 					selected         : ( $('#kbs_field_option_selected').is(':checked') ) ? $('#kbs_field_option_selected').val() : 0,
 					chosen           : ( $('#kbs_field_select_chosen').is(':checked') )   ? $('#kbs_field_select_chosen').val()   : 0,
+                    chosen_search    : $('#kbs_field_select_chosen_search').val(),
 					placeholder      : $('#kbs_field_placeholder').val(),
 					description      : $('#kbs_field_description').val(),
 					description_pos  : $('input[name=kbs_field_description_pos]').filter(':checked').val(),
