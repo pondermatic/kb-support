@@ -904,6 +904,10 @@ function kbs_display_form_select_field( $field, $settings )	{
         if ( $chosen_search && ! isset( $data_array['search-placeholder'] ) )    {
             $data_array['search-type']        = 'general';
             $data_array['search-placeholder'] = $chosen_search;
+
+			if ( ! empty( $settings['placeholder'] ) )	{
+				$data_array['placeholder'] = esc_html( $settings['placeholder'] );
+			}
         }
 	}
 
