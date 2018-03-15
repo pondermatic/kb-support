@@ -113,14 +113,18 @@ add_action( 'template_redirect', 'kbs_enforced_form_ssl_redirect_handler' );
  * @param	arr		$args	Arguments. See $defaults / WP_Query.
  * @return	obj		WP_Query Object
  */
-function kbs_get_forms()	{
-	
+function kbs_get_forms( $args = array() )	{
+
 	$defaults = array(
 		'post_type'         => 'kbs_form',
 		'post_status'       => 'any',
 		'posts_per_page'	=> -1
 	);
-	
+
+	$args  = wp_parse_args( $args, $defaults );
+	$forms = get_posts( $args );
+
+	return $forms;
 } // kbs_get_forms
 
 /**

@@ -253,8 +253,8 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-html-elements.php';
 		require_once KBS_PLUGIN_DIR . 'includes/emails/email-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/emails/email-template.php';
-		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-form.php';
-		require_once KBS_PLUGIN_DIR . 'includes/form-functions.php';
+		require_once KBS_PLUGIN_DIR . 'includes/forms/class-kbs-form.php';
+		require_once KBS_PLUGIN_DIR . 'includes/forms/form-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/misc-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/login-register.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-customer.php';

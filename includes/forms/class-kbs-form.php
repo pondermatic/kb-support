@@ -175,6 +175,10 @@ class KBS_Form {
 			'show_logged_in'  => ! empty( $data['show_logged_in'] )  ? $data['show_logged_in']                       : true
 		);
 
+		if ( ! empty( $settings['chosen_search'] ) && empty( $settings['chosen'] ) )	{
+			$settings['chosen_search'] = '';
+		}
+
 		// Auto map post_category to the ticket_category_dropdown
 		if ( 'ticket_category_dropdown' == $settings['type'] )	{
 			$settings['mapping'] = 'post_category';
