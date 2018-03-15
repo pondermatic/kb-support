@@ -635,6 +635,12 @@ function kbs_display_field_setting_icons( $field_id )	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
 
+        if ( ! empty( $settings['chosen'] ) )	{
+			$output[] = '<i title="' . __( 'Searchable', 'kb-support' ) . '" class="fa fa-search" aria-hidden="true"></i>';
+		} else	{
+			$output[] = '&nbsp;&nbsp;&nbsp;';
+		}
+
 	}
 
 	$output = apply_filters( 'kbs_field_setting_icons', $output, $field_id, $settings );
@@ -881,6 +887,8 @@ function kbs_display_form_select_field( $field, $settings )	{
 	$options  = array();
 
 	if ( ! empty( $settings['chosen'] ) )	{
+        wp_enqueue_script( 'jquery-chosen' );
+        wp_enqueue_style( 'jquery-chosen-css' );
 		$class .= 'kbs-select-chosen';
 	}
 

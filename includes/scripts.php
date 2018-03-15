@@ -53,8 +53,8 @@ function kbs_load_scripts() {
 
 	if ( ! empty( $is_submission ) )	{
 		add_thickbox();
+        // Register the chosen script here, but we enqueue within kbs_display_form_select_field when needed
 		wp_register_script( 'jquery-chosen', $js_dir . 'chosen.jquery' . $suffix . '.js', array( 'jquery' ), KBS_VERSION );
-		wp_enqueue_script( 'jquery-chosen' );
 	}
 
 } // kbs_load_scripts
@@ -115,8 +115,8 @@ function kbs_register_styles() {
 
 	if ( ! empty( $post ) )	{
 		if ( is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'kbs_submit') )	{
+            // Register the chosen styles here, but we enqueue within kbs_display_form_select_field when needed
 			wp_register_style( 'jquery-chosen-css', $css_dir . 'chosen.css', array(), KBS_VERSION );
-			wp_enqueue_style( 'jquery-chosen-css' );
 		}
 	}
 
