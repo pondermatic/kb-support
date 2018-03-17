@@ -117,7 +117,7 @@ function kbs_register_styles() {
 	if ( ! empty( $post ) )	{
 		if ( is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'kbs_submit') )	{
             // Register the chosen styles here, but we enqueue within kbs_display_form_select_field when needed
-			wp_register_style( 'jquery-chosen-css', $css_dir . 'chosen.css', array(), KBS_VERSION );
+			wp_register_style( 'jquery-chosen-css', $css_dir . 'chosen' . $suffix . '.css', array(), KBS_VERSION );
 		}
 	}
 
@@ -155,7 +155,7 @@ function kbs_load_admin_styles( $hook ) {
 	wp_register_style( 'kbs-admin', $css_dir . 'kbs-admin' . $suffix . '.css', array(), KBS_VERSION );
 	wp_enqueue_style( 'kbs-admin' );
 
-	wp_register_style( 'jquery-chosen-css', $css_dir . 'chosen.css', array(), KBS_VERSION );
+	wp_register_style( 'jquery-chosen-css', $css_dir . 'chosen' . $suffix . '.css', array(), KBS_VERSION );
 	wp_enqueue_style( 'jquery-chosen-css' );
 
 } // kbs_load_admin_styles
