@@ -154,7 +154,7 @@ add_action( 'kbs_reply_to_ticket', 'kbs_email_ticket_reply', 999, 2 );
 function kbs_email_ticket_closed( $ticket_id ) {
 
 	$disable = kbs_get_option( 'ticket_closed_disable_email', false );
-	$disable = apply_filters( 'kbs_ticket_reply_disable_email', $disable );
+	$disable = apply_filters( 'kbs_ticket_close_disable_email', $disable );
 	
 	if ( ! empty( $disable ) )	{
 		return;

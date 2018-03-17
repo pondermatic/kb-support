@@ -31,7 +31,26 @@ class KBS_HTML_Elements {
 	 * @param	str		$selected	Status to select automatically
 	 * @return	str		$output		Status dropdown
 	 */
-	public function ticket_status_dropdown( $name = 'post_status', $selected = 0 ) {
+	public function ticket_status_dropdown( $args ) {
+
+        $defaults = array(
+			'name'             => 'post_status',
+			'id'               => '',
+			'class'            => '',
+			'multiple'         => false,
+			'chosen'           => false,
+			'show_option_all'  => false,
+			'show_option_none' => false,
+			'placeholder'      => sprintf( __( 'Select a %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
+			'selected'         => 0,
+			'data'        => array(
+				'search-type'        => 'ticket_status',
+				'search-placeholder' => sprintf( __( 'Type to search all %s statuses', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
+			)
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
 		$ticket_statuses = kbs_get_post_statuses( 'labels', true );
 		$options         = array();
 		
@@ -40,11 +59,16 @@ class KBS_HTML_Elements {
 		}
 
 		$output = $this->select( array(
-			'name'             => $name,
-			'selected'         => $selected,
+			'name'             => $args['name'],
+			'selected'         => $args['selected'],
 			'options'          => $options,
-			'show_option_all'  => '',
-			'show_option_none' => false
+            'multiple'         => $args['multiple'],
+            'chosen'           => $args['chosen'],
+			'show_option_all'  => $args['show_option_all'],
+			'show_option_none' => $args['show_option_none'],
+            'placeholder'      => $args['placeholder'],
+            'data'             => $args['data'],
+            
 		) );
 
 		return $output;
@@ -99,6 +123,10 @@ class KBS_HTML_Elements {
 			'show_option_none' => '',
 			'placeholder'      => sprintf( __( 'Select a %s', 'kb-support' ), kbs_get_article_label_singular() ),
 			'selected'         => 0,
+			'data'        => array(
+				'search-type'        => 'article',
+				'search-placeholder' => sprintf( __( 'Type to search all %s', 'kb-support' ), kbs_get_article_label_plural() )
+			),
 			'key'              => 'id',
 			'articles'         => null,
 			'author'           => null,
@@ -258,16 +286,21 @@ class KBS_HTML_Elements {
 	public function customer_dropdown( $args = array() ) {
 
 		$defaults = array(
-			'name'        => 'customers',
-			'id'          => '',
-			'class'       => '',
-			'multiple'    => false,
-			'selected'    => 0,
-			'chosen'      => true,
-			'company_id'  => null,
-			'placeholder' => __( 'Select a Customer', 'kb-support' ),
-			'number'      => 30,
-			'data'        => array( 'search-type' => 'customer' ),
+			'name'             => 'customers',
+			'id'               => '',
+			'class'            => '',
+			'multiple'         => false,
+			'selected'         => 0,
+			'chosen'           => true,
+			'company_id'       => null,
+			'placeholder'      => __( 'Select a Customer', 'kb-support' ),
+			'number'           => -1,
+            'show_option_all'  => false,
+            'show_option_none' => __( 'Select a Customer', 'kb-support' ),
+			'data'             => array(
+				'search-type'        => 'customer',
+				'search-placeholder' => __( 'Type to search all customers', 'kb-support' )
+			)
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -311,14 +344,142 @@ class KBS_HTML_Elements {
 			'class'            => $args['class'] . ' kbs-customer-select',
 			'options'          => $options,
 			'multiple'         => $args['multiple'],
+			'placeholder'      => $args['placeholder'],
 			'chosen'           => $args['chosen'],
-			'show_option_all'  => false,
-			'show_option_none' => false,
+			'show_option_all'  => $args['show_option_all'],
+			'show_option_none' => $args['show_option_none'],
 			'data'             => $args['data']
 		) );
 
 		return $output;
 	} // customer_dropdown
+
+	/**
+	 * Renders an HTML Dropdown of all the Users
+	 *
+	 * @access	public
+	 * @since	1.2
+	 * @param	arr		$args
+     * @param   arr     $user_args
+	 * @return	str		$output	User dropdown
+	 */
+	public function user_dropdown( $args = array(), $user_args = array() ) {
+
+		$defaults = array(
+			'name'             => 'users',
+			'id'               => 'users',
+			'class'            => '',
+			'multiple'         => false,
+			'selected'         => 0,
+			'chosen'           => true,
+			'placeholder'      => __( 'Select a User', 'kb-support' ),
+			'number'           => -1,
+			'show_option_all'  => false,
+			'show_option_none' => false,
+			'data'             => array(
+				'search-type'        => 'user',
+				'search-placeholder' => __( 'Type to search all users', 'kb-support' ),
+			),
+		);
+
+        $user_defaults = array(
+            'number' => -1
+        );
+
+		$args      = wp_parse_args( $args, $defaults );
+        $user_args = wp_parse_args( $user_args, $user_defaults );
+
+		$users   = get_users( $user_args );
+		$options = array();
+
+		if ( $users ) {
+			foreach ( $users as $user ) {
+				$options[ $user->ID ] = esc_html( $user->display_name );
+			}
+		} else {
+			$options[0] = __( 'No users found', 'kb-support' );
+		}
+
+		// If a selected user has been specified, we need to ensure it's in the initial list of user displayed
+		if( ! empty( $args['selected'] ) ) {
+
+			if( ! array_key_exists( $args['selected'], $options ) ) {
+
+				$user = get_userdata( $args['selected'] );
+
+				if( $user ) {
+
+					$options[ absint( $args['selected'] ) ] = esc_html( $user->display_name );
+
+				}
+
+			}
+
+		}
+
+		$output = $this->select( array(
+			'name'             => $args['name'],
+			'selected'         => $args['selected'],
+			'id'               => $args['id'],
+			'class'            => $args['class'] . ' kbs-user-select',
+			'options'          => $options,
+			'multiple'         => $args['multiple'],
+			'placeholder'      => $args['placeholder'],
+			'chosen'           => $args['chosen'],
+			'show_option_all'  => $args['show_option_all'],
+			'show_option_none' => $args['show_option_none'],
+			'data'             => $args['data'],
+		) );
+
+		return $output;
+	} // user_dropdown
+
+	/**
+	 * Renders an HTML Dropdown of all the form field types
+	 *
+	 * @access	public
+	 * @since	1.2
+	 * @param	arr		$args
+	 * @return	str		$output	User dropdown
+	 */
+	public function field_types_dropdown( $args = array() ) {
+
+		$defaults = array(
+			'name'             => 'kbs_field_type',
+			'id'               => 'kbs_field_type',
+			'class'            => 'kbs_field_type',
+			'multiple'         => false,
+			'selected'         => 0,
+			'chosen'           => true,
+			'placeholder'      => __( 'Choose a Field Type', 'kb-support' ),
+			'show_option_all'  => false,
+			'show_option_none' => __( 'Choose a Field Type', 'kb-support' ),
+			'data'             => array(
+				'search-type'        => 'fields',
+				'search-placeholder' => __( 'Type to search all fields', 'kb-support' ),
+			)
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
+		$options = kbs_get_field_types();
+
+		$output = $this->select( array(
+			'name'             => $args['name'],
+			'selected'         => $args['selected'],
+			'id'               => $args['id'],
+			'class'            => $args['class'] . ' kbs-user-select',
+			'options'          => $options,
+			'multiple'         => $args['multiple'],
+			'placeholder'      => $args['placeholder'],
+			'chosen'           => $args['chosen'],
+			'show_option_all'  => $args['show_option_all'],
+			'show_option_none' => $args['show_option_none'],
+			'data'             => $args['data'],
+		) );
+
+		return $output;
+	} // field_types_dropdown
 
 	/**
 	 * Renders an HTML Dropdown of company's
@@ -340,7 +501,10 @@ class KBS_HTML_Elements {
 			'placeholder'      => __( 'Select a Company', 'kb-support' ),
 			'show_option_none' => __( 'No Company', 'kb-support' ),
 			'number'           => 30,
-			'data'             => array( 'search-type' => 'company' ),
+			'data'        => array(
+				'search-type'        => 'company',
+				'search-placeholder' => __( 'Type to search all companies', 'kb-support' )
+			)
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -412,7 +576,15 @@ class KBS_HTML_Elements {
 			'name'             => 'kbs_agent',
 			'show_option_all'  => false,
 			'show_option_none' => __( 'Select an Agent', 'kb-support' ),
-            'exclude'          => array()
+            'exclude'          => array(),
+            'selected'         => 0,
+            'chosen'           => false,
+            'multiple'         => false,
+            'placeholder'      => __( 'Select an Agent', 'kb-support' ),
+			'data'             => array(
+				'search-type'        => 'agent',
+				'search-placeholder' => __( 'Type to search all agents', 'kb-support' )
+			)
 		);
 
 		$args = wp_parse_args( $args, $defaults );

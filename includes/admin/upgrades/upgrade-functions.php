@@ -64,6 +64,10 @@ function kbs_do_automatic_upgrades() {
 		kbs_v119_upgrades();
 	}
 
+	if ( version_compare( $kbs_version, '1.1.13', '<' ) ) {
+		flush_rewrite_rules();
+	}
+
 	if ( version_compare( $kbs_version, KBS_VERSION, '<' ) )	{
 
 		// Let us know that an upgrade has happened

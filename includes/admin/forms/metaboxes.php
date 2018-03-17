@@ -33,7 +33,11 @@ function kbs_render_form_field_redirect_setting( $post )    {
 				'show_option_all'  => false,
 				'show_option_none' => false,
 				'options'          => kbs_get_pages( true ),
-				'selected'         => kbs_get_form_redirect_target( $post->ID )
+				'selected'         => kbs_get_form_redirect_target( $post->ID ),
+				'data'             => array(
+					'search-type'        => 'pages',
+					'search-placeholder' => __( 'Type to search all pages', 'kb-support' ),
+				)
 			) ); ?>
 		</div>
 		<?php
@@ -125,7 +129,7 @@ function kbs_form_add_field_mb_callback( $post, $args )	{
 function kbs_form_not_ready_mb_callback( $post, $args )	{
 	
 	?>
-   <p><i class="fa fa-exclamation" aria-hidden="true"></i> <?php _e( 'Please save or publish your form before adding fields.', 'kb-support' ); ?></p>
+   <p><i class="fas fa-exclamation-circle" aria-hidden="true"></i> <?php _e( 'Please save or publish your form before adding fields.', 'kb-support' ); ?></p>
     <?php
 	
 } // kbs_form_not_ready_mb_callback
@@ -339,14 +343,8 @@ function kbs_render_field_type_row( $post_id, $args )	{
 	<div id="kbs_meta_field_type_wrap">
 		<p><strong><?php _e( 'Type', 'kb-support' ); ?></strong><br />
 		<label for="kbs_field_type">
-			<?php echo KBS()->html->select( array(
-				'name'             => 'kbs_field_type',
-				'selected'         => ! empty( $kbs_edit_field ) ? $kbs_edit_field->settings['type'] : 0,
-				'class'            => 'kbs_field_type',
-				'show_option_all'  => false,
-				'show_option_none' => __( 'Select Type', 'kb-support' ),
-				'options'          => kbs_get_field_types(),
-                'chosen'           => true
+			<?php echo KBS()->html->field_types_dropdown( array(
+				'selected'         => ! empty( $kbs_edit_field ) ? $kbs_edit_field->settings['type'] : 0
 			) ); ?>
 		</label></p>
 	</div>
@@ -597,7 +595,19 @@ function kbs_render_field_options_rows( $post_id )	{
 			<strong><?php _e( 'Searchable?', 'kb-support' ); ?></strong></label>
         </p>
     </div>
-    
+
+    <div id="kbs_meta_field_select_search_text_wrap">
+    	<p><strong><?php _e( 'Search Text', 'kb-support' ); ?></strong><br>
+        <label for="kbs_field_select_chosen_search">
+			<?php echo KBS()->html->text( array(
+				'name'  => 'kbs_field_select_chosen_search',
+				'value' => ! empty( $kbs_edit_field->settings['chosen_search'] ) ? $kbs_edit_field->settings['chosen_search'] : null,
+                'class' => 'kbs_input',
+                'placeholder' => __( 'Optional search text', 'kb-support' )
+			) ); ?>
+        </label></p>
+    </div>
+
     <div id="kbs_meta_field_placeholder_wrap">
     	<p><strong><?php _e( 'Placeholder', 'kb-support' ); ?></strong><br />
 		<label for="kbs_field_placeholder">

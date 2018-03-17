@@ -686,6 +686,10 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
     }
 
 	if ( ! empty( $_POST['ticket_status'] ) && $_POST['ticket_status'] != $post->post_status )	{
+        if ( 'closed' == $_POST['ticket_status'] && ! isset( $_POST['kbs_closure_email'] ) )  {
+            add_filter( 'kbs_ticket_close_disable_email', '__return_true' );
+        }
+
 		$ticket->__set( 'status', $_POST['ticket_status'] );
 	}
 

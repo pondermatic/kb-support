@@ -39,22 +39,26 @@ function kbs_load_scripts() {
 	}
 
 	wp_localize_script( 'kbs-ajax', 'kbs_scripts', apply_filters( 'kbs_ajax_script_vars', array(
-		'ajaxurl'                 => kbs_get_ajax_url(),
-		'ajax_loader'             => KBS_PLUGIN_URL . 'assets/images/loading.gif',
-		'permalinks'              => get_option( 'permalink_structure' ) ? '1' : '0',
-		'max_files'               => kbs_get_max_file_uploads(),
-		'max_files_exceeded'      => kbs_get_notices( 'max_files', true ),
-		'is_submission'           => $is_submission,
-		'submit_ticket_loading'   => __( 'Please Wait...', 'kb-support' ),
-		'submit_ticket'           => kbs_get_form_submit_label(),
-		'reply_label'             => kbs_get_ticket_reply_label(),
-		'honeypot_fail'           => __( 'Honeypot validation error', 'kb-support' )
+        'ajax_loader'           => KBS_PLUGIN_URL . 'assets/images/loading.gif',
+		'ajaxurl'               => kbs_get_ajax_url(),
+        'honeypot_fail'         => __( 'Honeypot validation error', 'kb-support' ),
+        'is_submission'         => $is_submission,
+		'max_files'             => kbs_get_max_file_uploads(),
+		'max_files_exceeded'    => kbs_get_notices( 'max_files', true ),
+        'one_option'            => sprintf( __( 'Choose a %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
+		'one_or_more_option'    => sprintf( __( 'Choose one or more %s', 'kb-support' ), kbs_get_ticket_label_plural() ),
+        'permalinks'            => get_option( 'permalink_structure' ) ? '1' : '0',
+        'reply_label'           => kbs_get_ticket_reply_label(),
+        'search_placeholder'    => __( 'Type to search all options', 'kb-support' ),
+        'submit_ticket'         => kbs_get_form_submit_label(),
+		'submit_ticket_loading' => __( 'Please Wait...', 'kb-support' ),
+        'type_to_search'        => __( 'Type to search %s', 'kb-support' ),
 	) ) );
 
 	if ( ! empty( $is_submission ) )	{
 		add_thickbox();
+        // Register the chosen script here, but we enqueue within kbs_display_form_select_field when needed
 		wp_register_script( 'jquery-chosen', $js_dir . 'chosen.jquery' . $suffix . '.js', array( 'jquery' ), KBS_VERSION );
-		wp_enqueue_script( 'jquery-chosen' );
 	}
 
 } // kbs_load_scripts
@@ -107,16 +111,13 @@ function kbs_register_styles() {
 		$url = trailingslashit( kbs_get_templates_url() ) . $file;
 	}
 
-	wp_register_style( 'kbs-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css', array(), KBS_VERSION, 'all' ); 
-	wp_enqueue_style( 'kbs-font-awesome' );
-
 	wp_register_style( 'kbs-styles', $url, array(), KBS_VERSION, 'all' );
 	wp_enqueue_style( 'kbs-styles' );
 
 	if ( ! empty( $post ) )	{
 		if ( is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'kbs_submit') )	{
+            // Register the chosen styles here, but we enqueue within kbs_display_form_select_field when needed
 			wp_register_style( 'jquery-chosen-css', $css_dir . 'chosen.css', array(), KBS_VERSION );
-			wp_enqueue_style( 'jquery-chosen-css' );
 		}
 	}
 
@@ -204,30 +205,34 @@ function kbs_load_admin_scripts( $hook ) {
 	}
 
 	wp_localize_script( 'kbs-admin-scripts', 'kbs_vars', array(
-		'ajax_loader'             => KBS_PLUGIN_URL . 'assets/images/loading.gif',
-		'post_id'                 => isset( $post->ID ) ? $post->ID : null,
-		'post_type'               => isset( $_GET['post'] ) ? get_post_type( $_GET['post'] ) : false,
-		'editing_ticket'          => isset( $_GET['action'] ) && 'edit' == $_GET['action'] && 'kbs_ticket' == get_post_type( $_GET['post'] ) ? true : false,
-		'admin_url'               => admin_url(),
-		'kbs_version'             => KBS_VERSION,
 		'add_new_ticket'          => sprintf( __( 'Add New %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
-		'new_media_ui'            => apply_filters( 'kbs_use_35_media_ui', 1 ),
-		'no_ticket_reply_content' => __( 'There is no content in your reply', 'kb-support' ),
-		'ticket_confirm_close'    => __( 'Are you sure you wish to close this ticket? Click OK to close, or Cancel to return.', 'kb-support' ),
-		'ticket_reply_failed'     => sprintf( __( 'Could not add %s Reply', 'kb-support' ), kbs_get_ticket_label_singular() ),
-		'ticket_reply_added'      => 'ticket_reply_added',
-		'no_note_content'         => __( 'There is no content in your note', 'kb-support' ),
-		'note_not_added'          => __( 'Your note could not be added', 'kb-support' ),
-		'type_to_search'          => sprintf( __( 'Type to search %s', 'kb-support' ), kbs_get_article_label_plural() ),
-		'search_placeholder'      => sprintf( __( 'Type to search all %s', 'kb-support' ), kbs_get_article_label_plural() ),
+		'admin_url'               => admin_url(),
+		'ajax_loader'             => KBS_PLUGIN_URL . 'assets/images/loading.gif',
+        'disable_closure_email'   => kbs_get_option( 'ticket_closed_disable_email', false ),
 		'editing_field_type'      => $editing_field_type,
+		'editing_ticket'          => isset( $_GET['action'] ) && 'edit' == $_GET['action'] && 'kbs_ticket' == get_post_type( $_GET['post'] ) ? true : false,
 		'field_label_missing'     => __( 'Enter a Label for your field.', 'kb-support' ),
 		'field_type_missing'      => __( 'Select the field Type', 'kb-support' ),
-        'reply_has_data'          => sprintf( __( 'You have not submitted the reply. If you continue, the reply will not be added to the %s', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
-        'view_reply'              => __( 'View Reply', 'kb-support' ),
+		'hide_note'               => __( 'Hide Note', 'kb-support' ),
 		'hide_reply'              => __( 'Hide Reply', 'kb-support' ),
-		'view_note'               => __( 'View Note', 'kb-support' ),
-		'hide_note'               => __( 'Hide Note', 'kb-support' )
+		'kbs_version'             => KBS_VERSION,
+		'new_media_ui'            => apply_filters( 'kbs_use_35_media_ui', 1 ),
+		'no_note_content'         => __( 'There is no content in your note', 'kb-support' ),
+		'no_ticket_reply_content' => __( 'There is no content in your reply', 'kb-support' ),
+		'note_not_added'          => __( 'Your note could not be added', 'kb-support' ),
+		'one_option'              => sprintf( __( 'Choose a %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
+		'one_or_more_option'      => sprintf( __( 'Choose one or more %s', 'kb-support' ), kbs_get_ticket_label_plural() ),
+		'post_id'                 => isset( $post->ID ) ? $post->ID : null,
+		'post_type'               => isset( $_GET['post'] ) ? get_post_type( $_GET['post'] ) : false,
+		'reply_has_data'          => sprintf( __( 'You have not submitted the reply. If you continue, the reply will not be added to the %s', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+		'search_placeholder'      => sprintf( __( 'Type to search all %s', 'kb-support' ), kbs_get_ticket_label_plural() ),
+        'send_closure_email'      => __( 'Send closure email?', 'kb-support' ),
+		'ticket_confirm_close'    => __( 'Are you sure you wish to close this ticket? Click OK to close, or Cancel to return.', 'kb-support' ),
+		'ticket_reply_added'      => 'ticket_reply_added',
+		'ticket_reply_failed'     => sprintf( __( 'Could not add %s Reply', 'kb-support' ), kbs_get_ticket_label_singular() ),
+		'type_to_search'          => sprintf( __( 'Type to search %s', 'kb-support' ), kbs_get_article_label_plural() ),
+        'view_reply'              => __( 'View Reply', 'kb-support' ),
+		'view_note'               => __( 'View Note', 'kb-support' )
 	) );
 
 	if ( function_exists( 'wp_enqueue_media' ) && version_compare( $wp_version, '3.5', '>=' ) ) {
@@ -235,8 +240,8 @@ function kbs_load_admin_scripts( $hook ) {
 		wp_enqueue_media();
 	}
 
-	wp_register_style( 'kbs-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css', array(), KBS_VERSION, 'all' ); 
-	wp_enqueue_style( 'kbs-font-awesome' );
+    wp_register_script( 'kbs-font-awesome', '//use.fontawesome.com/releases/v5.0.8/js/all.js', array(), KBS_VERSION ); 
+	wp_enqueue_script( 'kbs-font-awesome' );
 
 	wp_register_script( 'jquery-chosen', $js_dir . 'chosen.jquery' . $suffix . '.js', array( 'jquery' ), KBS_VERSION );
 	wp_enqueue_script( 'jquery-chosen' );
@@ -250,6 +255,21 @@ function kbs_load_admin_scripts( $hook ) {
 
 } // kbs_load_admin_scripts
 add_action( 'admin_enqueue_scripts', 'kbs_load_admin_scripts' );
+
+/**
+ * Filter the HTML script tag of an enqueued script.
+ *
+ * @since   1.0
+ * @param   str     $tag    The HTML script tag
+ * @param   str     $handle The script handle name
+ */
+function kbs_filter_enqueued_script_tags( $tag, $handle )   {
+    if ( 'kbs-font-awesome5' == $handle )    {
+        $tag = str_replace( ' src', ' defer="defer" src', $tag );
+    }
+
+    return $tag;
+} // kbs_filter_enqueued_script_tags
 
 /**
  * At a Glance Icons

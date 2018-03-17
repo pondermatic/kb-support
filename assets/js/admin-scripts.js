@@ -13,7 +13,23 @@ jQuery(document).ready(function ($) {
 	// Setup Chosen menus
 	$('.kbs_select_chosen').chosen({
 		inherit_select_classes: true,
-        search_contains: true
+		placeholder_text_single: kbs_vars.one_option,
+		placeholder_text_multiple: kbs_vars.one_or_more_option
+	});
+
+	$('.kbs_select_chosen .chosen-search input').each( function() {
+		var selectElem = $(this).parent().parent().parent().prev('select.kbs_select_chosen'),
+			placeholder = selectElem.data('search-placeholder');
+		$(this).attr( 'placeholder', placeholder );
+	});
+
+	// Add placeholders for Chosen input fields
+	$( '.chosen-choices' ).on( 'click', function () {
+		var placeholder = $(this).parent().prev().data('search-placeholder');
+		if ( typeof placeholder === 'undefined' ) {
+			placeholder = kbs_vars.type_to_search;
+		}
+		$(this).children('li').children('input').attr( 'placeholder', placeholder );
 	});
 
 	/**
@@ -149,9 +165,21 @@ jQuery(document).ready(function ($) {
 					tinyMCE.triggerSave();
 				}
 
-				ticketResponse = $('#kbs_ticket_reply' ).val();
+				ticketResponse = $('#kbs_ticket_reply').val();
                 if ( ticketResponse.length > 0 )	{
                     return confirm( kbs_vars.reply_has_data );
+                }
+            });
+
+            $( document.body ).on( 'change', '#ticket_status', function() {
+                if ( 'closed' === $(this).val() && ! kbs_vars.disable_closure_email ) {
+                    $(this).parent().append('<br id="kbs-closure-option">');
+                    $(this).parent().append('<input type="checkbox" id="kbs-closure-email" name="kbs_closure_email" value="1" style="margin-top:0; margin-left: 4px;">');
+                    $(this).parent().append('<label for="kbs-closure-email">' + kbs_vars.send_closure_email + '</label>');
+                } else {
+                    $('#kbs-closure-option').remove();
+                    $('#kbs-closure-email').remove();
+                    $('label[for="kbs-closure-email"]').remove();
                 }
             });
         },
@@ -392,9 +420,7 @@ jQuery(document).ready(function ($) {
 			var kbs_field_type = $('.kbs_field_type');
 
 			$( document.body ).on('change', kbs_field_type, function()	{
-
 				toggleFieldOptions(kbs_field_type.val());
-
 			});
 
 			$( document.body ).on('change', $('#kbs_field_mapping'), function()	{
@@ -402,6 +428,14 @@ jQuery(document).ready(function ($) {
 					$('#kbs_meta_field_kb_search_wrap').show();
 				} else	{
 					$('#kbs_meta_field_kb_search_wrap').hide();
+				}
+			});
+
+			$( document.body ).on('change', $('#kbs_field_select_chosen'), function()	{
+				if( $('#kbs_field_select_chosen').is(':checked') )	{
+					$('#kbs_meta_field_select_search_text_wrap').show('fast');
+				} else	{
+					$('#kbs_meta_field_select_search_text_wrap').hide('fast');
 				}
 			});
 
@@ -434,6 +468,7 @@ jQuery(document).ready(function ($) {
 					select_multiple  : ( $('#kbs_field_select_multiple').is(':checked') ) ? $('#kbs_field_select_multiple').val() : 0,
 					selected         : ( $('#kbs_field_option_selected').is(':checked') ) ? $('#kbs_field_option_selected').val() : 0,
 					chosen           : ( $('#kbs_field_select_chosen').is(':checked') )   ? $('#kbs_field_select_chosen').val()   : 0,
+                    chosen_search    : $('#kbs_field_select_chosen_search').val(),
 					description      : $('#kbs_field_description').val(),
 					description_pos  : $('input[name=kbs_field_description_pos]').filter(':checked').val(),
 					placeholder      : $('#kbs_field_placeholder').val(),
@@ -494,6 +529,7 @@ jQuery(document).ready(function ($) {
 					select_multiple  : ( $('#kbs_field_select_multiple').is(':checked') ) ? $('#kbs_field_select_multiple').val() : 0,
 					selected         : ( $('#kbs_field_option_selected').is(':checked') ) ? $('#kbs_field_option_selected').val() : 0,
 					chosen           : ( $('#kbs_field_select_chosen').is(':checked') )   ? $('#kbs_field_select_chosen').val()   : 0,
+                    chosen_search    : $('#kbs_field_select_chosen_search').val(),
 					placeholder      : $('#kbs_field_placeholder').val(),
 					description      : $('#kbs_field_description').val(),
 					description_pos  : $('input[name=kbs_field_description_pos]').filter(':checked').val(),

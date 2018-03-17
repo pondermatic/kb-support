@@ -113,14 +113,18 @@ add_action( 'template_redirect', 'kbs_enforced_form_ssl_redirect_handler' );
  * @param	arr		$args	Arguments. See $defaults / WP_Query.
  * @return	obj		WP_Query Object
  */
-function kbs_get_forms()	{
-	
+function kbs_get_forms( $args = array() )	{
+
 	$defaults = array(
 		'post_type'         => 'kbs_form',
 		'post_status'       => 'any',
 		'posts_per_page'	=> -1
 	);
-	
+
+	$args  = wp_parse_args( $args, $defaults );
+	$forms = get_posts( $args );
+
+	return $forms;
 } // kbs_get_forms
 
 /**
@@ -285,6 +289,7 @@ function kbs_add_default_fields_to_form( $form_id )	{
 				'select_multiple' => false,
 				'selected'        => false,
 				'chosen'          => false,
+                'chosen_search'   => '',
 				'placeholder'     => '',
 				'description'     => '',
 				'hide_label'      => false,
@@ -590,7 +595,8 @@ function kbs_form_ignore_fields()	{
 		'kbs_action',
 		'kbs_redirect',
 		'kbs_honeypot',
-		'kbs_ticket_submit'
+		'kbs_ticket_submit',
+		'g-recaptcha-response'
 	);
 
 	return apply_filters( 'kbs_ignore_ticket_fields', $ignore );
@@ -611,25 +617,31 @@ function kbs_display_field_setting_icons( $field_id )	{
 	
 	if ( $settings )	{
 		if ( ! empty( $settings['hide_label'] ) )	{
-			$output[] = '<i title="' . __( 'Label Hidden', 'kb-support' ) . '" class="fa fa-tag" aria-hidden="true"></i>';
+			$output[] = '<i title="' . __( 'Label Hidden', 'kb-support' ) . '" class="fas fa-tag" aria-hidden="true"></i>';
 		} else	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
 
 		if ( ! empty( $settings['required'] ) )	{
-			$output[] = '<i title="' . __( 'Required Field', 'kb-support' ) . '" class="fa fa-asterisk" aria-hidden="true"></i>';
+			$output[] = '<i title="' . __( 'Required Field', 'kb-support' ) . '" class="fas fa-asterisk" aria-hidden="true"></i>';
 		} else	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
 		
 		if ( ! empty( $settings['placeholder'] ) )	{
-			$output[] = '<i title="' . sprintf( __( 'Placeholder: %s', 'kb-support' ), stripslashes( $settings['placeholder'] ) ) . '" class="fa fa-info-circle" aria-hidden="true"></i>';
+			$output[] = '<i title="' . sprintf( __( 'Placeholder: %s', 'kb-support' ), stripslashes( $settings['placeholder'] ) ) . '" class="fas fa-info-circle" aria-hidden="true"></i>';
 		} else	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
 		
 		if ( ! empty( $settings['mapping'] ) && 'post_category' != $settings['mapping'] )	{
-			$output[] = '<i title="' . sprintf( __( 'Maps to %s', 'kb-support' ), stripslashes( $mappings[ $settings['mapping'] ] ) ) . '" class="fa fa-map-marker" aria-hidden="true"></i>';
+			$output[] = '<i title="' . sprintf( __( 'Maps to %s', 'kb-support' ), stripslashes( $mappings[ $settings['mapping'] ] ) ) . '" class="fas fa-map-marker-alt" aria-hidden="true"></i>';
+		} else	{
+			$output[] = '&nbsp;&nbsp;&nbsp;';
+		}
+
+        if ( ! empty( $settings['chosen'] ) )	{
+			$output[] = '<i title="' . __( 'Searchable', 'kb-support' ) . '" class="fas fa-search" aria-hidden="true"></i>';
 		} else	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
@@ -875,21 +887,42 @@ add_action( 'kbs_form_display_rich_editor_field', 'kbs_display_form_textarea_fie
  */
 function kbs_display_form_select_field( $field, $settings )	{
 
-	$class    = ! empty( $settings['input_class'] )     ? esc_attr( $settings['input_class'] ) : '';
-	$multiple = ! empty( $settings['select_multiple'] ) ? ' ' . ' multiple'                    : false;
-	$options  = array();
+	$class         = ! empty( $settings['input_class'] )     ? esc_attr( $settings['input_class'] )   : '';
+	$multiple      = ! empty( $settings['select_multiple'] ) ? ' ' . ' multiple'                      : false;
+    $chosen        = ! empty( $settings['chosen'] )          ? true                                   : false;
+    $chosen_search = ! empty( $settings['chosen_search'] )   ? esc_html( $settings['chosen_search'] ) : false;
+    $data_array    = ! empty( $settings['data'] )            ? $settings['data']                      : array();
+    $data_elements = '';
+	$options       = array();
 
-	if ( ! empty( $settings['chosen'] ) )	{
+	if ( $chosen )	{
+        wp_enqueue_script( 'jquery-chosen' );
+        wp_enqueue_style( 'jquery-chosen-css' );
+
 		$class .= 'kbs-select-chosen';
+
+        if ( $chosen_search && ! isset( $data_array['search-placeholder'] ) )    {
+            $data_array['search-type']        = 'general';
+            $data_array['search-placeholder'] = $chosen_search;
+
+			if ( ! empty( $settings['placeholder'] ) )	{
+				$data_array['placeholder'] = esc_html( $settings['placeholder'] );
+			}
+        }
 	}
 
 	$class   = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $class ) ) );
 	$options = apply_filters( 'kbs_form_select_field_options', $settings['select_options'], $settings );
 
-	$output = sprintf( '<select name="%1$s" id="%1$s"%2$s%3$s>',
+    foreach ( $data_array as $key => $value ) {
+        $data_elements .= ' data-' . esc_attr( $key ) . '="' . esc_attr( $value ) . '"';
+    }
+
+	$output = sprintf( '<select name="%1$s" id="%1$s"%2$s%3$s%4$s>',
 		esc_attr( $field->post_name ),
 		' class="' . $class . ' kbs-input"',
-		$multiple
+		$multiple,
+        $data_elements
 	);
 
     if ( ! empty( $settings['placeholder'] ) )	{

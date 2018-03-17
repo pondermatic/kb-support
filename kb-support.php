@@ -3,8 +3,8 @@
  * Plugin Name: KB Support
  * Plugin URI: https://kb-support.com/
  * Description: The ultimate help desk and knowledge base support tool plugin for WordPress.
- * Version: 1.1.12
- * Date: 11 March 2018
+ * Version: 1.1.13
+ * Date: 17 March 2018
  * Author: KB Support Team
  * Author URI: https://kb-support.com/
  * Text Domain: kb-support
@@ -186,7 +186,7 @@ final class KB_Support {
 	private function setup_constants()	{
 
 		if ( ! defined( 'KBS_VERSION' ) )	{
-			define( 'KBS_VERSION', '1.1.12' );
+			define( 'KBS_VERSION', '1.1.13' );
 		}
 
 		if ( ! defined( 'KBS_PLUGIN_DIR' ) )	{
@@ -253,8 +253,8 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-html-elements.php';
 		require_once KBS_PLUGIN_DIR . 'includes/emails/email-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/emails/email-template.php';
-		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-form.php';
-		require_once KBS_PLUGIN_DIR . 'includes/form-functions.php';
+		require_once KBS_PLUGIN_DIR . 'includes/forms/class-kbs-form.php';
+		require_once KBS_PLUGIN_DIR . 'includes/forms/form-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/misc-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/login-register.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-customer.php';

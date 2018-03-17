@@ -4,7 +4,7 @@ Tags: Helpdesk, Support, Customer Support, Support Desk, Ticket System, Knowledg
 Requires at least: 4.1
 Tested up to: 5.0
 Requires PHP: 5.4
-Stable tag: 1.1.12
+Stable tag: 1.1.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -118,6 +118,35 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.1.13 =
+
+**Saturday, 17th March 2018**
+
+**New**
+
+* Allow agent to choose whether or not a customer email should be generate when a ticket is closed using the Update Ticket button
+* Added *Search Text* option for submission form select fields using Chosen library
+* Use Chosen library for ticket select fields
+* Updated to Font Awesome 5
+* Updated to latest version of Chosen library
+* Added search placeholder to admin Chosen select fields
+
+**Tweaks**
+
+* Set width of select field to match all other input fields
+* Added the search icon to the form fields table
+* Do not store the reCaptcha response with submission form data
+* Moved `form-functions.php` and `class-kbs-forms.php` to `\includes\forms\`
+
+**Bug Fixes**
+
+* 404 error may be displayed when navigating to am article parent category
+
+**Dev**
+
+* Added `user_dropdown` method to KBS_HTML_Elements class
+* Added `field_types_dropdown` method to KBS_HTML_Elements class
 
 = 1.1.12 =
 

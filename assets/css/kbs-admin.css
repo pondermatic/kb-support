@@ -268,6 +268,7 @@ span.price_restricted:before {
 #kbs_meta_field_select_multiple_wrap,
 #kbs_meta_field_option_selected_wrap,
 #kbs_meta_field_select_searchable_wrap,
+#kbs_meta_field_select_search_text_wrap,
 #kbs_meta_field_maxfiles_wrap,
 #kbs_meta_field_placeholder_wrap,
 #kbs_meta_field_hide_label_wrap	{ display: none; }
@@ -420,24 +421,23 @@ a.kbs_ticket_form_data	{
 #kbs-kb-options label {
 	display: inline-block;
 }
-#kbs-ticket-actions a,
+#kbs-ticket-actions .kbs_select_chosen { min-width: 200px; margin: 2px; padding-bottom: 2px; }
 #kbs-kb-options a {
 	display: inline-block;
 	width: 100px;
+}
+#kbs-ticket-actions a.chosen-single	{
+	min-width: 200px;
 }
 #kbs-ticket-actions input[type=submit],
 #kbs-kb-options input[type=submit] {
 	float: right;
 	width: auto;
 }
-#kbs-ticket-actions input:not([type='checkbox']):not([type="submit"]),
-#kbs-ticket-actions select,
 #kbs-kb-options input,
 #kbs-kb-options select {
 	width: 150px;
 }
-
-#kbs-ticket-actions select,
 #kbs-agent-options select,
 #kbs-multi-agent-options select	{
 	float: right;
