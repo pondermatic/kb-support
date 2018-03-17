@@ -228,6 +228,14 @@ class KBS_Ticket {
 	protected $email = '';
 
 	/**
+	 * Timestamp of when terms were agreed
+	 *
+	 * @since	1.0
+	 * @var		str|false
+	 */
+	protected $terms_agreed = false;
+
+	/**
 	 * IP Address ticket was opened from
 	 *
 	 * @since	1.0
@@ -512,6 +520,7 @@ class KBS_Ticket {
 			'sla_resolve'  => $this->sla_resolve,
 			'status'       => $this->status,
 			'source'       => $this->source,
+			'terms_agree'  => $this->terms_agreed,
 			'files'        => $this->new_files,
 			'form_data'    => $this->form_data
 		);
@@ -602,6 +611,10 @@ class KBS_Ticket {
 				$this->pending['files'] = $this->new_files;
 			}
 
+			if ( ! empty( $this->terms_agreed ) )	{
+				$this->pending['terms_agreed'] = $this->terms_agreed;
+			}
+
 			$this->pending['sla_respond'] = $this->sla_respond;
 			$this->pending['sla_resolve'] = $this->sla_resolve;
 
@@ -660,23 +673,6 @@ class KBS_Ticket {
 
 			foreach( $this->pending as $key => $value ) {
 				switch( $key ) {
-					case 'status':
-						$this->update_status( $this->status );
-						break;
-
-					case 'ip':
-						$this->update_meta( '_kbs_ticket_user_ip', $this->ip );
-						break;
-
-					case 'customer_id':
-						$this->update_meta( '_kbs_ticket_customer_id', $this->customer_id );
-						add_post_meta( $this->ID, '_kbs_ticket_created_by', $this->customer_id, true );
-						break;
-
-					case 'company_id':
-						$this->update_meta( '_kbs_ticket_company_id', $this->company_id );
-						break;
-
 					case 'agent_id':
                         if ( '-1' === $this->agent_id ) {
                             $this->agent_id = 0;
@@ -704,24 +700,35 @@ class KBS_Ticket {
                         }
                         break;
 
-					case 'user_id':
-						$this->update_meta( '_kbs_ticket_user_id', $this->user_id );
+					case 'company_id':
+						$this->update_meta( '_kbs_ticket_company_id', $this->company_id );
 						break;
 
-					case 'first_name':
-						$this->user_info['first_name'] = $this->first_name;
+					case 'customer_id':
+						$this->update_meta( '_kbs_ticket_customer_id', $this->customer_id );
+						add_post_meta( $this->ID, '_kbs_ticket_created_by', $this->customer_id, true );
 						break;
 
-					case 'last_name':
-						$this->user_info['last_name'] = $this->last_name;
+					case 'date':
+						$args = array(
+							'ID'        => $this->ID,
+							'post_date' => $this->date,
+							'edit_date' => true,
+						);
+
+						wp_update_post( $args );
 						break;
 
 					case 'email':
 						$this->update_meta( '_kbs_ticket_user_email', $this->email );
 						break;
 
-					case 'key':
-						$this->update_meta( '_kbs_ticket_key', $this->key );
+					case 'files':
+						$this->files = $this->attach_files();
+						break;
+
+					case 'first_name':
+						$this->user_info['first_name'] = $this->first_name;
 						break;
 
 					case 'form_data':
@@ -730,11 +737,58 @@ class KBS_Ticket {
 						}
 						break;
 
-					case 'date':
+					case 'ip':
+						$this->update_meta( '_kbs_ticket_user_ip', $this->ip );
+						break;
+
+					case 'key':
+						$this->update_meta( '_kbs_ticket_key', $this->key );
+						break;
+
+					case 'last_name':
+						$this->user_info['last_name'] = $this->last_name;
+						break;
+
+					case 'number':
+						$this->update_meta( '_kbs_ticket_number', $this->number );
+						break;
+
+					case 'resolved_date':
+						$this->update_meta( '_kbs_ticket_resolved_date', $this->resolved_date );
+						break;
+
+					case 'status':
+						$this->update_status( $this->status );
+						break;
+
+					case 'sla_resolve':
+						$this->update_meta( '_kbs_ticket_sla_target_resolve', $this->sla_resolve );
+						break;
+
+					case 'sla_respond':
+						$this->update_meta( '_kbs_ticket_sla_target_respond', $this->sla_respond );
+						break;
+
+					case 'source':
+						$this->update_meta( '_kbs_ticket_source', $this->source );
+						break;
+
+					case 'terms_agreed':
+						$this->update_meta( '_kbs_ticket_terms_agreed', $this->terms_agreed );
+						break;
+
+					case 'ticket_category':
+						if ( ! is_array( $this->ticket_category ) )	{
+							$this->ticket_category = array( $this->ticket_category );
+						}
+						$terms = array_map( 'intval', $this->ticket_category );
+						wp_set_object_terms( $this->ID, $terms, 'ticket_category' );
+						break;
+
+					case 'ticket_content':
 						$args = array(
-							'ID'        => $this->ID,
-							'post_date' => $this->date,
-							'edit_date' => true,
+							'ID'           => $this->ID,
+							'post_content' => $this->ticket_content
 						);
 
 						wp_update_post( $args );
@@ -749,45 +803,8 @@ class KBS_Ticket {
 						wp_update_post( $args );
 						break;
 
-					case 'ticket_content':
-						$args = array(
-							'ID'           => $this->ID,
-							'post_content' => $this->ticket_content
-						);
-
-						wp_update_post( $args );
-						break;
-
-					case 'ticket_category':
-						if ( ! is_array( $this->ticket_category ) )	{
-							$this->ticket_category = array( $this->ticket_category );
-						}
-						$terms = array_map( 'intval', $this->ticket_category );
-						wp_set_object_terms( $this->ID, $terms, 'ticket_category' );
-						break;
-
-					case 'resolved_date':
-						$this->update_meta( '_kbs_ticket_resolved_date', $this->resolved_date );
-						break;
-
-					case 'files':
-						$this->files = $this->attach_files();
-						break;
-
-					case 'sla_respond':
-						$this->update_meta( '_kbs_ticket_sla_target_respond', $this->sla_respond );
-						break;
-
-					case 'sla_resolve':
-						$this->update_meta( '_kbs_ticket_sla_target_resolve', $this->sla_resolve );
-						break;
-
-					case 'source':
-						$this->update_meta( '_kbs_ticket_source', $this->source );
-						break;
-
-					case 'number':
-						$this->update_meta( '_kbs_ticket_number', $this->number );
+					case 'user_id':
+						$this->update_meta( '_kbs_ticket_user_id', $this->user_id );
 						break;
 
 					default:
