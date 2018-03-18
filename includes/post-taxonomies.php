@@ -115,6 +115,10 @@ add_action( 'init', 'kbs_setup_kbs_ticket_tag_taxonomy', 0 );
 */
 function kbs_setup_kbs_ticket_department_taxonomy()	{
 
+	if ( ! kbs_departments_enabled() )	{
+		return;
+	}
+
 	$department_labels = array(
 		'name'              => _x( 'Departments', 'taxonomy general name', 'kb-support' ),
 		'singular_name'     => _x( 'Department', 'taxonomy singular name', 'kb-support' ),

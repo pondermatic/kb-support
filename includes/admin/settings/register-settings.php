@@ -399,6 +399,13 @@ function kbs_get_registered_settings() {
 						'type'    => 'checkbox',
 						'std'     => '0'
 					),
+					'enable_departments'  => array(
+						'id'      => 'enable_departments',
+						'name'    => __( 'Enable Departments?', 'kb-support' ),
+						'desc'    => sprintf( __( 'If enabled, agents can be added to departments and %s can be assigned to departments.', 'kb-support' ), strtolower( $plural ) ),
+						'type'    => 'checkbox',
+						'std'     => '0'
+					),
 					'assign_settings_header' => array(
 						'id'   => 'assign_settings_header',
 						'name' => '<h3>' . sprintf( __( '%s Assignment', 'kb-support' ), $single ) . '</h3>',

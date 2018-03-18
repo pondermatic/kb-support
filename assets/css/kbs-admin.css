@@ -447,6 +447,14 @@ a.kbs_ticket_form_data	{
 .kbs_default_side_wrapper { width: 100px; }
 #kbs-delete-post { padding-top: 3px; }
 
+/* Taxonomy Pages
+-------------------------------------------------------------- */
+tr .term-agents-wrap .kbs_select_chosen,
+div .term-agents-wrap .kbs_select_chosen {
+	width: 95%;
+	margin: 0px
+}
+
 /* Admin Pages
 -------------------------------------------------------------- */
 #kbs-item-wrapper .left {
