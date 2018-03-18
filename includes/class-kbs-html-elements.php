@@ -612,6 +612,57 @@ class KBS_HTML_Elements {
 	} // agent_dropdown
 
 	/**
+	 * Renders an HTML Dropdown of departments
+	 *
+	 * @access	public
+	 * @since	1.2
+	 * @param	arr		$args
+	 * @return	str		$output		Agent dropdown
+	 */
+	public function department_dropdown( $args = array() ) {
+		$options  = array();
+
+        $defaults = array(
+			'options'          => array(),
+			'name'             => 'departments',
+			'show_option_all'  => false,
+			'show_option_none' => false,
+            'exclude'          => array(),
+            'selected'         => 0,
+            'chosen'           => true,
+            'multiple'         => false,
+            'placeholder'      => __( 'Select a Department', 'kb-support' ),
+			'data'             => array(
+				'search-type'        => 'department',
+				'search-placeholder' => __( 'Type to search all departments', 'kb-support' )
+			)
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
+        if ( ! is_array( $args['exclude'] ) )   {
+            $args['exclude'] = array( $args['exclude'] );
+        }
+
+		$departments = kbs_get_departments();
+
+		if ( $departments )	{
+			foreach( $departments as $department )	{
+                if ( in_array( $department->term_id, $args['exclude'] ) ) {
+                    continue;
+                }
+				$options[ $department->term_id ] = $department->name;
+			}
+
+            $args['options'] = $options;
+		}
+
+		$output = $this->select( $args );
+
+		return $output;
+	} // department_dropdown
+
+	/**
 	 * Renders an HTML Dropdown
 	 *
 	 * @since	1.0
