@@ -485,6 +485,7 @@ function kbs_add_ticket( $ticket_data )	{
 	$ticket_data = apply_filters( 'kbs_add_ticket_data', $ticket_data );
 	$attachments = apply_filters( 'kbs_add_ticket_attachments', $ticket_data['attachments'] );
 	$category    = array();
+	$department  = '';
 
 	$ticket = new KBS_Ticket();
 
