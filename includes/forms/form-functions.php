@@ -986,6 +986,9 @@ add_action( 'kbs_form_display_ticket_category_dropdown_field', 'kbs_display_form
 function kbs_display_form_department_field( $field, $settings )	{
 
 	add_filter( 'kbs_form_select_field_options', 'kbs_get_department_options' );
+	if ( ! empty( $_GET['department'] ) )	{
+		$settings['selected'] = $_GET['department'];
+	}
 	kbs_display_form_select_field( $field, $settings );
 	remove_filter('kbs_form_select_field_options', 'kbs_get_department_options' );
 
