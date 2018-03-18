@@ -484,6 +484,7 @@ function kbs_get_field_types()	{
 		'checkbox'                  => __( 'Checkbox', 'kb-support' ),
 		'checkbox_list'             => __( 'Checkbox List', 'kb-support' ),
 		'date_field'                => __( 'Date Field', 'kb-support' ),
+		'department'                => __( 'Departments List', 'kb-support' ),
 		'email'                     => __( 'Email Field', 'kb-support' ),
 		'file_upload'               => __( 'File Upload', 'kb-support' ),
 		'hidden'                    => __( 'Hidden Field', 'kb-support' ),
@@ -497,15 +498,19 @@ function kbs_get_field_types()	{
 		'ticket_category_dropdown'  => sprintf( __( '%s Categories', 'kb-support' ), kbs_get_ticket_label_singular() ),
 		'url'                       => __( 'URL Field', 'kb-support' ),		
 	);
-	
+
+	if ( ! kbs_departments_enabled() )	{
+		unset( $field_types['department'] );
+	}
+
 	if ( ! kbs_file_uploads_are_enabled() )	{
 		unset( $field_types['file_uploads'] );
 	}
-	
+
 	if ( ! kbs_get_option( 'recaptcha_site_key' ) || ! kbs_get_option( 'recaptcha_secret' ) )	{
 		unset( $field_types['recaptcha'] );
 	}
-	
+
 	/**
 	 * Filter the field types to allow for custom fields to be added.
 	 *
@@ -513,11 +518,11 @@ function kbs_get_field_types()	{
 	 * @param	$field_types
 	 */
 	$field_types = apply_filters( 'kbs_field_types', $field_types );
-	
+
 	asort( $field_types );
-	
+
 	return $field_types;
-	
+
 } // kbs_get_field_types
 
 /**
@@ -536,9 +541,14 @@ function kbs_get_mappings( $mapping = null )	{
 		'customer_phone1'  => __( 'Customer Primary Phone', 'kb-support' ),
 		'customer_phone2'  => __( 'Customer Additional Phone', 'kb-support' ),
 		'customer_website' => __( 'Customer Website', 'kb-support' ),
-		'post_title'       => __( 'Ticket Title', 'kb-support' ),
-		'post_content'     => __( 'Ticket Content', 'kb-support' )
+		'department'       => __( 'Department', 'kb-support' ),
+		'post_content'     => __( 'Ticket Content', 'kb-support' ),
+		'post_title'       => __( 'Ticket Title', 'kb-support' )
 	);
+
+	if ( ! kbs_departments_enabled() )	{
+		unset( $mappings['department'] );
+	}
 
 	/**
 	 * Filter the field mappings to allow for custom mappings to be added.
@@ -964,6 +974,23 @@ function kbs_display_form_ticket_category_field( $field, $settings )	{
 
 } // kbs_display_form_ticket_category_field
 add_action( 'kbs_form_display_ticket_category_dropdown_field', 'kbs_display_form_ticket_category_field', 10, 2 );
+
+/**
+ * Display a departments select field.
+ *
+ * @since	1.2
+ * @param	obj			$field		Field post object
+ * @param	arr			$settings	Field settings
+ * @return	str			Field
+ */
+function kbs_display_form_department_field( $field, $settings )	{
+
+	add_filter( 'kbs_form_select_field_options', 'kbs_get_department_options' );
+	kbs_display_form_select_field( $field, $settings );
+	remove_filter('kbs_form_select_field_options', 'kbs_get_department_options' );
+
+} // kbs_display_form_department_field
+add_action( 'kbs_form_display_department_field', 'kbs_display_form_department_field', 10, 2 );
 
 /**
  * Display a form checkbox field

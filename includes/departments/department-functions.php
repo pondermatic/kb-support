@@ -29,7 +29,7 @@ function kbs_departments_enabled()	{
  *
  * @since	1.2
  * @param	array	$args		See WP_Term_Query::__construct
- * @return	array|	Array of department WP_Term objects or false if no departments exist
+ * @return	array	Array of department WP_Term objects or false if no departments exist
  */
 function kbs_get_departments( $args = array() )	{
 	$defaults = array(
@@ -47,6 +47,43 @@ function kbs_get_departments( $args = array() )	{
 
 	return $departments;
 } // kbs_get_departments
+
+/**
+ * Retrieve a department.
+ *
+ * Simple wrapper for get_term()
+ *
+ * @since	1.2
+ * @param	int		$department_id	Department term ID
+ * @return	object	WP_Term object
+ */
+function kbs_get_department( $department_id )	{
+
+	$department = get_term( $department_id, 'department' );
+
+	return $department;
+} // kbs_get_department
+
+/**
+ * Department options.
+ *
+ * @since	1.2
+ * @return	arr		Array of department options.
+ */
+function kbs_get_department_options()	{
+	$options     = array();
+	$departments = kbs_get_departments();
+
+	if ( $departments )	{
+		foreach( $departments as $department )	{
+			$options[ absint( $department->term_id ) ] = $department->name;
+		}
+	}
+
+	$options = apply_filters( 'kbs_department_options', $options );
+
+	return $options;
+} // kbs_get_department_options
 
 /**
  * Retrieve all department agents.

@@ -157,31 +157,39 @@ class KBS_Form {
 		}
 
 		$settings = array(
-			'type'            => $data['type'],
-			'mapping'         => ! empty( $data['mapping'] )         ? $data['mapping']                              : '',
-			'kb_search'       => ! empty( $data['kb_search'] )       ? true                                          : false,
-			'required'        => ! empty( $data['required'] )        ? true                                          : false,
-			'label_class'     => ! empty( $data['label_class'] )     ? sanitize_text_field( $data['label_class'] )   : '',
-			'input_class'     => ! empty( $data['input_class'] )     ? sanitize_text_field( $data['input_class'] )   : '',
-			'select_options'  => $select_options,
-			'select_multiple' => ! empty( $data['select_multiple'] ) ? true                                          : false,
-			'selected'        => ! empty( $data['selected'] )        ? true                                          : false,
 			'chosen'          => ! empty( $data['chosen'] )          ? true                                          : false,
             'chosen_search'   => ! empty( $data['chosen_search'] )   ? sanitize_text_field( $data['chosen_search'] ) : '',
 			'description'     => ! empty( $data['description'] )     ? sanitize_text_field( $data['description'] )   : '',
 			'description_pos' => ! empty( $data['description_pos'] ) ? $data['description_pos']                      : 'label',
-			'placeholder'     => ! empty( $data['placeholder'] )     ? sanitize_text_field( $data['placeholder'] )   : '',
 			'hide_label'      => ! empty( $data['hide_label'] )      ? true                                          : false,
-			'show_logged_in'  => ! empty( $data['show_logged_in'] )  ? $data['show_logged_in']                       : true
+			'input_class'     => ! empty( $data['input_class'] )     ? sanitize_text_field( $data['input_class'] )   : '',
+			'label_class'     => ! empty( $data['label_class'] )     ? sanitize_text_field( $data['label_class'] )   : '',
+			'mapping'         => ! empty( $data['mapping'] )         ? $data['mapping']                              : '',
+			'kb_search'       => ! empty( $data['kb_search'] )       ? true                                          : false,
+			'placeholder'     => ! empty( $data['placeholder'] )     ? sanitize_text_field( $data['placeholder'] )   : '',
+			'required'        => ! empty( $data['required'] )        ? true                                          : false,
+			'selected'        => ! empty( $data['selected'] )        ? true                                          : false,
+			'select_multiple' => ! empty( $data['select_multiple'] ) ? true                                          : false,
+			'select_options'  => $select_options,
+			'show_logged_in'  => ! empty( $data['show_logged_in'] )  ? $data['show_logged_in']                       : true,
+			'type'            => $data['type']
 		);
 
 		if ( ! empty( $settings['chosen_search'] ) && empty( $settings['chosen'] ) )	{
 			$settings['chosen_search'] = '';
 		}
 
-		// Auto map post_category to the ticket_category_dropdown
-		if ( 'ticket_category_dropdown' == $settings['type'] )	{
-			$settings['mapping'] = 'post_category';
+		// Auto mappings
+		$auto_mappings = array(
+			'department'               => 'department',
+			'ticket_category_dropdown' => 'post_category'
+		);
+		$auto_mappings = apply_filters( 'kbs_form_auto_mappings', $auto_mappings, $data, $settings );
+
+		foreach( $auto_mappings as $mapping_field => $mapping )	{
+			if ( $mapping_field == $settings['type'] )	{
+				$settings['mapping'] = $mapping;
+			}
 		}
 
 		$settings = apply_filters( 'kbs_new_form_field_settings', $settings, $data );
@@ -235,27 +243,35 @@ class KBS_Form {
 		}
 
 		$settings = array(
-			'type'            => $data['type'],
-			'mapping'         => ! empty( $data['mapping'] )         ? $data['mapping']                              : '',
-			'kb_search'       => ! empty( $data['kb_search'] )       ? true                                          : false,
-			'required'        => ! empty( $data['required'] )        ? true                                          : false,
-			'label_class'     => ! empty( $data['label_class'] )     ? sanitize_text_field( $data['label_class'] )   : '',
-			'input_class'     => ! empty( $data['input_class'] )     ? sanitize_text_field( $data['input_class'] )   : '',
-			'select_options'  => $select_options,
-			'select_multiple' => ! empty( $data['select_multiple'] ) ? true                                          : false,
-			'selected'        => ! empty( $data['selected'] )        ? true                                          : false,
 			'chosen'          => ! empty( $data['chosen'] )          ? true                                          : false,
             'chosen_search'   => ! empty( $data['chosen_search'] )   ? sanitize_text_field( $data['chosen_search'] ) : '',
 			'description'     => ! empty( $data['description'] )     ? sanitize_text_field( $data['description'] )   : '',
 			'description_pos' => ! empty( $data['description_pos'] ) ? $data['description_pos']                      : 'label',
-			'placeholder'     => ! empty( $data['placeholder'] )     ? sanitize_text_field( $data['placeholder'] )   : '',
 			'hide_label'      => ! empty( $data['hide_label'] )      ? true                                          : false,
-			'show_logged_in'  => ! empty( $data['show_logged_in'] )  ? $data['show_logged_in']                       : true
+			'input_class'     => ! empty( $data['input_class'] )     ? sanitize_text_field( $data['input_class'] )   : '',
+			'label_class'     => ! empty( $data['label_class'] )     ? sanitize_text_field( $data['label_class'] )   : '',
+			'mapping'         => ! empty( $data['mapping'] )         ? $data['mapping']                              : '',
+			'kb_search'       => ! empty( $data['kb_search'] )       ? true                                          : false,
+			'placeholder'     => ! empty( $data['placeholder'] )     ? sanitize_text_field( $data['placeholder'] )   : '',
+			'required'        => ! empty( $data['required'] )        ? true                                          : false,
+			'selected'        => ! empty( $data['selected'] )        ? true                                          : false,
+			'select_multiple' => ! empty( $data['select_multiple'] ) ? true                                          : false,
+			'select_options'  => $select_options,
+			'show_logged_in'  => ! empty( $data['show_logged_in'] )  ? $data['show_logged_in']                       : true,
+			'type'            => $data['type']
 		);
 
-		// Auto map post_category to the ticket_category_dropdown
-		if ( 'ticket_category_dropdown' == $settings['type'] )	{
-			$settings['mapping'] = 'post_category';
+		// Auto mappings
+		$auto_mappings = array(
+			'department'               => 'department',
+			'ticket_category_dropdown' => 'post_category'
+		);
+		$auto_mappings = apply_filters( 'kbs_form_auto_mappings', $auto_mappings, $data, $settings );
+
+		foreach( $auto_mappings as $mapping_field => $mapping )	{
+			if ( $mapping_field == $settings['type'] )	{
+				$settings['mapping'] = $mapping;
+			}
 		}
 
 		$settings = apply_filters( 'kbs_save_form_field_settings', $settings, $data );
