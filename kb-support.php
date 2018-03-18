@@ -225,6 +225,7 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/template-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-cache-helper.php';
 		require_once KBS_PLUGIN_DIR . 'includes/post-types.php';
+		require_once KBS_PLUGIN_DIR . 'includes/post-taxonomies.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-db.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-stats.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-roles.php';
