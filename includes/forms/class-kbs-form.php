@@ -172,7 +172,8 @@ class KBS_Form {
 			'select_multiple' => ! empty( $data['select_multiple'] ) ? true                                          : false,
 			'select_options'  => $select_options,
 			'show_logged_in'  => ! empty( $data['show_logged_in'] )  ? $data['show_logged_in']                       : true,
-			'type'            => $data['type']
+			'type'            => $data['type'],
+			'value'           => ! empty( $data['value'] )           ? sanitize_text_field( $data['value'] )         : ''
 		);
 
 		if ( ! empty( $settings['chosen_search'] ) && empty( $settings['chosen'] ) )	{
@@ -258,7 +259,8 @@ class KBS_Form {
 			'select_multiple' => ! empty( $data['select_multiple'] ) ? true                                          : false,
 			'select_options'  => $select_options,
 			'show_logged_in'  => ! empty( $data['show_logged_in'] )  ? $data['show_logged_in']                       : true,
-			'type'            => $data['type']
+			'type'            => $data['type'],
+			'value'           => ! empty( $data['value'] )           ? sanitize_text_field( $data['value'] )         : ''
 		);
 
 		// Auto mappings

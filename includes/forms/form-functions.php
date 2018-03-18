@@ -526,7 +526,7 @@ function kbs_get_field_types()	{
 } // kbs_get_field_types
 
 /**
- * Returns all possible form fields types.
+ * Returns all possible form field mappings.
  *
  * @since	1.0
  * @param	str		$mapping	The mapping to retrieve.
@@ -656,6 +656,12 @@ function kbs_display_field_setting_icons( $field_id )	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
 
+		if ( 'hidden' == $settings['type'] )	{
+			$output[] = '<i title="' . __( 'Hidden', 'kb-support' ) . '" class="far fa-eye-slash" aria-hidden="true"></i>';
+		} else	{
+			$output[] = '&nbsp;&nbsp;&nbsp;';
+		}
+
 	}
 
 	$output = apply_filters( 'kbs_field_setting_icons', $output, $field_id, $settings );
@@ -775,6 +781,7 @@ function kbs_display_form_text_field( $field, $settings )	{
 	$type        = ! empty( $settings['type'] ) ? $settings['type'] : 'text';
 	$placeholder = ! empty( $settings['placeholder'] ) ? ' placeholder="' . esc_attr( $settings['placeholder'] ) . '"' : '';
 	$class       = ! empty( $settings['input_class'] ) ? esc_attr( $settings['input_class'] ) : '';
+	$value       = '';
 
 	if ( $type == 'date_field' )	{
 		if( empty( $class ) ) {
@@ -790,7 +797,6 @@ function kbs_display_form_text_field( $field, $settings )	{
 	}
 
 	$class = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $class ) ) );
-	$value = '';
 
 	if ( ! empty( $settings['kb_search'] ) )	{
 		$class = 'kbs-article-search ' . $class;
@@ -818,6 +824,8 @@ function kbs_display_form_text_field( $field, $settings )	{
 		// Allow plugins to filter values for mapped fields
 		apply_filters( 'kbs_mapped_form_field_value', $value, $settings, $field );
 
+	} elseif ( ! empty( $settings['value'] ) )	{
+		$value = ' value="' . esc_attr( $settings['value'] ) . '"';
 	}
 
 	$output = sprintf( '<input type="%1$s" name="%2$s" id="%2$s" class="kbs-input %3$s"%4$s%5$s />',
@@ -835,6 +843,7 @@ function kbs_display_form_text_field( $field, $settings )	{
 } // kbs_display_form_text_field
 add_action( 'kbs_form_display_text_field', 'kbs_display_form_text_field', 10, 2 );
 add_action( 'kbs_form_display_date_field_field', 'kbs_display_form_text_field', 10, 2 );
+add_action( 'kbs_form_display_hidden_field', 'kbs_display_form_text_field', 10, 2 );
 add_action( 'kbs_form_display_email_field', 'kbs_display_form_text_field', 10, 2 );
 add_action( 'kbs_form_display_number_field', 'kbs_display_form_text_field', 10, 2 );
 add_action( 'kbs_form_display_url_field', 'kbs_display_form_text_field', 10, 2 );

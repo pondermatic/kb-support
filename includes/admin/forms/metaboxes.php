@@ -354,14 +354,14 @@ function kbs_render_field_type_row( $post_id, $args )	{
 add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_type_row', 20, 2 );
 
 /**
- * Render the row for selecting the mapping.
+ * Render the row for setting the default value.
  *
  * @since	1.0
  * @param	int		$post_id	The form post ID.
  * @param	arr		$args		Function arguments
  * @return	str
  */
-function kbs_render_field_mapping_row( $post_id, $args )	{
+function kbs_render_field_value_row( $post_id, $args )	{
 	global $kbs_edit_field;
 
 	$options = kbs_get_available_mappings( $post_id );
@@ -386,8 +386,41 @@ function kbs_render_field_mapping_row( $post_id, $args )	{
 	</div>
 	<?php
 
+} // kbs_render_field_value_row
+add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_value_row', 25, 2 );
+
+/**
+ * Render the row for selecting the mapping.
+ *
+ * @since	1.0
+ * @param	int		$post_id	The form post ID.
+ * @param	arr		$args		Function arguments
+ * @return	str
+ */
+function kbs_render_field_mapping_row( $post_id, $args )	{
+	global $kbs_edit_field;
+
+	$options = kbs_get_available_mappings( $post_id );
+
+	if ( ! empty( $kbs_edit_field->settings['mapping'] ) )	{
+		$options[ $kbs_edit_field->settings['mapping'] ] = kbs_get_mappings( $kbs_edit_field->settings['mapping'] );
+	}
+
+	?>
+	<div id="kbs_meta_field_value_wrap">
+		<p><strong><?php _e( 'Initial Value', 'kb-support' ); ?></strong><br />
+		<label for="kbs_field_value">
+			<?php echo KBS()->html->text( array(
+				'name'  => 'kbs_field_value',
+				'value' => ! empty( $kbs_edit_field->settings['value'] ) ? esc_html( $kbs_edit_field->settings['mapping'] ) : null,
+				'class' => 'kbs_input'
+			) ); ?>
+		</label></p>
+	</div>
+	<?php
+
 } // kbs_render_field_mapping_row
-add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_mapping_row', 25, 2 );
+add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_mapping_row', 30, 2 );
 
 /**
  * Render the row for setting as required.
@@ -427,7 +460,7 @@ function kbs_render_field_required_row( $post_id, $args )	{
     endif;
 
 } // kbs_render_field_required_row
-add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_required_row', 30, 2 );
+add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_required_row', 35, 2 );
 
 /**
  * Render the row for entering the label class.
@@ -454,7 +487,7 @@ function kbs_render_field_label_class_row( $post_id, $args )	{
 	<?php
 
 } // kbs_render_field_label_row
-add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_label_class_row', 35, 2 );
+add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_label_class_row', 40, 2 );
 
 /**
  * Render the row for entering the input class.
@@ -481,7 +514,7 @@ function kbs_render_field_input_class_row( $post_id, $args )	{
 	<?php
 
 } // kbs_render_field_label_row
-add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_input_class_row', 40, 2 );
+add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_input_class_row', 45, 2 );
 
 /**
  * Render the row for adding the new field.
