@@ -511,7 +511,7 @@ function kbs_add_ticket( $ticket_data )	{
 	$ticket->user_id         = ! empty( $ticket_data['user_info']['id'] ) ? (int) $ticket_data['user_info']['id'] : '';
 	$ticket->email           = strtolower( sanitize_email( $ticket_data['user_email'] ) );
 	$ticket->first_name      = ucfirst( sanitize_text_field( $ticket_data['user_info']['first_name'] ) );
-    $ticket->last_name       = '';
+  $ticket->last_name       = '';
 	$ticket->email           = strtolower( sanitize_email( $ticket_data['user_info']['email'] ) );
 	$ticket->ip              = kbs_get_ip();
 	$ticket->sla_respond     = kbs_calculate_sla_target_response();
@@ -519,6 +519,7 @@ function kbs_add_ticket( $ticket_data )	{
 	$ticket->source          = '';
 	$ticket->new_files       = $ticket_data['attachments'];
 	$ticket->form_data       = ! empty( $ticket_data['form_data'] ) ? $ticket_data['form_data'] : array();
+	$ticket->terms_agreed    = isset( $ticket_data['terms_agreed'] ) ? $ticket_data['terms_agreed'] : false;
 
     if ( ! empty( $ticket_data['user_info']['last_name'] ) )  {
         $ticket->last_name = ucfirst( sanitize_text_field( $ticket_data['user_info']['last_name'] ) );
@@ -553,14 +554,21 @@ function kbs_add_ticket( $ticket_data )	{
  */
 function kbs_add_ticket_from_form( $form_id, $form_data )	{
 
-	$kbs_form    = new KBS_Form( $form_id );
-	$fields      = $kbs_form->fields;
-	$data        = array();
+	$kbs_form     = new KBS_Form( $form_id );
+	$fields       = $kbs_form->fields;
+	$data         = array();
+	$terms_agreed = false;
+
+	if ( isset( $form_data['terms_agreed'] ) )	{
+		$terms_agreed = $form_data['terms_agreed'];
+		unset( $form_data['terms_agreed'] );
+	}
 
 	$ticket_data = array(
-		'user_info'   => array(),
-		'attachments' => array(),
-		'form_data'   => array(
+		'user_info'    => array(),
+		'attachments'  => array(),
+		'terms_agreed' => $terms_agreed,
+		'form_data'    => array(
 			'id'   => (int)$form_id,
 			'data' => $form_data
 		)

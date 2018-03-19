@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) )
 function kbs_email_ticket_received( $ticket_id, $admin_notice = true, $resend = false ) {
 
 	$disable = kbs_get_option( 'ticket_received_disable_email', false );
-	$disable = apply_filters( 'kbs_ticket_received_disable_email', $disable );
+	$disable = apply_filters( 'kbs_ticket_received_disable_email', $disable, $ticket_id );
 
 	if ( ! empty( $disable ) )	{
 		return;
@@ -95,7 +95,7 @@ function kbs_email_ticket_reply( $ticket_id, $reply_id ) {
 	}
 
 	$disable = kbs_get_option( 'ticket_reply_disable_email', false );
-	$disable = apply_filters( 'kbs_ticket_reply_disable_email', $disable );
+	$disable = apply_filters( 'kbs_ticket_reply_disable_email', $disable, $ticket_id );
 	
 	if ( ! empty( $disable ) )	{
 		return;
@@ -154,7 +154,7 @@ add_action( 'kbs_reply_to_ticket', 'kbs_email_ticket_reply', 999, 2 );
 function kbs_email_ticket_closed( $ticket_id ) {
 
 	$disable = kbs_get_option( 'ticket_closed_disable_email', false );
-	$disable = apply_filters( 'kbs_ticket_close_disable_email', $disable );
+	$disable = apply_filters( 'kbs_ticket_close_disable_email', $disable, $ticket_id );
 	
 	if ( ! empty( $disable ) )	{
 		return;

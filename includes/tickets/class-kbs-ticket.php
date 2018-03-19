@@ -236,6 +236,14 @@ class KBS_Ticket {
 	protected $email = '';
 
 	/**
+	 * Timestamp of when terms were agreed
+	 *
+	 * @since	1.0
+	 * @var		str|false
+	 */
+	protected $terms_agreed = false;
+
+	/**
 	 * IP Address ticket was opened from
 	 *
 	 * @since	1.0
@@ -520,6 +528,7 @@ class KBS_Ticket {
 			'sla_resolve'  => $this->sla_resolve,
 			'status'       => $this->status,
 			'source'       => $this->source,
+			'terms_agree'  => $this->terms_agreed,
 			'files'        => $this->new_files,
 			'form_data'    => $this->form_data
 		);
@@ -612,6 +621,10 @@ class KBS_Ticket {
 
 			if ( ! empty( $this->new_files ) )	{
 				$this->pending['files'] = $this->new_files;
+			}
+
+			if ( ! empty( $this->terms_agreed ) )	{
+				$this->pending['terms_agreed'] = $this->terms_agreed;
 			}
 
 			$this->pending['sla_respond'] = $this->sla_respond;
@@ -721,6 +734,7 @@ class KBS_Ticket {
 					case 'department':
 						$term = intval( $this->department );
 						wp_set_object_terms( $this->ID, $term, 'department' );
+
 						break;
 
 					case 'email':
@@ -761,6 +775,10 @@ class KBS_Ticket {
 						$this->update_meta( '_kbs_ticket_resolved_date', $this->resolved_date );
 						break;
 
+					case 'status':
+						$this->update_status( $this->status );
+						break;
+
 					case 'sla_resolve':
 						$this->update_meta( '_kbs_ticket_sla_target_resolve', $this->sla_resolve );
 						break;
@@ -775,6 +793,10 @@ class KBS_Ticket {
 
 					case 'status':
 						$this->update_status( $this->status );
+            break;
+
+					case 'terms_agreed':
+						$this->update_meta( '_kbs_ticket_terms_agreed', $this->terms_agreed );
 						break;
 
 					case 'ticket_category':
