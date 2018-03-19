@@ -116,6 +116,14 @@ class KBS_Ticket {
 	protected $agents = array();
 
 	/**
+	 * The ID of the department to which the ticket is assigned
+	 *
+	 * @since	1.0
+	 * @var		int
+	 */
+	protected $department;
+
+	/**
 	 * The ID of the agent who logged the ticket
 	 *
 	 * @since	1.0
@@ -599,6 +607,10 @@ class KBS_Ticket {
 				$this->pending['agents'] = $this->agents;
 			}
 
+			if ( ! empty( $this->department ) )	{
+				$this->pending['department'] = $this->department;
+			}
+
 			if ( ! empty( $this->source ) )	{
 				$this->pending['source'] = $this->source;
 			}
@@ -719,6 +731,12 @@ class KBS_Ticket {
 						wp_update_post( $args );
 						break;
 
+					case 'department':
+						$term = intval( $this->department );
+						wp_set_object_terms( $this->ID, $term, 'department' );
+
+						break;
+
 					case 'email':
 						$this->update_meta( '_kbs_ticket_user_email', $this->email );
 						break;
@@ -772,6 +790,10 @@ class KBS_Ticket {
 					case 'source':
 						$this->update_meta( '_kbs_ticket_source', $this->source );
 						break;
+
+					case 'status':
+						$this->update_status( $this->status );
+            break;
 
 					case 'terms_agreed':
 						$this->update_meta( '_kbs_ticket_terms_agreed', $this->terms_agreed );
@@ -1744,6 +1766,17 @@ class KBS_Ticket {
 			}
 
 			$settings = $form->get_field_settings( $form_field->ID );
+
+			if ( 'department' == $settings['mapping'] )	{
+				$department = kbs_get_department( $value );
+				if ( isset( $department ) )	{
+					$department = $department->name;
+				} else	{
+					$department = sprintf( __( 'Department %s not found', 'kb-support' ), $value );
+				}
+
+				$value = $department;
+			}
 
 			if ( 'post_category' == $settings['mapping'] )	{
 				$value = is_array( $value ) ? $value : array( $value );

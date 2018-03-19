@@ -41,6 +41,7 @@ function kbs_ticket_remove_meta_boxes()	{
 	$metaboxes = apply_filters( 'kbs_ticket_remove_metaboxes',
 		array(
 			array( 'submitdiv', 'kbs_ticket', 'side' ),
+			array( 'tagsdiv-department', 'kbs_ticket', 'side' ),
 			array( 'comments', 'kbs_ticket', 'normal' )
 		)
 	);

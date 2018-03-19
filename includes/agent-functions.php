@@ -16,6 +16,24 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Retrieve agent roles.
+ *
+ * @since	1.2
+ * @return	array	Array of user roles for agents
+ */
+function kbs_get_agent_user_roles()  {
+	$roles = array( 'support_agent', 'support_manager' );
+
+	if ( kbs_get_option( 'admin_agents', false ) )	{
+		$roles[] = 'administrator';
+	}
+
+	$roles = apply_filters( 'kbs_agent_user_roles', $roles );
+
+    return $roles;
+} // kbs_get_agent_user_roles
+
+/**
  * Whether or not a multiple agents is enabled.
  *
  * @since	1.1
@@ -62,11 +80,7 @@ function kbs_get_workers_of_ticket( $ticket_id )	{
  * @return	mixed
  */
 function kbs_get_agents( $ids = false )	{
-	$role  = array( 'support_agent', 'support_manager' );
-
-	if ( kbs_get_option( 'admin_agents', false ) )	{
-		$role[] = 'administrator';
-	}
+	$role = kbs_get_agent_user_roles();
 
 	$users = kbs_get_users_by_role( $role, $ids );
 	
