@@ -117,3 +117,74 @@ function kbs_get_department_agents( $department_id = '' )	{
 function kbs_get_department_agent_count( $department_id )	{
 	return count( kbs_get_department_agents( $department_id ) );
 } // kbs_get_department_agent_count
+
+/**
+ * Whether or not an agent is in a department.
+ *
+ * @since	1.2
+ * @param	int		$department_id	The department (term) ID
+ * @param	int		$agent_id		The agent (user) ID
+ * @return	bool
+ */
+function kbs_agent_is_in_department( $department_id, $agent_id = '' )	{
+	if ( empty( $agent_id ) )	{
+		if ( ! is_user_logged_in() )	{
+			return false;
+		}
+		$agent_id = get_current_user_id();
+	}
+
+	return in_array( $agent_id, kbs_get_department_agents( $department_id ) );
+} // kbs_agent_is_in_department
+
+/**
+ * Add an agent to a department.
+ *
+ * @since	1.2
+ * @param	int			$department_id	The department (term) ID
+ * @param	int			$agent_id		The agent (user) ID
+ * @return	array|bool	Array of department agents on success, or false
+ */
+function kbs_add_agent_to_department( $department_id, $agent_id = '' )	{
+	if ( empty( $agent_id ) )	{
+		if ( ! is_user_logged_in() )	{
+			return false;
+		}
+		$agent_id = get_current_user_id();
+	}
+
+	$agents = kbs_get_department_agents( $department_id );
+
+	if ( ! in_array( $agent_id, $agents ) )	{
+		$agents[] = absint( $agent_id );
+		update_term_meta( $department_id, 'kbs_department_agents', $agents );
+	}
+
+	return $agents;
+} // kbs_add_agent_to_department
+
+/**
+ * Add an agent to a department.
+ *
+ * @since	1.2
+ * @param	int			$department_id	The department (term) ID
+ * @param	int			$agent_id		The agent (user) ID
+ * @return	array|bool	Array of department agents on success, or false
+ */
+function kbs_remove_agent_from_department( $department_id, $agent_id = '' )	{
+	if ( empty( $agent_id ) )	{
+		if ( ! is_user_logged_in() )	{
+			return false;
+		}
+		$agent_id = get_current_user_id();
+	}
+
+	$agents = kbs_get_department_agents( $department_id );
+
+	if ( ( $key = array_search( $agent_id, $agents ) ) !== false )	{
+		unset( $agents[ $key ] );
+		update_term_meta( $department_id, 'kbs_department_agents', $agents );
+	}
+
+	return $agents;
+} // kbs_remove_agent_from_department

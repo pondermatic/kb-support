@@ -126,7 +126,7 @@ function kbs_save_department_agents( $term_id )	{
 
 	if ( isset( $_POST['kbs_agents'] ) )	{
 
-		$agents = $_POST['kbs_agents'];
+		$agents = array_map( 'absint', $_POST['kbs_agents'] );
 
 	} 
 
