@@ -26,6 +26,10 @@ if ( ! defined( 'ABSPATH' ) )
 function kbs_register_user_profile_fields()	{
 	$fields = array();
 
+    if ( kbs_departments_enabled() )    {
+        $fields[] = 'kbs_departments';
+    }
+
 	return apply_filters( 'kbs_user_profile_fields', $fields );
 } // kbs_register_user_profile_fields
 
@@ -54,6 +58,37 @@ function kbs_output_user_profile_fields( $user )	{
 } // kbs_output_user_profile_fields
 add_action( 'show_user_profile', 'kbs_output_user_profile_fields' );
 add_action( 'edit_user_profile', 'kbs_output_user_profile_fields' );
+
+/**
+ * Adds the department options field to the user profile for agents.
+ *
+ * @since	1.2
+ * @param   obj		$user	The WP_User object
+ */
+function kbs_render_user_profile_department_field( $user )  {
+    if ( ! kbs_is_agent( $user->ID ) )  {
+        return;
+    }
+
+    $departments = kbs_get_departments();
+
+    if ( $departments ) {
+        ob_start(); ?>
+
+        <tr>
+            <th><label for="kbs_department"><?php _e( 'Departments', 'kb-support' ); ?></label></th>
+            <td>
+                <?php foreach( $departments as $department ) : ?>
+                    
+                <?php endforeach; ?>
+            </td>
+        </tr>
+
+        <?php echo ob_get_clean();
+        
+    }
+} // kbs_render_user_profile_department_field
+add_action( 'kbs_display_user_profile_fields', 'kbs_render_user_profile_department_field', 10 );
 
 /**
  * Retrieve users by role.
