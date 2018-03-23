@@ -131,7 +131,8 @@ function kbs_setup_kbs_ticket_department_taxonomy()	{
 		'add_new_item'      => __( 'Add Department', 'kb-support' ),
 		'new_item_name'     => __( 'New Department Name', 'kb-support' ),
 		'menu_name'         => __( 'Departments', 'kb-support' ),
-		'not_found'         => __( 'No departments found', 'kb-support' )
+		'not_found'         => __( 'No departments found', 'kb-support' ),
+        'back_to_items'     => __( 'Back to departments', 'kb-support' )
 	);
 
 	$department_args = apply_filters( 'kbs_ticket_department_args', array(
