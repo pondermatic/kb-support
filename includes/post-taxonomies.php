@@ -169,7 +169,7 @@ function kbs_get_taxonomy_labels( $taxonomy = 'ticket_category' ) {
 
 	$allowed_taxonomies = apply_filters(
 		'kbs_allowed_taxonomies',
-		array( 'ticket_category', 'ticket_tag', 'agent_department', 'article_category', 'article_tag' )
+		array( 'ticket_category', 'ticket_tag', 'department', 'article_category', 'article_tag' )
 	);
 
 	if ( ! in_array( $taxonomy, $allowed_taxonomies ) ) {
