@@ -25,7 +25,7 @@ global $wpdb, $wp_roles;
 if ( kbs_get_option( 'remove_on_uninstall' ) )	{
 
 	// Delete the Custom Post Types
-	$kbs_taxonomies = array( 'ticket_category', 'ticket_tag', 'article_category', 'article_tag', 'kbs_log_type' );
+	$kbs_taxonomies = array( 'ticket_category', 'ticket_tag', 'article_category', 'article_tag', 'kbs_log_type', 'department' );
 	$kbs_post_types = array( 'kbs_ticket', 'kbs_ticket_reply', 'article', 'kbs_form', 'kbs_form_field', 'kbs_company', 'kbs_log' );
 
 	foreach ( $kbs_post_types as $post_type ) {

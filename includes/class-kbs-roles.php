@@ -121,12 +121,24 @@ class KBS_Roles {
 			$capabilities = $this->get_core_caps();
 			foreach ( $capabilities as $cap_group ) {
 				foreach ( $cap_group as $cap ) {
-					$wp_roles->add_cap( 'support_manager', $cap );
+
+					$ignore_for_agents = array(
+						'manage_ticket_terms',
+						'edit_ticket_terms',
+						'delete_ticket_terms',
+					);
+
+					if ( ! in_array( $cap, $ignore_for_agents ) )	{
+						$wp_roles->add_cap( 'support_agent', $cap );
+					}
+
 					$wp_roles->add_cap( 'administrator', $cap );
-					$wp_roles->add_cap( 'support_agent', $cap );
+					$wp_roles->add_cap( 'support_manager', $cap );
+
 				}
 			}
 
+			// Submission form capabilities
 			$wp_roles->add_cap( 'administrator', 'edit_submission_form' );
 			$wp_roles->add_cap( 'administrator', 'read_submission_form' );
 			$wp_roles->add_cap( 'administrator', 'delete_submission_form' );
@@ -278,6 +290,7 @@ class KBS_Roles {
 				}
 			}
 
+			// Submission form capabilities
 			$wp_roles->remove_cap( 'administrator', 'edit_submission_form' );
 			$wp_roles->remove_cap( 'administrator', 'read_submission_form' );
 			$wp_roles->remove_cap( 'administrator', 'delete_submission_form' );

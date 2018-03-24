@@ -51,20 +51,27 @@ function kbs_admin_messages() {
 	}
 
 	if ( isset( $_GET['kbs-message'] ) && 'ticket_reply_added' == $_GET['kbs-message'] )	{
+		add_settings_error(
+			'kbs-notices',
+			'kbs-ticket-reply-added',
+			__( 'The reply was successfully added.', 'kb-support' ),
+			'updated'
+		);
+	}
+
+	if ( isset( $_GET['kbs-message'] ) && 'ticket_reply_added_closed' == $_GET['kbs-message'] )	{
 		$closed = '';
-		if ( isset( $_GET['post'] ) && 'kbs_ticket' == get_post_type( $_GET['post'] ) && 'closed' == get_post_status( $_GET['post'] ) )	{
 
-			$create_article_link = add_query_arg( array(
-				'kbs-action' => 'create_article',
-				'ticket_id'  => $_GET['post']
-			), admin_url() );
+		$create_article_link = add_query_arg( array(
+			'kbs-action' => 'create_article',
+			'ticket_id'  => $_GET['kbs_ticket_id']
+		), admin_url() );
 
-			$create_article_link = apply_filters( 'kbs_create_article_link', $create_article_link, $_GET['post'] );
+		$create_article_link = apply_filters( 'kbs_create_article_link', $create_article_link, $_GET['kbs_ticket_id'] );
 
-			$closed = sprintf( __( ' and the %1$s was closed.', 'kb-support' ), kbs_get_ticket_label_singular() );
-			$closed .= ' ';
-			$closed .= sprintf( __( 'Create <a href="%s">%s</a>', 'kb-support' ), $create_article_link, kbs_get_article_label_singular() );
-		}
+		$closed = sprintf( __( ' and the %1$s was closed.', 'kb-support' ), kbs_get_ticket_label_singular( true ) );
+		$closed .= ' ';
+		$closed .= sprintf( __( 'Create <a href="%s">%s</a>', 'kb-support' ), $create_article_link, kbs_get_article_label_singular() );
 
 		add_settings_error(
 			'kbs-notices',

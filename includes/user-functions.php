@@ -24,10 +24,14 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	arr		Array of user profile field ids
  */
 function kbs_register_user_profile_fields()	{
-	$fields = array();
+	$fields = array(
+		0 => 'replies_to_load',
+		1 => 'redirect_reply',
+		2 => 'redirect_closed'
+	);
 
     if ( kbs_departments_enabled() )    {
-        $fields[] = 'kbs_departments';
+        $fields[10] = 'kbs_departments';
     }
 
 	return apply_filters( 'kbs_user_profile_fields', $fields );
@@ -60,13 +64,123 @@ add_action( 'show_user_profile', 'kbs_output_user_profile_fields' );
 add_action( 'edit_user_profile', 'kbs_output_user_profile_fields' );
 
 /**
+ * Adds the Replies to Load option field to the user profile for agents.
+ *
+ * @since	1.2
+ * @param   obj		$user	The WP_User object
+ */
+function kbs_render_user_profile_replies_to_load_field( $user )  {
+    if ( ! kbs_is_agent( $user->ID ) || ( get_current_user_id() != $user->ID && ! current_user_can( 'manage_ticket_settings' ) ) )  {
+        return;
+    }
+
+	$replies_to_load = get_user_meta( $user->ID, '_kbs_load_replies', true );
+
+	if ( empty( $replies_to_load ) )	{
+		$replies_to_load = 0;
+	}
+
+	ob_start(); ?>
+
+    <tr>
+        <th><label for="kbs-agent-load-replies"><?php _e( 'Replies to Load', 'kb-support' ); ?></label></th>
+        <td>
+            <input class="small-text" type="number" name="kbs_agent_load_replies" id="kbs-agent-load-replies" value="<?php echo (int)$replies_to_load; ?>" step="1" min="0" />
+            <p class="description"><?php printf( __( 'Choose the number of replies to initially load when accessing the %s page. <code>0</code> loads all.', 'kb-support' ), kbs_get_ticket_label_plural( true ) ); ?></p>
+        </td>
+    </tr>
+
+	<?php echo ob_get_clean();
+
+} // kbs_render_user_profile_replies_to_load_field
+add_action( 'kbs_display_user_profile_fields', 'kbs_render_user_profile_replies_to_load_field', 5 );
+
+/**
+ * Adds the Replies to Load option field to the user profile for agents.
+ *
+ * @since	1.2
+ * @param   obj		$user	The WP_User object
+ */
+function kbs_render_user_profile_redirect_reply_field( $user )  {
+    if ( ! kbs_is_agent( $user->ID ) || ( get_current_user_id() != $user->ID && ! current_user_can( 'manage_ticket_settings' ) ) )  {
+        return;
+    }
+
+	$redirect = get_user_meta( $user->ID, '_kbs_redirect_reply', true );
+	$redirect = ! empty( $redirect ) ? esc_attr( $redirect ) : 'stay';
+
+	ob_start(); ?>
+
+    <tr>
+        <th><label for="kbs-agent-redirect-reply"><?php _e( 'Redirect After Reply', 'kb-support' ); ?></label></th>
+        <td>
+        	<?php echo KBS()->html->select( array(
+				'name'             => 'kbs_agent_redirect_reply',
+				'id'               => 'kbs-agent-redirect-reply',
+				'selected'         => $redirect,
+				'show_option_all'  => false,
+				'show_option_none' => false,
+				'options'          => apply_filters( 'kbs_agent_reply_redirect_options', array(
+					'stay' => sprintf( __( 'Current %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
+					'list' => sprintf( __( '%s List', 'kb-support' ), kbs_get_ticket_label_plural() )
+				) )
+			) ); ?>
+            <p class="description"><?php printf( __( 'Choose where to be redirected after submitting a reply to a %s.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ); ?></p>
+        </td>
+    </tr>
+
+	<?php echo ob_get_clean();
+
+} // kbs_render_user_profile_redirect_reply_field
+add_action( 'kbs_display_user_profile_fields', 'kbs_render_user_profile_redirect_reply_field', 5 );
+
+/**
+ * Adds the Replies to Load option field to the user profile for agents.
+ *
+ * @since	1.2
+ * @param   obj		$user	The WP_User object
+ */
+function kbs_render_user_profile_redirect_close_field( $user )  {
+    if ( ! kbs_is_agent( $user->ID ) || ( get_current_user_id() != $user->ID && ! current_user_can( 'manage_ticket_settings' ) ) )  {
+        return;
+    }
+
+	$redirect = get_user_meta( $user->ID, '_kbs_redirect_close', true );
+	$redirect = ! empty( $redirect ) ? esc_attr( $redirect ) : 'stay';
+
+	ob_start(); ?>
+
+    <tr>
+        <th><label for="kbs-agent-redirect-close"><?php _e( 'Redirect After Close', 'kb-support' ); ?></label></th>
+        <td>
+        	<?php echo KBS()->html->select( array(
+				'name'             => 'kbs_agent_redirect_close',
+				'id'               => 'kbs-agent-redirect-close',
+				'selected'         => $redirect,
+				'show_option_all'  => false,
+				'show_option_none' => false,
+				'options'          => apply_filters( 'kbs_agent_close_redirect_options', array(
+					'stay' => sprintf( __( 'Current %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
+					'list' => sprintf( __( '%s List', 'kb-support' ), kbs_get_ticket_label_plural() )
+				) )
+			) ); ?>
+            <p class="description"><?php printf( __( 'Choose where to be redirected after submitting a reply to close a %s.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ); ?></p>
+        </td>
+    </tr>
+
+	<?php echo ob_get_clean();
+
+} // kbs_render_user_profile_redirect_close_field
+add_action( 'kbs_display_user_profile_fields', 'kbs_render_user_profile_redirect_close_field', 5 );
+
+/**
  * Adds the department options field to the user profile for agents.
  *
  * @since	1.2
  * @param   obj		$user	The WP_User object
  */
 function kbs_render_user_profile_department_field( $user )  {
-    if ( ! kbs_is_agent( $user->ID ) || ( get_current_user_id() != $user->ID && ! current_user_can( 'manage_ticket_settings' ) ) )  {
+    if ( ! ! kbs_departments_enabled() || ! kbs_is_agent( $user->ID ) || ! current_user_can( 'view_ticket_reports' ) )  {
         return;
     }
 
@@ -100,14 +214,75 @@ function kbs_render_user_profile_department_field( $user )  {
 add_action( 'kbs_display_user_profile_fields', 'kbs_render_user_profile_department_field', 10 );
 
 /**
- * Saves the signature field.
+ * Saves the load replies field.
  *
- * @since	1.0
+ * @since	1.2
+ * @param	int		$user_id	WP User ID
+ */
+function kbs_save_user_load_replies( $user_id ) {
+
+	if ( ! kbs_is_agent( $user_id ) || ! current_user_can( 'edit_user', $user_id ) )	{
+		return;
+	}
+
+	$number = ! empty( $_POST['kbs_agent_load_replies'] ) ? (int)$_POST['kbs_agent_load_replies'] : 0;
+
+	update_user_meta( $user_id, '_kbs_load_replies', $number );
+
+} // kbs_save_user_load_replies
+add_action( 'personal_options_update', 'kbs_save_user_load_replies' );
+add_action( 'edit_user_profile_update', 'kbs_save_user_load_replies' );
+
+/**
+ * Saves the redirect option when replying to a ticket.
+ *
+ * @since	1.2
+ * @param	int		$user_id	WP User ID
+ */
+function kbs_save_user_redirect_reply( $user_id ) {
+
+	if ( ! kbs_is_agent( $user_id ) || ! current_user_can( 'edit_user', $user_id ) )	{
+		return;
+	}
+
+	$number = ! empty( $_POST['kbs_agent_redirect_reply'] ) ? sanitize_text_field( $_POST['kbs_agent_redirect_reply'] ) : 'stay';
+
+	update_user_meta( $user_id, '_kbs_redirect_reply', $number );
+
+} // kbs_save_user_redirect_reply
+add_action( 'personal_options_update', 'kbs_save_user_redirect_reply' );
+add_action( 'edit_user_profile_update', 'kbs_save_user_redirect_reply' );
+
+/**
+ * Saves the redirect option when closing a ticket.
+ *
+ * @since	1.2
+ * @param	int		$user_id	WP User ID
+ */
+function kbs_save_user_redirect_close( $user_id ) {
+
+	if ( ! kbs_is_agent( $user_id ) || ! current_user_can( 'edit_user', $user_id ) )	{
+		return;
+	}
+
+	$number = ! empty( $_POST['kbs_agent_redirect_close'] ) ? sanitize_text_field( $_POST['kbs_agent_redirect_close'] ) : 'stay';
+
+	update_user_meta( $user_id, '_kbs_redirect_close', $number );
+
+} // kbs_save_user_redirect_close
+add_action( 'personal_options_update', 'kbs_save_user_redirect_close' );
+add_action( 'edit_user_profile_update', 'kbs_save_user_redirect_close' );
+
+/**
+ * Saves the departments fields.
+ *
+ * @since	1.2
+ * @param	int		$user_id	WP User ID
  */
 function kbs_save_user_departments( $user_id ) {
 
-	if ( ! kbs_departments_enabled() || ! current_user_can( 'edit_user', $user_id ) )	{
-		return false;
+	if ( ! kbs_departments_enabled() || ! kbs_is_agent( $user_id ) || ! current_user_can( 'edit_user', $user_id ) )	{
+		return;
 	}
 
 	$departments = kbs_get_departments();

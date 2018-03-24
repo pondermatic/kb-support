@@ -228,9 +228,30 @@ function kbs_ticket_reply_added_action()	{
 		return;
 	}
 
-	$url = add_query_arg( array( 'kbs-message' => 'ticket_reply_added' ),
-		kbs_get_ticket_url( $_GET['ticket_id'], true )
-	);
+	$status       = get_post_status( $_GET['ticket_id'] );
+	$redirect_key = 'closed' == $status ? 'close' : 'reply';
+	$redirect     = get_user_meta( get_current_user_id(), '_kbs_redirect_' . $redirect_key, true );
+
+	if ( empty( $redirect ) )	{
+		$redirect = 0;
+	}
+
+	switch( $redirect )	{
+		case 'stay': // Current ticket
+		default:
+			$url = add_query_arg( array(
+				'kbs-message' => 'closed' == $status ? 'ticket_reply_added_closed' : 'ticket_reply_added'
+			), kbs_get_ticket_url( $_GET['ticket_id'], true ) );
+			break;
+
+		case 'list': // All tickets list
+			$url = add_query_arg( array(
+				'post_type'     => 'kbs_ticket',
+				'kbs-message'   => 'closed' == $status ? 'ticket_reply_added_closed' : 'ticket_reply_added',
+				'kbs_ticket_id' => $_GET['ticket_id']
+			), admin_url( 'edit.php' ) );
+			break;
+	}
 
 	wp_safe_redirect( $url );
 	exit;
