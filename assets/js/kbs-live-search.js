@@ -12,7 +12,7 @@ jQuery(document).ready(function ($) {
 
 		$('#kbs-article-results').html('');
 
-		if( search_text.length < 3 )	{
+		if( search_text.length < kbs_search_vars.min_search_trigger )	{
 			$('.kbs-article-search-results').hide('slow');
 			return;
 		}

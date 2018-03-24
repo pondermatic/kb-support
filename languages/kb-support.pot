@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KB Support 1.1.13\n"
 "Report-Msgid-Bugs-To: https://kb-support.com/\n"
-"POT-Creation-Date: 2018-03-24 23:04:01+00:00\n"
+"POT-Creation-Date: 2018-03-24 23:30:58+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -2786,7 +2786,7 @@ msgid "Heading for the agree to terms thickbox."
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:946
-#: includes/forms/form-functions.php:1042
+#: includes/forms/form-functions.php:1043
 msgid "Terms and Conditions for Support %s"
 msgstr ""
 
@@ -3684,7 +3684,7 @@ msgstr ""
 msgid "Type to search all %s statuses"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:128 includes/scripts.php:232
+#: includes/class-kbs-html-elements.php:128 includes/scripts.php:231
 msgid "Type to search all %s"
 msgstr ""
 
@@ -4611,7 +4611,7 @@ msgstr ""
 msgid "New Reply"
 msgstr ""
 
-#: includes/post-types.php:78 includes/scripts.php:238
+#: includes/post-types.php:78 includes/scripts.php:237
 #: includes/tickets/ticket-functions.php:1393
 msgid "View Reply"
 msgstr ""
@@ -4882,83 +4882,83 @@ msgid_plural "%1$s %3$s restored from the Trash."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/scripts.php:44
+#: includes/scripts.php:39
 msgid "Honeypot validation error"
 msgstr ""
 
-#: includes/scripts.php:48 includes/scripts.php:227
+#: includes/scripts.php:43 includes/scripts.php:226
 msgid "Choose a %s"
 msgstr ""
 
-#: includes/scripts.php:49 includes/scripts.php:228
+#: includes/scripts.php:44 includes/scripts.php:227
 msgid "Choose one or more %s"
 msgstr ""
 
-#: includes/scripts.php:52
+#: includes/scripts.php:47
 msgid "Type to search all options"
 msgstr ""
 
-#: includes/scripts.php:54
+#: includes/scripts.php:49
 msgid "Please Wait..."
 msgstr ""
 
-#: includes/scripts.php:55 includes/scripts.php:237
+#: includes/scripts.php:50 includes/scripts.php:236
 msgid "Type to search %s"
 msgstr ""
 
-#: includes/scripts.php:212
+#: includes/scripts.php:211
 msgid "Add New %s"
 msgstr ""
 
-#: includes/scripts.php:218
+#: includes/scripts.php:217
 msgid "Enter a Label for your field."
 msgstr ""
 
-#: includes/scripts.php:219
+#: includes/scripts.php:218
 msgid "Select the field Type"
 msgstr ""
 
-#: includes/scripts.php:220
+#: includes/scripts.php:219
 msgid "Hide Note"
 msgstr ""
 
-#: includes/scripts.php:221
+#: includes/scripts.php:220
 msgid "Hide Reply"
 msgstr ""
 
-#: includes/scripts.php:224
+#: includes/scripts.php:223
 msgid "There is no content in your note"
 msgstr ""
 
-#: includes/scripts.php:225
+#: includes/scripts.php:224
 msgid "There is no content in your reply"
 msgstr ""
 
-#: includes/scripts.php:226
+#: includes/scripts.php:225
 msgid "Your note could not be added"
 msgstr ""
 
-#: includes/scripts.php:231
+#: includes/scripts.php:230
 msgid ""
 "You have not submitted the reply. If you continue, the reply will not be "
 "added to the %s"
 msgstr ""
 
-#: includes/scripts.php:233
+#: includes/scripts.php:232
 msgid "Send closure email?"
 msgstr ""
 
-#: includes/scripts.php:234
+#: includes/scripts.php:233
 msgid ""
 "Are you sure you wish to close this ticket? Click OK to close, or Cancel to "
 "return."
 msgstr ""
 
-#: includes/scripts.php:236
+#: includes/scripts.php:235
 msgid "Could not add %s Reply"
 msgstr ""
 
-#: includes/scripts.php:239 includes/tickets/ticket-functions.php:1700
+#: includes/scripts.php:238 includes/tickets/ticket-functions.php:1700
 msgid "View Note"
 msgstr ""
 

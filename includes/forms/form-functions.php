@@ -800,6 +800,7 @@ function kbs_display_form_text_field( $field, $settings )	{
 
 	if ( ! empty( $settings['kb_search'] ) )	{
 		$class = 'kbs-article-search ' . $class;
+		$type  = 'search';
 		wp_enqueue_script( 'kbs-live-search' );
 	}
 

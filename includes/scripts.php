@@ -59,6 +59,12 @@ function kbs_load_scripts() {
 		// The live search is registered here, but it is enqueued within /includes/forms/form-functions.php
 		wp_register_script( 'kbs-live-search', $js_dir . 'kbs-live-search' . $suffix . '.js', array( 'jquery' ), KBS_VERSION );
 
+		wp_localize_script( 'kbs-live-search', 'kbs_search_vars', apply_filters( 'kbs_search_script_vars', array(
+			'ajax_loader'           => KBS_PLUGIN_URL . 'assets/images/loading.gif',
+			'ajaxurl'               => kbs_get_ajax_url(),
+			'min_search_trigger'    => apply_filters( 'kbs_article_search_trigger_length', 3 ),
+		) ) );
+
 	}
 
 } // kbs_load_scripts
