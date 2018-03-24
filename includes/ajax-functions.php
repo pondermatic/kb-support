@@ -163,14 +163,31 @@ function kbs_ajax_display_ticket_replies()	{
 		$output .= kbs_get_reply_html( $_POST['kbs_reply_id'], $_POST['kbs_ticket_id'] );
 	} else	{
 
-		$replies  = kbs_get_replies( $_POST['kbs_ticket_id'] );
-	
+		$args = array(
+			'ticket_id' => (int)$_POST['kbs_ticket_id'],
+			'number'    => kbs_get_option( 'load_replies', -1 ),
+			'page'      => isset( $_POST['kbs_page'] ) ? (int)$_POST['kbs_page'] : null
+		);
+
+		$replies_query = new KBS_Replies_Query( $args );
+		$replies       = $replies_query->get_replies();
+
 		if ( ! empty( $replies ) )	{
 			foreach( $replies as $reply )	{
                 $output .= '<div class="kbs_historic_replies_wrapper">';
                     $output .= kbs_get_reply_html( $reply, $_POST['kbs_ticket_id'] );
                 $output .= '</div>';
 			}
+
+			if ( isset( $args['page'] ) && $args['page'] < $replies_query->pages )	{
+				$output .= sprintf(
+					'<p class="kbs-replies-load-more"><a class="button button-secondary button-small" id="kbs-replies-next-page" data-ticket-id="%d" data-load-page="%d">%s</a></p>',
+					(int)$_POST['kbs_ticket_id'],
+					( $args['page'] + 1 ),
+					__( 'Load More', 'kb-support' )
+				);
+			}
+
 		}
 
 	}

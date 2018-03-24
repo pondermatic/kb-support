@@ -242,6 +242,7 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/article/article-search.php';
 		require_once KBS_PLUGIN_DIR . 'includes/tickets/class-kbs-ticket-stats.php';
 		require_once KBS_PLUGIN_DIR . 'includes/tickets/class-kbs-tickets-query.php';
+		require_once KBS_PLUGIN_DIR . 'includes/tickets/class-kbs-replies-query.php';
 		require_once KBS_PLUGIN_DIR . 'includes/tickets/class-kbs-ticket.php';
 		require_once KBS_PLUGIN_DIR . 'includes/tickets/ticket-actions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/tickets/ticket-functions.php';
