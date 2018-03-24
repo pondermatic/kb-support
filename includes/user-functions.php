@@ -180,7 +180,7 @@ add_action( 'kbs_display_user_profile_fields', 'kbs_render_user_profile_redirect
  * @param   obj		$user	The WP_User object
  */
 function kbs_render_user_profile_department_field( $user )  {
-    if ( ! kbs_is_agent( $user->ID ) || ( get_current_user_id() != $user->ID && ! current_user_can( 'manage_ticket_settings' ) ) )  {
+    if ( ! kbs_is_agent( $user->ID ) || ! current_user_can( 'view_ticket_reports' ) )  {
         return;
     }
 
