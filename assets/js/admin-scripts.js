@@ -248,7 +248,7 @@ jQuery(document).ready(function ($) {
 
 			});
 
-			$( document.body ).on( 'click', '#kbs-replies-next-page', function(event) {
+			$( document.body ).on( 'click', '#kbs-replies-next-page', function() {
 				var ticket_id = $('#kbs-replies-next-page').data('ticket-id');
 				var page      = $('#kbs-replies-next-page').data('load-page');
 
