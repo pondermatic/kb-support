@@ -70,7 +70,7 @@ function kbs_edit_department_agent_options( $tag, $taxonomy )	{
 
 	?>
     <tr class="form-field term-agents-wrap">
-        <th scope="row"><label for="kbs_agents"><?php _e( 'Department Agents' ); ?></label></th>
+        <th scope="row"><label for="kbs_agents"><?php _e( 'Department Agents', 'kb-support' ); ?></label></th>
         <td><?php echo KBS()->html->agent_dropdown( array(
 			'options'          => array(),
 			'name'             => 'kbs_agents',
@@ -97,7 +97,7 @@ add_action( 'department_edit_form_fields', 'kbs_edit_department_agent_options', 
 function kbs_add_department_agent_options( $taxonomy )	{
 	?>
     <div class="form-field term-agents-wrap">
-    	<label for="kbs_agents"><?php _e( 'Department Agents' ); ?></label>
+    	<label for="kbs_agents"><?php _e( 'Department Agents', 'kb-support' ); ?></label>
         <?php echo KBS()->html->agent_dropdown( array(
 			'options'          => array(),
 			'name'             => 'kbs_agents',
