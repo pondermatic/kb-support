@@ -180,7 +180,7 @@ add_action( 'kbs_display_user_profile_fields', 'kbs_render_user_profile_redirect
  * @param   obj		$user	The WP_User object
  */
 function kbs_render_user_profile_department_field( $user )  {
-    if ( ! kbs_is_agent( $user->ID ) || ! current_user_can( 'view_ticket_reports' ) )  {
+    if ( ! ! kbs_departments_enabled() || ! kbs_is_agent( $user->ID ) || ! current_user_can( 'view_ticket_reports' ) )  {
         return;
     }
 
@@ -222,7 +222,7 @@ add_action( 'kbs_display_user_profile_fields', 'kbs_render_user_profile_departme
 function kbs_save_user_load_replies( $user_id ) {
 
 	if ( ! kbs_is_agent( $user_id ) || ! current_user_can( 'edit_user', $user_id ) )	{
-		return false;
+		return;
 	}
 
 	$number = ! empty( $_POST['kbs_agent_load_replies'] ) ? (int)$_POST['kbs_agent_load_replies'] : 0;
@@ -242,7 +242,7 @@ add_action( 'edit_user_profile_update', 'kbs_save_user_load_replies' );
 function kbs_save_user_redirect_reply( $user_id ) {
 
 	if ( ! kbs_is_agent( $user_id ) || ! current_user_can( 'edit_user', $user_id ) )	{
-		return false;
+		return;
 	}
 
 	$number = ! empty( $_POST['kbs_agent_redirect_reply'] ) ? sanitize_text_field( $_POST['kbs_agent_redirect_reply'] ) : 'stay';
@@ -262,7 +262,7 @@ add_action( 'edit_user_profile_update', 'kbs_save_user_redirect_reply' );
 function kbs_save_user_redirect_close( $user_id ) {
 
 	if ( ! kbs_is_agent( $user_id ) || ! current_user_can( 'edit_user', $user_id ) )	{
-		return false;
+		return;
 	}
 
 	$number = ! empty( $_POST['kbs_agent_redirect_close'] ) ? sanitize_text_field( $_POST['kbs_agent_redirect_close'] ) : 'stay';
@@ -282,7 +282,7 @@ add_action( 'edit_user_profile_update', 'kbs_save_user_redirect_close' );
 function kbs_save_user_departments( $user_id ) {
 
 	if ( ! kbs_departments_enabled() || ! kbs_is_agent( $user_id ) || ! current_user_can( 'edit_user', $user_id ) )	{
-		return false;
+		return;
 	}
 
 	$departments = kbs_get_departments();
