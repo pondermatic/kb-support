@@ -143,10 +143,10 @@ function kbs_setup_kbs_ticket_department_taxonomy()	{
 			'show_ui'      => true,
 			'rewrite'      => false,
 			'capabilities' => array(
-				'manage_terms' => 'manage_department_terms',
-				'edit_terms'   => 'edit_department_terms',
-				'assign_terms' => 'assign_department_terms',
-				'delete_terms' => 'delete_department_terms'
+				'manage_terms' => 'manage_ticket_terms',
+				'edit_terms'   => 'edit_ticket_terms',
+				'assign_terms' => 'assign_ticket_terms',
+				'delete_terms' => 'delete_ticket_terms'
 			),
 			'update_count_callback' => '_update_generic_term_count'
 		)

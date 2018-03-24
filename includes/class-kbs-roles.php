@@ -121,14 +121,24 @@ class KBS_Roles {
 			$capabilities = $this->get_core_caps();
 			foreach ( $capabilities as $cap_group ) {
 				foreach ( $cap_group as $cap ) {
-					$wp_roles->add_cap( 'support_manager', $cap );
+
+					$ignore_for_agents = array(
+						'manage_ticket_terms',
+						'edit_ticket_terms',
+						'delete_ticket_terms',
+					);
+
+					if ( ! in_array( $cap, $ignore_for_agents ) )	{
+						$wp_roles->add_cap( 'support_agent', $cap );
+					}
+
 					$wp_roles->add_cap( 'administrator', $cap );
-					$wp_roles->add_cap( 'support_agent', $cap );
+					$wp_roles->add_cap( 'support_manager', $cap );
+
 				}
 			}
 
-			$wp_roles->add_cap( 'support_agent', 'assign_department_terms' );
-
+			// Submission form capabilities
 			$wp_roles->add_cap( 'administrator', 'edit_submission_form' );
 			$wp_roles->add_cap( 'administrator', 'read_submission_form' );
 			$wp_roles->add_cap( 'administrator', 'delete_submission_form' );
@@ -142,10 +152,6 @@ class KBS_Roles {
 			$wp_roles->add_cap( 'administrator', 'delete_others_submission_forms' );
 			$wp_roles->add_cap( 'administrator', 'edit_private_submission_forms' );
 			$wp_roles->add_cap( 'administrator', 'edit_published_submission_forms' );
-			$wp_roles->add_cap( 'administrator', 'manage_department_terms' );
-			$wp_roles->add_cap( 'administrator', 'edit_department_terms' );
-			$wp_roles->add_cap( 'administrator', 'delete_department_terms' );
-			$wp_roles->add_cap( 'administrator', 'assign_department_terms' );
 
 			$wp_roles->add_cap( 'support_manager', 'edit_submission_form' );
 			$wp_roles->add_cap( 'support_manager', 'read_submission_form' );
@@ -160,10 +166,6 @@ class KBS_Roles {
 			$wp_roles->add_cap( 'support_manager', 'delete_others_submission_forms' );
 			$wp_roles->add_cap( 'support_manager', 'edit_private_submission_forms' );
 			$wp_roles->add_cap( 'support_manager', 'edit_published_submission_forms' );
-			$wp_roles->add_cap( 'support_manager', 'manage_department_terms' );
-			$wp_roles->add_cap( 'support_manager', 'edit_department_terms' );
-			$wp_roles->add_cap( 'support_manager', 'delete_department_terms' );
-			$wp_roles->add_cap( 'support_manager', 'assign_department_terms' );
 
 		}
 
@@ -288,8 +290,7 @@ class KBS_Roles {
 				}
 			}
 
-			$wp_roles->remove_cap( 'support_agent', 'assign_department_terms' );
-
+			// Submission form capabilities
 			$wp_roles->remove_cap( 'administrator', 'edit_submission_form' );
 			$wp_roles->remove_cap( 'administrator', 'read_submission_form' );
 			$wp_roles->remove_cap( 'administrator', 'delete_submission_form' );
@@ -303,10 +304,6 @@ class KBS_Roles {
 			$wp_roles->remove_cap( 'administrator', 'delete_others_submission_forms' );
 			$wp_roles->remove_cap( 'administrator', 'edit_private_submission_forms' );
 			$wp_roles->remove_cap( 'administrator', 'edit_published_submission_forms' );
-			$wp_roles->remove_cap( 'administrator', 'manage_department_terms' );
-			$wp_roles->remove_cap( 'administrator', 'edit_department_terms' );
-			$wp_roles->remove_cap( 'administrator', 'delete_department_terms' );
-			$wp_roles->remove_cap( 'administrator', 'assign_department_terms' );
 
 			$wp_roles->remove_cap( 'support_manager', 'edit_submission_form' );
 			$wp_roles->remove_cap( 'support_manager', 'read_submission_form' );
@@ -321,10 +318,6 @@ class KBS_Roles {
 			$wp_roles->remove_cap( 'support_manager', 'delete_others_submission_forms' );
 			$wp_roles->remove_cap( 'support_manager', 'edit_private_submission_forms' );
 			$wp_roles->remove_cap( 'support_manager', 'edit_published_submission_forms' );
-			$wp_roles->remove_cap( 'support_manager', 'manage_department_terms' );
-			$wp_roles->remove_cap( 'support_manager', 'edit_department_terms' );
-			$wp_roles->remove_cap( 'support_manager', 'delete_department_terms' );
-			$wp_roles->remove_cap( 'support_manager', 'assign_department_terms' );
 
 		}
 
