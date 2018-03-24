@@ -302,6 +302,14 @@ function kbs_get_registered_settings() {
 						'desc'    => sprintf( __( 'If enabled, by replying to a closed %1$s, customers can re-open the %1$s', 'kb-support' ), strtolower( $single ) ),
 						'type'    => 'checkbox',
                         'std'     => '0'
+					),
+					'load_replies' => array(
+						'id'      => 'load_replies',
+						'name'    => __( 'Replies to Load', 'kb-support' ),
+						'desc'    => sprintf( __( 'Choose the number of replies to initially load when accessing the %s page. <code>0</code> loads all.', 'kb-support' ), strtolower( $plural ) ),
+						'type'    => 'number',
+						'size'    => 'small',
+                        'std'     => '0'
 					)
 				),
 				'submit' => array(

@@ -85,6 +85,10 @@ function kbs_settings_contextual_help() {
 					$ticket_plural,
 					strtolower( $ticket_singular )
 				) . '</li>' .
+				'<li>' . sprintf( 
+					__( '<strong>Replies to Load</strong> - This option determines how many replies to pre load when accessing the %1$s page. There is a link on the %1$s page to load older replies.', 'kb-support' ),
+					$ticket_plural
+				) . '</li>' .
 			'</ul>' .
 			'<p>' . __( '<strong>Submission Settings</strong>', 'kb-support' ) . '</p>' .
 			'<ul>' .
