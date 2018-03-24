@@ -22,8 +22,6 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	void
  */
 function kbs_load_scripts() {
-	global $post;
-
 	$js_dir = KBS_PLUGIN_URL . 'assets/js/';
 
 	// Use minified libraries if SCRIPT_DEBUG is turned off
@@ -33,10 +31,7 @@ function kbs_load_scripts() {
 	wp_register_script( 'kbs-ajax', $js_dir . 'kbs-ajax' . $suffix . '.js', array( 'jquery' ), KBS_VERSION );
 	wp_enqueue_script( 'kbs-ajax' );
 
-	$is_submission = false;
-	if ( ! empty( $post ) && is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'kbs_submit') )	{
-		$is_submission = true;
-	}
+	$is_submission = kbs_is_submission_form();
 
 	wp_localize_script( 'kbs-ajax', 'kbs_scripts', apply_filters( 'kbs_ajax_script_vars', array(
         'ajax_loader'           => KBS_PLUGIN_URL . 'assets/images/loading.gif',
@@ -55,10 +50,15 @@ function kbs_load_scripts() {
         'type_to_search'        => __( 'Type to search %s', 'kb-support' ),
 	) ) );
 
-	if ( ! empty( $is_submission ) )	{
+	if ( $is_submission )	{
 		add_thickbox();
-        // Register the chosen script here, but we enqueue within kbs_display_form_select_field when needed
+
 		wp_register_script( 'jquery-chosen', $js_dir . 'chosen.jquery' . $suffix . '.js', array( 'jquery' ), KBS_VERSION );
+		wp_enqueue_script( 'jquery-chosen' );
+
+		// The live search is registered here, but it is enqueued within /includes/forms/form-functions.php
+		wp_register_script( 'kbs-live-search', $js_dir . 'kbs-live-search' . $suffix . '.js', array( 'jquery' ), KBS_VERSION );
+
 	}
 
 } // kbs_load_scripts
@@ -73,7 +73,6 @@ add_action( 'wp_enqueue_scripts', 'kbs_load_scripts' );
  * @return	void
  */
 function kbs_register_styles() {
-	global $post;
 
 	if ( kbs_get_option( 'disable_styles', false ) ) {
 		return;
@@ -114,11 +113,10 @@ function kbs_register_styles() {
 	wp_register_style( 'kbs-styles', $url, array(), KBS_VERSION, 'all' );
 	wp_enqueue_style( 'kbs-styles' );
 
-	if ( ! empty( $post ) )	{
-		if ( is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'kbs_submit') )	{
-            // Register the chosen styles here, but we enqueue within kbs_display_form_select_field when needed
-			wp_register_style( 'jquery-chosen-css', $css_dir . 'chosen' . $suffix . '.css', array(), KBS_VERSION );
-		}
+	if ( kbs_is_submission_form() )	{
+		// Register the chosen styles here, but we enqueue within kbs_display_form_select_field when needed
+		wp_register_style( 'jquery-chosen-css', $css_dir . 'chosen' . $suffix . '.css', array(), KBS_VERSION );
+		wp_enqueue_style( 'jquery-chosen-css' );
 	}
 
 } // kbs_register_styles
@@ -130,7 +128,6 @@ add_action( 'wp_enqueue_scripts', 'kbs_register_styles' );
  * Enqueues the required admin scripts.
  *
  * @since	1.0
- * @global	$post
  * @param	str		$hook	Page hook
  * @return	void
  */

@@ -800,6 +800,7 @@ function kbs_display_form_text_field( $field, $settings )	{
 
 	if ( ! empty( $settings['kb_search'] ) )	{
 		$class = 'kbs-article-search ' . $class;
+		wp_enqueue_script( 'kbs-live-search' );
 	}
 
 	if ( ! empty( $settings['mapping'] ) && is_user_logged_in() && ! kbs_is_agent() )	{
@@ -915,9 +916,6 @@ function kbs_display_form_select_field( $field, $settings )	{
 	$options       = array();
 
 	if ( $chosen )	{
-        wp_enqueue_script( 'jquery-chosen' );
-        wp_enqueue_style( 'jquery-chosen-css' );
-
 		$class .= 'kbs-select-chosen';
 
         if ( $chosen_search && ! isset( $data_array['search-placeholder'] ) )    {
