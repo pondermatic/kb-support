@@ -163,9 +163,12 @@ function kbs_ajax_display_ticket_replies()	{
 		$output .= kbs_get_reply_html( $_POST['kbs_reply_id'], $_POST['kbs_ticket_id'] );
 	} else	{
 
+		$number = get_user_meta( get_current_user_id(), '_kbs_load_replies', true );
+		$number = ! empty( $number ) ? (int)$number : 0;
+
 		$args = array(
 			'ticket_id' => (int)$_POST['kbs_ticket_id'],
-			'number'    => kbs_get_option( 'load_replies', -1 ),
+			'number'    => $number,
 			'page'      => isset( $_POST['kbs_page'] ) ? (int)$_POST['kbs_page'] : null
 		);
 
