@@ -164,7 +164,8 @@ module.exports = function( grunt ) {
 			all: [
 				'Gruntfile.js',
 				'<%= dirs.main.js %>/admin-scripts.js',
-				'<%= dirs.main.js %>/kbs-ajax.js'
+				'<%= dirs.main.js %>/kbs-ajax.js',
+				'<%= dirs.main.js %>/kbs-live-search.js'
 			]
 		},
 
@@ -183,7 +184,8 @@ module.exports = function( grunt ) {
 			dist: {
 				files: {
 					'<%= dirs.main.js %>/admin-scripts.min.js': ['<%= dirs.main.js %>/admin-scripts.js'],
-					'<%= dirs.main.js %>/kbs-ajax.min.js': ['<%= dirs.main.js %>/kbs-ajax.js']
+					'<%= dirs.main.js %>/kbs-ajax.min.js': ['<%= dirs.main.js %>/kbs-ajax.js'],
+					'<%= dirs.main.js %>/kbs-live-search.min.js': ['<%= dirs.main.js %>/kbs-live-search.js']
 				}
 			}
 		},
