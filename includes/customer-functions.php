@@ -93,6 +93,12 @@ function kbs_customer_can_access_ticket( $ticket = '', $customer = '' )	{
 		$can_access = true;
 	}
 
+	if ( ! $can_access )	{
+		if ( ! empty( $customer->company_id ) && ! empty( $ticket->company_id ) && $customer->company_id  == $ticket->company_id )	{
+			$can_access = true;
+		}
+	}
+
 	/**
 	 * Enable extensions to overide the $can_access result
 	 *
