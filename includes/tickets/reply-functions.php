@@ -307,3 +307,118 @@ function kbs_reply_is_read( $reply_id ) {
 
     return apply_filters( 'kbs_reply_is_read', $read, $reply_id );
 } // kbs_reply_is_read
+
+/**
+ * Count Replies
+ *
+ * Returns the total number of replies.
+ *
+ * @since	1.2
+ * @param	array	$args	List of arguments to base the reply count on
+ * @return	array	$count	Number of replies sorted by reply date
+ */
+function kbs_count_replies( $args = array() ) {
+
+	global $wpdb;
+
+	$defaults = array(
+		'agent'      => null,
+		'user'       => null,
+		'customer'   => null, // Unused
+		'ticket'     => null,
+		'start-date' => null,
+		'end-date'   => null
+	);
+
+	$args = wp_parse_args( $args, $defaults );
+
+	$select = "SELECT count(*)";
+	$join = '';
+	$where = "WHERE p.post_type = 'kbs_ticket_reply' AND p.post_status = 'publish'";
+
+	// Limit reply count by received date
+	if ( ! empty( $args['start-date'] ) && false !== strpos( $args['start-date'], '-' ) ) {
+
+		$date_parts = explode( '-', $args['start-date'] );
+		$year       = ! empty( $date_parts[0] ) && is_numeric( $date_parts[0] ) ? $date_parts[0] : 0;
+		$month      = ! empty( $date_parts[1] ) && is_numeric( $date_parts[1] ) ? $date_parts[1] : 0;
+		$day        = ! empty( $date_parts[2] ) && is_numeric( $date_parts[2] ) ? $date_parts[2] : 0;
+
+		$is_date    = checkdate( $month, $day, $year );
+		if ( false !== $is_date ) {
+
+			$date   = new DateTime( $args['start-date'] );
+			$where .= $wpdb->prepare( " AND p.post_date >= '%s'", $date->format( 'Y-m-d' ) );
+
+		}
+
+		// Fixes an issue with the replies list table counts when no end date is specified (partly with stats class)
+		if ( empty( $args['end-date'] ) ) {
+			$args['end-date'] = $args['start-date'];
+		}
+
+	}
+
+	if ( ! empty ( $args['end-date'] ) && false !== strpos( $args['end-date'], '-' ) ) {
+
+		$date_parts = explode( '-', $args['end-date'] );
+		$year       = ! empty( $date_parts[0] ) && is_numeric( $date_parts[0] ) ? $date_parts[0] : 0;
+		$month      = ! empty( $date_parts[1] ) && is_numeric( $date_parts[1] ) ? $date_parts[1] : 0;
+		$day        = ! empty( $date_parts[2] ) && is_numeric( $date_parts[2] ) ? $date_parts[2] : 0;
+
+		$is_date    = checkdate( $month, $day, $year );
+		if ( false !== $is_date ) {
+
+			$date   = new DateTime( $args['end-date'] );
+			$where .= $wpdb->prepare( " AND p.post_date <= '%s'", $date->format( 'Y-m-d' ) );
+
+		}
+
+	}
+
+	// Replies by ticket ID
+	if ( ! empty( $args['ticket'] ) )	{
+		$ticket_id = absint( $args['ticket'] );
+		if ( ! empty( $ticket_id ) )	{
+			$where .= $wpdb->prepare( " AND p.post_parent = '%d'", $ticket_id );
+		}
+	}
+
+	// Replies by agent ID
+	if ( ! empty( $args['agent'] ) )	{
+		$agent_id = absint( $args['agent'] );
+		if ( ! empty( $agent_id ) )	{
+			$where .= $wpdb->prepare( " AND p.post_author = '%d'", $agent_id );
+		}
+	}
+
+	// Replies by user ID
+	if ( ! empty( $args['user'] ) )	{
+		$user_id = absint( $args['user'] );
+		if ( ! empty( $user_id ) )	{
+			$where .= $wpdb->prepare( " AND p.post_author = '%d'", $user_id );
+		}
+	}
+
+	$where = apply_filters( 'kbs_count_replies_where', $where );
+	$join  = apply_filters( 'kbs_count_replies_join', $join );
+
+	$query = "$select
+		FROM $wpdb->posts p
+		$join
+		$where
+	";
+
+	$cache_key = md5( $query );
+
+	$count = wp_cache_get( $cache_key, 'counts' );
+
+	if ( false !== $count ) {
+		return $count;
+	}
+
+	$count = $wpdb->get_var( $query );
+	wp_cache_set( $cache_key, $count, 'counts', DAY_IN_SECONDS );
+
+	return $count;
+} // kbs_count_replies
