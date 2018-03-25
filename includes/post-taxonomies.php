@@ -79,7 +79,7 @@ function kbs_setup_kbs_ticket_tag_taxonomy()	{
 		'add_new_item'          => sprintf( __( 'Add New %s Tag', 'kb-support' ), kbs_get_ticket_label_singular() ),
 		'new_item_name'         => sprintf( __( 'New %s Tag Name', 'kb-support' ), kbs_get_ticket_label_singular() ),
 		'menu_name'             => __( 'Tags', 'kb-support' ),
-		'choose_from_most_used' => sprintf( __( 'Choose from most used %s tags', 'kb-support' ), kbs_get_ticket_label_singular() )
+		'choose_from_most_used' => sprintf( __( 'Choose from most used %s tags', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
 	);
 
 	$ticket_tag_args = apply_filters( 'kbs_ticket_tag_args', array(
