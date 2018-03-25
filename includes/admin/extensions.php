@@ -151,7 +151,7 @@ function kbs_get_extensions()	{
 			$content = json_decode( $body );
 	
 			if ( is_object( $content ) && isset( $content->products ) ) {
-				set_transient( '_kbs_extensions_feed', $content->products, DAY_IN_SECONDS / 2 ); // Store for 12 hours
+				set_transient( '_kbs_extensions_feed', $content->products, DAY_IN_SECONDS / 2 ); // Store for 24 hours
 				$extensions = $content->products;
 			}
 		}
