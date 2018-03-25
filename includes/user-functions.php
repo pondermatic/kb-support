@@ -51,7 +51,7 @@ function kbs_output_user_profile_fields( $user )	{
 	if ( ! empty( $fields ) )	{
 		ob_start(); ?>
 
-		<h2><?php _e( 'KB Support', 'kb-support' ); ?></h2>
+		<h2><?php _e( 'KB Support Settings', 'kb-support' ); ?></h2>
 		<table class="form-table">
 			<?php do_action( 'kbs_display_user_profile_fields', $user, $fields ); ?>
 		</table>
@@ -60,8 +60,8 @@ function kbs_output_user_profile_fields( $user )	{
 	}
 
 } // kbs_output_user_profile_fields
-add_action( 'show_user_profile', 'kbs_output_user_profile_fields' );
-add_action( 'edit_user_profile', 'kbs_output_user_profile_fields' );
+add_action( 'show_user_profile', 'kbs_output_user_profile_fields', 11 );
+add_action( 'edit_user_profile', 'kbs_output_user_profile_fields', 11 );
 
 /**
  * Adds the Replies to Load option field to the user profile for agents.
