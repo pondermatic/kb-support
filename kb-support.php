@@ -246,6 +246,7 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/tickets/class-kbs-ticket.php';
 		require_once KBS_PLUGIN_DIR . 'includes/tickets/ticket-actions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/tickets/ticket-functions.php';
+		require_once KBS_PLUGIN_DIR . 'includes/tickets/reply-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/departments/department-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/files.php';
 		require_once KBS_PLUGIN_DIR . 'includes/formatting.php';
