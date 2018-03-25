@@ -410,7 +410,7 @@ function kbs_get_notices( $notice = '', $notice_only = false )	{
 		),
 		'invalid_customer' => array(
 			'class'  => 'error',
-			'notice' => sprintf( __( 'You are not allowed to manage this %s.', 'kb-support' ), kbs_get_ticket_label_singular() )
+			'notice' => sprintf( __( 'You are not allowed to manage this %s.', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
 		),
 		'profile_updated' => array(
 			'class'  => 'success',
