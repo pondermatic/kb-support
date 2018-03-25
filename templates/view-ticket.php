@@ -36,7 +36,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 
 	$customer = new KBS_Customer( $customer_id, $use_user_id ); ?>
 
-	<?php if ( empty( $customer->id ) || $customer->id != $ticket->customer_id ) : ?>
+	<?php if ( ! kbs_customer_can_access_ticket( $ticket, $customer ) ) : ?>
 
     	<?php echo kbs_display_notice( 'invalid_customer' ); ?>
 
