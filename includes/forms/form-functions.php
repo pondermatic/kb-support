@@ -697,7 +697,7 @@ function kbs_display_form( $form_id = 0 ) {
 	
 		ob_start();
 	
-		kbs_get_template_part( 'shortcode', apply_filters( 'kbs_form_template', 'form' ) );
+		kbs_get_template_part( 'shortcode', apply_filters( 'kbs_form_template', 'form', $kbs_form, $form_id ) );
 	
 		return apply_filters( 'kbs_submit_form', ob_get_clean(), $kbs_form, $form_id );
 
