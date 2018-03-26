@@ -1754,8 +1754,6 @@ class KBS_Ticket {
 
 		$form = new KBS_Form( $this->form_data['id'] );
 
-		$ignore = kbs_form_ignore_fields();
-
 		$output = '<h2>' . sprintf( __( 'Form: %s', 'kb-support' ), get_the_title( $this->form_data['id'] ) ) . '</h2>';
 		foreach( $this->form_data['data'] as $field => $value )	{
 
@@ -1766,6 +1764,10 @@ class KBS_Ticket {
 			}
 
 			$settings = $form->get_field_settings( $form_field->ID );
+
+			if ( 'recaptcha' == $settings['type'] )	{
+				continue;
+			}
 
 			if ( 'department' == $settings['mapping'] )	{
 				$department = kbs_get_department( $value );
@@ -1794,6 +1796,14 @@ class KBS_Ticket {
 
 			if ( is_array( $value ) )	{
 				$value = implode( ', ', $value );
+			}
+
+			if ( 'email' == $settings['type'] && is_email( $value ) )	{
+				$value = sprintf( '<a href="mailto:%1$s">%1$s</a>', sanitize_email( $value ) );
+			}
+
+			if ( 'url' == $settings['type'] )	{
+				$value = sprintf( '<a href="%1$s" target="_blank">%1$s</a>', esc_url( $value ) );
 			}
 
 			$value = apply_filters( 'kbs_show_form_data', $value, $form_field->ID, $settings );
