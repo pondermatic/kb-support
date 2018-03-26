@@ -699,7 +699,7 @@ function kbs_display_form( $form_id = 0 ) {
 	
 		kbs_get_template_part( 'shortcode', apply_filters( 'kbs_form_template', 'form' ) );
 	
-		return apply_filters( 'kbs_submit_form', ob_get_clean() );
+		return apply_filters( 'kbs_submit_form', ob_get_clean(), $kbs_form, $form_id );
 
 	}
 } // kbs_display_form
