@@ -52,7 +52,8 @@ add_action( 'kbs_notices', 'kbs_notices' );
  * @return	str		The label for the form submit button.
  */
 function kbs_get_form_submit_label()	{
-	return kbs_get_option( 'form_submit_label', sprintf( __( 'Submit %s', 'kb-support' ), kbs_get_ticket_label_singular() ) );
+    $label = kbs_get_option( 'form_submit_label', sprintf( __( 'Submit %s', 'kb-support' ), kbs_get_ticket_label_singular() ) );
+	return apply_filters( 'kbs_form_submit_label', $label );
 } // kbs_get_form_submit_label
 
 /**

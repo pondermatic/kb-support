@@ -1014,7 +1014,7 @@ add_action( 'kbs_form_display_department_field', 'kbs_display_form_department_fi
 function kbs_display_form_checkbox_field( $field, $settings )	{
 
 	$class       = ! empty( $settings['input_class'] ) ? ' class="' . esc_attr( $settings['input_class'] ) . '"' : '';
-	$checked     = ! empty( $settings['selected'] )        ? ' ' . ' checked'                                    : '';
+	$checked     = ! empty( $settings['selected'] )    ? ' ' . ' checked'                                        : '';
 
 	$output = sprintf( '<input type="checkbox" name="%1$s" id="%1$s"%2$s%3$s />',
 		esc_attr( $field->post_name ),
