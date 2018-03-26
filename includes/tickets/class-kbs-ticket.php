@@ -1808,7 +1808,20 @@ class KBS_Ticket {
 
 			$value = apply_filters( 'kbs_show_form_data', $value, $form_field->ID, $settings );
 
-			$output .= '<p><strong>' . get_the_title( $form_field->ID ) . '</strong>: ' . $value;
+			$output .= sprintf( '<p><strong>%s</strong>: %s</p>',
+				get_the_title( $form_field->ID ),
+				$value
+			);
+		}
+
+		$terms_agreed = $this->get_meta( '_kbs_ticket_terms_agreed', true );
+		if ( $terms_agreed )	{
+			$date_format = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
+
+			$output .= sprintf( '<p class="description">%s: %s</p>',
+				__( 'The terms and conditions were accepted', 'kb-support' ),
+				date_i18n( $date_format, $terms_agreed )
+			);
 		}
 
 		return apply_filters( 'kbs_show_form_data', $output );

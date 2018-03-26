@@ -511,7 +511,7 @@ function kbs_add_ticket( $ticket_data )	{
 	$ticket->user_id         = ! empty( $ticket_data['user_info']['id'] ) ? (int) $ticket_data['user_info']['id'] : '';
 	$ticket->email           = strtolower( sanitize_email( $ticket_data['user_email'] ) );
 	$ticket->first_name      = ucfirst( sanitize_text_field( $ticket_data['user_info']['first_name'] ) );
-  $ticket->last_name       = '';
+	$ticket->last_name       = '';
 	$ticket->email           = strtolower( sanitize_email( $ticket_data['user_info']['email'] ) );
 	$ticket->ip              = kbs_get_ip();
 	$ticket->sla_respond     = kbs_calculate_sla_target_response();
