@@ -199,7 +199,7 @@ function kbs_setup_post_types() {
 		'can_export'         => true
 	);
 
-	register_post_type( 'kbs_company', $company_args );
+	register_post_type( 'kbs_company', apply_filters( 'kbs_ticket_company_post_type_args', $company_args ) );
 
 } // kbs_setup_post_types
 add_action( 'init', 'kbs_setup_post_types', 1 );
