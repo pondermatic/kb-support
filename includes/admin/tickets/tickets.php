@@ -436,7 +436,7 @@ function kbs_add_ticket_filters() {
                 $tag_labels = kbs_get_taxonomy_labels( 'department' );
 
                 echo "<select name='department' id='department' class='postform'>";
-                    echo "<option value=''>" . sprintf( __( 'Show all %s', 'kb-support' ), strtolower( $tag_labels['name'] ) ) . "</option>";
+                    echo "<option value=''>" . sprintf( __( 'All %s', 'kb-support' ), strtolower( $tag_labels['name'] ) ) . "</option>";
 
                     foreach ( $terms as $term ) {
                         $selected = isset( $_GET['department'] ) && $_GET['department'] == $term->slug ? ' selected="selected"' : '';
