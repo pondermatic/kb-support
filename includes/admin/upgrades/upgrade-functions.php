@@ -453,4 +453,6 @@ function kbs_v12_upgrades()	{
 		}
 	}
 
+    flush_rewrite_rules();
+
 } // kbs_v12_upgrades

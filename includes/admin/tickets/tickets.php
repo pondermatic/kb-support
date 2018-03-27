@@ -115,7 +115,13 @@ function kbs_set_kbs_ticket_column_data( $column_name, $post_id ) {
 			echo kb_tickets_post_column_customer( $post_id, $kbs_ticket );
 			$company = kbs_get_company_name( $kbs_ticket->company_id );
 			if ( ! empty( $company ) )	{
-				echo '<br />' . $company;
+                $company_url = get_edit_post_link( $kbs_ticket->company_id );
+				echo '<br />';
+                printf(
+                    '<span class="description"><a href="%s">%s</a></span>',
+                    $company_url,
+                    $company
+                );
 			}
 			break;
 
