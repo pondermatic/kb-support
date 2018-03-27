@@ -497,6 +497,37 @@ add_action( 'wp_ajax_kbs_validate_ticket_form', 'kbs_ajax_validate_form_submissi
 add_action( 'wp_ajax_nopriv_kbs_validate_ticket_form', 'kbs_ajax_validate_form_submission' );
 
 /**
+ * Retrieves customer data.
+ *
+ * @since	1.2
+ * @return	void
+ */
+function kbs_ajax_get_customer_data()	{
+
+	$response = array(
+		'name'  => '',
+		'email' => '',
+		'phone' => '',
+		'url'   => ''
+	);
+
+	$customer = new KBS_Customer( $_POST['customer_id'] );
+
+	if ( $customer )	{
+		$response = array(
+			'name'  => ! empty( $customer->name )          ? esc_attr( $customer->name )          : '',
+			'email' => ! empty( $customer->email )         ? esc_attr( $customer->email )         : '',
+			'phone' => ! empty( $customer->primary_phone ) ? esc_attr( $customer->primary_phone ) : '',
+			'url'   => ! empty( $customer->website )       ? esc_url( $customer->website )        : ''
+		);
+	}
+
+	wp_send_json( $response );
+
+} // kbs_ajax_get_customer_data
+add_action( 'wp_ajax_kbs_get_customer_data', 'kbs_ajax_get_customer_data' );
+
+/**
  * Adds a new customer.
  *
  * @since	1.0

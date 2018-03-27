@@ -797,6 +797,50 @@ jQuery(document).ready(function ($) {
 	};
 	KBS_Customer.init();
 
+	/**
+	 * Company post screen JS
+	 */
+	var KBS_Company = {
+		init : function() {
+			this.contacts();
+		},
+
+		contacts : function()	{
+			$( '#_kbs_company_customer' ).change( function() {
+
+				if ( 0 === $('#_kbs_company_customer').val() )	{
+					return;
+				}
+
+				var postData = {
+					action : 'kbs_get_customer_data',
+					company_id : kbs_vars.post_id,
+					customer_id : $( '#_kbs_company_customer' ).val()
+				};
+
+				$.ajax({
+					type: 'POST',
+					dataType: 'json',
+					data: postData,
+					url: ajaxurl,
+					success: function ( response ) {
+						$( '#_kbs_company_contact' ).val( response.name );
+						$( '#_kbs_company_email' ).val( response.email );
+						$( '#_kbs_company_phone' ).val( response.phone );
+						$( '#_kbs_company_website' ).val( response.url );
+					}
+				}).fail( function ( data ) {
+					if ( window.console && window.console.log ) {
+						console.log( data );
+					}
+				});
+
+			});
+		}
+
+	};
+	KBS_Company.init();
+
     /**
 	 * Export screen JS
 	 */

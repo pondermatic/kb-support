@@ -460,6 +460,10 @@ div .term-agents-wrap .kbs_select_chosen {
 
 /* Admin Pages
 -------------------------------------------------------------- */
+#kbs-company-data .kbs_select_chosen	{
+	width: 25em;
+	margin: 0px;
+}
 #kbs-item-wrapper .left {
 	float: left;
 }

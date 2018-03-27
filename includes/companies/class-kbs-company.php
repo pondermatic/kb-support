@@ -35,6 +35,13 @@ class KBS_Company {
 	public $name;
 
 	/**
+	 * The customer iD
+	 *
+	 * @since 1.2
+	 */
+	public $customer = 0;
+
+	/**
 	 * The company contact
 	 *
 	 * @since 1.0
@@ -130,12 +137,18 @@ class KBS_Company {
 		$this->modified_date   = $company->post_modified;
 
 		// Company information
-		$this->name    = $company->post_title;
-		$this->contact = $this->get_meta( '_kbs_company_contact' );
-		$this->phone   = $this->get_meta( '_kbs_company_phone' );
-		$this->email   = $this->get_meta( '_kbs_company_email' );
-		$this->logo    = get_the_post_thumbnail_url( $this->ID );
-		$this->website = $this->get_meta( '_kbs_company_website' );
+		$this->name     = $company->post_title;
+		$this->customer = $this->get_meta( '_kbs_company_customer' );
+
+		if ( ! empty( $this->customer ) )	{
+			$customer = new KBS_Customer( $this->customer );
+		}
+
+		$this->contact  = ! empty( $customer->id ) ? $customer->name  : $this->get_meta( '_kbs_company_contact' );
+		$this->email    = ! empty( $customer->id ) ? $customer->email : $this->get_meta( '_kbs_company_email' );
+		$this->phone    = $this->get_meta( '_kbs_company_phone' );
+		$this->logo     = get_the_post_thumbnail_url( $this->ID );
+		$this->website  = $this->get_meta( '_kbs_company_website' );
 
 		// Extensions can hook here to add items to this object
 		do_action( 'kbs_setup_company', $this, $company_id );
