@@ -430,6 +430,23 @@ function kbs_add_ticket_filters() {
 			echo "</select>";
 		}
 
+        if ( kbs_departments_enabled() )    {
+            $terms = get_terms( 'department' );
+            if ( is_array( $terms ) && count( $terms ) > 0 )	{
+                $tag_labels = kbs_get_taxonomy_labels( 'department' );
+
+                echo "<select name='department' id='department' class='postform'>";
+                    echo "<option value=''>" . sprintf( __( 'Show all %s', 'kb-support' ), strtolower( $tag_labels['name'] ) ) . "</option>";
+
+                    foreach ( $terms as $term ) {
+                        $selected = isset( $_GET['department'] ) && $_GET['department'] == $term->slug ? ' selected="selected"' : '';
+                        echo '<option value="' . esc_attr( $term->slug ) . '"' . $selected . '>' . esc_html( $term->name ) .' (' . $term->count .')</option>';
+                    }
+
+                echo "</select>";
+            }
+        }
+
 		if ( isset( $_REQUEST['all_posts'] ) && '1' === $_REQUEST['all_posts'] )	{
 
 			echo '<input type="hidden" name="all_posts" value="1" />';
