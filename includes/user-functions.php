@@ -180,14 +180,15 @@ add_action( 'kbs_display_user_profile_fields', 'kbs_render_user_profile_redirect
  * @param   obj		$user	The WP_User object
  */
 function kbs_render_user_profile_department_field( $user )  {
-    if ( ! ! kbs_departments_enabled() || ! kbs_is_agent( $user->ID ) || ! current_user_can( 'view_ticket_reports' ) )  {
+    if ( ! kbs_departments_enabled() || ! kbs_is_agent( $user->ID ) || ( get_current_user_id() != $user->ID && ! current_user_can( 'manage_ticket_settings' ) ) )  {
         return;
     }
 
     $departments = kbs_get_departments();
 
     if ( $departments ) {
-		$output = array();
+        $read_only = ! current_user_can( 'manage_ticket_settings' ) ? ' disabled' : '';
+		$output    = array();
         ob_start(); ?>
 
         <tr>
@@ -195,11 +196,11 @@ function kbs_render_user_profile_department_field( $user )  {
             <td>
                 <?php foreach( $departments as $department ) : ?>
                     <?php $output[] = sprintf(
-						'<input type="checkbox" name="kbs_departments[]" id="%s" value="%s"%s /> <label for="%s">%s</label>',
+						'<input type="checkbox" name="kbs_departments[]" id="%1$s" value="%2$s"%3$s%4$s /> <label for="%1$s">%5$s</label>',
 						$department->slug,
 						$department->term_id,
 						kbs_agent_is_in_department( $department->term_id, $user->ID ) ? ' checked="checked"' : '',
-						$department->slug,
+                        $read_only,
 						$department->name
 					); ?>
                 <?php endforeach; ?>
@@ -281,7 +282,7 @@ add_action( 'edit_user_profile_update', 'kbs_save_user_redirect_close' );
  */
 function kbs_save_user_departments( $user_id ) {
 
-	if ( ! kbs_departments_enabled() || ! kbs_is_agent( $user_id ) || ! current_user_can( 'edit_user', $user_id ) )	{
+	if ( ! kbs_departments_enabled() || ! kbs_is_agent( $user_id ) || ! current_user_can( 'manage_ticket_settings' ) )	{
 		return;
 	}
 
