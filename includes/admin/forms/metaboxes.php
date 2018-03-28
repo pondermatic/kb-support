@@ -412,7 +412,7 @@ function kbs_render_field_mapping_row( $post_id, $args )	{
 		<label for="kbs_field_value">
 			<?php echo KBS()->html->text( array(
 				'name'  => 'kbs_field_value',
-				'value' => ! empty( $kbs_edit_field->settings['value'] ) ? esc_html( $kbs_edit_field->settings['mapping'] ) : null,
+				'value' => ! empty( $kbs_edit_field->settings['value'] ) ? esc_html( $kbs_edit_field->settings['value'] ) : null,
 				'class' => 'kbs_input'
 			) ); ?>
 		</label></p>
