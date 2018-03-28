@@ -321,11 +321,6 @@ function kbs_setup_email_tags() {
 			'description' => __( 'Inserts the logo of the company', 'kb-support' ),
 			'function'    => 'kbs_email_tag_company_logo'
 		),
-        array(
-			'tag'         => 'department',
-			'description' => sprintf( __( 'Inserts the name of the department who are handling the %s or an empty string if no department is assigned', 'kb-support' ), strtolower( $ticket_singular ) ),
-			'function'    => 'kbs_email_tag_department'
-		),
 		array(
 			'tag'         => 'sitename',
 			'description' => __( 'Your site name', 'kb-support' ),
@@ -360,6 +355,11 @@ function kbs_setup_email_tags() {
 			'tag'         => 'ticket_files',
 			'description' => sprintf( __( 'Attach or list files attached to the %s', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_ticket_files'
+		),
+        array(
+			'tag'         => 'department',
+			'description' => sprintf( __( 'Inserts the name of the department who are handling the %s or an empty string if no department is assigned', 'kb-support' ), strtolower( $ticket_singular ) ),
+			'function'    => 'kbs_email_tag_department'
 		),
 		array(
 			'tag'         => 'reply_date',
