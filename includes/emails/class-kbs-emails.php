@@ -330,7 +330,7 @@ class KBS_Emails {
 		add_filter( 'wp_mail_from',         array( $this, 'get_from_address' ) );
 		add_filter( 'wp_mail_from_name',    array( $this, 'get_from_name' ) );
 		add_filter( 'wp_mail_content_type', array( $this, 'get_content_type' ) );
-		add_filter( 'kbs_email_headers',    array( $this, 'set_xmailer' ) );
+		//add_filter( 'kbs_email_headers',    array( $this, 'set_xmailer' ) );
 	} // send_before
 
 	/**
@@ -367,7 +367,7 @@ class KBS_Emails {
 	 * @since	1.1.11
 	 */
 	public function set_xmailer( $headers )	{
-		$headers .= 'X-Mailer: ' . sprintf( __( 'KB Support version %s (https://kb-support.com)', 'kb-support' ), KBS_VERSION );
+		$headers .= 'X-Mailer: ' . sprintf( __( 'KB Support version %s (https://kb-support.com)', 'kb-support' ), KBS_VERSION ) . "\r\n";
 
 		return $headers;
 	} // set_xmailer

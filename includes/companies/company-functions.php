@@ -129,6 +129,50 @@ function kbs_count_customers_in_company( $company_id = 0 ) {
 } // kbs_count_customers_in_company
 
 /**
+ * Whether or not to copy the primary company contact into customer emails.
+ *
+ * @since   1.2
+ * @return  bool
+ */
+function kbs_email_cc_company_contact() {
+    $cc = kbs_get_option( 'copy_company_contact', false );
+    $cc = apply_filters( 'kbs_email_cc_company_contact', $cc );
+
+    return $cc;
+} // kbs_email_cc_company_contact
+
+/**
+ * Filters email headers if we CC in the primary company contact.
+ *
+ * @since   1.2
+ * @param   string  $headers        Email headers
+ * @param   int     $ticket_id      Ticket ID
+ * @param   array   $ticket_data    Array of ticket meta data
+ * @return  string
+ */
+function kbs_maybe_cc_company_contact( $headers, $ticket_id, $ticket_data ) {
+    $cc = kbs_email_cc_company_contact();
+    $cc = apply_filters( 'kbs_maybe_cc_company_contact', $cc, $ticket_id, $ticket_data );
+
+    if ( $cc )  {
+        $ticket = new KBS_Ticket( $ticket_id );
+
+        if ( ! empty( $ticket->company_id ) )   {
+            $email = is_email( kbs_get_company_email( $ticket->company_id ) );
+
+            if ( $email )   {
+                $headers .= 'Cc: ' . $email . "\r\n";
+            }
+        }
+    }
+
+    return $headers;
+} // kbs_maybe_cc_company_contact
+add_filter( 'kbs_ticket_headers', 'kbs_maybe_cc_company_contact', 10, 3 );
+add_filter( 'kbs_ticket_reply_headers', 'kbs_maybe_cc_company_contact', 10, 3 );
+add_filter( 'kbs_ticket_closed_headers', 'kbs_maybe_cc_company_contact', 10, 3 );
+
+/**
  * Retrieve company name.
  *
  * @since	1.0

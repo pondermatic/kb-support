@@ -619,6 +619,12 @@ function kbs_get_registered_settings() {
 						'type'    => 'checkbox',
                         'std'     => '1'
 					),
+                    'copy_company_contact' => array(
+                        'id'      => 'copy_company_contact',
+						'name'    => __( 'Copy Company Contact?', 'kb-support' ),
+						'desc'    => sprintf( __( 'If enabled, the primary company contact will be copied into all customer emails for %s associated with the company.', 'kb-support' ), strtolower( $plural ) ),
+						'type'    => 'checkbox'
+                    ),
 					'email_settings' => array(
 						'id'   => 'email_settings',
 						'name' => '',

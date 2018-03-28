@@ -240,7 +240,8 @@ function kbs_ticket_reply_added_action()	{
 		case 'stay': // Current ticket
 		default:
 			$url = add_query_arg( array(
-				'kbs-message' => 'closed' == $status ? 'ticket_reply_added_closed' : 'ticket_reply_added'
+				'kbs-message' => 'closed' == $status ? 'ticket_reply_added_closed' : 'ticket_reply_added',
+                'kbs_ticket_id' => $_GET['ticket_id']
 			), kbs_get_ticket_url( $_GET['ticket_id'], true ) );
 			break;
 
