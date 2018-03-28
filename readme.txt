@@ -4,7 +4,7 @@ Tags: Helpdesk, Support, Customer Support, Support Desk, Ticket System, Knowledg
 Requires at least: 4.1
 Tested up to: 5.0
 Requires PHP: 5.4
-Stable tag: 1.1.13
+Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -127,31 +127,31 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 **New**
 
-* **Better Company Integration**
+**Better Company Integration**
 
-* * Improved Company interface allows selection of customer as primary contact
-* * Added Copy Company Contact? setting to copy company primary contacts into all customer ticket emails associated with the company
-* * Customers belonging to a company, can access all tickets already associated with that company. Customer who logged ticket must have already been associated with the company at the time of logging
+* Improved Company interface allows selection of customer as primary contact
+* Added **Copy Company Contact?** setting within *Tickets -> Settings -> Emails* to copy company primary contacts into all customer ticket emails associated with the company
+* Customers belonging to a company, can access all tickets already associated with that company. Customer who logged ticket must have already been associated with the company at the time of logging
 
-* **Departments**
+**Departments**
 
 Agents can now be added to departments via the Departments menu option or their user profile. Departments can only be managed by Support Manager and above roles.
 
 Within core, tickets may only be assigned to departments via front end submission forms. Look out for our advanced assignment extension coming soon for additional options.
 
-* * Department dropdown field type added to submission form field types
-* * Department mapping added to submission forms
-* * Added the `{department}` email template tag which returns the name of the department handling the ticket
-* * Filter ticket list by department
+* Department dropdown field type added to submission form field types
+* Department mapping added to submission forms
+* Added the `{department}` email template tag which returns the name of the department handling the ticket
+* Filter ticket list by department
 
-* **Other**
+**Other**
 
-* * Article search field on submission form now includes a delay before searching
-* * Added Initial Value option for the Submission Form hidden field type
-* * Agents can limit the number of replies initially loaded on the tickets screen via their user profile
-* * Agents can choose where to be redirected to when replying to tickets via their user profile
-* * Added reply count stats to admin dashboard 
-* * For new tickets created via a submission form where terms and conditions were accepted, display the date and time the terms were accepted within the ticket form data thickbox
+* Article search field on submission form now includes a delay before searching
+* Added Initial Value option for the Submission Form hidden field type
+* Agents can limit the number of replies initially loaded on the tickets screen via their user profile
+* Agents can choose where to be redirected to when replying to tickets via their user profile
+* Added reply count stats to admin dashboard 
+* For new tickets created via a submission form where terms and conditions were accepted, display the date and time the terms were accepted within the ticket form data thickbox
 
 **Tweaks**
 
@@ -165,6 +165,7 @@ Within core, tickets may only be assigned to departments via front end submissio
 **Bug Fixes**
 
 * KBS_HTML_Elements was not correctly passing the company variable to the `kbs_get_customers()` function
+* Agents should not be able to add ticket categories
 
 **Dev**
 

@@ -69,7 +69,7 @@ function kbs_do_automatic_upgrades() {
 	}
 
 	if ( version_compare( $kbs_version, '1.2', '<' ) ) {
-		//kbs_v12_upgrades();
+		kbs_v12_upgrades();
 	}
 
 	if ( version_compare( $kbs_version, KBS_VERSION, '<' ) )	{
@@ -82,9 +82,9 @@ function kbs_do_automatic_upgrades() {
 	if ( $did_upgrade )	{
 
 		// Send to what's new page
-		if ( substr_count( KBS_VERSION, '.' ) < 2 )	{
+		/*if ( substr_count( KBS_VERSION, '.' ) < 2 )	{
 			set_transient( '_kbs_activation_redirect', true, 30 );
-		}
+		}*/
 
 		update_option( 'kbs_version_upgraded_from', get_option( 'kbs_version' ) );
 		update_option( 'kbs_version', preg_replace( '/[^0-9.].*/', '', KBS_VERSION ) );
