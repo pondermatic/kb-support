@@ -27,6 +27,26 @@ function kbs_get_customer_id_from_ticket( $ticket_id )	{
 } // kbs_get_customer_id_from_ticket
 
 /**
+ * Adds a customer to a company.
+ *
+ * @since   1.2
+ * @param   int|object  $customer   Customer ID or KBS_Customer object
+ * @param   int         $company_id Company ID
+ * @return  bool
+ */
+function kbs_add_customer_to_company( $customer, $company_id )  {
+    if ( ! is_object( $customer ) ) {
+        $customer = new KBS_Customer( $customer );
+    }
+
+    if ( empty( $customer->id ) )   {
+        return false;
+    }
+
+    return $customer->add_company( $company_id );
+} // kbs_add_customer_to_company
+
+/**
  * Retrieve the customer company ID.
  *
  * @since	1.0
