@@ -321,6 +321,11 @@ function kbs_setup_email_tags() {
 			'description' => __( 'Inserts the logo of the company', 'kb-support' ),
 			'function'    => 'kbs_email_tag_company_logo'
 		),
+        array(
+			'tag'         => 'department',
+			'description' => sprintf( __( 'Inserts the name of the department who are handling the %s or an empty string if no department is assigned', 'kb-support' ), strtolower( $ticket_singular ) ),
+			'function'    => 'kbs_email_tag_department'
+		),
 		array(
 			'tag'         => 'sitename',
 			'description' => __( 'Your site name', 'kb-support' ),
@@ -570,6 +575,25 @@ function kbs_email_tag_company_logo( $ticket_id ) {
 
 	return $return;
 } // kbs_email_tag_company_logo
+
+/**
+ * Email template tag: department
+ * Inserts the department name who are handling the ticket
+ *
+ * @since	1.0
+ * @param	int		$ticket_id
+ * @return	str		Department name
+ */
+function kbs_email_tag_department( $ticket_id ) {
+	$department = kbs_get_department_for_ticket( $ticket_id );
+    $return     = '';
+
+    if ( $department )  {
+        $return = $department->name;
+    }
+
+	return $return;
+} // kbs_email_tag_department
 
 /**
  * Email template tag: sitename

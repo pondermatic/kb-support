@@ -188,3 +188,21 @@ function kbs_remove_agent_from_department( $department_id, $agent_id = '' )	{
 
 	return $agents;
 } // kbs_remove_agent_from_department
+
+/**
+ * Retrieves the department name from the ticket
+ *
+ * @since   1.2
+ * @param   int     $ticket_id  The ticket ID
+ * @return  array   Array containing department term object or false
+ */
+function kbs_get_department_for_ticket( $ticket_id )    {
+    $terms = wp_get_post_terms( $ticket_id, 'department' );
+
+    if ( ! empty( $terms ) )    {
+        return $terms[0];
+    }
+
+    return false;
+} // kbs_get_department_for_ticket
+
