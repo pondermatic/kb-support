@@ -31,8 +31,9 @@ function kbs_process_ticket_submission()	{
 
 	kbs_do_honeypot_check( $_POST );
 
-	$form_id  = ! empty( $_POST['kbs_form_id'] ) ? $_POST['kbs_form_id'] : '';
-	$redirect = ! empty( $_POST['redirect'] )    ? $_POST['redirect']    : '';
+	$form_id      = ! empty( $_POST['kbs_form_id'] )     ? $_POST['kbs_form_id'] : '';
+	$redirect     = ! empty( $_POST['redirect'] )        ? $_POST['redirect']    : '';
+	$terms_agreed = ! empty( $_POST['kbs_agree_terms'] ) ? true                  : false;
 
 	$posted = array();
 	$ignore = kbs_form_ignore_fields();
@@ -48,6 +49,10 @@ function kbs_process_ticket_submission()	{
 			}
 
 		}
+	}
+
+	if ( $terms_agreed )	{
+		$posted['terms_agreed'] = current_time( 'timestamp' );
 	}
 
 	$ticket_id = kbs_add_ticket_from_form( $form_id, $posted );
@@ -223,9 +228,31 @@ function kbs_ticket_reply_added_action()	{
 		return;
 	}
 
-	$url = add_query_arg( array( 'kbs-message' => 'ticket_reply_added' ),
-		kbs_get_ticket_url( $_GET['ticket_id'], true )
-	);
+	$status       = get_post_status( $_GET['ticket_id'] );
+	$redirect_key = 'closed' == $status ? 'close' : 'reply';
+	$redirect     = get_user_meta( get_current_user_id(), '_kbs_redirect_' . $redirect_key, true );
+
+	if ( empty( $redirect ) )	{
+		$redirect = 0;
+	}
+
+	switch( $redirect )	{
+		case 'stay': // Current ticket
+		default:
+			$url = add_query_arg( array(
+				'kbs-message' => 'closed' == $status ? 'ticket_reply_added_closed' : 'ticket_reply_added',
+                'kbs_ticket_id' => $_GET['ticket_id']
+			), kbs_get_ticket_url( $_GET['ticket_id'], true ) );
+			break;
+
+		case 'list': // All tickets list
+			$url = add_query_arg( array(
+				'post_type'     => 'kbs_ticket',
+				'kbs-message'   => 'closed' == $status ? 'ticket_reply_added_closed' : 'ticket_reply_added',
+				'kbs_ticket_id' => $_GET['ticket_id']
+			), admin_url( 'edit.php' ) );
+			break;
+	}
 
 	wp_safe_redirect( $url );
 	exit;

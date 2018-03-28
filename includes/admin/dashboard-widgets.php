@@ -77,6 +77,10 @@ function kbs_load_dashboard_tickets_widget() {
 						<td class="first t monthly_closed"><?php echo _e( 'Closed', 'kb-support' ); ?></td>
 						<td class="b b-closed"><?php echo $stats->get_tickets( 'this_month', '', 'closed' ); ?></td>
 					</tr>
+                    <tr>
+						<td class="first t monthly_replies"><?php echo _e( 'Replies', 'kb-support' ); ?></td>
+						<td class="b b-replies"><?php echo $stats->get_replies( 'this_month', '' ); ?></td>
+					</tr>
 				</tbody>
 			</table>
 			<table>
@@ -91,12 +95,12 @@ function kbs_load_dashboard_tickets_widget() {
 						<td class="b b-last-month-opened"><?php echo $stats->get_tickets( 'last_month', '', $statuses ); ?></td>
 					</tr>
 					<tr>
-						<td class="first t closed">
-							<?php echo _e( 'Closed', 'kb-support' ); ?>
-						</td>
-						<td class="b b-last-month-closed">
-							<?php echo $stats->get_tickets( 'last_month', '', 'closed' ); ?>
-						</td>
+						<td class="first t closed"><?php echo _e( 'Closed', 'kb-support' ); ?></td>
+						<td class="b b-last-month-closed"><?php echo $stats->get_tickets( 'last_month', '', 'closed' ); ?></td>
+					</tr>
+                    <tr>
+						<td class="first t replies"><?php echo _e( 'Replies', 'kb-support' ); ?></td>
+						<td class="b b-last-month-replies"><?php echo $stats->get_replies( 'last_month', '' ); ?></td>
 					</tr>
 				</tbody>
 			</table>
@@ -113,17 +117,15 @@ function kbs_load_dashboard_tickets_widget() {
 				<tbody>
 					<tr>
 						<td class="t opened"><?php _e( 'Opened', 'kb-support' ); ?></td>
-						<td class="last b b-opened">
-							<?php echo $stats->get_tickets( 'today', '', $statuses ); ?>
-						</td>
+						<td class="last b b-opened"><?php echo $stats->get_tickets( 'today', '', $statuses ); ?></td>
 					</tr>
 					<tr>
-						<td class="t closed">
-							<?php _e( 'Closed', 'kb-support' ); ?>
-						</td>
-						<td class="last b b-closed">
-							<?php echo $stats->get_tickets( 'today', '', 'closed' ); ?>
-						</td>
+						<td class="t closed"><?php _e( 'Closed', 'kb-support' ); ?></td>
+						<td class="last b b-closed"><?php echo $stats->get_tickets( 'today', '', 'closed' ); ?></td>                        
+					</tr>
+                    <tr>
+						<td class="t replies"><?php echo _e( 'Replies', 'kb-support' ); ?></td>
+						<td class="last b b-replies"><?php echo $stats->get_replies( 'today', '' ); ?></td>
 					</tr>
 				</tbody>
 			</table>

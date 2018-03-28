@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) )
  * Checks if file uploads are enabled
  *
  * @since	1.0
- * @return	bool	$ret	True if guest checkout is enabled, false otherwise
+ * @return	bool	$ret	True if file uploads are enabled, false otherwise
  */
 function kbs_file_uploads_are_enabled() {
 	$return = false;

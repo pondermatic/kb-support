@@ -262,6 +262,7 @@ span.price_restricted:before {
 #kbs_formfields .kbs_meta_field_label_wrap p select,
 #kbs_formfields .kbs_meta_field_label_wrap p textarea { margin: 4px 0; width: 100%; }
 #kbs_formfields .kbs_meta_field_label_wrap p .submit input { width: auto; }
+#kbs_meta_field_value_wrap,
 #kbs_meta_field_mapping_wrap,
 #kbs_meta_field_kb_search_wrap,
 #kbs_meta_field_select_options_wrap,
@@ -412,7 +413,9 @@ a.kbs_ticket_form_data	{
 	display: block;
 	margin-bottom: 2px;
 }
-
+.kbs-replies-load-more	{
+	text-align: right;
+}
 #kbs-ticket-reply-container { width: 100%; height: 20px; padding-top: 20px; padding-bottom: 20px; }
 .kbs-reply { float: left; padding-right: 20px; }
 
@@ -447,8 +450,20 @@ a.kbs_ticket_form_data	{
 .kbs_default_side_wrapper { width: 100px; }
 #kbs-delete-post { padding-top: 3px; }
 
+/* Taxonomy Pages
+-------------------------------------------------------------- */
+tr .term-agents-wrap .kbs_select_chosen,
+div .term-agents-wrap .kbs_select_chosen {
+	width: 95%;
+	margin: 0px
+}
+
 /* Admin Pages
 -------------------------------------------------------------- */
+#kbs-company-data .kbs_select_chosen	{
+	width: 25em;
+	margin: 0px;
+}
 #kbs-item-wrapper .left {
 	float: left;
 }

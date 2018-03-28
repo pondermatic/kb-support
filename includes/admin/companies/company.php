@@ -22,7 +22,7 @@ function kbs_set_company_post_columns( $columns ) {
 
 	$columns = array(
         'cb'        => '<input type="checkbox" />',
-		'logo'      => '',     
+		'logo'      => __( 'Logo', 'kb-support' ),     
 		'title'     => __( 'Company', 'kb-support' ),
 		'contact'   => __( 'Contact', 'kb-support' ),
 		'email'     => __( 'Email', 'kb-support' ),
@@ -175,6 +175,11 @@ function kbs_company_post_save( $post_id, $post, $update )	{
 
 		if ( ! empty( $new_value ) ) {
 			update_post_meta( $post_id, $field, $new_value );
+
+            if ( '_kbs_company_customer' == $field )    {
+                kbs_add_customer_to_company( $new_value, $post_id );
+            }
+
 		} else {
 			delete_post_meta( $post_id, $field );
 		}

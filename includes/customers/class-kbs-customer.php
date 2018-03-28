@@ -317,6 +317,17 @@ class KBS_Customer {
 		return $updated;
 	} // update
 
+    /**
+     * Adds a customer to a company
+     *
+     * @since   1.2
+     * @param   int     $company_id
+     * @return  bool    True if successful, otherwise false
+     */
+    public function add_company( $company_id )  {
+        return $this->update( array( 'company_id' => $company_id ) );
+    } // add_company
+
 	/**
 	 * Retrieve the customers company
 	 *

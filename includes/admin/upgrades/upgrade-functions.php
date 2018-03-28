@@ -68,6 +68,10 @@ function kbs_do_automatic_upgrades() {
 		flush_rewrite_rules();
 	}
 
+	if ( version_compare( $kbs_version, '1.2', '<' ) ) {
+		//kbs_v12_upgrades();
+	}
+
 	if ( version_compare( $kbs_version, KBS_VERSION, '<' ) )	{
 
 		// Let us know that an upgrade has happened
@@ -406,3 +410,49 @@ function kbs_v119_upgrades()	{
     }
 
 } // kbs_v119_upgrades
+
+/**
+ * Upgrade routine for version 1.2.
+ *
+ * - Remove ticket term capabilities from Support Agents.
+ * - Add the value setting to all submission form fields
+ *
+ * @since	1.2
+ * @return	void
+ */
+function kbs_v12_upgrades()	{
+	global $wp_roles;
+
+	if ( class_exists( 'WP_Roles' ) ) {
+		if ( ! isset( $wp_roles ) ) {
+			$wp_roles = new WP_Roles();
+		}
+	}
+
+	if ( is_object( $wp_roles ) )	{
+		$wp_roles->remove_cap( 'support_agent', 'manage_ticket_terms' );
+		$wp_roles->remove_cap( 'support_agent', 'edit_ticket_terms' );
+		$wp_roles->remove_cap( 'support_agent', 'delete_ticket_terms' );
+	}
+
+	$form_fields = get_posts( array(
+		'posts_per_page' => -1,
+		'post_type'      => 'kbs_form_field',
+		'post_status'    => 'publish',
+		'fields'         => 'ids'
+	) );
+
+	if ( $form_fields )	{
+		foreach( $form_fields as $field_id )	{
+			$settings = get_post_meta( $field_id, '_kbs_field_settings', true );
+
+			if ( ! isset( $settings['value'] ) )	{
+				$settings['value'] = '';
+				update_post_meta( $field_id, '_kbs_field_settings', $settings );
+			}
+		}
+	}
+
+    flush_rewrite_rules();
+
+} // kbs_v12_upgrades

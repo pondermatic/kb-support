@@ -27,6 +27,26 @@ function kbs_get_customer_id_from_ticket( $ticket_id )	{
 } // kbs_get_customer_id_from_ticket
 
 /**
+ * Adds a customer to a company.
+ *
+ * @since   1.2
+ * @param   int|object  $customer   Customer ID or KBS_Customer object
+ * @param   int         $company_id Company ID
+ * @return  bool
+ */
+function kbs_add_customer_to_company( $customer, $company_id )  {
+    if ( ! is_object( $customer ) ) {
+        $customer = new KBS_Customer( $customer );
+    }
+
+    if ( empty( $customer->id ) )   {
+        return false;
+    }
+
+    return $customer->add_company( $company_id );
+} // kbs_add_customer_to_company
+
+/**
  * Retrieve the customer company ID.
  *
  * @since	1.0
@@ -51,6 +71,66 @@ function kbs_get_customer_company_id( $customer_id )	{
 
 	return $company_id;
 } // kbs_get_customer_company_id
+
+/**
+ * Whether or not a customer can access the ticket.
+ *
+ * @since	1.2
+ * @param	int|object	$ticket		The ticket ID or a KBS_Ticket class object
+ * @param	int|object	$customer	The customer ID or a KBS_Customer class object.
+ * @return	bool		True if customer can view, otherwise false
+ */
+function kbs_customer_can_access_ticket( $ticket = '', $customer = '' )	{
+
+	if ( empty( $ticket ) )	{
+		return false;
+	}
+
+	if ( is_numeric( $ticket ) )	{
+		$ticket = new KBS_Ticket( $ticket );
+		if ( empty( $ticket->ID ) )	{
+			return false;
+		}
+	}
+
+	if ( is_numeric( $customer ) )	{
+		$by_user_id = false;
+
+		if ( get_current_user_id() == $customer )	{
+			$by_user_id = true;
+		}
+
+		$customer = new KBS_Customer( $customer, $by_user_id );
+
+		if ( empty( $customer->id ) )	{
+			return false;
+		}
+	}
+
+	$can_access = false;
+
+	if ( $customer->id == $ticket->customer_id )	{
+		$can_access = true;
+	}
+
+	if ( ! $can_access )	{
+		if ( ! empty( $customer->company_id ) && ! empty( $ticket->company_id ) && $customer->company_id  == $ticket->company_id )	{
+			$can_access = true;
+		}
+	}
+
+	/**
+	 * Enable extensions to overide the $can_access result
+	 *
+	 * @since	1.2
+	 * @param	bool	$can_access		True if customer can view, otherwise false
+	 * @param	object	$ticket			KBS_Ticket class object
+	 * @param	object	$customer		KBS_Customer class object
+	 */
+	$can_access = apply_filters( 'kbs_customer_can_access_ticket', $can_access, $ticket, $customer );
+
+	return (bool)$can_access;
+} // kbs_customer_can_access_ticket
 
 /**
  * Retrieve customer tickets.

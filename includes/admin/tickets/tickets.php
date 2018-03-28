@@ -115,7 +115,13 @@ function kbs_set_kbs_ticket_column_data( $column_name, $post_id ) {
 			echo kb_tickets_post_column_customer( $post_id, $kbs_ticket );
 			$company = kbs_get_company_name( $kbs_ticket->company_id );
 			if ( ! empty( $company ) )	{
-				echo '<br />' . $company;
+                $company_url = get_edit_post_link( $kbs_ticket->company_id );
+				echo '<br />';
+                printf(
+                    '<span class="description"><a href="%s">%s</a></span>',
+                    $company_url,
+                    $company
+                );
 			}
 			break;
 
@@ -429,6 +435,23 @@ function kbs_add_ticket_filters() {
 
 			echo "</select>";
 		}
+
+        if ( kbs_departments_enabled() )    {
+            $terms = get_terms( 'department' );
+            if ( is_array( $terms ) && count( $terms ) > 0 )	{
+                $tag_labels = kbs_get_taxonomy_labels( 'department' );
+
+                echo "<select name='department' id='department' class='postform'>";
+                    echo "<option value=''>" . sprintf( __( 'All %s', 'kb-support' ), strtolower( $tag_labels['name'] ) ) . "</option>";
+
+                    foreach ( $terms as $term ) {
+                        $selected = isset( $_GET['department'] ) && $_GET['department'] == $term->slug ? ' selected="selected"' : '';
+                        echo '<option value="' . esc_attr( $term->slug ) . '"' . $selected . '>' . esc_html( $term->name ) .' (' . $term->count .')</option>';
+                    }
+
+                echo "</select>";
+            }
+        }
 
 		if ( isset( $_REQUEST['all_posts'] ) && '1' === $_REQUEST['all_posts'] )	{
 

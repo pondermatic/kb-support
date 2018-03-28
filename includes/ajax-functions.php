@@ -163,14 +163,34 @@ function kbs_ajax_display_ticket_replies()	{
 		$output .= kbs_get_reply_html( $_POST['kbs_reply_id'], $_POST['kbs_ticket_id'] );
 	} else	{
 
-		$replies  = kbs_get_replies( $_POST['kbs_ticket_id'] );
-	
+		$number = get_user_meta( get_current_user_id(), '_kbs_load_replies', true );
+		$number = ! empty( $number ) ? (int)$number : 0;
+
+		$args = array(
+			'ticket_id' => (int)$_POST['kbs_ticket_id'],
+			'number'    => $number,
+			'page'      => isset( $_POST['kbs_page'] ) ? (int)$_POST['kbs_page'] : null
+		);
+
+		$replies_query = new KBS_Replies_Query( $args );
+		$replies       = $replies_query->get_replies();
+
 		if ( ! empty( $replies ) )	{
 			foreach( $replies as $reply )	{
                 $output .= '<div class="kbs_historic_replies_wrapper">';
                     $output .= kbs_get_reply_html( $reply, $_POST['kbs_ticket_id'] );
                 $output .= '</div>';
 			}
+
+			if ( isset( $args['page'] ) && $args['page'] < $replies_query->pages )	{
+				$output .= sprintf(
+					'<p class="kbs-replies-load-more"><a class="button button-secondary button-small" id="kbs-replies-next-page" data-ticket-id="%d" data-load-page="%d">%s</a></p>',
+					(int)$_POST['kbs_ticket_id'],
+					( $args['page'] + 1 ),
+					__( 'Load More', 'kb-support' )
+				);
+			}
+
 		}
 
 	}
@@ -475,6 +495,37 @@ function kbs_ajax_validate_form_submission()	{
 } // kbs_ajax_validate_form_submission
 add_action( 'wp_ajax_kbs_validate_ticket_form', 'kbs_ajax_validate_form_submission' );
 add_action( 'wp_ajax_nopriv_kbs_validate_ticket_form', 'kbs_ajax_validate_form_submission' );
+
+/**
+ * Retrieves customer data.
+ *
+ * @since	1.2
+ * @return	void
+ */
+function kbs_ajax_get_customer_data()	{
+
+	$response = array(
+		'name'  => '',
+		'email' => '',
+		'phone' => '',
+		'url'   => ''
+	);
+
+	$customer = new KBS_Customer( $_POST['customer_id'] );
+
+	if ( $customer )	{
+		$response = array(
+			'name'  => ! empty( $customer->name )          ? esc_attr( $customer->name )          : '',
+			'email' => ! empty( $customer->email )         ? esc_attr( $customer->email )         : '',
+			'phone' => ! empty( $customer->primary_phone ) ? esc_attr( $customer->primary_phone ) : '',
+			'url'   => ! empty( $customer->website )       ? esc_url( $customer->website )        : ''
+		);
+	}
+
+	wp_send_json( $response );
+
+} // kbs_ajax_get_customer_data
+add_action( 'wp_ajax_kbs_get_customer_data', 'kbs_ajax_get_customer_data' );
 
 /**
  * Adds a new customer.

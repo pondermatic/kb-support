@@ -231,7 +231,7 @@ jQuery(document).ready(function ($) {
 					},
 					success: function (response) {
 						if (response.reply_id)	{
-							kbs_load_ticket_replies(ticket_id, response.reply_id);
+							kbs_load_ticket_replies( ticket_id, response.reply_id, 1 );
 							window.location.href = kbs_vars.admin_url + '?kbs-action=ticket_reply_added&ticket_id=' + ticket_id;
 							return true;
 						} else	{
@@ -247,6 +247,15 @@ jQuery(document).ready(function ($) {
 				});
 
 			});
+
+			$( document.body ).on( 'click', '#kbs-replies-next-page', function() {
+				var ticket_id = $('#kbs-replies-next-page').data('ticket-id');
+				var page      = $('#kbs-replies-next-page').data('load-page');
+
+				$('.kbs-replies-load-more').remove();
+				kbs_load_ticket_replies( ticket_id, 0, page );
+			});
+
 		},
 		notes : function() {
 			// Add a new ticket note
@@ -295,7 +304,7 @@ jQuery(document).ready(function ($) {
 			// Auto load ticket replies and notes
 			if( kbs_vars.editing_ticket === '1' ) {
 				setTimeout( function() {
-					kbs_load_ticket_replies( kbs_vars.post_id, 0 );
+					kbs_load_ticket_replies( kbs_vars.post_id, 0, 1 );
 					kbs_load_ticket_notes( kbs_vars.post_id, 0 );
 				}, 200);
 			}
@@ -349,12 +358,17 @@ jQuery(document).ready(function ($) {
 		forms : function() {
 
 			var toggleFieldOptions = function(kbs_selected_field)	{
-				if ( 'text' === kbs_selected_field || 'date_field' === kbs_selected_field || 'email' === kbs_selected_field || 'number' === kbs_selected_field || 'select' === kbs_selected_field || 'textarea' === kbs_selected_field || 'url' === kbs_selected_field )	{
+				if ( 'text' === kbs_selected_field || 'date_field' === kbs_selected_field || 'department' === kbs_selected_field || 'email' === kbs_selected_field || 'number' === kbs_selected_field || 'select' === kbs_selected_field || 'textarea' === kbs_selected_field || 'url' === kbs_selected_field )	{
 
 					$('#kbs_meta_field_placeholder_wrap').show();
-					$('#kbs_meta_field_hide_label_wrap').show();
 				} else	{
 					$('#kbs_meta_field_placeholder_wrap').hide();
+				}
+
+				if ( 'text' === kbs_selected_field || 'date_field' === kbs_selected_field || 'department' === kbs_selected_field || 'email' === kbs_selected_field || 'hidden' === kbs_selected_field || 'number' === kbs_selected_field || 'select' === kbs_selected_field || 'textarea' === kbs_selected_field || 'url' === kbs_selected_field )	{
+
+					$('#kbs_meta_field_hide_label_wrap').show();
+				} else	{
 					$('#kbs_meta_field_hide_label_wrap').hide();
 				}
 
@@ -370,7 +384,7 @@ jQuery(document).ready(function ($) {
 					$('#kbs_meta_field_select_multiple_wrap').hide();
 				}
 
-				if ( 'select' === kbs_selected_field || 'ticket_category_dropdown' === kbs_selected_field )	{
+				if ( 'select' === kbs_selected_field || 'department' === kbs_selected_field || 'ticket_category_dropdown' === kbs_selected_field )	{
 					$('#kbs_meta_field_select_searchable_wrap').show();
 				} else	{
 					$('#kbs_meta_field_select_searchable_wrap').hide();
@@ -398,10 +412,16 @@ jQuery(document).ready(function ($) {
 					$('#kbs_meta_field_input_class_wrap').show();
 				}
 
-				if ( 'text' === kbs_selected_field || 'email' === kbs_selected_field || 'url' === kbs_selected_field || 'textarea' === kbs_selected_field || 'rich_editor' === kbs_selected_field )	{
+				if ( 'text' === kbs_selected_field || 'email' === kbs_selected_field || 'hidden' === kbs_selected_field || 'url' === kbs_selected_field || 'textarea' === kbs_selected_field || 'rich_editor' === kbs_selected_field )	{
 					$('#kbs_meta_field_mapping_wrap').show();
 				} else	{
 					$('#kbs_meta_field_mapping_wrap').hide();
+				}
+
+				if ( 'hidden' === kbs_selected_field )	{
+					$('#kbs_meta_field_value_wrap').show();
+				} else	{
+					$('#kbs_meta_field_value_wrap').hide();
 				}
 
 				if( 'post_title' === $('#kbs_field_mapping').val() )	{
@@ -455,25 +475,26 @@ jQuery(document).ready(function ($) {
 
 				var return_url       = $('#form_return_url').val();			
 				var postData         = {
-					form_id          : kbs_vars.post_id,
-					form_data        : $('#post').serialize(),
-					label            : $('#kbs_field_label').val(),
-					type             : $('#kbs_field_type').val(),
-					mapping          : $('#kbs_field_mapping').val(),
-					kb_search        : ( $('#kbs_field_kb_search').is(':checked') )       ? $('#kbs_field_kb_search').val()     : 0,
-					required         : ( $('#kbs_field_required').is(':checked') )        ? $('#kbs_field_required').val()        : 0,
-					label_class      : $('#kbs_field_label_class').val(),
-					input_class      : $('#kbs_field_input_class').val(),
-					select_options   : $('textarea#kbs_field_select_options').val(),
-					select_multiple  : ( $('#kbs_field_select_multiple').is(':checked') ) ? $('#kbs_field_select_multiple').val() : 0,
-					selected         : ( $('#kbs_field_option_selected').is(':checked') ) ? $('#kbs_field_option_selected').val() : 0,
+					action           : 'kbs_add_form_field',
 					chosen           : ( $('#kbs_field_select_chosen').is(':checked') )   ? $('#kbs_field_select_chosen').val()   : 0,
                     chosen_search    : $('#kbs_field_select_chosen_search').val(),
 					description      : $('#kbs_field_description').val(),
 					description_pos  : $('input[name=kbs_field_description_pos]').filter(':checked').val(),
-					placeholder      : $('#kbs_field_placeholder').val(),
+					form_data        : $('#post').serialize(),
+					form_id          : kbs_vars.post_id,
 					hide_label       : ( $('#kbs_field_hide_label').is(':checked') )      ? $('#kbs_field_hide_label').val()      : 0,
-					action           : 'kbs_add_form_field'
+					input_class      : $('#kbs_field_input_class').val(),
+					kb_search        : ( $('#kbs_field_kb_search').is(':checked') )       ? $('#kbs_field_kb_search').val()     : 0,
+					label            : $('#kbs_field_label').val(),
+					label_class      : $('#kbs_field_label_class').val(),
+					mapping          : $('#kbs_field_mapping').val(),
+					placeholder      : $('#kbs_field_placeholder').val(),
+					required         : ( $('#kbs_field_required').is(':checked') )        ? $('#kbs_field_required').val()        : 0,
+					selected         : ( $('#kbs_field_option_selected').is(':checked') ) ? $('#kbs_field_option_selected').val() : 0,
+					select_multiple  : ( $('#kbs_field_select_multiple').is(':checked') ) ? $('#kbs_field_select_multiple').val() : 0,
+					select_options   : $('textarea#kbs_field_select_options').val(),
+					type             : $('#kbs_field_type').val(),
+					value            : $('#kbs_field_value').val()
 				};
 				
 				$.ajax({
@@ -515,26 +536,27 @@ jQuery(document).ready(function ($) {
 
 				var return_url       = $('#form_return_url').val();			
 				var postData         = {
-					form_id          : kbs_vars.post_id,
-					form_data        : $('#post').serialize(),
-					field_id         : $('#kbs_edit_field').val(), 
-					label            : $('#kbs_field_label').val(),
-					type             : $('#kbs_field_type').val(),
-					mapping          : $('#kbs_field_mapping').val(),
-					kb_search        : ( $('#kbs_field_kb_search').is(':checked') ) ? $('#kbs_field_kb_search').val() : 0,
-					required         : ( $('#kbs_field_required').is(':checked') ) ? $('#kbs_field_required').val() : 0,
-					label_class      : $('#kbs_field_label_class').val(),
-					input_class      : $('#kbs_field_input_class').val(),
-					select_options   : $('textarea#kbs_field_select_options').val(),
-					select_multiple  : ( $('#kbs_field_select_multiple').is(':checked') ) ? $('#kbs_field_select_multiple').val() : 0,
-					selected         : ( $('#kbs_field_option_selected').is(':checked') ) ? $('#kbs_field_option_selected').val() : 0,
+					action           : 'kbs_save_form_field',
 					chosen           : ( $('#kbs_field_select_chosen').is(':checked') )   ? $('#kbs_field_select_chosen').val()   : 0,
                     chosen_search    : $('#kbs_field_select_chosen_search').val(),
-					placeholder      : $('#kbs_field_placeholder').val(),
 					description      : $('#kbs_field_description').val(),
 					description_pos  : $('input[name=kbs_field_description_pos]').filter(':checked').val(),
+					field_id         : $('#kbs_edit_field').val(),
+					form_data        : $('#post').serialize(),
+					form_id          : kbs_vars.post_id,
 					hide_label       : ( $('#kbs_field_hide_label').is(':checked') )      ? $('#kbs_field_hide_label').val()      : 0,
-					action           : 'kbs_save_form_field'
+					input_class      : $('#kbs_field_input_class').val(),
+					kb_search        : ( $('#kbs_field_kb_search').is(':checked') ) ? $('#kbs_field_kb_search').val() : 0,
+					label            : $('#kbs_field_label').val(),
+					label_class      : $('#kbs_field_label_class').val(),
+					mapping          : $('#kbs_field_mapping').val(),
+					placeholder      : $('#kbs_field_placeholder').val(),
+					required         : ( $('#kbs_field_required').is(':checked') ) ? $('#kbs_field_required').val() : 0,
+					selected         : ( $('#kbs_field_option_selected').is(':checked') ) ? $('#kbs_field_option_selected').val() : 0,
+					select_options   : $('textarea#kbs_field_select_options').val(),
+					select_multiple  : ( $('#kbs_field_select_multiple').is(':checked') ) ? $('#kbs_field_select_multiple').val() : 0,
+					type             : $('#kbs_field_type').val(),
+					value            : $('#kbs_field_value').val()
 				};
 				
 				$.ajax({
@@ -775,6 +797,50 @@ jQuery(document).ready(function ($) {
 	};
 	KBS_Customer.init();
 
+	/**
+	 * Company post screen JS
+	 */
+	var KBS_Company = {
+		init : function() {
+			this.contacts();
+		},
+
+		contacts : function()	{
+			$( '#_kbs_company_customer' ).change( function() {
+
+				if ( 0 === $('#_kbs_company_customer').val() )	{
+					return;
+				}
+
+				var postData = {
+					action : 'kbs_get_customer_data',
+					company_id : kbs_vars.post_id,
+					customer_id : $( '#_kbs_company_customer' ).val()
+				};
+
+				$.ajax({
+					type: 'POST',
+					dataType: 'json',
+					data: postData,
+					url: ajaxurl,
+					success: function ( response ) {
+						$( '#_kbs_company_contact' ).val( response.name );
+						$( '#_kbs_company_email' ).val( response.email );
+						$( '#_kbs_company_phone' ).val( response.phone );
+						$( '#_kbs_company_website' ).val( response.url );
+					}
+				}).fail( function ( data ) {
+					if ( window.console && window.console.log ) {
+						console.log( data );
+					}
+				});
+
+			});
+		}
+
+	};
+	KBS_Company.init();
+
     /**
 	 * Export screen JS
 	 */
@@ -945,12 +1011,19 @@ jQuery(document).ready(function ($) {
 });
 
 // Retrieve ticket replies
-function kbs_load_ticket_replies( ticket_id, reply_id )	{
+function kbs_load_ticket_replies( ticket_id, reply_id, page )	{
+
 	jQuery('#kbs-replies-loader').html('<img src="' + kbs_vars.ajax_loader + '" />');
 
-	jQuery.post(ajaxurl, { action: 'kbs_display_ticket_replies', kbs_ticket_id: ticket_id, kbs_reply_id: reply_id },
+	jQuery.post(ajaxurl,
+		{
+			action: 'kbs_display_ticket_replies',
+			kbs_ticket_id: ticket_id,
+			kbs_reply_id: reply_id,
+			kbs_page: page
+		},
 		function(response)	{
-			jQuery('.kbs-historic-reply-option-fields').prepend(response);
+			jQuery('.kbs-historic-reply-option-fields').append(response);
 			jQuery('#kbs-replies-loader').html('');
 		}
 	);

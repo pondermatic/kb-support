@@ -116,6 +116,14 @@ class KBS_Ticket {
 	protected $agents = array();
 
 	/**
+	 * The ID of the department to which the ticket is assigned
+	 *
+	 * @since	1.0
+	 * @var		int
+	 */
+	protected $department;
+
+	/**
 	 * The ID of the agent who logged the ticket
 	 *
 	 * @since	1.0
@@ -226,6 +234,14 @@ class KBS_Ticket {
 	 * @var		str
 	 */
 	protected $email = '';
+
+	/**
+	 * Timestamp of when terms were agreed
+	 *
+	 * @since	1.0
+	 * @var		str|false
+	 */
+	protected $terms_agreed = false;
 
 	/**
 	 * IP Address ticket was opened from
@@ -512,6 +528,7 @@ class KBS_Ticket {
 			'sla_resolve'  => $this->sla_resolve,
 			'status'       => $this->status,
 			'source'       => $this->source,
+			'terms_agree'  => $this->terms_agreed,
 			'files'        => $this->new_files,
 			'form_data'    => $this->form_data
 		);
@@ -590,6 +607,10 @@ class KBS_Ticket {
 				$this->pending['agents'] = $this->agents;
 			}
 
+			if ( ! empty( $this->department ) )	{
+				$this->pending['department'] = $this->department;
+			}
+
 			if ( ! empty( $this->source ) )	{
 				$this->pending['source'] = $this->source;
 			}
@@ -600,6 +621,10 @@ class KBS_Ticket {
 
 			if ( ! empty( $this->new_files ) )	{
 				$this->pending['files'] = $this->new_files;
+			}
+
+			if ( ! empty( $this->terms_agreed ) )	{
+				$this->pending['terms_agreed'] = $this->terms_agreed;
 			}
 
 			$this->pending['sla_respond'] = $this->sla_respond;
@@ -660,23 +685,6 @@ class KBS_Ticket {
 
 			foreach( $this->pending as $key => $value ) {
 				switch( $key ) {
-					case 'status':
-						$this->update_status( $this->status );
-						break;
-
-					case 'ip':
-						$this->update_meta( '_kbs_ticket_user_ip', $this->ip );
-						break;
-
-					case 'customer_id':
-						$this->update_meta( '_kbs_ticket_customer_id', $this->customer_id );
-						add_post_meta( $this->ID, '_kbs_ticket_created_by', $this->customer_id, true );
-						break;
-
-					case 'company_id':
-						$this->update_meta( '_kbs_ticket_company_id', $this->company_id );
-						break;
-
 					case 'agent_id':
                         if ( '-1' === $this->agent_id ) {
                             $this->agent_id = 0;
@@ -704,24 +712,41 @@ class KBS_Ticket {
                         }
                         break;
 
-					case 'user_id':
-						$this->update_meta( '_kbs_ticket_user_id', $this->user_id );
+					case 'company_id':
+						$this->update_meta( '_kbs_ticket_company_id', $this->company_id );
 						break;
 
-					case 'first_name':
-						$this->user_info['first_name'] = $this->first_name;
+					case 'customer_id':
+						$this->update_meta( '_kbs_ticket_customer_id', $this->customer_id );
+						add_post_meta( $this->ID, '_kbs_ticket_created_by', $this->customer_id, true );
 						break;
 
-					case 'last_name':
-						$this->user_info['last_name'] = $this->last_name;
+					case 'date':
+						$args = array(
+							'ID'        => $this->ID,
+							'post_date' => $this->date,
+							'edit_date' => true,
+						);
+
+						wp_update_post( $args );
+						break;
+
+					case 'department':
+						$term = intval( $this->department );
+						wp_set_object_terms( $this->ID, $term, 'department' );
+
 						break;
 
 					case 'email':
 						$this->update_meta( '_kbs_ticket_user_email', $this->email );
 						break;
 
-					case 'key':
-						$this->update_meta( '_kbs_ticket_key', $this->key );
+					case 'files':
+						$this->files = $this->attach_files();
+						break;
+
+					case 'first_name':
+						$this->user_info['first_name'] = $this->first_name;
 						break;
 
 					case 'form_data':
@@ -730,11 +755,62 @@ class KBS_Ticket {
 						}
 						break;
 
-					case 'date':
+					case 'ip':
+						$this->update_meta( '_kbs_ticket_user_ip', $this->ip );
+						break;
+
+					case 'key':
+						$this->update_meta( '_kbs_ticket_key', $this->key );
+						break;
+
+					case 'last_name':
+						$this->user_info['last_name'] = $this->last_name;
+						break;
+
+					case 'number':
+						$this->update_meta( '_kbs_ticket_number', $this->number );
+						break;
+
+					case 'resolved_date':
+						$this->update_meta( '_kbs_ticket_resolved_date', $this->resolved_date );
+						break;
+
+					case 'status':
+						$this->update_status( $this->status );
+						break;
+
+					case 'sla_resolve':
+						$this->update_meta( '_kbs_ticket_sla_target_resolve', $this->sla_resolve );
+						break;
+
+					case 'sla_respond':
+						$this->update_meta( '_kbs_ticket_sla_target_respond', $this->sla_respond );
+						break;
+
+					case 'source':
+						$this->update_meta( '_kbs_ticket_source', $this->source );
+						break;
+
+					case 'status':
+						$this->update_status( $this->status );
+            break;
+
+					case 'terms_agreed':
+						$this->update_meta( '_kbs_ticket_terms_agreed', $this->terms_agreed );
+						break;
+
+					case 'ticket_category':
+						if ( ! is_array( $this->ticket_category ) )	{
+							$this->ticket_category = array( $this->ticket_category );
+						}
+						$terms = array_map( 'intval', $this->ticket_category );
+						wp_set_object_terms( $this->ID, $terms, 'ticket_category' );
+						break;
+
+					case 'ticket_content':
 						$args = array(
-							'ID'        => $this->ID,
-							'post_date' => $this->date,
-							'edit_date' => true,
+							'ID'           => $this->ID,
+							'post_content' => $this->ticket_content
 						);
 
 						wp_update_post( $args );
@@ -749,45 +825,8 @@ class KBS_Ticket {
 						wp_update_post( $args );
 						break;
 
-					case 'ticket_content':
-						$args = array(
-							'ID'           => $this->ID,
-							'post_content' => $this->ticket_content
-						);
-
-						wp_update_post( $args );
-						break;
-
-					case 'ticket_category':
-						if ( ! is_array( $this->ticket_category ) )	{
-							$this->ticket_category = array( $this->ticket_category );
-						}
-						$terms = array_map( 'intval', $this->ticket_category );
-						wp_set_object_terms( $this->ID, $terms, 'ticket_category' );
-						break;
-
-					case 'resolved_date':
-						$this->update_meta( '_kbs_ticket_resolved_date', $this->resolved_date );
-						break;
-
-					case 'files':
-						$this->files = $this->attach_files();
-						break;
-
-					case 'sla_respond':
-						$this->update_meta( '_kbs_ticket_sla_target_respond', $this->sla_respond );
-						break;
-
-					case 'sla_resolve':
-						$this->update_meta( '_kbs_ticket_sla_target_resolve', $this->sla_resolve );
-						break;
-
-					case 'source':
-						$this->update_meta( '_kbs_ticket_source', $this->source );
-						break;
-
-					case 'number':
-						$this->update_meta( '_kbs_ticket_number', $this->number );
+					case 'user_id':
+						$this->update_meta( '_kbs_ticket_user_id', $this->user_id );
 						break;
 
 					default:
@@ -1715,8 +1754,6 @@ class KBS_Ticket {
 
 		$form = new KBS_Form( $this->form_data['id'] );
 
-		$ignore = kbs_form_ignore_fields();
-
 		$output = '<h2>' . sprintf( __( 'Form: %s', 'kb-support' ), get_the_title( $this->form_data['id'] ) ) . '</h2>';
 		foreach( $this->form_data['data'] as $field => $value )	{
 
@@ -1727,6 +1764,21 @@ class KBS_Ticket {
 			}
 
 			$settings = $form->get_field_settings( $form_field->ID );
+
+			if ( 'recaptcha' == $settings['type'] )	{
+				continue;
+			}
+
+			if ( 'department' == $settings['mapping'] )	{
+				$department = kbs_get_department( $value );
+				if ( isset( $department ) )	{
+					$department = $department->name;
+				} else	{
+					$department = sprintf( __( 'Department %s not found', 'kb-support' ), $value );
+				}
+
+				$value = $department;
+			}
 
 			if ( 'post_category' == $settings['mapping'] )	{
 				$value = is_array( $value ) ? $value : array( $value );
@@ -1746,9 +1798,30 @@ class KBS_Ticket {
 				$value = implode( ', ', $value );
 			}
 
+			if ( 'email' == $settings['type'] && is_email( $value ) )	{
+				$value = sprintf( '<a href="mailto:%1$s">%1$s</a>', sanitize_email( $value ) );
+			}
+
+			if ( 'url' == $settings['type'] )	{
+				$value = sprintf( '<a href="%1$s" target="_blank">%1$s</a>', esc_url( $value ) );
+			}
+
 			$value = apply_filters( 'kbs_show_form_data', $value, $form_field->ID, $settings );
 
-			$output .= '<p><strong>' . get_the_title( $form_field->ID ) . '</strong>: ' . $value;
+			$output .= sprintf( '<p><strong>%s</strong>: %s</p>',
+				get_the_title( $form_field->ID ),
+				$value
+			);
+		}
+
+		$terms_agreed = $this->get_meta( '_kbs_ticket_terms_agreed', true );
+		if ( $terms_agreed )	{
+			$date_format = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
+
+			$output .= sprintf( '<p class="description">%s: %s</p>',
+				__( 'The terms and conditions were accepted', 'kb-support' ),
+				date_i18n( $date_format, $terms_agreed )
+			);
 		}
 
 		return apply_filters( 'kbs_show_form_data', $output );

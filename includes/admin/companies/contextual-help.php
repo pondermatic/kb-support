@@ -47,6 +47,10 @@ function kbs_company_contextual_help() {
 				admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-customers' )
 			) . '</p>' .
 			'<ul>' .
+                '<li>' .
+					__( "<strong>Customer</strong> - Select an existing customer to become the primary contact for the company. Upon selection the other fields may be populated with the customer's information.", 'kb-support' ) . '<br>' .
+                    __( 'When creating a new company, all customers are displayed with their company name. For existing companies, only customers who have been associated with the company are available for selection.', 'kb-support' ) .
+				'</li>' .
 				'<li>' .
 					__( '<strong>Contact Name</strong> - This should be the name of the primay contact person within the company.', 'kb-support' ) .
 				'</li>' .
@@ -60,9 +64,12 @@ function kbs_company_contextual_help() {
 					__( '<strong>Website</strong> - The website for the company', 'kb-support' ) .
 				'</li>' .
 				'<li>' .
-					__( '<strong>Company Logo</strong> - Optionally upload the company logo .', 'kb-support' ) .
+					__( '<strong>Company Logo</strong> - Optionally upload the company logo.', 'kb-support' ) .
 				'</li>' .
-			'</ul>'
+			'</ul>' .
+            '<p>' .
+                sprintf( __( 'For existing companies, %s that have been recently created are displayed.', 'kb-support' ), strtolower( $ticket_plural ) ) .
+            '</p>'
         )
 	) );
 
@@ -70,3 +77,4 @@ function kbs_company_contextual_help() {
 
 } // kbs_company_contextual_help
 add_action( 'load-post.php', 'kbs_company_contextual_help' );
+add_action( 'edit-post.php', 'kbs_company_contextual_help' );

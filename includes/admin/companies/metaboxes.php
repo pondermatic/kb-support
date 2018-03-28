@@ -20,6 +20,7 @@ if ( ! defined( 'ABSPATH' ) )
 function kbs_company_metabox_fields() {
 
 	$fields = array(
+		'_kbs_company_customer',
 		'_kbs_company_contact',
 		'_kbs_company_email',
 		'_kbs_company_phone',
@@ -57,7 +58,7 @@ function kbs_company_add_meta_boxes( $post )	{
 		array()
 	);
 
-	if ( ! $kbs_company_update )	{
+	if ( $kbs_company_update )	{
 		add_meta_box(
 			'kbs-company-metabox-tickets',
 			sprintf( __( 'Recent %s', 'kb-support' ), kbs_get_ticket_label_plural() ),
@@ -123,7 +124,17 @@ function kbs_company_metabox_tickets_callback()	{
 function kbs_company_metabox_data( $post_id )	{
 	global $kbs_company, $kbs_company_update; ?>
 
-	<div class="kbs-company-data">
+	<div id="kbs-company-data">
+
+		<p><label for="_kbs_company_customer"><?php _e( 'Customer', 'kb-support' ); ?>:</label><br />
+        <?php echo KBS()->html->customer_dropdown( array(
+			'name'             => '_kbs_company_customer',
+			'selected'         => $kbs_company->customer,
+			'company_id'       => $kbs_company_update   ? $post_id : null,
+			'show_company'     => ! $kbs_company_update ? true     : false,
+			'show_option_none' => false
+		) ); ?></p>
+        <p class="description"><?php _e( '', 'kb-support' ); ?></p>
 
     	<p><label for="_kbs_company_contact"><?php _e( 'Contact Name', 'kb-support' ); ?>:</label><br />
         <?php echo KBS()->html->text( array(
@@ -164,7 +175,50 @@ add_action( 'kbs_company_data_fields', 'kbs_company_metabox_data', 10, 1 );
  * @return	str
  */
 function kbs_company_metabox_tickets_table( $post_id )	{
-	global $kbs_company_update;
+	global $kbs_company, $kbs_company_update;
+
+	$tickets = kbs_get_tickets( array( 'company' => $post_id ) );
+
+	?>
+    <table class="wp-list-table widefat striped tickets">
+        <thead>
+            <tr>
+                <th><?php _e( '#', 'kb-support' ); ?></th>
+                <th><?php _e( 'Opened', 'kb-support' ); ?></th>
+                <th><?php _e( 'Title', 'kb-support' ); ?></th>
+                <th><?php _e( 'Status', 'kb-support' ); ?></th>
+                <?php do_action( 'kbs_company_tickets_table_headers', $kbs_company, $post_id ); ?>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if ( ! empty( $tickets ) ) : ?>
+                <?php foreach ( $tickets as $ticket ) : ?>
+                    <tr>
+                        <td><a href="<?php echo admin_url( 'post.php?post=' . $ticket->ID . '&action=edit' ); ?>">
+                                <?php echo kbs_format_ticket_number( kbs_get_ticket_number( $ticket->ID ) ); ?>
+                            </a>
+                        </td>
+                        <td class="date"><?php echo date_i18n( get_option( 'date_format' ), strtotime( $ticket->post_date ) ); ?></td>
+                        <td class="title"><?php echo get_the_title( $ticket->ID ); ?></td>
+                        <td><?php echo kbs_get_ticket_status( $ticket, true ); ?></td>
+                        <?php do_action( 'kbs_after_company_tickets_table_status', $kbs_company, $post_id ); ?>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr><td colspan="5"><?php printf( __( 'No %s Found', 'kb-support' ), kbs_get_ticket_label_plural() ); ?></td></tr>
+            <?php endif; ?>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th><?php _e( '#', 'kb-support' ); ?></th>
+                <th><?php _e( 'Opened', 'kb-support' ); ?></th>
+                <th><?php _e( 'Title', 'kb-support' ); ?></th>
+                <th><?php _e( 'Status', 'kb-support' ); ?></th>
+                <?php do_action( 'kbs_company_tickets_table_headers', $kbs_company, $post_id ); ?>
+            </tr>
+        </tfoot>
+    </table>
+    <?php
 
 } // kbs_company_metabox_tickets_table
 add_action( 'kbs_company_tickets_fields', 'kbs_company_metabox_tickets_table', 10, 1 );

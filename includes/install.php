@@ -70,7 +70,9 @@ function kbs_run_install() {
 	kbs_setup_post_types();
 
 	// Setup the Custom Taxonomies
-	kbs_setup_custom_taxonomies();
+	kbs_setup_kbs_ticket_category_taxonomy();
+	kbs_setup_kbs_ticket_tag_taxonomy();
+	kbs_setup_kbs_ticket_department_taxonomy();
 
 	// Clear the permalinks
 	flush_rewrite_rules( false );
