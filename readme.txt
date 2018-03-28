@@ -121,6 +121,58 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 == Changelog ==
 
+= 1.2 =
+
+**Wednesday, 28th March 2018**
+
+**New**
+
+* **Better Company Integration**
+
+* * Improved Company interface allows selection of customer as primary contact
+* * Added Copy Company Contact? setting to copy company primary contacts into all customer ticket emails associated with the company
+* * Customers belonging to a company, can access all tickets already associated with that company. Customer who logged ticket must have already been associated with the company at the time of logging
+
+* **Departments**
+
+Agents can now be added to departments via the Departments menu option or their user profile. Departments can only be managed by Support Manager and above roles.
+
+Within core, tickets may only be assigned to departments via front end submission forms. Look out for our advanced assignment extension coming soon for additional options.
+
+* * Department dropdown field type added to submission form field types
+* * Department mapping added to submission forms
+* * Added the `{department}` email template tag which returns the name of the department handling the ticket
+* * Filter ticket list by department
+
+* **Other**
+
+* * Article search field on submission form now includes a delay before searching
+* * Added Initial Value option for the Submission Form hidden field type
+* * Agents can limit the number of replies initially loaded on the tickets screen via their user profile
+* * Agents can choose where to be redirected to when replying to tickets via their user profile
+* * Added reply count stats to admin dashboard 
+* * For new tickets created via a submission form where terms and conditions were accepted, display the date and time the terms were accepted within the ticket form data thickbox
+
+**Tweaks**
+
+* Better validation of whether or not the submission page is displayed improves enqueuing of scripts
+* Enable selection of customer as primary company contact
+* Pass the Ticket ID to the `kbs_ticket_received_disable_email`, `kbs_ticket_reply_disable_email` and `kbs_ticket_close_disable_email` filters
+* Log the timestamp for when a customer accepts the Terms & Conditions during ticket submission
+* A KB search field on submission form is now a search input field type
+* Email and URL values are now clickable links within the ticket form data thickbox
+
+**Bug Fixes**
+
+* KBS_HTML_Elements was not correctly passing the company variable to the `kbs_get_customers()` function
+
+**Dev**
+
+* Introduction of the `KBS_Replies_Query` class
+* Added the `$kbs_form` and `$form_id` variables to the `kbs_submit_form` and the `kbs_form_template()`  filters
+* Added the `kbs_form_submit_label` filter
+* Added the `kbs_ticket_company_post_type_args` filter
+
 = 1.1.13 =
 
 **Saturday, 17th March 2018**
