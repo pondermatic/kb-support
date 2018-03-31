@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name: KB Support
+ * Plugin Name: KB Support - WordPress Ticket System, Help Desk and Knowledgebase
  * Plugin URI: https://kb-support.com/
- * Description: The ultimate help desk and knowledge base support tool plugin for WordPress.
+ * Description: The ultimate ticket system, help desk and knowledge base support tool plugin for WordPress.
  * Version: 1.2
  * Date: 28 March 2018
  * Author: KB Support Team
@@ -12,7 +12,7 @@
  * License: GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * GitHub Plugin URI: https://github.com/KB-Support/kb-support
- * Tags:  Helpdesk, Support, Customer Support, Support Desk, Ticket System, Knowledge Base, Tickets, Service, Service Desk, ITIL, Support Helpdesk, Ticket, Support Tickets, Helpdesk Tickets, Knowledgebase, Service Level, SLA, Help Desk
+ * Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
  *
  *
  * KB Support is free software; you can redistribute it and/or modify

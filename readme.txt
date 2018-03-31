@@ -1,17 +1,19 @@
-=== KB Support ===
+=== KB Support -  ===
 Contributors: kbsupport, mikeyhoward1977
-Tags: Helpdesk, Support, Customer Support, Support Desk, Ticket System, Knowledge Base, Tickets, Service, Service Desk, ITIL, Support Helpdesk, Ticket, Support Tickets, Helpdesk Tickets, Knowledgebase, Service Level, SLA, Help Desk
+Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
-Tested up to: 5.0
+Tested up to: 4.9.4
 Requires PHP: 5.4
 Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
 
-The ultimate help desk and knowledge base support tool plugin for WordPress.
+The ultimate ticket system, help desk and knowledge base support tool plugin for WordPress.
 
 == Description ==
+
+KB Support is the ultimate WordPress plugin for providing support and help desk services to your customers.
 
 An effective Helpdesk / Support desk tool is one that encourages users to find and implement the solution to their queries without actually logging a support ticket and KB Support has been developed to do exactly that!
 
@@ -27,16 +29,18 @@ From your own experience in running a helpdesk for your product(s) you will know
 * Email notifications keep customers, admins and agents up to date with recent ticket events
 * Restricted access ensures that only agents and the assigned customer are able to view tickets and correspondance
 * A fully responsive and clean front end design where customers can manage their tickets, including viewing and creating replies
-* Integrated Knowledge Base Articles can be easily created and referenced to try and offer solutions without tickets being created
+* Integrated Knowledge Base articles can be easily created and referenced to try and offer solutions without tickets being created
 * Ability to restrict access to individual knowledge base articles to logged in users only
 * Auto assign new tickets to agents based on current ticket count, or randomly
 * Tracks an agents status so you can see if they are online or offline
 * Ability to assign tickets to multiple agents
+* Add agents to departments and have assign to departments
 * A number of useful shortcodes to display submission forms, KB Article lists, ticket history, login/registration forms, profile editor, KB Article search form - and more
 * Numerous template tags enable you to easily add ticket related content into email notifications
 * Private ticket notes that are visible to agents only
 * Restrict which tickets an agent can view. i.e. Just those to which they are assigned
 * Group customers within a company
+* Customers can access tickets created by other members of their company
 * Uses templates that allow for easy customisation of front end pages, shortcodes and CSS styles
 * Ajax based ticket submissions provide a powerful, reliable and friendly interface for customers
 * Built in SPAM protection
