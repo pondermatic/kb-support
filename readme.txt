@@ -9,24 +9,22 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
 
-The ultimate ticket system, help desk and knowledge base support tool plugin for WordPress.
+The ultimate support ticket system, helpdesk and knowledge base tool plugin for WordPress.
 
 == Description ==
 
-KB Support is the ultimate WordPress plugin for providing support and help desk services to your customers.
+KB Support is the ultimate WordPress plugin for providing support and helpdesk services to your customers.
 
-An effective Helpdesk / Support desk tool is one that encourages users to find and implement the solution to their queries without actually logging a support ticket and KB Support has been developed to do exactly that!
+Enriched with features, you can be sure that right from activation, KB Support will provide the perfect HelpDesk solution for your agents to support your customers.
 
-From the moment your customers begin to log a ticket, KB Support will search your knowledgebase and offer potential solutions based upon the articles that are published on your site.
-
-From your own experience in running a helpdesk for your product(s) you will know that in a busy environment, documenting solutions and making them readily available to your customers always seems to take a back seat. KB Support makes this process much easier and encourages your support desk agents to produce articles when working through resolution of a customers ticket. Those articles are then immediately available on your website, and automatically referenced during a support ticket submission as a potential solution.
+The built-in Knowledgebase allows customers to find solutions to their issues during the ticket submission process, reducing the overall number of support queries received by your helpdesk.
 
 **Key FREE Features of KB Support include**:
 
 * Easily manage and customise submission forms. No coding required, multiple forms can be created and utilised
 * Guest submission is fully supported. Customers do not need an account to create or manage support tickets
 * Sequential ticket numbers
-* Email notifications keep customers, admins and agents up to date with recent ticket events
+* Email notifications keep customers, admins and support agents up to date with recent ticket events
 * Restricted access ensures that only agents and the assigned customer are able to view tickets and correspondance
 * A fully responsive and clean front end design where customers can manage their tickets, including viewing and creating replies
 * Integrated Knowledge Base articles can be easily created and referenced to try and offer solutions without tickets being created
@@ -46,7 +44,7 @@ From your own experience in running a helpdesk for your product(s) you will know
 * Built in SPAM protection
 * Customer portal enabling access to existing and historic tickets
 * Truly versatile - A bunch of hooks and filters for our developer friends
-* A growing number of [extensions](https://kb-support.com/extensions/) providing even more functionality and customisation options
+* A growing number of [extensions](https://kb-support.com/extensions/) to provide even more functionality and customisation options
 
 More information can be found at [https://kb-support.com/](https://kb-support.com/).
 
