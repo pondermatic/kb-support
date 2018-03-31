@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: KB Support - WordPress Ticket System, Help Desk and Knowledgebase
+ * Plugin Name: KB Support - WordPress Help Desk, Support & Knowledge Base plugin
  * Plugin URI: https://kb-support.com/
  * Description: The ultimate ticket system, help desk and knowledge base support tool plugin for WordPress.
  * Version: 1.2
