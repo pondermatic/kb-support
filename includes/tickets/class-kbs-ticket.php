@@ -636,7 +636,7 @@ class KBS_Ticket {
 			$this->update_meta( '_ticket_data', $this->ticket_meta );
             $this->update_meta( '_kbs_pending_ticket_created_email', true );
 
-			if ( kbs_get_option( 'enable_sequential' ) )	{
+			if ( kbs_use_sequential_ticket_numbers() )	{
 				$number       = kbs_get_next_ticket_number();
 				$this->number = kbs_format_ticket_number( $number );
 				$this->update_meta( '_kbs_ticket_number', $this->number );
@@ -1410,7 +1410,7 @@ class KBS_Ticket {
 	private function setup_ticket_number()	{
 		$number = $this->ID;
 
-		if ( kbs_get_option( 'enable_sequential' ) )	{
+		if ( kbs_use_sequential_ticket_numbers() )	{
 			$number = $this->get_meta( '_kbs_ticket_number', true );
 
 			if ( ! $number ) {

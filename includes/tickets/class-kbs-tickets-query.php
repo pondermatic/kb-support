@@ -411,7 +411,7 @@ class KBS_Tickets_Query extends KBS_Stats {
 
 			$this->__set( 'meta_query', $search_meta );
 
-			if ( kbs_get_option( 'enable_sequential' ) )	{
+			if ( kbs_use_sequential_ticket_numbers() )	{
 
 				$search_meta = array(
 					'key'     => '_kbs_ticket_number',
@@ -428,7 +428,7 @@ class KBS_Tickets_Query extends KBS_Stats {
 			$this->__unset( 's' );
 
 		} elseif (
-			kbs_get_option( 'enable_sequential' ) &&
+			kbs_use_sequential_ticket_numbers() &&
 			(
 				false !== strpos( $search, kbs_get_option( 'ticket_prefix' ) ) ||
 				false !== strpos( $search, kbs_get_option( 'ticket_suffix' ) )
