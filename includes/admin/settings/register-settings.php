@@ -1065,7 +1065,7 @@ function kbs_settings_sanitize_tickets_main( $input ) {
 		return $input;
 	}
 
-	if ( ! empty( $input['enable_sequential'] ) && ! kbs_get_option( 'enable_sequential' ) )	{
+	if ( ! empty( $input['enable_sequential'] ) && ! kbs_use_sequential_ticket_numbers() )	{
 		// Shows an admin notice about upgrading previous ticket numbers
 		add_option( 'kbs_upgrade_sequential', '1' );
 	}

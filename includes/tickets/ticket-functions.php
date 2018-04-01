@@ -14,6 +14,16 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Whether sequential ticket numbers are in use.
+ *
+ * @since	1.3
+ * @return	bool
+ */
+function kbs_use_sequential_ticket_numbers()	{
+	return kbs_get_option( 'enable_sequential', false );
+} // kbs_use_sequential_ticket_numbers
+
+/**
  * Get Tickets
  *
  * Retrieve tickets from the database.
@@ -1001,7 +1011,7 @@ function kbs_format_ticket_number( $number )	{
  */
 function kbs_get_next_ticket_number()	{
 
-	if ( ! kbs_get_option( 'enable_sequential' ) )	{
+	if ( ! kbs_use_sequential_ticket_numbers() )	{
 		return false;
 	}
 
