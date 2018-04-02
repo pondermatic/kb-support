@@ -375,6 +375,149 @@ function kbs_admin_addons_notices() {
 } // kbs_admin_addons_notices
 
 /**
+ * Request 5 star rating after 25 closed tickets.
+ *
+ * After 25 closed tickets we ask the admin for a 5 star rating
+ *
+ * @since	1.3
+ * @return	void
+ */
+function kbs_request_wp_5star_rating() {
+
+	// Do not show message if installed in an SAAS environment
+	if ( defined( 'KBS_SAAS' ) && true === KBS_SAAS )	{
+		return ;
+	}				
+
+	// Only show this message to admins
+	if ( ! current_user_can( 'administrator' ) )	{
+		return;
+	}
+
+	// Only show the notice on the plugin pages
+	if ( ! kbs_is_admin_page() )	{
+		return;
+	}
+	
+	// If notice has been dismissed, return since everything else after this is expensive operations!
+	if ( kbs_is_notice_dismissed( 'kbs_request_wp_5star_rating' ) )	{
+		return ;
+	}
+
+	// How many tickets have been closed?
+	$closed_tickets = kbs_get_tickets( array( 'status' => 'closed', 'number' => 25, 'output' => 'posts', 'fields' => 'ids' ) );
+	
+	// Show notice if number of closed tickets greater than 25.
+	if ( count ( $closed_tickets ) >= 25 ) {
+	
+		WPAS()->admin_notices->add_notice( 'updated', 'kbs_request_wp_5star_rating', wp_kses( sprintf( __( 'Wow! It looks like you have closed a lot of tickets which is pretty awesome! We guess you must really like Awesome Support, huh? Could you please do us a favor and leave a 5 star rating on WordPress? It will only take a minute and helps to motivate our developers and volunteers. <a href="%1$s">Yes, you deserve it!</a>.', 'awesome-support' ), 'https://wordpress.org/support/plugin/awesome-support/reviews/' ) , 
+		array( 'strong' => array(), 'a' => array( 'href' => array() ) ) ) );
+
+	}
+} // kbs_request_wp_5star_rating
+
+/**
+ * Retrieve all dismissed notices.
+ *
+ * @since	1.3
+ * @return	array	Array of dismissed notices
+ */
+function kbs_dismissed_notices() {
+
+	global $current_user;
+
+	$user_notices = (array) get_user_option( 'kbs_dismissed_notices', $current_user->ID );
+
+	return $user_notices;
+
+} // kbs_dismissed_notices
+
+/**
+ * Check if a specific notice has been dismissed.
+ *
+ * @since	1.3
+ * @param	string	$notice	Notice to check
+ * @return	bool	Whether or not the notice has been dismissed
+ */
+function kbs_is_notice_dismissed( $notice ) {
+
+	$dismissed = kbs_dismissed_notices();
+
+	if ( array_key_exists( $notice, $dismissed ) ) {
+		return true;
+	} else {
+		return false;
+	}
+
+} // kbs_is_notice_dismissed
+
+/**
+ * Dismiss a notice.
+ *
+ * @since	1.3
+ * @param	string		$notice	Notice to dismiss
+ * @return	bool|int	True on success, false on failure, meta ID if it didn't exist yet
+ */
+function kbs_dismiss_notice( $notice ) {
+
+	global $current_user;
+
+	$dismissed_notices = $new = (array) kbs_dismissed_notices();
+
+	if ( ! array_key_exists( $notice, $dismissed_notices ) ) {
+		$new[ $notice ] = 'true';
+	}
+
+	$update = update_user_option( $current_user->ID, 'kbs_dismissed_notices', $new );
+
+	return $update;
+
+} // kbs_dismiss_notice
+
+/**
+ * Restore a dismissed notice.
+ *
+ * @since	1.3
+ * @param	string		$notice	Notice to restore
+ * @return	bool|int	True on success, false on failure, meta ID if it didn't exist yet
+ */
+function kbs_restore_notice( $notice ) {
+
+	global $current_user;
+
+	$dismissed_notices = (array) kbs_dismissed_notices();
+
+	if ( array_key_exists( $notice, $dismissed_notices ) ) {
+		unset( $dismissed_notices[ $notice ] );
+	}
+
+	$update = update_user_option( $current_user->ID, 'kbs_dismissed_notices', $dismissed_notices );
+
+	return $update;
+
+} // kbs_restore_notice
+
+/**
+ * Check if there is a notice to dismiss.
+ *
+ * @since	1.3
+ * @param	array	$data	Contains the notice ID
+ * @return	void
+ */
+function kbs_grab_notice_dismiss( $data ) {
+
+	$notice_id = isset( $data['notice_id'] ) ? $data['notice_id'] : false;
+
+	if ( false === $notice_id ) {
+		return;
+	}
+
+	kbs_dismiss_notice( $notice_id );
+
+} // kbs_grab_notice_dismiss
+add_action( 'kbs_do_dismiss_notice', 'kbs_grab_notice_dismiss' );
+
+/**
  * Dismisses admin notices when Dismiss links are clicked
  *
  * @since	0.1
