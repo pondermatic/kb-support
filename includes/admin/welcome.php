@@ -451,7 +451,9 @@ class KBS_Welcome {
             <div class="feature-section clearfix">
 
                 <div class="content feature-section-item display-options">
-                    <img src="<?php echo KBS_PLUGIN_URL; ?>assets/images/screenshots/getting-started-extensions.jpg">
+                	<a href="https://kb-support.com/extensions/" target="_blank" title="Extend KB Support with extensions">
+                        <img src="<?php echo KBS_PLUGIN_URL; ?>assets/images/screenshots/getting-started-extensions.jpg">
+                    </a>
                 </div>
 
                 <div class="content feature-section-item last-feature">
@@ -465,7 +467,7 @@ class KBS_Welcome {
 
 					<p><?php printf(
 						__( 'And of course, if you need any assistance, <a href="%s" target="_blank">log a support ticket</a> via our website and we\'ll be happy to help.', 'kb-support' ),
-						'https://kb-support.com/extensions/'
+						'https://kb-support.com/log-a-support-ticket/'
 					); ?></p>
 
                 </div>
