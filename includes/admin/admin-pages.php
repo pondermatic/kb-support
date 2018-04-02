@@ -94,15 +94,21 @@ function kbs_is_admin_page( $passed_page = '', $passed_view = '' ) {
 				case 'new':
 					if ( ( 'kbs_ticket' == $typenow || 'kbs_ticket' === $post_type ) && $pagenow == 'edit-tags.php' && 'edit' !== $action && 'ticket_category' === $taxonomy ) {
 						$found = true;
+					} elseif ( ( 'kbs_ticket' == $typenow || 'kbs_ticket' === $post_type ) && $pagenow == 'edit-tags.php' && 'edit' !== $action && 'department' === $taxonomy ) {
+						$found = true;
 					}
 					break;
 				case 'edit':
 					if ( ( 'kbs_ticket' == $typenow || 'kbs_ticket' === $post_type ) && $pagenow == 'edit-tags.php' && 'edit' === $action && 'ticket_category' === $taxonomy ) {
 						$found = true;
+					} elseif ( ( 'kbs_ticket' == $typenow || 'kbs_ticket' === $post_type ) && $pagenow == 'edit-tags.php' && 'edit' === $action && 'department' === $taxonomy ) {
+						$found = true;
 					}
 					break;
 				default:
 					if ( ( 'kbs_ticket' == $typenow || 'kbs_ticket' === $post_type ) && $pagenow == 'edit-tags.php' && 'ticket_category' === $taxonomy ) {
+						$found = true;
+					} elseif ( ( 'kbs_ticket' == $typenow || 'kbs_ticket' === $post_type ) && $pagenow == 'edit-tags.php' && 'department' === $taxonomy ) {
 						$found = true;
 					}
 					break;
