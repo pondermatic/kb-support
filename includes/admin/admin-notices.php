@@ -389,13 +389,8 @@ function kbs_request_wp_5star_rating() {
 		return ;
 	}				
 
-	// Only show this message to admins
-	if ( ! current_user_can( 'administrator' ) )	{
-		return;
-	}
-
-	// Only show the notice on the plugin pages
-	if ( ! kbs_is_admin_page() )	{
+	// Only show this message to admins whilst on KBS plugin pages
+	if ( ! current_user_can( 'administrator' ) || ! kbs_is_admin_page() )	{
 		return;
 	}
 	
@@ -405,7 +400,12 @@ function kbs_request_wp_5star_rating() {
 	}
 
 	// How many tickets have been closed?
-	$closed_tickets = kbs_get_tickets( array( 'status' => 'closed', 'number' => 25, 'output' => 'posts', 'fields' => 'ids' ) );
+	$closed_tickets = kbs_get_tickets( array(
+		'status' => 'closed',
+		'number' => 25,
+		'output' => 'posts',
+		'fields' => 'ids'
+	) );
 	
 	// Show notice if number of closed tickets greater than 25.
 	if ( count ( $closed_tickets ) >= 25 ) {
@@ -415,6 +415,7 @@ function kbs_request_wp_5star_rating() {
 
 	}
 } // kbs_request_wp_5star_rating
+add_action( 'plugins_loaded', 'kbs_request_first_5star_rating' );
 
 /**
  * Retrieve all dismissed notices.
