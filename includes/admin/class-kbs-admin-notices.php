@@ -454,10 +454,6 @@ class KBS_Admin_Notices	{
     */
     function dismiss_notices() {
 
-        if ( ! is_user_logged_in() ) {
-            return;
-        }
-
         $notice = isset( $_GET['kbs_notice'] ) ? $_GET['kbs_notice'] : false;
 
         if ( ! $notice )	{
