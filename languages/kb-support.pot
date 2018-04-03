@@ -2,9 +2,10 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: KB Support 1.2\n"
+"Project-Id-Version: KB Support - WordPress Help Desk, Support & Knowledge "
+"Base plugin 1.2.1\n"
 "Report-Msgid-Bugs-To: https://kb-support.com/\n"
-"POT-Creation-Date: 2018-03-28 19:37:19+00:00\n"
+"POT-Creation-Date: 2018-04-03 22:44:23+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -53,164 +54,6 @@ msgstr ""
 #: includes/admin/upgrades/upgrade-functions.php:318
 #: includes/class-kbs-license-handler.php:313
 msgid "Error"
-msgstr ""
-
-#: includes/admin/admin-notices.php:30
-msgid "Security verification failed."
-msgstr ""
-
-#: includes/admin/admin-notices.php:39
-msgid "%s reopened."
-msgstr ""
-
-#: includes/admin/admin-notices.php:48
-msgid "The %s cannot be re-opened. It is not closed."
-msgstr ""
-
-#: includes/admin/admin-notices.php:57
-msgid "The reply was successfully added."
-msgstr ""
-
-#: includes/admin/admin-notices.php:72
-msgid " and the %1$s was closed."
-msgstr ""
-
-#: includes/admin/admin-notices.php:74
-msgid "Create <a href=\"%s\">%s</a>"
-msgstr ""
-
-#: includes/admin/admin-notices.php:79
-msgid "The reply was successfully added%s."
-msgstr ""
-
-#: includes/admin/admin-notices.php:88
-msgid "The reply could not be added."
-msgstr ""
-
-#: includes/admin/admin-notices.php:97
-msgid "The note was deleted."
-msgstr ""
-
-#: includes/admin/admin-notices.php:106
-msgid "The note could not be deleted."
-msgstr ""
-
-#: includes/admin/admin-notices.php:115
-msgid "Field was added."
-msgstr ""
-
-#: includes/admin/admin-notices.php:124
-msgid "Field added."
-msgstr ""
-
-#: includes/admin/admin-notices.php:133
-msgid "Field updated."
-msgstr ""
-
-#: includes/admin/admin-notices.php:142
-msgid "Field not saved."
-msgstr ""
-
-#: includes/admin/admin-notices.php:151
-msgid "Field deleted."
-msgstr ""
-
-#: includes/admin/admin-notices.php:160
-msgid "Field not deleted."
-msgstr ""
-
-#: includes/admin/admin-notices.php:168
-msgid "Editing: %s."
-msgstr ""
-
-#: includes/admin/admin-notices.php:177
-msgid "Customer added successfully."
-msgstr ""
-
-#: includes/admin/admin-notices.php:186
-msgid "You do not have permission to view the customer list."
-msgstr ""
-
-#: includes/admin/admin-notices.php:195
-msgid "An invalid customer ID was provided."
-msgstr ""
-
-#: includes/admin/admin-notices.php:204
-msgid "Email address added."
-msgstr ""
-
-#: includes/admin/admin-notices.php:213 includes/misc-functions.php:341
-msgid "Email address removed."
-msgstr ""
-
-#: includes/admin/admin-notices.php:222
-msgid "Email address could not be removed."
-msgstr ""
-
-#: includes/admin/admin-notices.php:231
-msgid "Primary email address updated."
-msgstr ""
-
-#: includes/admin/admin-notices.php:240
-msgid "Primary email address could not be updated."
-msgstr ""
-
-#: includes/admin/admin-notices.php:249
-msgid "Please confirm you wish to delete this customer."
-msgstr ""
-
-#: includes/admin/admin-notices.php:258
-msgid "Customer deleted."
-msgstr ""
-
-#: includes/admin/admin-notices.php:267
-msgid "Could not delete customer."
-msgstr ""
-
-#: includes/admin/admin-notices.php:276
-msgid "A customer with the specified ID could not be found."
-msgstr ""
-
-#: includes/admin/admin-notices.php:285
-msgid "Customer disconnected from user ID."
-msgstr ""
-
-#: includes/admin/admin-notices.php:294
-msgid "Could not disconnect customer from user ID."
-msgstr ""
-
-#: includes/admin/admin-notices.php:303
-msgid "Draft %1$s created from %2$s. Review, edit and publish the new %1$s below."
-msgstr ""
-
-#: includes/admin/admin-notices.php:312
-msgid "Could not create new %1$s from %2$s."
-msgstr ""
-
-#: includes/admin/admin-notices.php:321
-msgid "View count reset for %s."
-msgstr ""
-
-#: includes/admin/admin-notices.php:330
-msgid "Failed to reset %s view count."
-msgstr ""
-
-#: includes/admin/admin-notices.php:339
-msgid "Settings imported."
-msgstr ""
-
-#: includes/admin/admin-notices.php:348
-msgid "Please upload a valid .json file."
-msgstr ""
-
-#: includes/admin/admin-notices.php:357
-msgid "%s numbers have been successfully upgraded."
-msgstr ""
-
-#: includes/admin/admin-notices.php:373
-msgid ""
-"There seems to be an issue with the server. Please try again in a few "
-"minutes."
 msgstr ""
 
 #: includes/admin/admin-pages.php:29 includes/post-types.php:176
@@ -377,6 +220,174 @@ msgstr ""
 msgid "Restrict access?"
 msgstr ""
 
+#: includes/admin/class-kbs-admin-notices.php:23
+msgid ""
+"There seems to be an issue with the server. Please try again in a few "
+"minutes."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:141
+msgid "Editing: %s."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:152
+msgid "Security verification failed."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:160
+msgid "%s reopened."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:164
+msgid "The %s cannot be re-opened. It is not closed."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:168
+msgid "The reply was successfully added."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:182
+msgid " and the %1$s was closed."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:184
+msgid "Create <a href=\"%s\">%s</a>"
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:186
+msgid "The reply was successfully added%s."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:190
+msgid "The reply could not be added."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:194
+msgid "The note was deleted."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:198
+msgid "The note could not be deleted."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:208
+msgid "Draft %1$s created from %2$s. Review, edit and publish the new %1$s below."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:216
+msgid "Could not create new %1$s from %2$s."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:223
+msgid "View count reset for %s."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:227
+msgid "Failed to reset %s view count."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:236
+msgid "Field was added."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:240
+msgid "Unable to add field."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:244
+msgid "Field updated."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:248
+msgid "Unable to save field."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:252
+#: includes/admin/class-kbs-admin-notices.php:260
+msgid "Field deleted."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:256
+msgid "Unable to delete field."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:269
+#: includes/admin/class-kbs-admin-notices.php:327
+msgid "Customer added successfully."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:273
+msgid "You do not have permission to view the customer list."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:277
+msgid "An invalid customer ID was provided."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:281
+msgid "Email address added."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:285
+#: includes/misc-functions.php:341
+msgid "Email address removed."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:289
+msgid "Email address could not be removed."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:293
+msgid "Primary email address updated."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:297
+msgid "Primary email address could not be updated."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:301
+msgid "Please confirm you wish to delete this customer."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:305
+msgid "Customer deleted."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:309
+msgid "Customer could not be deleted."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:313
+msgid "Customer disconnected from user ID."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:317
+msgid "Could not disconnect customer from user ID."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:331
+msgid "Please upload a valid .json file."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:340
+msgid "%s numbers have been successfully upgraded."
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:374
+msgid ""
+"<strong>Awesome!</strong> It looks like you have closed over 25 %1$s since "
+"you activated KB Support which is really fantastic!"
+msgstr ""
+
+#: includes/admin/class-kbs-admin-notices.php:380
+msgid ""
+"Would you <strong>please</strong> do us a favour and leave a 5 star rating "
+"on WordPress.org? It only takes a minute and it <strong>really "
+"helps</strong> to motivate our developers and volunteers to continue to "
+"work on great new features and functionality. <a href=\"%1$s\" "
+"target=\"_blank\">Sure thing, you deserve it!</a>"
+msgstr ""
+
 #: includes/admin/companies/company.php:25
 #: includes/admin/settings/register-settings.php:611
 msgid "Logo"
@@ -396,7 +407,7 @@ msgstr ""
 #: includes/admin/companies/company.php:28
 #: includes/admin/customers/customers-page.php:400
 #: includes/admin/import-export/export/class-batch-export-customers.php:45
-#: includes/tickets/ticket-functions.php:457
+#: includes/tickets/ticket-functions.php:467
 #: templates/shortcode-register.php:23
 msgid "Email"
 msgstr ""
@@ -500,7 +511,7 @@ msgid "Phone Number"
 msgstr ""
 
 #: includes/admin/companies/metaboxes.php:157
-#: includes/tickets/ticket-functions.php:456
+#: includes/tickets/ticket-functions.php:466
 msgid "Website"
 msgstr ""
 
@@ -691,7 +702,7 @@ msgid "Nonce verification failed."
 msgstr ""
 
 #: includes/admin/customers/customer-actions.php:291
-#: includes/ajax-functions.php:548
+#: includes/ajax-functions.php:564
 msgid "Invalid email address."
 msgstr ""
 
@@ -3645,11 +3656,11 @@ msgid ""
 "the menu to start writing."
 msgstr ""
 
-#: includes/admin/welcome.php:458
+#: includes/admin/welcome.php:460
 msgid "STEP 4: Optionally Add More Functionality"
 msgstr ""
 
-#: includes/admin/welcome.php:461
+#: includes/admin/welcome.php:463
 msgid ""
 "There are many more ways in which you can customise your instance of KB "
 "Support. Take a look at our range of <a href=\"%s\" "
@@ -3658,63 +3669,63 @@ msgid ""
 "for additional help and tips."
 msgstr ""
 
-#: includes/admin/welcome.php:467
+#: includes/admin/welcome.php:469
 msgid ""
 "And of course, if you need any assistance, <a href=\"%s\" "
 "target=\"_blank\">log a support ticket</a> via our website and we'll be "
 "happy to help."
 msgstr ""
 
-#: includes/admin/welcome.php:481
+#: includes/admin/welcome.php:483
 msgid "Configure Settings"
 msgstr ""
 
-#: includes/admin/welcome.php:484 includes/admin/welcome.php:490
+#: includes/admin/welcome.php:486 includes/admin/welcome.php:492
 msgid "Go to %s"
 msgstr ""
 
-#: includes/admin/welcome.php:487
+#: includes/admin/welcome.php:489
 msgid "Manage Submission Forms"
 msgstr ""
 
-#: includes/admin/welcome.php:493
+#: includes/admin/welcome.php:495
 msgid "View Extensions"
 msgstr ""
 
-#: includes/admin/welcome.php:496
+#: includes/admin/welcome.php:498
 msgid "WordPress Dashboard"
 msgstr ""
 
-#: includes/admin/welcome.php:514
+#: includes/admin/welcome.php:516
 msgid "No valid changelog was found."
 msgstr ""
 
-#: includes/admin/welcome.php:573
+#: includes/admin/welcome.php:575
 #. translators: %s: KB Support twitter user @kbsupport_wp
 msgid "Follow %s"
 msgstr ""
 
-#: includes/ajax-functions.php:190
+#: includes/ajax-functions.php:206
 msgid "Load More"
 msgstr ""
 
-#: includes/ajax-functions.php:541
+#: includes/ajax-functions.php:557
 msgid "Please enter a customer name."
 msgstr ""
 
-#: includes/ajax-functions.php:577
+#: includes/ajax-functions.php:593
 msgid "Customer email address already exists for customer #%s &ndash; %s."
 msgstr ""
 
-#: includes/ajax-functions.php:586
+#: includes/ajax-functions.php:602
 msgid "Could not create customer."
 msgstr ""
 
-#: includes/ajax-functions.php:631 includes/class-kbs-html-elements.php:406
+#: includes/ajax-functions.php:647 includes/class-kbs-html-elements.php:406
 msgid "No users found"
 msgstr ""
 
-#: includes/ajax-functions.php:696
+#: includes/ajax-functions.php:712
 msgid "View all %d possible solutions."
 msgstr ""
 
@@ -3806,7 +3817,7 @@ msgstr ""
 msgid "Enter username"
 msgstr ""
 
-#. Plugin Name of the plugin/theme
+#: includes/class-kbs-knowledgebase.php:88
 msgid "KB Support"
 msgstr ""
 
@@ -5017,7 +5028,7 @@ msgstr ""
 msgid "Could not add %s Reply"
 msgstr ""
 
-#: includes/scripts.php:238 includes/tickets/ticket-functions.php:1405
+#: includes/scripts.php:238 includes/tickets/ticket-functions.php:1415
 msgid "View Note"
 msgstr ""
 
@@ -5116,7 +5127,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: includes/tickets/reply-functions.php:160
-#: includes/tickets/ticket-functions.php:1419
+#: includes/tickets/ticket-functions.php:1429
 msgid "%s by %s"
 msgstr ""
 
@@ -5141,19 +5152,19 @@ msgstr ""
 msgid "%s re-opened."
 msgstr ""
 
-#: includes/tickets/ticket-functions.php:458
+#: includes/tickets/ticket-functions.php:468
 msgid "Telephone"
 msgstr ""
 
-#: includes/tickets/ticket-functions.php:459
+#: includes/tickets/ticket-functions.php:469
 msgid "Other"
 msgstr ""
 
-#: includes/tickets/ticket-functions.php:1392
+#: includes/tickets/ticket-functions.php:1402
 msgid "KBS Bot"
 msgstr ""
 
-#: includes/tickets/ticket-functions.php:1406
+#: includes/tickets/ticket-functions.php:1416
 msgid "Delete Note"
 msgstr ""
 
@@ -5375,12 +5386,18 @@ msgstr ""
 msgid "HTTP Requests disbaled for unit tests"
 msgstr ""
 
+#. Plugin Name of the plugin/theme
+msgid "KB Support - WordPress Help Desk, Support & Knowledge Base plugin"
+msgstr ""
+
 #. Author URI of the plugin/theme
 msgid "https://kb-support.com/"
 msgstr ""
 
 #. Description of the plugin/theme
-msgid "The ultimate help desk and knowledge base support tool plugin for WordPress."
+msgid ""
+"The ultimate ticket system, help desk and knowledge base support tool "
+"plugin for WordPress."
 msgstr ""
 
 #. Author of the plugin/theme
@@ -5388,11 +5405,7 @@ msgid "KB Support Team"
 msgstr ""
 
 #. Tags of the plugin/theme
-msgid ""
-"Helpdesk, Support, Customer Support, Support Desk, Ticket System, Knowledge "
-"Base, Tickets, Service, Service Desk, ITIL, Support Helpdesk, Ticket, "
-"Support Tickets, Helpdesk Tickets, Knowledgebase, Service Level, SLA, Help "
-"Desk"
+msgid "helpdesk, help desk, ticket system, support ticket, knowledge base"
 msgstr ""
 
 #: includes/class-kbs-html-elements.php:99

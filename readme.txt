@@ -2,9 +2,9 @@
 Contributors: kbsupport, mikeyhoward1977
 Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
-Tested up to: 4.9.4
+Tested up to: 4.9.5
 Requires PHP: 5.4
-Stable tag: 1.2
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -122,6 +122,18 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.2.1 =
+
+** Wednesday, 4th April 2018**
+
+**Bug**: Fixed URL on welcome screen
+**Tweak**: Updated extensions image on welcome screen
+**Tweak**: Added KBS_Admin_Notices class for better admin notice management
+**Tweak**: Request WordPress.org rating after 25 ticket closures
+**Tweak**: Bump WordPress tested with version to 4.9.5
+**Dev**: Added `kbs_use_sequential_ticket_numbers()` - returns whether or not sequential ticket numbers are in use
+**Tweak**: Updated plugin tags and description
 
 = 1.2 =
 
