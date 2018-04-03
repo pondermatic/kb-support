@@ -122,6 +122,22 @@ function kbs_get_ajax_url() {
 } // kbs_get_ajax_url
 
 /**
+ * Dismiss admin notices.
+ *
+ * @since	1.0
+ * @return	void
+ */
+function kbs_ajax_dismiss_admin_notice()	{
+
+	$notice = sanitize_text_field( $_POST['notice'] );
+    kbs_dismiss_notice( $notice );
+
+	wp_send_json_success();
+
+} // kbs_ajax_dismiss_admin_notice
+add_action( 'wp_ajax_kbs_dismiss_notice', 'kbs_ajax_dismiss_admin_notice' );
+
+/**
  * Reply to a ticket.
  *
  * @since	1.0
