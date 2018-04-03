@@ -1,10 +1,6 @@
 sudo: false
 language: php
 
-notifications:
-  on_success: never
-  on_failure: change
-
 php:
   - 5.4
   - 5.5
@@ -14,37 +10,20 @@ php:
   - 7.2
 
 env:
-- WP_VERSION=latest WP_MULTISITE=0
-- WP_VERSION=4.9 WP_MULTISITE=0
-- WP_VERSION=4.8.3 WP_MULTISITE=0
-- WP_VERSION=4.7.7 WP_MULTISITE=0
-- WP_VERSION=4.6.8 WP_MULTISITE=0
-- WP_VERSION=4.5.11 WP_MULTISITE=0
-- WP_VERSION=4.4.2 WP_MULTISITE=0
+  - WP_PROJECT_TYPE=plugin WP_VERSION=latest WP_MULTISITE=0 WP_TEST_URL=http://localhost:12000 WP_TEST_USER=test WP_TEST_USER_PASS=test
 
 matrix:
   include:
-    - php: 7.1
-      env: WP_VERSION=latest WP_MULTISITE=0
-    - php: 7.1
-      env: WP_VERSION=4.7 WP_MULTISITE=0
-    - php: 5.6
-      env: WP_VERSION=latest WP_MULTISITE=1
-    - php: 5.3
-      env: WP_VERSION=latest WP_MULTISITE=0
-      dist: precise
-    - php: 5.3
-      env: WP_VERSION=4.7 WP_MULTISITE=0
-      dist: precise
-    - php: 5.3
-      env: WP_VERSION=4.6 WP_MULTISITE=0
-      dist: precise
-    - php: 5.3
-      env: WP_VERSION=4.5 WP_MULTISITE=0
-      dist: precise
-    - php: 5.3
-      env: WP_VERSION=4.4 WP_MULTISITE=0
-      dist: precise
+    - php: "5.6"
+      env: WP_VERSION=master WP_ALLOW_MULTISITE=1
+    - php: "7"
+      env: WP_VERSION=master
+    - php: "7"
+      env: WP_VERSION=master WP_ALLOW_MULTISITE=1      
+    - php: "7.1"
+      env: WP_VERSION=master
+    - php: "7.2"
+      env: WP_VERSION=master
 
 before_script:
   - git clone https://github.com/Seravo/wordpress-test-template wp-tests
@@ -57,6 +36,7 @@ branches:
   only:
     - master
     - /^release\/.*$/
+
 
 notifications:
     slack: kbsupport:4jojNlDtoZ6qLQbeSjJ5ivFX
