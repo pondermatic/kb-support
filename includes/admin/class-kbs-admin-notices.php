@@ -111,9 +111,9 @@ class KBS_Admin_Notices	{
 	 * Get things going.
 	 */
 	public function __construct()	{
-		add_action( 'admin_notices',         array( $this, 'show_notices'    ) );
-		add_action( 'kbs_dismiss_notices',   array( $this, 'dismiss_notices' ) );
+		add_action( 'admin_notices',         array( $this, 'show_notices'            ) );
         add_action( 'plugins_loaded',        array( $this, 'request_wp_5star_rating' ) );
+        add_action( 'kbs_dismiss_notices',   array( $this, 'dismiss_notices'         ) );
         add_action( 'kbs_do_dismiss_notice', array( $this, 'grab_notice_dismiss'     ) );
 	} // __construct
 
@@ -136,9 +136,12 @@ class KBS_Admin_Notices	{
         // Global messages
         if ( isset( $_GET['kbs-message'], $_GET['field_id'] ) && 'editing_field' == $_GET['kbs-message'] )	{
             ob_start(); ?>
-                <div class="notice notice-info">
-                    <p><strong><?php printf( __( 'Editing: %s.', 'kb-support' ), get_the_title( $_GET['field_id'] ) ); ?></strong></p>
-                </div>
+            <div class="notice notice-info">
+                <p><strong><?php printf(
+                    __( 'Editing: %s.', 'kb-support' ),
+                    get_the_title( $_GET['field_id'] )
+                ); ?></strong></p>
+            </div>
             <?php echo ob_get_clean();
         }
 
@@ -365,20 +368,20 @@ class KBS_Admin_Notices	{
     function admin_wp_5star_rating_notice() {
         ob_start(); ?>
 
-            <div class="updated notice notice-kbs-dismiss is-dismissible" data-notice="kbs_request_wp_5star_rating">
-                <p>
-                    <?php printf(
-                        __( '<strong>Awesome!</strong> It looks like you have closed over 25 %1$s since you activated KB Support which is really fantastic!', 'kb-support' ),
-                        kbs_get_ticket_label_plural( true )
-                    ); ?>
-                </p>
-                <p>
-                    <?php printf(
-                        __( 'Would you <strong>please</strong> do us a favour and leave a 5 star rating on WordPress.org? It only takes a minute and it <strong>really helps</strong> to motivate our developers and volunteers to continue to work on great new features and functionality. <a href="%1$s" target="_blank">Sure thing, you deserve it!</a>', 'kb-support' ),
-                        'https://wordpress.org/support/plugin/kb-support/reviews/'
-                    ); ?>
-                </p>
-            </div>
+        <div class="updated notice notice-kbs-dismiss is-dismissible" data-notice="kbs_request_wp_5star_rating">
+            <p>
+                <?php printf(
+                    __( '<strong>Awesome!</strong> It looks like you have closed over 25 %1$s since you activated KB Support which is really fantastic!', 'kb-support' ),
+                    kbs_get_ticket_label_plural( true )
+                ); ?>
+            </p>
+            <p>
+                <?php printf(
+                    __( 'Would you <strong>please</strong> do us a favour and leave a 5 star rating on WordPress.org? It only takes a minute and it <strong>really helps</strong> to motivate our developers and volunteers to continue to work on great new features and functionality. <a href="%1$s" target="_blank">Sure thing, you deserve it!</a>', 'kb-support' ),
+                    'https://wordpress.org/support/plugin/kb-support/reviews/'
+                ); ?>
+            </p>
+        </div>
 
         <?php echo ob_get_clean();
     } // admin_wp_5star_rating_notice
