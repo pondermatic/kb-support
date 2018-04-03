@@ -50,9 +50,8 @@ function kbs_plugin_row_meta( $input, $file )	{
 	}
 
 	$links = array(
-		'<a href="' . admin_url( 'index.php?page=kbs-getting-started' ) . '">' . esc_html__( 'Getting Started', 'kb-support' ) . '</a>',
-		'<a href="' . esc_url( 'https://kb-support.com/extensions/' ) . '" target="_blank">' . esc_html__( 'Extensions', 'kb-support' ) . '</a>',
-		'<a href="' . esc_url( 'https://kb-support.com/support/' ) . '" target="_blank">' . esc_html__( 'Documentation', 'kb-support' ) . '</a>'
+		'<a href="' . esc_url( 'https://kb-support.com/support/' ) . '" target="_blank">' . esc_html__( 'Documentation', 'kb-support' ) . '</a>',
+		'<a href="' . esc_url( 'https://kb-support.com/extensions/' ) . '" target="_blank">' . esc_html__( 'Extensions', 'kb-support' ) . '</a>'
 	);
 
 	$input = array_merge( $input, $links );
