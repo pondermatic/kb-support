@@ -421,7 +421,7 @@ class KBS_Admin_Notices	{
             'closed'
         ) );
 
-        if ( $closed_tickets > 2 ) {
+        if ( $closed_tickets > 25 ) {
             add_action( 'admin_notices', array( $this, 'admin_wp_5star_rating_notice' ) );
         }
 
