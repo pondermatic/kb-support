@@ -387,9 +387,9 @@ class KBS_Admin_Notices	{
     } // admin_first_extension_discount_advisory_notice
 
     /**
-     * Request extensions more info.
+     * Advise admins of discount for extensions in the plugin store.
      *
-     * After 5 closed tickets we ask notify the admin that a discount on extensions is available
+     * After 5 closed tickets we notify the admin that a discount on extensions is available
      *
      * @since	1.3
      * @return	void
