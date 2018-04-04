@@ -111,10 +111,11 @@ class KBS_Admin_Notices	{
 	 * Get things going.
 	 */
 	public function __construct()	{
-		add_action( 'admin_notices',         array( $this, 'show_notices'            ) );
-        add_action( 'plugins_loaded',        array( $this, 'request_wp_5star_rating' ) );
-        add_action( 'kbs_dismiss_notices',   array( $this, 'dismiss_notices'         ) );
-        add_action( 'kbs_do_dismiss_notice', array( $this, 'grab_notice_dismiss'     ) );
+		add_action( 'admin_notices',         array( $this, 'show_notices'                             ) );
+        add_action( 'plugins_loaded',        array( $this, 'notify_first_extension_discount_advisory' ) );
+        add_action( 'plugins_loaded',        array( $this, 'request_wp_5star_rating'                  ) );
+        add_action( 'kbs_dismiss_notices',   array( $this, 'dismiss_notices'                          ) );
+        add_action( 'kbs_do_dismiss_notice', array( $this, 'grab_notice_dismiss'                      ) );
 	} // __construct
 
     /**
@@ -358,6 +359,73 @@ class KBS_Admin_Notices	{
 		settings_errors( 'kbs-notices' );
 
     } // show_notices
+
+    /**
+     * Plugin discount Notice
+     *
+     * @since	1.3
+     * @return	void
+    */
+    function admin_first_extension_discount_advisory_notice() {
+        ob_start(); ?>
+
+        <div class="updated notice notice-kbs-dismiss is-dismissible" data-notice="first_extension_discount_advisory">
+            <p>
+                <?php printf(
+                    __( 'Loving KB Support? Great! Did you know you can receive a <strong>%s discount</strong> on the purchase of extensions from our <a target="_blank" href="%s">plugin store</a> to further enhance the features and functionality? <a href="%s">More info</a>', 'kb-support' ),
+                    '15%',
+                    'https://kb-support.com/extensions/',
+                    add_query_arg( array(
+                        'post_type' => 'kbs_ticket',
+                        'page'      => 'kbs-extensions'
+                    ), admin_url( 'edit.php' ) )
+                ); ?>
+            </p>
+        </div>
+
+        <?php echo ob_get_clean();
+    } // admin_first_extension_discount_advisory_notice
+
+    /**
+     * Request extensions more info.
+     *
+     * After 5 closed tickets we ask notify the admin that a discount on extensions is available
+     *
+     * @since	1.3
+     * @return	void
+     */
+    public function notify_first_extension_discount_advisory() {
+
+        if ( defined( 'KBS_SAAS' ) && true === KBS_SAAS )	{
+            return ;
+        }				
+
+        if ( ! current_user_can( 'administrator' ) || ! kbs_is_admin_page() )	{
+            return;
+        }
+
+        if ( kbs_is_notice_dismissed( 'first_extension_discount_advisory' ) )	{
+            return ;
+        }
+
+        global $wpdb;
+
+        $closed_tickets = $wpdb->get_var( $wpdb->prepare(
+            "
+                SELECT COUNT(*)
+                FROM $wpdb->posts
+                WHERE `post_type` = %s
+                AND `post_status` = %s
+            ",
+            'kbs_ticket',
+            'closed'
+        ) );
+
+        if ( $closed_tickets >= 5 ) {
+            add_action( 'admin_notices', array( $this, 'admin_first_extension_discount_advisory_notice' ) );
+        }
+
+    } // notify_first_extension_discount_advisory
 
     /**
      * Admin WP Rating Request Notice
