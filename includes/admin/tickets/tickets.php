@@ -425,7 +425,7 @@ function kbs_search_ticket_list_by_id( $query ) {
         return;
     }
 
-    if ( get_post( $id ) )  {
+    if ( is_numeric( $id ) && get_post( $id ) )  {
 
         $query->query_vars['p'] = $id;
 
