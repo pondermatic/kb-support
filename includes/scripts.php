@@ -260,21 +260,6 @@ function kbs_load_admin_scripts( $hook ) {
 add_action( 'admin_enqueue_scripts', 'kbs_load_admin_scripts' );
 
 /**
- * Filter the HTML script tag of an enqueued script.
- *
- * @since   1.0
- * @param   str     $tag    The HTML script tag
- * @param   str     $handle The script handle name
- */
-function kbs_filter_enqueued_script_tags( $tag, $handle )   {
-    if ( 'kbs-font-awesome5' == $handle )    {
-        $tag = str_replace( ' src', ' defer="defer" src', $tag );
-    }
-
-    return $tag;
-} // kbs_filter_enqueued_script_tags
-
-/**
  * At a Glance Icons
  *
  * Echoes the CSS for the ticket and article post type icons.
