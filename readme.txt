@@ -21,11 +21,11 @@ The built-in Knowledgebase allows customers to find solutions to their issues du
 
 **Key FREE Features of KB Support include**:
 
-* Easily manage and customise submission forms. No coding required, multiple forms can be created and utilised
+* Easily manage and customize submission forms. No coding required, multiple forms can be created and utilized
 * Guest submission is fully supported. Customers do not need an account to create or manage support tickets
 * Sequential ticket numbers
 * Email notifications keep customers, admins and support agents up to date with recent ticket events
-* Restricted access ensures that only agents and the assigned customer are able to view tickets and correspondance
+* Restricted access ensures that only agents and the assigned customer are able to view tickets and correspondence
 * A fully responsive and clean front end design where customers can manage their tickets, including viewing and creating replies
 * Integrated Knowledge Base articles can be easily created and referenced to try and offer solutions without tickets being created
 * Ability to restrict access to individual knowledge base articles to logged in users only
@@ -39,12 +39,12 @@ The built-in Knowledgebase allows customers to find solutions to their issues du
 * Restrict which tickets an agent can view. i.e. Just those to which they are assigned
 * Group customers within a company
 * Customers can access tickets created by other members of their company
-* Uses templates that allow for easy customisation of front end pages, shortcodes and CSS styles
+* Uses templates that allow for easy customization of front end pages, shortcodes and CSS styles
 * Ajax based ticket submissions provide a powerful, reliable and friendly interface for customers
 * Built in SPAM protection
 * Customer portal enabling access to existing and historic tickets
 * Truly versatile - A bunch of hooks and filters for our developer friends
-* A growing number of [extensions](https://kb-support.com/extensions/) to provide even more functionality and customisation options
+* A growing number of [extensions](https://kb-support.com/extensions/) to provide even more functionality and customization options
 
 More information can be found at [https://kb-support.com/](https://kb-support.com/).
 
@@ -97,7 +97,7 @@ Searchable docs can be found at [https://kb-support.com]([https://kb-support.com
 
 Create your submission form within Tickets > Submission Forms, and copy the shortcode to any page. i.e. [kbs_submit form="1277"].
 
-A default form with the most popular fields is added during installation. Customise this form to meet your needs, or create new forms as required.
+A default form with the most popular fields is added during installation. Customize this form to meet your needs, or create new forms as required.
 
 = How can a Customer view their Ticket History? =
 
@@ -290,7 +290,7 @@ Within core, tickets may only be assigned to departments via front end submissio
 
 **Monday, 5th February 2018**
 
-**This update includes changes to a template page. If you are using a customised version of the template, you can [review the changes here](https://github.com/KB-Support/kb-support/commit/d1d7e506dfc38c0231bdd4f158b92b42319fa820).**
+**This update includes changes to a template page. If you are using a customized version of the template, you can [review the changes here](https://github.com/KB-Support/kb-support/commit/d1d7e506dfc38c0231bdd4f158b92b42319fa820).**
 
 **Bug Fixes**
 
@@ -352,7 +352,7 @@ Within core, tickets may only be assigned to departments via front end submissio
 
 * Added filter `kbs_ticket_closed_by`
 * Changed newsletter subscription button to secondary class on extensions page
-* Added compatability for users utilising All in One WordPress Security who had renamed the login page
+* Added compatibility for users utilizing All in One WordPress Security who had renamed the login page
 * Added admin form CSS classes
 
 = 1.1.4 =
@@ -508,7 +508,7 @@ Within core, tickets may only be assigned to departments via front end submissio
 * Added `kbsupport_init` hook which is run after the main KB_Support class is initiated
 * Added `kbs_articles_column_data_{$column_name}` filter to allow for custom content within the KB Article edit screen
 * Adjusted priority for the `kbs_after_article_content` hook
-* Added `kbs_agent_can_submit` function. By default agents cannot submit tickets from the front end. Overide by hooking into the `kbs_agent_can_submit` filter
+* Added `kbs_agent_can_submit` function. By default agents cannot submit tickets from the front end. Override by hooking into the `kbs_agent_can_submit` filter
 
 **Tweaks**
 
@@ -560,7 +560,7 @@ Within core, tickets may only be assigned to departments via front end submissio
 
 **Tweaks**
 
-* Added most popular articles to KBS Ticket Summary dahboard widget
+* Added most popular articles to KBS Ticket Summary dashboard widget
 * Ensure agents always have access to restricted KB Articles
 
 **Bug Fixes**
