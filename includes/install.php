@@ -247,7 +247,7 @@ function kbs_new_blog_created( $blog_id, $user_id, $domain, $path, $site_id, $me
 add_action( 'wpmu_new_blog', 'kbs_new_blog_created', 10, 6 );
 
 /**
- * Drop our custom tables when a mu site is deleted
+ * Drop our custom tables when an mu site is deleted
  *
  * @since   1.2.2
  * @param   array   $tables  The tables to drop

@@ -26,7 +26,6 @@ if ( is_multisite() )   {
     global $wpdb;
 
     foreach ( $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" ) as $blog_id )  {
-        kbs_uninstall();
         switch_to_blog( $blog_id );
         kbs_uninstall();
         restore_current_blog();
@@ -114,6 +113,7 @@ function kbs_uninstall()    {
 
         // Delete all Plugin Options
         delete_option( 'kbs_last_ticket_number' );
+        delete_option( '_kbs_table_check' );
         delete_option( 'kbs_settings' );
         delete_option( 'kbs_version' );
 
