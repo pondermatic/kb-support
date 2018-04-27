@@ -592,7 +592,7 @@ function kbs_remove_inactive_tickets( $query )	{
 add_action( 'pre_get_posts', 'kbs_remove_inactive_tickets' );
 
 /**
- * Customise the view filter counts
+ * Customize the view filter counts
  *
  * @since	1.0
  * @param	arr		$views		Array of views
