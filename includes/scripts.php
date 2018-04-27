@@ -44,6 +44,7 @@ function kbs_load_scripts() {
 		'one_or_more_option'    => __( 'Choose one or more options', 'kb-support' ),
         'permalinks'            => get_option( 'permalink_structure' ) ? '1' : '0',
         'reply_label'           => kbs_get_ticket_reply_label(),
+        'search_placeholder'    => __( 'Search options', 'kb-support' ),
         'submit_ticket'         => kbs_get_form_submit_label(),
 		'submit_ticket_loading' => __( 'Please Wait...', 'kb-support' ),
         'type_to_search'        => __( 'Type to search', 'kb-support' ),
