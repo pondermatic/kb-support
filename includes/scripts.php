@@ -40,14 +40,13 @@ function kbs_load_scripts() {
         'is_submission'         => $is_submission,
 		'max_files'             => kbs_get_max_file_uploads(),
 		'max_files_exceeded'    => kbs_get_notices( 'max_files', true ),
-        'one_option'            => sprintf( __( 'Choose a %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
-		'one_or_more_option'    => sprintf( __( 'Choose one or more %s', 'kb-support' ), kbs_get_ticket_label_plural() ),
+        'one_option'            => __( 'Choose an option', 'kb-support' ),
+		'one_or_more_option'    => __( 'Choose one or more options', 'kb-support' ),
         'permalinks'            => get_option( 'permalink_structure' ) ? '1' : '0',
         'reply_label'           => kbs_get_ticket_reply_label(),
-        'search_placeholder'    => __( 'Type to search all options', 'kb-support' ),
         'submit_ticket'         => kbs_get_form_submit_label(),
 		'submit_ticket_loading' => __( 'Please Wait...', 'kb-support' ),
-        'type_to_search'        => __( 'Type to search %s', 'kb-support' ),
+        'type_to_search'        => __( 'Type to search', 'kb-support' ),
 	) ) );
 
 	if ( $is_submission )	{
