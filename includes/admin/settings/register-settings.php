@@ -850,7 +850,31 @@ function kbs_get_registered_settings() {
 						'desc' => sprintf( __( 'Label shown next to the agree to privacy policy checkbox. This text will link to your defined <a href="%s">privacy policy</a>.', 'kb-support' ), esc_attr( admin_url( 'privacy.php' ) ) ),
 						'type' => 'text',
 						'size' => 'regular'
-					)
+					),
+                    'privacy_export_erase_settings' => array(
+						'id'   => 'privacy_export_erase_settings',
+						'name' => '<h3>' . __( 'Export & Erase Settings', 'kb-support' ) . '</h3>',
+						'type' => 'header',
+                        'desc' => sprintf(
+                            __( 'These are the actions that will be taken on associated %s when a user/customer requests to be removed from your site or anonymized', 'kb-support' ),
+                            kbs_get_ticket_label_plural( true )
+                        )
+					),
+                    'ticket_privacy_action' => array(
+                        'id'      => 'ticket_privacy_action',
+                        'name'    => sprintf( '%s', kbs_get_ticket_label_plural() ),
+                        'desc'    => sprintf(
+                            __( 'This is the action that will be taken on associated %s when a user/customer requests to be anonymized or removed from your site.', 'kb-support' ),
+                            kbs_get_ticket_label_plural( true )
+                        ),
+                        'type'    => 'select',
+                        'options' => array(
+                            'none'      => __( 'None', 'kb-support' ),
+                            'anonymize' => __( 'Anonymize', 'kb-support' ),
+                            'delete'    => __( 'Delete', 'kb-support' ),
+                        ),
+                        'std'     => 'none'
+                    )
 				),
 				'terms_conditions'     => array(
 					'terms_settings' => array(

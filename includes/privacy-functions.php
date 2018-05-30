@@ -459,14 +459,14 @@ function _kbs_anonymize_ticket( $ticket_id = 0 ) {
  */
 function _kbs_privacy_get_ticket_action( KBS_Ticket $ticket ) {
 
-	$action = kbs_get_option( 'ticket_privacy_status_action_' . $ticket->status, false );
+	$action = kbs_get_option( 'ticket_privacy_action', false );
 
 	// If the admin has not saved any special settings for the actions to be taken, use defaults.
 	if ( empty( $action ) ) {
 
 		switch ( $ticket->status ) {
 
-			case 'open':
+            case 'open':
 			case 'hold':
 			case 'closed':
 				$action = 'anonymize';

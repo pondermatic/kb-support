@@ -72,6 +72,10 @@ function kbs_do_automatic_upgrades() {
 		kbs_v12_upgrades();
 	}
 
+    if ( version_compare( $kbs_version, '1.2.2', '<' ) ) {
+		kbs_v122_upgrades();
+	}
+
 	if ( version_compare( $kbs_version, KBS_VERSION, '<' ) )	{
 
 		// Let us know that an upgrade has happened
@@ -456,3 +460,23 @@ function kbs_v12_upgrades()	{
     flush_rewrite_rules();
 
 } // kbs_v12_upgrades
+
+/**
+ * Upgrade routine for version 1.2.2.
+ *
+ * - Add default privacy setting option values.
+ *
+ * @since	1.2.2
+ * @return	void
+ */
+function kbs_v122_upgrades()	{
+    $new_options = array(
+        'show_agree_to_privacy_policy' => false,
+        'agree_privacy_label'          => '',
+        'ticket_privacy_action'        => 'none'
+    );
+
+    foreach( $new_options as $option => $value )    {
+        kbs_update_option( $option, $value );
+    }
+} // kbs_v122_upgrades
