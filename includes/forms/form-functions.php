@@ -1038,7 +1038,7 @@ add_action( 'kbs_form_display_checkbox_field', 'kbs_display_form_checkbox_field'
  */
 function kbs_render_agree_to_privacy_policy_field()	{
 	$agree_to_policy = kbs_get_option( 'show_agree_to_privacy_policy', false );
-	$privacy_page    = get_option( 'wp_page_for_privacy_policy' );
+	$privacy_page    = kbs_get_privacy_page();
 	$label           = kbs_get_option( 'agree_privacy_label', false );
     $description     = kbs_get_option( 'agree_privacy_descripton', false );
 

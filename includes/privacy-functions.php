@@ -14,6 +14,19 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Retrieve the privacy page.
+ *
+ * @since   1.2.2
+ * @return  int     The page ID for the privacy policy
+ */
+function kbs_get_privacy_page() {
+    $privacy_page    = get_option( 'wp_page_for_privacy_policy' );
+    $privacy_page    = apply_filters( 'kbs_privacy_page', $privacy_page );
+
+    return $privacy_page;
+} // kbs_get_privacy_page
+
+/**
  * Register the KBS template for a privacy policy.
  *
  * Note, this is just a suggestion and should be customized to meet your businesses needs.
