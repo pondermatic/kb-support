@@ -138,6 +138,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 **Other Changes in this Version**
 
+**New**: Added the ticket title column to the ticket history front end page
 **New**: Search extisting tickets by post ID or ticket number. Prefix the search string with *#* to conduct this search
 **New**: Add a description to the Terms and Privacy Policy acceptance fields via Tickets -> Settings -> Compliance
 **Tweak**: Moved Terms & Conditions options to the Settings -> Compliance tab
