@@ -417,11 +417,13 @@ add_action( 'wp_ajax_kbs_order_form_fields', 'kbs_ajax_order_form_fields' );
  */
 function kbs_ajax_validate_form_submission()	{
 
-	$form           = new KBS_Form( $_POST['kbs_form_id'] );
-	$error          = false;
-	$agree_to_terms = kbs_get_option( 'show_agree_to_terms', false );
-	$agree_text     = kbs_get_option( 'agree_text', false );
-	$field          = '';
+	$form            = new KBS_Form( $_POST['kbs_form_id'] );
+	$error           = false;
+	$agree_to_policy = kbs_get_option( 'show_agree_to_privacy_policy', false );
+	$privacy_page    = kbs_get_privacy_page();
+	$agree_to_terms  = kbs_get_option( 'show_agree_to_terms', false );
+	$agree_text      = kbs_get_option( 'agree_terms_text', false );
+	$field           = '';
 
 	if ( ! kbs_user_can_submit() )	{
 		wp_send_json( array(
@@ -481,6 +483,13 @@ function kbs_ajax_validate_form_submission()	{
 			) );
 		}
 	
+	}
+
+	if ( $agree_to_policy && $privacy_page && empty( $_POST['kbs_agree_privacy_policy'] ) )	{
+		wp_send_json( array(
+			'error' => kbs_form_submission_errors( 0, 'agree_to_policy' ),
+			'field' => 'kbs-agree-privacy-policy'
+		) );
 	}
 
 	if ( $agree_to_terms && $agree_text && empty( $_POST['kbs_agree_terms'] ) )	{

@@ -394,6 +394,55 @@ function kbs_restrict_agent_ticket_view( $query )	{
 add_action( 'pre_get_posts', 'kbs_restrict_agent_ticket_view' );
 
 /**
+ * Search by ticket ID.
+ *
+ * Allows user to search for ticket by either Post ID or Ticket number.
+ * Searches should be prefixed with '#'
+ *
+ * @since   1.3
+ * @param   object  $query  The WP Query object
+ * @return  object  The WP Query object
+ */
+function kbs_search_ticket_list_by_id( $query ) {
+
+    global $pagenow, $typenow;
+
+    if ( 'edit.php' != $pagenow && 'kbs_ticket' != $typenow )   {
+        return;
+    }
+
+    if ( ! isset( $query->query_vars['s'] ) )   {
+        return;
+    }
+
+    if ( '#' != substr( $query->query_vars['s'], 0, 1 ) )  {
+        return;
+    }
+
+    $id = substr( $query->query_vars['s'], 1 );
+
+    if ( ! $id )    {
+        return;
+    }
+
+    if ( is_numeric( $id ) && get_post( $id ) )  {
+
+        $query->query_vars['p'] = $id;
+
+    } elseif ( kbs_use_sequential_ticket_numbers() )	{
+
+        $query->query_vars['meta_key']   = '_kbs_ticket_number';
+        $query->query_vars['meta_value'] = $id;
+
+    }
+
+    unset( $query->query_vars['s'] );
+    add_filter( 'get_search_query', function() { return $_GET['s']; } );
+
+} // kbs_search_ticket_list_by_id
+add_action( 'parse_request', 'kbs_search_ticket_list_by_id' );
+
+/**
  * Add Ticket Filters
  *
  * Adds taxonomy drop down filters for tickets.
@@ -543,7 +592,7 @@ function kbs_remove_inactive_tickets( $query )	{
 add_action( 'pre_get_posts', 'kbs_remove_inactive_tickets' );
 
 /**
- * Customise the view filter counts
+ * Customize the view filter counts
  *
  * @since	1.0
  * @param	arr		$views		Array of views

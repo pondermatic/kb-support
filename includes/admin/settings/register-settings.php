@@ -829,6 +829,107 @@ function kbs_get_registered_settings() {
 				)
 			)
 		),
+		/** Compliance Settings */
+		'terms_compliance' => apply_filters( 'kbs_settings_terms_compliance',
+			array(
+				'privacy'     => array(
+					'privacy_settings' => array(
+						'id'   => 'privacy_settings',
+						'name' => '<h3>' . __( 'Agreement Settings', 'kb-support' ) . '</h3>',
+						'type' => 'header',
+					),
+					'show_agree_to_privacy_policy' => array(
+						'id'   => 'show_agree_to_privacy_policy',
+						'name' => __( 'Agree to Privacy Policy?', 'kb-support' ),
+						'desc' => sprintf( __( 'Check this to show an agree to terms on the submission page that users must agree to before submitting their %s.', 'kb-support' ), strtolower( $single ) ),
+						'type' => 'checkbox'
+					),
+					'agree_privacy_label' => array(
+						'id'   => 'agree_privacy_label',
+						'name' => __( 'Agree to Privacy Policy Label', 'kb-support' ),
+						'desc' => sprintf( __( 'Label shown next to the agree to privacy policy checkbox. This text will link to your defined <a href="%s">privacy policy</a>.', 'kb-support' ), esc_attr( admin_url( 'privacy.php' ) ) ),
+						'type' => 'text',
+						'size' => 'regular'
+					),
+                    'agree_privacy_descripton' => array(
+						'id'   => 'agree_privacy_descripton',
+						'name' => __( 'Agree to Privacy Policy Description', 'kb-support' ),
+						'desc' => __( 'Description shown under the Agree to Privacy Policy field. Leave blank for none', 'kb-support' ),
+						'type' => 'text',
+						'size' => 'regular'
+					),
+                    'privacy_export_erase_settings' => array(
+						'id'   => 'privacy_export_erase_settings',
+						'name' => '<h3>' . __( 'Export & Erase Settings', 'kb-support' ) . '</h3>',
+						'type' => 'header',
+                        'desc' => sprintf(
+                            __( 'These are the actions that will be taken on associated %s when a user/customer requests to be removed from your site or anonymized', 'kb-support' ),
+                            kbs_get_ticket_label_plural( true )
+                        )
+					),
+                    'ticket_privacy_action' => array(
+                        'id'      => 'ticket_privacy_action',
+                        'name'    => sprintf( '%s', kbs_get_ticket_label_plural() ),
+                        'desc'    => sprintf(
+                            __( 'This is the action that will be taken on associated %s when a user/customer requests to be anonymized or removed from your site.', 'kb-support' ),
+                            kbs_get_ticket_label_plural( true )
+                        ),
+                        'type'    => 'select',
+                        'options' => array(
+                            'none'      => __( 'None', 'kb-support' ),
+                            'anonymize' => __( 'Anonymize', 'kb-support' ),
+                            'delete'    => __( 'Delete', 'kb-support' ),
+                        ),
+                        'std'     => 'none'
+                    )
+				),
+				'terms_conditions'     => array(
+					'terms_settings' => array(
+						'id'   => 'terms_settings',
+						'name' => '<h3>' . __( 'Agreement Settings', 'kb-support' ) . '</h3>',
+						'type' => 'header',
+					),
+					'show_agree_to_terms' => array(
+						'id'   => 'show_agree_to_terms',
+						'name' => __( 'Agree to Terms', 'kb-support' ),
+						'desc' => sprintf( __( 'Check this to show an agree to terms on the submission page that users must agree to before submitting their %s.', 'kb-support' ), strtolower( $single ) ),
+						'type' => 'checkbox',
+						'std'  => false
+					),
+					'agree_terms_label' => array(
+						'id'   => 'agree_terms_label',
+						'name' => __( 'Agree to Terms Label', 'kb-support' ),
+						'desc' => __( 'Label shown next to the agree to terms checkbox.', 'kb-support' ),
+						'type' => 'text',
+						'size' => 'regular',
+						'std'  => __( 'I have read and agree to the terms and conditions', 'kb-support' )
+					),
+                    'agree_terms_description' => array(
+						'id'   => 'agree_terms_description',
+						'name' => __( 'Agree to Terms Description', 'kb-support' ),
+						'desc' => __( 'Description shown under the Agree to Terms field. Leave blank for none', 'kb-support' ),
+						'type' => 'text',
+						'size' => 'regular'
+					),
+					'agree_terms_heading' => array(
+						'id'   => 'agree_terms_heading',
+						'name' => __( 'Terms Heading', 'kb-support' ),
+						'desc' => __( 'Heading for the agree to terms thickbox.', 'kb-support' ),
+						'type' => 'text',
+						'size' => 'regular',
+						'std'  => sprintf(
+							__( 'Terms and Conditions for Support %s', 'kb-support' ), $plural
+						)
+					),
+					'agree_terms_text' => array(
+						'id'   => 'agree_terms_text',
+						'name' => __( 'Agreement Text', 'kb-support' ),
+						'desc' => __( 'If Agree to Terms is checked, enter the agreement terms here.', 'kb-support' ),
+						'type' => 'rich_editor'
+					)
+				)
+			)
+		),
 		/** Styles Settings */
 		'styles' => apply_filters( 'kbs_settings_styles',
 			array(
@@ -920,44 +1021,6 @@ function kbs_get_registered_settings() {
 						'std'     => 'normal'
 					)
 					
-				),
-				'site_terms'     => array(
-					'terms_settings' => array(
-						'id'   => 'terms_settings',
-						'name' => '<h3>' . __( 'Agreement Settings', 'kb-support' ) . '</h3>',
-						'type' => 'header',
-					),
-					'show_agree_to_terms' => array(
-						'id'   => 'show_agree_to_terms',
-						'name' => __( 'Agree to Terms', 'kb-support' ),
-						'desc' => sprintf( __( 'Check this to show an agree to terms on the submission page that users must agree to before submitting their %s.', 'kb-support' ), strtolower( $single ) ),
-						'type' => 'checkbox',
-						'std'  => false
-					),
-					'agree_label' => array(
-						'id'   => 'agree_label',
-						'name' => __( 'Agree to Terms Label', 'kb-support' ),
-						'desc' => __( 'Label shown next to the agree to terms check box.', 'kb-support' ),
-						'type' => 'text',
-						'size' => 'regular',
-						'std'  => __( 'I have read and agree to the terms and conditions', 'kb-support' )
-					),
-					'agree_heading' => array(
-						'id'   => 'agree_heading',
-						'name' => __( 'Terms Heading', 'kb-support' ),
-						'desc' => __( 'Heading for the agree to terms thickbox.', 'kb-support' ),
-						'type' => 'text',
-						'size' => 'regular',
-						'std'  => sprintf(
-							__( 'Terms and Conditions for Support %s', 'kb-support' ), $plural
-						)
-					),
-					'agree_text' => array(
-						'id'   => 'agree_text',
-						'name' => __( 'Agreement Text', 'kb-support' ),
-						'desc' => __( 'If Agree to Terms is checked, enter the agreement terms here.', 'kb-support' ),
-						'type' => 'rich_editor'
-					)
 				)
 			)
 		)
@@ -1116,11 +1179,12 @@ function kbs_get_settings_tabs() {
 
 	$settings = kbs_get_registered_settings();
 
-	$tabs                 = array();
-	$tabs['general']  = __( 'General', 'kb-support' );
-	$tabs['tickets']  = sprintf( __( '%s', 'kb-support' ), kbs_get_ticket_label_plural() );
-	$tabs['articles'] = sprintf( __( '%s', 'kb-support' ), kbs_get_article_label_plural() );
-	$tabs['emails']   = __( 'Emails', 'kb-support' );
+	$tabs                     = array();
+	$tabs['general']          = __( 'General', 'kb-support' );
+	$tabs['tickets']          = sprintf( __( '%s', 'kb-support' ), kbs_get_ticket_label_plural() );
+	$tabs['articles']         = sprintf( __( '%s', 'kb-support' ), kbs_get_article_label_plural() );
+	$tabs['emails']           = __( 'Emails', 'kb-support' );
+	$tabs['terms_compliance'] = __( 'Compliance', 'kb-support' );
 
 	$tabs = apply_filters( 'kbs_settings_tabs_before_styles', $tabs );
 
@@ -1181,13 +1245,13 @@ function kbs_get_registered_settings_sections() {
 			'main'                 => __( 'General Settings', 'kb-support' ),
 			'pages'                => __( 'Pages', 'kb-support' )
 		) ),
-		'tickets'        => apply_filters( 'kbs_settings_sections_tickets', array(
+		'tickets'    => apply_filters( 'kbs_settings_sections_tickets', array(
 			'main'                 => sprintf( __( 'General %s Settings', 'kb-support' ), $single ),
 			'submit'               => __( 'Submission Settings', 'kb-support' ),
 			'agents'               => __( 'Agent Settings', 'kb-support' ),
 			'sla'                  => __( 'Service Levels', 'kb-support' )
 		) ),
-		'articles'        => apply_filters( 'kbs_settings_sections_articles', array(
+		'articles'   => apply_filters( 'kbs_settings_sections_articles', array(
 			'main'                 => sprintf( __( 'General %s Settings', 'kb-support' ), kbs_get_article_label_singular() ),
 			'restricted_notices'   => __( 'Restricted Content Notices', 'kb-support' )
 		) ),
@@ -1198,6 +1262,10 @@ function kbs_get_registered_settings_sections() {
 			'ticket_closed'        => sprintf( __( '%s Closed', 'kb-support' ), $single ),
 			'ticket_notifications' => __( 'Notifications', 'kb-support' ),
 		) ),
+		'terms_compliance'  => apply_filters( 'kbs_settings_sections_terms_compliance', array(
+			'privacy'              => __( 'Privacy Policy', 'kb-support' ),
+			'terms_conditions'     => __( 'Terms and Conditions', 'kb-support' )
+		) ),
 		'styles'     => apply_filters( 'kbs_settings_sections_styles', array(
 			'main'                 => __( 'Styles', 'kb-support' )
 		) ),
@@ -1207,8 +1275,7 @@ function kbs_get_registered_settings_sections() {
 		'licenses'   => apply_filters( 'kbs_settings_sections_licenses', array() ),
 		'misc'       => apply_filters( 'kbs_settings_sections_misc', array(
 			'main'                 => __( 'Misc Settings', 'kb-support' ),
-			'recaptcha'            => __( 'Google reCaptcha', 'kb-support' ),
-			'site_terms'           => __( 'Terms and Conditions', 'kb-support' )
+			'recaptcha'            => __( 'Google reCaptcha', 'kb-support' )
 		) )
 	);
 

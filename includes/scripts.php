@@ -40,14 +40,14 @@ function kbs_load_scripts() {
         'is_submission'         => $is_submission,
 		'max_files'             => kbs_get_max_file_uploads(),
 		'max_files_exceeded'    => kbs_get_notices( 'max_files', true ),
-        'one_option'            => sprintf( __( 'Choose a %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
-		'one_or_more_option'    => sprintf( __( 'Choose one or more %s', 'kb-support' ), kbs_get_ticket_label_plural() ),
+        'one_option'            => __( 'Choose an option', 'kb-support' ),
+		'one_or_more_option'    => __( 'Choose one or more options', 'kb-support' ),
         'permalinks'            => get_option( 'permalink_structure' ) ? '1' : '0',
         'reply_label'           => kbs_get_ticket_reply_label(),
-        'search_placeholder'    => __( 'Type to search all options', 'kb-support' ),
+        'search_placeholder'    => __( 'Search options', 'kb-support' ),
         'submit_ticket'         => kbs_get_form_submit_label(),
 		'submit_ticket_loading' => __( 'Please Wait...', 'kb-support' ),
-        'type_to_search'        => __( 'Type to search %s', 'kb-support' ),
+        'type_to_search'        => __( 'Type to search', 'kb-support' ),
 	) ) );
 
 	if ( $is_submission )	{
@@ -258,21 +258,6 @@ function kbs_load_admin_scripts( $hook ) {
 
 } // kbs_load_admin_scripts
 add_action( 'admin_enqueue_scripts', 'kbs_load_admin_scripts' );
-
-/**
- * Filter the HTML script tag of an enqueued script.
- *
- * @since   1.0
- * @param   str     $tag    The HTML script tag
- * @param   str     $handle The script handle name
- */
-function kbs_filter_enqueued_script_tags( $tag, $handle )   {
-    if ( 'kbs-font-awesome5' == $handle )    {
-        $tag = str_replace( ' src', ' defer="defer" src', $tag );
-    }
-
-    return $tag;
-} // kbs_filter_enqueued_script_tags
 
 /**
  * At a Glance Icons

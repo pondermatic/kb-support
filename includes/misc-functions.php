@@ -41,6 +41,10 @@ function kbs_get_contextual_help_sidebar_text() {
 		'<p>' . sprintf(
 			__( '<a href="%s" target="_blank">Extensions</a>', 'kb-support' ),
 			esc_url( 'https://kb-support.com/extensions/' )
+		) . '</p>' .
+        '<p>' . sprintf(
+			__( '<a href="%s" target="_blank">Leave a Review</a>', 'kb-support' ),
+			esc_url( 'https://wordpress.org/support/plugin/kb-support/reviews/' )
 		) . '</p>';
 
     return $sidebar_text;

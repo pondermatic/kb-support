@@ -236,6 +236,14 @@ class KBS_Ticket {
 	protected $email = '';
 
 	/**
+	 * Timestamp of when privacu policy was agreed
+	 *
+	 * @since	1.5
+	 * @var		string|false
+	 */
+	protected $privacy_accepted = false;
+
+	/**
 	 * Timestamp of when terms were agreed
 	 *
 	 * @since	1.0
@@ -523,14 +531,15 @@ class KBS_Ticket {
 				'additional_phone' => isset( $this->user_info['additional_phone'] ) ? $this->user_info['additional_phone'] : '',
 				'website'          => isset( $this->user_info['website'] )          ? $this->user_info['website']          : ''
 			),
-			'company_id'   => $this->company_id,
-			'sla_respond'  => $this->sla_respond,
-			'sla_resolve'  => $this->sla_resolve,
-			'status'       => $this->status,
-			'source'       => $this->source,
-			'terms_agree'  => $this->terms_agreed,
-			'files'        => $this->new_files,
-			'form_data'    => $this->form_data
+			'company_id'       => $this->company_id,
+			'sla_respond'      => $this->sla_respond,
+			'sla_resolve'      => $this->sla_resolve,
+			'status'           => $this->status,
+			'source'           => $this->source,
+			'privacy_accepted' => $this->privacy_accepted,
+			'terms_agree'      => $this->terms_agreed,
+			'files'            => $this->new_files,
+			'form_data'        => $this->form_data
 		);
 
 		$args = apply_filters( 'kbs_insert_ticket_args', array(
@@ -621,6 +630,10 @@ class KBS_Ticket {
 
 			if ( ! empty( $this->new_files ) )	{
 				$this->pending['files'] = $this->new_files;
+			}
+
+			if ( ! empty( $this->privacy_accepted ) )	{
+				$this->pending['privacy_accepted'] = $this->privacy_accepted;
 			}
 
 			if ( ! empty( $this->terms_agreed ) )	{
@@ -794,6 +807,10 @@ class KBS_Ticket {
 					case 'status':
 						$this->update_status( $this->status );
             break;
+
+					case 'privacy_accepted':
+						$this->update_meta( '_kbs_ticket_privacy_accepted', $this->privacy_accepted );
+						break;
 
 					case 'terms_agreed':
 						$this->update_meta( '_kbs_ticket_terms_agreed', $this->terms_agreed );
@@ -1811,6 +1828,16 @@ class KBS_Ticket {
 			$output .= sprintf( '<p><strong>%s</strong>: %s</p>',
 				get_the_title( $form_field->ID ),
 				$value
+			);
+		}
+
+		$privacy_accepted = $this->get_meta( '_kbs_ticket_privacy_accepted', true );
+		if ( $privacy_accepted )	{
+			$date_format = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
+
+			$output .= sprintf( '<p class="description">%s: %s</p>',
+				__( 'The privacy policy was acknowledged', 'kb-support' ),
+				date_i18n( $date_format, $privacy_accepted )
 			);
 		}
 

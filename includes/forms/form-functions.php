@@ -718,6 +718,7 @@ function kbs_form_submission_errors( $field_id, $error )	{
 		'process_error'    => __( 'An internal error has occurred, please try again or contact support.', 'kb-support' ),
 		'required'         => get_the_title( $field_id ) . __( ' is a required field.', 'kb-support' ),
 		'invalid_email'    => get_the_title( $field_id ) . __( ' requires a valid email address.', 'kb-support' ),
+		'agree_to_policy'  => __( 'You must acknowledge and accept our privacy policy', 'kb-support' ),
 		'agree_to_terms'   => __( 'You must agree to the terms and conditions', 'kb-support' ),
 		'google_recaptcha' => get_the_title( $field_id ) . __( ' validation failed', 'kb-support' )
 	);
@@ -1030,6 +1031,63 @@ function kbs_display_form_checkbox_field( $field, $settings )	{
 add_action( 'kbs_form_display_checkbox_field', 'kbs_display_form_checkbox_field', 10, 2 );
 
 /**
+ * Render the agree to privacy policy checkbox.
+ *
+ * @since	1.5
+ * @return	string
+ */
+function kbs_render_agree_to_privacy_policy_field()	{
+	$agree_to_policy = kbs_get_option( 'show_agree_to_privacy_policy', false );
+	$privacy_page    = kbs_get_privacy_page();
+	$label           = kbs_get_option( 'agree_privacy_label', false );
+    $description     = kbs_get_option( 'agree_privacy_descripton', false );
+
+	if ( empty( $agree_to_policy ) || empty( $privacy_page ) || empty( $label ) )	{
+    	return;
+	}
+
+	$privacy_text = get_post_field( 'post_content', $privacy_page );
+
+	if ( empty( $privacy_text ) )	{
+		return;
+	}
+
+	$label_class = '';
+	$input_class = '';
+
+	$args = apply_filters( 'kbs_agree_to_privacy_policy_args', array(
+		'label_class' => '',
+		'input_class' => ''
+	) );
+
+	if ( ! empty( $args['label_class'] ) )	{
+		$label_class = ' ' . sanitize_html_class( $args['label_class'] );
+	}
+
+	if ( ! empty( $args['input_class'] ) )	{
+		$input_class = ' class="' . sanitize_html_class( $args['input_class'] ) . '"';
+	}
+
+	ob_start(); ?>
+
+	<p><input type="checkbox" name="kbs_agree_privacy_policy" id="kbs-agree-privacy-policy"<?php echo $input_class; ?> value="1" /> <a href="#TB_inline?width=600&height=550&inlineId=kbs-ticket-privacy-policy" title="<?php echo esc_html( get_the_title( $privacy_page ) ); ?>" class="thickbox"<?php echo $label_class; ?>><?php esc_attr_e( $label, 'kb-support' ); ?></a></p>
+
+	<div id="kbs-ticket-privacy-policy" class="kbs_hidden">
+		<?php do_action( 'kbs_before_privacy_policy' ); ?>
+		<?php echo wpautop( do_shortcode( stripslashes( $privacy_text ) ) ); ?>
+		<?php do_action( 'kbs_after_privacy_policy' ); ?>
+    </div>
+
+    <?php if ( ! empty( $description ) ) : ?>
+        <span class="kbs-description"><?php echo esc_html( $description ); ?></span>
+    <?php endif; ?>
+
+	<?php echo ob_get_clean();
+
+} // kbs_render_agree_to_privacy_policy_field
+add_action( 'kbs_ticket_form_after_fields', 'kbs_render_agree_to_privacy_policy_field', 950 );
+
+/**
  * Render the agree to terms checkbox.
  *
  * @since	1.0
@@ -1037,9 +1095,10 @@ add_action( 'kbs_form_display_checkbox_field', 'kbs_display_form_checkbox_field'
  */
 function kbs_render_agree_to_terms_field()	{
 	$agree_to_terms = kbs_get_option( 'show_agree_to_terms', false );
-	$agree_text     = kbs_get_option( 'agree_text', false );
-	$label          = kbs_get_option( 'agree_label', false );
-	$terms_heading  = kbs_get_option( 'agree_heading', sprintf(
+	$agree_text     = kbs_get_option( 'agree_terms_text', false );
+	$label          = kbs_get_option( 'agree_terms_label', false );
+    $description    = kbs_get_option( 'agree_terms_description', false );
+	$terms_heading  = kbs_get_option( 'agree_terms_heading', sprintf(
 		__( 'Terms and Conditions for Support %s', 'kb-support' ), kbs_get_ticket_label_plural()
 	) );
 
@@ -1072,6 +1131,10 @@ function kbs_render_agree_to_terms_field()	{
 		<?php echo wpautop( stripslashes( $agree_text ) ); ?>
 		<?php do_action( 'kbs_after_terms' ); ?>
     </div>
+
+    <?php if ( ! empty( $description ) ) : ?>
+        <span class="kbs-description"><?php echo esc_html( $description ); ?></span>
+    <?php endif; ?>
 
 	<?php echo ob_get_clean();
 

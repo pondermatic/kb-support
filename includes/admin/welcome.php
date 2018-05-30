@@ -263,7 +263,7 @@ class KBS_Welcome {
 					); ?></p>
 
 					<p><?php printf(
-						__( 'You can now configure and fully customise agent notifications to ensure that any time a support worker is assigned to a %1$s as either the primary agent, or an additional agent, they receive an email notification.', 'kb-support' ),
+						__( 'You can now configure and fully customize agent notifications to ensure that any time a support worker is assigned to a %1$s as either the primary agent, or an additional agent, they receive an email notification.', 'kb-support' ),
 						strtolower( $this->ticket_singular )
 					); ?></p>
 
@@ -365,12 +365,12 @@ class KBS_Welcome {
 
 			<?php $this->tabs(); ?>
 
-            <p class="about-text"><?php _e( 'Getting started with KB Support is easy! It works right from installation but we\'ve put together this quick start guide to help first time users customise the plugin to meet the individual needs of their business. We\'ll have you up and running in no time. Let\'s begin!', 'kb-support' ); ?></p>
+            <p class="about-text"><?php _e( 'Getting started with KB Support is easy! It works right from installation but we\'ve put together this quick start guide to help first time users customize the plugin to meet the individual needs of their business. We\'ll have you up and running in no time. Let\'s begin!', 'kb-support' ); ?></p>
 
             <div class="feature-section clearfix">
 
                 <div class="content feature-section-item">
-                    <h3><?php _e( 'STEP 1: Customise Settings', 'kb-support' ); ?></h3>
+                    <h3><?php _e( 'STEP 1: Customize Settings', 'kb-support' ); ?></h3>
 
                     <p><?php printf(
                         __('KB Support settings enable you to define the communication flow and content between your support business and your customers, as well as determine who can submit a %1$s, how %2$s are assigned to support workers, which tasks support workers can undertake, plus much more...', 'kb-support' ),
@@ -460,7 +460,7 @@ class KBS_Welcome {
                     <h3><?php esc_html_e( 'STEP 4: Optionally Add More Functionality', 'kb-support' ); ?></h3>
 
                     <p><?php printf(
-						__( 'There are many more ways in which you can customise your instance of KB Support. Take a look at our range of <a href="%s" target="_blank">extensions</a> to add even more functionality and review our extensive <a href="%s" target="_blank">support documentation</a> for additional help and tips.', 'kb-support' ),
+						__( 'There are many more ways in which you can customize your instance of KB Support. Take a look at our range of <a href="%s" target="_blank">extensions</a> to add even more functionality and review our extensive <a href="%s" target="_blank">support documentation</a> for additional help and tips.', 'kb-support' ),
 						'https://kb-support.com/extensions/',
 						'https://kb-support.com/support/'
 					); ?></p>

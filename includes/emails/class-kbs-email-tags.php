@@ -209,6 +209,10 @@ function kbs_get_emails_tags_list() {
 	// Get all tags
 	$email_tags = kbs_get_email_tags();
 
+    if ( empty( $email_tags ) || ! is_array( $email_tags ) )    {
+        $email_tags = array();
+    }
+
 	// Check
 	if ( count( $email_tags ) > 0 ) {
 

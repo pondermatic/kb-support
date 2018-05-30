@@ -247,6 +247,32 @@ function kbs_new_blog_created( $blog_id, $user_id, $domain, $path, $site_id, $me
 add_action( 'wpmu_new_blog', 'kbs_new_blog_created', 10, 6 );
 
 /**
+ * Drop our custom tables when an mu site is deleted
+ *
+ * @since   1.2.2
+ * @param   array   $tables  The tables to drop
+ * @param   int     $blog_id The Blog ID being deleted
+ * @return  array   The tables to drop
+ */
+function kbs_wpmu_drop_tables( $tables, $blog_id ) {
+
+	switch_to_blog( $blog_id );
+	$customers_db     = new KBS_DB_Customers();
+	$customer_meta_db = new KBS_DB_Customer_Meta();
+
+	if ( $customers_db->installed() ) {
+		$tables[] = $customers_db->table_name;
+		$tables[] = $customer_meta_db->table_name;
+	}
+
+	restore_current_blog();
+
+	return $tables;
+
+} // kbs_wpmu_drop_tables
+add_filter( 'wpmu_drop_tables', 'kbs_wpmu_drop_tables', 10, 2 );
+
+/**
  * Post-installation
  *
  * Runs just after plugin installation and exposes the
@@ -262,6 +288,28 @@ function kbs_after_install() {
 	}
 
 	$kbs_options     = get_transient( '_kbs_installed' );
+    $kbs_table_check = get_option( '_kbs_table_check', false );
+
+    if ( false === $kbs_table_check || current_time( 'timestamp' ) > $kbs_table_check ) {
+
+        if ( ! @KBS()->customer_meta->installed() ) {
+
+			// Create the customer meta database (this ensures it creates it on multisite instances where it is network activated)
+			@KBS()->customer_meta->create_table();
+
+		}
+
+		if ( ! @KBS()->customers->installed() ) {
+			// Create the customers database (this ensures it creates it on multisite instances where it is network activated)
+			@KBS()->customers->create_table();
+			@KBS()->customer_meta->create_table();
+
+			do_action( 'kbs_after_install', $kbs_options );
+		}
+
+		update_option( '_kbs_table_check', ( current_time( 'timestamp' ) + WEEK_IN_SECONDS ) );
+
+    }
 
 	if ( false !== $kbs_options ) {
 		// Delete the transient
@@ -284,11 +332,11 @@ function kbs_install_roles_on_network() {
 
 	global $wp_roles;
 
-	if( ! is_object( $wp_roles ) ) {
+	if ( ! is_object( $wp_roles ) ) {
 		return;
 	}
 
-	if( ! in_array( 'support_manager', $wp_roles->roles ) ) {
+	if ( empty( $wp_roles->roles ) || ! array_key_exists( 'support_manager', $wp_roles->roles ) ) {
 
 		// Create KBS support roles
 		$roles = new KBS_Roles;

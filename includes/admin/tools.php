@@ -221,6 +221,7 @@ function kbs_tools_sysinfo_get()	{
 	$return .= 'Site URL:                 ' . site_url() . "\n";
 	$return .= 'Home URL:                 ' . home_url() . "\n";
 	$return .= 'Multisite:                ' . ( is_multisite() ? 'Yes' : 'No' ) . "\n";
+    $return .= 'Locale:                   ' . get_locale() . "\n";
 
 	$return  = apply_filters( 'kbs_sysinfo_after_site_info', $return );
 
@@ -309,7 +310,7 @@ function kbs_tools_sysinfo_get()	{
 	// Must-use plugins
 	// NOTE: MU plugins can't show updates!
 	$muplugins = get_mu_plugins();
-	if ( count( $muplugins > 0 ) ) {
+	if ( ! empty( $muplugins ) ) {
 		$return .= "\n" . '-- Must-Use Plugins' . "\n\n";
 
 		foreach( $muplugins as $plugin => $plugin_data ) {
