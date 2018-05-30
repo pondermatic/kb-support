@@ -1040,6 +1040,7 @@ function kbs_render_agree_to_privacy_policy_field()	{
 	$agree_to_policy = kbs_get_option( 'show_agree_to_privacy_policy', false );
 	$privacy_page    = get_option( 'wp_page_for_privacy_policy' );
 	$label           = kbs_get_option( 'agree_privacy_label', false );
+    $description     = kbs_get_option( 'agree_privacy_descripton', false );
 
 	if ( empty( $agree_to_policy ) || empty( $privacy_page ) || empty( $label ) )	{
     	return;
@@ -1077,6 +1078,10 @@ function kbs_render_agree_to_privacy_policy_field()	{
 		<?php do_action( 'kbs_after_privacy_policy' ); ?>
     </div>
 
+    <?php if ( ! empty( $description ) ) : ?>
+        <span class="kbs-description"><?php echo esc_html( $description ); ?></span>
+    <?php endif; ?>
+
 	<?php echo ob_get_clean();
 
 } // kbs_render_agree_to_privacy_policy_field
@@ -1092,6 +1097,7 @@ function kbs_render_agree_to_terms_field()	{
 	$agree_to_terms = kbs_get_option( 'show_agree_to_terms', false );
 	$agree_text     = kbs_get_option( 'agree_text', false );
 	$label          = kbs_get_option( 'agree_label', false );
+    $description    = kbs_get_option( 'agree_terms_description', false );
 	$terms_heading  = kbs_get_option( 'agree_heading', sprintf(
 		__( 'Terms and Conditions for Support %s', 'kb-support' ), kbs_get_ticket_label_plural()
 	) );
@@ -1125,6 +1131,10 @@ function kbs_render_agree_to_terms_field()	{
 		<?php echo wpautop( stripslashes( $agree_text ) ); ?>
 		<?php do_action( 'kbs_after_terms' ); ?>
     </div>
+
+    <?php if ( ! empty( $description ) ) : ?>
+        <span class="kbs-description"><?php echo esc_html( $description ); ?></span>
+    <?php endif; ?>
 
 	<?php echo ob_get_clean();
 

@@ -328,6 +328,7 @@ function kbs_settings_contextual_help() {
             '<ul>' .
 				'<li>' . sprintf( __( '<strong>Agree to Privacy Policy?</strong> - Select this option to insert a field into your %1$s submission form that customers must select to indicate they have read and agreed to your Privacy Policy. Your <a href="%2$s">privacy policy</a> is <a href="%2$s">defined here</a>.', 'kb-support' ), strtolower( $ticket_singular ), admin_url( 'privacy.php' ) ) . '</li>' .
 				'<li>' . __( '<strong>Agree to Privacy Policy Label</strong> - This is the label that will accompany the checkbox for privacy policy agreement.', 'kb-support' ) . '</li>' .
+                '<li>' . __( '<strong>Agree to Privacy Policy Description</strong> - Optionally enter a description to be displayed below the <em>Agree to Privacy Policy</em> field.', 'kb-support' ) . '</li>' .
                 '<li>' . sprintf( __( '<strong>%1$s</strong> - Select the action you want taken with regards to customer data that is stored within their %2$s when you action their request to anomylize or erase their data from your site.', 'mobile-dj-manager' ), $ticket_plural, strtolower( $ticket_plural ) ) . '</li>' .
             '</ul>' .
             '<p>' . __( '<strong>Terms and Conditions</strong>', 'kb-support' ) . '<br />' .
@@ -335,6 +336,7 @@ function kbs_settings_contextual_help() {
 			'<ul>' .
 				'<li>' . sprintf( __( '<strong>Agree to Terms</strong> - Select this option to insert a field into your %1$s submission form that customers must select to indicate they have read and agreed to your Terms and Conditions.', 'kb-support' ), strtolower( $ticket_singular ) ) . '</li>' .
 				'<li>' . __( '<strong>Agree to Terms Label</strong> - This is the label that will accompany the checkbox for terms agreement.', 'kb-support' ) . '</li>' .
+                '<li>' . __( '<strong>Agree to Terms Description</strong> - Optionally enter a description to be displayed below the <em>Agree to Terms</em> field.', 'kb-support' ) . '</li>' .
 				'<li>' . __( '<strong>Terms Heading</strong> - Enter a heading that will appear at the top of the Terms and Conditions pop-up window.', 'kb-support' ) . '</li>' .
 				'<li>' . __( '<strong>Agreement Text</strong> - Enter your Terms and Conditions here.', 'kb-support' ) . '</li>' .
 			'</ul>'

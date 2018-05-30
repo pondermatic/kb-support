@@ -473,7 +473,9 @@ function kbs_v122_upgrades()	{
     $new_options = array(
         'show_agree_to_privacy_policy' => false,
         'agree_privacy_label'          => '',
-        'ticket_privacy_action'        => 'none'
+        'ticket_privacy_action'        => 'none',
+        'agree_terms_description'      => '',
+        'agree_privacy_description'    => ''
     );
 
     foreach( $new_options as $option => $value )    {

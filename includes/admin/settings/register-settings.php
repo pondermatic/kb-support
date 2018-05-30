@@ -851,6 +851,13 @@ function kbs_get_registered_settings() {
 						'type' => 'text',
 						'size' => 'regular'
 					),
+                    'agree_privacy_descripton' => array(
+						'id'   => 'agree_privacy_descripton',
+						'name' => __( 'Agree to Privacy Policy Description', 'kb-support' ),
+						'desc' => __( 'Description shown under the Agree to Privacy Policy field. Leave blank for none', 'kb-support' ),
+						'type' => 'text',
+						'size' => 'regular'
+					),
                     'privacy_export_erase_settings' => array(
 						'id'   => 'privacy_export_erase_settings',
 						'name' => '<h3>' . __( 'Export & Erase Settings', 'kb-support' ) . '</h3>',
@@ -896,6 +903,13 @@ function kbs_get_registered_settings() {
 						'type' => 'text',
 						'size' => 'regular',
 						'std'  => __( 'I have read and agree to the terms and conditions', 'kb-support' )
+					),
+                    'agree_terms_description' => array(
+						'id'   => 'agree_terms_description',
+						'name' => __( 'Agree to Terms Description', 'kb-support' ),
+						'desc' => __( 'Description shown under the Agree to Terms field. Leave blank for none', 'kb-support' ),
+						'type' => 'text',
+						'size' => 'regular'
 					),
 					'agree_heading' => array(
 						'id'   => 'agree_heading',
