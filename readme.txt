@@ -2,9 +2,9 @@
 Contributors: kbsupport, mikeyhoward1977
 Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
-Tested up to: 4.9.5
+Tested up to: 4.9.6
 Requires PHP: 5.4
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -122,6 +122,32 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.2.2 =
+
+** Wednesday, 30th May 2018**
+
+**GDPR Features**
+
+**New**: Added GDPR Privacy Policy template
+**New**: Added **Compliance** tab within Settings page
+**New**: **Agree to Privacy Policy** setting forces customers to agree to the Privacy Policy before submitting ticket forms
+**New**: Export KBS Customer data with WP user data when exporting personal data
+**New**: Erase KBS Customer data with WP user data when erasing personal data
+**New**: Select process for handling customer data when customers request to be anonymized or erased from your site
+
+**Other Changes in this Version**
+
+**New**: Search extisting tickets by post ID or ticket number. Prefix the search string with *#* to conduct this search
+**New**: Add a description to the Terms and Privacy Policy acceptance fields via Tickets -> Settings -> Compliance
+**Tweak**: Moved Terms & Conditions options to the Settings -> Compliance tab
+**Tweak**: Adjusted the default chosen select search text to `Type to Search` and `Choose an Option`
+**Tweak**: Improved the installation procedures for multi site
+**Tweak**: Improved the uninstall procedures for multi site
+**Tweak**: Removed unneeded filter during enqueuing of Font Awesome script
+**Tweak**: Added advisory notice for discount of first extension
+**Tweak**: Localization work
+**Bug**: Count error on system tools page resolved
 
 = 1.2.1 =
 
