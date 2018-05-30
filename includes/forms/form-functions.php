@@ -1095,10 +1095,10 @@ add_action( 'kbs_ticket_form_after_fields', 'kbs_render_agree_to_privacy_policy_
  */
 function kbs_render_agree_to_terms_field()	{
 	$agree_to_terms = kbs_get_option( 'show_agree_to_terms', false );
-	$agree_text     = kbs_get_option( 'agree_text', false );
-	$label          = kbs_get_option( 'agree_label', false );
+	$agree_text     = kbs_get_option( 'agree_terms_text', false );
+	$label          = kbs_get_option( 'agree_terms_label', false );
     $description    = kbs_get_option( 'agree_terms_description', false );
-	$terms_heading  = kbs_get_option( 'agree_heading', sprintf(
+	$terms_heading  = kbs_get_option( 'agree_terms_heading', sprintf(
 		__( 'Terms and Conditions for Support %s', 'kb-support' ), kbs_get_ticket_label_plural()
 	) );
 

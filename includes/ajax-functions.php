@@ -422,7 +422,7 @@ function kbs_ajax_validate_form_submission()	{
 	$agree_to_policy = kbs_get_option( 'show_agree_to_privacy_policy', false );
 	$privacy_page    = get_option( 'wp_page_for_privacy_policy' );
 	$agree_to_terms  = kbs_get_option( 'show_agree_to_terms', false );
-	$agree_text      = kbs_get_option( 'agree_text', false );
+	$agree_text      = kbs_get_option( 'agree_terms_text', false );
 	$field           = '';
 
 	if ( ! kbs_user_can_submit() )	{

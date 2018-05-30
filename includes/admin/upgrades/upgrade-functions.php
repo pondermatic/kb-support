@@ -465,20 +465,33 @@ function kbs_v12_upgrades()	{
  * Upgrade routine for version 1.2.2.
  *
  * - Add default privacy setting option values.
+ * - Rename terms and condition option names.
  *
  * @since	1.2.2
  * @return	void
  */
 function kbs_v122_upgrades()	{
+    $kbs_options   = get_option( 'kbs_settings' );
+    $terms_label   = ! empty( $kbs_options['agree_label'] ) ? $kbs_options['agree_label'] : __( 'I have read and agree to the terms and conditions', 'kb-support' );
+    $terms_text    = ! empty( $kbs_options['agree_text'] ) ? $kbs_options['agree_text'] : '';
+    $terms_heading = ! empty( $kbs_options['agree_heading'] ) ? $kbs_options['agree_heading'] : sprintf( __( 'Terms and Conditions for Support %s', 'kb-support' ), kbs_get_ticket_label_plural() );
+
     $new_options = array(
         'show_agree_to_privacy_policy' => false,
         'agree_privacy_label'          => '',
         'ticket_privacy_action'        => 'none',
+        'agree_terms_label'            => $terms_label,
+        'agree_terms_heading'          => $terms_heading,
         'agree_terms_description'      => '',
+        'agree_terms_text'             => $terms_text,
         'agree_privacy_description'    => ''
     );
 
     foreach( $new_options as $option => $value )    {
         kbs_update_option( $option, $value );
     }
+
+    kbs_delete_option( 'agree_label' );
+    kbs_delete_option( 'agree_heading' );
+    kbs_delete_option( 'agree_text' );
 } // kbs_v122_upgrades

@@ -896,8 +896,8 @@ function kbs_get_registered_settings() {
 						'type' => 'checkbox',
 						'std'  => false
 					),
-					'agree_label' => array(
-						'id'   => 'agree_label',
+					'agree_terms_label' => array(
+						'id'   => 'agree_terms_label',
 						'name' => __( 'Agree to Terms Label', 'kb-support' ),
 						'desc' => __( 'Label shown next to the agree to terms checkbox.', 'kb-support' ),
 						'type' => 'text',
@@ -911,8 +911,8 @@ function kbs_get_registered_settings() {
 						'type' => 'text',
 						'size' => 'regular'
 					),
-					'agree_heading' => array(
-						'id'   => 'agree_heading',
+					'agree_terms_heading' => array(
+						'id'   => 'agree_terms_heading',
 						'name' => __( 'Terms Heading', 'kb-support' ),
 						'desc' => __( 'Heading for the agree to terms thickbox.', 'kb-support' ),
 						'type' => 'text',
@@ -921,8 +921,8 @@ function kbs_get_registered_settings() {
 							__( 'Terms and Conditions for Support %s', 'kb-support' ), $plural
 						)
 					),
-					'agree_text' => array(
-						'id'   => 'agree_text',
+					'agree_terms_text' => array(
+						'id'   => 'agree_terms_text',
 						'name' => __( 'Agreement Text', 'kb-support' ),
 						'desc' => __( 'If Agree to Terms is checked, enter the agreement terms here.', 'kb-support' ),
 						'type' => 'rich_editor'
