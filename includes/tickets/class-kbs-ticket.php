@@ -452,8 +452,7 @@ class KBS_Ticket {
 		$this->status          = $ticket->post_status;
 		$this->post_status     = $this->status;
 
-		$all_ticket_statuses   = kbs_get_ticket_statuses();
-		$this->status_nicename = array_key_exists( $this->post_status, $all_ticket_statuses ) ? $all_ticket_statuses[ $this->status ] : ucfirst( $this->status );
+		$this->status_nicename = kbs_get_post_status_label( $this->status );
 
 		// Content & Replies
 		$this->ticket_title    = $ticket->post_title;
@@ -929,8 +928,7 @@ class KBS_Ticket {
 
 			$updated = wp_update_post( $update_fields );
 
-			$all_ticket_statuses   = kbs_get_ticket_statuses();
-			$this->status_nicename = array_key_exists( $status, $all_ticket_statuses ) ? $all_ticket_statuses[ $status ] : ucfirst( $status );
+			$this->status_nicename = kbs_get_post_status_label( $status );
 
 			// Process any specific status functions
 			switch( $status ) {

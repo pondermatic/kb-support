@@ -395,6 +395,24 @@ function kbs_get_post_statuses( $output = 'names', $allowed_only = false )	{
 } // kbs_get_post_statuses
 
 /**
+ * Retrieve the label for the given post status.
+ *
+ * @since	1.2.3
+ * @param	string	$post_status	The post status to retrieve the label for
+ * @return	string	The post status label
+ */
+function kbs_get_post_status_label( $post_status )	{
+	$status_object = get_post_status_object( $post_status );
+	$label         = '';
+
+	if ( ! empty( $status_object ) )	{
+		$label = $status_object->label;
+	}
+
+	return $label;
+} // kbs_get_post_status_label
+
+/**
  * Updated Messages
  *
  * Returns an array of with all updated messages.
