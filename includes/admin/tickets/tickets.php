@@ -352,8 +352,15 @@ function kbs_restrict_agent_ticket_view( $query )	{
 		return;
 	}
 
+	$agents_only = kbs_get_option( 'admin_agents' );
+
+	if ( empty( $agents_only ) && current_user_can( 'administrator' ) )	{
+		$query->set( 'p', '99999999' );
+		return;
+	}
+
 	// If user is admin and admins are agents, they see all.
-	if ( kbs_get_option( 'admin_agents' ) && ( current_user_can( 'manage_ticket_settings' ) || current_user_can( 'administrator' ) ) )	{
+	if ( current_user_can( 'manage_ticket_settings' ) )	{
 		return;
 	}
 
