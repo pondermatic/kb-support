@@ -609,6 +609,10 @@ function kbs_ticket_filter_views( $views )	{
 
 	$active_only = kbs_get_option( 'hide_closed' );
 
+	if ( isset( $views['mine'] ) )	{
+		unset( $views['mine'] );
+	}
+
 	if ( 'kbs_ticket' != get_post_type() || ! $active_only )	{
 		return $views;
 	}
