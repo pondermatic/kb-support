@@ -352,9 +352,9 @@ function kbs_restrict_agent_ticket_view( $query )	{
 		return;
 	}
 
-	$agents_only = kbs_get_option( 'admin_agents' );
+	$admin_agents = kbs_get_option( 'admin_agents' );
 
-	if ( empty( $agents_only ) && current_user_can( 'administrator' ) )	{
+	if ( empty( $admin_agents ) && current_user_can( 'administrator' ) )	{
 		$query->set( 'p', '99999999' );
 		return;
 	}
