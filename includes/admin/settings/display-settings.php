@@ -108,7 +108,7 @@ function kbs_options_page() {
 		</h1>
 		<?php
 
-		$number_of_sections = count( $sections );
+		$number_of_sections = is_array( $sections ) ? count( $sections ) : 0;
 		$number = 0;
 		if ( $number_of_sections > 1 ) {
 			echo '<div><ul class="subsubsub">';

@@ -64,8 +64,11 @@ function kbs_admin_footer_for_thickbox() {
 
 	global $pagenow, $typenow;
 
+    $post_types = array( 'kbs_ticket' );
+	$post_types = apply_filters( 'kbs_link_article_media_button_post_types', $post_types );
+
 	// Only run in post/page creation and edit screens
-	if ( in_array( $pagenow, array( 'post.php', 'page.php', 'post-new.php', 'post-edit.php' ) ) && 'kbs_ticket' == $typenow )	{
+	if ( in_array( $pagenow, array( 'post.php', 'page.php', 'post-new.php', 'post-edit.php' ) ) && in_array( $typenow, $post_types ) )	{
 
 		$single_article = kbs_get_article_label_singular(); ?>
 

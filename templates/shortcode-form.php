@@ -28,35 +28,39 @@ global $kbs_form;
 					<?php $label_class = ''; ?>
                     <?php $settings    = $kbs_form->get_field_settings( $field->ID ); ?>
 
-                    <p class="<?php echo $field->post_name; ?>">
-                        <?php if ( empty( $settings['hide_label'] ) && 'recaptcha' != $settings['type'] ) : ?>
-                            <?php if ( ! empty( $settings['label_class'] ) ) : ?>
-                                <?php $label_class = ' class="' . sanitize_html_class( $settings['label_class'] ) . '"'; ?>
-                            <?php endif; ?>
-
-                            <label for="<?php echo $field->post_name; ?>"<?php echo $label_class; ?>>
-
-                                <?php echo esc_attr( get_the_title( $field->ID ) ); ?>
-
-                                <?php if ( $settings['required'] ) : ?>
-                                    <span class="kbs-required-indicator">*</span>
+                    <?php if ( 'hidden' != $settings['type'] ) : ?>
+                        <p class="<?php echo $field->post_name; ?>">
+                    <?php endif; ?>
+                            <?php if ( empty( $settings['hide_label'] ) && 'recaptcha' != $settings['type'] ) : ?>
+                                <?php if ( ! empty( $settings['label_class'] ) ) : ?>
+                                    <?php $label_class = ' class="' . sanitize_html_class( $settings['label_class'] ) . '"'; ?>
                                 <?php endif; ?>
 
-                            </label>
+                                <label for="<?php echo $field->post_name; ?>"<?php echo $label_class; ?>>
 
-                            <?php if ( ! empty( $settings['description'] ) && 'label' == $settings['description_pos'] ) : ?>
+                                    <?php echo esc_attr( get_the_title( $field->ID ) ); ?>
+
+                                    <?php if ( $settings['required'] ) : ?>
+                                        <span class="kbs-required-indicator">*</span>
+                                    <?php endif; ?>
+
+                                </label>
+
+                                <?php if ( ! empty( $settings['description'] ) && 'label' == $settings['description_pos'] ) : ?>
+                                    <?php kbs_display_form_field_description( $field, $settings ); ?>
+                                <?php endif; ?>
+
+                            <?php endif; ?>
+
+                            <?php $kbs_form->display_field( $field, $settings ); ?>
+
+                            <?php if ( ! empty( $settings['description'] ) && 'field' == $settings['description_pos'] ) : ?>
                                 <?php kbs_display_form_field_description( $field, $settings ); ?>
                             <?php endif; ?>
 
-                        <?php endif; ?>
-
-                        <?php $kbs_form->display_field( $field, $settings ); ?>
-
-                        <?php if ( ! empty( $settings['description'] ) && 'field' == $settings['description_pos'] ) : ?>
-                            <?php kbs_display_form_field_description( $field, $settings ); ?>
-                        <?php endif; ?>
-
-                    </p>
+                    <?php if ( 'hidden' != $settings['type'] ) : ?>
+                        </p>
+                    <?php endif; ?>
 
 					<?php if ( ! empty( $settings['kb_search'] ) ) : ?>
                         <div id="kbs-loading" class="kbs-loader kbs-hidden"></div>

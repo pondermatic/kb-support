@@ -885,7 +885,7 @@ function kbs_display_form_textarea_field( $field, $settings )	{
 
 		$output = sprintf( '<textarea name="%1$s" id="%1$s"%2$s%3$s></textarea>',
 			esc_attr( $field->post_name ),
-			$class,
+			! empty( $class ) ? ' class="' . $class . '"' : '',
 			$placeholder
 		);
 

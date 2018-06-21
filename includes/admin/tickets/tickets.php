@@ -352,8 +352,15 @@ function kbs_restrict_agent_ticket_view( $query )	{
 		return;
 	}
 
+	$admin_agents = kbs_get_option( 'admin_agents' );
+
+	if ( empty( $admin_agents ) && current_user_can( 'administrator' ) )	{
+		$query->set( 'p', '99999999' );
+		return;
+	}
+
 	// If user is admin and admins are agents, they see all.
-	if ( kbs_get_option( 'admin_agents' ) && ( current_user_can( 'manage_ticket_settings' ) || current_user_can( 'administrator' ) ) )	{
+	if ( current_user_can( 'manage_ticket_settings' ) )	{
 		return;
 	}
 
@@ -601,6 +608,10 @@ add_action( 'pre_get_posts', 'kbs_remove_inactive_tickets' );
 function kbs_ticket_filter_views( $views )	{
 
 	$active_only = kbs_get_option( 'hide_closed' );
+
+	if ( isset( $views['mine'] ) )	{
+		unset( $views['mine'] );
+	}
 
 	if ( 'kbs_ticket' != get_post_type() || ! $active_only )	{
 		return $views;

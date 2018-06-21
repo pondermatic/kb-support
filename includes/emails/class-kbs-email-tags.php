@@ -345,6 +345,11 @@ function kbs_setup_email_tags() {
 			'description' => sprintf( __( 'The unique ID number for this %s', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_ticket_id'
 		),
+        array(
+			'tag'         => 'ticket_status',
+			'description' => sprintf( __( 'The current status of the %s', 'kb-support' ), strtolower( $ticket_singular ) ),
+			'function'    => 'kbs_email_tag_ticket_status'
+		),
 		array(
 			'tag'         => 'ticket_title',
 			'description' => sprintf( __( 'Title of the %s', 'kb-support' ), strtolower( $ticket_singular ) ),
@@ -645,11 +650,23 @@ function kbs_email_tag_time( $ticket_id ) {
  *
  * @since	1.0
  * @param	int		$ticket_id
- * @return	int		ticket_id
+ * @return	int		Ticket number
  */
 function kbs_email_tag_ticket_id( $ticket_id ) {
 	return kbs_get_ticket_number( $ticket_id );
 } // kbs_email_tag_ticket_id
+
+/**
+ * Email template tag: ticket_status
+ * The current status of the ticket
+ *
+ * @since	1.2.2
+ * @param	int		$ticket_status
+ * @return	int		Ticket post status
+ */
+function kbs_email_tag_ticket_status( $ticket_id ) {
+	return kbs_get_ticket_status( $ticket_id, true );
+} // kbs_email_tag_ticket_status
 
 /**
  * Email template tag: ticket_title

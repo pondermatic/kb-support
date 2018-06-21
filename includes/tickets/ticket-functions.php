@@ -377,7 +377,7 @@ function kbs_get_ticket_status( $ticket, $return_label = false ) {
 
 	if ( array_key_exists( $ticket->status, $statuses ) ) {
 		if ( true === $return_label ) {
-			return $statuses[ $ticket->status ];
+			return $ticket->status_nicename;
 		} else {
 			// Make sure we're matching cases, since they matter
 			return array_search( strtolower( $post_status ), array_map( 'strtolower', $statuses ) );
