@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: KB Support 1.2.2\n"
+"Project-Id-Version: KB Support 1.2.3\n"
 "Report-Msgid-Bugs-To: https://kb-support.com/\n"
-"POT-Creation-Date: 2018-05-30 12:43:13+00:00\n"
+"POT-Creation-Date: 2018-06-21 10:22:08+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -148,8 +148,8 @@ msgstr ""
 
 #: includes/admin/article/article.php:183
 #: includes/admin/article/article.php:198
-#: includes/admin/tickets/tickets.php:463
-#: includes/admin/tickets/tickets.php:478
+#: includes/admin/tickets/tickets.php:470
+#: includes/admin/tickets/tickets.php:485
 msgid "Show all %s"
 msgstr ""
 
@@ -823,7 +823,7 @@ msgstr ""
 
 #: includes/admin/customers/customers-page.php:367
 #: includes/admin/customers/customers-page.php:608
-#: includes/admin/forms/metaboxes.php:555 includes/admin/thickbox.php:110
+#: includes/admin/forms/metaboxes.php:555 includes/admin/thickbox.php:113
 #: includes/class-kbs-html-elements.php:1155
 msgid "Cancel"
 msgstr ""
@@ -3048,7 +3048,7 @@ msgid "Open"
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:1675
-#: templates/shortcode-form.php:65
+#: templates/shortcode-form.php:69
 msgid "Close"
 msgstr ""
 
@@ -3224,27 +3224,27 @@ msgstr ""
 msgid "4 Weeks"
 msgstr ""
 
-#: includes/admin/thickbox.php:41 includes/admin/thickbox.php:109
+#: includes/admin/thickbox.php:41 includes/admin/thickbox.php:112
 msgid "Link %s"
 msgstr ""
 
-#: includes/admin/thickbox.php:79
+#: includes/admin/thickbox.php:82
 msgid "You must choose a %s."
 msgstr ""
 
-#: includes/admin/thickbox.php:95
+#: includes/admin/thickbox.php:98
 msgid "Complete the form below to insert a link to a %s"
 msgstr ""
 
-#: includes/admin/thickbox.php:98
+#: includes/admin/thickbox.php:101
 msgid "Enter Link Text"
 msgstr ""
 
-#: includes/admin/thickbox.php:100
+#: includes/admin/thickbox.php:103
 msgid "Leave empty to use %s title"
 msgstr ""
 
-#: includes/admin/thickbox.php:104
+#: includes/admin/thickbox.php:107
 msgid "Select %s"
 msgstr ""
 
@@ -3411,15 +3411,15 @@ msgstr ""
 msgid "No Agent Assigned"
 msgstr ""
 
-#: includes/admin/tickets/tickets.php:494
+#: includes/admin/tickets/tickets.php:501
 msgid "All %s"
 msgstr ""
 
-#: includes/admin/tickets/tickets.php:633
+#: includes/admin/tickets/tickets.php:644
 msgid "All"
 msgstr ""
 
-#: includes/admin/tickets/tickets.php:634
+#: includes/admin/tickets/tickets.php:645
 msgid "Active %s"
 msgstr ""
 
@@ -4178,48 +4178,52 @@ msgid "The unique ID number for this %s"
 msgstr ""
 
 #: includes/emails/class-kbs-email-tags.php:350
-msgid "Title of the %s"
+msgid "The current status of the %s"
 msgstr ""
 
 #: includes/emails/class-kbs-email-tags.php:355
-msgid "Content of the %s"
+msgid "Title of the %s"
 msgstr ""
 
 #: includes/emails/class-kbs-email-tags.php:360
-msgid "Attach or list files attached to the %s"
+msgid "Content of the %s"
 msgstr ""
 
 #: includes/emails/class-kbs-email-tags.php:365
+msgid "Attach or list files attached to the %s"
+msgstr ""
+
+#: includes/emails/class-kbs-email-tags.php:370
 msgid ""
 "Inserts the name of the department who are handling the %s or an empty "
 "string if no department is assigned"
 msgstr ""
 
-#: includes/emails/class-kbs-email-tags.php:370
+#: includes/emails/class-kbs-email-tags.php:375
 msgid "The date of the most recent %s reply"
 msgstr ""
 
-#: includes/emails/class-kbs-email-tags.php:375
+#: includes/emails/class-kbs-email-tags.php:380
 msgid "The time of the most recent %s reply"
 msgstr ""
 
-#: includes/emails/class-kbs-email-tags.php:380
+#: includes/emails/class-kbs-email-tags.php:385
 msgid "Content of the most recent reply"
 msgstr ""
 
-#: includes/emails/class-kbs-email-tags.php:385
+#: includes/emails/class-kbs-email-tags.php:390
 msgid "Attach or list files attached to the %s reply"
 msgstr ""
 
-#: includes/emails/class-kbs-email-tags.php:390
+#: includes/emails/class-kbs-email-tags.php:395
 msgid "Adds a URL so customers can view their %s directly on your website."
 msgstr ""
 
-#: includes/emails/class-kbs-email-tags.php:395
+#: includes/emails/class-kbs-email-tags.php:400
 msgid "Adds a URL so admins can access a %s directly."
 msgstr ""
 
-#: includes/emails/class-kbs-email-tags.php:400
+#: includes/emails/class-kbs-email-tags.php:405
 msgid "Adds a URL link that customers can click to close a ticket."
 msgstr ""
 
@@ -4972,107 +4976,107 @@ msgid_plural "Closed <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/post-types.php:416 includes/post-types.php:417
+#: includes/post-types.php:434 includes/post-types.php:435
 msgid "%1$s updated."
 msgstr ""
 
-#: includes/post-types.php:418
+#: includes/post-types.php:436
 msgid "%1$s opened."
 msgstr ""
 
-#: includes/post-types.php:419
+#: includes/post-types.php:437
 msgid "%1$s saved."
 msgstr ""
 
-#: includes/post-types.php:420
+#: includes/post-types.php:438
 msgid "%1$s submitted."
 msgstr ""
 
-#: includes/post-types.php:425 includes/post-types.php:426
+#: includes/post-types.php:443 includes/post-types.php:444
 msgid "%2$s updated. %1$sView %2$s%3$s."
 msgstr ""
 
-#: includes/post-types.php:427
+#: includes/post-types.php:445
 msgid "%2$s published. %1$sView %2$s%3$s."
 msgstr ""
 
-#: includes/post-types.php:428
+#: includes/post-types.php:446
 msgid "%2$s saved. %1$sView %2$s%3$s."
 msgstr ""
 
-#: includes/post-types.php:429
+#: includes/post-types.php:447
 msgid "%2$s submitted. %1$sView %2$s%3$s."
 msgstr ""
 
-#: includes/post-types.php:430
+#: includes/post-types.php:448
 msgid "%1$s draft updated. <a target=\"_blank\" href=\"%2$s\">Preview %1$s</a>"
 msgstr ""
 
-#: includes/post-types.php:435 includes/post-types.php:436
+#: includes/post-types.php:453 includes/post-types.php:454
 msgid "Form updated."
 msgstr ""
 
-#: includes/post-types.php:437
+#: includes/post-types.php:455
 msgid "Form published."
 msgstr ""
 
-#: includes/post-types.php:438
+#: includes/post-types.php:456
 msgid "Form saved."
 msgstr ""
 
-#: includes/post-types.php:439
+#: includes/post-types.php:457
 msgid "Form submitted."
 msgstr ""
 
-#: includes/post-types.php:440
+#: includes/post-types.php:458
 msgid "Form draft updated."
 msgstr ""
 
-#: includes/post-types.php:444 includes/post-types.php:445
+#: includes/post-types.php:462 includes/post-types.php:463
 msgid "Company updated."
 msgstr ""
 
-#: includes/post-types.php:446
+#: includes/post-types.php:464
 msgid "Company published."
 msgstr ""
 
-#: includes/post-types.php:447
+#: includes/post-types.php:465
 msgid "Company saved."
 msgstr ""
 
-#: includes/post-types.php:448
+#: includes/post-types.php:466
 msgid "Company submitted."
 msgstr ""
 
-#: includes/post-types.php:449
+#: includes/post-types.php:467
 msgid "Company draft updated."
 msgstr ""
 
-#: includes/post-types.php:473 includes/post-types.php:481
+#: includes/post-types.php:491 includes/post-types.php:499
 msgid "%1$s %2$s updated."
 msgid_plural "%1$s %3$s updated."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/post-types.php:474 includes/post-types.php:482
+#: includes/post-types.php:492 includes/post-types.php:500
 msgid "%1$s %2$s not updated, somebody is editing it."
 msgid_plural "%1$s %3$s not updated, somebody is editing them."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/post-types.php:475 includes/post-types.php:483
+#: includes/post-types.php:493 includes/post-types.php:501
 msgid "%1$s %2$s permanently deleted."
 msgid_plural "%1$s %3$s permanently deleted."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/post-types.php:476 includes/post-types.php:484
+#: includes/post-types.php:494 includes/post-types.php:502
 msgid "%1$s %2$s moved to the Trash."
 msgid_plural "%1$s %3$s moved to the Trash."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/post-types.php:477 includes/post-types.php:485
+#: includes/post-types.php:495 includes/post-types.php:503
 msgid "%1$s %2$s restored from the Trash."
 msgid_plural "%1$s %3$s restored from the Trash."
 msgstr[0] ""
@@ -5352,43 +5356,43 @@ msgstr ""
 msgid "%s left to resolve"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:502
+#: includes/tickets/class-kbs-ticket.php:501
 msgid "New %s"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:999
+#: includes/tickets/class-kbs-ticket.php:997
 msgid "Show more&hellip;"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:1628
+#: includes/tickets/class-kbs-ticket.php:1626
 msgid "ago"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:1646
+#: includes/tickets/class-kbs-ticket.php:1644
 msgid "Source could not be found"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:1757
+#: includes/tickets/class-kbs-ticket.php:1755
 msgid "%s re-opened by %s reply."
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:1774
+#: includes/tickets/class-kbs-ticket.php:1772
 msgid "Form: %s"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:1794
+#: includes/tickets/class-kbs-ticket.php:1792
 msgid "Department %s not found"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:1808
+#: includes/tickets/class-kbs-ticket.php:1806
 msgid "Term %s no longer exists"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:1839
+#: includes/tickets/class-kbs-ticket.php:1837
 msgid "The privacy policy was acknowledged"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:1849
+#: includes/tickets/class-kbs-ticket.php:1847
 msgid "The terms and conditions were accepted"
 msgstr ""
 
@@ -5534,7 +5538,7 @@ msgstr ""
 msgid "This form is secured and encrypted via SSL"
 msgstr ""
 
-#: templates/shortcode-form.php:67
+#: templates/shortcode-form.php:71
 msgid "Could any of the following %s help resolve your query?"
 msgstr ""
 
