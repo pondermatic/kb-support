@@ -4,7 +4,7 @@ Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
 Tested up to: 4.9.6
 Requires PHP: 5.4
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -123,9 +123,25 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 == Changelog ==
 
+= 1.2.3 =
+
+**Thursday, 21st June 2018**
+
+**New**: Added the `{ticket_status}` email content tag
+
+**Fix**: If admins are not set as agents, Support Workers could not view all tickets
+**Fix**: Front end ticket manager was not using translated text for ticket status
+**Fix**: Custom input class was not being applied correctly to textarea fields on the submission form
+
+**Tweak**: No need to wrap hidden fields in `<p>` tags
+**Tweak**: Removed the *Mine* view within the trashed tickets list
+**Tweak**: Make sure settings sections array is countable before counting as PHP 7 and above generates a warning
+
+**Dev**: Added filters to overide when the *Link KB Article* button should be displayed allowing extensions to display the button
+
 = 1.2.2 =
 
-** Wednesday, 30th May 2018**
+**Wednesday, 30th May 2018**
 
 **GDPR Features**
 
