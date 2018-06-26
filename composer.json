@@ -1,12 +1,12 @@
 {
-    "name": "mdjm/mobile-dj-manager",
+    "name": "KB-Support/kb-support/",
     "type": "wordpress-plugin",
-    "description": "The most efficient and versatile event management solution for WordPress.",
-    "keywords": ["mdjm", "mobile dj manager", "mdjm event management"],
-    "homepage": "https://mdjm.co.uk/",
+    "description": "The ultimate support ticket system, helpdesk and knowledge base tool plugin for WordPress.",
+    "keywords": ["kbs", "kb support", "helpdesk", "help desk", "ticket system", "support ticket", "knowledge base"],
+    "homepage": "https://kb-support.com/",
     "license": "GPL-2.0+",
     "support": {
-        "issues": "https://mdjm.co.uk/support"
+        "issues": "https://kb-support.com"
     },
     "require": {
         "php": ">=5.4.0",
