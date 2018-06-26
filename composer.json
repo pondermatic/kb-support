@@ -1,5 +1,5 @@
 {
-    "name": "KB-Support/kb-support/",
+    "name": "KB-Support/kb-support",
     "type": "wordpress-plugin",
     "description": "The ultimate support ticket system, helpdesk and knowledge base tool plugin for WordPress.",
     "keywords": ["kbs", "kb support", "helpdesk", "help desk", "ticket system", "support ticket", "knowledge base"],
