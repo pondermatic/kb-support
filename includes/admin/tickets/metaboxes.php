@@ -449,6 +449,7 @@ add_action( 'kbs_ticket_agent_fields', 'kbs_ticket_metabox_agent_row', 10 );
  * Display the additional agents ticket metabox row.
  *
  * @since	1.0
+ * @global	object	$kbs_ticket			KBS_Ticket class object
  * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
  * @param	int		$ticket_id			The ticket post ID.
  */
@@ -482,6 +483,9 @@ function kbs_ticket_metabox_additional_agents_row( $ticket_id )	{
 add_action( 'kbs_ticket_agent_fields', 'kbs_ticket_metabox_additional_agents_row', 50 );
 
 /**
+ * Display the ticket content sections metaboxes.
+ *
+ * @since	1.2.4
  * @global	object	$kbs_ticket			KBS_Ticket class object
  * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
  * @param	int		$ticket_id			The ticket post ID.
