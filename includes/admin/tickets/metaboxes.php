@@ -325,24 +325,20 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
 
                 <?php do_action( 'kbs_ticket_metabox_save_before_status', $ticket_id ); ?>
 
-                <p>
-                    <?php echo KBS()->html->ticket_status_dropdown( array(
-                        'name'     => 'ticket_status',
-                        'selected' => $kbs_ticket->post_status,
-                        'chosen'   => true
-                    ) ); ?>
-                </p>
+				<?php echo KBS()->html->ticket_status_dropdown( array(
+					'name'     => 'ticket_status',
+					'selected' => $kbs_ticket->post_status,
+					'chosen'   => true
+				) ); ?>
 
                 <?php do_action( 'kbs_ticket_metabox_save_after_status', $ticket_id ); ?>
 
                 <div id="kbs-customer-select">
-                    <p>
-                        <?php echo KBS()->html->customer_dropdown( array(
-                            'name'     => 'kbs_customer_id',
-                            'selected' => $kbs_ticket->customer_id,
-                            'chosen'   => true
-                        ) ); ?>
-                    </p>
+					<p><?php echo KBS()->html->customer_dropdown( array(
+						'name'     => 'kbs_customer_id',
+						'selected' => $kbs_ticket->customer_id,
+						'chosen'   => true
+					) ); ?></p>
                 </div>
 
                 <?php do_action( 'kbs_ticket_metabox_save_after_customer', $ticket_id ); ?>
