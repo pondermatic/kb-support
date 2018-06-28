@@ -211,6 +211,9 @@ function kbs_load_admin_scripts( $hook ) {
 		'add_new_ticket'          => sprintf( __( 'Add New %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
 		'admin_url'               => admin_url(),
 		'ajax_loader'             => KBS_PLUGIN_URL . 'assets/images/loading.gif',
+        'delete_ticket_warn'      => sprintf(
+            __( "You are about to permanently delete this %s.\n\nThis action cannot be undone.\n\nClick 'Cancel' to stop, 'OK' to delete.", 'kb-support' ), kbs_get_ticket_label_singular( true )
+        ),
         'disable_closure_email'   => kbs_get_option( 'ticket_closed_disable_email', false ),
 		'editing_field_type'      => $editing_field_type,
 		'editing_ticket'          => isset( $_GET['action'] ) && 'edit' == $_GET['action'] && 'kbs_ticket' == get_post_type( $_GET['post'] ) ? true : false,

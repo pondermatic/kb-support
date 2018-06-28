@@ -1,4 +1,4 @@
-var kbs_vars;
+var KBSShowNotice, kbs_vars;
 jQuery(document).ready(function ($) {
 
 	// Setup datepicker
@@ -1057,3 +1057,45 @@ function kbs_load_ticket_notes( ticket_id, note_id )	{
 		}
 	);
 }
+
+/**
+ * Shows message pop-up notice or confirmation message.
+ *
+ * @since 1.2.4
+ * @type {{warn: KBSShowNotice.warn, note: KBSShowNotice.note}}
+ * @returns {void}
+ */
+KBSShowNotice = {
+
+	/**
+	 * Shows a delete confirmation pop-up message on the ticket screen.
+     *
+     * @since 1.2.4
+     * @param      string  The object type to which the notice applies.
+	 * @return     bool    Returns true if the message is confirmed.
+	 */
+	warn : function( type ) {
+        if ( type === undefined )   {
+            type = 'ticket';
+        }
+
+        var msg = kbs_vars.delete_ticket_warn || '';
+
+		if ( confirm(msg) ) {
+			return true;
+		}
+
+		return false;
+	},
+
+	/**
+	 * Shows an alert message.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @param text The text to display in the message.
+	 */
+	note : function(text) {
+		alert(text);
+	}
+};
