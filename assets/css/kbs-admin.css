@@ -381,6 +381,31 @@ a.kbs_ticket_form_data	{
 	border-color: #e5e5e5;
 }
 
+.kbs-ticket-avatar	{
+	float: left;
+}
+
+.kbs-customer-ticket-overview {
+	display: inline-block;
+	vertical-align: top;
+    margin-right: 10px;
+}
+
+.kbs-customer-ticket-contact {
+	float: right;
+	padding-left: 10px;
+}
+.kbs-customer-ticket-attr {
+	display: block;
+}
+.kbs-customer-ticket-attr.customer-name {
+	font-size: larger;
+	font-weight: 600;
+}
+.kbs-customer-ticket-attr.customer-company {
+	font-weight: 600;
+}
+
 .kbs-replies-content-wrap,
 .kbs-notes-content-wrap {
 	display: none;

@@ -40,7 +40,8 @@ function kbs_ticket_remove_meta_boxes()	{
 	$metaboxes = array(
         array( 'submitdiv', 'kbs_ticket', 'side' ),
         array( 'tagsdiv-department', 'kbs_ticket', 'side' ),
-        array( 'comments', 'kbs_ticket', 'normal' )
+        array( 'comments', 'kbs_ticket', 'normal' ),
+		array( 'commentsdiv', 'kbs_ticket', 'normal' )
     );
 
     $metaboxes = apply_filters( 'kbs_ticket_remove_metaboxes', $metaboxes );
@@ -159,10 +160,6 @@ function kbs_get_ticket_actions( $kbs_ticket, $updating = true )   {
     $actions = array();
 
     if ( $updating )   {
-        if ( ! empty( $kbs_ticket->customer_id ) ) {
-            $actions['customer_data'] = '<a href="#" class="toggle-view-customer-option-section">' . __( 'View customer details', 'kb-support' ) . '</a>';
-        }
-
         if ( ! empty( $kbs_ticket->form_data ) )    {
             $actions['form_data'] = '<a href="#" class="toggle-view-submission-option-section">' . __( 'View submission data', 'kb-support' ) . '</a>';
         }
@@ -545,6 +542,67 @@ function kbs_ticket_metabox_sections()  {
 add_action( 'kbs_ticket_data_fields', 'kbs_ticket_metabox_sections', 10 );
 
 /**
+ * Display the ticket customer section.
+ *
+ * @since	1.2.4
+ * @global	obj		$kbs_ticket			KBS_Ticket class object
+ * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
+ * @param	int		$ticket_id			The ticket post ID.
+ * @return	str
+ */
+function kbs_ticket_metabox_customer_section( $ticket_id )	{
+
+	global $kbs_ticket, $kbs_ticket_update;
+
+	$user_info = $kbs_ticket->user_info;
+	$show_info = array( 'website' );
+
+    ?>
+	<div class="kbs-customer-ticket-overview">
+		<span class="kbs-ticket-avatar">
+			<?php echo get_avatar( $kbs_ticket->email, '', kbs_get_company_logo( $kbs_ticket->company_id ) ); ?>
+		</span>
+		<span class="kbs-customer-ticket-contact">
+			<span class="kbs-customer-ticket-attr customer-name">
+				<?php printf(
+					'%s %s (<a href="%s">#%s</a>)',
+					$kbs_ticket->first_name,
+					$kbs_ticket->last_name,
+					add_query_arg( array(
+						'post_type' => 'kbs_ticket',
+						'page'      => 'kbs-customers',
+						'view'      => 'userdata',
+						'id'        => $kbs_ticket->customer_id
+					), admin_url( 'edit.php' ) ),
+					$kbs_ticket->customer_id
+				); ?>
+			</span>
+
+			<?php if ( ! empty( $kbs_ticket->company_id ) ) : ?>
+				<span class="kbs-customer-ticket-attr customer-company">
+					<?php echo kbs_get_company_name( $kbs_ticket->company_id ); ?>
+				</span>
+			<?php endif; ?>
+
+			<span class="kbs-customer-ticket-attr customer-email">
+				<?php printf( '<a href="mailto:%1$s">%1$s</a>', $kbs_ticket->email ); ?>
+			</span>
+
+			<?php if ( ! empty( $user_info['website'] ) ) : ?>
+				<span class="kbs-customer-ticket-attr customer-website">
+					<?php printf( '<a href="%1$s">%1$s</a>', $user_info['website'] ); ?>
+				</span>
+			<?php endif; ?>
+
+		</span>
+	</div>
+	<hr>
+    <?php
+		
+} // kbs_ticket_metabox_customer_section
+add_action( 'kbs_ticket_metabox_standard_fields', 'kbs_ticket_metabox_customer_section', 10 );
+
+/**
  * Display the original ticket content section.
  *
  * @since	1.0
@@ -559,41 +617,15 @@ function kbs_ticket_metabox_content_section( $ticket_id )	{
 
     ?>
     <div class="kbs-ticket-content">
-        <p><?php echo $kbs_ticket->get_content(); ?></p>
-    </div>
-    <?php
-
-    /*
-	?>
-	<div id="kbs-ticket-content-container" class="kbs_ticket_wrap">
-        <p><?php echo $kbs_ticket->get_content(); ?></p>
-    </div>
-    <?php */
-		
-} // kbs_ticket_metabox_content_section
-add_action( 'kbs_ticket_metabox_standard_fields', 'kbs_ticket_metabox_content_section', 10 );
-
-/**
- * Display the ticket customer details section.
- *
- * @since	1.2.4
- * @global	object	$kbs_ticket			KBS_Ticket class object
- * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
- * @param	int		$ticket_id			The ticket post ID.
- * @return	string
- */
-function kbs_ticket_metabox_customer_section( $ticket_id )	{
-
-	global $kbs_ticket, $kbs_ticket_update;
-
-    ?>
-    <div class="kbs-ticket-customer-section">
+		<h3>
+			<?php printf( __( '%s Content', 'kb-support' ), kbs_get_ticket_label_singular() ); ?>
+		</h3>
         <p><?php echo $kbs_ticket->get_content(); ?></p>
     </div>
     <?php
 		
 } // kbs_ticket_metabox_content_section
-add_action( 'kbs_ticket_metabox_custom_sections', 'kbs_ticket_metabox_customer_section', 10 );
+add_action( 'kbs_ticket_metabox_standard_fields', 'kbs_ticket_metabox_content_section', 20 );
 
 /**
  * Display the ticket form submission details row.
