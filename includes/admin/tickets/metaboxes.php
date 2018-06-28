@@ -555,7 +555,6 @@ function kbs_ticket_metabox_customer_section( $ticket_id )	{
 	global $kbs_ticket, $kbs_ticket_update;
 
 	$user_info = $kbs_ticket->user_info;
-	$show_info = array( 'website' );
 
     ?>
 	<div class="kbs-customer-ticket-overview">
@@ -590,7 +589,7 @@ function kbs_ticket_metabox_customer_section( $ticket_id )	{
 
 			<?php if ( ! empty( $user_info['website'] ) ) : ?>
 				<span class="kbs-customer-ticket-attr customer-website">
-					<?php printf( '<a href="%1$s">%1$s</a>', $user_info['website'] ); ?>
+					<?php printf( '<a href="%1$s">%1$s</a>', esc_url( $user_info['website'] ) ); ?>
 				</span>
 			<?php endif; ?>
 
