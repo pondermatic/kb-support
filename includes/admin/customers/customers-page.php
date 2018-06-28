@@ -194,7 +194,7 @@ function kbs_customers_view( $customer ) {
 			<div class="kbs-item-info customer-info">
 
 				<div class="avatar-wrap left" id="customer-avatar">
-					<?php echo get_avatar( $customer->email ); ?><br />
+					<?php echo get_avatar( $customer->email, '', kbs_get_company_logo( $customer->company_id ) ); ?><br />
 					<?php if ( current_user_can( $customer_edit_role ) ): ?>
 						<span class="info-item editable customer-edit-link"><a href="#" id="edit-customer"><?php _e( 'Edit Customer', 'kb-support' ); ?></a></span>
 					<?php endif; ?>
@@ -531,7 +531,7 @@ function kbs_customer_notes_view( $customer ) {
 
 	<div id="kbs-item-notes-wrapper">
 		<div class="kbs-item-notes-header">
-			<?php echo get_avatar( $customer->email, 30 ); ?> <span><?php echo $customer->name; ?></span>
+			<?php echo get_avatar( $customer->email, 30, kbs_get_company_logo( $customer->company_id ) ); ?> <span><?php echo $customer->name; ?></span>
 		</div>
 
         <h3><?php _e( 'Agreeements','kb-support' ); ?></h3>
@@ -617,7 +617,7 @@ function kbs_customers_delete_view( $customer ) {
 		<form id="delete-customer" method="post" action="<?php echo admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-customers&view=delete&id=' . $customer->id ); ?>">
 
 				<div class="kbs-item-notes-header">
-				<?php echo get_avatar( $customer->email, 30 ); ?> <span><?php echo $customer->name; ?></span>
+				<?php echo get_avatar( $customer->email, 30, kbs_get_company_logo( $customer->company_id ) ); ?> <span><?php echo $customer->name; ?></span>
 			</div>
 
 
