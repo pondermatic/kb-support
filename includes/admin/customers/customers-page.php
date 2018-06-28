@@ -509,13 +509,45 @@ function kbs_customer_notes_view( $customer ) {
 	$per_page    = apply_filters( 'kbs_customer_notes_per_page', 20 );
 	$total_pages = ceil( $note_count / $per_page );
 
-	$customer_notes = $customer->get_notes( $per_page, $paged );
+	$customer_notes    = $customer->get_notes( $per_page, $paged );
+
+    $show_agree_to_terms   = kbs_get_option( 'show_agree_to_terms', false );
+    $show_agree_to_privacy = kbs_get_option( 'show_agree_to_privacy_policy', false );
+    $privacy_accepted      = __( 'Not yet accepted', 'mobile-dj-manager' );
+    $terms_accepted        = __( 'Not yet agreed', 'mobile-dj-manager' );
+    $privacy_timestamp     = $customer->get_meta( 'agree_to_privacy_time', true );
+    $terms_timestamp       = $customer->get_meta( 'agree_to_terms_time', true );
+    $date_format           = get_option( 'date_format' );
+    $time_format           = get_option( 'time_format' );
+
+    if ( ! empty( $privacy_timestamp ) ) {
+        $privacy_accepted = date_i18n( $date_format . ' ' . $time_format, $privacy_timestamp );
+    }
+
+    if ( ! empty( $terms_timestamp ) ) {
+        $terms_accepted = date_i18n( $date_format . ' ' . $time_format, $terms_timestamp );
+    }
 	?>
 
 	<div id="kbs-item-notes-wrapper">
 		<div class="kbs-item-notes-header">
 			<?php echo get_avatar( $customer->email, 30 ); ?> <span><?php echo $customer->name; ?></span>
 		</div>
+
+        <h3><?php _e( 'Agreeements','kb-support' ); ?></h3>
+
+        <?php if ( $show_agree_to_terms ) : ?>
+            <span class="customer-terms-agreement-date info-item">
+                <?php printf( __( 'Last Agreed to Terms%s', 'kb-support' ), ': ' . $terms_accepted ); ?>
+            </span>
+        <?php endif; ?>
+
+        <?php if ( $show_agree_to_privacy ) : ?>
+            <span class="customer-privacy-policy-date info-item">
+                <?php printf( __( 'Last Agreed to Privacy Policy%s', 'kb-support' ),': ' . $privacy_accepted ); ?>
+            </span>
+        <?php endif; ?>
+
 		<h3><?php _e( 'Notes', 'kb-support' ); ?></h3>
 
 		<?php if ( 1 == $paged ) : ?>
