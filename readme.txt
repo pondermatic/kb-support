@@ -123,6 +123,20 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 == Changelog ==
 
+= 1.2.4 =
+
+**Thursday, 21st June 2018**
+
+**New**: Improved metabox display for tickets
+**New**: Added trash/permanently delete ticket option to ticket screen
+**New**: Added customer data to ticket screen
+**New**: Added customer last agreed to terms date to customer notes screen
+**New**: Added customer last agreed to privacy policy date to customer notes screen
+
+**Tweak**: Fallback to company logo (if one exists) as avatar image if customer does not have an avatar
+
+**Fix**: Corrected output for privacy policy acceptance
+
 = 1.2.3 =
 
 **Thursday, 21st June 2018**
