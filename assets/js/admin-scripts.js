@@ -203,6 +203,14 @@ jQuery(document).ready(function ($) {
         },
 
         options : function()    {
+            // When Add Reply is clicked
+            $( document.body ).on( 'click', '.toggle-add-reply-option-section', function(e) {
+                e.preventDefault();
+
+                 $('html, body').animate({
+                    scrollTop: $('.kbs-historic-reply-option-fields').offset().top
+                }, 500 );
+            });
             // Toggle display of submission form data
             $( document.body ).on( 'click', '.toggle-view-submission-option-section', function(e) {
                 e.preventDefault();

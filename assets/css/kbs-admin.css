@@ -300,6 +300,7 @@ a.kbs_ticket_form_data	{
 	vertical-align: middle;
 }
 
+.kbs-ticket-content-row-actions .toggle-add-reply-option-section,
 .kbs-ticket-content-row-actions .toggle-view-customer-option-section,
 .kbs-ticket-content-row-actions .toggle-view-submission-option-section,
 .kbs-replies-row-actions .toggle-view-reply-option-section,
@@ -307,6 +308,7 @@ a.kbs_ticket_form_data	{
 .kbs-notes-row-actions .toggle-view-note-option-section {
 	color: #777;
 }
+.kbs-ticket-content-row-actions .toggle-add-reply-option-section:hover,
 .kbs-ticket-content-row-actions .toggle-view-customer-option-section:hover,
 .kbs-ticket-content-row-actions .toggle-view-submission-option-section:hover,
 .kbs-replies-row-actions .toggle-view-reply-option-section:hover,

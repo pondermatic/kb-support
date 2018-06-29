@@ -160,6 +160,11 @@ function kbs_get_ticket_actions( $kbs_ticket, $updating = true )   {
     $actions = array();
 
     if ( $updating )   {
+
+        if ( 'new' != $kbs_ticket->status && 'closed' != $kbs_ticket->status )  {
+            $actions['add_reply'] = '<a href="#" class="toggle-add-reply-option-section">' . __( 'Add reply', 'kb-support' ) . '</a>';
+        }
+
         if ( ! empty( $kbs_ticket->form_data ) )    {
             $actions['form_data'] = '<a href="#" class="toggle-view-submission-option-section">' . __( 'View submission data', 'kb-support' ) . '</a>';
         }
@@ -174,7 +179,7 @@ function kbs_get_ticket_actions( $kbs_ticket, $updating = true )   {
 		} else {
             $delete_url  = get_delete_post_link( $kbs_ticket->ID, null, true );
             $delete_term = sprintf( __( 'Delete %s', 'kb-support' ), kbs_get_ticket_label_singular( true ) );
-			$delete_ays  = ! MEDIA_TRASH ? " onclick='return KBSShowNotice.warn();'" : '';
+			$delete_ays  = ! EMPTY_TRASH_DAYS ? " onclick='return KBSShowNotice.warn();'" : '';
 		}
 
         $actions['trash'] = sprintf(
