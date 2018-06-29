@@ -1800,7 +1800,7 @@ class KBS_Ticket {
 
 			if ( 'department' == $settings['mapping'] )	{
 				$department = kbs_get_department( $value );
-				if ( isset( $department ) )	{
+				if ( isset( $department ) && ! is_wp_error( $department ) )	{
 					$department = $department->name;
 				} else	{
 					$department = sprintf( __( 'Department %s not found', 'kb-support' ), $value );
