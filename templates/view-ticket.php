@@ -43,7 +43,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
     <?php else : ?>
 
 		<?php do_action( 'kbs_notices' ); ?>
-        <div id="kbs_item_wrapper" class="kbs_ticket_wrapper" style="float: left">
+        <div id="kbs_item_wrapper" class="kbs_ticket_wrapper" style="float: left;">
             <div class="ticket_info_wrapper data_section">
 
                 <?php do_action( 'kbs_before_single_ticket_form', $ticket ); ?>
