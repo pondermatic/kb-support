@@ -33,8 +33,8 @@ function kbs_process_ticket_submission()	{
 
 	$form_id          = ! empty( $_POST['kbs_form_id'] )              ? $_POST['kbs_form_id'] : '';
 	$redirect         = ! empty( $_POST['redirect'] )                 ? $_POST['redirect']    : '';
-	$privacy_accepted = ! empty( $_POST['kbs_agree_terms'] )          ? true                  : false;
-	$terms_agreed     = ! empty( $_POST['kbs_agree_privacy_policy'] ) ? true                  : false;
+	$privacy_accepted = ! empty( $_POST['kbs_agree_privacy_policy'] ) ? true                  : false;
+	$terms_agreed     = ! empty( $_POST['kbs_agree_terms'] )          ? true                  : false;
 
 	$posted = array();
 	$ignore = kbs_form_ignore_fields();
