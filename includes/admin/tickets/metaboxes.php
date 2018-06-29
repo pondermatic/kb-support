@@ -550,7 +550,25 @@ function kbs_ticket_metabox_customer_section( $ticket_id )	{
 
 	global $kbs_ticket, $kbs_ticket_update;
 
-	$user_info = $kbs_ticket->user_info;
+	$user_info   = $kbs_ticket->user_info;
+    $customer_id = $kbs_ticket->customer_id;
+
+    if ( '-1' == $customer_id || empty( $customer_id ) )    {
+        $customer = __( 'No customer assigned', 'kb-support' );
+    } else  {
+        $customer = sprintf(
+            '%s %s (<a href="%s">#%s</a>)',
+            $kbs_ticket->first_name,
+            $kbs_ticket->last_name,
+            add_query_arg( array(
+                'post_type' => 'kbs_ticket',
+                'page'      => 'kbs-customers',
+                'view'      => 'userdata',
+                'id'        => $kbs_ticket->customer_id
+            ), admin_url( 'edit.php' ) ),
+            $kbs_ticket->customer_id
+        );
+    }
 
     ?>
 	<div class="kbs-customer-ticket-overview">
@@ -559,18 +577,7 @@ function kbs_ticket_metabox_customer_section( $ticket_id )	{
 		</span>
 		<span class="kbs-customer-ticket-contact">
 			<span class="kbs-customer-ticket-attr customer-name">
-				<?php printf(
-					'%s %s (<a href="%s">#%s</a>)',
-					$kbs_ticket->first_name,
-					$kbs_ticket->last_name,
-					add_query_arg( array(
-						'post_type' => 'kbs_ticket',
-						'page'      => 'kbs-customers',
-						'view'      => 'userdata',
-						'id'        => $kbs_ticket->customer_id
-					), admin_url( 'edit.php' ) ),
-					$kbs_ticket->customer_id
-				); ?>
+				<?php echo $customer; ?>
 			</span>
 
 			<?php if ( ! empty( $kbs_ticket->company_id ) ) : ?>
@@ -634,19 +641,23 @@ function kbs_ticket_metabox_form_data_row( $ticket_id )	{
 
 	global $kbs_ticket, $kbs_ticket_update; ?>
 
-	<?php if ( ! empty( $kbs_ticket->form_data ) ) : ?>
+    <?php if ( empty( $kbs_ticket->form_data ) ) return; ?>
 
-        <div id="kbs-ticket-form-data-container" class="kbs_ticket_wrap">
-                <p><a href="#TB_inline?width=600&height=550&inlineId=kbs-ticket-form-data" title="<?php _e( 'Submitted Form Data', 'kb-support' ); ?>" class="thickbox kbs_ticket_form_data"><?php _e( 'View Form Submission Data', 'kb-support' ); ?></a></p>
+    <div id="kbs-ticket-formdata-fields" class="kbs-custom-ticket-sections-wrap">
+        <div class="kbs-custom-ticket-sections">
+            <div class="kbs-custom-ticket-section">
+                <span class="kbs-custom-ticket-section-title"><?php echo $kbs_ticket->get_form_name(); ?></span>
+
+                <span class="kbs-ticket-form-content">
+                    <?php echo $kbs_ticket->show_form_data(); ?>
+                </span>
+            </div>
         </div>
-
-    <?php endif; ?>
-
-    <div id="kbs-ticket-form-data" class="kbs-hidden"><?php echo $kbs_ticket->show_form_data(); ?></div>
+    </div>
     <?php
 		
 } // kbs_ticket_metabox_form_data_row
-add_action( 'kbs_ticket_data_fields', 'kbs_ticket_metabox_form_data_row', 20 );
+add_action( 'kbs_ticket_metabox_custom_sections', 'kbs_ticket_metabox_form_data_row', 20 );
 
 /**
  * Display the ticket files row.

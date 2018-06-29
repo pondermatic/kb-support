@@ -1762,14 +1762,28 @@ class KBS_Ticket {
 
 	} // add_reply
 
+    /**
+     * Retrieve the form name from which the ticket was submitted.
+     *
+     * @since   1.2.4
+     * @return  string  Submission form name
+     */
+    public function get_form_name() {
+        if ( empty( $this->form_data ) )	{
+			return;
+		}
+
+        return sprintf( __( 'Form: %s', 'kb-support' ), get_the_title( $this->form_data['id'] ) );
+    } // get_form_name
+
 	public function show_form_data()	{
 		if ( empty( $this->form_data ) )	{
 			return;
 		}
 
-		$form = new KBS_Form( $this->form_data['id'] );
+		$form   = new KBS_Form( $this->form_data['id'] );
+        $output = '';
 
-		$output = '<h2>' . sprintf( __( 'Form: %s', 'kb-support' ), get_the_title( $this->form_data['id'] ) ) . '</h2>';
 		foreach( $this->form_data['data'] as $field => $value )	{
 
 			$form_field = kbs_get_field_by( 'name', $field );

@@ -221,6 +221,7 @@ function kbs_load_admin_scripts( $hook ) {
 		'field_type_missing'      => __( 'Select the field Type', 'kb-support' ),
 		'hide_note'               => __( 'Hide Note', 'kb-support' ),
 		'hide_reply'              => __( 'Hide Reply', 'kb-support' ),
+        'hide_submission'         => __( 'Hide submission data', 'kb-support' ),
 		'kbs_version'             => KBS_VERSION,
 		'new_media_ui'            => apply_filters( 'kbs_use_35_media_ui', 1 ),
 		'no_note_content'         => __( 'There is no content in your note', 'kb-support' ),
@@ -238,7 +239,8 @@ function kbs_load_admin_scripts( $hook ) {
 		'ticket_reply_failed'     => sprintf( __( 'Could not add %s Reply', 'kb-support' ), kbs_get_ticket_label_singular() ),
 		'type_to_search'          => sprintf( __( 'Type to search %s', 'kb-support' ), kbs_get_article_label_plural() ),
         'view_reply'              => __( 'View Reply', 'kb-support' ),
-		'view_note'               => __( 'View Note', 'kb-support' )
+		'view_note'               => __( 'View Note', 'kb-support' ),
+        'view_submission'         => __( 'View submission data', 'kb-support' )
 	) );
 
 	if ( function_exists( 'wp_enqueue_media' ) && version_compare( $wp_version, '3.5', '>=' ) ) {

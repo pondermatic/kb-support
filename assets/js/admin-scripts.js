@@ -169,6 +169,7 @@ jQuery(document).ready(function ($) {
 	var KBS_Tickets = {
 		init : function() {
             this.save();
+            this.options();
 			this.reply();
 			this.notes();
 		},
@@ -199,6 +200,24 @@ jQuery(document).ready(function ($) {
                     $('label[for="kbs-closure-email"]').remove();
                 }
             });
+        },
+
+        options : function()    {
+            // Toggle display of submission form data
+            $( document.body ).on( 'click', '.toggle-view-submission-option-section', function(e) {
+                e.preventDefault();
+                var show = $(this).html() === kbs_vars.view_submission ? true : false;
+
+                if ( show ) {
+                    $(this).html( kbs_vars.hide_submission );
+                } else {
+                    $(this).html( kbs_vars.view_submission );
+                }
+
+                var header = $(this).parents('.kbs-ticket-content-row-header');
+                header.siblings('.kbs-custom-ticket-sections-wrap').slideToggle();
+            });
+            
         },
 
 		reply : function() {

@@ -406,6 +406,16 @@ a.kbs_ticket_form_data	{
 	font-weight: 600;
 }
 
+/* Hidden Sections */
+.kbs-custom-ticket-sections-wrap {
+    display: none;
+	border-width: 0 1px 1px;
+	border-style: solid;
+	border-color: #e5e5e5;
+	box-sizing: border-box;
+	width: 100%;
+}
+
 .kbs-replies-content-wrap,
 .kbs-notes-content-wrap {
 	display: none;
@@ -415,7 +425,7 @@ a.kbs_ticket_form_data	{
 	box-sizing: border-box;
 	width: 100%;
 }
-
+.kbs-custom-ticket-section,
 .kbs-replies-content-section,
 .kbs-replies-files-section,
 .kbs-notes-content-section {
@@ -428,20 +438,23 @@ a.kbs_ticket_form_data	{
 	background: #f9f9f9;
 }
 
+.kbs-custom-ticket-section:last-child,
 .kbs-replies-content-section:last-child,
 .kbs-notes-content-section:last-child {
 	border-bottom: none;
 }
 
+.kbs-custom-ticket-section-title,
 .kbs-replies-content-section-title,
 .kbs-replies-files-section-title,
 .kbs-notes-content-section-title {
 	display: block;
 	font-size: 14px;
 	font-weight: 600;
-	padding: 0 0 10px;
+	padding: 0 0 5px;
 	text-align: center;
 }
+.kbs-custom-ticket-section > *:not(.kbs-custom-ticket-section-title),
 .kbs-replies-content-section > *:not(.kbs-replies-content-section-title),
 .kbs-notes-content-section > *:not(.kbs-notes-content-section-title) {
 	padding-right: 20px;
