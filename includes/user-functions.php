@@ -46,6 +46,10 @@ function kbs_register_user_profile_fields()	{
  */
 function kbs_output_user_profile_fields( $user )	{
 
+    if ( ! kbs_is_agent( $user->ID ) || ( get_current_user_id() != $user->ID && ! current_user_can( 'manage_ticket_settings' ) ) )  {
+        return;
+    }
+
 	$fields = kbs_register_user_profile_fields();
 
 	if ( ! empty( $fields ) )	{
@@ -70,9 +74,6 @@ add_action( 'edit_user_profile', 'kbs_output_user_profile_fields', 11 );
  * @param   obj		$user	The WP_User object
  */
 function kbs_render_user_profile_replies_to_load_field( $user )  {
-    if ( ! kbs_is_agent( $user->ID ) || ( get_current_user_id() != $user->ID && ! current_user_can( 'manage_ticket_settings' ) ) )  {
-        return;
-    }
 
 	$replies_to_load = get_user_meta( $user->ID, '_kbs_load_replies', true );
 
