@@ -111,7 +111,7 @@ function kbs_ticket_add_meta_boxes( $post )	{
 	if ( $kbs_ticket_update )	{
 		add_meta_box(
 			'kbs-ticket-metabox-ticket-details',
-			sprintf( __( 'Original %1$s', 'kb-support' ), $single_label ),
+			sprintf( __( 'Submitted %1$s', 'kb-support' ), $single_label ),
 			'kbs_ticket_metabox_data_callback',
 			'kbs_ticket',
 			'normal',
@@ -163,15 +163,11 @@ function kbs_get_ticket_actions( $kbs_ticket, $updating = true )   {
         if ( ! empty( $kbs_ticket->form_data ) )    {
             $actions['form_data'] = '<a href="#" class="toggle-view-submission-option-section">' . __( 'View submission data', 'kb-support' ) . '</a>';
         }
-
-        if ( ! empty( $kbs_ticket->files ) )    {
-            $actions['files'] = '<a href="#" class="toggle-view-files-option-section">' . __( 'Hide attachments', 'kb-support' ) . '</a>';
-        }
     }
 
     if ( $updating && current_user_can( 'manage_ticket_settings' ) ) {
 
-        if ( EMPTY_TRASH_DAYS && MEDIA_TRASH ) {
+        if ( EMPTY_TRASH_DAYS ) {
             $delete_url  = get_delete_post_link( $kbs_ticket->ID );
 			$delete_term = _x( 'Trash', 'verb', 'kb-support' );
             $delete_ays  = '';
@@ -182,10 +178,11 @@ function kbs_get_ticket_actions( $kbs_ticket, $updating = true )   {
 		}
 
         $actions['trash'] = sprintf(
-            '<a href="%s" class="kbs-delete"%s>%s</a>',
+            '<a href="%s" class="kbs-delete"%s>%s %s</a>',
             $delete_url,
             $delete_ays,
-            $delete_term
+            $delete_term,
+            kbs_get_ticket_label_singular( true )
         );
 
     }
@@ -607,7 +604,7 @@ add_action( 'kbs_ticket_metabox_standard_fields', 'kbs_ticket_metabox_customer_s
 /**
  * Display the original ticket content section.
  *
- * @since	1.0
+ * @since	1.2.4
  * @global	obj		$kbs_ticket			KBS_Ticket class object
  * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
  * @param	int		$ticket_id			The ticket post ID.
@@ -630,9 +627,49 @@ function kbs_ticket_metabox_content_section( $ticket_id )	{
 add_action( 'kbs_ticket_metabox_standard_fields', 'kbs_ticket_metabox_content_section', 20 );
 
 /**
- * Display the ticket form submission details row.
+ * Display ticket attachment details row.
  *
  * @since	1.0
+ * @global	object	$kbs_ticket			KBS_Ticket class object
+ * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
+ * @param	int		$ticket_id			The ticket post ID.
+ */
+function kbs_ticket_metabox_attachments_row( $ticket_id )	{
+
+	global $kbs_ticket, $kbs_ticket_update;
+
+    if ( ! kbs_get_option( 'file_uploads' ) )	{
+		return;
+	}
+
+	if ( ! $kbs_ticket_update || empty( $kbs_ticket->files ) ) {
+        return;
+    }
+
+    $files = array();
+    ?>
+    <div class="kbs-ticket-attachments">
+        <h3> <?php _e( 'Attachments', 'kb-support' ); ?></h3>
+
+        <?php foreach( $kbs_ticket->files as $file ) : ?>
+            <?php $files[] = sprintf(
+                '<a class="kbs_ticket_form_data" href="%s" target="_blank">%s</a>',
+                wp_get_attachment_url( $file->ID ),
+                basename( get_attached_file( $file->ID ) )
+            ); ?>
+        <?php endforeach; ?>
+
+        <?php echo implode( '&nbsp;&nbsp;&#124;&nbsp;&nbsp;', $files ); ?>
+
+    </div>
+    <?php		
+} // kbs_ticket_metabox_attachments_row
+add_action( 'kbs_ticket_metabox_standard_fields', 'kbs_ticket_metabox_attachments_row', 25 );
+
+/**
+ * Display the ticket form submission details row.
+ *
+ * @since	1.2.4
  * @global	object	$kbs_ticket			KBS_Ticket class object
  * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
  * @param	int		$ticket_id			The ticket post ID.
@@ -657,39 +694,7 @@ function kbs_ticket_metabox_form_data_row( $ticket_id )	{
     <?php
 		
 } // kbs_ticket_metabox_form_data_row
-add_action( 'kbs_ticket_metabox_custom_sections', 'kbs_ticket_metabox_form_data_row', 20 );
-
-/**
- * Display the ticket files row.
- *
- * @since	1.0
- * @global	object	$kbs_ticket			KBS_Ticket class object
- * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
- * @param	int		$ticket_id			The ticket post ID.
- */
-function kbs_ticket_metabox_files_row( $ticket_id )	{
-
-	global $kbs_ticket, $kbs_ticket_update;
-
-	if ( ! kbs_get_option( 'file_uploads' ) )	{
-		return;
-	}
-
-	?>
-
-	<?php if ( $kbs_ticket_update && ! empty( $kbs_ticket->files ) ) : ?>
-		
-		<div id="kbs-original-ticket-files-wrap" class="kbs_ticket_files_wrap">
-        	<p><strong><?php _e( 'Attached Files', 'kb-support' ); ?></strong></p>
-			<?php foreach( $kbs_ticket->files as $file ) : ?>
-                <p><a class="kbs_ticket_form_data" href="<?php echo wp_get_attachment_url( $file->ID ); ?>" target="_blank"><?php echo basename( get_attached_file( $file->ID ) ); ?></a></p>
-            <?php endforeach; ?>
-		</div>
-	
-	<?php endif;
-		
-} // kbs_ticket_metabox_details_row
-add_action( 'kbs_ticket_data_fields', 'kbs_ticket_metabox_files_row', 30 );
+add_action( 'kbs_ticket_metabox_custom_sections', 'kbs_ticket_metabox_form_data_row', 10 );
 
 /**
  * Display the ticket replies row.
