@@ -429,13 +429,11 @@ function kbs_ticket_metabox_agent_row( $ticket_id )	{
 
     ?>
     <div id="kbs-agent-options">
-        <p>
-            <?php echo KBS()->html->agent_dropdown( array(
-                'name'     => 'kbs_agent_id',
-                'selected' => ( ! empty( $kbs_ticket->agent_id ) ? $kbs_ticket->agent_id : get_current_user_id() ),
-                'chosen'   => true
-            ) ); ?>
-        </p>
+		<?php echo KBS()->html->agent_dropdown( array(
+			'name'     => 'kbs_agent_id',
+			'selected' => ( ! empty( $kbs_ticket->agent_id ) ? $kbs_ticket->agent_id : get_current_user_id() ),
+			'chosen'   => true
+		) ); ?>
     </div>
     <?php
 
@@ -460,17 +458,16 @@ function kbs_ticket_metabox_additional_agents_row( $ticket_id )	{
 
     ?>
     <div id="kbs-multi-agent-options">
-        <p><label for="kbs_assigned_agents"><?php _e( 'Additional Agents', 'kb-support' ); ?>:</label>
-            <?php echo KBS()->html->agent_dropdown( array(
-                'name'            => 'kbs_assigned_agents',
-                'selected'        => $kbs_ticket->agents,
-                'chosen'          => true,
-                'multiple'        => true,
-                'show_option_all' => false,
-                'placeholder'     => __( 'Select Additional Agents', 'kb-support' ),
-                'exclude'         => array( $kbs_ticket->agent_id )
-            ) ); ?>
-        </p>
+        <label for="kbs_assigned_agents"><?php _e( 'Additional Agents', 'kb-support' ); ?>:</label>
+		<?php echo KBS()->html->agent_dropdown( array(
+			'name'            => 'kbs_assigned_agents',
+			'selected'        => $kbs_ticket->agents,
+			'chosen'          => true,
+			'multiple'        => true,
+			'show_option_all' => false,
+			'placeholder'     => __( 'Select Additional Agents', 'kb-support' ),
+			'exclude'         => array( $kbs_ticket->agent_id )
+		) ); ?>
 
         <?php do_action( 'kbs_ticket_metabox_after_agent', $ticket_id ); ?>
     </div>
@@ -596,7 +593,7 @@ function kbs_ticket_metabox_customer_section( $ticket_id )	{
 
 			<?php if ( ! empty( $user_info['website'] ) ) : ?>
 				<span class="kbs-customer-ticket-attr customer-website">
-					<?php printf( '<a href="%1$s">%1$s</a>', esc_url( $user_info['website'] ) ); ?>
+					<?php printf( '<a href="%1$s" target="_blank">%1$s</a>', esc_url( $user_info['website'] ) ); ?>
 				</span>
 			<?php endif; ?>
 
