@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KB Support 1.2.3\n"
 "Report-Msgid-Bugs-To: https://kb-support.com/\n"
-"POT-Creation-Date: 2018-06-29 11:58:48+00:00\n"
+"POT-Creation-Date: 2018-06-29 21:47:47+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -65,7 +65,7 @@ msgstr ""
 msgid "Customers"
 msgstr ""
 
-#: includes/admin/admin-pages.php:33 includes/user-functions.php:54
+#: includes/admin/admin-pages.php:33 includes/user-functions.php:58
 msgid "KB Support Settings"
 msgstr ""
 
@@ -949,18 +949,18 @@ msgid_plural "(%s views)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/admin/departments/departments.php:31
+#: includes/admin/departments/departments.php:29
 #: includes/admin/settings/register-settings.php:373
 msgid "Agents"
 msgstr ""
 
-#: includes/admin/departments/departments.php:73
-#: includes/admin/departments/departments.php:100
+#: includes/admin/departments/departments.php:71
+#: includes/admin/departments/departments.php:98
 msgid "Department Agents"
 msgstr ""
 
-#: includes/admin/departments/departments.php:82
-#: includes/admin/departments/departments.php:109
+#: includes/admin/departments/departments.php:80
+#: includes/admin/departments/departments.php:107
 msgid "Select agents"
 msgstr ""
 
@@ -1292,7 +1292,7 @@ msgid "Agent"
 msgstr ""
 
 #: includes/admin/import-export/export/class-batch-export-tickets.php:51
-#: includes/admin/tickets/metaboxes.php:456
+#: includes/admin/tickets/metaboxes.php:463
 msgid "Additional Agents"
 msgstr ""
 
@@ -2180,7 +2180,7 @@ msgid "The label for the %s reply form submit button."
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:351
-#: includes/admin/tickets/metaboxes.php:768 includes/template-functions.php:66
+#: includes/admin/tickets/metaboxes.php:775 includes/template-functions.php:66
 #: templates/view-ticket.php:246
 msgid "Reply"
 msgstr ""
@@ -3346,7 +3346,7 @@ msgid "Create"
 msgstr ""
 
 #: includes/admin/tickets/metaboxes.php:85
-#: includes/admin/tickets/metaboxes.php:347
+#: includes/admin/tickets/metaboxes.php:354
 msgid "Update"
 msgstr ""
 
@@ -3362,72 +3362,76 @@ msgstr ""
 msgid "Reply to %1$s"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:164 includes/scripts.php:243
+#: includes/admin/tickets/metaboxes.php:165
+msgid "Add reply"
+msgstr ""
+
+#: includes/admin/tickets/metaboxes.php:169 includes/scripts.php:243
 msgid "View submission data"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:176
+#: includes/admin/tickets/metaboxes.php:181
 msgid "Delete %s"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:343
+#: includes/admin/tickets/metaboxes.php:350
 msgid "Back to %s"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:347
+#: includes/admin/tickets/metaboxes.php:354
 msgid "Add"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:401
+#: includes/admin/tickets/metaboxes.php:408
 #: includes/admin/tickets/tickets.php:70
 msgid "SLA Status"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:463
+#: includes/admin/tickets/metaboxes.php:470
 msgid "Select Additional Agents"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:500
+#: includes/admin/tickets/metaboxes.php:507
 msgid "Received: %s"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:507
+#: includes/admin/tickets/metaboxes.php:514
 msgid "Updated: %s"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:554
+#: includes/admin/tickets/metaboxes.php:561
 msgid "No customer assigned"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:620
+#: includes/admin/tickets/metaboxes.php:627
 msgid "%s Content"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:652
+#: includes/admin/tickets/metaboxes.php:659
 msgid "Attachments"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:738
+#: includes/admin/tickets/metaboxes.php:745
 msgid "This %1$s is currently closed. <a href=\"%2$s\">Re-open %3$s.</a>"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:752
+#: includes/admin/tickets/metaboxes.php:759
 msgid "Add a New Reply"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:769
+#: includes/admin/tickets/metaboxes.php:776
 msgid "Reply and Close"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:818
+#: includes/admin/tickets/metaboxes.php:825
 msgid "Add a New Note"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:822
+#: includes/admin/tickets/metaboxes.php:829
 msgid "Notes are only visible to support workers"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:835
+#: includes/admin/tickets/metaboxes.php:842
 msgid "Add Note"
 msgstr ""
 
@@ -4775,7 +4779,7 @@ msgstr ""
 msgid "New Department Name"
 msgstr ""
 
-#: includes/post-taxonomies.php:133 includes/user-functions.php:195
+#: includes/post-taxonomies.php:133 includes/user-functions.php:196
 msgid "Departments"
 msgstr ""
 
@@ -5493,37 +5497,37 @@ msgstr ""
 msgid "Delete Note"
 msgstr ""
 
-#: includes/user-functions.php:86
+#: includes/user-functions.php:87
 msgid "Replies to Load"
 msgstr ""
 
-#: includes/user-functions.php:89
+#: includes/user-functions.php:90
 msgid ""
 "Choose the number of replies to initially load when accessing the %s page. "
 "<code>0</code> loads all."
 msgstr ""
 
-#: includes/user-functions.php:115
+#: includes/user-functions.php:116
 msgid "Redirect After Reply"
 msgstr ""
 
-#: includes/user-functions.php:124 includes/user-functions.php:163
+#: includes/user-functions.php:125 includes/user-functions.php:164
 msgid "Current %s"
 msgstr ""
 
-#: includes/user-functions.php:125 includes/user-functions.php:164
+#: includes/user-functions.php:126 includes/user-functions.php:165
 msgid "%s List"
 msgstr ""
 
-#: includes/user-functions.php:128
+#: includes/user-functions.php:129
 msgid "Choose where to be redirected after submitting a reply to a %s."
 msgstr ""
 
-#: includes/user-functions.php:154
+#: includes/user-functions.php:155
 msgid "Redirect After Close"
 msgstr ""
 
-#: includes/user-functions.php:167
+#: includes/user-functions.php:168
 msgid "Choose where to be redirected after submitting a reply to close a %s."
 msgstr ""
 
@@ -5733,7 +5737,7 @@ msgstr ""
 msgid "helpdesk, help desk, ticket system, support ticket, knowledge base"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:172
+#: includes/admin/tickets/metaboxes.php:177
 msgctxt "verb"
 msgid "Trash"
 msgstr ""
