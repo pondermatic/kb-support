@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KB Support 1.2.3\n"
 "Report-Msgid-Bugs-To: https://kb-support.com/\n"
-"POT-Creation-Date: 2018-06-21 10:22:08+00:00\n"
+"POT-Creation-Date: 2018-06-29 11:58:48+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -583,8 +583,8 @@ msgstr ""
 
 #: includes/admin/customers/contextual-help.php:41
 #: includes/admin/customers/customers-page.php:80
-#: includes/admin/customers/customers-page.php:631
-#: includes/admin/customers/customers-page.php:665
+#: includes/admin/customers/customers-page.php:663
+#: includes/admin/customers/customers-page.php:697
 msgid "Add Customer"
 msgstr ""
 
@@ -646,7 +646,7 @@ msgstr ""
 
 #: includes/admin/customers/contextual-help.php:82
 #: includes/admin/customers/customer-functions.php:64
-#: includes/admin/customers/customers-page.php:607
+#: includes/admin/customers/customers-page.php:639
 msgid "Delete Customer"
 msgstr ""
 
@@ -772,17 +772,17 @@ msgid "Postal / Zip"
 msgstr ""
 
 #: includes/admin/customers/customers-page.php:270
-#: includes/admin/customers/customers-page.php:644
+#: includes/admin/customers/customers-page.php:676
 msgid "Customer Name"
 msgstr ""
 
 #: includes/admin/customers/customers-page.php:281
-#: includes/admin/customers/customers-page.php:651
+#: includes/admin/customers/customers-page.php:683
 msgid "Customer Company"
 msgstr ""
 
 #: includes/admin/customers/customers-page.php:292
-#: includes/admin/customers/customers-page.php:656
+#: includes/admin/customers/customers-page.php:688
 #: includes/forms/form-functions.php:540
 msgid "Customer Email"
 msgstr ""
@@ -822,7 +822,7 @@ msgid "Update Customer"
 msgstr ""
 
 #: includes/admin/customers/customers-page.php:367
-#: includes/admin/customers/customers-page.php:608
+#: includes/admin/customers/customers-page.php:640
 #: includes/admin/forms/metaboxes.php:555 includes/admin/thickbox.php:113
 #: includes/class-kbs-html-elements.php:1155
 msgid "Cancel"
@@ -860,16 +860,36 @@ msgstr ""
 msgid "No Emails Found"
 msgstr ""
 
-#: includes/admin/customers/customers-page.php:519
+#: includes/admin/customers/customers-page.php:516
+msgid "Not yet accepted"
+msgstr ""
+
+#: includes/admin/customers/customers-page.php:517
+msgid "Not yet agreed"
+msgstr ""
+
+#: includes/admin/customers/customers-page.php:537
+msgid "Agreeements"
+msgstr ""
+
+#: includes/admin/customers/customers-page.php:541
+msgid "Last Agreed to Terms%s"
+msgstr ""
+
+#: includes/admin/customers/customers-page.php:547
+msgid "Last Agreed to Privacy Policy%s"
+msgstr ""
+
+#: includes/admin/customers/customers-page.php:551
 #: includes/admin/import-export/export/class-batch-export-customers.php:48
 msgid "Notes"
 msgstr ""
 
-#: includes/admin/customers/customers-page.php:557
+#: includes/admin/customers/customers-page.php:589
 msgid "No Customer Notes"
 msgstr ""
 
-#: includes/admin/customers/customers-page.php:597
+#: includes/admin/customers/customers-page.php:629
 msgid "Are you sure you want to delete this customer?"
 msgstr ""
 
@@ -1272,7 +1292,7 @@ msgid "Agent"
 msgstr ""
 
 #: includes/admin/import-export/export/class-batch-export-tickets.php:51
-#: includes/admin/tickets/metaboxes.php:443
+#: includes/admin/tickets/metaboxes.php:456
 msgid "Additional Agents"
 msgstr ""
 
@@ -2160,7 +2180,7 @@ msgid "The label for the %s reply form submit button."
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:351
-#: includes/admin/tickets/metaboxes.php:618 includes/template-functions.php:66
+#: includes/admin/tickets/metaboxes.php:768 includes/template-functions.php:66
 #: templates/view-ticket.php:246
 msgid "Reply"
 msgstr ""
@@ -3326,7 +3346,7 @@ msgid "Create"
 msgstr ""
 
 #: includes/admin/tickets/metaboxes.php:85
-#: includes/admin/tickets/metaboxes.php:331
+#: includes/admin/tickets/metaboxes.php:347
 msgid "Update"
 msgstr ""
 
@@ -3335,71 +3355,79 @@ msgid "Assignment"
 msgstr ""
 
 #: includes/admin/tickets/metaboxes.php:114
-msgid "Original %1$s"
+msgid "Submitted %1$s"
 msgstr ""
 
 #: includes/admin/tickets/metaboxes.php:126
 msgid "Reply to %1$s"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:283
-msgid "Received"
+#: includes/admin/tickets/metaboxes.php:164 includes/scripts.php:243
+msgid "View submission data"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:288
-msgid "Updated"
+#: includes/admin/tickets/metaboxes.php:176
+msgid "Delete %s"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:327
+#: includes/admin/tickets/metaboxes.php:343
 msgid "Back to %s"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:331
+#: includes/admin/tickets/metaboxes.php:347
 msgid "Add"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:386
+#: includes/admin/tickets/metaboxes.php:401
 #: includes/admin/tickets/tickets.php:70
 msgid "SLA Status"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:450
+#: includes/admin/tickets/metaboxes.php:463
 msgid "Select Additional Agents"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:503
-msgid "Submitted Form Data"
+#: includes/admin/tickets/metaboxes.php:500
+msgid "Received: %s"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:503
-msgid "View Form Submission Data"
+#: includes/admin/tickets/metaboxes.php:507
+msgid "Updated: %s"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:536 templates/view-ticket.php:158
-msgid "Attached Files"
+#: includes/admin/tickets/metaboxes.php:554
+msgid "No customer assigned"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:588
+#: includes/admin/tickets/metaboxes.php:620
+msgid "%s Content"
+msgstr ""
+
+#: includes/admin/tickets/metaboxes.php:652
+msgid "Attachments"
+msgstr ""
+
+#: includes/admin/tickets/metaboxes.php:738
 msgid "This %1$s is currently closed. <a href=\"%2$s\">Re-open %3$s.</a>"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:602
+#: includes/admin/tickets/metaboxes.php:752
 msgid "Add a New Reply"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:619
+#: includes/admin/tickets/metaboxes.php:769
 msgid "Reply and Close"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:670
+#: includes/admin/tickets/metaboxes.php:818
 msgid "Add a New Note"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:674
+#: includes/admin/tickets/metaboxes.php:822
 msgid "Notes are only visible to support workers"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:687
+#: includes/admin/tickets/metaboxes.php:835
 msgid "Add Note"
 msgstr ""
 
@@ -3860,7 +3888,7 @@ msgstr ""
 msgid "Type to search all %s statuses"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:128 includes/scripts.php:231
+#: includes/class-kbs-html-elements.php:128 includes/scripts.php:235
 msgid "Type to search all %s"
 msgstr ""
 
@@ -4811,7 +4839,7 @@ msgstr ""
 msgid "New Reply"
 msgstr ""
 
-#: includes/post-types.php:78 includes/scripts.php:237
+#: includes/post-types.php:78 includes/scripts.php:241
 #: includes/tickets/reply-functions.php:123
 msgid "View Reply"
 msgstr ""
@@ -5248,67 +5276,80 @@ msgstr ""
 msgid "Add New %s"
 msgstr ""
 
-#: includes/scripts.php:217
-msgid "Enter a Label for your field."
-msgstr ""
-
-#: includes/scripts.php:218
-msgid "Select the field Type"
-msgstr ""
-
-#: includes/scripts.php:219
-msgid "Hide Note"
+#: includes/scripts.php:215
+msgid ""
+"You are about to permanently delete this %s.\n"
+"\n"
+"This action cannot be undone.\n"
+"\n"
+"Click 'Cancel' to stop, 'OK' to delete."
 msgstr ""
 
 #: includes/scripts.php:220
-msgid "Hide Reply"
+msgid "Enter a Label for your field."
+msgstr ""
+
+#: includes/scripts.php:221
+msgid "Select the field Type"
+msgstr ""
+
+#: includes/scripts.php:222
+msgid "Hide Note"
 msgstr ""
 
 #: includes/scripts.php:223
-msgid "There is no content in your note"
+msgid "Hide Reply"
 msgstr ""
 
 #: includes/scripts.php:224
-msgid "There is no content in your reply"
-msgstr ""
-
-#: includes/scripts.php:225
-msgid "Your note could not be added"
-msgstr ""
-
-#: includes/scripts.php:226
-msgid "Choose a %s"
+msgid "Hide submission data"
 msgstr ""
 
 #: includes/scripts.php:227
-msgid "Choose one or more %s"
+msgid "There is no content in your note"
+msgstr ""
+
+#: includes/scripts.php:228
+msgid "There is no content in your reply"
+msgstr ""
+
+#: includes/scripts.php:229
+msgid "Your note could not be added"
 msgstr ""
 
 #: includes/scripts.php:230
+msgid "Choose a %s"
+msgstr ""
+
+#: includes/scripts.php:231
+msgid "Choose one or more %s"
+msgstr ""
+
+#: includes/scripts.php:234
 msgid ""
 "You have not submitted the reply. If you continue, the reply will not be "
 "added to the %s"
 msgstr ""
 
-#: includes/scripts.php:232
+#: includes/scripts.php:236
 msgid "Send closure email?"
 msgstr ""
 
-#: includes/scripts.php:233
+#: includes/scripts.php:237
 msgid ""
 "Are you sure you wish to close this ticket? Click OK to close, or Cancel to "
 "return."
 msgstr ""
 
-#: includes/scripts.php:235
+#: includes/scripts.php:239
 msgid "Could not add %s Reply"
 msgstr ""
 
-#: includes/scripts.php:236
+#: includes/scripts.php:240
 msgid "Type to search %s"
 msgstr ""
 
-#: includes/scripts.php:238 includes/tickets/ticket-functions.php:1423
+#: includes/scripts.php:242 includes/tickets/ticket-functions.php:1423
 msgid "View Note"
 msgstr ""
 
@@ -5376,23 +5417,23 @@ msgstr ""
 msgid "%s re-opened by %s reply."
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:1772
+#: includes/tickets/class-kbs-ticket.php:1776
 msgid "Form: %s"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:1792
+#: includes/tickets/class-kbs-ticket.php:1806
 msgid "Department %s not found"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:1806
+#: includes/tickets/class-kbs-ticket.php:1820
 msgid "Term %s no longer exists"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:1837
+#: includes/tickets/class-kbs-ticket.php:1851
 msgid "The privacy policy was acknowledged"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:1847
+#: includes/tickets/class-kbs-ticket.php:1861
 msgid "The terms and conditions were accepted"
 msgstr ""
 
@@ -5634,6 +5675,10 @@ msgstr ""
 msgid "by"
 msgstr ""
 
+#: templates/view-ticket.php:158
+msgid "Attached Files"
+msgstr ""
+
 #: templates/view-ticket.php:178
 msgid "No replies yet"
 msgstr ""
@@ -5686,6 +5731,11 @@ msgstr ""
 
 #. Tags of the plugin/theme
 msgid "helpdesk, help desk, ticket system, support ticket, knowledge base"
+msgstr ""
+
+#: includes/admin/tickets/metaboxes.php:172
+msgctxt "verb"
+msgid "Trash"
 msgstr ""
 
 #: includes/class-kbs-html-elements.php:99

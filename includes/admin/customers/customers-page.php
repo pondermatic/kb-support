@@ -513,8 +513,8 @@ function kbs_customer_notes_view( $customer ) {
 
     $show_agree_to_terms   = kbs_get_option( 'show_agree_to_terms', false );
     $show_agree_to_privacy = kbs_get_option( 'show_agree_to_privacy_policy', false );
-    $privacy_accepted      = __( 'Not yet accepted', 'mobile-dj-manager' );
-    $terms_accepted        = __( 'Not yet agreed', 'mobile-dj-manager' );
+    $privacy_accepted      = __( 'Not yet accepted', 'kb-support' );
+    $terms_accepted        = __( 'Not yet agreed', 'kb-support' );
     $privacy_timestamp     = $customer->get_meta( 'agree_to_privacy_time', true );
     $terms_timestamp       = $customer->get_meta( 'agree_to_terms_time', true );
     $date_format           = get_option( 'date_format' );
