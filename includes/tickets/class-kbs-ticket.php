@@ -1422,7 +1422,7 @@ class KBS_Ticket {
 		$participants = $this->get_meta( '_kbs_ticket_participants', true );
 
 		if ( empty( $participants ) )	{
-			$participants = $this->add_participants();
+			$participants = array( $this->email );
 		}
 
 		return $participants;
