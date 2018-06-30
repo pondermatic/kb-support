@@ -290,6 +290,12 @@ function kbs_get_registered_settings() {
 						'type'    => 'text',
 						'size'    => 'small'
 					),
+					'enable_participants' => array(
+						'id'      => 'enable_participants',
+						'name'    => __( 'Enable Participants?', 'kb-support' ),
+						'desc'    => sprintf( __( 'If enabled, participants can be added to %s and each participant will be able to view and respond to the %s', 'kb-support' ), strtolower( $plural ), strtolower( $single ) ),
+						'type'    => 'checkbox'
+					),
 					'hide_closed' => array(
 						'id'      => 'hide_closed',
 						'name'    => sprintf( __( 'Hide Closed %s?', 'kb-support' ), $plural ),

@@ -119,6 +119,10 @@ function kbs_customer_can_access_ticket( $ticket = '', $customer = '' )	{
 		}
 	}
 
+	if ( ! $can_access && ! empty ( $customer->id ) )	{
+		$can_access = kbs_is_ticket_participant( $ticket->ID, $customer->id );
+	}
+
 	/**
 	 * Enable extensions to overide the $can_access result
 	 *

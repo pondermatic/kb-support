@@ -236,6 +236,14 @@ class KBS_Ticket {
 	protected $email = '';
 
 	/**
+	 * Participants of ticket.
+	 *
+	 * @since	1.2.4
+	 * @var		array
+	 */
+	protected $participants = array();
+
+	/**
 	 * Timestamp of when privacu policy was agreed
 	 *
 	 * @since	1.5
@@ -472,6 +480,7 @@ class KBS_Ticket {
 		$this->user_info       = $this->setup_user_info();
 		$this->first_name      = $this->user_info['first_name'];
 		$this->last_name       = $this->user_info['last_name'];
+		$this->participants    = $this->get_participants();
 
 		// SLA
 		$this->sla_respond     = $this->setup_sla_targets( 'respond' );
@@ -531,6 +540,7 @@ class KBS_Ticket {
 				'website'          => isset( $this->user_info['website'] )          ? $this->user_info['website']          : ''
 			),
 			'company_id'       => $this->company_id,
+			'participants'     => $this->participants,
 			'sla_respond'      => $this->sla_respond,
 			'sla_resolve'      => $this->sla_resolve,
 			'status'           => $this->status,
@@ -605,6 +615,7 @@ class KBS_Ticket {
 			$this->company_id             = $customer->company_id;
 			$this->pending['customer_id'] = $this->customer_id;
 			$this->pending['company_id']  = $this->company_id;
+			$this->participants[]         = $this->email;
 			$customer->attach_ticket( $this->ID );
 
 			if ( ! empty( $this->agent_id ) )	{
@@ -613,6 +624,10 @@ class KBS_Ticket {
 
             if ( ! empty( $this->agents ) )	{
 				$this->pending['agents'] = $this->agents;
+			}
+
+			if ( ! empty( $this->participants ) )	{
+				$this->pending['participants'] = $this->participants;
 			}
 
 			if ( ! empty( $this->department ) )	{
@@ -781,6 +796,10 @@ class KBS_Ticket {
 
 					case 'number':
 						$this->update_meta( '_kbs_ticket_number', $this->number );
+						break;
+
+					case 'participants':
+						$this->add_participants( $this->participants );
 						break;
 
 					case 'resolved_date':
@@ -1392,6 +1411,100 @@ class KBS_Ticket {
 
 		return $user_info;
 	} // setup_user_info
+
+	/**
+	 * Retrieve the participants
+	 *
+	 * @since	1.2.4
+	 * @return	array	The email addresses associated with the ticket.
+	 */
+	public function get_participants() {
+		$participants = $this->get_meta( '_kbs_ticket_participants', true );
+
+		if ( empty( $participants ) )	{
+			$participants = $this->add_participants();
+		}
+
+		return $participants;
+	} // get_participants
+
+	/**
+	 * Adds participants to the ticket.
+	 *
+	 * @since	1.2.4
+	 * @param	array	$email_addresses
+	 * @return	array	Array of participant email addresses
+	 */
+	public function add_participants( $email_addresses = array() )	{
+		$participants = $this->get_participants();
+
+		if ( empty( $participants ) )	{
+			$participants = array();
+		}
+
+		if ( ! is_array( $participants ) )	{
+			$participants = array( $participants );
+		}
+
+		if ( ! is_array( $email_addresses ) )	{
+			$email_addresses = array( $email_addresses );
+		}
+
+		$email_addresses = array_map( 'sanitize_email', $email_addresses );
+		$email_addresses = array_filter( $email_addresses, 'is_email' );
+
+		if ( ! empty( $email_addresses ) )	{
+			$participants = array_merge( $participants, $email_addresses );
+			$participants = array_unique( $participants );
+		}
+
+		if ( ! in_array( $this->email, $participants ) )	{
+			array_unshift( $participants, $this->email );
+		}
+
+		$this->update_meta( '_kbs_ticket_participants', $participants );
+		$this->participants = $this->get_participants();
+
+		return $this->participants;
+	} // add_participants
+
+	/**
+	 * Whether or not the user is a participant.
+	 *
+	 * @since	1.2.4
+	 * @param	int|string	$id_or_email	Customer ID or email address
+	 * @return	bool		True if a participant of the ticket, otherwise false
+	 */
+	public function is_participant( $id_or_email )	{
+		$participant = false;
+		$emails      = false;
+
+		if ( kbs_participants_enabled() )	{
+			if ( is_numeric( $id_or_email ) )	{
+				$customer = new KBS_Customer( $id_or_email );
+
+				if ( $customer )	{
+					$emails = $customer->emails;
+				}
+			} else	{
+				if ( is_email( $id_or_email ) )	{
+					$emails = array( $id_or_email );
+				}
+			}
+		}
+
+		if ( $emails )	{
+			foreach( $emails as $email )	{
+				if ( in_array( $email, $this->participants ) )	{
+					$participant = true;
+				}
+			}
+		}
+
+		$participant = apply_filters( 'kbs_is_participant', $participant, $id_or_email, $this );
+
+		return $participant;
+	} // is_participant
 
 	/**
 	 * Setup the IP Address for the ticket.

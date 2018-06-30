@@ -495,3 +495,22 @@ function kbs_v122_upgrades()	{
     kbs_delete_option( 'agree_heading' );
     kbs_delete_option( 'agree_text' );
 } // kbs_v122_upgrades
+
+/**
+ * Upgrade routine for version 1.2.4.
+ *
+ * - Add participants option.
+ *
+ * @since	1.2.4
+ * @return	void
+ */
+function kbs_v124_upgrades()	{
+
+    $new_options = array(
+        'enable_participants' => false
+    );
+
+    foreach( $new_options as $option => $value )    {
+        kbs_update_option( $option, $value );
+    }
+} // kbs_v124_upgrades
