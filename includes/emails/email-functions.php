@@ -428,13 +428,13 @@ function kbs_get_admin_notice_emails( $ticket_id = 0 )	{
 	$emails = array_map( 'trim', explode( "\n", $emails ) );
 
 	if ( ! empty( $ticket_id ) )	{
-		$agent_id  = kbs_get_agent( $ticket_id );
+		$agent_id = kbs_get_agent( $ticket_id );
 
 		if ( ! empty( $agent_id ) )	{
-			$agent_data  = get_userdata( $agent_id );
+			$agent_data = get_userdata( $agent_id );
 
 			if ( ! empty( $agent_data ) )	{
-				$emails      = str_replace( '{agent}', $agent_data->user_email, $emails );
+				$emails = str_replace( '{agent}', $agent_data->user_email, $emails );
 			}
 		}
 	}
