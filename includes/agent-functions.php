@@ -407,3 +407,49 @@ function kbs_get_online_agent_count()	{
 
 	return (int)$online;
 } // kbs_get_online_agent_count
+
+/**
+ * Redirect when an agent replies to or closes a ticket within admin.
+ *
+ * @since   1.2.4
+ * @param   int     $ticket_id  The ticket ID
+ * @param   int     $agent_id   The agent ID
+ * @return  void
+ */
+function kbs_maybe_redirect_on_ticket_save( $ticket_id, $agent_id = 0 )   {
+    if ( empty( $agent_id ) )   {
+        $agent_id = get_current_user_id();
+    }
+
+    $status        = get_post_status( $ticket_id );
+    $redirect_type = 'closed' == $status ? 'close' : 'reply';
+    $redirect_key  = '_kbs_redirect_' . $redirect_type;
+	$redirect      = get_user_meta( $agent_id, $redirect_key, true );
+    $default       = 'stay';
+    $notice        = 'closed' == $status ? 'ticket_reply_added_closed' : 'ticket_reply_added';
+
+	if ( empty( $redirect ) )	{
+		$redirect = $default;
+	}
+
+	switch( $redirect )	{
+		case 'stay': // Current ticket
+		default:
+			$url = add_query_arg( array(
+				'kbs-message'   => $notice,
+                'kbs_ticket_id' => $ticket_id
+			), kbs_get_ticket_url( $ticket_id, true ) );
+			break;
+
+		case 'list': // All tickets list
+			$url = add_query_arg( array(
+				'post_type'     => 'kbs_ticket',
+				'kbs-message'   => $notice,
+				'kbs_ticket_id' => $ticket_id
+			), admin_url( 'edit.php' ) );
+			break;
+	}
+
+	wp_safe_redirect( $url );
+	exit;
+} // kbs_maybe_redirect_on_ticket_save
