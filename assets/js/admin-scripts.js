@@ -296,7 +296,7 @@ jQuery(document).ready(function ($) {
 			});
 
 			// Removes a participant from a ticket
-			$( document.body ).on( 'click', '.remove-participant, #kbs-reply-update', function(e) {
+			$( document.body ).on( 'click', '.remove-participant', function(e) {
 				e.preventDefault(e);
 
 				var participant = $(this).data('participant');
