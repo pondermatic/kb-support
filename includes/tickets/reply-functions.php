@@ -215,7 +215,7 @@ function kbs_get_reply_author_name( $reply, $role = false )	{
 
 	$author       = __( 'Unknown', 'kb-support' );
 	$author_role  = __( 'Customer', 'kb-support' );
-    $author_email = get_post_meta( $reply->ID, '_kbs_reply_participant', true );
+    $author_email = kbs_participants_enabled() ? get_post_meta( $reply->ID, '_kbs_reply_participant', true ) : false;
     $author_email = is_email( $author_email );
     $ticket_email = kbs_get_ticket_user_email( $reply->post_parent );
     $customer_id  = get_post_meta( $reply->post_parent, '_kbs_ticket_customer_id', true );

@@ -507,7 +507,8 @@ function kbs_v122_upgrades()	{
 function kbs_v124_upgrades()	{
 
     $new_options = array(
-        'enable_participants' => false
+        'enable_participants' => false,
+        'copy_participants'   => false
     );
 
     foreach( $new_options as $option => $value )    {
