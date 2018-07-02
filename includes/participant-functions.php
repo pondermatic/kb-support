@@ -21,7 +21,17 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function kbs_participants_enabled()	{
 	return kbs_get_option( 'enable_participants', false );
-} // kbs_get_ticket_participants
+} // kbs_participants_enabled
+
+/**
+ * Whether or not participants should be copied into ticket communications.
+ *
+ * @since   1.2.4
+ * @return  bool    True if they should be copied, otherwise false
+ */
+function kbs_copy_participants_in_communications()   {
+    return kbs_get_option( 'copy_participants', false );
+} // kbs_copy_participants_in_communications
 
 /**
  * Whether or not the given user is a participant of the current ticket.
@@ -196,3 +206,35 @@ function kbs_remove_ticket_participants( $ticket, $email_addresses )	{
 	return $participants;
 } // kbs_remove_ticket_participants
 
+/**
+ * Filters email headers if we CC in the ticket participants.
+ *
+ * @since   1.2.4
+ * @param   string  $headers        Email headers
+ * @param   int     $ticket_id      Ticket ID
+ * @param   array   $ticket_data    Array of ticket meta data
+ * @return  string
+ */
+function kbs_maybe_cc_participants( $headers, $ticket_id, $ticket_data ) {
+    $cc = kbs_copy_participants_in_communications();
+    $cc = apply_filters( 'kbs_maybe_cc_participants', $cc, $ticket_id, $ticket_data );
+
+    if ( $cc )  {
+        $participants = kbs_get_ticket_participants( $ticket_id, false );
+
+        if ( ! empty( $participants ) )   {
+            foreach( $participants as $participant )    {
+                $email = is_email( $participant );
+
+                if ( $email )   {
+                    $headers[] = 'Cc: ' . $participant;
+                }
+            }
+        }
+    }
+
+    return $headers;
+} // kbs_maybe_cc_participants
+add_filter( 'kbs_ticket_headers', 'kbs_maybe_cc_participants', 10, 3 );
+add_filter( 'kbs_ticket_reply_headers', 'kbs_maybe_cc_participants', 10, 3 );
+add_filter( 'kbs_ticket_closed_headers', 'kbs_maybe_cc_participants', 10, 3 );

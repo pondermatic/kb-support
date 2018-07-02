@@ -254,6 +254,7 @@ function kbs_admin_email_ticket_notice( $ticket_id = 0, $ticket_data = array() )
 
 	$single    = kbs_get_ticket_label_singular();
 	$ticket_id = absint( $ticket_id );
+    $headers   = array();
 
 	if ( empty( $ticket_id ) ) {
 		return;
@@ -269,10 +270,9 @@ function kbs_admin_email_ticket_notice( $ticket_id = 0, $ticket_data = array() )
 	$subject     = apply_filters( 'kbs_admin_ticket_notification_subject', wp_strip_all_tags( $subject ), $ticket_id );
 	$subject     = kbs_do_email_tags( $subject, $ticket_id );
 
-	$headers     = "From: " . stripslashes_deep( html_entity_decode( $from_name, ENT_COMPAT, 'UTF-8' ) ) . " <$from_email>\r\n";
-	$headers    .= "Reply-To: ". $from_email . "\r\n";
-	//$headers  .= "MIME-Version: 1.0\r\n";
-	$headers    .= "Content-Type: text/html; charset=utf-8\r\n";
+	$headers[]   = "From: " . stripslashes_deep( html_entity_decode( $from_name, ENT_COMPAT, 'UTF-8' ) ) . " <$from_email>";
+	$headers[]   = "Reply-To: ". $from_email;
+	$headers[]   = "Content-Type: text/html; charset=utf-8";
 	$headers     = apply_filters( 'kbs_admin_ticket_notification_headers', $headers, $ticket_id, $ticket_data );
 
 	$message     = kbs_get_ticket_notification_email_body_content( $ticket_id, $ticket_data );
@@ -305,6 +305,7 @@ function kbs_admin_email_reply_notice( $reply_id = 0, $data = array() ) {
 
 	$single    = kbs_get_ticket_label_singular();
 	$ticket_id = absint( $reply_id );
+    $headers   = array();
 
 	if ( empty( $reply_id ) ) {
 		return;
@@ -326,10 +327,9 @@ function kbs_admin_email_reply_notice( $reply_id = 0, $data = array() ) {
 	$subject     = apply_filters( 'kbs_admin_reply_notification_subject', wp_strip_all_tags( $subject ), $ticket_id, $reply_id );
 	$subject     = kbs_do_email_tags( $subject, $ticket_id );
 
-	$headers     = "From: " . stripslashes_deep( html_entity_decode( $from_name, ENT_COMPAT, 'UTF-8' ) ) . " <$from_email>\r\n";
-	$headers    .= "Reply-To: ". $from_email . "\r\n";
-	//$headers  .= "MIME-Version: 1.0\r\n";
-	$headers    .= "Content-Type: text/html; charset=utf-8\r\n";
+	$headers[]   = "From: " . stripslashes_deep( html_entity_decode( $from_name, ENT_COMPAT, 'UTF-8' ) ) . " <$from_email>";
+	$headers[]   = "Reply-To: ". $from_email;
+	$headers[]   = "Content-Type: text/html; charset=utf-8";
 	$headers     = apply_filters( 'kbs_admin_reply_notification_headers', $headers, $ticket_id, $data, $reply_id );
 
 	$message     = kbs_get_reply_notification_email_body_content( $ticket_id, $data );

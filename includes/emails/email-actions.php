@@ -91,7 +91,9 @@ function kbs_add_additional_agents_to_reply_notifications( $headers, $ticket_id,
                 }
 
                 if ( ! empty( $agent_emails ) ) {
-                    $headers .= 'Cc: ' . implode( ',', $agent_emails ) . "\r\n";
+                    foreach( $agent_emails as $email )  {
+                        $headers[] = 'Cc: ' . $email;
+                    }
                 }
 
             }
@@ -100,7 +102,7 @@ function kbs_add_additional_agents_to_reply_notifications( $headers, $ticket_id,
 
     return $headers;
 } // kbs_add_additional_agents_to_reply_notifications
-add_action( 'kbs_admin_reply_notification_headers', 'kbs_add_additional_agents_to_reply_notifications', 10, 3 );
+add_filter( 'kbs_admin_reply_notification_headers', 'kbs_add_additional_agents_to_reply_notifications', 10, 3 );
 
 /**
  * Adds attachments to ticket emails.
