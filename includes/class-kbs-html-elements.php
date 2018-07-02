@@ -296,6 +296,7 @@ class KBS_HTML_Elements {
 			'show_company'     => false,
 			'placeholder'      => __( 'Select a Customer', 'kb-support' ),
 			'number'           => -1,
+			'show_no_attached' => true,
             'show_option_all'  => false,
             'show_option_none' => __( 'Select a Customer', 'kb-support' ),
 			'data'             => array(
@@ -314,7 +315,9 @@ class KBS_HTML_Elements {
 		$options  = array();
 
 		if ( $customers ) {
-			$options[0] = __( 'No customer attached', 'kb-support' );
+			if ( $args['show_no_attached'] )	{
+				$options[0] = __( 'No customer attached', 'kb-support' );
+			}
 
 			foreach ( $customers as $customer ) {
 				$company = '';

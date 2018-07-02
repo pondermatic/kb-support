@@ -27,39 +27,172 @@ function kbs_participants_enabled()	{
  * Whether or not the given user is a participant of the current ticket.
  *
  * @since	1.2.4
- * @param	int		$ticket_id	Ticket ID
- * @param	string	$email		Email address of user
- * @return	bool	True if a participant of the ticket, otherwise false
+ * @param	int|object	$ticket		Ticket ID or KBS_Ticket object
+ * @param	string		$email		Email address of user
+ * @return	bool		True if a participant of the ticket, otherwise false
  */
-function kbs_is_ticket_participant( $ticket_id, $email )	{
-	$ticket = new KBS_Ticket( $ticket_id );
+function kbs_is_ticket_participant( $ticket, $email )	{
+	$ticket         = kbs_get_ticket( $ticket );
+	$is_participant = false;
 
-	return $ticket->is_participant( $email );
+	if ( $ticket )	{
+		$is_participant = $ticket->is_participant( $email );
+	}
+
+	return $is_participant;
 } // kbs_is_ticket_participant
 
 /**
- * Retrieve the list of ticket participants.
+ * Retrieve the ticket participants.
  *
  * @since	1.2.4
- * @param	int				$ticket_id	Ticket ID
- * @return	array			Array of participants
+ * @param	int|object	$ticket				Ticket ID or KBS_Ticket object
+ * @param	bool		$include_primary	True to include the primary employee in the count
+ * @return	array		Array of participants
  */
-function kbs_get_ticket_participants( $ticket_id )	{
-	$ticket = new KBS_Ticket( $ticket_id );
+function kbs_get_ticket_participants( $ticket, $include_primary = true )	{
+	$ticket       = kbs_get_ticket( $ticket );
+	$participants = array();
+	
+	if ( $ticket )	{
+		$participants = $ticket->participants;
 
-	return $ticket->participants;
+		if ( ! $include_primary && in_array( $ticket->email, $participants ) )	{
+			if ( ( $key = array_search( $ticket->email, $participants ) ) !== false )	{
+				unset( $participants[ $key ] );
+			}
+		}
+	}
+
+	return $participants;
 } // kbs_get_ticket_participants
+
+/**
+ * Retrieve the count of ticket participants.
+ *
+ * @since	1.2.4
+ * @param	int|object	$ticket				Ticket ID or KBS_Ticket object
+ * @param	bool		$include_primary	True to include the primary employee in the count
+ * @return	int			Count of participants
+ */
+function kbs_get_ticket_participant_count( $ticket, $include_primary = false  )	{
+	return count( kbs_get_ticket_participants( $ticket, $include_primary ) );
+} // kbs_get_ticket_participant_count
+
+/**
+ * List the ticket participants.
+ *
+ * @since	1.2.4
+ * @param	int|object	$ticket				Ticket ID or KBS_Ticket object
+ * @param	bool		$include_primary	True to include the primary employee
+ * @param	bool		$email_only			True returns a list of email addresses only
+ * @param	bool		$with_id			True includes a customers ID if they exist
+ * @return	string		Count of participants
+ */
+function kbs_list_ticket_participants( $ticket, $args = array()  )	{
+	$defaults = array(
+		'primary'     => false,
+		'email_only'  => true,
+		'remove_link' => false
+	);
+
+	$args          = wp_parse_args( $args, $defaults );
+	$participants  = array();
+	$_participants = kbs_get_ticket_participants( $ticket, $args['primary'] );
+
+	if ( empty( $_participants ) )	{
+		return sprintf(
+			__( 'There are no participants of this %s.', 'kb-support' ),
+			kbs_get_ticket_label_singular( true )
+		);
+	}
+
+	foreach( $_participants as $email )	{
+		$output   = '<ul class="participant-container space-between">';
+		$customer = false;
+		$link     = '';
+
+		$output .= '<li class="participant-item">';
+		$output .= sprintf( '<a href="mailto:%1$s">%1$s</a>', $email );
+		$output .= '</li>';
+
+		if ( ! $args['email_only'] )	{
+			$customer = new KBS_Customer( $email );
+
+			$output .= '<li class="participant-item">';
+
+			if ( $customer && ! empty( $customer->id ) )	{
+				$link    = add_query_arg( array(
+					'post_type' => 'kbs_ticket',
+					'page'      => 'kbs-customers',
+					'view'      => 'userdata',
+					'id'        => $customer->id
+				) );
+				$output .= sprintf(
+					'<a href="%s">%s</a>',
+					$link,
+					$customer->name
+				);
+			} else	{
+				$output .= '&mdash;';
+			}
+
+			$output .= '</li>';
+		}
+
+		if ( $args['remove_link'] )	{
+			$output .= '<li class="participant-item">';
+			$output .= sprintf(
+				'<a href="#" class="kbs-delete remove-participant" data-participant="%s">%s</a>',
+				$email,
+				__( 'Remove', 'kb-support' )
+			);
+			$output .= '</li>';
+		}
+
+		$output .= '</ul>';
+
+		$participants[] = $output;
+	}
+
+	return implode( '', $participants );
+} // kbs_list_ticket_participants
 
 /**
  * Update the list of ticket participants.
  *
  * @since	1.2.4
- * @param	int				$ticket_id	Ticket ID
- * @param	string|array	Email address, or array of addresses, to add
+ * @param	int				$ticket				Ticket ID or KBS_Ticket object
+ * @param	string|array	$email_addresses	Email address, or array of addresses, to add
  * @return	array			Array of participants
  */
-function kbs_add_ticket_participants( $ticket_id, $email_addresses )	{
-	$ticket = new KBS_Ticket( $ticket_id );
+function kbs_add_ticket_participants( $ticket, $email_addresses )	{
+	$ticket       = kbs_get_ticket( $ticket );
+	$participants = array();
 
-	return $ticket->add_participants( $email_addresses );
+	if ( $ticket )	{
+		$participants = $ticket->add_participants( $email_addresses );
+	}
+
+	return $participants;
 } // kbs_add_ticket_participants
+
+/**
+ * Removes a ticket participants.
+ *
+ * @since	1.2.4
+ * @param	int				$ticket				Ticket ID or KBS_Ticket object
+ * @param	string|array	$email_addresses	Email address, or array of addresses, to remove
+ * @return	array			Array of remaining participants
+ */
+function kbs_remove_ticket_participants( $ticket, $email_addresses )	{
+	$ticket       = kbs_get_ticket( $ticket );
+	$participants = array();
+
+	if ( $ticket )	{
+		$participants = $ticket->remove_participants( $email_addresses );
+	}
+
+	return $participants;
+} // kbs_remove_ticket_participants
+

@@ -727,8 +727,8 @@ class KBS_Ticket {
                         }
 
                         if ( in_array( $this->agent_id, $this->agents ) )   {
-                            if ( ( $key = array_search( $this->agent_id, $this->agents ) ) !== false ) {
-                                unset( $this->agents[ $key ] );
+                            if ( ( $array_key = array_search( $this->agent_id, $this->agents ) ) !== false ) {
+                                unset( $this->agents[ $array_key ] );
                             }
                         }
 
@@ -1432,8 +1432,8 @@ class KBS_Ticket {
 	 * Adds participants to the ticket.
 	 *
 	 * @since	1.2.4
-	 * @param	array	$email_addresses
-	 * @return	array	Array of participant email addresses
+	 * @param	string|array	$email_addresses	Email address, or array of addresses, to add
+	 * @return	array			Array of participant email addresses
 	 */
 	public function add_participants( $email_addresses = array() )	{
 		$participants = $this->get_participants();
@@ -1467,6 +1467,38 @@ class KBS_Ticket {
 
 		return $this->participants;
 	} // add_participants
+
+	/**
+	 * Removes participants from the ticket.
+	 *
+	 * @since	1.2.4
+	 * @param	string|array	$email_addresses	Email address, or array of addresses, to remove
+	 * @return	array			Array of participant email addresses
+	 */
+	public function remove_participants( $email_addresses = array() )	{
+		$participants = $this->get_participants();
+
+		if ( ! is_array( $email_addresses ) )	{
+			$email_addresses = array( $email_addresses );
+		}
+
+		foreach( $email_addresses as $email )	{
+			if ( $this->email == $email )	{
+				continue;
+			}
+
+			if ( in_array( $email, $participants ) )   {
+				if ( ( $array_key = array_search( $email, $participants ) ) !== false ) {
+					unset( $participants[ $array_key ] );
+				}
+			}
+		}
+
+		$this->update_meta( '_kbs_ticket_participants', $participants );
+		$this->participants = $this->get_participants();
+
+		return $this->participants;
+	} // remove_participants
 
 	/**
 	 * Whether or not the user is a participant.

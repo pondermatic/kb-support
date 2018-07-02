@@ -138,6 +138,74 @@ function kbs_ajax_dismiss_admin_notice()	{
 add_action( 'wp_ajax_kbs_dismiss_notice', 'kbs_ajax_dismiss_admin_notice' );
 
 /**
+ * Add a participant to a ticket.
+ *
+ * @since	1.2.4
+ * @return	void
+ */
+function kbs_ajax_add_participant()	{
+	$email     = false;
+	$ticket_id = absint( $_POST['ticket_id'] );
+
+	if ( '-1' != $_POST['participant'] )	{
+		$customer = new KBS_Customer( $_POST['participant'] );
+
+		if ( $customer )	{
+			$email = $customer->email;
+		}
+	} else	{
+		$posted_email = sanitize_email( $_POST['email'] );
+		$email        = is_email( $posted_email );
+	}
+
+	if ( ! empty( $ticket_id ) && ! empty( $email ) )	{
+		kbs_add_ticket_participants( $ticket_id, $email );
+		$count = kbs_get_ticket_participant_count( $ticket_id );
+		$list  = kbs_list_ticket_participants( $ticket_id, array(
+			'email_only'  => false,
+			'remove_link' => true
+		) );
+
+		wp_send_json_success( array(
+			'list'  => $list,
+			'count' => $count
+		) );
+	}
+
+	wp_send_json_error();
+} // kbs_ajax_add_participant
+add_action( 'wp_ajax_kbs_add_participant', 'kbs_ajax_add_participant' );
+
+/**
+ * Remove a participant from a ticket.
+ *
+ * @since	1.2.4
+ * @return	void
+ */
+function kbs_ajax_remove_participant()	{
+	$ticket_id    = absint( $_POST['ticket_id'] );
+	$posted_email = sanitize_email( $_POST['participant'] );
+	$email        = is_email( $posted_email );
+
+	if ( ! empty( $ticket_id ) && ! empty( $email ) )	{
+		kbs_remove_ticket_participants( $ticket_id, $email );
+		$count = kbs_get_ticket_participant_count( $ticket_id );
+		$list  = kbs_list_ticket_participants( $ticket_id, array(
+			'email_only'  => false,
+			'remove_link' => true
+		) );
+
+		wp_send_json_success( array(
+			'list'  => $list,
+			'count' => $count
+		) );
+	}
+
+	wp_send_json_error();
+} // kbs_ajax_remove_participant
+add_action( 'wp_ajax_kbs_remove_participant', 'kbs_ajax_remove_participant' );
+
+/**
  * Reply to a ticket.
  *
  * @since	1.0
