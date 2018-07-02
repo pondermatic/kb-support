@@ -132,10 +132,9 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 **New**: Added customer data to ticket screen
 **New**: Added customer last agreed to terms date to customer notes screen
 **New**: Added customer last agreed to privacy policy date to customer notes screen
-
 **Tweak**: Fallback to company logo (if one exists) as avatar image if customer does not have an avatar
-
 **Fix**: Corrected output for privacy policy acceptance
+**Dev**: We've switched to array based email headers
 
 = 1.2.3 =
 
