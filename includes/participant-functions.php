@@ -30,7 +30,13 @@ function kbs_participants_enabled()	{
  * @return  bool    True if they should be copied, otherwise false
  */
 function kbs_copy_participants_in_communications()   {
-    return kbs_get_option( 'copy_participants', false );
+    $enabled = false;
+
+    if ( kbs_participants_enabled() ) {
+        $enabled = kbs_get_option( 'copy_participants', false );
+    }
+
+    return $enabled;
 } // kbs_copy_participants_in_communications
 
 /**

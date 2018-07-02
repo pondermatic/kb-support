@@ -1862,6 +1862,10 @@ class KBS_Ticket {
 			$args['meta_input']['_kbs_reply_agent_id'] = $reply_data['agent_id'];
 		}
 
+        if ( isset( $reply_data['participant'] ) )	{
+			$args['meta_input']['_kbs_reply_participant'] = $reply_data['participant'];
+		}
+
 		if ( $close )	{
 			$args['meta_input']['_kbs_reply_resolution'] = true;
 		}
