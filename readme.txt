@@ -128,12 +128,17 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 **Thursday, 21st June 2018**
 
 **New**: Improved metabox display for tickets
+**New**: Introduced the participants feature. A ticket can have multiple participants all of whom can access and manage the ticket. [Learn more](https://kb-support.com/articles/ticket-participants/)
+**New**: Added the `{reply_author}` email template tag. This tag will output the name of the author to the last reply if it is saved in the database, or their email address
 **New**: Added trash/permanently delete ticket option to ticket screen
 **New**: Added customer data to ticket screen
 **New**: Added customer last agreed to terms date to customer notes screen
 **New**: Added customer last agreed to privacy policy date to customer notes screen
+
 **Tweak**: Fallback to company logo (if one exists) as avatar image if customer does not have an avatar
+
 **Fix**: Corrected output for privacy policy acceptance
+
 **Dev**: We've switched to array based email headers
 
 = 1.2.3 =
