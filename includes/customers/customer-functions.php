@@ -95,7 +95,7 @@ function kbs_customer_can_access_ticket( $ticket = '', $customer = '' )	{
 
     $by_user_id = false;
 
-    if ( empty( $customer ) )	{
+    if ( empty( $customer ) && is_user_logged_in() )	{
         $by_user_id = true;
         $user_id    = get_current_user_id();
     }
