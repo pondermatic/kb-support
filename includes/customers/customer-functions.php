@@ -93,13 +93,14 @@ function kbs_customer_can_access_ticket( $ticket = '', $customer = '' )	{
 		}
 	}
 
+    $by_user_id = false;
+
+    if ( empty( $customer ) )	{
+        $by_user_id = true;
+        $user_id    = get_current_user_id();
+    }
+
 	if ( is_numeric( $customer ) )	{
-		$by_user_id = false;
-
-		if ( get_current_user_id() == $customer )	{
-			$by_user_id = true;
-		}
-
 		$customer = new KBS_Customer( $customer, $by_user_id );
 
 		if ( empty( $customer->id ) )	{
@@ -119,8 +120,8 @@ function kbs_customer_can_access_ticket( $ticket = '', $customer = '' )	{
 		}
 	}
 
-	if ( ! $can_access && ! empty ( $customer->id ) )	{
-		$can_access = kbs_is_ticket_participant( $ticket->ID, $customer->id );
+	if ( ! $can_access && kbs_participants_enabled() && ! empty ( $customer->id ) )	{
+        $can_access = kbs_is_ticket_participant( $ticket, $customer );
 	}
 
 	/**

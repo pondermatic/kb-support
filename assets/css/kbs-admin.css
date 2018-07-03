@@ -848,7 +848,15 @@ td.kbs_article_label {
 
 /* System Info page styles
 -------------------------------------------------------------- */
-#system-info-textarea { width: 800px; height: 600px; font-family: Menlo, Monaco, monospace; background: #FFFFFF; white-space: pre; overflow: auto; display: block; }
+#system-info-textarea {
+    width: auto;
+    height: 600px;
+    font-family: Menlo, Monaco, monospace;
+    background: #FFFFFF;
+    white-space: pre;
+    overflow: auto;
+    display: block;
+}
 
 /* Export page styles
 -------------------------------------------------------------- */
