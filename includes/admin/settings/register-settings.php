@@ -290,6 +290,12 @@ function kbs_get_registered_settings() {
 						'type'    => 'text',
 						'size'    => 'small'
 					),
+					'enable_participants' => array(
+						'id'      => 'enable_participants',
+						'name'    => __( 'Enable Participants?', 'kb-support' ),
+						'desc'    => sprintf( __( 'If enabled, participants can be added to %s and each participant will be able to view and respond to the %s', 'kb-support' ), strtolower( $plural ), strtolower( $single ) ),
+						'type'    => 'checkbox'
+					),
 					'hide_closed' => array(
 						'id'      => 'hide_closed',
 						'name'    => sprintf( __( 'Hide Closed %s?', 'kb-support' ), $plural ),
@@ -612,6 +618,12 @@ function kbs_get_registered_settings() {
 						'desc' => sprintf( __( 'Upload or choose a logo to be displayed at the top of the %s received emails. Displayed on HTML emails only.', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'upload'
 					),
+                    'email_settings' => array(
+						'id'   => 'email_settings',
+						'name' => '',
+						'desc' => '',
+						'type' => 'hook'
+					),
                     'attach_files' => array(
 						'id'      => 'attach_files',
 						'name'    => __( 'Attach Files?', 'kb-support' ),
@@ -625,12 +637,12 @@ function kbs_get_registered_settings() {
 						'desc'    => sprintf( __( 'If enabled, the primary company contact will be copied into all customer emails for %s associated with the company.', 'kb-support' ), strtolower( $plural ) ),
 						'type'    => 'checkbox'
                     ),
-					'email_settings' => array(
-						'id'   => 'email_settings',
-						'name' => '',
-						'desc' => '',
-						'type' => 'hook'
-					)
+                    'copy_participants' => array(
+                        'id'      => 'copy_participants',
+						'name'    => __( 'Copy Participants?', 'kb-support' ),
+						'desc'    => sprintf( __( 'If enabled, all participants will receive email notification for all %s activity.', 'kb-support' ), strtolower( $single ) ),
+						'type'    => 'checkbox'
+                    )
 				),
 				'ticket_logged' => array(
 					'ticket_logged_settings' => array(
@@ -1025,6 +1037,12 @@ function kbs_get_registered_settings() {
 			)
 		)
 	);
+
+    if ( ! kbs_participants_enabled() ) {
+        if ( isset( $kbs_settings['emails']['main']['copy_participants'] ) )   {
+            unset( $kbs_settings['emails']['main']['copy_participants'] );
+        }
+    }
 
 	return apply_filters( 'kbs_registered_settings', $kbs_settings );
 }

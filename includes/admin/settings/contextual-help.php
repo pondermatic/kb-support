@@ -232,6 +232,8 @@ function kbs_settings_contextual_help() {
                 '</li>' .
                 '<li>' . sprintf( __( '<strong>Copy Company Contact</strong> - Enabling this option will copy in the primary company contact to all customer emails that are sent in relation to %s associated with the company.', 'kb-support' ), strtolower( $ticket_plural ) ) .
                 '</li>' .
+                '<li>' . sprintf( __( '<strong>Copy Participants</strong> - Enabling this option will ensure that all email communication relating to a %1$s is also sent to all of the participants of the %1$s. This option is only visible when <code>Enable Participants?</code> is enabled within the %2$s settings tab.', 'kb-support' ), strtolower( $ticket_singular ), strtolower( $ticket_plural ) ) .
+                '</li>' .
 			'</ul>' .
 			'<p>' . sprintf( __( '<strong>%s Logged</strong>', 'kb-support' ), $ticket_singular ) . '<br />' .
 				sprintf( __( '<em>Adjust the settings for emails that are sent to a customer when they have logged a %1$s via a submission form.</em>', 'kb-support' ), strtolower( $ticket_singular ) ) . '</p>' .

@@ -202,6 +202,10 @@ function kbs_ticket_customer_reply_action()	{
 		'author'      => 0
 	);
 
+    if ( kbs_participants_enabled() && ! empty( $_POST['kbs_confirm_email'] ) )  {
+        $reply_data['participant'] = is_email( sanitize_email( $_POST['kbs_confirm_email'] ) );
+    }
+
 	$reply_id = $ticket->add_reply( $reply_data );
 
 	if ( $reply_id )	{

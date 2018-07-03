@@ -50,13 +50,17 @@ function kbs_get_tickets( $args = array() ) {
  * Retrieve a ticket.
  *
  * @since	1.0
- * @param	int	$ticket_id	The ticket ID.
+ * @param	int|object	id_or_object	The ticket ID or a KBS_Ticket object.
  * @return	@see get_post()
  */
-function kbs_get_ticket( $ticket_id )	{
-	$ticket = new KBS_Ticket( $ticket_id );
+function kbs_get_ticket( $id_or_object )	{
+	if ( is_numeric( $id_or_object ) )	{
+		$ticket = new KBS_Ticket( $id_or_object );
+	} else	{
+		$ticket = $id_or_object;
+	}
 
-	return apply_filters( 'kbs_get_ticket', $ticket, $ticket_id );
+	return apply_filters( 'kbs_get_ticket', $ticket, $id_or_object );
 } // kbs_get_ticket
 
 /**
@@ -523,6 +527,7 @@ function kbs_add_ticket( $ticket_data )	{
 	$ticket->first_name       = ucfirst( sanitize_text_field( $ticket_data['user_info']['first_name'] ) );
 	$ticket->last_name        = '';
 	$ticket->email            = strtolower( sanitize_email( $ticket_data['user_info']['email'] ) );
+	$ticket->participants     = ! empty( $ticket_data['participants'] ) ? $ticket_data['participants'] : array( $ticket->email );
 	$ticket->ip               = kbs_get_ip();
 	$ticket->sla_respond      = kbs_calculate_sla_target_response();
 	$ticket->sla_resolve      = kbs_calculate_sla_target_resolution();

@@ -145,9 +145,11 @@ class KBS_Emails {
 	 */
 	public function get_headers() {
 		if ( ! $this->headers ) {
-			$this->headers  = "From: {$this->get_from_name()} <{$this->get_from_address()}>\r\n";
-			$this->headers .= "Reply-To: {$this->get_from_address()}\r\n";
-			$this->headers .= "Content-Type: {$this->get_content_type()}; charset=utf-8\r\n";
+            $this->headers = array();
+
+			$this->headers[] = "From: {$this->get_from_name()} <{$this->get_from_address()}>";
+			$this->headers[] = "Reply-To: {$this->get_from_address()}";
+			$this->headers[] = "Content-Type: {$this->get_content_type()}; charset=utf-8";
 		}
 
 		return apply_filters( 'kbs_email_headers', $this->headers, $this );
@@ -367,7 +369,7 @@ class KBS_Emails {
 	 * @since	1.1.11
 	 */
 	public function set_xmailer( $headers )	{
-		$headers .= 'X-Mailer: ' . sprintf( __( 'KB Support version %s (https://kb-support.com)', 'kb-support' ), KBS_VERSION ) . "\r\n";
+		$headers['X-Mailer'] = sprintf( __( 'KB Support version %s (https://kb-support.com)', 'kb-support' ), KBS_VERSION );
 
 		return $headers;
 	} // set_xmailer

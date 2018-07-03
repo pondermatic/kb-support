@@ -165,6 +165,14 @@ function kbs_get_ticket_actions( $kbs_ticket, $updating = true )   {
             $actions['add_reply'] = '<a href="#" class="toggle-add-reply-option-section">' . __( 'Add reply', 'kb-support' ) . '</a>';
         }
 
+		if ( kbs_participants_enabled() )	{
+			$participant_count  = kbs_get_ticket_participant_count( $kbs_ticket );
+			$participant_string = __( 'View participants', 'kb-support' );
+			$participant_count  = ' (<span id="participant-count">' . $participant_count . '</span>)';
+
+			$actions['participants'] = '<a href="#" class="toggle-view-participants-option-section">' . $participant_string . '</a>' . $participant_count;
+		}
+
         if ( ! empty( $kbs_ticket->form_data ) )    {
             $actions['form_data'] = '<a href="#" class="toggle-view-submission-option-section">' . __( 'View submission data', 'kb-support' ) . '</a>';
         }
@@ -671,6 +679,70 @@ function kbs_ticket_metabox_attachments_row( $ticket_id )	{
 add_action( 'kbs_ticket_metabox_standard_fields', 'kbs_ticket_metabox_attachments_row', 25 );
 
 /**
+ * Display the ticket participants row.
+ *
+ * @since	1.2.4
+ * @global	object	$kbs_ticket			KBS_Ticket class object
+ * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
+ * @param	int		$ticket_id			The ticket post ID.
+ */
+function kbs_ticket_metabox_participants_row( $ticket_id )	{
+
+	global $kbs_ticket, $kbs_ticket_update; ?>
+
+    <?php if ( ! kbs_participants_enabled() ) return; ?>
+
+    <div id="kbs-ticket-participants-fields" class="kbs-custom-ticket-sections-wrap">
+        <div class="kbs-custom-ticket-sections">
+            <div class="kbs-custom-ticket-section">
+                <span class="kbs-custom-ticket-section-title">
+					<?php _e( 'Participants', 'kb-support' ); ?>
+				</span>
+
+                <span class="kbs-ticket-participants-list">
+                    <?php echo kbs_list_ticket_participants( $kbs_ticket, array(
+						'email_only'  => false,
+						'remove_link' => true
+					) ); ?>
+                </span>
+
+				<span class="kbs-ticket-participants-hint">
+					<?php _e( 'Add participants by selecting an existing customer, or entering an email address below.', 'kb-support' ); ?>
+				</span>
+
+				<span class="kbs-ticket-add-customer-participant">
+					<?php echo KBS()->html->customer_dropdown( array(
+						'name'             => 'participant_id',
+						'chosen'           => true,
+						'show_option_none' => __( 'Select a participant', 'kb-support' ),
+						'show_no_attached' => false
+					) ); ?>
+				</span>
+
+				<span class="kbs-ticket-add-email-participant">
+					<?php echo KBS()->html->text( array(
+						'name'             => 'participant_email',
+						'selected'         => $kbs_ticket->customer_id,
+						'chosen'           => true,
+						'placeholder'      => __( 'or enter any email address', 'kb-support' )
+					) ); ?>
+				</span>
+
+				<span class="kbs-ticket-add-email-participant">
+					<button id="kbs-add-participant" class="button button-secondary">
+						<?php _e( 'Add Participant', 'kb-support' ); ?>
+					</button>
+				</span>
+
+            </div>
+        </div>
+    </div>
+    <?php
+		
+} // kbs_ticket_metabox_participants_row
+add_action( 'kbs_ticket_metabox_custom_sections', 'kbs_ticket_metabox_participants_row', 10 );
+
+/**
  * Display the ticket form submission details row.
  *
  * @since	1.2.4
@@ -698,7 +770,7 @@ function kbs_ticket_metabox_form_data_row( $ticket_id )	{
     <?php
 		
 } // kbs_ticket_metabox_form_data_row
-add_action( 'kbs_ticket_metabox_custom_sections', 'kbs_ticket_metabox_form_data_row', 10 );
+add_action( 'kbs_ticket_metabox_custom_sections', 'kbs_ticket_metabox_form_data_row', 20 );
 
 /**
  * Display the ticket replies row.

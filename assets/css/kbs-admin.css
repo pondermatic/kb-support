@@ -8,7 +8,14 @@
  */
 
 .kbs-hidden { display: none; }
-.kbs-clearfix:after { display: block; visibility: hidden; content: "."; text-indent: -9999px; height: 0; }
+.kbs-mute { opacity: 0.4; }
+.kbs-clearfix:after {
+	display: block;
+	visibility: hidden;
+	content: ".";
+	text-indent: -9999px;
+	height: 0;
+}
 .kbs-wrap a { text-decoration: none; }
 .kbs-expired { color: #dc3232; }
 .kbs-active { color: #46b450; }
@@ -301,7 +308,7 @@ a.kbs_ticket_form_data	{
 }
 
 .kbs-ticket-content-row-actions .toggle-add-reply-option-section,
-.kbs-ticket-content-row-actions .toggle-view-customer-option-section,
+.kbs-ticket-content-row-actions .toggle-view-participants-option-section,
 .kbs-ticket-content-row-actions .toggle-view-submission-option-section,
 .kbs-replies-row-actions .toggle-view-reply-option-section,
 .kbs-replies-row-actions .toggle-reply-option-create-article,
@@ -309,7 +316,7 @@ a.kbs_ticket_form_data	{
 	color: #777;
 }
 .kbs-ticket-content-row-actions .toggle-add-reply-option-section:hover,
-.kbs-ticket-content-row-actions .toggle-view-customer-option-section:hover,
+.kbs-ticket-content-row-actions .toggle-view-participants-option-section:hover,
 .kbs-ticket-content-row-actions .toggle-view-submission-option-section:hover,
 .kbs-replies-row-actions .toggle-view-reply-option-section:hover,
 .kbs-notes-row-actions .toggle-view-note-option-section:hover,
@@ -468,6 +475,33 @@ a.kbs_ticket_form_data	{
 	display: block;
 	margin-bottom: 2px;
 }
+.kbs-ticket-participants-hint {
+	display: block;
+	margin-top: 15px;
+}
+
+.participant-container {
+	width: 75%;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	display: flex;
+}
+
+.participant-container:hover {
+	background: #f1f1f1;
+}
+
+.space-between { 
+	justify-content: space-between; 
+}  
+
+.participant-item {
+	width: 33%;
+	text-align: inherit;
+	margin-top: 5px;
+}
+
 .kbs-replies-load-more	{
 	text-align: right;
 }
@@ -814,7 +848,15 @@ td.kbs_article_label {
 
 /* System Info page styles
 -------------------------------------------------------------- */
-#system-info-textarea { width: 800px; height: 600px; font-family: Menlo, Monaco, monospace; background: #FFFFFF; white-space: pre; overflow: auto; display: block; }
+#system-info-textarea {
+    width: auto;
+    height: 600px;
+    font-family: Menlo, Monaco, monospace;
+    background: #FFFFFF;
+    white-space: pre;
+    overflow: auto;
+    display: block;
+}
 
 /* Export page styles
 -------------------------------------------------------------- */
