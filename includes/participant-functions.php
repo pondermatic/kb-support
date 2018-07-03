@@ -43,16 +43,16 @@ function kbs_copy_participants_in_communications()   {
  * Whether or not the given user is a participant of the current ticket.
  *
  * @since	1.2.4
- * @param	int|object	$ticket		Ticket ID or KBS_Ticket object
- * @param	string		$email		Email address of user
- * @return	bool		True if a participant of the ticket, otherwise false
+ * @param	int|object	$ticket             Ticket ID or KBS_Ticket object
+ * @param	mixed	$customer_id_or_email   Customer ID, email address or KBS_Customer object
+ * @return	bool	True if a participant of the ticket, otherwise false
  */
-function kbs_is_ticket_participant( $ticket, $email )	{
+function kbs_is_ticket_participant( $ticket, $customer_id_or_email )	{
 	$ticket         = kbs_get_ticket( $ticket );
 	$is_participant = false;
 
 	if ( $ticket )	{
-		$is_participant = $ticket->is_participant( $email );
+		$is_participant = $ticket->is_participant( $customer_id_or_email );
 	}
 
 	return $is_participant;

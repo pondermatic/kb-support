@@ -1504,23 +1504,27 @@ class KBS_Ticket {
 	 * Whether or not the user is a participant.
 	 *
 	 * @since	1.2.4
-	 * @param	int|string	$id_or_email	Customer ID or email address
-	 * @return	bool		True if a participant of the ticket, otherwise false
+	 * @param	mixed	$customer_id_or_email	Customer ID, email address or KBS_Customer object
+	 * @return	bool	True if a participant of the ticket, otherwise false
 	 */
-	public function is_participant( $id_or_email )	{
+	public function is_participant( $customer_id_or_email )	{
 		$participant = false;
 		$emails      = false;
 
 		if ( kbs_participants_enabled() )	{
-			if ( is_numeric( $id_or_email ) )	{
-				$customer = new KBS_Customer( $id_or_email );
+            if ( is_object( $customer_id_or_email ) && ! empty( $customer_id_or_email->id ) )   {
+
+                $emails = $customer_id_or_email->emails;
+
+            } elseif ( is_numeric( $customer_id_or_email ) )	{
+				$customer = new KBS_Customer( $customer_id_or_email );
 
 				if ( $customer )	{
 					$emails = $customer->emails;
 				}
 			} else	{
-				if ( is_email( $id_or_email ) )	{
-					$emails = array( $id_or_email );
+				if ( is_email( $customer_id_or_email ) )	{
+					$emails = array( $customer_id_or_email );
 				}
 			}
 		}
@@ -1533,7 +1537,7 @@ class KBS_Ticket {
 			}
 		}
 
-		$participant = apply_filters( 'kbs_is_participant', $participant, $id_or_email, $this );
+		$participant = apply_filters( 'kbs_is_participant', $participant, $customer_id_or_email, $this );
 
 		return $participant;
 	} // is_participant
