@@ -1175,4 +1175,13 @@ td.kbs_article_label {
 	.kbs-replies-row-title {
 		padding-bottom: 0;
 	}
+    .participant_id,
+    .participant_email {
+        float: none;
+		text-align: left;
+		width: 100% !important;
+		margin: 10px 0;
+    }
+    
+
 }
