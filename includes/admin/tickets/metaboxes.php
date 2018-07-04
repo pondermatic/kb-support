@@ -631,7 +631,7 @@ function kbs_ticket_metabox_content_section( $ticket_id )	{
 		<h3>
 			<?php printf( __( '%s Content', 'kb-support' ), kbs_get_ticket_label_singular() ); ?>
 		</h3>
-        <p><?php echo $kbs_ticket->get_content(); ?></p>
+        <?php echo $kbs_ticket->get_content(); ?>
     </div>
     <?php
 		
@@ -714,6 +714,7 @@ function kbs_ticket_metabox_participants_row( $ticket_id )	{
 					<?php echo KBS()->html->customer_dropdown( array(
 						'name'             => 'participant_id',
 						'chosen'           => true,
+                        'class'            => 'participants-list',
 						'show_option_none' => __( 'Select a participant', 'kb-support' ),
 						'show_no_attached' => false
 					) ); ?>
@@ -723,7 +724,6 @@ function kbs_ticket_metabox_participants_row( $ticket_id )	{
 					<?php echo KBS()->html->text( array(
 						'name'             => 'participant_email',
 						'selected'         => $kbs_ticket->customer_id,
-						'chosen'           => true,
 						'placeholder'      => __( 'or enter any email address', 'kb-support' )
 					) ); ?>
 				</span>
