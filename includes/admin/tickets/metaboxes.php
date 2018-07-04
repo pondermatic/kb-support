@@ -728,7 +728,7 @@ function kbs_ticket_metabox_participants_row( $ticket_id )	{
 					) ); ?>
 				</span>
 
-				<span class="kbs-ticket-add-email-participant">
+				<span class="kbs-ticket-add-participant">
 					<button id="kbs-add-participant" class="button button-secondary">
 						<?php _e( 'Add Participant', 'kb-support' ); ?>
 					</button>

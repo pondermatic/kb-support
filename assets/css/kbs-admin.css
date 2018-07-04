@@ -502,6 +502,11 @@ a.kbs_ticket_form_data	{
 	margin-top: 5px;
 }
 
+.kbs_select_chosen.participants-list	{
+	width: 200px !important;
+    min-width: 200px !important;
+}
+
 .kbs-replies-load-more	{
 	text-align: right;
 }
