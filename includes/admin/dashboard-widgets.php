@@ -138,8 +138,12 @@ function kbs_load_dashboard_tickets_widget() {
 					</tr>
 				</thead>
 				<tbody>
+                    <tr>
+						<td class="t opened"><?php _e( 'Open', 'kb-support' ); ?></td>
+						<td class="last b b-opened"><?php echo kbs_get_open_ticket_count( 'open' ); ?></td>
+					</tr>
 					<tr>
-						<td class="t opened"><?php printf( __( 'Active %s', 'kb-support' ), kbs_get_ticket_label_plural() ); ?></td>
+						<td class="t opened"><?php _e( 'Active', 'kb-support' ); ?></td>
 						<td class="last b b-opened"><?php echo kbs_get_open_ticket_count(); ?></td>
 					</tr>
 					<tr>

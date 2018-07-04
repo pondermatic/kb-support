@@ -322,16 +322,22 @@ function kbs_count_tickets( $args = array() ) {
  * Retrieve Open Ticket Count
  *
  * @since	1.0
- *
  * @return	int		Total number of currently open tickets
  */
-function kbs_get_open_ticket_count()	{
+function kbs_get_open_ticket_count( $status = false )	{
 
-	$tickets    = kbs_count_tickets();
-	$open_count = 0;
+	$tickets         = kbs_count_tickets();
+	$open_count      = 0;
+    $active_statuses = $status;
 
 	if ( ! empty( $tickets ) )	{
-		$active_statuses   = kbs_get_active_ticket_status_keys();
+        if ( ! $active_statuses )   {
+            $active_statuses   = kbs_get_active_ticket_status_keys();
+        } else  {
+            if ( ! is_array( $active_statuses ) )   {
+                $active_statuses = array( $active_statuses );
+            }
+        }
 		$inactive_statuses = kbs_get_inactive_ticket_statuses();
 
 		foreach( $tickets as $status => $count )	{
