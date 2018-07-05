@@ -19,9 +19,11 @@
 .kbs-wrap a { text-decoration: none; }
 .kbs-expired { color: #dc3232; }
 .kbs-active { color: #46b450; }
-.kbs-delete { color: #a00; }
-a.kbs-delete { color: #a00; }
-a.kbs-delete:hover { color: #f00; }
+
+.kbs-delete {
+	color: #a00;
+}
+.kbs-delete:hover { color: #dc3232; }
 .kbs_loader {
 	display: block;
 	width: 20px;
