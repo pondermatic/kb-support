@@ -294,6 +294,7 @@ class KBS_HTML_Elements {
 			'chosen'           => true,
 			'company_id'       => null,
 			'show_company'     => false,
+            'exclude_id'       => null,
 			'placeholder'      => __( 'Select a Customer', 'kb-support' ),
 			'number'           => -1,
 			'show_no_attached' => true,
@@ -309,7 +310,8 @@ class KBS_HTML_Elements {
 
 		$customers = KBS()->customers->get_customers( array(
 			'number'     => $args['number'],
-			'company_id' => $args['company_id']
+			'company_id' => $args['company_id'],
+            'exclude_id' => $args['exclude_id']
 		) );
 
 		$options  = array();

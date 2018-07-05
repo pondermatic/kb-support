@@ -425,12 +425,13 @@ class KBS_DB_Customers extends KBS_DB  {
 		global $wpdb;
 
 		$defaults = array(
-			'number'       => 20,
-			'offset'       => 0,
-			'user_id'      => 0,
-			'company_id'   => 0,
-			'orderby'      => 'id',
-			'order'        => 'DESC',
+			'number'     => 20,
+			'offset'     => 0,
+			'user_id'    => 0,
+			'company_id' => 0,
+            'exclude_id' => 0,
+			'orderby'    => 'id',
+			'order'      => 'DESC',
 		);
 
 		$args  = wp_parse_args( $args, $defaults );
@@ -452,6 +453,19 @@ class KBS_DB_Customers extends KBS_DB  {
 			}
 
 			$where .= " AND `id` IN( {$ids} ) ";
+
+		}
+
+        // Exclude customers
+		if ( ! empty( $args['exclude_id'] ) ) {
+
+			if ( is_array( $args['exclude_id'] ) ) {
+				$exclude_ids = implode( ',', array_map('intval', $args['exclude_id'] ) );
+			} else {
+				$exclude_ids = intval( $args['exclude_id'] );
+			}
+
+			$where .= " AND `id` NOT IN( {$exclude_ids} ) ";
 
 		}
 
@@ -557,6 +571,7 @@ class KBS_DB_Customers extends KBS_DB  {
 
 		if( $customers === false ) {
 			$query     = $wpdb->prepare( "SELECT * FROM  $this->table_name $join $where GROUP BY $this->primary_key ORDER BY {$args['orderby']} {$args['order']} LIMIT %d,%d;", absint( $args['offset'] ), absint( $args['number'] ) );
+            error_log( $query );
 			$customers = $wpdb->get_results( $query );
 			wp_cache_set( $cache_key, $customers, 'customers', 3600 );
 		}
