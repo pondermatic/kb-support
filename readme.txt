@@ -26,7 +26,7 @@ The built-in Knowledgebase allows customers to find solutions to their issues du
 * Sequential ticket numbers
 * Email notifications keep customers, admins and support agents up to date with recent ticket events
 * Restricted access ensures that only agents and the assigned customer are able to view tickets and correspondence
-* Ticket participants to ensure that all relevant parties can contribute towards a ticket on behalf of a customer
+* Unlimited ticket participants to ensure that all relevant parties can contribute towards a ticket on behalf of a customer
 * A fully responsive and clean front end design where customers can manage their tickets, including viewing and creating replies
 * Integrated Knowledge Base articles can be easily created and referenced to try and offer solutions without tickets being created
 * Ability to restrict access to individual knowledge base articles to logged in users only

@@ -238,7 +238,10 @@ function kbs_get_reply_author_name( $reply, $role = false )	{
 	} else {
         if ( $author_email )    {
             $author_customer = new KBS_Customer( $author_email );
-            if ( $author_customer && $author_customer->id > 0 && $author_customer->id != $customer_id )   {
+            if ( $author_customer && $author_customer->id > 0 && $author_customer->id == $customer_id )   {
+				$author      = $author_customer->name;
+				$author_role = __( 'Customer', 'kb-support' );
+            } elseif ( $author_customer && $author_customer->id > 0 && $author_customer->id != $customer_id )   {
 				$author      = $author_customer->name;
 				$author_role = __( 'Participant', 'kb-support' );
             } else  {
