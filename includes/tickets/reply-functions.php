@@ -128,7 +128,7 @@ function kbs_get_reply_html( $reply, $ticket_id = 0 ) {
 
     $icons   = array();
 
-    if ( false === strpos( $author, __( 'Customer', 'kb-support' ) ) )  {
+    if ( false === strpos( $author, __( 'Customer', 'kb-support' ) ) && false === strpos( $author, __( 'Participant', 'kb-support' ) ) )  {
         $is_read = kbs_reply_is_read( $reply->ID );
         if ( $is_read )  {
             $icons['is_read'] = sprintf(
