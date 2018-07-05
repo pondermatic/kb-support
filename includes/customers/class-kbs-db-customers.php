@@ -570,8 +570,20 @@ class KBS_DB_Customers extends KBS_DB  {
 		$customers = false;
 
 		if( $customers === false ) {
-			$query     = $wpdb->prepare( "SELECT * FROM  $this->table_name $join $where GROUP BY $this->primary_key ORDER BY {$args['orderby']} {$args['order']} LIMIT %d,%d;", absint( $args['offset'] ), absint( $args['number'] ) );
-            error_log( $query );
+			$query = $wpdb->prepare(
+                "
+                SELECT * FROM
+                $this->table_name
+                $join
+                $where
+                GROUP BY $this->primary_key
+                ORDER BY {$args['orderby']} {$args['order']}
+                LIMIT %d,%d;
+                ",
+                absint( $args['offset'] ),
+                absint( $args['number'] )
+            );
+
 			$customers = $wpdb->get_results( $query );
 			wp_cache_set( $cache_key, $customers, 'customers', 3600 );
 		}
