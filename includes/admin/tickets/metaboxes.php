@@ -706,33 +706,38 @@ function kbs_ticket_metabox_participants_row( $ticket_id )	{
 					) ); ?>
                 </span>
 
-				<span class="kbs-ticket-participants-hint">
-					<?php _e( 'Add participants by selecting an existing customer, or entering an email address below.', 'kb-support' ); ?>
-				</span>
+                <?php if ( 'closed' != $kbs_ticket->status ) : ?>
 
-				<span class="kbs-ticket-add-customer-participant">
-					<?php echo KBS()->html->customer_dropdown( array(
-						'name'             => 'participant_id',
-						'chosen'           => true,
-                        'class'            => 'participants-list',
-						'show_option_none' => __( 'Select a participant', 'kb-support' ),
-						'show_no_attached' => false
-					) ); ?>
-				</span>
+                    <span class="kbs-ticket-participants-hint">
+                        <?php _e( 'Add participants by selecting an existing customer, or entering an email address below.', 'kb-support' ); ?>
+                    </span>
 
-				<span class="kbs-ticket-add-email-participant">
-					<?php echo KBS()->html->text( array(
-						'name'             => 'participant_email',
-						'selected'         => $kbs_ticket->customer_id,
-						'placeholder'      => __( 'or enter any email address', 'kb-support' )
-					) ); ?>
-				</span>
+                    <span class="kbs-ticket-add-customer-participant">
+                        <?php echo KBS()->html->customer_dropdown( array(
+                            'name'             => 'participant_id',
+                            'chosen'           => true,
+                            'class'            => 'participants-list',
+                            'show_option_none' => __( 'Select a participant', 'kb-support' ),
+                            'show_no_attached' => false,
+                            'exclude_id'       => $kbs_ticket->customer_id
+                        ) ); ?>
+                    </span>
 
-				<span class="kbs-ticket-add-participant">
-					<button id="kbs-add-participant" class="button button-secondary">
-						<?php _e( 'Add Participant', 'kb-support' ); ?>
-					</button>
-				</span>
+                    <span class="kbs-ticket-add-email-participant">
+                        <?php echo KBS()->html->text( array(
+                            'name'             => 'participant_email',
+                            'selected'         => $kbs_ticket->customer_id,
+                            'placeholder'      => __( 'or enter any email address', 'kb-support' )
+                        ) ); ?>
+                    </span>
+
+                    <span class="kbs-ticket-add-participant">
+                        <button id="kbs-add-participant" class="button button-secondary">
+                            <?php _e( 'Add Participant', 'kb-support' ); ?>
+                        </button>
+                    </span>
+
+                <?php endif; ?>
 
             </div>
         </div>
