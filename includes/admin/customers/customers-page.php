@@ -534,7 +534,7 @@ function kbs_customer_notes_view( $customer ) {
 			<?php echo get_avatar( $customer->email, 30, kbs_get_company_logo( $customer->company_id ) ); ?> <span><?php echo $customer->name; ?></span>
 		</div>
 
-        <h3><?php _e( 'Agreeements','kb-support' ); ?></h3>
+        <h3><?php _e( 'Agreements','kb-support' ); ?></h3>
 
         <?php if ( $show_agree_to_terms ) : ?>
             <span class="customer-terms-agreement-date info-item">
