@@ -304,6 +304,8 @@ function kbs_tools_sysinfo_get()	{
 		$return  = apply_filters( 'kbs_sysinfo_after_kbs_templates', $return );
 	}
 
+    $return = apply_filters( 'kbs_sysinfo_before_plugins', $return );
+
 	// Get plugins that have an update
 	$updates = get_plugin_updates();
 

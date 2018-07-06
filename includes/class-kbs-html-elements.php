@@ -294,8 +294,10 @@ class KBS_HTML_Elements {
 			'chosen'           => true,
 			'company_id'       => null,
 			'show_company'     => false,
+            'exclude_id'       => null,
 			'placeholder'      => __( 'Select a Customer', 'kb-support' ),
 			'number'           => -1,
+			'show_no_attached' => true,
             'show_option_all'  => false,
             'show_option_none' => __( 'Select a Customer', 'kb-support' ),
 			'data'             => array(
@@ -308,13 +310,16 @@ class KBS_HTML_Elements {
 
 		$customers = KBS()->customers->get_customers( array(
 			'number'     => $args['number'],
-			'company_id' => $args['company_id']
+			'company_id' => $args['company_id'],
+            'exclude_id' => $args['exclude_id']
 		) );
 
 		$options  = array();
 
 		if ( $customers ) {
-			$options[0] = __( 'No customer attached', 'kb-support' );
+			if ( $args['show_no_attached'] )	{
+				$options[0] = __( 'No customer attached', 'kb-support' );
+			}
 
 			foreach ( $customers as $customer ) {
 				$company = '';

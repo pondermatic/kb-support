@@ -194,7 +194,7 @@ function kbs_customers_view( $customer ) {
 			<div class="kbs-item-info customer-info">
 
 				<div class="avatar-wrap left" id="customer-avatar">
-					<?php echo get_avatar( $customer->email ); ?><br />
+					<?php echo get_avatar( $customer->email, '', kbs_get_company_logo( $customer->company_id ) ); ?><br />
 					<?php if ( current_user_can( $customer_edit_role ) ): ?>
 						<span class="info-item editable customer-edit-link"><a href="#" id="edit-customer"><?php _e( 'Edit Customer', 'kb-support' ); ?></a></span>
 					<?php endif; ?>
@@ -509,13 +509,45 @@ function kbs_customer_notes_view( $customer ) {
 	$per_page    = apply_filters( 'kbs_customer_notes_per_page', 20 );
 	$total_pages = ceil( $note_count / $per_page );
 
-	$customer_notes = $customer->get_notes( $per_page, $paged );
+	$customer_notes    = $customer->get_notes( $per_page, $paged );
+
+    $show_agree_to_terms   = kbs_get_option( 'show_agree_to_terms', false );
+    $show_agree_to_privacy = kbs_get_option( 'show_agree_to_privacy_policy', false );
+    $privacy_accepted      = __( 'Not yet accepted', 'kb-support' );
+    $terms_accepted        = __( 'Not yet agreed', 'kb-support' );
+    $privacy_timestamp     = $customer->get_meta( 'agree_to_privacy_time', true );
+    $terms_timestamp       = $customer->get_meta( 'agree_to_terms_time', true );
+    $date_format           = get_option( 'date_format' );
+    $time_format           = get_option( 'time_format' );
+
+    if ( ! empty( $privacy_timestamp ) ) {
+        $privacy_accepted = date_i18n( $date_format . ' ' . $time_format, $privacy_timestamp );
+    }
+
+    if ( ! empty( $terms_timestamp ) ) {
+        $terms_accepted = date_i18n( $date_format . ' ' . $time_format, $terms_timestamp );
+    }
 	?>
 
 	<div id="kbs-item-notes-wrapper">
 		<div class="kbs-item-notes-header">
-			<?php echo get_avatar( $customer->email, 30 ); ?> <span><?php echo $customer->name; ?></span>
+			<?php echo get_avatar( $customer->email, 30, kbs_get_company_logo( $customer->company_id ) ); ?> <span><?php echo $customer->name; ?></span>
 		</div>
+
+        <h3><?php _e( 'Agreeements','kb-support' ); ?></h3>
+
+        <?php if ( $show_agree_to_terms ) : ?>
+            <span class="customer-terms-agreement-date info-item">
+                <?php printf( __( 'Last Agreed to Terms%s', 'kb-support' ), ': ' . $terms_accepted ); ?>
+            </span>
+        <?php endif; ?>
+
+        <?php if ( $show_agree_to_privacy ) : ?>
+            <span class="customer-privacy-policy-date info-item">
+                <?php printf( __( 'Last Agreed to Privacy Policy%s', 'kb-support' ),': ' . $privacy_accepted ); ?>
+            </span>
+        <?php endif; ?>
+
 		<h3><?php _e( 'Notes', 'kb-support' ); ?></h3>
 
 		<?php if ( 1 == $paged ) : ?>
@@ -585,7 +617,7 @@ function kbs_customers_delete_view( $customer ) {
 		<form id="delete-customer" method="post" action="<?php echo admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-customers&view=delete&id=' . $customer->id ); ?>">
 
 				<div class="kbs-item-notes-header">
-				<?php echo get_avatar( $customer->email, 30 ); ?> <span><?php echo $customer->name; ?></span>
+				<?php echo get_avatar( $customer->email, 30, kbs_get_company_logo( $customer->company_id ) ); ?> <span><?php echo $customer->name; ?></span>
 			</div>
 
 

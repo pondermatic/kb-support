@@ -371,6 +371,11 @@ function kbs_setup_email_tags() {
 			'function'    => 'kbs_email_tag_department'
 		),
 		array(
+			'tag'         => 'reply_author',
+			'description' => sprintf( __( 'The name or email address (if no name is in the database) of the author of the the most recent %s reply', 'kb-support' ), strtolower( $ticket_singular ) ),
+			'function'    => 'kbs_email_tag_reply_author'
+		),
+		array(
 			'tag'         => 'reply_date',
 			'description' => sprintf( __( 'The date of the most recent %s reply', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_reply_date'
@@ -724,6 +729,20 @@ function kbs_email_tag_ticket_files( $ticket_id )	{
         }
     }
 } // kbs_email_tag_ticket_files
+
+/**
+ * Email template tag: reply_author
+ * Name or email address of the author to the most recent ticket reply.
+ *
+ * @since	1.2.4
+ * @param	int		$ticket_id
+ * @return	string	date
+ */
+function kbs_email_tag_reply_author( $ticket_id  ) {
+	$reply = kbs_get_last_reply( $ticket_id );
+
+	return kbs_get_reply_author_name( $reply );
+} // kbs_email_tag_reply_author
 
 /**
  * Email template tag: reply_date

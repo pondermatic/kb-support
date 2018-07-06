@@ -15,7 +15,6 @@ if ( ! defined( 'ABSPATH' ) )
 
 /**
  * Remove the slug column
- * Rename the count column as tickets.
  * Add the agent count column.
  *
  * @since	1.2
@@ -27,7 +26,6 @@ function kbs_department_taxonomy_columns( $columns )	{
 		unset( $columns['slug'] );
 	}
 
-	//$columns['posts']  = kbs_get_ticket_label_plural();
 	$columns['agents'] = __( 'Agents', 'kb-support' );
 
 	return $columns;

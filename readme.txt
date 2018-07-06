@@ -2,9 +2,9 @@
 Contributors: kbsupport, mikeyhoward1977
 Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
-Tested up to: 4.9.6
+Tested up to: 4.9.7
 Requires PHP: 5.4
-Stable tag: 1.2.3
+Stable tag: 1.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -26,6 +26,7 @@ The built-in Knowledgebase allows customers to find solutions to their issues du
 * Sequential ticket numbers
 * Email notifications keep customers, admins and support agents up to date with recent ticket events
 * Restricted access ensures that only agents and the assigned customer are able to view tickets and correspondence
+* Unlimited ticket participants to ensure that all relevant parties can contribute towards a ticket on behalf of a customer
 * A fully responsive and clean front end design where customers can manage their tickets, including viewing and creating replies
 * Integrated Knowledge Base articles can be easily created and referenced to try and offer solutions without tickets being created
 * Ability to restrict access to individual knowledge base articles to logged in users only
@@ -51,7 +52,7 @@ More information can be found at [https://kb-support.com/](https://kb-support.co
 **Further enhance the features and functionality of KB Support with paid [extensions](https://kb-support.com/extensions/) such as**:
 
 * [Email Support](https://kb-support.com/downloads/email-support/) - Management of tickets via email for agents and customers. Automation via email for agents.
-* [Easy Digital Downloads Integration](https://kb-support.com/downloads/easy-digital-downloads/) - Integrate KB Support with your EDD store providing a seamless support solution
+* [Easy Digital Downloads Integration](https://kb-support.com/downloads/easy-digital-downloads/) - Integrate KB Support with your Easy Digital Downloads store providing a seamless support solution
 * [WooCommerce Integration](https://kb-support.com/downloads/woocommerce/) - Integrate KB Support with your WooCommerce store providing a seamless support solution
 * [Knowledge Base Integrations](https://kb-support.com/downloads/knowledge-base-integrations/) - Fully integrate KB Support into your existing knowledge base solution
 * [Ratings & Satisfaction](https://kb-support.com/downloads/ratings-and-satisfaction/) - Enables customers and visitors to provide feedback on their support experience as well as the quality of your KB articles
@@ -122,6 +123,26 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.2.4 =
+
+**Friday, 6th July 2018**
+
+**New**: Improved metabox display for tickets
+**New**: Introduced the participants feature. A ticket can have multiple participants all of whom can access and manage the ticket. [Learn more](https://kb-support.com/articles/ticket-participants/)
+**New**: Added the `{reply_author}` email template tag. This tag will output the name of the author to the last reply if it is saved in the database, or their email address
+**New**: Added trash/permanently delete ticket option to ticket screen
+**New**: Added customer data to ticket screen
+**New**: Added customer last agreed to terms date to customer notes screen
+**New**: Added customer last agreed to privacy policy date to customer notes screen
+**New**: Added open ticket count to KBS Summary widget on the admin dashboard screen
+
+**Tweak**: Fallback to company logo (if one exists) as avatar image if customer does not have an avatar
+
+**Fix**: Corrected output for privacy policy acceptance
+
+**Dev**: We've switched to array based email headers
+**Dev**: Allow exclusion by ID when retrieving customers from the DB
 
 = 1.2.3 =
 

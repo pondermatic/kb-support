@@ -57,7 +57,7 @@ function kbs_setup_kbs_ticket_category_taxonomy()	{
 	register_taxonomy_for_object_type( 'ticket_category', 'kbs_ticket' );
 
 } // kbs_setup_kbs_ticket_category_taxonomy
-add_action( 'init', 'kbs_setup_kbs_ticket_category_taxonomy', 0 );
+add_action( 'init', 'kbs_setup_kbs_ticket_category_taxonomy', 2 );
 
 /**
  * Registers the Tags taxonomy for the kbs_ticket custom post types.
@@ -105,7 +105,7 @@ function kbs_setup_kbs_ticket_tag_taxonomy()	{
 
 
 } // kbs_setup_kbs_ticket_tag_taxonomy
-add_action( 'init', 'kbs_setup_kbs_ticket_tag_taxonomy', 0 );
+add_action( 'init', 'kbs_setup_kbs_ticket_tag_taxonomy', 2 );
 
 /**
  * Registers the Categories taxonomy for the kbs_ticket custom post types.
@@ -156,7 +156,7 @@ function kbs_setup_kbs_ticket_department_taxonomy()	{
 	register_taxonomy_for_object_type( 'department', 'kbs_ticket' );
 
 } // kbs_setup_kbs_ticket_department_taxonomy
-add_action( 'init', 'kbs_setup_kbs_ticket_department_taxonomy', 0 );
+add_action( 'init', 'kbs_setup_kbs_ticket_department_taxonomy', 2 );
 
 /**
  * Get the singular and plural labels for a taxonomy.

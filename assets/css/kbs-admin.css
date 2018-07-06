@@ -8,13 +8,22 @@
  */
 
 .kbs-hidden { display: none; }
-.kbs-clearfix:after { display: block; visibility: hidden; content: "."; text-indent: -9999px; height: 0; }
+.kbs-mute { opacity: 0.4; }
+.kbs-clearfix:after {
+	display: block;
+	visibility: hidden;
+	content: ".";
+	text-indent: -9999px;
+	height: 0;
+}
 .kbs-wrap a { text-decoration: none; }
 .kbs-expired { color: #dc3232; }
 .kbs-active { color: #46b450; }
-.kbs-delete { color: #a00; }
-a.kbs-delete { color: #a00; }
-a.kbs-delete:hover { color: #f00; }
+
+.kbs-delete {
+	color: #a00;
+}
+.kbs-delete:hover { color: #dc3232; }
 .kbs_loader {
 	display: block;
 	width: 20px;
@@ -279,17 +288,19 @@ a.kbs_ticket_form_data	{
 	font-size: 12px;
 	text-align: right;
 }
-
+.kbs_ticket_content_wrapper:not(:first-child),
 .kbs_historic_replies_wrapper:not(:first-child),
 .kbs_ticket_notes_wrapper:not(:first-child)	{
 	margin-top: 12px;
 }
 
+.kbs-ticket-content-row-actions,
 .kbs-replies-row-actions,
 .kbs-notes-row-actions {
 	color: #777;
 	font-size: 12px;
 }
+.kbs-ticket-content-row-actions,
 .kbs-replies-row-actions a,
 .kbs-notes-row-actions a {
 	text-decoration: none;
@@ -298,17 +309,24 @@ a.kbs_ticket_form_data	{
 	vertical-align: middle;
 }
 
+.kbs-ticket-content-row-actions .toggle-add-reply-option-section,
+.kbs-ticket-content-row-actions .toggle-view-participants-option-section,
+.kbs-ticket-content-row-actions .toggle-view-submission-option-section,
 .kbs-replies-row-actions .toggle-view-reply-option-section,
 .kbs-replies-row-actions .toggle-reply-option-create-article,
 .kbs-notes-row-actions .toggle-view-note-option-section {
 	color: #777;
 }
+.kbs-ticket-content-row-actions .toggle-add-reply-option-section:hover,
+.kbs-ticket-content-row-actions .toggle-view-participants-option-section:hover,
+.kbs-ticket-content-row-actions .toggle-view-submission-option-section:hover,
 .kbs-replies-row-actions .toggle-view-reply-option-section:hover,
 .kbs-notes-row-actions .toggle-view-note-option-section:hover,
 .kbs-replies-row-actions .toggle-reply-option-create-article:hover {
 	color: #444;
 }
 
+.kbs-ticket-content-row-header,
 .kbs-replies-row-header,
 .kbs-notes-row-header {
 	clear: both;
@@ -316,6 +334,8 @@ a.kbs_ticket_form_data	{
 	border: 1px solid #e5e5e5;
 }
 
+.kbs-ticket-content-row-header:before,
+.kbs-ticket-content-row-header:after,
 .kbs-replies-row-header:before,
 .kbs-replies-row-header:after,
 .kbs-notes-row-header:after,
@@ -324,11 +344,13 @@ a.kbs_ticket_form_data	{
 	display: table;
 }
 
+.kbs-ticket-content-row-header:after,
 .kbs-replies-row-header:after,
 .kbs-notes-row-header:after {
 	clear: both;
 }
 
+.kbs-ticket-content-row-title,
 .kbs-replies-row-title,
 .kbs-notes-row-title {
 	float: left;
@@ -336,20 +358,23 @@ a.kbs_ticket_form_data	{
     font-weight: 600;
 }
 
+.kbs-ticket-content-row-title,
 .kbs-replies-row-title,
 .kbs-notes-row-title,
+.kbs-ticket-content-row-actions,
 .kbs-replies-row-actions,
 .kbs-notes-row-actions {
 	padding: 8px;
 	box-sizing: border-box;
 }
+.kbs-ticket-content-row-actions,
 .kbs-replies-row-actions,
 .kbs-notes-row-actions {
 	float: right;
 	text-align: right;
 	padding: 8px;
 }
-
+.kbs-ticket-content-row-actions .kbs-remove-row,
 .kbs-replies-row-actions .kbs-remove-row,
 .kbs-notes-row-actions .kbs-remove-row {
 	font-size: 12px;
@@ -357,6 +382,7 @@ a.kbs_ticket_form_data	{
 	cursor: pointer;
 }
 
+.kbs-ticket-content-row-standard-fields,
 .kbs-replies-row-standard-fields,
 .kbs-notes-row-standard-fields {
 	background: #f9f9f9;
@@ -364,6 +390,41 @@ a.kbs_ticket_form_data	{
 	border-width: 0 1px 1px;
 	border-style: solid;
 	border-color: #e5e5e5;
+}
+
+.kbs-ticket-avatar	{
+	float: left;
+}
+
+.kbs-customer-ticket-overview {
+	display: inline-block;
+	vertical-align: top;
+    margin-right: 10px;
+}
+
+.kbs-customer-ticket-contact {
+	float: right;
+	padding-left: 5px;
+}
+.kbs-customer-ticket-attr {
+	display: block;
+}
+.kbs-customer-ticket-attr.customer-name {
+	font-size: larger;
+	font-weight: 600;
+}
+.kbs-customer-ticket-attr.customer-company {
+	font-weight: 600;
+}
+
+/* Hidden Sections */
+.kbs-custom-ticket-sections-wrap {
+    display: none;
+	border-width: 0 1px 1px;
+	border-style: solid;
+	border-color: #e5e5e5;
+	box-sizing: border-box;
+	width: 100%;
 }
 
 .kbs-replies-content-wrap,
@@ -375,7 +436,7 @@ a.kbs_ticket_form_data	{
 	box-sizing: border-box;
 	width: 100%;
 }
-
+.kbs-custom-ticket-section,
 .kbs-replies-content-section,
 .kbs-replies-files-section,
 .kbs-notes-content-section {
@@ -388,20 +449,23 @@ a.kbs_ticket_form_data	{
 	background: #f9f9f9;
 }
 
+.kbs-custom-ticket-section:last-child,
 .kbs-replies-content-section:last-child,
 .kbs-notes-content-section:last-child {
 	border-bottom: none;
 }
 
+.kbs-custom-ticket-section-title,
 .kbs-replies-content-section-title,
 .kbs-replies-files-section-title,
 .kbs-notes-content-section-title {
 	display: block;
 	font-size: 14px;
 	font-weight: 600;
-	padding: 0 0 10px;
+	padding: 0 0 5px;
 	text-align: center;
 }
+.kbs-custom-ticket-section > *:not(.kbs-custom-ticket-section-title),
 .kbs-replies-content-section > *:not(.kbs-replies-content-section-title),
 .kbs-notes-content-section > *:not(.kbs-notes-content-section-title) {
 	padding-right: 20px;
@@ -413,6 +477,38 @@ a.kbs_ticket_form_data	{
 	display: block;
 	margin-bottom: 2px;
 }
+.kbs-ticket-participants-hint {
+	display: block;
+	margin-top: 15px;
+}
+
+.participant-container {
+	width: 75%;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	display: flex;
+}
+
+.participant-container:hover {
+	background: #f1f1f1;
+}
+
+.space-between { 
+	justify-content: space-between; 
+}  
+
+.participant-item {
+	width: 33%;
+	text-align: inherit;
+	margin-top: 5px;
+}
+
+.kbs_select_chosen.participants-list	{
+	width: 200px !important;
+    min-width: 200px !important;
+}
+
 .kbs-replies-load-more	{
 	text-align: right;
 }
@@ -446,7 +542,9 @@ a.kbs_ticket_form_data	{
 	float: right;
 	min-width: 150px;
 }
-
+#kbs-ticket-status-select {
+	padding-bottom: 7px;
+}
 .kbs_default_side_wrapper { width: 100px; }
 #kbs-delete-post { padding-top: 3px; }
 
@@ -757,7 +855,15 @@ td.kbs_article_label {
 
 /* System Info page styles
 -------------------------------------------------------------- */
-#system-info-textarea { width: 800px; height: 600px; font-family: Menlo, Monaco, monospace; background: #FFFFFF; white-space: pre; overflow: auto; display: block; }
+#system-info-textarea {
+    width: auto;
+    height: 600px;
+    font-family: Menlo, Monaco, monospace;
+    background: #FFFFFF;
+    white-space: pre;
+    overflow: auto;
+    display: block;
+}
 
 /* Export page styles
 -------------------------------------------------------------- */
@@ -1060,12 +1166,24 @@ td.kbs_article_label {
 }
 
 @media screen and ( max-width: 480px ) {
+    .kbs-ticket-content-row-title,
 	.kbs-replies-row-title,
+    .kbs-ticket-content-row-actions,
 	.kbs-replies-row-actions {
 		text-align: left;
 		width: 100%;
 	}
+    .kbs-ticket-content-row-title,
 	.kbs-replies-row-title {
 		padding-bottom: 0;
 	}
+    .participant_id,
+    .participant_email {
+        float: none;
+		text-align: left;
+		width: 100% !important;
+		margin: 10px 0;
+    }
+    
+
 }

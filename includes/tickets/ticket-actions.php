@@ -33,8 +33,8 @@ function kbs_process_ticket_submission()	{
 
 	$form_id          = ! empty( $_POST['kbs_form_id'] )              ? $_POST['kbs_form_id'] : '';
 	$redirect         = ! empty( $_POST['redirect'] )                 ? $_POST['redirect']    : '';
-	$privacy_accepted = ! empty( $_POST['kbs_agree_terms'] )          ? true                  : false;
-	$terms_agreed     = ! empty( $_POST['kbs_agree_privacy_policy'] ) ? true                  : false;
+	$privacy_accepted = ! empty( $_POST['kbs_agree_privacy_policy'] ) ? true                  : false;
+	$terms_agreed     = ! empty( $_POST['kbs_agree_terms'] )          ? true                  : false;
 
 	$posted = array();
 	$ignore = kbs_form_ignore_fields();
@@ -202,6 +202,10 @@ function kbs_ticket_customer_reply_action()	{
 		'author'      => 0
 	);
 
+    if ( kbs_participants_enabled() && ! empty( $_POST['kbs_confirm_email'] ) )  {
+        $reply_data['participant'] = is_email( sanitize_email( $_POST['kbs_confirm_email'] ) );
+    }
+
 	$reply_id = $ticket->add_reply( $reply_data );
 
 	if ( $reply_id )	{
@@ -209,7 +213,7 @@ function kbs_ticket_customer_reply_action()	{
 			kbs_attach_files_to_reply( $reply_id );
 		}
 
-		do_action( 'kbs_ticket_customer_reply', $reply_id );
+		do_action( 'kbs_ticket_customer_reply', $reply_id, $reply_data );
 		$redirect = add_query_arg( 'kbs_notice', 'reply_success', $redirect );
 	} else	{
 		$redirect = add_query_arg( 'kbs_notice', 'reply_fail', $redirect );
@@ -233,37 +237,27 @@ function kbs_ticket_reply_added_action()	{
 		return;
 	}
 
-	$status       = get_post_status( $_GET['ticket_id'] );
-	$redirect_key = 'closed' == $status ? 'close' : 'reply';
-	$redirect     = get_user_meta( get_current_user_id(), '_kbs_redirect_' . $redirect_key, true );
+    $ticket_id = absint( $_GET['ticket_id'] );
 
-	if ( empty( $redirect ) )	{
-		$redirect = 0;
-	}
-
-	switch( $redirect )	{
-		case 'stay': // Current ticket
-		default:
-			$url = add_query_arg( array(
-				'kbs-message' => 'closed' == $status ? 'ticket_reply_added_closed' : 'ticket_reply_added',
-                'kbs_ticket_id' => $_GET['ticket_id']
-			), kbs_get_ticket_url( $_GET['ticket_id'], true ) );
-			break;
-
-		case 'list': // All tickets list
-			$url = add_query_arg( array(
-				'post_type'     => 'kbs_ticket',
-				'kbs-message'   => 'closed' == $status ? 'ticket_reply_added_closed' : 'ticket_reply_added',
-				'kbs_ticket_id' => $_GET['ticket_id']
-			), admin_url( 'edit.php' ) );
-			break;
-	}
-
-	wp_safe_redirect( $url );
-	exit;
+    if ( ! empty( $ticket_id ) )    {
+        kbs_maybe_redirect_on_ticket_save( $ticket_id );
+    }
 
 } // kbs_ticket_reply_added_action
-add_action( 'init', 'kbs_ticket_reply_added_action' );
+add_action( 'admin_init', 'kbs_ticket_reply_added_action', 999 );
+
+/**
+ * When a ticket is marked as closed, determine where to send the agent.
+ *
+ * @since   1.2.4
+ * @param   int     $ticket_id  The ticket ID
+ * @param   object  $post       The ticket post object
+ * @return  void
+ */
+function kbs_redirect_when_closed_action( $ticket_id, $post )   {
+    kbs_maybe_redirect_on_ticket_save( $ticket_id );
+} // kbs_redirect_when_closed_action
+add_action( 'kbs_save_ticket', 'kbs_redirect_when_closed_action', 99999, 2 );
 
 /**
  * Record Ticket Reply In Log

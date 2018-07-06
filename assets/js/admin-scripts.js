@@ -1,4 +1,4 @@
-var kbs_vars;
+var KBSShowNotice, kbs_vars;
 jQuery(document).ready(function ($) {
 
 	// Setup datepicker
@@ -168,9 +168,11 @@ jQuery(document).ready(function ($) {
 	 */
 	var KBS_Tickets = {
 		init : function() {
-            this.save();
-			this.reply();
 			this.notes();
+            this.options();
+			this.participants();
+			this.reply();
+			this.save();
 		},
 
         save : function()   {
@@ -200,6 +202,136 @@ jQuery(document).ready(function ($) {
                 }
             });
         },
+
+        options : function()    {
+            // When Add Reply is clicked
+            $( document.body ).on( 'click', '.toggle-add-reply-option-section', function(e) {
+                e.preventDefault();
+
+                 $('html, body').animate({
+                    scrollTop: $('.kbs-historic-reply-option-fields').offset().top
+                }, 500 );
+            });
+
+			// Toggle display of participants
+            $( document.body ).on( 'click', '.toggle-view-participants-option-section', function(e) {
+                e.preventDefault();
+                var show = $(this).html() === kbs_vars.view_participants ? true : false;
+
+                if ( show ) {
+                    $(this).html( kbs_vars.hide_participants );
+                } else {
+                    $(this).html( kbs_vars.view_participants );
+                }
+
+                $('#kbs-ticket-participants-fields').slideToggle();
+            });
+
+            // Toggle display of submission form data
+            $( document.body ).on( 'click', '.toggle-view-submission-option-section', function(e) {
+                e.preventDefault();
+                var show = $(this).html() === kbs_vars.view_submission ? true : false;
+
+                if ( show ) {
+                    $(this).html( kbs_vars.hide_submission );
+                } else {
+                    $(this).html( kbs_vars.view_submission );
+                }
+
+                $('#kbs-ticket-formdata-fields').slideToggle();
+            });
+            
+        },
+
+		participants : function()	{
+			// Adds a participant to a ticket
+			$( document.body ).on( 'click', '#kbs-add-participant, #kbs-reply-update', function(e) {
+				e.preventDefault(e);
+
+				var customer_id = $('#participant_id').val(),
+					user_email  = $('#participant_email').val();
+
+				if ( '-1' === customer_id && ! user_email )	{
+					return;
+				}
+
+				var postData = {
+					ticket_id   : kbs_vars.post_id,
+					participant : customer_id,
+					email       : user_email,
+					action      : 'kbs_add_participant'
+				};
+
+				$.ajax({
+					type: 'POST',
+					dataType: 'json',
+					data: postData,
+					url: ajaxurl,
+					beforeSend: function()	{
+						$('#kbs-ticket-participants-fields').addClass('kbs-mute');
+						$('#kbs-add-participant').attr('disabled', true);
+					},
+					success: function (response) {
+						if ( true === response.success )	{
+							if ( '-1' !== customer_id )	{
+								$('#participant_id option:selected').remove();
+							}
+
+							$('.kbs-ticket-participants-list').html( response.data.list );
+							$('#participant-count').text(response.data.count);
+						}
+
+						$('#participant_email').empty();
+						$('#participant_id').val('-1');
+						$('#participant_id').trigger('chosen:updated');
+
+						$('#kbs-add-participant').attr('disabled', false);
+						$('#kbs-ticket-participants-fields').removeClass('kbs-mute');
+					}
+				}).fail(function (data) {
+					if ( window.console && window.console.log ) {
+						console.log( data );
+					}
+				});
+			});
+
+			// Removes a participant from a ticket
+			$( document.body ).on( 'click', '.remove-participant', function(e) {
+				e.preventDefault(e);
+
+				var participant = $(this).data('participant');
+
+				var postData = {
+					participant : participant,
+					ticket_id   : kbs_vars.post_id,
+					action      : 'kbs_remove_participant'
+				};
+
+				$.ajax({
+					type: 'POST',
+					dataType: 'json',
+					data: postData,
+					url: ajaxurl,
+					beforeSend: function()	{
+						$('#kbs-ticket-participants-fields').addClass('kbs-mute');
+						$('#kbs-add-participant').attr('disabled', true);
+					},
+					success: function (response) {
+						if ( true === response.success )	{
+							$('.kbs-ticket-participants-list').html( response.data.list );
+							$('#participant-count').text( response.data.count );
+						}
+
+						$('#kbs-add-participant').attr('disabled', false);
+						$('#kbs-ticket-participants-fields').removeClass('kbs-mute');
+					}
+				}).fail(function (data) {
+					if ( window.console && window.console.log ) {
+						console.log( data );
+					}
+				});
+			});
+		},
 
 		reply : function() {
 			// Reply to ticket Requests
@@ -1057,3 +1189,45 @@ function kbs_load_ticket_notes( ticket_id, note_id )	{
 		}
 	);
 }
+
+/**
+ * Shows message pop-up notice or confirmation message.
+ *
+ * @since 1.2.4
+ * @type {{warn: KBSShowNotice.warn, note: KBSShowNotice.note}}
+ * @returns {void}
+ */
+KBSShowNotice = {
+
+	/**
+	 * Shows a delete confirmation pop-up message on the ticket screen.
+     *
+     * @since 1.2.4
+     * @param      string  The object type to which the notice applies.
+	 * @return     bool    Returns true if the message is confirmed.
+	 */
+	warn : function( type ) {
+        if ( type === undefined )   {
+            type = 'ticket';
+        }
+
+        var msg = kbs_vars.delete_ticket_warn || '';
+
+		if ( confirm(msg) ) {
+			return true;
+		}
+
+		return false;
+	},
+
+	/**
+	 * Shows an alert message.
+	 *
+	 * @since 2.7.0
+	 *
+	 * @param text The text to display in the message.
+	 */
+	note : function(text) {
+		alert(text);
+	}
+};

@@ -211,13 +211,18 @@ function kbs_load_admin_scripts( $hook ) {
 		'add_new_ticket'          => sprintf( __( 'Add New %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
 		'admin_url'               => admin_url(),
 		'ajax_loader'             => KBS_PLUGIN_URL . 'assets/images/loading.gif',
+        'delete_ticket_warn'      => sprintf(
+            __( "You are about to permanently delete this %s.\n\nThis action cannot be undone.\n\nClick 'Cancel' to stop, 'OK' to delete.", 'kb-support' ), kbs_get_ticket_label_singular( true )
+        ),
         'disable_closure_email'   => kbs_get_option( 'ticket_closed_disable_email', false ),
 		'editing_field_type'      => $editing_field_type,
 		'editing_ticket'          => isset( $_GET['action'] ) && 'edit' == $_GET['action'] && 'kbs_ticket' == get_post_type( $_GET['post'] ) ? true : false,
 		'field_label_missing'     => __( 'Enter a Label for your field.', 'kb-support' ),
 		'field_type_missing'      => __( 'Select the field Type', 'kb-support' ),
 		'hide_note'               => __( 'Hide Note', 'kb-support' ),
+		'hide_participants'       => __( 'Hide participants', 'kb-support' ),
 		'hide_reply'              => __( 'Hide Reply', 'kb-support' ),
+        'hide_submission'         => __( 'Hide submission data', 'kb-support' ),
 		'kbs_version'             => KBS_VERSION,
 		'new_media_ui'            => apply_filters( 'kbs_use_35_media_ui', 1 ),
 		'no_note_content'         => __( 'There is no content in your note', 'kb-support' ),
@@ -235,7 +240,9 @@ function kbs_load_admin_scripts( $hook ) {
 		'ticket_reply_failed'     => sprintf( __( 'Could not add %s Reply', 'kb-support' ), kbs_get_ticket_label_singular() ),
 		'type_to_search'          => sprintf( __( 'Type to search %s', 'kb-support' ), kbs_get_article_label_plural() ),
         'view_reply'              => __( 'View Reply', 'kb-support' ),
-		'view_note'               => __( 'View Note', 'kb-support' )
+		'view_note'               => __( 'View Note', 'kb-support' ),
+		'view_participants'       => __( 'View participants', 'kb-support' ),
+        'view_submission'         => __( 'View submission data', 'kb-support' )
 	) );
 
 	if ( function_exists( 'wp_enqueue_media' ) && version_compare( $wp_version, '3.5', '>=' ) ) {
