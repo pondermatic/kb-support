@@ -213,10 +213,10 @@ function kbs_remove_ticket_participants( $ticket, $email_addresses )	{
 } // kbs_remove_ticket_participants
 
 /**
- * Filters email headers if we CC in the ticket participants.
+ * Filters email headers if we CC in the ticket participants in agent replies.
  *
  * @since   1.2.4
- * @param   string  $headers        Email headers
+ * @param   array   $headers        Email headers
  * @param   int     $ticket_id      Ticket ID
  * @param   array   $ticket_data    Array of ticket meta data
  * @return  string

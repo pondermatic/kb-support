@@ -2,9 +2,9 @@
 Contributors: kbsupport, mikeyhoward1977
 Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
-Tested up to: 4.9.6
+Tested up to: 4.9.7
 Requires PHP: 5.4
-Stable tag: 1.2.3
+Stable tag: 1.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -126,7 +126,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 = 1.2.4 =
 
-**Thursday, 21st June 2018**
+**Friday, 6th July 2018**
 
 **New**: Improved metabox display for tickets
 **New**: Introduced the participants feature. A ticket can have multiple participants all of whom can access and manage the ticket. [Learn more](https://kb-support.com/articles/ticket-participants/)
@@ -142,6 +142,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 **Fix**: Corrected output for privacy policy acceptance
 
 **Dev**: We've switched to array based email headers
+**Dev**: Allow exclusion by ID when retrieving customers from the DB
 
 = 1.2.3 =
 

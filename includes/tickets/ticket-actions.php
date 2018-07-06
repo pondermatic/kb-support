@@ -213,7 +213,7 @@ function kbs_ticket_customer_reply_action()	{
 			kbs_attach_files_to_reply( $reply_id );
 		}
 
-		do_action( 'kbs_ticket_customer_reply', $reply_id );
+		do_action( 'kbs_ticket_customer_reply', $reply_id, $reply_data );
 		$redirect = add_query_arg( 'kbs_notice', 'reply_success', $redirect );
 	} else	{
 		$redirect = add_query_arg( 'kbs_notice', 'reply_fail', $redirect );
