@@ -245,7 +245,7 @@ jQuery(document).ready(function ($) {
 
 		participants : function()	{
 			// Adds a participant to a ticket
-			$( document.body ).on( 'click', '#kbs-add-participant, #kbs-reply-update', function(e) {
+			$( document.body ).on( 'click', '#kbs-add-participant', function(e) {
 				e.preventDefault(e);
 
 				var customer_id = $('#participant_id').val(),
