@@ -124,6 +124,12 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 == Changelog ==
 
+= 1.2.5 =
+
+**DATE**
+
+**Bug**: Corrected spelling of *Agreeements*. Thanks to @garrett-eclipse
+
 = 1.2.4 =
 
 **Friday, 6th July 2018**
