@@ -716,9 +716,32 @@ class KBS_Ticket {
                         if ( '-1' === $this->agent_id ) {
                             $this->agent_id = 0;
                         }
-						$current_agent = $this->get_meta( '_kbs_ticket_agent_id' );
-						$this->update_meta( '_kbs_ticket_agent_id', $this->agent_id );
-						kbs_record_agent_change_in_log( $this->ID, $this->agent_id, $current_agent );
+
+                        $current_agent = $this->get_meta( '_kbs_ticket_agent_id' );
+
+                        /**
+                         * Fires immediately before assigning an agent
+                         *
+                         * @since	1.0
+                         */
+                        do_action( 'kbs_pre_assign_agent', $this->ID, $this->agent_id, $current_agent ); // Backwards compat
+                        do_action( 'kbs_assign_agent', $this->ID, $this->agent_id, $current_agent );
+                        do_action( 'kbs_assign_agent_' . $this->agent_id, $this->ID, $current_agent );
+
+						$result = $this->update_meta( '_kbs_ticket_agent_id', $this->agent_id );
+
+                        if ( $result )  {
+                            /**
+                             * Fires immediately after assigning an agent
+                             *
+                             * @since	1.0
+                             */
+                            do_action( 'kbs_post_assign_agent', $this->ID, $this->agent_id, $current_agent ); // Backwards compat
+                            do_action( 'kbs_assigned_agent', $this->ID, $this->agent_id, $current_agent );
+                            do_action( 'kbs_assign_agent_' . $this->agent_id, $this->ID, $current_agent );
+
+                            kbs_record_agent_change_in_log( $this->ID, $this->agent_id, $current_agent );
+                        }
 						break;
 
                     case 'agents':
@@ -934,13 +957,13 @@ class KBS_Ticket {
 			return false; // Don't permit status changes that aren't changes
 		}
 
-		$do_change = apply_filters( 'kbs_should_update_ticket_status', true, $this->ID, $status, $old_status );
+		$do_change = apply_filters( 'kbs_should_update_ticket_status', true, $this->ID, $status, $old_status, $this );
 
 		$updated = false;
 
 		if ( $do_change ) {
 
-			do_action( 'kbs_before_ticket_status_change', $this->ID, $status, $old_status );
+			do_action( 'kbs_before_ticket_status_change', $this->ID, $status, $old_status, $this );
 
 			$update_fields = array( 'ID' => $this->ID, 'post_status' => $status, 'edit_date' => current_time( 'mysql' ) );
 			$update_fields = apply_filters( 'kbs_update_ticket_status_fields', $update_fields );
@@ -961,14 +984,14 @@ class KBS_Ticket {
 					$this->process_closed();
 					break;
 				default:
-					do_action( 'kbs_ticket_status_' . $status, $this->ID, $old_status );
+					do_action( 'kbs_ticket_status_' . $status, $this->ID, $old_status, $this );
 			}
 
 			update_post_meta( $this->ID, '_kbs_ticket_last_status_change', current_time( 'timestamp' ) );
 
 		}
 
-		do_action( 'kbs_update_ticket_status', $this->ID, $status, $old_status );
+		do_action( 'kbs_update_ticket_status', $this->ID, $status, $old_status, $this );
 
 		return $updated;
 
