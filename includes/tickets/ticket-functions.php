@@ -1130,26 +1130,8 @@ function kbs_assign_agent( $ticket_id, $agent_id = 0 )	{
 		return false;
 	}
 
-	/**
-	 * Fires immediately before assigning an agent
-	 *
-	 * @since	1.0
-	 * @param	int	$ticket_id		The ticket ID
-	 * @param	int	$agent_id		The agent user ID
-	 */
-	do_action( 'kbs_pre_assign_agent', $ticket_id, $agent_id );
-
 	$ticket->__set( 'agent_id', $agent_id );
 	$return = $ticket->save();
-
-	/**
-	 * Fires immediately after assigning an agent
-	 *
-	 * @since	1.0
-	 * @param	int	$ticket_id		The ticket ID
-	 * @param	int	$agent_id		The agent user ID
-	 */
-	do_action( 'kbs_post_assign_agent', $ticket_id, $agent_id );
 
 	return $return;
 
@@ -1310,7 +1292,7 @@ function kbs_ticket_status_from_new_to_open( $ticket_id )	{
 		kbs_set_ticket_status( $ticket_id, 'open' );
 	}
 }
-add_action( 'kbs_post_assign_agent', 'kbs_ticket_status_from_new_to_open' );
+add_action( 'kbs_assigned_agent', 'kbs_ticket_status_from_new_to_open' );
 
 /**
  * Retrieve all notes attached to a ticket.

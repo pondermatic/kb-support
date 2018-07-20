@@ -264,10 +264,10 @@ function kb_tickets_post_column_customer( $ticket_id, $kbs_ticket )	{
 function kb_tickets_post_column_agent( $ticket_id, $kbs_ticket )	{
 	do_action( 'kbs_tickets_pre_column_agent', $kbs_ticket );
 
-	if ( ! empty( $kbs_ticket->agent_id ) && $agent = get_userdata( $kbs_ticket->agent_id ) )	{
+	if ( ! empty( $kbs_ticket->agent_id ) && $agent = new KBS_Agent( (int) $kbs_ticket->agent_id ) )	{
 		$output = sprintf( '<a href="%s">%s</a>',
 			get_edit_user_link( $kbs_ticket->agent_id ),
-			$agent->display_name
+			$agent->name
 		);
 	} else	{
 		$output = __( 'No Agent Assigned', 'kb-support' );

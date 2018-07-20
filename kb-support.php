@@ -269,7 +269,9 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/companies/company-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/user-functions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/customers/customer-functions.php';
-        require_once KBS_PLUGIN_DIR . 'includes/agent-functions.php';
+        require_once KBS_PLUGIN_DIR . 'includes/agents/class-kbs-agent.php';
+        require_once KBS_PLUGIN_DIR . 'includes/agents/agent-functions.php';
+        require_once KBS_PLUGIN_DIR . 'includes/agents/agent-actions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/customers/class-kbs-db-customers.php';
 		require_once KBS_PLUGIN_DIR . 'includes/customers/class-kbs-db-customer-meta.php';
 		require_once KBS_PLUGIN_DIR . 'includes/shortcodes.php';
