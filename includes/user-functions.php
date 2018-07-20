@@ -290,13 +290,15 @@ function kbs_save_user_departments( $user_id ) {
 	$departments = kbs_get_departments();
 	$add_departments  = ! empty( $_POST['kbs_departments'] ) ? $_POST['kbs_departments'] : array();
 
-	foreach( $departments as $department )	{
-		if ( in_array( $department->term_id, $add_departments ) )	{
-			kbs_add_agent_to_department( $department->term_id, $user_id );
-		} else	{
-			kbs_remove_agent_from_department( $department->term_id, $user_id );
-		}
-	}
+    if ( $departments ) {
+        foreach( $departments as $department )	{
+            if ( in_array( $department->term_id, $add_departments ) )	{
+                kbs_add_agent_to_department( $department->term_id, $user_id );
+            } else	{
+                kbs_remove_agent_from_department( $department->term_id, $user_id );
+            }
+        }
+    }
 
 } // kbs_save_user_departments
 add_action( 'personal_options_update', 'kbs_save_user_departments' );
