@@ -38,6 +38,48 @@ function kbs_add_options_link() {
 add_action( 'admin_menu', 'kbs_add_options_link', 20 );
 
 /**
+ * Display the open ticket count next to the tickets menu item.
+ *
+ * @since	1.2.5
+ * @return	void
+ */
+function kbs_menu_open_ticket_count()	{
+	if ( ! kbs_get_option( 'show_count', false ) )	{
+		return;
+	}
+
+	global $menu, $current_user;
+
+	if ( kbs_is_ticket_admin() || ! kbs_get_option( 'restrict_agent_view' ) )	{
+		$count = kbs_get_open_ticket_count( 'open' );
+	} else	{
+		$agent = new KBS_Agent( $current_user->ID );
+
+		if ( $agent )	{
+			$count = $agent->open_tickets;
+		}
+	}
+
+	if ( empty( $count ) )	{
+		return;
+	}
+
+	foreach ( $menu as $key => $value ) {
+
+		if ( 'edit.php?post_type=kbs_ticket' == $menu[ $key ][2] )	{
+
+			$menu[ $key ][0] .= sprintf(
+				' <span class="update-plugins count-%d"><span class="pending-count">%d</span></span>',
+				absint( $count ),
+				number_format_i18n( $count )
+			);
+		}
+	}
+
+} // kbs_menu_open_ticket_count
+add_action( 'admin_menu', 'kbs_menu_open_ticket_count', 21 );
+
+/**
  *  Determines whether the current admin page is a specific KBS admin page.
  *
  *  Only works after the `wp_loaded` hook, & most effective
