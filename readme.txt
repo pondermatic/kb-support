@@ -128,14 +128,15 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 **DATE**
 
-**New**: Added open ticket count bubble option to settings. *Tickets -> Settings -> Tickets*
+**New**: Added open ticket count menu bubble. Activate within settings. *Tickets -> Settings -> Tickets*
 
-**Bug**: Removed incorrect Ajax trigger when adding participants
-**Bug**: Corrected spelling of *Agreeements*. Thanks to @garrett-eclipse
+**Bug**: Removed incorrect Ajax trigger when adding participants which generated a Javascript error
+**Bug**: Corrected spelling of *Agreeements*. Thanks to [@garrett-eclipse](https://github.com/garrett-eclipse)
+**Bug**: Corrected width of the system info textarea input
 
 **Dev**: Added the `KBS_Agent` class
-**Dev**: Added hooks before and after agent assignment
-**Dev**: The `KBS_Tickets_Query` class now accepts the 'agent' argument
+**Dev**: Added hooks before and after agent ticket assignment
+**Dev**: The `KBS_Tickets_Query` class now accepts the 'agent' argument to retrieve tickets by agent ID
 
 = 1.2.4 =
 
