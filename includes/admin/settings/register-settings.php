@@ -290,6 +290,12 @@ function kbs_get_registered_settings() {
 						'type'    => 'text',
 						'size'    => 'small'
 					),
+					'show_count' => array(
+						'id'      => 'show_count',
+						'name'    => sprintf( __( 'Show %s Count', 'kb-support' ), $single ),
+						'desc'    => sprintf( __( 'Whether or not to display the open %s count next to the %s menu', 'kb-support' ), strtolower( $single ), $plural ),
+						'type'    => 'checkbox'
+					),
 					'enable_participants' => array(
 						'id'      => 'enable_participants',
 						'name'    => __( 'Enable Participants?', 'kb-support' ),

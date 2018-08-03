@@ -65,6 +65,7 @@ class KBS_Tickets_Query extends KBS_Stats {
 			'user'             => null,
 			'customer'         => null,
 			'company'          => null,
+            'agent'            => null,
 			'key'              => null,
 			'status'           => kbs_get_ticket_status_keys( false ),
 			'meta_key'         => null,
@@ -124,6 +125,7 @@ class KBS_Tickets_Query extends KBS_Stats {
 		add_action( 'kbs_pre_get_tickets',  array( $this, 'user'       ) );
 		add_action( 'kbs_pre_get_tickets',  array( $this, 'customer'   ) );
 		add_action( 'kbs_pre_get_tickets',  array( $this, 'company'    ) );
+        add_action( 'kbs_pre_get_tickets',  array( $this, 'agent'      ) );
 		add_action( 'kbs_pre_get_tickets',  array( $this, 'key'        ) );
 		add_action( 'kbs_pre_get_tickets',  array( $this, 'search'     ) );
 	} // init

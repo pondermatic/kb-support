@@ -88,6 +88,76 @@ function kbs_get_agents( $ids = false )	{
 } // kbs_get_agents
 
 /**
+ * Retrieve ticket admin user roles.
+ *
+ * @since	1.2.5
+ * @return	array	Array of KBS admin user roles
+ */
+function kbs_get_ticket_admin_user_roles()	{
+	$roles = array( 'support_manager' );
+
+	if ( kbs_get_option( 'admin_agents' ) )	{
+		$roles[] = 'administrator';
+	}
+
+	$roles = apply_filters( 'kbs_ticket_admin_user_roles', $roles );
+
+	return $roles;
+} // kbs_get_ticket_admin_user_roles
+
+/**
+ * Whether or not the user is a KBS ticket admin.
+ *
+ * @since	1.0
+ * @param	int|object	$agent_id	The user ID or a WP_User object to check.
+ * @return	bool	True if the user is a KBS ticket admin, or false
+ */
+function kbs_is_ticket_admin( $agent_id = 0 )	{
+
+	if ( ! empty( $agent_id ) && is_numeric( $agent_id ) ) {
+        $agent = get_userdata( $agent_id );
+    } else {
+        $agent = wp_get_current_user();
+    }
+
+	$is_admin = false;
+
+    if ( ! empty( $agent ) ) {
+		$roles = kbs_get_ticket_admin_user_roles();
+
+		foreach( $roles as $role )	{
+			$is_admin = in_array( $role, (array) $agent->roles );
+
+			if ( $is_admin )	{
+				break;
+			}
+		}
+    }
+
+	$is_admin = apply_filters( 'kbs_is_ticket_admin', $is_admin, $agent );
+
+	return $is_admin;
+
+} // kbs_is_ticket_admin
+
+/**
+ * Whether or not the user is a KBS admin.
+ *
+ * @since	1.0
+ * @param	int		$agent_id	The user ID to check.
+ * @return	bool	True if the user is a KBS admin, or false
+ */
+function kbs_is_kbs_admin( $agent_id = 0 )	{
+
+	if ( empty( $agent_id ) )	{
+		$agent_id = get_current_user_id();
+	}
+
+	return ( user_can( $agent_id, 'administrator' ) || user_can( $agent_id, 'manage_ticket_settings' ) );
+
+} // kbs_is_kbs_admin
+
+/**
  * Whether or not the user is an agent.
  *
  * @since	1.0

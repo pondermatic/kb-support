@@ -856,8 +856,8 @@ td.kbs_article_label {
 /* System Info page styles
 -------------------------------------------------------------- */
 #system-info-textarea {
-    width: auto;
-    height: 600px;
+	width: 800px;
+    height: 400px;
     font-family: Menlo, Monaco, monospace;
     background: #FFFFFF;
     white-space: pre;

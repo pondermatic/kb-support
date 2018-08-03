@@ -2,9 +2,9 @@
 Contributors: kbsupport, mikeyhoward1977
 Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
-Tested up to: 4.9.7
+Tested up to: 4.9.8
 Requires PHP: 5.4
-Stable tag: 1.2.4
+Stable tag: 1.2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -106,7 +106,7 @@ Place the [kbs_tickets] shortcode on any page.
 
 = Is there a Pro version with additional features? =
 
-Extensions are available at [https://kb-support.com/extensions/](https://kb-support.com/extensions/ "KB Support Extensions") to further enhance KB Support features and functionality. New extensions are being added regularly. [Join our mailing list](http://eepurl.com/cnxWcz) to be the first to hear about new releases and to receive a 25% discount off of your first purchase!
+Extensions are available at [https://kb-support.com/extensions/](https://kb-support.com/extensions/ "KB Support Extensions") to further enhance KB Support features and functionality. New extensions are being added regularly. [Join our mailing list](http://eepurl.com/cnxWcz) to be the first to hear about new releases and to receive a 15% discount off of your first purchase!
 
 == Screenshots ==
 
@@ -123,6 +123,22 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.2.5 =
+
+**Friday, 3rd August 2018**
+
+**New**: Added open ticket count menu bubble. Activate within settings. *Tickets -> Settings -> Tickets*
+
+**Bug**: Removed incorrect Ajax trigger when adding participants which generated a Javascript error
+**Bug**: Corrected spelling of *Agreeements*. Thanks to [@garrett-eclipse](https://github.com/garrett-eclipse)
+**Bug**: Corrected width of the system info textarea input
+
+**Tweak**: Supported up to WordPress 4.9.8
+
+**Dev**: Added the `KBS_Agent` class
+**Dev**: Added hooks before and after agent ticket assignment
+**Dev**: The `KBS_Tickets_Query` class now accepts the 'agent' argument to retrieve tickets by agent ID
 
 = 1.2.4 =
 
