@@ -2,9 +2,9 @@
 Contributors: kbsupport, mikeyhoward1977
 Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
-Tested up to: 4.9.7
+Tested up to: 4.9.8
 Requires PHP: 5.4
-Stable tag: 1.2.4
+Stable tag: 1.2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -126,13 +126,15 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 = 1.2.5 =
 
-**DATE**
+**Friday, 3rd August 2018**
 
 **New**: Added open ticket count menu bubble. Activate within settings. *Tickets -> Settings -> Tickets*
 
 **Bug**: Removed incorrect Ajax trigger when adding participants which generated a Javascript error
 **Bug**: Corrected spelling of *Agreeements*. Thanks to [@garrett-eclipse](https://github.com/garrett-eclipse)
 **Bug**: Corrected width of the system info textarea input
+
+**Tweak**: Supported up to WordPress 4.9.8
 
 **Dev**: Added the `KBS_Agent` class
 **Dev**: Added hooks before and after agent ticket assignment
