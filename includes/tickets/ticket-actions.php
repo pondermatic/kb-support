@@ -247,6 +247,43 @@ function kbs_ticket_reply_added_action()	{
 add_action( 'admin_init', 'kbs_ticket_reply_added_action', 999 );
 
 /**
+ * Delete a reply.
+ *
+ * @since   1.2.6
+ * @return  void
+ */
+function kbs_delete_ticket_reply_action()   {
+    if ( ! isset( $_GET['kbs-action'] ) || 'delete_ticket_reply' != $_GET['kbs-action'] )	{
+		return;
+	}
+
+    if ( ! isset ( $_GET['kbs_nonce'] ) || ! wp_verify_nonce( $_GET['kbs_nonce'], 'delete_ticket_reply' ) )  {
+        return;
+    }
+
+    $reply_id  = absint( $_GET['reply_id'] );
+    $ticket_id = absint( $_GET['ticket_id'] );
+
+    if ( empty( $reply_id ) || empty( $ticket_id ) )    {
+        return;
+    }
+
+    if ( wp_delete_post( $reply_id, true ) )  {
+        $message = 'ticket_reply_deleted';
+    } else  {
+        $message = 'ticket_reply_delete_failed';
+    }
+
+    wp_safe_redirect( add_query_arg( array(
+        'post'        => $ticket_id,
+        'action'      => 'edit',
+        'kbs-message' => $message
+    ), admin_url( 'post.php' ) ) );
+    exit;
+} // kbs_delete_ticket_reply_action
+add_action( 'admin_init', 'kbs_delete_ticket_reply_action' );
+
+/**
  * When a ticket is marked as closed, determine where to send the agent.
  *
  * @since   1.2.4

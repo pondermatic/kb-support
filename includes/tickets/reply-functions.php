@@ -142,6 +142,23 @@ function kbs_get_reply_html( $reply, $ticket_id = 0 ) {
                 __( 'Customer has not read', 'kb-support' )
             );
         }
+
+        if ( 'closed' != get_post_status( $ticket_id ) && ( current_user_can( 'manage_ticket_settings' ) || get_current_user_id() == $reply->post_author ) ) {
+
+            $delete_url  = wp_nonce_url( add_query_arg( array(
+                'kbs-action' => 'delete_ticket_reply',
+                'reply_id'   => $reply->ID,
+                'ticket_id'  => $ticket_id
+            ), admin_url() ), 'delete_ticket_reply', 'kbs_nonce' );
+
+            $actions['trash'] = sprintf(
+                '<a href="%s" class="kbs-delete delete-reply">%s</a>',
+                $delete_url,
+                __( 'Delete Reply', 'kb-support' )
+            );
+
+        }
+
     }
 
     if ( $file_count )  {

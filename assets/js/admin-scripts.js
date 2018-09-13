@@ -334,6 +334,16 @@ jQuery(document).ready(function ($) {
 		},
 
 		reply : function() {
+
+            // Delete a reply
+            $( document.body ).on( 'click', '.reply-delete', function(event) {
+                event.preventDefault();
+
+                if ( confirm( kbs_vars.delete_ticket_warn ) ) {
+                    window.location = $(this).attr('href');
+                }
+            });
+
 			// Reply to ticket Requests
 			$( document.body ).on( 'click', '#kbs-reply-close, #kbs-reply-update', function(event) {
 				
