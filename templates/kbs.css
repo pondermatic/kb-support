@@ -263,28 +263,6 @@
 	left: -35px;
 }
 
-#kbs_secure_site_wrapper {
-	padding: 0px 0px 8px 0;
-	font-size: smaller;
-	font-weight: bold;
-	text-align: right;
-}
-
-#kbs_secure_site_wrapper span.padlock:before {
-	content: '\f160';
-	display: inline-block;
-	-webkit-font-smoothing: antialiased;
-	font: normal 20px/1 'dashicons';
-	vertical-align: middle;
-}
-
-#kbs_secure_site_wrapper span.id {
-	display: inline-block;
-	font-size: large;
-	-webkit-font-smoothing: antialiased;
-	vertical-align: middle;
-}
-
 /* = Tickets
 -------------------------------------------------------------- */
 #kbs_item_wrapper .left {

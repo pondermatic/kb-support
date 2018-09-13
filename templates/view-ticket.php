@@ -179,13 +179,6 @@ if ( $visible && ! empty( $ticket->ID ) ) :
                             </span>
                         <?php endif; ?>
 
-                        <?php if( is_ssl() ) : ?>
-                            <div id="kbs_secure_site_wrapper">
-                                <span class="padlock"></span>
-                                <span><?php _e( 'This form is secured and encrypted via SSL', 'kb-support' ); ?></span>
-                            </div>
-                        <?php endif; ?>
-
                         <?php do_action( 'kbs_before_single_ticket_reply', $ticket ); ?>
 
                         <?php if ( 'closed' != $ticket->status || kbs_customer_can_repoen_ticket( $customer->id, $ticket->ID ) ) : ?>
