@@ -2039,7 +2039,7 @@ class KBS_Ticket {
 			);
 		}
 
-		return apply_filters( 'kbs_show_form_data', $output );
+		return apply_filters( 'kbs_show_form_data', $output, $this->form_data['id'], $this );
 	} // show_form_data
 
 } // KBS_Ticket
