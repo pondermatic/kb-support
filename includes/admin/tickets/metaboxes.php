@@ -585,26 +585,38 @@ function kbs_ticket_metabox_customer_section( $ticket_id )	{
 			<?php echo get_avatar( $kbs_ticket->email, '', kbs_get_company_logo( $kbs_ticket->company_id ) ); ?>
 		</span>
 		<span class="kbs-customer-ticket-contact">
+
+			<?php do_action( 'kbs_ticket_metabox_customer_section_before_details' ); ?>
+
 			<span class="kbs-customer-ticket-attr customer-name">
 				<?php echo $customer; ?>
 			</span>
+
+			<?php do_action( 'kbs_ticket_metabox_customer_section_after_name' ); ?>
 
 			<?php if ( ! empty( $kbs_ticket->company_id ) ) : ?>
 				<span class="kbs-customer-ticket-attr customer-company">
 					<?php echo kbs_get_company_name( $kbs_ticket->company_id ); ?>
 				</span>
+
+				<?php do_action( 'kbs_ticket_metabox_customer_section_after_company' ); ?>
 			<?php endif; ?>
 
 			<span class="kbs-customer-ticket-attr customer-email">
 				<?php printf( '<a href="mailto:%1$s">%1$s</a>', $kbs_ticket->email ); ?>
 			</span>
 
+			<?php do_action( 'kbs_ticket_metabox_customer_section_after_email' ); ?>
+
 			<?php if ( ! empty( $user_info['website'] ) ) : ?>
 				<span class="kbs-customer-ticket-attr customer-website">
 					<?php printf( '<a href="%1$s" target="_blank">%1$s</a>', esc_url( $user_info['website'] ) ); ?>
 				</span>
+
+				<?php do_action( 'kbs_ticket_metabox_customer_section_after_website' ); ?>
 			<?php endif; ?>
 
+			<?php do_action( 'kbs_ticket_metabox_customer_section_after_details' ); ?>
 		</span>
 	</div>
 	<hr>
