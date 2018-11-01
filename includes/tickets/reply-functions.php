@@ -247,7 +247,7 @@ function kbs_get_reply_author_name( $reply, $role = false )	{
             $author_customer = new KBS_Customer( $author_email );
 
             if ( $author_customer && $author_customer->id > 0 )   {
-                if ( in_array( $ticket_email, $author_obj->emails ) )   {
+                if ( in_array( $ticket_email, $author_customer->emails ) )   {
                     $author_role = __( 'Participant', 'kb-support' );
                 }
             }
