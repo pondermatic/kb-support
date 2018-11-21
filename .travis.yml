@@ -29,6 +29,3 @@ branches:
   only:
     - master
     - /^release\/.*$/
-
-notifications:
-    slack: kbsupport:4jojNlDtoZ6qLQbeSjJ5ivFX
