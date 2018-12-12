@@ -2019,6 +2019,13 @@ class KBS_Ticket {
 			);
 		}
 
+        if ( ! empty( $this->ip ) ) {
+            $output .= sprintf( '<p><strong>%s</strong>: %s</p>',
+				__( 'Submitted from IP address', 'kb-support' ),
+				$this->ip
+            );
+        }
+
 		$privacy_accepted = $this->get_meta( '_kbs_ticket_privacy_accepted', true );
 		if ( $privacy_accepted )	{
 			$date_format = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
@@ -2039,7 +2046,7 @@ class KBS_Ticket {
 			);
 		}
 
-		return apply_filters( 'kbs_show_form_data', $output, $this->form_data['id'], $this );
+		return apply_filters( 'kbs_show_form_data_output', $output, $this->form_data['id'], $this );
 	} // show_form_data
 
 } // KBS_Ticket
