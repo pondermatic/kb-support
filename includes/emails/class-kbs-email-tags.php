@@ -401,14 +401,29 @@ function kbs_setup_email_tags() {
 			'function'    => 'kbs_email_tag_ticket_url'
 		),
 		array(
+			'tag'         => 'ticket_url_path',
+			'description' => sprintf( __( 'Adds a non-linked URL so customers can view their %s directly on your website.', 'kb-support' ), strtolower( $ticket_singular ) ),
+			'function'    => 'kbs_email_tag_ticket_url_path'
+		),
+		array(
 			'tag'         => 'ticket_admin_url',
 			'description' => sprintf( __( 'Adds a URL so admins can access a %s directly.', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_ticket_admin_url'
 		),
 		array(
+			'tag'         => 'ticket_admin_url_path',
+			'description' => sprintf( __( 'Adds a non-linked URL so admins can access a %s directly.', 'kb-support' ), strtolower( $ticket_singular ) ),
+			'function'    => 'kbs_email_tag_ticket_admin_url_path'
+		),
+		array(
 			'tag'         => 'close_ticket_url',
 			'description' => sprintf( __( 'Adds a URL link that customers can click to close a ticket.', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_ticket_close_ticket_url'
+		),
+		array(
+			'tag'         => 'close_ticket_url_path',
+			'description' => sprintf( __( 'Adds a non-linked URL link that customers can click to close a ticket.', 'kb-support' ), strtolower( $ticket_singular ) ),
+			'function'    => 'kbs_email_tag_ticket_close_ticket_url_path'
 		)
 	);
 
@@ -828,6 +843,21 @@ function kbs_email_tag_ticket_url( $ticket_id ) {
 } // kbs_email_tag_ticket_url
 
 /**
+ * Email template tag: ticket_url_path
+ * Adds a non-linked URL so customers can view their ticket directly on your website
+ *
+ * @since	1.0
+ * @param	int		$ticket_id
+ * @return	str		Ticket URL path
+ */
+function kbs_email_tag_ticket_url_path( $ticket_id ) {
+	$url = kbs_get_ticket_url( $ticket_id, false, true );
+	$url = apply_filters( 'kbs_tag_ticket_url_path', $url, $ticket_id );
+
+	return $url;
+} // kbs_email_tag_ticket_url_path
+
+/**
  * Email template tag: ticket_admin_url
  * Adds a URL so admins can access a ticket directly
  *
@@ -841,6 +871,21 @@ function kbs_email_tag_ticket_admin_url( $ticket_id ) {
 
 	return '<a href="' . $url . '">' . $url . '</a>';
 } // kbs_email_tag_ticket_admin_url
+
+/**
+ * Email template tag: ticket_admin_url_path
+ * Adds a non-linked URL so admins can access a ticket directly
+ *
+ * @since	1.0
+ * @param	int		$ticket_id
+ * @return	str		Ticket admin URL path
+ */
+function kbs_email_tag_ticket_admin_url_path( $ticket_id ) {
+	$url = kbs_get_ticket_url( $ticket_id, true );
+	$url = apply_filters( 'kbs_tag_ticket_admin_url_path', $url, $ticket_id );
+
+	return $url;
+} // kbs_email_tag_ticket_admin_url_path
 
 /**
  * Email template tag: close_ticket_url
@@ -858,3 +903,20 @@ function kbs_email_tag_ticket_close_ticket_url( $ticket_id ) {
 
 	return '<a href="' . $url . '">' . $url . '</a>';
 } // kbs_email_tag_ticket_close_ticket_url
+
+/**
+ * Email template tag: close_ticket_url_path
+ * Adds a non-linked URL so customers can close a ticket
+ *
+ * @since	1.0
+ * @param	int		$ticket_id
+ * @return	str		Close ticket URL path
+ */
+function kbs_email_tag_ticket_close_ticket_url_path( $ticket_id ) {
+	$url = kbs_get_ticket_url( $ticket_id, false, true );
+	$url = remove_query_arg( 'kbs_action', $url );
+	$url = add_query_arg( 'kbs_action', 'close_ticket', $url );
+	$url = apply_filters( 'kbs_tag_close_ticket_url_path', $url, $ticket_id );
+
+	return $url;
+} // kbs_email_tag_ticket_close_ticket_url_path

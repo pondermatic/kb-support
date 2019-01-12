@@ -717,7 +717,7 @@ function kbs_get_registered_settings() {
 						'type' => 'rich_editor',
 						'std'  => __( "Dear", "kb-support" ) . " {name},\n\n" . 
 								  sprintf( __( 'Your support %1$s # {ticket_id} has received a reply. Click the link below to access your %1$s and review the details.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
-								  '{ticket_url}' . "\n\n" .
+								  '<a href="{ticket_url_path}">' . sprintf( __( 'View %s', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</a>' . "\n\n" .
 								  __( 'Regards', 'kb-support' ) . "\n\n" .
 								  '{sitename}'
 					)
@@ -755,7 +755,7 @@ function kbs_get_registered_settings() {
 						'type' => 'rich_editor',
 						'std'  => __( "Dear", "kb-support" ) . " {name},\n\n" . 
 								  sprintf( __( 'Your support %1$s # {ticket_id} is now closed. You can review the details of your %1$s by clicking the URL below.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
-								  '{ticket_url}' . "\n\n" .
+								  '<a href="{ticket_url_path}">' . sprintf( __( 'View %s', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</a>' . "\n\n" .
 								  __( 'Regards', 'kb-support' ) . "\n\n" .
 								  '{sitename}'
 					)
@@ -787,7 +787,7 @@ function kbs_get_registered_settings() {
 						'std'  => __( 'Hey there!', 'kb-support' ) . "\n\n" .
 								  sprintf( __( 'A new %s has been logged at', 'kb-support' ), strtolower( $single ) ) . " {sitename}.\n\n" .
 								  "<strong>{ticket_title} - #{ticket_id}</strong>\n\n" .
-								  "{ticket_admin_url}\n\n" .
+								  '<a href="{ticket_admin_url_path}">' . sprintf( __( 'View %s', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</a>' . "\n\n" .
 								  __( 'Regards', 'kb-support' ) . "\n\n" .
 								  '{sitename}'
 					),
@@ -806,7 +806,7 @@ function kbs_get_registered_settings() {
 						'std'  => __( 'Hey there!', 'kb-support' ) . "\n\n" .
 								  sprintf( __( 'A new %s reply has been received at', 'kb-support' ), strtolower( $single ) ) . " {sitename}.\n\n" .
 								  "<strong>{ticket_title} - #{ticket_id}</strong>\n\n" .
-								  "{ticket_admin_url}\n\n" .
+								  '<a href="{ticket_admin_url_path}">' . sprintf( __( 'View %s', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</a>' . "\n\n" .
 								  __( 'Regards', 'kb-support' ) . "\n\n" .
 								  '{sitename}'
 					),
@@ -840,7 +840,7 @@ function kbs_get_registered_settings() {
 								  sprintf( __( 'A %s has been assigned to you at {sitename}.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
 								  "<strong>{ticket_title} - #{ticket_id}</strong>\n\n" .
 								  sprintf( __( 'Please login to view and update the %s.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
-                                  "{ticket_admin_url}\n\n" .
+                                  '<a href="{ticket_admin_url_path}">' . sprintf( __( 'View %s', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</a>' . "\n\n" .
 								  __( 'Regards', 'kb-support' ) . "\n\n" .
 								  '{sitename}'
 					)

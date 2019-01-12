@@ -165,7 +165,7 @@ function kbs_get_ticket_logged_email_body_content( $ticket_id = 0, $ticket_data 
 	$logged_email_body .= '<h3>' . sprintf( __( 'Your Ticket Details', 'kb-support' ), kbs_get_ticket_label_singular() ) . ' - #{ticket_id}</h3>' . "\n";
 	$logged_email_body .= '<strong>{ticket_title}</strong>' . "\n\n";
 	$logged_email_body .= '{ticket_content}' . "\n\n";
-	$logged_email_body .= '{ticket_url}' . "\n\n";
+	$logged_email_body .= '<a href="{ticket_url_path}">' . sprintf( __( 'View %s', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</a>' . "\n\n";
 
 	$email = kbs_get_option( 'ticket_content', false );
 	$email = $email ? stripslashes( $email ) : $logged_email_body;
@@ -192,7 +192,7 @@ function kbs_get_ticket_reply_email_body_content( $ticket_id = 0, $ticket_data =
 
 	$logged_email_body = __( 'Dear', 'kb-support' ) . " {name},\n\n";
 	$logged_email_body .= sprintf( __( 'Your support %s # {ticket_id} has received a reply.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ) . "\n\n";
-	$logged_email_body .= "{ticket_url}\n\n";
+	$logged_email_body .= '<a href="{ticket_url_path}">' . sprintf( __( 'View %s', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</a>' . "\n\n";
 	$logged_email_body .= "Regards\n\n";
 	$logged_email_body .= "{sitename}";
 
@@ -221,7 +221,7 @@ function kbs_get_ticket_closed_email_body_content( $ticket_id = 0, $ticket_data 
 
 	$logged_email_body = __( 'Dear', 'kb-support' ) . " {name},\n\n";
 	$logged_email_body .= sprintf( __( 'Your support %s # {ticket_id} is now closed.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ) . "\n\n";
-	$logged_email_body .= "{ticket_url}\n\n";
+	$logged_email_body .= '<a href="{ticket_url_path}">' . sprintf( __( 'View %s', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</a>' . "\n\n";
 	$logged_email_body .= "Regards\n\n";
 	$logged_email_body .= "{sitename}";
 
@@ -256,7 +256,7 @@ function kbs_get_ticket_notification_email_body_content( $ticket_id = 0, $ticket
 	$default_email_body = __( 'Hey there!', 'kb-support' ) . "\n\n";
 	$default_email_body .= sprintf( __( 'A new %s has been logged at', 'kb-support' ), strtolower( $single ) ) . " {sitename}.\n\n";
 	$default_email_body .= "<strong>{ticket_title} - #{ticket_id}</strong>\n\n";
-	$default_email_body .= "{ticket_admin_url}\n\n";
+	$default_email_body .= '<a href="{ticket_admin_url_path}">' . sprintf( __( 'View %s', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</a>' . "\n\n";
 	$default_email_body .= __( 'Regards', 'kb-support' ) . "\n\n";
 	$default_email_body .= '{sitename}';
 
@@ -291,7 +291,7 @@ function kbs_get_reply_notification_email_body_content( $ticket_id = 0, $ticket_
 	$default_email_body = __( 'Hey there!', 'kb-support' ) . "\n\n";
 	$default_email_body .= sprintf( __( 'A new reply has been received for a support %s.', 'kb-support' ), strtolower( $single ) ) . "\n\n";
 	$default_email_body .= "<strong>{ticket_title} - #{ticket_id}</strong>\n\n";
-	$default_email_body .= "{ticket_admin_url}\n\n";
+	$default_email_body .= '<a href="{ticket_admin_url_path}">' . sprintf( __( 'View %s', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</a>' . "\n\n";
 	$default_email_body .= __( 'Regards', 'kb-support' ) . "\n\n";
 	$default_email_body .= '{sitename}';
 
@@ -323,7 +323,7 @@ function kbs_get_agent_assigned_notification_email_body_content( $ticket_id = 0,
 	$default_email_body .= sprintf( __( 'A %s has been assigned to you at {sitename}.', 'kb-support' ), strtolower( $single ) ) . "\n\n";
 	$default_email_body .= "<strong>{ticket_title} - #{ticket_id}</strong>\n\n";
 	$default_email_body .= sprintf( __( 'Please login to view and update the %s.', 'kb-support' ), strtolower( $single ) ) . "\n\n";
-    $default_email_body .= "{ticket_admin_url}\n\n";
+    $default_email_body .= '<a href="{ticket_admin_url_path}">' . sprintf( __( 'View %s', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</a>' . "\n\n";
 	$default_email_body .= __( 'Regards', 'kb-support' ) . "\n\n";
 	$default_email_body .= '{sitename}';
 
