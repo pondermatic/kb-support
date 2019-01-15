@@ -287,7 +287,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 
                                     <?php kbs_render_hidden_reply_fields( $ticket->ID ); ?>
                                     <?php do_action( 'kbs_before_single_ticket_reply_submit', $ticket ); ?>
-                                    <input class="button" name="kbs_ticket_reply" id="kbs_reply_submit" type="submit" value="<?php _e( 'Reply', 'kb-support' ); ?>" />
+                                    <input class="button" name="kbs_ticket_reply" id="kbs_reply_submit" type="submit" value="<?php echo esc_attr( kbs_get_ticket_reply_label() ); ?>" />
 
                                 </div>
 
