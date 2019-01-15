@@ -196,7 +196,26 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 										</div>
 
 										<div id="kbs_ticket_reply-<?php echo $reply->ID; ?>" class="collapse" aria-labelledby="kbs_ticket_reply-<?php echo $reply->ID; ?>-heading" data-parent="#kbs-ticket-replies">
-											<div class="card-body"><?php echo $reply_content; ?></div>
+											<div class="card-body">
+                                                <?php echo $reply_content; ?>
+                                                <?php if ( $files ) : ?>
+                                                <div class="kbs_ticket_reply_files">
+                                                    <strong><?php printf(
+                                                        __( 'Attached Files (%d)', 'kb-support' ),
+                                                        $file_count
+                                                    ); ?></strong>
+                                                    <ol>
+                                                        <?php foreach( $files as $file ) : ?>
+                                                            <li>
+                                                                <a href="<?php echo wp_get_attachment_url( $file->ID ); ?>" target="_blank">
+                                                                    <?php echo basename( get_attached_file( $file->ID ) ); ?>
+                                                                </a>
+                                                            </li>
+                                                        <?php endforeach; ?>
+                                                    </ol>
+                                                </div>
+                                            <?php endif; ?>
+                                            </div>
 										</div>
 									</div>
 								<?php endforeach; ?>
