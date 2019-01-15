@@ -177,7 +177,9 @@
 	margin: 0 0 5px;
 	font-style: italic;
 }
-
+span.kbs-time    {
+    display: inline;
+}
 #kbs_ticket_wrap input.kbs-input,
 #kbs_ticket_form_wrap input.kbs-input,
 #kbs_ticket_form_wrap select,

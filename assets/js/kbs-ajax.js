@@ -36,6 +36,24 @@ jQuery(document).ready(function ($) {
         });
 	}
 
+    /* = Accordian
+	====================================================================================== */
+    $('.kbs-accordian').collapse({
+        toggle: false
+    });
+
+	/* = Scroller
+	====================================================================================== */
+	$( document.body ).on( 'click', '.kbs-scroll', function(e) {
+		e.preventDefault();
+
+		var target = $(this).attr('href');
+
+		$('html, body').animate({
+			scrollTop: $(target).offset().top
+		}, 500 );
+	});
+
 	/* = Ticket submission form validation and submission
 	====================================================================================== */
 	$(document).on('click', '#kbs_ticket_form #kbs_ticket_submit', function(e) {
@@ -90,7 +108,6 @@ jQuery(document).ready(function ($) {
 	====================================================================================== */
 	$(document).on('click', '.ticket_reply_content', function()	{
 		var reply_id = $(this).data('key');
-		$('#ticket_response_' + reply_id).toggle('fast');
         kbs_cust_read_reply(reply_id);
 	});
 

@@ -435,3 +435,27 @@ function kbs_get_attachment_path_from_url( $url )	{
 
 	return $file_path;
 } // kbs_get_attachment_path_from_url
+
+/**
+ * Create array of files for display on ticket manager page.
+ *
+ * @since	1.2.6
+ * @param	array	$files	Array of files attached to ticket
+ * @return	array	Array of file links
+ */
+function kbs_get_ticket_files_list( $files = array() )	{
+	$output = array();
+
+	foreach( $files as $file )	{
+		$file_url  = wp_get_attachment_url( $file->ID );
+		$file_name = basename( get_attached_file( $file->ID ) );
+
+		$output[] = sprintf(
+			'<a href="%s" target="_blank">%s</a>',
+			$file_url,
+			$file_name
+		);
+    }
+
+	return $output;
+} // kbs_get_ticket_files_list
