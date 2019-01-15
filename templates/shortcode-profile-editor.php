@@ -12,6 +12,8 @@ if ( ! is_user_logged_in() ) : ?>
 <?php else :
 	global $current_user;
 
+    $customer = new KBS_Customer( $current_user->ID, true );
+
 	do_action( 'kbs_notices' ); ?>
 
 	<div id="kbs_item_wrapper" class="kbs_profile_wrapper" style="float: left">
@@ -69,9 +71,6 @@ if ( ! is_user_logged_in() ) : ?>
 						<div class="kbs_profile_editor_email">
                             <p>
                                 <label for="kbs_email"><?php _e( 'Primary Email', 'kb-support' ); ?></label>
-
-                                <?php $customer = new KBS_Customer( $current_user->ID, true ); ?>
-
                                 <?php if ( $customer->id > 0 ) : ?>
                 
                                     <?php if ( 1 === count( $customer->emails ) ) : ?>
@@ -144,6 +143,17 @@ if ( ! is_user_logged_in() ) : ?>
                         <?php endif; ?>
 
 						<?php do_action( 'kbs_profile_editor_after_email' ); ?>
+
+                        <legend><?php _e( 'Update Preferences', 'kb-support' ); ?></legend>
+
+						<div class="kbs_profile_editor_replies_to_load">
+                            <p>
+                            	<label for="kbs_number_replies"><?php _e( 'Load Replies', 'kb-support' ); ?></label>
+                                <input type="number" class="kbs-input" name="kbs_number_replies" id="kbs-number-replies" value="<?php echo esc_attr( $customer->get_replies_to_load() ); ?>" min="0" max="50" step="1" size="3" />
+                            </p>
+                        </div>
+
+                        <?php do_action( 'kbs_profile_editor_after_replies_to_load' ); ?>
 
 						<div class="kbs_profile_editor_password">
                             <p>

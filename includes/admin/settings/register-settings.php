@@ -379,6 +379,23 @@ function kbs_get_registered_settings() {
 						'std'     => kbs_get_default_file_types()
 					)
 				),
+                'ticket_manager' => array(
+                    'ticket_manager_settings_header' => array(
+						'id'   => 'ticket_manager_settings_header',
+						'name' => '<h3>' . sprintf( __( '%s Manager Settings', 'kb-support' ), $single ) . '</h3>',
+						'type' => 'header'
+					),
+                    'replies_to_load' => array(
+						'id'      => 'replies_to_load',
+						'name'    => __( 'Default Replies to Load', 'kb-support' ),
+						'desc'    => sprintf( __( 'Enter the number of replies a customer should see by default on the %s Manager screen. Enter <code>0</code> to load all. Registered customers can adjust this on their profile page if they wish.', 'kb-support' ), strtolower( $single ) ),
+						'type'    => 'number',
+						'size'    => 'small',
+                        'min'     => '0',
+						'max'     => '50',
+						'std'     => '5'
+					)
+                ),
 				'agents' => array(
 					'agent_settings_header' => array(
 						'id'   => 'agent_settings_header',
@@ -1272,6 +1289,7 @@ function kbs_get_registered_settings_sections() {
 		'tickets'    => apply_filters( 'kbs_settings_sections_tickets', array(
 			'main'                 => sprintf( __( 'General %s Settings', 'kb-support' ), $single ),
 			'submit'               => __( 'Submission Settings', 'kb-support' ),
+            'ticket_manager'       => sprintf( __( '%s Manager Settings', 'kb-support' ), $single ),
 			'agents'               => __( 'Agent Settings', 'kb-support' ),
 			'sla'                  => __( 'Service Levels', 'kb-support' )
 		) ),

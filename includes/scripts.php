@@ -35,6 +35,7 @@ function kbs_load_scripts() {
 
 	$is_submission = kbs_is_submission_form();
 	$ticket_page   = $post->ID == kbs_get_option( 'tickets_page' );
+    $user_id       = get_current_user_id();
 
 	wp_localize_script( 'kbs-ajax', 'kbs_scripts', apply_filters( 'kbs_ajax_script_vars', array(
         'ajax_loader'           => KBS_PLUGIN_URL . 'assets/images/loading.gif',
@@ -46,6 +47,7 @@ function kbs_load_scripts() {
         'one_option'            => __( 'Choose an option', 'kb-support' ),
 		'one_or_more_option'    => __( 'Choose one or more options', 'kb-support' ),
         'permalinks'            => get_option( 'permalink_structure' ) ? '1' : '0',
+        'replies_to_load'       => kbs_get_customer_replies_to_load(), 
         'reply_label'           => kbs_get_ticket_reply_label(),
         'search_placeholder'    => __( 'Search options', 'kb-support' ),
         'submit_ticket'         => kbs_get_form_submit_label(),

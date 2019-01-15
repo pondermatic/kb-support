@@ -454,6 +454,16 @@ class KBS_Customer {
 
 	} // set_primary_email
 
+    /**
+	 * Retrieve the number of replies the customer wants to load
+	 *
+	 * @since	1.2.6
+	 * @return	int		Number of replies to load
+	 */
+	public function get_replies_to_load()	{
+        return kbs_get_customer_replies_to_load( $this->user_id );
+	} // get_replies_to_load
+
 	/*
 	 * Get the ticket ids of the customer in an array.
 	 *

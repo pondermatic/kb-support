@@ -519,3 +519,22 @@ function kbs_v124_upgrades()	{
         kbs_update_option( $option, $value );
     }
 } // kbs_v124_upgrades
+
+/**
+ * Upgrade routine for version 1.2.6.
+ *
+ * - Add load number of replies default option.
+ *
+ * @since	1.2.6
+ * @return	void
+ */
+function kbs_v124_upgrades()	{
+
+    $new_options = array(
+        'replies_to_load' => 5
+    );
+
+    foreach( $new_options as $option => $value )    {
+        kbs_update_option( $option, $value );
+    }
+} // kbs_v126_upgrades
