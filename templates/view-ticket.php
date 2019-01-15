@@ -110,7 +110,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
                                 <div id="kbs-ticket-last-update" class="row kbs_ticket_data">
 									<div class="col-md">
                                         <span class="ticket_updated">
-                                            <span class="kbs-description"><label><?php _e( 'Last Updated', 'kb-support' ); ?>:</label> <?php echo date_i18n( $time_format . ' \o\n ' . $date_format, strtotime( $ticket->modified_date ) ); ?> <?php printf( __( '(%s ago)', 'kb-support' ), human_time_diff( strtotime( $ticket->modified_date ), current_time( 'timestamp' ) ) ); ?></span>
+                                            <label><?php _e( 'Last Updated', 'kb-support' ); ?>:</label> <?php echo date_i18n( $time_format . ' \o\n ' . $date_format, strtotime( $ticket->modified_date ) ); ?> <?php printf( __( '(%s ago)', 'kb-support' ), human_time_diff( strtotime( $ticket->modified_date ), current_time( 'timestamp' ) ) ); ?>
                                         </span>
                                     </div>
                                 </div><!-- #kbs-ticket-last-update -->
