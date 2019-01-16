@@ -528,7 +528,7 @@ function kbs_v124_upgrades()	{
  * @since	1.2.6
  * @return	void
  */
-function kbs_v124_upgrades()	{
+function kbs_v126_upgrades()	{
 
     $new_options = array(
         'replies_to_load' => 5

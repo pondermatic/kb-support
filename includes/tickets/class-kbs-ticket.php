@@ -465,7 +465,7 @@ class KBS_Ticket {
 		// Content & Replies
 		$this->ticket_title    = $ticket->post_title;
 		$this->ticket_content  = $ticket->post_content;
-		$this->replies         = $this->get_replies();
+		//$this->replies         = $this->get_replies();
 		$this->files           = $this->get_files();
 
 		// User data

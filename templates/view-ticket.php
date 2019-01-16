@@ -165,7 +165,19 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 						<fieldset id="kbs_ticket_replies">
 							<legend><?php _e( 'Replies', 'kb-support' ); ?></legend>
 
-							<?php if ( ! empty( $ticket->replies ) ) : ?>
+							<?php
+							$load = kbs_get_customer_replies_to_load( $current_user->ID );
+							$args = array(
+								'ticket_id' => $ticket->ID,
+								'number'    => empty( $load ) ? -1 : $load,
+								'page'      => null
+							);
+
+							$replies_query = new KBS_Replies_Query( $args );
+							$replies       = $replies_query->get_replies();
+							?>
+
+							<?php if ( ! empty( $replies ) ) : ?>
 
 							<span class="kbs-description">
 								<?php _e( 'Expand the reply you wish to read by clicking on its heading.', 'kb-support' ); ?>
@@ -175,7 +187,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 							</span>
 
 							<div id="kbs-ticket-replies" class="kbs-accordion">
-								<?php foreach( $ticket->replies as $reply ) : ?>
+								<?php foreach( $replies as $reply ) : ?>
 
 									<?php
 									$reply_content = apply_filters( 'the_content', $reply->post_content );
@@ -188,9 +200,11 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 										<div class="card-header" id="kbs_ticket_reply-<?php echo $reply->ID; ?>-heading">
 											<h5 class="mb-0">
 												<button class="btn btn-link ticket_reply_content" type="button" data-toggle="collapse" data-target="#kbs_ticket_reply-<?php echo $reply->ID; ?>" aria-expanded="false" aria-controls="kbs_ticket_reply-<?php echo $reply->ID; ?>" data-key="<?php echo $reply->ID; ?>">
-													<?php echo date_i18n( $time_format . ' \o\n ' . $date_format, strtotime(  $reply->post_date ) ); ?> 
-													<?php _e( 'by', 'kb-support' ); ?>  
-													<?php echo kbs_get_reply_author_name( $reply->ID, true ); ?>
+													<?php printf(
+														'%s by %s',
+														date_i18n( $time_format . ' \o\n ' . $date_format, strtotime(  $reply->post_date ) ),
+														kbs_get_reply_author_name( $reply->ID, true )
+													); ?>
 												</button>
 											</h5>
 										</div>

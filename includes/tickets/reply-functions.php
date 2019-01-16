@@ -298,10 +298,10 @@ function kbs_get_ticket_id_from_reply( $reply_id )  {
  * Retrieve the number of replies to load (front end).
  *
  * @since   1.2.6
- * @param   int     $user_id    the User ID of the current user
+ * @param   int     $user_id    The User ID of the current user
  * @return  int     The number of replies to load
  */
-function kbs_get_customer_replies_to_load( $user_id = false )   {
+function kbs_get_customer_replies_to_load( $user_id = 0 )   {
     $default = kbs_get_option( 'replies_to_load' );
 
     if ( empty( $user_id ) )    {
@@ -309,7 +309,7 @@ function kbs_get_customer_replies_to_load( $user_id = false )   {
     }
 
     if ( ! empty( $user_id ) )    {
-        $replies = get_user_meta( $user_id, 'replies_to_load', true );
+        $replies = get_user_meta( $user_id, '_kbs_load_replies', true );
 
         if ( '' == $replies )   {
             $replies = $default;
@@ -320,6 +320,7 @@ function kbs_get_customer_replies_to_load( $user_id = false )   {
     }
 
     $replies = ! empty( $replies ) ? $replies : 0;
+
     $replies = apply_filters( 'kbs_replies_to_load', $replies, $user_id );
 
     return (int)$replies;
