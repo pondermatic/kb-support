@@ -388,13 +388,21 @@ function kbs_get_registered_settings() {
                     'replies_to_load' => array(
 						'id'      => 'replies_to_load',
 						'name'    => __( 'Default Replies to Load', 'kb-support' ),
-						'desc'    => sprintf( __( 'Enter the number of replies a customer should see by default on the %s Manager screen. Enter <code>0</code> to load all. Registered customers can adjust this on their profile page if they wish.', 'kb-support' ), strtolower( $single ) ),
+						'desc'    => sprintf( __( 'Enter the number of replies a customer should see by default on the %s Manager screen. Enter <code>0</code> to load all. Registered customers can change this setting on their profile page.', 'kb-support' ), strtolower( $single ) ),
 						'type'    => 'number',
 						'size'    => 'small',
                         'min'     => '0',
 						'max'     => '50',
 						'std'     => '5'
+					),
+                    'hide_closed_front' => array(
+						'id'      => 'hide_closed_front',
+						'name'    => sprintf( __( 'Hide Closed %s?', 'kb-support' ), $plural ),
+						'desc'    => sprintf( __( 'If enabled, closed %s will not be displayed by default for customers on the %s Manager screen. Registered customers can change this setting on their profile page', 'kb-support' ), strtolower( $plural ), $single ),
+						'type'    => 'checkbox',
+						'std'     => '0'
 					)
+                    
                 ),
 				'agents' => array(
 					'agent_settings_header' => array(

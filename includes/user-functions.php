@@ -39,7 +39,8 @@ function kbs_register_user_profile_fields( $user )	{
 	} else	{
 		$type   = 'customer';
 		$fields = array(
-			0 => 'replies_to_load'
+			0 => 'replies_to_load',
+            1 => 'closed_tickets'
 		);
 	}
 
@@ -237,6 +238,32 @@ function kbs_render_agent_user_profile_department_field( $user )  {
 add_action( 'kbs_display_agent_user_profile_fields', 'kbs_render_agent_user_profile_department_field', 10 );
 
 /**
+ * Adds the Hide Closed Tickets option field to the user profile for non-agents.
+ *
+ * @since	1.2.6
+ * @param   object	$user	The WP_User object
+ */
+function kbs_render_user_profile_hide_closed_tickets_field( $user )  {
+
+	$hide_closed = get_user_meta( $user->ID, '_kbs_hide_closed', true );
+    $hide_closed = '' == $hide_closed ? kbs_get_option( 'hide_closed_front' ) : $hide_closed;
+
+	ob_start(); ?>
+
+    <tr>
+        <th><label for="kbs-agent-hide-closed"><?php printf( __( 'Hide Closed %s', 'kb-support' ), kbs_get_ticket_label_singular() ); ?></label></th>
+        <td>
+            <input type="checkbox" name="kbs_hide_closed" id="kbs-hide-closed" value="1"<?php checked( 1, $hide_closed ); ?> />
+            <p class="description"><?php printf( __( 'Enable to hide closed %s from the %s Manager screen.', 'kb-support' ), kbs_get_ticket_label_plural( true ), kbs_get_ticket_label_singular() ); ?></p>
+        </td>
+    </tr>
+
+	<?php echo ob_get_clean();
+
+} // kbs_render_user_profile_hide_closed_tickets_field
+add_action( 'kbs_display_customer_user_profile_fields', 'kbs_render_user_profile_hide_closed_tickets_field', 5 );
+
+/**
  * Saves the load replies field.
  *
  * @since	1.2
@@ -324,6 +351,26 @@ function kbs_save_user_departments( $user_id ) {
 } // kbs_save_user_departments
 add_action( 'personal_options_update', 'kbs_save_user_departments' );
 add_action( 'edit_user_profile_update', 'kbs_save_user_departments' );
+
+/**
+ * Saves the hide closed tickets field.
+ *
+ * @since	1.2.6
+ * @param	int		$user_id	WP User ID
+ */
+function kbs_save_user_hide_closed_tickets( $user_id ) {
+
+	if ( ! current_user_can( 'edit_user', $user_id ) )	{
+		return;
+	}
+
+	$hide = isset( $_POST['kbs_hide_closed'] ) ? $_POST['kbs_hide_closed'] : false;
+
+	update_user_meta( $user_id, '_kbs_hide_closed', $hide );
+
+} // kbs_save_user_hide_closed_tickets
+add_action( 'personal_options_update', 'kbs_save_user_hide_closed_tickets' );
+add_action( 'edit_user_profile_update', 'kbs_save_user_hide_closed_tickets' );
 
 /**
  * Retrieve users by role.
@@ -488,6 +535,13 @@ function kbs_process_profile_editor_updates( $data ) {
 	if ( $new_load_replies != $old_load_replies )	{
 		update_user_meta( $user_id, '_kbs_load_replies', $new_load_replies );
 	}
+
+    $old_hide_closed = get_user_meta( $user_id, '_kbs_hide_closed', true );
+    $new_hide_closed = ! empty( $_POST['kbs_hide_closed'] ) ? $_POST['kbs_hide_closed'] : false;
+
+    if ( $new_hide_closed != $old_hide_closed  )    {
+	   update_user_meta( $user_id, '_kbs_hide_closed', $new_hide_closed );
+    }
 
 	if ( $customer->email === $email || ( is_array( $customer->emails ) && in_array( $email, $customer->emails ) ) ) {
 		$customer->set_primary_email( $email );

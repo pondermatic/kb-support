@@ -155,6 +155,18 @@ if ( ! is_user_logged_in() ) : ?>
 
                         <?php do_action( 'kbs_profile_editor_after_replies_to_load' ); ?>
 
+                        <?php
+                        $hide_closed = get_user_meta( $customer->user_id, '_kbs_hide_closed', true );
+                        $hide_closed = '' == $hide_closed ? kbs_get_option( 'hide_closed_front' ) : $hide_closed;
+                        ?>
+
+                        <div class="kbs_profile_editor_hide_closed">
+                            <p>
+                            	<label for="kbs_hide_closed"><?php printf( __( 'Hide Closed %s', 'kb-support' ), kbs_get_ticket_label_plural() ); ?></label>
+                                <input type="checkbox" name="kbs_hide_closed" id="kbs-hide-closed" value="1"<?php checked( 1, $hide_closed ); ?> />
+                            </p>
+                        </div>
+
 						<div class="kbs_profile_editor_password">
                             <p>
                                 <label for="kbs_new_user_pass1"><?php _e( 'New Password', 'kb-support' ); ?></label>
