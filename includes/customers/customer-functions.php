@@ -172,8 +172,12 @@ function kbs_get_customer_tickets( $customer, $args = array(), $can_select = tru
 
 	$defaults = array(
 		'customer' => $customer_id,
-		'status'   => array_keys( $ticket_statuses ),
-		'number'   => 10
+		'number'   => 10,
+		'status'   => apply_filters(
+			'kbs_get_customer_tickets_statuses',
+			array_keys( $ticket_statuses ),
+			$can_select
+		)
 	);
 
 	$args = wp_parse_args( $args, $defaults );
@@ -220,6 +224,58 @@ function kbs_get_customer_ticket_count( $customer )	{
 
 	return $count;
 } // kbs_get_customer_ticket_count
+
+/**
+ * Retrieve the number of replies to load (front end).
+ *
+ * @since   1.2.6
+ * @param   int     $user_id    The User ID of the current user
+ * @return  int     The number of replies to load
+ */
+function kbs_get_customer_replies_to_load( $user_id = 0 )   {
+    $default = kbs_get_option( 'replies_to_load' );
+
+    if ( empty( $user_id ) )    {
+        $user_id = get_current_user_id();
+    }
+
+    if ( ! empty( $user_id ) )    {
+        $replies = get_user_meta( $user_id, '_kbs_load_replies', true );
+
+        if ( '' == $replies )   {
+            $replies = $default;
+        }
+
+    } else  {
+        $replies = $default;
+    }
+
+    $replies = ! empty( $replies ) ? $replies : 0;
+
+    $replies = apply_filters( 'kbs_replies_to_load', $replies, $user_id );
+
+    return (int)$replies;
+} // kbs_get_customer_replies_to_load
+
+/**
+ * Whether or not a customer wishes to hide closed tickets.
+ *
+ * @since   1.2.6
+ * @param   int     $user_id    The User ID of the current user
+ * @return  bool    Whether or not closed tickets should be hidden
+ */
+function kbs_customer_maybe_hide_closed_tickets( $user_id = 0 )   {
+	if ( empty( $user_id ) )	{
+		$user_id = get_current_user_id();
+	}
+    if ( metadata_exists( 'user', $user_id, '_kbs_hide_closed' ) )	{
+		$hide_closed = get_user_meta( $user_id, '_kbs_hide_closed', true );
+	} else	{
+    	$hide_closed = kbs_get_option( 'hide_closed_front' );
+	}
+
+    return $hide_closed;
+} // kbs_customer_maybe_hide_closed_tickets
 
 /**
  * Retrieve all customers.

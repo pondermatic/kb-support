@@ -295,38 +295,6 @@ function kbs_get_ticket_id_from_reply( $reply_id )  {
 } // kbs_get_ticket_id_from_reply
 
 /**
- * Retrieve the number of replies to load (front end).
- *
- * @since   1.2.6
- * @param   int     $user_id    The User ID of the current user
- * @return  int     The number of replies to load
- */
-function kbs_get_customer_replies_to_load( $user_id = 0 )   {
-    $default = kbs_get_option( 'replies_to_load' );
-
-    if ( empty( $user_id ) )    {
-        $user_id = get_current_user_id();
-    }
-
-    if ( ! empty( $user_id ) )    {
-        $replies = get_user_meta( $user_id, '_kbs_load_replies', true );
-
-        if ( '' == $replies )   {
-            $replies = $default;
-        }
-
-    } else  {
-        $replies = $default;
-    }
-
-    $replies = ! empty( $replies ) ? $replies : 0;
-
-    $replies = apply_filters( 'kbs_replies_to_load', $replies, $user_id );
-
-    return (int)$replies;
-} // kbs_get_customer_replies_to_load
-
-/**
  * Mark a reply as read.
  *
  * @since   1.2

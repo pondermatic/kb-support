@@ -245,13 +245,11 @@ add_action( 'kbs_display_agent_user_profile_fields', 'kbs_render_agent_user_prof
  */
 function kbs_render_user_profile_hide_closed_tickets_field( $user )  {
 
-	$hide_closed = get_user_meta( $user->ID, '_kbs_hide_closed', true );
-    $hide_closed = '' == $hide_closed ? kbs_get_option( 'hide_closed_front' ) : $hide_closed;
-
+	$hide_closed = kbs_customer_maybe_hide_closed_tickets( $user->ID );
 	ob_start(); ?>
 
     <tr>
-        <th><label for="kbs-agent-hide-closed"><?php printf( __( 'Hide Closed %s', 'kb-support' ), kbs_get_ticket_label_singular() ); ?></label></th>
+        <th><label for="kbs-agent-hide-closed"><?php printf( __( 'Hide Closed %s', 'kb-support' ), kbs_get_ticket_label_plural() ); ?></label></th>
         <td>
             <input type="checkbox" name="kbs_hide_closed" id="kbs-hide-closed" value="1"<?php checked( 1, $hide_closed ); ?> />
             <p class="description"><?php printf( __( 'Enable to hide closed %s from the %s Manager screen.', 'kb-support' ), kbs_get_ticket_label_plural( true ), kbs_get_ticket_label_singular() ); ?></p>
