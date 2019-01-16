@@ -135,18 +135,7 @@ function kbs_register_styles() {
 		$url = trailingslashit( kbs_get_templates_url() ) . $file;
 	}
 
-	wp_register_style( 'kbs-styles', $url, array(), KBS_VERSION, 'all' );
-	wp_enqueue_style( 'kbs-styles' );
-
-	if ( kbs_is_submission_form() )	{
-
-		// Register the chosen styles here, but we enqueue within kbs_display_form_select_field when needed
-		wp_register_style( 'jquery-chosen-css', $css_dir . 'chosen' . $suffix . '.css', array(), KBS_VERSION );
-		wp_enqueue_style( 'jquery-chosen-css' );
-
-	}
-
-	if ( $ticket_page )	{
+    if ( $ticket_page )	{
 
 		wp_register_style(
 			'kbs-bootstrap-4-css',
@@ -155,6 +144,17 @@ function kbs_register_styles() {
 			'4.2.1'
 		);
 		wp_enqueue_style( 'kbs-bootstrap-4-css' );
+
+	}
+
+	wp_register_style( 'kbs-styles', $url, array(), KBS_VERSION, 'all' );
+	wp_enqueue_style( 'kbs-styles' );
+
+	if ( kbs_is_submission_form() )	{
+
+		// Register the chosen styles here, but we enqueue within kbs_display_form_select_field when needed
+		wp_register_style( 'jquery-chosen-css', $css_dir . 'chosen' . $suffix . '.css', array(), KBS_VERSION );
+		wp_enqueue_style( 'jquery-chosen-css' );
 
 	}
 

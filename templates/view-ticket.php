@@ -141,7 +141,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 
 								<?php if ( ! empty( $ticket->files ) ) : ?>
                                     <p>
-                                        <a class="btn btn-primary" data-toggle="collapse" href="#kbs-ticket-files" role="button" aria-expanded="false" aria-controls="kbs-ticket-files">
+                                        <a class="button kbs_action_button" data-toggle="collapse" href="#kbs-ticket-files" role="button" aria-expanded="false" aria-controls="kbs-ticket-files">
                                             <?php printf(
                                                 _n( 'View %s Attachment', 'View %s Attachments', count( $ticket->files ), 'kb-support' ),
                                                 count( $ticket->files )
@@ -170,7 +170,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 							$args = array(
 								'ticket_id' => $ticket->ID,
 								'number'    => empty( $load ) ? -1 : $load,
-								'page'      => null
+								'page'      => 1
 							);
 
 							$replies_query = new KBS_Replies_Query( $args );
@@ -179,12 +179,12 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 
 							<?php if ( ! empty( $replies ) ) : ?>
 
-							<span class="kbs-description">
+							<p><span class="kbs-description">
 								<?php _e( 'Expand the reply you wish to read by clicking on its heading.', 'kb-support' ); ?>
 								<?php if ( 'closed' != $ticket->status || kbs_customer_can_repoen_ticket( $customer->id, $ticket->ID ) ) : ?>
 									<?php _e( ' Or <a class="kbs-scroll" href="#new-reply">compose a new reply</a>.', 'kb-support'); ?>
 								<?php endif; ?>
-							</span>
+							</span></p>
 
 							<div id="kbs-ticket-replies" class="kbs-accordion">
 								<?php foreach( $replies as $reply ) : ?>
@@ -194,20 +194,25 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 									$reply_content = str_replace( ']]>', ']]&gt;', $reply_content );
 									$files         = kbs_ticket_has_files( $reply->ID );
 									$file_count    = ( $files ? count( $files ) : false );
+                                    $heading       = apply_filters( 'kbs_front_replies_title', sprintf(
+                                        '%s by %s',
+                                        date_i18n( $time_format . ' \o\n ' . $date_format, strtotime(  $reply->post_date ) ),
+                                        kbs_get_reply_author_name( $reply->ID, true )
+                                    ) );
 									?>
 
-									<div class="card">
-										<div class="card-header" id="kbs_ticket_reply-<?php echo $reply->ID; ?>-heading">
-											<h5 class="mb-0">
-												<button class="btn btn-link ticket_reply_content" type="button" data-toggle="collapse" data-target="#kbs_ticket_reply-<?php echo $reply->ID; ?>" aria-expanded="false" aria-controls="kbs_ticket_reply-<?php echo $reply->ID; ?>" data-key="<?php echo $reply->ID; ?>">
-													<?php printf(
-														'%s by %s',
-														date_i18n( $time_format . ' \o\n ' . $date_format, strtotime(  $reply->post_date ) ),
-														kbs_get_reply_author_name( $reply->ID, true )
-													); ?>
-												</button>
-											</h5>
-										</div>
+									<div id="kbs-reply-card" class="card kbs_replies_wrapper">
+                                        <div class="card-header kbs-replies-row-header">
+                                            <span class="kbs-replies-row-title">
+                                                <?php echo $heading; ?>
+                                            </span>
+
+                                            <span class="kbs-replies-row-actions">
+                                                <a href="#" class="toggle-view-reply-option-section" data-toggle="collapse" data-target="#kbs_ticket_reply-<?php echo $reply->ID; ?>" aria-expanded="false" aria-controls="kbs_ticket_reply-<?php echo $reply->ID; ?>" data-key="<?php echo $reply->ID; ?>">
+                                                    <?php _e( 'View Reply', 'kb-support' ); ?>
+                                                </a>
+                                            </span>
+                                        </div>
 
 										<div id="kbs_ticket_reply-<?php echo $reply->ID; ?>" class="collapse" aria-labelledby="kbs_ticket_reply-<?php echo $reply->ID; ?>-heading" data-parent="#kbs-ticket-replies">
 											<div class="card-body">
@@ -233,8 +238,19 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 										</div>
 									</div>
 								<?php endforeach; ?>
+                                <div id="kbs-loading-replies"></div>
 							</div><!-- .kbs-accordian -->
-							<div class="kbs_clearfix"></div>
+
+                            <div id="kbs-replies-loader"></div>
+
+                            <?php if ( isset( $args['page'] ) && $args['page'] < $replies_query->pages ) : ?>
+                                <?php printf(
+                                    '<p class="kbs_replies_load_more"><a class="button kbs_action_button" id="kbs-replies-next-page" data-ticket-id="%d" data-load-page="%d" role="button">%s</a></p>',
+                                    $ticket->ID,
+                                    ( (int)$args['page'] + 1 ),
+                                    __( 'Load More', 'kb-support' )
+                                ); ?>
+                            <?php endif; ?>
 
 							<?php else : ?>
 								<span class="kbs-description ticket-no-replies">
