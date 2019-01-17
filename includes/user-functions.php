@@ -273,7 +273,7 @@ function kbs_save_user_load_replies( $user_id ) {
 		return;
 	}
 
-	$number = (int)$_POST['kbs_load_replies'] ;
+	$number = absint( $_POST['kbs_load_replies'] );
 
 	update_user_meta( $user_id, '_kbs_load_replies', $number );
 
@@ -358,7 +358,7 @@ add_action( 'edit_user_profile_update', 'kbs_save_user_departments' );
  */
 function kbs_save_user_hide_closed_tickets( $user_id ) {
 
-	if ( ! current_user_can( 'edit_user', $user_id ) )	{
+	if ( kbs_is_agent( $user_id ) || ! current_user_can( 'edit_user', $user_id ) )	{
 		return;
 	}
 
