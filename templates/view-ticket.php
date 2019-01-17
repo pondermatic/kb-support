@@ -58,7 +58,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
                         <fieldset id="kbs_ticket_info_details">
 							<legend><?php printf( __( 'Support %s Details # %s', 'kb-support' ), $singular, kbs_format_ticket_number( kbs_get_ticket_number( $ticket->ID ) ) ); ?></legend>
 
-							<div class="container ticket_manager_data">
+							<div class="container-fluid ticket_manager_data text-left">
 
 								<div id="kbs-ticket-customer-date" class="row kbs_ticket_data">
 									<div class="col-sm">
@@ -178,14 +178,6 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 							?>
 
 							<?php if ( ! empty( $replies ) ) : ?>
-
-                                <p><span class="kbs-description">
-                                    <?php _e( 'Expand the reply you wish to read by clicking on its heading.', 'kb-support' ); ?>
-                                    <?php if ( 'closed' != $ticket->status || kbs_customer_can_repoen_ticket( $customer->id, $ticket->ID ) ) : ?>
-                                        <?php _e( ' Or <a class="kbs-scroll" href="#new-reply">compose a new reply</a>.', 'kb-support'); ?>
-                                    <?php endif; ?>
-                                </span></p>
-
                                 <div id="kbs-ticket-replies" class="kbs-accordion">
                                     <?php foreach( $replies as $reply ) : ?>
 
