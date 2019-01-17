@@ -193,6 +193,35 @@ function kbs_get_customer_tickets( $customer, $args = array(), $can_select = tru
 } // kbs_get_customer_tickets
 
 /**
+ * Whether or not a customer has closed tickets.
+ *
+ * @since   1.2.6
+ * @param	int|object	$customer	The customer ID or a KBS_Customer object.
+ * @return  bool        True if the customer has tickets in the closed status
+ */
+function kbs_customer_has_closed_tickets( $customer )   {
+	$customer_id = $customer;
+
+	if ( is_object( $customer ) )	{
+		$customer_id = $customer->id;
+	}
+
+	if ( empty( $customer_id ) )	{
+		return false;
+	}
+
+    $args = array(
+		'customer' => $customer_id,
+		'number'   => 1,
+		'status'   => 'closed'
+	);
+
+    $tickets = kbs_get_tickets( $args );
+
+    return ! empty( $tickets );
+} // kbs_customer_has_closed_tickets
+
+/**
  * Retrieve customer ticket count.
  *
  * @since	1.0
