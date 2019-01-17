@@ -143,7 +143,7 @@
 #kbs_register_form fieldset legend,
 #kbs_login_form fieldset legend,
 #kbs_profile_editor_form fieldset legend,
-.kbs_form_heading {
+.kbs_form_section_heading {
 	padding-left: 1.5px;
 	padding-right: 1.5px;
 	font-weight: bold;
