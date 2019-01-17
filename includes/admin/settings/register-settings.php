@@ -379,6 +379,31 @@ function kbs_get_registered_settings() {
 						'std'     => kbs_get_default_file_types()
 					)
 				),
+                'ticket_manager' => array(
+                    'ticket_manager_settings_header' => array(
+						'id'   => 'ticket_manager_settings_header',
+						'name' => '<h3>' . sprintf( __( '%s Manager Settings', 'kb-support' ), $single ) . '</h3>',
+						'type' => 'header'
+					),
+                    'replies_to_load' => array(
+						'id'      => 'replies_to_load',
+						'name'    => __( 'Default Replies to Load', 'kb-support' ),
+						'desc'    => sprintf( __( 'Enter the number of replies a customer should see by default on the %s Manager screen. Enter <code>0</code> to load all. Registered customers can change this setting on their profile page.', 'kb-support' ), strtolower( $single ) ),
+						'type'    => 'number',
+						'size'    => 'small',
+                        'min'     => '0',
+						'max'     => '50',
+						'std'     => '5'
+					),
+                    'hide_closed_front' => array(
+						'id'      => 'hide_closed_front',
+						'name'    => sprintf( __( 'Hide Closed %s?', 'kb-support' ), $plural ),
+						'desc'    => sprintf( __( 'If enabled, closed %s will not be displayed by default for customers on the %s Manager screen. Registered customers can change this setting on their profile page', 'kb-support' ), strtolower( $plural ), $single ),
+						'type'    => 'checkbox',
+						'std'     => '0'
+					)
+                    
+                ),
 				'agents' => array(
 					'agent_settings_header' => array(
 						'id'   => 'agent_settings_header',
@@ -989,6 +1014,12 @@ function kbs_get_registered_settings() {
 						'desc'    => __( 'KB Support is provided for free. If you like our plugin, consider spreading the word by displaying <code>Powered by KB Support</code> below the ticket and reply forms.', 'kb-support' ),
 						'type'    => 'checkbox'
 					),
+                    'remove_rating' => array(
+						'id'      => 'remove_rating',
+						'name'    => __( 'Remove Rating Request?', 'kb-support' ),
+						'desc'    => __( 'Enable to remove the rating request displayed at the foot of the admin screen.', 'kb-support' ),
+						'type'    => 'checkbox'
+					),
 					'remove_on_uninstall' => array(
 						'id'      => 'remove_on_uninstall',
 						'name'    => __( 'Remove Data on Uninstall?', 'kb-support' ),
@@ -1272,6 +1303,7 @@ function kbs_get_registered_settings_sections() {
 		'tickets'    => apply_filters( 'kbs_settings_sections_tickets', array(
 			'main'                 => sprintf( __( 'General %s Settings', 'kb-support' ), $single ),
 			'submit'               => __( 'Submission Settings', 'kb-support' ),
+            'ticket_manager'       => sprintf( __( '%s Manager Settings', 'kb-support' ), $single ),
 			'agents'               => __( 'Agent Settings', 'kb-support' ),
 			'sla'                  => __( 'Service Levels', 'kb-support' )
 		) ),

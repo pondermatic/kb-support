@@ -12,6 +12,8 @@ if ( ! is_user_logged_in() ) : ?>
 <?php else :
 	global $current_user;
 
+    $customer = new KBS_Customer( $current_user->ID, true );
+
 	do_action( 'kbs_notices' ); ?>
 
 	<div id="kbs_item_wrapper" class="kbs_profile_wrapper" style="float: left">
@@ -22,7 +24,7 @@ if ( ! is_user_logged_in() ) : ?>
 			<form id="kbs_profile_editor_form" class="kbs_form" action="" method="post">
             	<div class="kbs_item_info customer_info">
                 	<fieldset id="kbs_ticket_info_details">
-                        <legend><?php _e( 'Update Name, Email and Password', 'kb-support' ); ?></legend>
+                        <legend><?php _e( 'Update your Profile Data', 'kb-support' ); ?></legend>
 
 						<div class="kbs_profile_editor_firstname">
                             <p>
@@ -41,7 +43,7 @@ if ( ! is_user_logged_in() ) : ?>
 						<div class="kbs_profile_editor_displayname">
                         	<p>
                                 <label for="kbs_display_name"><?php _e( 'Display Name', 'kb-support' ); ?></label>
-                                <select name="kbs_display_name" id="kbs_display_name" class="select kbs-select">
+                                <select name="kbs_display_name" id="kbs_display_name" class="select kbs-select kbs-input">
 
 								<?php if ( ! empty( $current_user->first_name ) ): ?>
 	                                <option <?php selected( $current_user->display_name, $current_user->first_name ); ?> value="<?php echo esc_attr( $current_user->first_name ); ?>"><?php echo esc_html( $current_user->first_name ); ?></option>
@@ -69,9 +71,6 @@ if ( ! is_user_logged_in() ) : ?>
 						<div class="kbs_profile_editor_email">
                             <p>
                                 <label for="kbs_email"><?php _e( 'Primary Email', 'kb-support' ); ?></label>
-
-                                <?php $customer = new KBS_Customer( $current_user->ID, true ); ?>
-
                                 <?php if ( $customer->id > 0 ) : ?>
                 
                                     <?php if ( 1 === count( $customer->emails ) ) : ?>
@@ -145,6 +144,29 @@ if ( ! is_user_logged_in() ) : ?>
 
 						<?php do_action( 'kbs_profile_editor_after_email' ); ?>
 
+                        <p class="kbs_form_section_heading"><?php _e( 'Update Preferences', 'kb-support' ); ?></p>
+
+						<div class="kbs_profile_editor_replies_to_load">
+                            <p>
+                            	<label for="kbs_number_replies"><?php _e( 'Replies to Load', 'kb-support' ); ?></label>
+                                <input type="number" class="kbs-input" name="kbs_number_replies" id="kbs-number-replies" value="<?php echo esc_attr( $customer->get_replies_to_load() ); ?>" min="0" max="50" step="1" /><span class="kbs-description"><?php printf( __( 'How many replies do you want to initially load on the %s Manager page? <code>0</code> loads all.', 'kb-support' ), kbs_get_ticket_label_singular() ); ?></span>
+                            </p>
+                        </div>
+
+                        <?php do_action( 'kbs_profile_editor_after_replies_to_load' ); ?>
+
+                        <?php $hide_closed = kbs_customer_maybe_hide_closed_tickets( $customer->user_id ); ?>
+
+                        <div class="kbs_profile_editor_hide_closed">
+                            <p>
+                            	<label for="kbs_hide_closed"><?php printf( __( 'Hide Closed %s', 'kb-support' ), kbs_get_ticket_label_plural() ); ?></label>
+                                <input type="checkbox" name="kbs_hide_closed" id="kbs-hide-closed" value="1"<?php checked( '1', $hide_closed ); ?> />
+                            </p>
+                        </div>
+
+						<?php do_action( 'kbs_profile_editor_after_hide_closed' ); ?>
+
+                        <p class="kbs_form_section_heading"><?php _e( 'Change Password', 'kb-support' ); ?></p>
 						<div class="kbs_profile_editor_password">
                             <p>
                                 <label for="kbs_new_user_pass1"><?php _e( 'New Password', 'kb-support' ); ?></label>

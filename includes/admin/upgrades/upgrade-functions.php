@@ -519,3 +519,26 @@ function kbs_v124_upgrades()	{
         kbs_update_option( $option, $value );
     }
 } // kbs_v124_upgrades
+
+/**
+ * Upgrade routine for version 1.2.6.
+ *
+ * - Add load number of replies default option.
+ * - Add hide closed tickets default option.
+ * - Add remove rating default option.
+ *
+ * @since	1.2.6
+ * @return	void
+ */
+function kbs_v126_upgrades()	{
+
+    $new_options = array(
+        'replies_to_load'   => 5,
+        'hide_closed_front' => 0,
+        'remove_rating'     => 0
+    );
+
+    foreach( $new_options as $option => $value )    {
+        kbs_update_option( $option, $value );
+    }
+} // kbs_v126_upgrades

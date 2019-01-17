@@ -21,43 +21,64 @@ if ( ! defined( 'ABSPATH' ) )
  * Fields should be registered as field_name => bool (true for agent only, otherwise false for all users)
  *
  * @since	1.0
- * @return	arr		Array of user profile field ids
+ * @param	object	$user	WP_User object
+ * @return	array	Array of user profile field ids
  */
-function kbs_register_user_profile_fields()	{
-	$fields = array(
-		0 => 'replies_to_load',
-		1 => 'redirect_reply',
-		2 => 'redirect_closed'
-	);
+function kbs_register_user_profile_fields( $user )	{
+	if ( kbs_is_agent( $user->ID ) )	{
+		$type   = 'agent';
+		$fields = array(
+			0 => 'replies_to_load',
+			1 => 'redirect_reply',
+			2 => 'redirect_closed'
+		);
 
-    if ( kbs_departments_enabled() )    {
-        $fields[10] = 'kbs_departments';
-    }
+		if ( kbs_departments_enabled() )    {
+			$fields[10] = 'kbs_departments';
+		}
+	} else	{
+		$type   = 'customer';
+		$fields = array(
+			0 => 'replies_to_load',
+            1 => 'closed_tickets'
+		);
+	}
 
-	return apply_filters( 'kbs_user_profile_fields', $fields );
+	// For backwards compatibility
+	if ( 'agent' == $type )	{
+		$fields = apply_filters( 'kbs_user_profile_fields', $fields );
+	}
+
+	return apply_filters( "kbs_{$type}_user_profile_fields", $fields );
 } // kbs_register_user_profile_fields
 
 /**
  * Output user profile fields.
  *
  * @since	1.0
- * @param	obj		$user	The WP_User object
- * @return	arr		Array of user profile fields
+ * @param	object	$user	The WP_User object
+ * @return	array	Array of user profile fields
  */
 function kbs_output_user_profile_fields( $user )	{
 
-    if ( ! kbs_is_agent( $user->ID ) || ( get_current_user_id() != $user->ID && ! current_user_can( 'manage_ticket_settings' ) ) )  {
+    if ( get_current_user_id() != $user->ID && ! current_user_can( 'manage_ticket_settings' ) )  {
         return;
     }
 
-	$fields = kbs_register_user_profile_fields();
+	$fields = kbs_register_user_profile_fields( $user );
 
 	if ( ! empty( $fields ) )	{
+		$type = kbs_is_agent( $user->ID ) ? 'agent' : 'customer';
 		ob_start(); ?>
 
 		<h2><?php _e( 'KB Support Settings', 'kb-support' ); ?></h2>
 		<table class="form-table">
-			<?php do_action( 'kbs_display_user_profile_fields', $user, $fields ); ?>
+			<?php do_action( "kbs_display_{$type}_user_profile_fields", $user, $fields ); ?>
+
+			<?php // For backwards compatibility ?>
+			<?php if ( 'agent' == $type )	{
+				do_action( 'kbs_display_user_profile_fields', $user, $fields );
+			} ?>
 		</table>
 
 		<?php echo ob_get_clean();
@@ -77,8 +98,8 @@ function kbs_render_user_profile_replies_to_load_field( $user )  {
 
 	$replies_to_load = get_user_meta( $user->ID, '_kbs_load_replies', true );
 
-	if ( empty( $replies_to_load ) )	{
-		$replies_to_load = 0;
+	if ( '' == $replies_to_load )	{
+		$replies_to_load = kbs_is_agent( $user->ID ) ? 0 : kbs_get_option( 'replies_to_load' );
 	}
 
 	ob_start(); ?>
@@ -86,7 +107,7 @@ function kbs_render_user_profile_replies_to_load_field( $user )  {
     <tr>
         <th><label for="kbs-agent-load-replies"><?php _e( 'Replies to Load', 'kb-support' ); ?></label></th>
         <td>
-            <input class="small-text" type="number" name="kbs_agent_load_replies" id="kbs-agent-load-replies" value="<?php echo (int)$replies_to_load; ?>" step="1" min="0" />
+            <input class="small-text" type="number" name="kbs_load_replies" id="kbs-load-replies" value="<?php echo (int)$replies_to_load; ?>" step="1" min="0" />
             <p class="description"><?php printf( __( 'Choose the number of replies to initially load when accessing the %s page. <code>0</code> loads all.', 'kb-support' ), kbs_get_ticket_label_plural( true ) ); ?></p>
         </td>
     </tr>
@@ -94,15 +115,16 @@ function kbs_render_user_profile_replies_to_load_field( $user )  {
 	<?php echo ob_get_clean();
 
 } // kbs_render_user_profile_replies_to_load_field
-add_action( 'kbs_display_user_profile_fields', 'kbs_render_user_profile_replies_to_load_field', 5 );
+add_action( 'kbs_display_agent_user_profile_fields', 'kbs_render_user_profile_replies_to_load_field', 5 );
+add_action( 'kbs_display_customer_user_profile_fields', 'kbs_render_user_profile_replies_to_load_field', 5 );
 
 /**
- * Adds the Replies to Load option field to the user profile for agents.
+ * Adds the Redirect After Reply option field to the user profile for agents.
  *
  * @since	1.2
- * @param   obj		$user	The WP_User object
+ * @param   object	$user	The WP_User object
  */
-function kbs_render_user_profile_redirect_reply_field( $user )  {
+function kbs_render_agent_user_profile_redirect_reply_field( $user )  {
     if ( ! kbs_is_agent( $user->ID ) || ( get_current_user_id() != $user->ID && ! current_user_can( 'manage_ticket_settings' ) ) )  {
         return;
     }
@@ -132,16 +154,16 @@ function kbs_render_user_profile_redirect_reply_field( $user )  {
 
 	<?php echo ob_get_clean();
 
-} // kbs_render_user_profile_redirect_reply_field
-add_action( 'kbs_display_user_profile_fields', 'kbs_render_user_profile_redirect_reply_field', 5 );
+} // kbs_render_agent_user_profile_redirect_reply_field
+add_action( 'kbs_display_agent_user_profile_fields', 'kbs_render_agent_user_profile_redirect_reply_field', 5 );
 
 /**
- * Adds the Replies to Load option field to the user profile for agents.
+ * Adds the Redirect on Close option field to the user profile for agents.
  *
  * @since	1.2
- * @param   obj		$user	The WP_User object
+ * @param   object	$user	The WP_User object
  */
-function kbs_render_user_profile_redirect_close_field( $user )  {
+function kbs_render_agent_user_profile_redirect_close_field( $user )  {
     if ( ! kbs_is_agent( $user->ID ) || ( get_current_user_id() != $user->ID && ! current_user_can( 'manage_ticket_settings' ) ) )  {
         return;
     }
@@ -171,16 +193,16 @@ function kbs_render_user_profile_redirect_close_field( $user )  {
 
 	<?php echo ob_get_clean();
 
-} // kbs_render_user_profile_redirect_close_field
-add_action( 'kbs_display_user_profile_fields', 'kbs_render_user_profile_redirect_close_field', 5 );
+} // kbs_render_agent_user_profile_redirect_close_field
+add_action( 'kbs_display_agent_user_profile_fields', 'kbs_render_agent_user_profile_redirect_close_field', 5 );
 
 /**
  * Adds the department options field to the user profile for agents.
  *
  * @since	1.2
- * @param   obj		$user	The WP_User object
+ * @param   object	$user	The WP_User object
  */
-function kbs_render_user_profile_department_field( $user )  {
+function kbs_render_agent_user_profile_department_field( $user )  {
     if ( ! kbs_departments_enabled() || ! kbs_is_agent( $user->ID ) || ( get_current_user_id() != $user->ID && ! current_user_can( 'manage_ticket_settings' ) ) )  {
         return;
     }
@@ -212,8 +234,32 @@ function kbs_render_user_profile_department_field( $user )  {
         <?php echo ob_get_clean();
         
     }
-} // kbs_render_user_profile_department_field
-add_action( 'kbs_display_user_profile_fields', 'kbs_render_user_profile_department_field', 10 );
+} // kbs_render_agent_user_profile_department_field
+add_action( 'kbs_display_agent_user_profile_fields', 'kbs_render_agent_user_profile_department_field', 10 );
+
+/**
+ * Adds the Hide Closed Tickets option field to the user profile for non-agents.
+ *
+ * @since	1.2.6
+ * @param   object	$user	The WP_User object
+ */
+function kbs_render_user_profile_hide_closed_tickets_field( $user )  {
+
+	$hide_closed = kbs_customer_maybe_hide_closed_tickets( $user->ID );
+	ob_start(); ?>
+
+    <tr>
+        <th><label for="kbs-agent-hide-closed"><?php printf( __( 'Hide Closed %s', 'kb-support' ), kbs_get_ticket_label_plural() ); ?></label></th>
+        <td>
+            <input type="checkbox" name="kbs_hide_closed" id="kbs-hide-closed" value="1"<?php checked( 1, $hide_closed ); ?> />
+            <p class="description"><?php printf( __( 'Enable to hide closed %s from the %s Manager screen.', 'kb-support' ), kbs_get_ticket_label_plural( true ), kbs_get_ticket_label_singular() ); ?></p>
+        </td>
+    </tr>
+
+	<?php echo ob_get_clean();
+
+} // kbs_render_user_profile_hide_closed_tickets_field
+add_action( 'kbs_display_customer_user_profile_fields', 'kbs_render_user_profile_hide_closed_tickets_field', 5 );
 
 /**
  * Saves the load replies field.
@@ -223,11 +269,11 @@ add_action( 'kbs_display_user_profile_fields', 'kbs_render_user_profile_departme
  */
 function kbs_save_user_load_replies( $user_id ) {
 
-	if ( ! kbs_is_agent( $user_id ) || ! current_user_can( 'edit_user', $user_id ) )	{
+	if ( ! current_user_can( 'edit_user', $user_id ) )	{
 		return;
 	}
 
-	$number = ! empty( $_POST['kbs_agent_load_replies'] ) ? (int)$_POST['kbs_agent_load_replies'] : 0;
+	$number = absint( $_POST['kbs_load_replies'] );
 
 	update_user_meta( $user_id, '_kbs_load_replies', $number );
 
@@ -303,6 +349,26 @@ function kbs_save_user_departments( $user_id ) {
 } // kbs_save_user_departments
 add_action( 'personal_options_update', 'kbs_save_user_departments' );
 add_action( 'edit_user_profile_update', 'kbs_save_user_departments' );
+
+/**
+ * Saves the hide closed tickets field.
+ *
+ * @since	1.2.6
+ * @param	int		$user_id	WP User ID
+ */
+function kbs_save_user_hide_closed_tickets( $user_id ) {
+
+	if ( kbs_is_agent( $user_id ) || ! current_user_can( 'edit_user', $user_id ) )	{
+		return;
+	}
+
+	$hide = isset( $_POST['kbs_hide_closed'] ) ? $_POST['kbs_hide_closed'] : false;
+
+	update_user_meta( $user_id, '_kbs_hide_closed', $hide );
+
+} // kbs_save_user_hide_closed_tickets
+add_action( 'personal_options_update', 'kbs_save_user_hide_closed_tickets' );
+add_action( 'edit_user_profile_update', 'kbs_save_user_hide_closed_tickets' );
 
 /**
  * Retrieve users by role.
@@ -460,6 +526,20 @@ function kbs_process_profile_editor_updates( $data ) {
 		$meta     = update_user_meta( $user_id, '_kbs_user_address', $address );
 		$customer->update_meta( 'address', $address );
 	}
+
+	$old_load_replies = kbs_get_customer_replies_to_load( $user_id );
+	$new_load_replies = empty( $_POST['kbs_number_replies'] ) ? 0 : absint( $_POST['kbs_number_replies'] );
+
+	if ( $new_load_replies != $old_load_replies )	{
+		update_user_meta( $user_id, '_kbs_load_replies', $new_load_replies );
+	}
+
+    $old_hide_closed = get_user_meta( $user_id, '_kbs_hide_closed', true );
+    $new_hide_closed = ! empty( $_POST['kbs_hide_closed'] ) ? $_POST['kbs_hide_closed'] : false;
+
+    if ( $new_hide_closed != $old_hide_closed  )    {
+	   update_user_meta( $user_id, '_kbs_hide_closed', $new_hide_closed );
+    }
 
 	if ( $customer->email === $email || ( is_array( $customer->emails ) && in_array( $email, $customer->emails ) ) ) {
 		$customer->set_primary_email( $email );

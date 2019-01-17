@@ -22,6 +22,8 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	void
  */
 function kbs_load_scripts() {
+	global $post;
+
 	$js_dir = KBS_PLUGIN_URL . 'assets/js/';
 
 	// Use minified libraries if SCRIPT_DEBUG is turned off
@@ -32,6 +34,8 @@ function kbs_load_scripts() {
 	wp_enqueue_script( 'kbs-ajax' );
 
 	$is_submission = kbs_is_submission_form();
+	$ticket_page   = $post->ID == kbs_get_option( 'tickets_page' );
+    $user_id       = get_current_user_id();
 
 	wp_localize_script( 'kbs-ajax', 'kbs_scripts', apply_filters( 'kbs_ajax_script_vars', array(
         'ajax_loader'           => KBS_PLUGIN_URL . 'assets/images/loading.gif',
@@ -43,6 +47,7 @@ function kbs_load_scripts() {
         'one_option'            => __( 'Choose an option', 'kb-support' ),
 		'one_or_more_option'    => __( 'Choose one or more options', 'kb-support' ),
         'permalinks'            => get_option( 'permalink_structure' ) ? '1' : '0',
+        'replies_to_load'       => kbs_get_customer_replies_to_load(), 
         'reply_label'           => kbs_get_ticket_reply_label(),
         'search_placeholder'    => __( 'Search options', 'kb-support' ),
         'submit_ticket'         => kbs_get_form_submit_label(),
@@ -67,6 +72,16 @@ function kbs_load_scripts() {
 
 	}
 
+	if ( $ticket_page )	{
+		wp_register_script(
+			'kbs-bootstrap-4-js',
+			'https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js',
+			array( 'jquery' ),
+			'4.2.1'
+		);
+		wp_enqueue_script( 'kbs-bootstrap-4-js' );
+	}
+
 } // kbs_load_scripts
 add_action( 'wp_enqueue_scripts', 'kbs_load_scripts' );
 
@@ -83,6 +98,10 @@ function kbs_register_styles() {
 	if ( kbs_get_option( 'disable_styles', false ) ) {
 		return;
 	}
+
+	global $post;
+
+	$ticket_page = $post->ID == kbs_get_option( 'tickets_page' );
 
 	// Use minified libraries if SCRIPT_DEBUG is turned off
 	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
@@ -116,13 +135,27 @@ function kbs_register_styles() {
 		$url = trailingslashit( kbs_get_templates_url() ) . $file;
 	}
 
+    if ( $ticket_page )	{
+
+		wp_register_style(
+			'kbs-bootstrap-4-css',
+			'https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css',
+			array(),
+			'4.2.1'
+		);
+		wp_enqueue_style( 'kbs-bootstrap-4-css' );
+
+	}
+
 	wp_register_style( 'kbs-styles', $url, array(), KBS_VERSION, 'all' );
 	wp_enqueue_style( 'kbs-styles' );
 
 	if ( kbs_is_submission_form() )	{
+
 		// Register the chosen styles here, but we enqueue within kbs_display_form_select_field when needed
 		wp_register_style( 'jquery-chosen-css', $css_dir . 'chosen' . $suffix . '.css', array(), KBS_VERSION );
 		wp_enqueue_style( 'jquery-chosen-css' );
+
 	}
 
 } // kbs_register_styles

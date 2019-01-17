@@ -84,8 +84,11 @@
 .kbs_ticket_page_kbs-settings .form-table input.small-text ~ label,
 .kbs_ticket_page_kbs-settings .form-table input[type="checkbox"] + label { display: inline; }
 .kbs_ticket_page_kbs-settings .form-table tr > th > strong,
-.kbs_ticket_page_kbs-settings .form-table tr > th > h3
-{ font-size: 1.2em; font-weight: 600; margin: 0 auto; }
+.kbs_ticket_page_kbs-settings .form-table tr > th > h3 {
+    font-size: 1.2em;
+    font-weight: 600;
+    margin: 0 auto;
+}
 
 .kbs-form-error,
 .kbs-select-chosen .kbs-form-error {

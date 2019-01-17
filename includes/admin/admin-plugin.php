@@ -71,7 +71,9 @@ add_filter( 'plugin_row_meta', 'kbs_plugin_row_meta', 10, 2 );
 function kbs_admin_footer_rate_us( $footer_text )	{
 	global $typenow;
 
-	if ( 'kbs_ticket' == $typenow || KBS()->KB->post_type == $typenow || 'kbs_form' == $typenow )	{
+    $disable = kbs_get_option( 'remove_rating' );
+
+	if ( ! $disable && ( 'kbs_ticket' == $typenow || KBS()->KB->post_type == $typenow || 'kbs_form' == $typenow ) )	{
 
 		$footer_text = sprintf(
 			__( 'If <strong>KB Support</strong> is helping you support your customers, please <a href="%s" target="_blank">leave us a ★★★★★ rating</a>. A <strong style="text-decoration: underline;">huge</strong> thank you in advance!', 'kb-support'
