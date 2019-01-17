@@ -245,7 +245,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 
                                 <?php if ( isset( $args['page'] ) && $args['page'] < $replies_query->pages ) : ?>
                                     <?php printf(
-                                        '<p class="kbs_replies_load_more"><a class="button kbs_action_button" id="kbs-replies-next-page" data-ticket-id="%d" data-load-page="%d" role="button">%s</a></p>',
+                                        '<p class="kbs_replies_load_more"><a href="#" class="button kbs_action_button" id="kbs-replies-next-page" data-ticket-id="%d" data-load-page="%d" role="button">%s</a></p>',
                                         $ticket->ID,
                                         ( (int)$args['page'] + 1 ),
                                         __( 'Load More', 'kb-support' )
