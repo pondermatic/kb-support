@@ -11,7 +11,20 @@ if ( is_user_logged_in() )	: ?>
 	$tickets  = kbs_get_customer_tickets( $customer->id, array(), false, true ); ?>
 
 	<?php if ( ! empty( $tickets ) ) : ?>
+        <?php
+            $hide_closed = kbs_customer_maybe_hide_closed_tickets( $customer->user_id );
+            $hide_closed = ( $hide_closed && ( ! isset( $_REQUEST['show_closed'] ) || '1' != $_REQUEST['show_closed'] ) );
+            $hide_notice = sprintf(
+                __( 'If you have any closed %1$s, they are currently not being displayed below. <a href="%2$s">Show closed %1$s</a>.', 'kb-support' ),
+                kbs_get_ticket_label_plural( true ),
+                add_query_arg( 'show_closed', '1' )
+            );
+        ?>
+        
         <div id="kbs_item_wrapper" class="kbs_ticket_history_wrapper" style="float: left">
+            <?php if ( $hide_closed ) : ?>
+                <p><?php echo $hide_notice; ?></p>
+            <?php endif; ?>
             <div class="ticket_info_wrapper data_section">
 				<?php do_action( 'kbs_before_ticket_history_table', $tickets, $customer ); ?>
                 <table id="ticket_history">

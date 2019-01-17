@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) )
  * @param	bool	$can_select	True to only return selectable status. False for all
  */
 function kbs_customer_action_maybe_hide_closed_tickets( $statuses, $can_select )	{
-	if ( ! kbs_is_agent() )	{
+	if ( ! kbs_is_agent() && ( ! isset( $_REQUEST['show_closed'] ) || '1' != $_REQUEST['show_closed'] ) )	{
 		$user_id = get_current_user_id();
 		if ( ! empty( $user_id ) && kbs_customer_maybe_hide_closed_tickets( $user_id ) )	{
 			if ( ( $key = array_search( 'closed', $statuses ) ) !== false )	{
