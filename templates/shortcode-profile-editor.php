@@ -149,7 +149,7 @@ if ( ! is_user_logged_in() ) : ?>
 						<div class="kbs_profile_editor_replies_to_load">
                             <p>
                             	<label for="kbs_number_replies"><?php _e( 'Replies to Load', 'kb-support' ); ?></label>
-                                <input type="number" class="kbs-input" name="kbs_number_replies" id="kbs-number-replies" value="<?php echo esc_attr( $customer->get_replies_to_load() ); ?>" min="0" max="50" step="1" /><span class="kbs-description"><?php printf( __( 'How many replies do you want to initially load on the %s Manager page?', 'kb-support' ), kbs_get_ticket_label_singular() ); ?></span>
+                                <input type="number" class="kbs-input" name="kbs_number_replies" id="kbs-number-replies" value="<?php echo esc_attr( $customer->get_replies_to_load() ); ?>" min="0" max="50" step="1" /><span class="kbs-description"><?php printf( __( 'How many replies do you want to initially load on the %s Manager page? <code>0</code> loads all.', 'kb-support' ), kbs_get_ticket_label_singular() ); ?></span>
                             </p>
                         </div>
 
