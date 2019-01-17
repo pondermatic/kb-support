@@ -363,7 +363,7 @@ function kbs_ajax_load_front_end_replies()	{
 
         <?php endforeach; ?>
 
-        <?php if ( isset( $args['page'] ) && $args['page'] < $replies_query->pages ) :
+        <?php if ( isset( $args['page'] ) && (int)$args['page'] < $replies_query->pages ) :
             $next_page = (int)$args['page'] + 1;
         else :
             $next_page = 0;
