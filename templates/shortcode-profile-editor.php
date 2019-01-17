@@ -155,9 +155,7 @@ if ( ! is_user_logged_in() ) : ?>
 
                         <?php do_action( 'kbs_profile_editor_after_replies_to_load' ); ?>
 
-                        <?php
-						$hide_closed = kbs_customer_maybe_hide_closed_tickets( $customer->user_id );
-                        ?>
+                        <?php $hide_closed = kbs_customer_maybe_hide_closed_tickets( $customer->user_id ); ?>
 
                         <div class="kbs_profile_editor_hide_closed">
                             <p>
