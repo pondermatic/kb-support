@@ -1014,6 +1014,12 @@ function kbs_get_registered_settings() {
 						'desc'    => __( 'KB Support is provided for free. If you like our plugin, consider spreading the word by displaying <code>Powered by KB Support</code> below the ticket and reply forms.', 'kb-support' ),
 						'type'    => 'checkbox'
 					),
+                    'remove_rating' => array(
+						'id'      => 'remove_rating',
+						'name'    => __( 'Remove Rating Request?', 'kb-support' ),
+						'desc'    => __( 'Enable to remove the rating request displayed at the foot of the admin screen.', 'kb-support' ),
+						'type'    => 'checkbox'
+					),
 					'remove_on_uninstall' => array(
 						'id'      => 'remove_on_uninstall',
 						'name'    => __( 'Remove Data on Uninstall?', 'kb-support' ),
