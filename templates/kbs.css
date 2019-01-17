@@ -510,6 +510,9 @@ a .kbs_action_button    {
 }
 
 @media screen and ( max-width: 480px ) {
+    #kbs_item_wrapper .data_section table {
+        font-size: 60%;
+    }
 	.kbs-replies-row-title
 	.kbs-replies-row-actions {
 		text-align: left;
