@@ -171,9 +171,9 @@ function kbs_process_register_form() {
     $required_name_fields = kbs_get_option( 'require_name_fields' );
 
     if ( 'first' == $required_name_fields || 'both' == $required_name_fields && empty( $_POST['kbs_user_first_name'] ) ) {
-        $error = 'first_name_invalid';
+        $error = 'empty_first_name';
     } elseif ( 'both' == $required_name_fields && empty( $_POST['kbs_user_last_name'] ) ) {
-        $error = 'last_name_invalid';
+        $error = 'empty_last_name';
     } elseif ( empty( $_POST['kbs_user_email'] ) || ! is_email( $_POST['kbs_user_email'] ) ) {
 		$error = 'email_invalid';
     } elseif ( email_exists( $_POST['kbs_user_email'] ) ) {

@@ -320,17 +320,13 @@ function kbs_get_notices( $notice = '', $notice_only = false )	{
 			'class'  => 'error',
 			'notice' => __( 'Unable to register your user account.', 'kb-support' )
 		),
-		'empty_username' => array(
+		'empty_first_name' => array(
 			'class'  => 'error',
-			'notice' => __( 'Please enter a username.', 'kb-support' )
+			'notice' => __( 'Please enter your first name.', 'kb-support' )
 		),
-		'username_unavailable' => array(
+		'empty_last_name' => array(
 			'class'  => 'error',
-			'notice' => __( 'Your chosen username is unavailable.', 'kb-support' )
-		),
-		'username_invalid' => array(
-			'class'  => 'error',
-			'notice' => __( 'You entered an invalid username.', 'kb-support' )
+			'notice' => __( 'Please enter your last name.', 'kb-support' )
 		),
 		'email_unavailable' => array(
 			'class'  => 'error',
