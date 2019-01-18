@@ -15,22 +15,43 @@ global $kbs_register_redirect; ?>
     
                 <?php do_action( 'kbs_register_form_fields_before' ); ?>
     
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="kbs-first-name"><?php _e( 'First Name', 'kb-support' ); ?></label>
-                            <input type="text" name="kbs_user_first_name" class="required kbs-input" id="kbs-user-first-name" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="kbs-last-name"><?php _e( 'Last Name', 'kb-support' ); ?></label>
-                            <input type="text" name="kbs_user_last_name" class="required kbs-input" id="kbs-user-last-name" required>
-                        </div>
-                    </div><!-- .row -->
+				<?php
+				$name_fields         = kbs_get_option( 'show_name_fields' );
+				$show_first          = 'none' != $name_fields;
+				$show_last           = 'both' == $name_fields;
+				$require_name_fields = kbs_get_option( 'require_name_fields' );
+				$require_first       = 'none' != $require_name_fields;
+				$require_last        = 'both' == $require_name_fields;
+				$first_class         = $require_first ? ' required' : '';
+				$last_class          = $require_last  ? ' required' : '';
+				?>
+
+                <div class="container kbs_registration_wrapper">
+					<?php if ( 'none' != $name_fields ) : ?>
+						<div class="row">
+							<?php if ( $show_first ) : ?>
+								<div class="col-md-6 mb-3">
+									<label for="kbs-first-name"><?php _e( 'First Name', 'kb-support' ); ?></label>
+									<input type="text" name="kbs_user_first_name" class="required kbs-input" id="kbs-user-first-name"<?php echo $first_class; ?>>
+								</div>
+							<?php endif; ?>
+							<?php if ( $show_last ) : ?>
+								<div class="col-md-6 mb-3">
+									<label for="kbs-last-name"><?php _e( 'Last Name', 'kb-support' ); ?></label>
+									<input type="text" name="kbs_user_last_name" class="required kbs-input" id="kbs-user-last-name"<?php echo $last_class; ?>>
+								</div>
+							<?php endif; ?>
+						</div><!-- .row -->
+					<?php endif; ?>
+
+					<?php do_action( 'kbs_register_form_after_name' ); ?>
 
                     <div class="mb-3">
                         <label for="kbs-email"><?php _e( 'Email Address', 'kb-support' ); ?></label>
-                        <input type="email" name="kbs_user_email" class="required kbs-input" id="kbs-email">
+                        <input type="email" name="kbs_user_email" class="required kbs-input" id="kbs-email" required>
                     </div>
+
+					<?php do_action( 'kbs_register_form_after_email' ); ?>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">

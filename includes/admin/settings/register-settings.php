@@ -260,28 +260,33 @@ function kbs_get_registered_settings() {
                     'show_name_fields' => array(
                         'id'      => 'show_name_fields',
                         'name'    => __( 'Name Fields', 'kb-support' ),
+						'desc'    => __( 'Select whether to display both the First and Last name fields on the registration form, or just the First name.', 'kb-support' ),
                         'type'    => 'select',
                         'chosen'  => true,
                         'options' => array(
                             'both'  => __( 'Both First and Last Name', 'kb-support' ),
-                            'first' => __( 'First Name Only', 'kb-support' )
+                            'first' => __( 'First Name Only', 'kb-support' ),
+							'none'  => __( 'None', 'kb-support' )
                         ),
                         'std'     => 'both'
                     ),
                     'require_name_fields' => array(
                         'id'      => 'require_name_fields',
                         'name'    => __( 'Required Name Fields', 'kb-support' ),
+						'desc'    => __( 'Select whether both the First and Last name fields are required fields on the registration form, or just the First name.', 'kb-support' ),
                         'type'    => 'select',
                         'chosen'  => true,
                         'options' => array(
                             'both'  => __( 'Both First and Last Name', 'kb-support' ),
-                            'first' => __( 'First Name Only', 'kb-support' )
+                            'first' => __( 'First Name Only', 'kb-support' ),
+							'none'  => __( 'None', 'kb-support' )
                         ),
                         'std'     => 'both'
                     ),
                     'reg_name_format' => array(
                         'id'      => 'reg_name_format',
                         'name'    => __( 'Username Format', 'kb-support' ),
+						'desc'    => __( 'Choose which format you would like usernames to created in following successful registration.', 'kb-support' ),
                         'type'    => 'select',
                         'chosen'  => true,
                         'options' => array(
@@ -294,6 +299,7 @@ function kbs_get_registered_settings() {
                     'default_role' => array(
                         'id'      => 'default_role',
                         'name'    => __( 'Default Role', 'kb-support' ),
+						'desc'    => __( 'Select the role to assign to a newly registered user.', 'kb-support' ),
                         'type'    => 'select',
                         'chosen'  => true,
                         'options' => kbs_get_user_role_options(),
@@ -1344,7 +1350,7 @@ function kbs_get_registered_settings_sections() {
 	$sections = array(
 		'general'    => apply_filters( 'kbs_settings_sections_general', array(
 			'main'                 => __( 'General Settings', 'kb-support' ),
-			'pages'                => __( 'Pages', 'kb-support' ),
+			'pages'                => __( 'Pages Settings', 'kb-support' ),
             'customers'            => __( 'Customer Settings', 'kb-support' )
 		) ),
 		'tickets'    => apply_filters( 'kbs_settings_sections_tickets', array(
