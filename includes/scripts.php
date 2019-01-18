@@ -34,9 +34,20 @@ function kbs_load_scripts() {
 	wp_enqueue_script( 'kbs-ajax' );
 
 	$is_submission = kbs_is_submission_form();
-	$ticket_page   = $post->ID == kbs_get_option( 'tickets_page' );
+	$needs_bs4     = $post->ID == kbs_get_option( 'tickets_page' );
     $user_id       = get_current_user_id();
+    $shortcodes    = array( 'kbs_login', 'kbs_register', 'kbs_profile_editor' );
 
+    if ( ! $needs_bs4 && ! empty( $post ) && is_a( $post, 'WP_Post' ) )	{
+        foreach( $shortcodes as $shortcode )    {
+            if ( $needs_bs4 )   {
+                break;
+            }
+
+            $needs_bs4 = has_shortcode( $post->post_content, $shortcode );
+        }
+    }
+        
 	wp_localize_script( 'kbs-ajax', 'kbs_scripts', apply_filters( 'kbs_ajax_script_vars', array(
         'ajax_loader'           => KBS_PLUGIN_URL . 'assets/images/loading.gif',
 		'ajaxurl'               => kbs_get_ajax_url(),
@@ -72,7 +83,7 @@ function kbs_load_scripts() {
 
 	}
 
-	if ( $ticket_page )	{
+	if ( $needs_bs4 )	{
 		wp_register_script(
 			'kbs-bootstrap-4-js',
 			'https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js',
@@ -101,7 +112,20 @@ function kbs_register_styles() {
 
 	global $post;
 
-	$ticket_page = $post->ID == kbs_get_option( 'tickets_page' );
+    $is_submission = kbs_is_submission_form();
+    $shortcodes    = array( 'kbs_login', 'kbs_register', 'kbs_profile_editor' );
+	$needs_bs4     = $post->ID == kbs_get_option( 'tickets_page' );
+    $needs_bs4     = false;
+
+    if ( ! $needs_bs4 && ! empty( $post ) && is_a( $post, 'WP_Post' ) )	{
+        foreach( $shortcodes as $shortcode )    {
+            if ( $needs_bs4 )   {
+                break;
+            }
+
+            $needs_bs4 = has_shortcode( $post->post_content, $shortcode );
+        }
+    }
 
 	// Use minified libraries if SCRIPT_DEBUG is turned off
 	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
@@ -135,7 +159,7 @@ function kbs_register_styles() {
 		$url = trailingslashit( kbs_get_templates_url() ) . $file;
 	}
 
-    if ( $ticket_page )	{
+    if ( $is_submission || $needs_bs4 )	{
 
 		wp_register_style(
 			'kbs-bootstrap-4-css',
@@ -150,7 +174,7 @@ function kbs_register_styles() {
 	wp_register_style( 'kbs-styles', $url, array(), KBS_VERSION, 'all' );
 	wp_enqueue_style( 'kbs-styles' );
 
-	if ( kbs_is_submission_form() )	{
+	if ( $is_submission )	{
 
 		// Register the chosen styles here, but we enqueue within kbs_display_form_select_field when needed
 		wp_register_style( 'jquery-chosen-css', $css_dir . 'chosen' . $suffix . '.css', array(), KBS_VERSION );
