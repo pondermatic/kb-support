@@ -250,7 +250,78 @@ function kbs_get_registered_settings() {
 						'chosen'  => true,
 						'options' => kbs_get_pages(),
 					)
-				)
+				),
+                'customers' => array(
+                    'customer_registration_settings_header' => array(
+						'id'   => 'customer_registration_settings_header',
+						'name' => '<h3>' . sprintf( __( 'Registration Settings', 'kb-support' ), $single ) . '</h3>',
+						'type' => 'header'
+					),
+                    'show_name_fields' => array(
+                        'id'      => 'show_name_fields',
+                        'name'    => __( 'Name Fields', 'kb-support' ),
+                        'type'    => 'select',
+                        'chosen'  => true,
+                        'options' => array(
+                            'both'  => __( 'Both First and Last Name', 'kb-support' ),
+                            'first' => __( 'First Name Only', 'kb-support' )
+                        ),
+                        'std'     => 'both'
+                    ),
+                    'require_name_fields' => array(
+                        'id'      => 'require_name_fields',
+                        'name'    => __( 'Required Name Fields', 'kb-support' ),
+                        'type'    => 'select',
+                        'chosen'  => true,
+                        'options' => array(
+                            'both'  => __( 'Both First and Last Name', 'kb-support' ),
+                            'first' => __( 'First Name Only', 'kb-support' )
+                        ),
+                        'std'     => 'both'
+                    ),
+                    'reg_name_format' => array(
+                        'id'      => 'reg_name_format',
+                        'name'    => __( 'Username Format', 'kb-support' ),
+                        'type'    => 'select',
+                        'chosen'  => true,
+                        'options' => array(
+                            'email'        => __( 'Full Email Address', 'kb-support' ),
+                            'email_prefix' => __( 'Email Address Prefix', 'kb-support' ),
+                            'full_name'    => __( 'First and Last Name', 'kb-support' )
+                        ),
+                        'std'     => 'email'
+                    ),
+                    'default_role' => array(
+                        'id'      => 'default_role',
+                        'name'    => __( 'Default Role', 'kb-support' ),
+                        'type'    => 'select',
+                        'chosen'  => true,
+                        'options' => kbs_get_user_role_options(),
+                        'std'     => 'support_customer'
+                    ),
+                    'ticket_manager_settings_header' => array(
+						'id'   => 'ticket_manager_settings_header',
+						'name' => '<h3>' . sprintf( __( '%s Manager Settings', 'kb-support' ), $single ) . '</h3>',
+						'type' => 'header'
+					),
+                    'replies_to_load' => array(
+						'id'      => 'replies_to_load',
+						'name'    => __( 'Default Replies to Load', 'kb-support' ),
+						'desc'    => sprintf( __( 'Enter the number of replies a customer should see by default on the %s Manager screen. Enter <code>0</code> to load all. Registered customers can change this setting on their profile page.', 'kb-support' ), strtolower( $single ) ),
+						'type'    => 'number',
+						'size'    => 'small',
+                        'min'     => '0',
+						'max'     => '50',
+						'std'     => '5'
+					),
+                    'hide_closed_front' => array(
+						'id'      => 'hide_closed_front',
+						'name'    => sprintf( __( 'Hide Closed %s?', 'kb-support' ), $plural ),
+						'desc'    => sprintf( __( 'If enabled, closed %s will not be displayed by default for customers on the %s Manager screen. Registered customers can change this setting on their profile page', 'kb-support' ), strtolower( $plural ), $single ),
+						'type'    => 'checkbox',
+						'std'     => '0'
+					)
+                )
 			)
 		),
 		/** Ticket Settings */
@@ -379,31 +450,6 @@ function kbs_get_registered_settings() {
 						'std'     => kbs_get_default_file_types()
 					)
 				),
-                'ticket_manager' => array(
-                    'ticket_manager_settings_header' => array(
-						'id'   => 'ticket_manager_settings_header',
-						'name' => '<h3>' . sprintf( __( '%s Manager Settings', 'kb-support' ), $single ) . '</h3>',
-						'type' => 'header'
-					),
-                    'replies_to_load' => array(
-						'id'      => 'replies_to_load',
-						'name'    => __( 'Default Replies to Load', 'kb-support' ),
-						'desc'    => sprintf( __( 'Enter the number of replies a customer should see by default on the %s Manager screen. Enter <code>0</code> to load all. Registered customers can change this setting on their profile page.', 'kb-support' ), strtolower( $single ) ),
-						'type'    => 'number',
-						'size'    => 'small',
-                        'min'     => '0',
-						'max'     => '50',
-						'std'     => '5'
-					),
-                    'hide_closed_front' => array(
-						'id'      => 'hide_closed_front',
-						'name'    => sprintf( __( 'Hide Closed %s?', 'kb-support' ), $plural ),
-						'desc'    => sprintf( __( 'If enabled, closed %s will not be displayed by default for customers on the %s Manager screen. Registered customers can change this setting on their profile page', 'kb-support' ), strtolower( $plural ), $single ),
-						'type'    => 'checkbox',
-						'std'     => '0'
-					)
-                    
-                ),
 				'agents' => array(
 					'agent_settings_header' => array(
 						'id'   => 'agent_settings_header',
@@ -1298,12 +1344,12 @@ function kbs_get_registered_settings_sections() {
 	$sections = array(
 		'general'    => apply_filters( 'kbs_settings_sections_general', array(
 			'main'                 => __( 'General Settings', 'kb-support' ),
-			'pages'                => __( 'Pages', 'kb-support' )
+			'pages'                => __( 'Pages', 'kb-support' ),
+            'customers'            => __( 'Customer Settings', 'kb-support' )
 		) ),
 		'tickets'    => apply_filters( 'kbs_settings_sections_tickets', array(
 			'main'                 => sprintf( __( 'General %s Settings', 'kb-support' ), $single ),
 			'submit'               => __( 'Submission Settings', 'kb-support' ),
-            'ticket_manager'       => sprintf( __( '%s Manager Settings', 'kb-support' ), $single ),
 			'agents'               => __( 'Agent Settings', 'kb-support' ),
 			'sla'                  => __( 'Service Levels', 'kb-support' )
 		) ),
@@ -2180,6 +2226,25 @@ function kbs_get_pages( $force = false ) {
 	return $pages_options;
 
 } // kbs_get_pages
+
+/**
+ * Returns a select list for user role options.
+ *
+ * @since	1.2.6
+ * @return	string		Array of selectable options for user roles.
+ */
+function kbs_get_user_role_options()	{
+	$roles     = array();
+    $all_roles = array_reverse( get_editable_roles() );
+
+    foreach( $all_roles as $role => $data ) {
+        $name  = translate_user_role( $data['name'] );
+
+        $roles[ $role ] = $name;
+    }
+	
+	return apply_filters( 'kbs_user_role_options', $roles );
+} // kbs_get_user_role_options
 
 /**
  * Returns a select list for target response time options.

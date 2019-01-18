@@ -609,3 +609,65 @@ function kbs_process_profile_editor_remove_email() {
 	exit;
 } // kbs_process_profile_editor_remove_email
 add_action( 'init', 'kbs_process_profile_editor_remove_email' );
+
+/**
+ * Generate a username for a new support customer
+ *
+ * @since   1.2.6
+ * @param   array   $user_data  Array of user data
+ * @return  string  Username
+ */
+function kbs_create_user_name( $user_data ) {
+    $format    = kbs_get_option( 'reg_name_format', 'email' );
+    $user_name = '';
+
+    switch( $format )   {
+        case 'email_prefix':
+            $email_prefix = explode( '@', $user_data['user_email'] );
+            $user_name    = strtolower( $email_prefix[0] );
+            break;
+
+        case 'email':
+            $user_name = strtolower( $user_data['user_email'] );
+            break;
+
+        case 'full_name':
+			$user_name = strtolower( $user_data['user_first'] . $user_data['user_last'] );
+			break ;
+    }
+
+    /**
+     * WP has a maximum 60 characters for usernames.
+     * We max at 57 to allow for suffixes to be added to duplicates
+     */
+    $user_name = substr( $user_name, 0, 57 );
+
+    return kbs_check_duplicate_user_name( $user_name );
+} // kbs_create_user_name
+
+/**
+ * Check to see if a username is a duplicate.
+ * If it is, append a postfix and return it.
+ * 
+ * @since 1.2.6
+ *
+ * @param   string  $user_name  Username to check
+ * @return  string  username    Validated username
+ */
+function kbs_check_duplicate_user_name( $user_name ) {
+	
+	$user_check = get_user_by( 'login', $user_name );
+
+	if ( is_a( $user_check, 'WP_User' ) ) {
+		$suffix = 1;
+		do {
+			$alt_username = sanitize_user( $user_name . $suffix );
+			$user_check   = get_user_by( 'login', $alt_username );
+			$suffix ++;
+		} while ( is_a( $user_check, 'WP_User' ) );
+		$user_name = $alt_username;
+	}
+
+	return $user_name ;
+	
+} // kbs_check_duplicate_user_name

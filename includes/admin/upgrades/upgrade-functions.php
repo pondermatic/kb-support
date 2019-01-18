@@ -533,9 +533,13 @@ function kbs_v124_upgrades()	{
 function kbs_v126_upgrades()	{
 
     $new_options = array(
-        'replies_to_load'   => 5,
-        'hide_closed_front' => 0,
-        'remove_rating'     => 0
+        'shoe_name_fields'    => 'both',
+        'require_name_fields' => 'both',
+        'reg_name_format'     => 'email',
+        'default_role'        => 'support_customer',
+        'replies_to_load'     => 5,
+        'hide_closed_front'   => 0,
+        'remove_rating'       => 0
     );
 
     foreach( $new_options as $option => $value )    {

@@ -168,16 +168,16 @@ function kbs_process_register_form() {
 
 	do_action( 'kbs_pre_process_register_form' );
 
-	if ( empty( $_POST['kbs_user_login'] ) ) {
-		$error = 'empty_username';
-	} elseif ( username_exists( $_POST['kbs_user_login'] ) ) {
-		$error = 'username_unavailable';
-	} elseif ( ! validate_username( $_POST['kbs_user_login'] ) ) {
-		$error = 'username_invalid';
-	} elseif ( email_exists( $_POST['kbs_user_email'] ) ) {
-		$error = 'email_unavailable';
-	} elseif ( empty( $_POST['kbs_user_email'] ) || ! is_email( $_POST['kbs_user_email'] ) ) {
+    $required_name_fields = kbs_get_option( 'require_name_fields' );
+
+    if ( 'first' == $required_name_fields || 'both' == $required_name_fields && empty( $_POST['kbs_user_first_name'] ) ) {
+        $error = 'first_name_invalid';
+    } elseif ( 'both' == $required_name_fields && empty( $_POST['kbs_user_last_name'] ) ) {
+        $error = 'last_name_invalid';
+    } elseif ( empty( $_POST['kbs_user_email'] ) || ! is_email( $_POST['kbs_user_email'] ) ) {
 		$error = 'email_invalid';
+    } elseif ( email_exists( $_POST['kbs_user_email'] ) ) {
+		$error = 'email_unavailable';
 	} elseif ( empty( $_POST['kbs_user_pass'] ) ) {
 		$error = 'empty_password';
 	} elseif ( ( ! empty( $_POST['kbs_user_pass'] ) && empty( $_POST['kbs_user_pass2'] ) ) || ( $_POST['kbs_user_pass'] !== $_POST['kbs_user_pass2'] ) ) {
@@ -195,15 +195,20 @@ function kbs_process_register_form() {
 		die();
 	}
 
+    $user_data = array(
+        'user_first'      => isset( $_POST['kbs_user_first_name'] ) ? sanitize_text_field( $_POST['kbs_user_first_name'] ) : '',
+        'user_last'       => isset( $_POST['kbs_user_last_name'] )  ? sanitize_text_field( $_POST['kbs_user_last_name'] ) : '',
+		'user_pass'       => $_POST['kbs_user_pass'],
+		'user_email'      => sanitize_email( $_POST['kbs_user_email'] ),
+		'user_registered' => date( 'Y-m-d H:i:s' ),
+		'role'            => kbs_get_option( 'default_role' )
+    );
+
+    $user_data['user_login'] = kbs_create_user_name( $user_data );
+
 	$redirect = apply_filters( 'kbs_register_redirect', $_POST['kbs_redirect'] );
 
-	kbs_register_and_login_new_user( array(
-		'user_login'      => $_POST['kbs_user_login'],
-		'user_pass'       => $_POST['kbs_user_pass'],
-		'user_email'      => $_POST['kbs_user_email'],
-		'user_registered' => date( 'Y-m-d H:i:s' ),
-		'role'            => get_option( 'default_role' )
-	) );
+	kbs_register_and_login_new_user( $user_data );
 
 	wp_safe_redirect( $redirect );
 	die();
@@ -234,7 +239,7 @@ function kbs_register_and_login_new_user( $user_data = array() ) {
 		'first_name'      => isset( $user_data['user_first'] ) ? $user_data['user_first'] : '',
 		'last_name'       => isset( $user_data['user_last'] )  ? $user_data['user_last']  : '',
 		'user_registered' => date( 'Y-m-d H:i:s' ),
-		'role'            => get_option( 'default_role' )
+		'role'            => isset( $user_data['role'] ) ? $user_data['role'] : kbs_get_option( 'default_role' )
 	), $user_data );
 
 	// Insert new user
@@ -242,7 +247,7 @@ function kbs_register_and_login_new_user( $user_data = array() ) {
 
 	// Validate inserted user
 	if ( is_wp_error( $user_id ) )	{
-		wp_safe_redirect( wp_add_query_arg( array(
+		wp_safe_redirect( add_query_arg( array(
 			'kbs_notice' => 'could_not_register'
 		), $return ) );
 	}
