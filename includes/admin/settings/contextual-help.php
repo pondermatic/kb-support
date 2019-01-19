@@ -45,6 +45,36 @@ function kbs_settings_contextual_help() {
 					$ticket_plural,
 					strtolower( $ticket_plural )
 				) . '</li>' .
+			'</ul>' .
+			'<p>' . __( '<strong>Customer Settings</strong>', 'kb-support' ) .
+			'<p>' . __( '<em>Registration Settings</em>', 'kb-support' ) . '<br />' .
+			'<ul>' .
+				'<li>' . 
+					__( '<strong>Name Fields</strong> - You can choose which name fields to display on your KBS registration form. This is the page which contains the shortcode <code>[kbs_register].</code>', 'kb-support'
+				) . '</li>' .
+				'<li>' .
+					__( '<strong>Required Name Fields</strong> - Specify which name fields are required to be completed during registration. If any of the specified fields are left empty when the registration form is submitted, registration will fail and an error will be displayed.', 'kb-support'
+				) . '</li>' .
+				'<li>' .
+					__( '<strong>Username Format</strong> - When a customer successfully registers, KBS will auto generate a username based on your selection here. Using the email address of the customer is the default option.', 'kb-support'
+				) . '</li>' .
+				'<li>' .
+					__( '<strong>Default Role</strong> - Choose which WordPress role will be assigned to customers who register via the KBS registration form. <code>Support Customer</code> is the default and is very similar to the built-in <code>Subscriber</code> WordPress role.', 'kb-support'
+				) . '</li>' .
+			'</ul>' .
+			'<p>' . sprintf( __( '<em>%s Manager Settings</em>', 'kb-support' ), $ticket_singular ) . '<br />' .
+				__( '<em>The following options can be customized by registered customers when they edit their profile.</em>', 'kb-support' ) . '</p>' .
+			'<ul>' .
+				'<li>' . sprintf( 
+					__( '<strong>Default Replies to Load</strong> - Applies to the front end %s Manager page for customers. The specified number of replies will be loaded by default. If more replies exist, customers can load them by clicking the relevant link. Entering <code>0</code> will load all replies by default.', 'kb-support' ),
+					$ticket_singular
+				) . '</li>' .
+				'<li>' . sprintf(
+					__( '<strong>Hide Closed %s?</strong> - With this option enabled, by default customers will not see their closed %s within the front end %s Manager page. A link will be displayed on the page should they wish to load them.', 'kb-support' ),
+                    $ticket_plural,
+                    strtolower( $ticket_plural ),
+                    $ticket_singular
+				). '</li>' .
 			'</ul>'
         )
 	) );
@@ -113,20 +143,6 @@ function kbs_settings_contextual_help() {
 					__( '<strong>Allowed File Types</strong> - Enter the file extensions that a customer can upload when submitting a %1$s. Seperate each file extension with a comma. If a customer attempts to upload a file with an extension that is not listed, they will receive an error.', 'kb-support' ),
 					$ticket_singular
 				) . '</li>' .
-			'</ul>' .
-            '<p>' . sprintf( __( '<strong>%s Manager Settings</strong>', 'kb-support' ), $ticket_singular ) . '<br />' .
-				__( '<em>The following options can be customized by registered customers when they edit their profile.</em>', 'kb-support' ) . '</p>' .
-			'<ul>' .
-				'<li>' . sprintf( 
-					__( '<strong>Default Replies to Load</strong> - Applies to the front end %s Manager page for customers. The specified number of replies will be loaded by default. If more replies exist, customers can load them by clicking the relevant link. Entering <code>0</code> will load all replies by default.', 'kb-support' ),
-					$ticket_singular
-				) . '</li>' .
-				'<li>' . sprintf(
-					__( '<strong>Hide Closed %s?</strong> - With this option enabled, by default customers will not see their closed %s within the front end %s Manager page. A link will be displayed on the page should they wish to load them.', 'kb-support' ),
-                    $ticket_plural,
-                    strtolower( $ticket_plural ),
-                    $ticket_singular
-				). '</li>' .
 			'</ul>' .
 			'<p>' . __( '<strong>Agent Settings</strong>', 'kb-support' ) . '</p>' .
 			'<ul>' .

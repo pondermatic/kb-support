@@ -149,14 +149,24 @@
 	font-weight: bold;
 }
 
-#kbs_register_form .kbs-input,
 #kbs_login_form .kbs-input,
 #kbs_profile_editor_form .kbs-input,
-#kbs_register_form label,
 #kbs_login_form label,
 #kbs_profile_editor_form label {
 	display: inline-block;
 	width: 200px;
+}
+
+#kbs_login_form_wrap fieldset,
+#kbs_register_form_wrap fieldset {
+	border: 1px solid #eee;
+	padding: 1.387em;
+	margin: 0 0 21px;
+}
+
+.kbs_login_wrapper label,
+.kbs_registration_wrapper label {
+	font-weight: bold;
 }
 
 /* = Theme Specific styling
