@@ -16,10 +16,10 @@ global $kbs_register_redirect; ?>
                 <?php do_action( 'kbs_register_form_fields_before' ); ?>
     
 				<?php
-				$name_fields         = kbs_get_option( 'show_name_fields' );
+				$name_fields         = kbs_get_option( 'show_name_fields', 'both' );
 				$show_first          = 'none' != $name_fields;
 				$show_last           = 'both' == $name_fields;
-				$require_name_fields = kbs_get_option( 'require_name_fields' );
+				$require_name_fields = kbs_get_option( 'require_name_fields', 'both' );
 				$require_first       = 'none' != $require_name_fields;
 				$require_last        = 'both' == $require_name_fields;
 				$first_class         = $require_first ? ' required' : '';
