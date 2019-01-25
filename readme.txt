@@ -2,9 +2,9 @@
 Contributors: kbsupport, mikeyhoward1977
 Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
-Tested up to: 5.0
+Tested up to: 5.0.3
 Requires PHP: 5.4
-Stable tag: 1.2.5
+Stable tag: 1.2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -123,6 +123,45 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.2.6 =
+
+**Friday, 25th January 2019**
+
+**Note the following template files have been updated**;
+
+* view-ticket.php
+* ticket-manager.php
+* shortcode-login.php
+* shortcode-register.php
+* shortcode-profile-editor.php
+* kbs.css
+* kbs.min.css
+
+**New**
+
+* Updated front end ticket manager templates to make them more responsive to mobile devices
+* Updated front end login, register and profile templates to standardise layout
+* Agents can now delete replies that they have authored. Support Managers can delete all agent replies
+* Customers IP address is now displayed within the form data section on the ticket page within admin
+* Added the `{ticket_url_path}`, `{ticket_admin_url_path}`, `{close_ticket_url_path}` [template tags](https://kb-support.com/articles/email-tags/)
+* Added **Customer Settings** setting option within **General** settings tab
+* Added options to customize registration form fields
+* Added option to choose username format for customers registering via the KBS registration form
+* Added option to set the default number of replies to load for a customer on the front ticket page
+* Added profile option for registered customers to choose how many replies to load on the front ticket page
+* Added option to hide closed tickets on the Ticket Manager page for customers
+* Added user profile option for registered customers to choose whether or not they want closed tickets displayed on the Ticket Manager page
+
+**Tweaks**
+
+* Removed SSL notice on submission page
+* Added link to a customers WP user profile on the ticket page if they are registered
+
+**Dev**
+
+* Added the form ID and the ticket object vars to the `kbs_show_form_data` filter
+* Added a number of hooks to the Customer Section meta box on the ticket page
 
 = 1.2.5 =
 
