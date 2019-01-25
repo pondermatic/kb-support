@@ -285,6 +285,103 @@ function kbs_ajax_display_ticket_replies()	{
 add_action( 'wp_ajax_kbs_display_ticket_replies', 'kbs_ajax_display_ticket_replies' );
 
 /**
+ * Display replies for ticket management page.
+ *
+ * @since	1.2.6
+ * @return	string
+ */
+function kbs_ajax_load_front_end_replies()	{
+	$output = '';
+
+    $time_format = get_option( 'time_format' );
+    $date_format = get_option( 'date_format' );
+    $user_id     = get_current_user_id();
+	$number      = get_user_meta( $user_id, '_kbs_load_replies', true );
+    $number      = ! empty( $number ) ? (int)$number : 0;
+    $ticket_id   = (int)$_POST['kbs_ticket_id'];
+
+    $args = array(
+        'ticket_id' => $ticket_id,
+        'number'    => $number,
+        'page'      => isset( $_POST['kbs_page'] ) ? (int)$_POST['kbs_page'] : null
+    );
+
+    $replies_query = new KBS_Replies_Query( $args );
+    $replies       = $replies_query->get_replies();
+
+    ob_start();
+
+    if ( ! empty( $replies ) ) :
+        foreach( $replies as $reply ) :
+            $reply_content = apply_filters( 'the_content', $reply->post_content );
+            $reply_content = str_replace( ']]>', ']]&gt;', $reply_content );
+            $files         = kbs_ticket_has_files( $reply->ID );
+            $file_count    = ( $files ? count( $files ) : false );
+            $heading       = apply_filters( 'kbs_front_replies_title', sprintf(
+                '%s by %s',
+                date_i18n( $time_format . ' \o\n ' . $date_format, strtotime(  $reply->post_date ) ),
+                kbs_get_reply_author_name( $reply->ID, true )
+            ) );
+            ?>
+            <div id="kbs-reply-card" class="card kbs_replies_wrapper">
+                <div class="card-header kbs-replies-row-header">
+                    <span class="kbs-replies-row-title">
+                        <?php echo $heading; ?>
+                    </span>
+
+                    <span class="kbs-replies-row-actions">
+                        <a href="#" class="toggle-view-reply-option-section" data-toggle="collapse" data-target="#kbs_ticket_reply-<?php echo $reply->ID; ?>" aria-expanded="false" aria-controls="kbs_ticket_reply-<?php echo $reply->ID; ?>" data-key="<?php echo $reply->ID; ?>">
+                            <?php _e( 'View Reply', 'kb-support' ); ?>
+                        </a>
+                    </span>
+                </div>
+
+                <div id="kbs_ticket_reply-<?php echo $reply->ID; ?>" class="collapse" aria-labelledby="kbs_ticket_reply-<?php echo $reply->ID; ?>-heading" data-parent="#kbs-ticket-replies">
+                    <div class="card-body">
+                        <?php echo $reply_content; ?>
+                        <?php if ( $files ) : ?>
+                        <div class="kbs_ticket_reply_files">
+                            <strong><?php printf(
+                                __( 'Attached Files (%d)', 'kb-support' ),
+                                $file_count
+                            ); ?></strong>
+                            <ol>
+                                <?php foreach( $files as $file ) : ?>
+                                    <li>
+                                        <a href="<?php echo wp_get_attachment_url( $file->ID ); ?>" target="_blank">
+                                            <?php echo basename( get_attached_file( $file->ID ) ); ?>
+                                        </a>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ol>
+                        </div>
+                    <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+            <div id="kbs-loading-replies"></div>
+
+        <?php endforeach; ?>
+
+        <?php if ( isset( $args['page'] ) && (int)$args['page'] < $replies_query->pages ) :
+            $next_page = (int)$args['page'] + 1;
+        else :
+            $next_page = 0;
+        endif; ?>
+
+    <?php endif;
+
+	$output = ob_get_clean();
+    $response = array(
+        'replies'   => $output,
+        'next_page' => $next_page
+    );
+	wp_send_json_success( $response );
+} // kbs_ajax_load_front_end_replies
+add_action( 'wp_ajax_kbs_load_front_end_replies', 'kbs_ajax_load_front_end_replies' );
+add_action( 'wp_ajax_nopriv_kbs_load_front_end_replies', 'kbs_ajax_load_front_end_replies' );
+
+/**
  * Mark a reply as read.
  *
  * @since   1.2

@@ -191,6 +191,14 @@ class KBS_Admin_Notices	{
                         $notices['error']['kbs-ticket-reply-failed'] = __( 'The reply could not be added.', 'kb-support' );
                         break;
 
+                    case 'ticket_reply_deleted':
+                        $notices['updated']['kbs-ticket-reply-deleted'] = __( 'The reply was successfully deleted.', 'kb-support' );
+                        break;
+
+                    case 'ticket_reply_delete_failed':
+                        $notices['error']['kbs-ticket-reply-deleted'] = __( 'The reply could not be deleted.', 'kb-support' );
+                        break;
+
                     case 'note_deleted':
                         $notices['updated']['kbs-ticket-note-deleted'] = __( 'The note was deleted.', 'kb-support' );
                         break;

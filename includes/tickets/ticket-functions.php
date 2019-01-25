@@ -437,8 +437,8 @@ function kbs_get_ticket_status_keys( $can_select = true ) {
  * @since	1.0
  * @return	arr		Active ticket statuses
  */
-function kbs_get_active_ticket_status_keys()	{
-	$statuses = kbs_get_ticket_status_keys();
+function kbs_get_active_ticket_status_keys( $can_select = true )	{
+	$statuses = kbs_get_ticket_status_keys( $can_select );
 	$inactive = kbs_get_inactive_ticket_statuses();
 
 	foreach( $inactive as $status )	{

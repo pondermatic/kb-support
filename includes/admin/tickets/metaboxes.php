@@ -561,10 +561,19 @@ function kbs_ticket_metabox_customer_section( $ticket_id )	{
 
 	$user_info   = $kbs_ticket->user_info;
     $customer_id = $kbs_ticket->customer_id;
+    $user_id     = $kbs_ticket->user_id;
+    $edit_user   = '';
 
     if ( '-1' == $customer_id || empty( $customer_id ) )    {
         $customer = __( 'No customer assigned', 'kb-support' );
     } else  {
+        if ( ! empty( $user_id ) )  {
+            $edit_user = sprintf(
+                '<a href="%s">%s</a>',
+                get_edit_user_link( $user_id ),
+                __( 'User Profile', 'kb-support' )
+            );
+        }
         $customer = sprintf(
             '%s %s (<a href="%s">#%s</a>)',
             $kbs_ticket->first_name,
@@ -602,6 +611,12 @@ function kbs_ticket_metabox_customer_section( $ticket_id )	{
 			<?php if ( ! empty( $user_info['website'] ) ) : ?>
 				<span class="kbs-customer-ticket-attr customer-website">
 					<?php printf( '<a href="%1$s" target="_blank">%1$s</a>', esc_url( $user_info['website'] ) ); ?>
+				</span>
+			<?php endif; ?>
+
+            <?php if ( ! empty( $edit_user ) ) : ?>
+				<span class="kbs-customer-ticket-attr customer-user">
+					<?php echo $edit_user; ?>
 				</span>
 			<?php endif; ?>
 

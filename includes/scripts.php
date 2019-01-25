@@ -22,6 +22,8 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	void
  */
 function kbs_load_scripts() {
+	global $post;
+
 	$js_dir = KBS_PLUGIN_URL . 'assets/js/';
 
 	// Use minified libraries if SCRIPT_DEBUG is turned off
@@ -32,7 +34,20 @@ function kbs_load_scripts() {
 	wp_enqueue_script( 'kbs-ajax' );
 
 	$is_submission = kbs_is_submission_form();
+	$needs_bs4     = $post->ID == kbs_get_option( 'tickets_page' );
+    $user_id       = get_current_user_id();
+    $shortcodes    = array( 'kbs_login', 'kbs_register', 'kbs_profile_editor' );
 
+    if ( ! $needs_bs4 && ! empty( $post ) && is_a( $post, 'WP_Post' ) )	{
+        foreach( $shortcodes as $shortcode )    {
+            if ( $needs_bs4 )   {
+                break;
+            }
+
+            $needs_bs4 = has_shortcode( $post->post_content, $shortcode );
+        }
+    }
+        
 	wp_localize_script( 'kbs-ajax', 'kbs_scripts', apply_filters( 'kbs_ajax_script_vars', array(
         'ajax_loader'           => KBS_PLUGIN_URL . 'assets/images/loading.gif',
 		'ajaxurl'               => kbs_get_ajax_url(),
@@ -43,6 +58,7 @@ function kbs_load_scripts() {
         'one_option'            => __( 'Choose an option', 'kb-support' ),
 		'one_or_more_option'    => __( 'Choose one or more options', 'kb-support' ),
         'permalinks'            => get_option( 'permalink_structure' ) ? '1' : '0',
+        'replies_to_load'       => kbs_get_customer_replies_to_load(), 
         'reply_label'           => kbs_get_ticket_reply_label(),
         'search_placeholder'    => __( 'Search options', 'kb-support' ),
         'submit_ticket'         => kbs_get_form_submit_label(),
@@ -67,6 +83,16 @@ function kbs_load_scripts() {
 
 	}
 
+	if ( $needs_bs4 )	{
+		wp_register_script(
+			'kbs-bootstrap-4-js',
+			'https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js',
+			array( 'jquery' ),
+			'4.2.1'
+		);
+		wp_enqueue_script( 'kbs-bootstrap-4-js' );
+	}
+
 } // kbs_load_scripts
 add_action( 'wp_enqueue_scripts', 'kbs_load_scripts' );
 
@@ -83,6 +109,23 @@ function kbs_register_styles() {
 	if ( kbs_get_option( 'disable_styles', false ) ) {
 		return;
 	}
+
+	global $post;
+
+    $is_submission = kbs_is_submission_form();
+    $shortcodes    = array( 'kbs_login', 'kbs_register', 'kbs_profile_editor' );
+	$needs_bs4     = $post->ID == kbs_get_option( 'tickets_page' );
+    $needs_bs4     = false;
+
+    if ( ! $needs_bs4 && ! empty( $post ) && is_a( $post, 'WP_Post' ) )	{
+        foreach( $shortcodes as $shortcode )    {
+            if ( $needs_bs4 )   {
+                break;
+            }
+
+            $needs_bs4 = has_shortcode( $post->post_content, $shortcode );
+        }
+    }
 
 	// Use minified libraries if SCRIPT_DEBUG is turned off
 	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
@@ -116,13 +159,27 @@ function kbs_register_styles() {
 		$url = trailingslashit( kbs_get_templates_url() ) . $file;
 	}
 
+    if ( $is_submission || $needs_bs4 )	{
+
+		wp_register_style(
+			'kbs-bootstrap-4-css',
+			'https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css',
+			array(),
+			'4.2.1'
+		);
+		wp_enqueue_style( 'kbs-bootstrap-4-css' );
+
+	}
+
 	wp_register_style( 'kbs-styles', $url, array(), KBS_VERSION, 'all' );
 	wp_enqueue_style( 'kbs-styles' );
 
-	if ( kbs_is_submission_form() )	{
+	if ( $is_submission )	{
+
 		// Register the chosen styles here, but we enqueue within kbs_display_form_select_field when needed
 		wp_register_style( 'jquery-chosen-css', $css_dir . 'chosen' . $suffix . '.css', array(), KBS_VERSION );
 		wp_enqueue_style( 'jquery-chosen-css' );
+
 	}
 
 } // kbs_register_styles
@@ -211,6 +268,7 @@ function kbs_load_admin_scripts( $hook ) {
 		'add_new_ticket'          => sprintf( __( 'Add New %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
 		'admin_url'               => admin_url(),
 		'ajax_loader'             => KBS_PLUGIN_URL . 'assets/images/loading.gif',
+        'delete_reply_warn'       => __( "You will permanently delete this reply.\n\nDepending on configuration, your customer may have already received it via email.\n\nClick 'Cancel' to stop, 'OK' to delete.", 'kb-support' ),
         'delete_ticket_warn'      => sprintf(
             __( "You are about to permanently delete this %s.\n\nThis action cannot be undone.\n\nClick 'Cancel' to stop, 'OK' to delete.", 'kb-support' ), kbs_get_ticket_label_singular( true )
         ),

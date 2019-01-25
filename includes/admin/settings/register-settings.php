@@ -250,7 +250,84 @@ function kbs_get_registered_settings() {
 						'chosen'  => true,
 						'options' => kbs_get_pages(),
 					)
-				)
+				),
+                'customers' => array(
+                    'customer_registration_settings_header' => array(
+						'id'   => 'customer_registration_settings_header',
+						'name' => '<h3>' . sprintf( __( 'Registration Settings', 'kb-support' ), $single ) . '</h3>',
+						'type' => 'header'
+					),
+                    'show_name_fields' => array(
+                        'id'      => 'show_name_fields',
+                        'name'    => __( 'Name Fields', 'kb-support' ),
+						'desc'    => __( 'Select whether to display both the First and Last name fields on the registration form, or just the First name.', 'kb-support' ),
+                        'type'    => 'select',
+                        'chosen'  => true,
+                        'options' => array(
+                            'both'  => __( 'Both First and Last Name', 'kb-support' ),
+                            'first' => __( 'First Name Only', 'kb-support' ),
+							'none'  => __( 'None', 'kb-support' )
+                        ),
+                        'std'     => 'both'
+                    ),
+                    'require_name_fields' => array(
+                        'id'      => 'require_name_fields',
+                        'name'    => __( 'Required Name Fields', 'kb-support' ),
+						'desc'    => __( 'Select whether both the First and Last name fields are required fields on the registration form, or just the First name.', 'kb-support' ),
+                        'type'    => 'select',
+                        'chosen'  => true,
+                        'options' => array(
+                            'both'  => __( 'Both First and Last Name', 'kb-support' ),
+                            'first' => __( 'First Name Only', 'kb-support' ),
+							'none'  => __( 'None', 'kb-support' )
+                        ),
+                        'std'     => 'both'
+                    ),
+                    'reg_name_format' => array(
+                        'id'      => 'reg_name_format',
+                        'name'    => __( 'Username Format', 'kb-support' ),
+						'desc'    => __( 'Choose which format you would like usernames to created in following successful registration.', 'kb-support' ),
+                        'type'    => 'select',
+                        'chosen'  => true,
+                        'options' => array(
+                            'email'        => __( 'Full Email Address', 'kb-support' ),
+                            'email_prefix' => __( 'Email Address Prefix', 'kb-support' ),
+                            'full_name'    => __( 'First and Last Name', 'kb-support' )
+                        ),
+                        'std'     => 'email'
+                    ),
+                    'default_role' => array(
+                        'id'      => 'default_role',
+                        'name'    => __( 'Default Role', 'kb-support' ),
+						'desc'    => __( 'Select the role to assign to a newly registered user.', 'kb-support' ),
+                        'type'    => 'select',
+                        'chosen'  => true,
+                        'options' => kbs_get_user_role_options(),
+                        'std'     => 'support_customer'
+                    ),
+                    'ticket_manager_settings_header' => array(
+						'id'   => 'ticket_manager_settings_header',
+						'name' => '<h3>' . sprintf( __( '%s Manager Settings', 'kb-support' ), $single ) . '</h3>',
+						'type' => 'header'
+					),
+                    'replies_to_load' => array(
+						'id'      => 'replies_to_load',
+						'name'    => __( 'Default Replies to Load', 'kb-support' ),
+						'desc'    => sprintf( __( 'Enter the number of replies a customer should see by default on the %s Manager screen. Enter <code>0</code> to load all. Registered customers can change this setting on their profile page.', 'kb-support' ), strtolower( $single ) ),
+						'type'    => 'number',
+						'size'    => 'small',
+                        'min'     => '0',
+						'max'     => '50',
+						'std'     => '5'
+					),
+                    'hide_closed_front' => array(
+						'id'      => 'hide_closed_front',
+						'name'    => sprintf( __( 'Hide Closed %s?', 'kb-support' ), $plural ),
+						'desc'    => sprintf( __( 'If enabled, closed %s will not be displayed by default for customers on the %s Manager screen. Registered customers can change this setting on their profile page', 'kb-support' ), strtolower( $plural ), $single ),
+						'type'    => 'checkbox',
+						'std'     => '0'
+					)
+                )
 			)
 		),
 		/** Ticket Settings */
@@ -717,7 +794,7 @@ function kbs_get_registered_settings() {
 						'type' => 'rich_editor',
 						'std'  => __( "Dear", "kb-support" ) . " {name},\n\n" . 
 								  sprintf( __( 'Your support %1$s # {ticket_id} has received a reply. Click the link below to access your %1$s and review the details.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
-								  '{ticket_url}' . "\n\n" .
+								  '<a href="{ticket_url_path}">' . sprintf( __( 'View %s', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</a>' . "\n\n" .
 								  __( 'Regards', 'kb-support' ) . "\n\n" .
 								  '{sitename}'
 					)
@@ -755,7 +832,7 @@ function kbs_get_registered_settings() {
 						'type' => 'rich_editor',
 						'std'  => __( "Dear", "kb-support" ) . " {name},\n\n" . 
 								  sprintf( __( 'Your support %1$s # {ticket_id} is now closed. You can review the details of your %1$s by clicking the URL below.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
-								  '{ticket_url}' . "\n\n" .
+								  '<a href="{ticket_url_path}">' . sprintf( __( 'View %s', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</a>' . "\n\n" .
 								  __( 'Regards', 'kb-support' ) . "\n\n" .
 								  '{sitename}'
 					)
@@ -787,7 +864,7 @@ function kbs_get_registered_settings() {
 						'std'  => __( 'Hey there!', 'kb-support' ) . "\n\n" .
 								  sprintf( __( 'A new %s has been logged at', 'kb-support' ), strtolower( $single ) ) . " {sitename}.\n\n" .
 								  "<strong>{ticket_title} - #{ticket_id}</strong>\n\n" .
-								  "{ticket_admin_url}\n\n" .
+								  '<a href="{ticket_admin_url_path}">' . sprintf( __( 'View %s', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</a>' . "\n\n" .
 								  __( 'Regards', 'kb-support' ) . "\n\n" .
 								  '{sitename}'
 					),
@@ -806,7 +883,7 @@ function kbs_get_registered_settings() {
 						'std'  => __( 'Hey there!', 'kb-support' ) . "\n\n" .
 								  sprintf( __( 'A new %s reply has been received at', 'kb-support' ), strtolower( $single ) ) . " {sitename}.\n\n" .
 								  "<strong>{ticket_title} - #{ticket_id}</strong>\n\n" .
-								  "{ticket_admin_url}\n\n" .
+								  '<a href="{ticket_admin_url_path}">' . sprintf( __( 'View %s', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</a>' . "\n\n" .
 								  __( 'Regards', 'kb-support' ) . "\n\n" .
 								  '{sitename}'
 					),
@@ -840,7 +917,7 @@ function kbs_get_registered_settings() {
 								  sprintf( __( 'A %s has been assigned to you at {sitename}.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
 								  "<strong>{ticket_title} - #{ticket_id}</strong>\n\n" .
 								  sprintf( __( 'Please login to view and update the %s.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
-                                  "{ticket_admin_url}\n\n" .
+                                  '<a href="{ticket_admin_url_path}">' . sprintf( __( 'View %s', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</a>' . "\n\n" .
 								  __( 'Regards', 'kb-support' ) . "\n\n" .
 								  '{sitename}'
 					)
@@ -987,6 +1064,12 @@ function kbs_get_registered_settings() {
 						'id'      => 'show_credits',
 						'name'    => __( 'Display Credit?', 'kb-support' ),
 						'desc'    => __( 'KB Support is provided for free. If you like our plugin, consider spreading the word by displaying <code>Powered by KB Support</code> below the ticket and reply forms.', 'kb-support' ),
+						'type'    => 'checkbox'
+					),
+                    'remove_rating' => array(
+						'id'      => 'remove_rating',
+						'name'    => __( 'Remove Rating Request?', 'kb-support' ),
+						'desc'    => __( 'Enable to remove the rating request displayed at the foot of the admin screen.', 'kb-support' ),
 						'type'    => 'checkbox'
 					),
 					'remove_on_uninstall' => array(
@@ -1267,7 +1350,8 @@ function kbs_get_registered_settings_sections() {
 	$sections = array(
 		'general'    => apply_filters( 'kbs_settings_sections_general', array(
 			'main'                 => __( 'General Settings', 'kb-support' ),
-			'pages'                => __( 'Pages', 'kb-support' )
+			'pages'                => __( 'Pages Settings', 'kb-support' ),
+            'customers'            => __( 'Customer Settings', 'kb-support' )
 		) ),
 		'tickets'    => apply_filters( 'kbs_settings_sections_tickets', array(
 			'main'                 => sprintf( __( 'General %s Settings', 'kb-support' ), $single ),
@@ -2148,6 +2232,25 @@ function kbs_get_pages( $force = false ) {
 	return $pages_options;
 
 } // kbs_get_pages
+
+/**
+ * Returns a select list for user role options.
+ *
+ * @since	1.2.6
+ * @return	string		Array of selectable options for user roles.
+ */
+function kbs_get_user_role_options()	{
+	$roles     = array();
+    $all_roles = array_reverse( get_editable_roles() );
+
+    foreach( $all_roles as $role => $data ) {
+        $name  = translate_user_role( $data['name'] );
+
+        $roles[ $role ] = $name;
+    }
+	
+	return apply_filters( 'kbs_user_role_options', $roles );
+} // kbs_get_user_role_options
 
 /**
  * Returns a select list for target response time options.
