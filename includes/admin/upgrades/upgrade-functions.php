@@ -80,6 +80,10 @@ function kbs_do_automatic_upgrades() {
 		kbs_v124_upgrades();
 	}
 
+    if ( version_compare( $kbs_version, '1.2.6', '<' ) ) {
+		kbs_v126_upgrades();
+	}
+
 	if ( version_compare( $kbs_version, KBS_VERSION, '<' ) )	{
 
 		// Let us know that an upgrade has happened
