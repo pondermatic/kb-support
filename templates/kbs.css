@@ -164,6 +164,10 @@
 	margin: 0 0 21px;
 }
 
+.kbs_login_wrapper .kbs-input {
+    margin-top: 10px;
+}
+
 .kbs_login_wrapper label,
 .kbs_registration_wrapper label {
 	font-weight: bold;
