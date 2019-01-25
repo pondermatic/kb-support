@@ -36,7 +36,7 @@ function kbs_load_scripts() {
 	$is_submission = kbs_is_submission_form();
 	$needs_bs4     = $post->ID == kbs_get_option( 'tickets_page' );
     $user_id       = get_current_user_id();
-    $shortcodes    = array( 'kbs_login', 'kbs_register', 'kbs_profile_editor' );
+    $shortcodes    = array( 'kbs_tickets' );
 
     if ( ! $needs_bs4 && ! empty( $post ) && is_a( $post, 'WP_Post' ) )	{
         foreach( $shortcodes as $shortcode )    {
@@ -113,7 +113,7 @@ function kbs_register_styles() {
 	global $post;
 
     $is_submission = kbs_is_submission_form();
-    $shortcodes    = array( 'kbs_login', 'kbs_register', 'kbs_profile_editor' );
+    $shortcodes    = array( 'kbs_tickets', 'kbs_login', 'kbs_register', 'kbs_profile_editor' );
 	$needs_bs4     = $post->ID == kbs_get_option( 'tickets_page' );
     $needs_bs4     = false;
 
@@ -124,6 +124,12 @@ function kbs_register_styles() {
             }
 
             $needs_bs4 = has_shortcode( $post->post_content, $shortcode );
+        }
+    }
+
+    if ( ! $needs_bs4 && has_shortcode( $post->post_content, 'kbs_submit' ) )   {
+        if ( ! kbs_user_can_submit() && 'none' != kbs_get_option( 'show_register_form' ) )  {
+            $needs_bs4 = true;
         }
     }
 
@@ -159,7 +165,7 @@ function kbs_register_styles() {
 		$url = trailingslashit( kbs_get_templates_url() ) . $file;
 	}
 
-    if ( $is_submission || $needs_bs4 )	{
+    if ( $needs_bs4 )	{
 
 		wp_register_style(
 			'kbs-bootstrap-4-css',
