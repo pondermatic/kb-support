@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: KB Support 1.2.5\n"
+"Project-Id-Version: KB Support 1.2.6\n"
 "Report-Msgid-Bugs-To: https://kb-support.com/\n"
-"POT-Creation-Date: 2019-01-19 21:36:32+00:00\n"
+"POT-Creation-Date: 2019-01-25 14:37:53+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -49,8 +49,8 @@ msgstr ""
 #: includes/admin/import-export/export/class-kbs-export.php:192
 #: includes/admin/import-export/export/export-actions.php:29
 #: includes/admin/tickets/metaboxes.php:71
-#: includes/admin/upgrades/upgrade-functions.php:168
-#: includes/admin/upgrades/upgrade-functions.php:326
+#: includes/admin/upgrades/upgrade-functions.php:172
+#: includes/admin/upgrades/upgrade-functions.php:330
 #: includes/class-kbs-license-handler.php:313
 msgid "Error"
 msgstr ""
@@ -2378,7 +2378,7 @@ msgid "The label for the %s reply form submit button."
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:440
-#: includes/admin/tickets/metaboxes.php:849 includes/template-functions.php:66
+#: includes/admin/tickets/metaboxes.php:864 includes/template-functions.php:66
 msgid "Reply"
 msgstr ""
 
@@ -2812,7 +2812,7 @@ msgstr ""
 #: includes/admin/settings/register-settings.php:868
 #: includes/admin/settings/register-settings.php:887
 #: includes/admin/settings/register-settings.php:921
-#: includes/admin/upgrades/upgrade-functions.php:307
+#: includes/admin/upgrades/upgrade-functions.php:311
 #: includes/emails/email-template.php:161
 #: includes/emails/email-template.php:260
 #: includes/emails/email-template.php:295
@@ -2896,7 +2896,7 @@ msgstr ""
 #: includes/admin/settings/register-settings.php:864
 #: includes/admin/settings/register-settings.php:883
 #: includes/admin/settings/register-settings.php:916
-#: includes/admin/upgrades/upgrade-functions.php:302
+#: includes/admin/upgrades/upgrade-functions.php:306
 #: includes/emails/email-template.php:256
 #: includes/emails/email-template.php:291
 #: includes/emails/email-template.php:322
@@ -2968,7 +2968,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:909
-#: includes/admin/upgrades/upgrade-functions.php:301
+#: includes/admin/upgrades/upgrade-functions.php:305
 msgid "A %s Has Been Assigned to You - ##{ticket_id}##"
 msgstr ""
 
@@ -2983,13 +2983,13 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:917
-#: includes/admin/upgrades/upgrade-functions.php:303
+#: includes/admin/upgrades/upgrade-functions.php:307
 #: includes/emails/email-template.php:323
 msgid "A %s has been assigned to you at {sitename}."
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:919
-#: includes/admin/upgrades/upgrade-functions.php:305
+#: includes/admin/upgrades/upgrade-functions.php:309
 #: includes/emails/email-template.php:325
 msgid "Please login to view and update the %s."
 msgstr ""
@@ -3063,7 +3063,7 @@ msgid "Label shown next to the agree to terms checkbox."
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:1000
-#: includes/admin/upgrades/upgrade-functions.php:479
+#: includes/admin/upgrades/upgrade-functions.php:483
 msgid "I have read and agree to the terms and conditions"
 msgstr ""
 
@@ -3084,7 +3084,7 @@ msgid "Heading for the agree to terms thickbox."
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:1016
-#: includes/admin/upgrades/upgrade-functions.php:481
+#: includes/admin/upgrades/upgrade-functions.php:485
 #: includes/forms/form-functions.php:1102
 msgid "Terms and Conditions for Support %s"
 msgstr ""
@@ -3597,11 +3597,11 @@ msgstr ""
 msgid "Add reply"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:170 includes/scripts.php:302
+#: includes/admin/tickets/metaboxes.php:170 includes/scripts.php:308
 msgid "View participants"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:177 includes/scripts.php:303
+#: includes/admin/tickets/metaboxes.php:177 includes/scripts.php:309
 msgid "View submission data"
 msgstr ""
 
@@ -3634,61 +3634,65 @@ msgstr ""
 msgid "Updated: %s"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:566
+#: includes/admin/tickets/metaboxes.php:568
 msgid "No customer assigned"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:632
+#: includes/admin/tickets/metaboxes.php:574
+msgid "User Profile"
+msgstr ""
+
+#: includes/admin/tickets/metaboxes.php:647
 msgid "%s Content"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:664
+#: includes/admin/tickets/metaboxes.php:679
 msgid "Attachments"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:699
+#: includes/admin/tickets/metaboxes.php:714
 msgid "Participants"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:712
+#: includes/admin/tickets/metaboxes.php:727
 msgid ""
 "Add participants by selecting an existing customer, or entering an email "
 "address below."
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:720
+#: includes/admin/tickets/metaboxes.php:735
 msgid "Select a participant"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:730
+#: includes/admin/tickets/metaboxes.php:745
 msgid "or enter any email address"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:736
+#: includes/admin/tickets/metaboxes.php:751
 msgid "Add Participant"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:819
+#: includes/admin/tickets/metaboxes.php:834
 msgid "This %1$s is currently closed. <a href=\"%2$s\">Re-open %3$s.</a>"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:833
+#: includes/admin/tickets/metaboxes.php:848
 msgid "Add a New Reply"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:850
+#: includes/admin/tickets/metaboxes.php:865
 msgid "Reply and Close"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:899
+#: includes/admin/tickets/metaboxes.php:914
 msgid "Add a New Note"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:903
+#: includes/admin/tickets/metaboxes.php:918
 msgid "Notes are only visible to support workers"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:916
+#: includes/admin/tickets/metaboxes.php:931
 msgid "Add Note"
 msgstr ""
 
@@ -3771,23 +3775,23 @@ msgid ""
 "you to easily import the configuration into another site."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:127
+#: includes/admin/upgrades/upgrade-functions.php:131
 msgid ""
 "KB Support needs to complete an upgrade that was previously started. Click "
 "<a href=\"%s\">here</a> to resume the upgrade."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:138
+#: includes/admin/upgrades/upgrade-functions.php:142
 msgid ""
 "KB Support needs to upgrade existing %s numbers to make them sequential, "
 "click <a href=\"%s\">here</a> to start the upgrade."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:168
+#: includes/admin/upgrades/upgrade-functions.php:172
 msgid "You do not have permission to do perform KBS upgrades"
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:326
+#: includes/admin/upgrades/upgrade-functions.php:330
 msgid "You do not have permission to perform upgrades"
 msgstr ""
 
@@ -4124,7 +4128,7 @@ msgid "Load More"
 msgstr ""
 
 #: includes/ajax-functions.php:334 includes/post-types.php:78
-#: includes/scripts.php:300 includes/tickets/reply-functions.php:123
+#: includes/scripts.php:306 includes/tickets/reply-functions.php:123
 #: templates/view-ticket.php:204
 msgid "View Reply"
 msgstr ""
@@ -4166,7 +4170,7 @@ msgstr ""
 msgid "Type to search all %s statuses"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:128 includes/scripts.php:294
+#: includes/class-kbs-html-elements.php:128 includes/scripts.php:300
 msgid "Type to search all %s"
 msgstr ""
 
@@ -5557,11 +5561,11 @@ msgstr ""
 msgid "Type to search"
 msgstr ""
 
-#: includes/scripts.php:268
+#: includes/scripts.php:274
 msgid "Add New %s"
 msgstr ""
 
-#: includes/scripts.php:271
+#: includes/scripts.php:277
 msgid ""
 "You will permanently delete this reply.\n"
 "\n"
@@ -5571,7 +5575,7 @@ msgid ""
 "Click 'Cancel' to stop, 'OK' to delete."
 msgstr ""
 
-#: includes/scripts.php:273
+#: includes/scripts.php:279
 msgid ""
 "You are about to permanently delete this %s.\n"
 "\n"
@@ -5580,75 +5584,75 @@ msgid ""
 "Click 'Cancel' to stop, 'OK' to delete."
 msgstr ""
 
-#: includes/scripts.php:278
+#: includes/scripts.php:284
 msgid "Enter a Label for your field."
 msgstr ""
 
-#: includes/scripts.php:279
+#: includes/scripts.php:285
 msgid "Select the field Type"
 msgstr ""
 
-#: includes/scripts.php:280
+#: includes/scripts.php:286
 msgid "Hide Note"
 msgstr ""
 
-#: includes/scripts.php:281
+#: includes/scripts.php:287
 msgid "Hide participants"
 msgstr ""
 
-#: includes/scripts.php:282
+#: includes/scripts.php:288
 msgid "Hide Reply"
 msgstr ""
 
-#: includes/scripts.php:283
+#: includes/scripts.php:289
 msgid "Hide submission data"
 msgstr ""
 
-#: includes/scripts.php:286
+#: includes/scripts.php:292
 msgid "There is no content in your note"
 msgstr ""
 
-#: includes/scripts.php:287
+#: includes/scripts.php:293
 msgid "There is no content in your reply"
 msgstr ""
 
-#: includes/scripts.php:288
+#: includes/scripts.php:294
 msgid "Your note could not be added"
 msgstr ""
 
-#: includes/scripts.php:289
+#: includes/scripts.php:295
 msgid "Choose a %s"
 msgstr ""
 
-#: includes/scripts.php:290
+#: includes/scripts.php:296
 msgid "Choose one or more %s"
 msgstr ""
 
-#: includes/scripts.php:293
+#: includes/scripts.php:299
 msgid ""
 "You have not submitted the reply. If you continue, the reply will not be "
 "added to the %s"
 msgstr ""
 
-#: includes/scripts.php:295
+#: includes/scripts.php:301
 msgid "Send closure email?"
 msgstr ""
 
-#: includes/scripts.php:296
+#: includes/scripts.php:302
 msgid ""
 "Are you sure you wish to close this ticket? Click OK to close, or Cancel to "
 "return."
 msgstr ""
 
-#: includes/scripts.php:298
+#: includes/scripts.php:304
 msgid "Could not add %s Reply"
 msgstr ""
 
-#: includes/scripts.php:299
+#: includes/scripts.php:305
 msgid "Type to search %s"
 msgstr ""
 
-#: includes/scripts.php:301 includes/tickets/ticket-functions.php:1416
+#: includes/scripts.php:307 includes/tickets/ticket-functions.php:1416
 msgid "View Note"
 msgstr ""
 
