@@ -38,9 +38,11 @@ jQuery(document).ready(function ($) {
 
     /* = Accordian
 	====================================================================================== */
-    $('.kbs-accordian').collapse({
-        toggle: false
-    });
+    if ( kbs_scripts.needs_bs4 )	{
+		$('.kbs-accordian').collapse({
+			toggle: false
+		});
+	}
 
 	/* = Scroller
 	====================================================================================== */

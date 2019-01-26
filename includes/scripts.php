@@ -55,6 +55,7 @@ function kbs_load_scripts() {
         'is_submission'         => $is_submission,
 		'max_files'             => kbs_get_max_file_uploads(),
 		'max_files_exceeded'    => kbs_get_notices( 'max_files', true ),
+		'needs_bs4'             => $needs_bs4,
         'one_option'            => __( 'Choose an option', 'kb-support' ),
 		'one_or_more_option'    => __( 'Choose one or more options', 'kb-support' ),
         'permalinks'            => get_option( 'permalink_structure' ) ? '1' : '0',
