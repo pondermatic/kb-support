@@ -4,7 +4,7 @@ Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
 Tested up to: 5.0.3
 Requires PHP: 5.4
-Stable tag: 1.2.6
+Stable tag: 1.2.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -123,6 +123,15 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.2.7 =
+
+**Saturday, 26th January 2019**
+
+**Bugs**
+
+* Only query bootstrap JS functions when bootstrap is loaded. Caused loss of JS functionality
+* PHP warning may have been generated whilst querying whether `kbs_submit` shortcode was in use
 
 = 1.2.6 =
 
