@@ -47,7 +47,9 @@ function kbs_load_scripts() {
             $needs_bs4 = has_shortcode( $post->post_content, $shortcode );
         }
     }
-        
+
+	$needs_bs4 = apply_filters( 'kbs_scripts_need_bs4', $needs_bs4 );
+
 	wp_localize_script( 'kbs-ajax', 'kbs_scripts', apply_filters( 'kbs_ajax_script_vars', array(
         'ajax_loader'           => KBS_PLUGIN_URL . 'assets/images/loading.gif',
 		'ajaxurl'               => kbs_get_ajax_url(),
@@ -126,13 +128,16 @@ function kbs_register_styles() {
 
             $needs_bs4 = has_shortcode( $post->post_content, $shortcode );
         }
+
+		if ( ! $needs_bs4 && has_shortcode( $post->post_content, 'kbs_submit' ) )   {
+			if ( ! kbs_user_can_submit() && 'none' != kbs_get_option( 'show_register_form' ) )  {
+				$needs_bs4 = true;
+			}
+		}
+
     }
 
-    if ( ! $needs_bs4 && has_shortcode( $post->post_content, 'kbs_submit' ) )   {
-        if ( ! kbs_user_can_submit() && 'none' != kbs_get_option( 'show_register_form' ) )  {
-            $needs_bs4 = true;
-        }
-    }
+	$needs_bs4 = apply_filters( 'kbs_styles_need_bs4', $needs_bs4 );
 
 	// Use minified libraries if SCRIPT_DEBUG is turned off
 	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
