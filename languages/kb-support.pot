@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: KB Support 1.2.6\n"
+"Project-Id-Version: KB Support 1.2.7\n"
 "Report-Msgid-Bugs-To: https://kb-support.com/\n"
-"POT-Creation-Date: 2019-01-25 14:37:53+00:00\n"
+"POT-Creation-Date: 2019-01-26 22:24:39+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -3597,11 +3597,11 @@ msgstr ""
 msgid "Add reply"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:170 includes/scripts.php:308
+#: includes/admin/tickets/metaboxes.php:170 includes/scripts.php:314
 msgid "View participants"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:177 includes/scripts.php:309
+#: includes/admin/tickets/metaboxes.php:177 includes/scripts.php:315
 msgid "View submission data"
 msgstr ""
 
@@ -4128,7 +4128,7 @@ msgid "Load More"
 msgstr ""
 
 #: includes/ajax-functions.php:334 includes/post-types.php:78
-#: includes/scripts.php:306 includes/tickets/reply-functions.php:123
+#: includes/scripts.php:312 includes/tickets/reply-functions.php:123
 #: templates/view-ticket.php:204
 msgid "View Reply"
 msgstr ""
@@ -4170,7 +4170,7 @@ msgstr ""
 msgid "Type to search all %s statuses"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:128 includes/scripts.php:300
+#: includes/class-kbs-html-elements.php:128 includes/scripts.php:306
 msgid "Type to search all %s"
 msgstr ""
 
@@ -5537,35 +5537,35 @@ msgstr ""
 msgid "All eligible %s anonymized or deleted for %s."
 msgstr ""
 
-#: includes/scripts.php:54
+#: includes/scripts.php:56
 msgid "Honeypot validation error"
 msgstr ""
 
-#: includes/scripts.php:58
+#: includes/scripts.php:61
 msgid "Choose an option"
 msgstr ""
 
-#: includes/scripts.php:59
+#: includes/scripts.php:62
 msgid "Choose one or more options"
 msgstr ""
 
-#: includes/scripts.php:63
+#: includes/scripts.php:66
 msgid "Search options"
 msgstr ""
 
-#: includes/scripts.php:65
+#: includes/scripts.php:68
 msgid "Please Wait..."
 msgstr ""
 
-#: includes/scripts.php:66
+#: includes/scripts.php:69
 msgid "Type to search"
 msgstr ""
 
-#: includes/scripts.php:274
+#: includes/scripts.php:280
 msgid "Add New %s"
 msgstr ""
 
-#: includes/scripts.php:277
+#: includes/scripts.php:283
 msgid ""
 "You will permanently delete this reply.\n"
 "\n"
@@ -5575,7 +5575,7 @@ msgid ""
 "Click 'Cancel' to stop, 'OK' to delete."
 msgstr ""
 
-#: includes/scripts.php:279
+#: includes/scripts.php:285
 msgid ""
 "You are about to permanently delete this %s.\n"
 "\n"
@@ -5584,75 +5584,75 @@ msgid ""
 "Click 'Cancel' to stop, 'OK' to delete."
 msgstr ""
 
-#: includes/scripts.php:284
+#: includes/scripts.php:290
 msgid "Enter a Label for your field."
 msgstr ""
 
-#: includes/scripts.php:285
+#: includes/scripts.php:291
 msgid "Select the field Type"
 msgstr ""
 
-#: includes/scripts.php:286
+#: includes/scripts.php:292
 msgid "Hide Note"
 msgstr ""
 
-#: includes/scripts.php:287
+#: includes/scripts.php:293
 msgid "Hide participants"
 msgstr ""
 
-#: includes/scripts.php:288
+#: includes/scripts.php:294
 msgid "Hide Reply"
 msgstr ""
 
-#: includes/scripts.php:289
+#: includes/scripts.php:295
 msgid "Hide submission data"
 msgstr ""
 
-#: includes/scripts.php:292
+#: includes/scripts.php:298
 msgid "There is no content in your note"
 msgstr ""
 
-#: includes/scripts.php:293
+#: includes/scripts.php:299
 msgid "There is no content in your reply"
 msgstr ""
 
-#: includes/scripts.php:294
+#: includes/scripts.php:300
 msgid "Your note could not be added"
 msgstr ""
 
-#: includes/scripts.php:295
+#: includes/scripts.php:301
 msgid "Choose a %s"
 msgstr ""
 
-#: includes/scripts.php:296
+#: includes/scripts.php:302
 msgid "Choose one or more %s"
 msgstr ""
 
-#: includes/scripts.php:299
+#: includes/scripts.php:305
 msgid ""
 "You have not submitted the reply. If you continue, the reply will not be "
 "added to the %s"
 msgstr ""
 
-#: includes/scripts.php:301
+#: includes/scripts.php:307
 msgid "Send closure email?"
 msgstr ""
 
-#: includes/scripts.php:302
+#: includes/scripts.php:308
 msgid ""
 "Are you sure you wish to close this ticket? Click OK to close, or Cancel to "
 "return."
 msgstr ""
 
-#: includes/scripts.php:304
+#: includes/scripts.php:310
 msgid "Could not add %s Reply"
 msgstr ""
 
-#: includes/scripts.php:305
+#: includes/scripts.php:311
 msgid "Type to search %s"
 msgstr ""
 
-#: includes/scripts.php:307 includes/tickets/ticket-functions.php:1416
+#: includes/scripts.php:313 includes/tickets/ticket-functions.php:1416
 msgid "View Note"
 msgstr ""
 
