@@ -58,8 +58,8 @@ function kbs_set_kbs_ticket_post_columns( $columns ) {
 	$columns = array(
         'cb'               => '<input type="checkbox" />',
         'id'               => '#',
-		'dates'            => __( 'Date', 'kb-support' ),
 		'title'            => __( 'Title', 'kb-support' ),
+		'dates'            => __( 'Date', 'kb-support' ),
         'customer'         => __( 'Customer', 'kb-support' ),
 		'ticket_category'  => $category_labels['menu_name'],
 		'ticket_tag'       => $tag_labels['menu_name'],
@@ -74,6 +74,23 @@ function kbs_set_kbs_ticket_post_columns( $columns ) {
 	
 } // kbs_set_kbs_ticket_post_columns
 add_filter( 'manage_kbs_ticket_posts_columns' , 'kbs_set_kbs_ticket_post_columns' );
+
+/**
+ * Set the primary column for the kbs_ticket post type.
+ *
+ * @since	1.2.8
+ * @param	string	$primary_id	The primary column ID
+ * @param	string	$screen_id	Current screen ID
+ * @return	string	The primary column ID
+ */
+function kbs_filter_ticket_primary_column( $primary_id, $screen_id )	{
+	if ( 'edit-kbs_ticket' == $screen_id )	{
+		$primary_id = 'id';
+	}
+
+	return $primary_id;
+} // kbs_filter_ticket_primary_column
+add_filter( 'list_table_primary_column', 'kbs_filter_ticket_primary_column', 10, 2 );
 
 /**
  * Define which columns are sortable for ticket posts
@@ -671,14 +688,29 @@ add_filter( 'views_edit-kbs_ticket' , 'kbs_ticket_filter_views' );
  * @param	arr		$actions	The action items array
  * @return	arr		Filtered action items array
  */
-function kbs_tickets_remove_trash_action( $actions )	{
+function kbs_tickets_remove_ticket_post_actions( $actions )	{
 	if ( 'kbs_ticket' == get_post_type() )	{
+		global $post;
 
 		$remove_actions = array( 'edit', 'trash', 'inline hide-if-no-js' );
+		$singular       = kbs_get_ticket_label_singular();
 
 		foreach( $remove_actions as $remove_action )	{
 
 			if ( doing_filter( 'bulk_actions-edit-kbs_ticket' ) && current_user_can( 'manage_ticket_settings' ) && 'trash' == $remove_action )	{
+				continue;
+			}
+
+			if ( doing_filter( 'post_row_actions' ) && 'edit' == $remove_action && kbs_agent_can_access_ticket( $post->ID ) )	{
+				$actions['edit'] = sprintf(
+					'<a href="%s" aria-label="%s">%s</a>',
+					get_edit_post_link( $post->ID ),
+					/* translators: %s: Ticket*/
+					esc_attr( sprintf(
+						__( 'Manage %s', 'kb-support' ), kbs_format_ticket_number( kbs_get_ticket_number( $post->ID ) )
+					) ),
+					sprintf( __( 'Manage %s', 'kb-support' ), $singular )
+				);
 				continue;
 			}
 
@@ -691,9 +723,9 @@ function kbs_tickets_remove_trash_action( $actions )	{
 	}
 
 	return $actions;
-} // kbs_tickets_remove_bulk_trash
-add_filter( 'bulk_actions-edit-kbs_ticket', 'kbs_tickets_remove_trash_action' );
-add_filter( 'post_row_actions', 'kbs_tickets_remove_trash_action' );
+} // kbs_tickets_remove_ticket_post_actions
+add_filter( 'bulk_actions-edit-kbs_ticket', 'kbs_tickets_remove_ticket_post_actions' );
+add_filter( 'post_row_actions', 'kbs_tickets_remove_ticket_post_actions' );
 
 /**
  * Save the KBS Ticket custom posts
