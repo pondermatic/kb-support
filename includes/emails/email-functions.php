@@ -50,18 +50,21 @@ function kbs_maybe_remove_email_from_notification( $email = '' ) {
 		return false;
 	}
 
-	$no_notify = kbs_get_no_notification_emails();
-	$remove    = false;
+	$no_notify   = kbs_get_no_notification_emails();
+	$remove      = false;
+	$check_email = strtolower( trim( $email ) );
 
 	if ( ! empty( $no_notify ) && is_array( $no_notify ) )	{
 		return false;
 	}
 
 	foreach( $no_notify as $no_notify_email )	{
+		$no_notify_email = strtolower( trim( $no_notify_email ) );
+
 		if ( is_email( $no_notify_email ) )	{
-			$return = ( $no_notify_email == trim( $email )          ? true : false );
+			$return = ( $no_notify_email == $check_email ? true : false );
 		} else {
-			$return = ( stristr( trim( $email ), $no_notify_email ) ? true : false );
+			$return = ( stristr( $check_email, $no_notify_email ) ? true : false );
 		}
 
 		if ( true === $return ) {
