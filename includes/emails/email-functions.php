@@ -16,6 +16,64 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Retrieve an array of addresses that should not receive notifications.
+ *
+ * @since	1.2.8
+ * @return	array	Array of email address which should be excluded from email notifications
+ */
+function kbs_get_no_notification_emails()	{
+	$emails = array_map( 'trim', explode( "\n", kbs_get_option( 'no_notify_emails', array() ) ) );
+	$emails = array_unique( $emails );
+	$emails = array_map( 'sanitize_text_field', $emails );
+
+	foreach( $emails as $id => $email )	{
+		if ( ! is_email( $email ) )	{
+			if ( $email[0] != '@' )	{
+				unset( $emails[ $id ] );
+			}
+		}
+	}
+
+	return apply_filters( 'kbs_no_notification_emails', $emails );
+} // kbs_get_no_notification_emails
+
+/**
+ * Determines if an email should be removed from the notification list.
+ *
+ * @since	1.2.7
+ * @param	string	$email	Email address to check	
+ * @return	bool	true if the email address should be removed
+ */
+function kbs_maybe_remove_email_from_notification( $email = '' ) {
+
+	if ( empty( $email ) ) {
+		return false;
+	}
+
+	$no_notify = kbs_get_no_notification_emails();
+	$remove    = false;
+
+	if ( ! empty( $no_notify ) && is_array( $no_notify ) )	{
+		return false;
+	}
+
+	foreach( $no_notify as $no_notify_email )	{
+		if ( is_email( $no_notify_email ) )	{
+			$return = ( $no_notify_email == trim( $email )          ? true : false );
+		} else {
+			$return = ( stristr( trim( $email ), $no_notify_email ) ? true : false );
+		}
+
+		if ( true === $return ) {
+			break;
+		}
+	}
+
+	return apply_filters( 'kbs_remove_email_from_notification', $return, $email );
+
+} // kbs_maybe_remove_email_from_notification
+
+/**
  * Email the ticket details to the customer.
  *
  * @since	1.0
