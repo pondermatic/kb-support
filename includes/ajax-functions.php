@@ -263,7 +263,7 @@ function kbs_ajax_display_ticket_replies()	{
 		if ( ! empty( $replies ) )	{
 			foreach( $replies as $reply )	{
                 if ( ! $latest_reply )  {
-                    $output .= sprintf( '<input type="hidden" name="kbs_latest_reply" value="%s">', $reply->ID );
+                    $output .= sprintf( '<input type="hidden" id="kbs-latest-reply" name="kbs_latest_reply" value="%s">', $reply->ID );
                     $latest_reply = true;
                 }
                 $output .= '<div class="kbs_historic_replies_wrapper">';
@@ -280,7 +280,9 @@ function kbs_ajax_display_ticket_replies()	{
 				);
 			}
 
-		}
+		} else    {
+            $output .= '<input type="hidden" id="kbs-latest-reply" name="kbs_latest_reply" value="0">';
+        }
 
 	}
 
