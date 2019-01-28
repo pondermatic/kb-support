@@ -67,7 +67,11 @@ function kbs_set_company_column_data( $column_name, $post_id ) {
 			break;
 
 		case 'website':
-			echo $company->website;
+			printf(
+                '<a href="%1$s" title="%2$s" target="_blank">%1$s</a>',
+                $company->website,
+                sprintf( __( 'Open %s in a new tab', 'kb-support' ), $company->website )
+            );
 			break;
 
 		case 'tickets':
