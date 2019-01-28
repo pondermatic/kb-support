@@ -31,51 +31,6 @@ function kbs_disable_emails_to_no_notification_addresses( $email, $ticket )	{
 add_filter( 'kbs_ticket_received_to_email', 'kbs_disable_emails_to_no_notification_addresses', 999, 2 );
 
 /**
- * Remove no notification emails from the CC list.
- *
- * @since	1.2.8
- * @param   string			$headers        Email headers
- * @param   int     		$ticket_id      Ticket ID
- * @param   array   		$ticket_data    Array of ticket meta data
- * @return  string|array	Email headers
- */
-function kbs_remove_no_notification_addresses_from_email_headers( $headers, $ticket_id, $ticket_data )	{
-	$no_notify = kbs_get_no_notification_emails();
-
-	if ( ! empty( $headers ) && ! empty( $no_notify ) )	{
-		if ( ! is_array( $headers ) )	{
-			$headers = explode( "\n", str_replace( "\r\n", "\n", $headers ) );
-		}
-
-		foreach( $headers as $key => $email )	{
-			foreach( $no_notify as $ignore )	{
-				$remove = false;
-
-				if ( is_email( $ignore ) )	{
-					if ( false !== strpos( strtolower( $email ), 'cc: ' . $ignore ) )	{
-						$remove = true;
-					}
-				} else	{
-					$pattern = "/c{2}:(?:\s.*{$ignore})$/i";
-					if ( preg_match( $pattern, $email ) )	{
-						$remove = true;
-					}
-				}
-
-				if ( $remove )	{
-					unset( $headers[ $key ] );
-				}
-			}
-		}
-	}
-
-	return $headers;
-} // kbs_remove_no_notification_addresses_from_email_headers
-add_filter( 'kbs_ticket_headers', 'kbs_remove_no_notification_addresses_from_email_headers', 9999, 3 );
-add_filter( 'kbs_ticket_reply_headers', 'kbs_remove_no_notification_addresses_from_email_headers', 9999, 3 );
-add_filter( 'kbs_ticket_closed_headers', 'kbs_remove_no_notification_addresses_from_email_headers', 9999, 3 );
-
-/**
  * Triggers Ticket Received email to be sent after the ticket status is updated
  *
  * @since	1.0

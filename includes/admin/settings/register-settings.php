@@ -725,12 +725,6 @@ function kbs_get_registered_settings() {
 						'name'    => __( 'Copy Participants?', 'kb-support' ),
 						'desc'    => sprintf( __( 'If enabled, all participants will receive email notification for all %s activity.', 'kb-support' ), strtolower( $single ) ),
 						'type'    => 'checkbox'
-                    ),
-					'no_notify_emails' => array(
-                        'id'      => 'no_notify_emails',
-						'name'    => __( 'No Notification Emails', 'kb-support' ),
-						'desc'    => sprintf( __( 'Email addresses entered here will not receive any %s notifications. Applies to all emails (customer and agent/admin). Enter one address per line. To exclude an entire domain enter the domain starting with <code>@</code>.', 'kb-support' ), strtolower( $single ) ),
-						'type'    => 'textarea'
                     )
 				),
 				'ticket_logged' => array(
@@ -745,6 +739,12 @@ function kbs_get_registered_settings() {
 						'desc' => sprintf( __( 'Select to stop emails being sent when a %s is logged.', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'checkbox'
 					),
+                    'no_notify_received_emails' => array(
+                        'id'      => 'no_notify_received_emails',
+						'name'    => __( 'No Notification Emails', 'kb-support' ),
+						'desc'    => sprintf( __( 'Email addresses entered here will not receive the %s Received email notifications. Enter one address per line. To exclude an entire domain enter the domain starting with <code>@</code>.', 'kb-support' ), $single ),
+						'type'    => 'textarea'
+                    ),
 					'ticket_subject' => array(
 						'id'   => 'ticket_subject',
 						'name' => __( 'Email Subject', 'kb-support' ),
