@@ -118,7 +118,6 @@ function kbs_register_styles() {
     $is_submission = kbs_is_submission_form();
     $shortcodes    = array( 'kbs_tickets', 'kbs_login', 'kbs_register', 'kbs_profile_editor' );
 	$needs_bs4     = $post->ID == kbs_get_option( 'tickets_page' );
-    $needs_bs4     = false;
 
     if ( ! $needs_bs4 && ! empty( $post ) && is_a( $post, 'WP_Post' ) )	{
         foreach( $shortcodes as $shortcode )    {
