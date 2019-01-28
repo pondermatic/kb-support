@@ -17,19 +17,18 @@ if ( ! defined( 'ABSPATH' ) )
  * Disable notification emails if the To address is included in the no notification list.
  *
  * @since	1.2.8
- * @param   bool	$disable        Whether or not sending is disabled
- * @param   int     $ticket_id      Ticket ID
- * @return  bool	Whether or not sending is disabled
+ * @param   string	$email      Email address
+ * @param   object  $ticket     KBS_Ticket Ticket Object
+ * @return  string|false        The email address to send to, or false
  */
-function kbs_disable_emails_to_no_notification_addresses( $disable, $ticket_id )	{
-	if ( ! $disable )	{
-		$ticket  = new KBS_Ticket( $ticket_id );
-		$disable = kbs_maybe_remove_email_from_notification( $ticket->email );
+function kbs_disable_emails_to_no_notification_addresses( $email, $ticket )	{
+	if ( kbs_maybe_remove_email_from_notification( $ticket->email ) )  {
+        $email = false;
 	}
 
-	return (bool)$disable;
+	return $email;
 } // kbs_disable_emails_to_no_notification_addresses
-add_filter( 'kbs_ticket_received_disable_email', 'kbs_disable_emails_to_no_notification_addresses', 9999, 2 );
+add_filter( 'kbs_ticket_received_to_email', 'kbs_disable_emails_to_no_notification_addresses', 999, 2 );
 
 /**
  * Remove no notification emails from the CC list.
