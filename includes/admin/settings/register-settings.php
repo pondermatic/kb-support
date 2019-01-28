@@ -739,6 +739,12 @@ function kbs_get_registered_settings() {
 						'desc' => sprintf( __( 'Select to stop emails being sent when a %s is logged.', 'kb-support' ), strtolower( $single ) ),
 						'type' => 'checkbox'
 					),
+                    'no_notify_received_emails' => array(
+                        'id'      => 'no_notify_received_emails',
+						'name'    => __( 'No Notification Emails', 'kb-support' ),
+						'desc'    => sprintf( __( 'Email addresses entered here will not receive the %s Received email notifications. Enter one address per line. To exclude an entire domain enter the domain starting with <code>@</code>.', 'kb-support' ), $single ),
+						'type'    => 'textarea'
+                    ),
 					'ticket_subject' => array(
 						'id'   => 'ticket_subject',
 						'name' => __( 'Email Subject', 'kb-support' ),
@@ -1223,11 +1229,11 @@ function kbs_settings_sanitize( $input = array() ) {
 } // kbs_settings_sanitize
 
 /**
- * Misc Accounting Settings Sanitization
+ * Tickets General Settings Sanitization
  *
  * @since	1.1
- * @param	arr		$input	The value inputted in the field
- * @return	str		$input	Sanitized value
+ * @param	array	$input	The value inputted in the field
+ * @return	array	$input	Sanitized value
  */
 function kbs_settings_sanitize_tickets_main( $input ) {
 

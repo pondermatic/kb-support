@@ -16,6 +16,73 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Retrieve an array of addresses that should not receive ticket logged notifications.
+ *
+ * @since	1.2.8
+ * @return	array	Array of email address which should be excluded from email notifications
+ */
+function kbs_get_ticket_received_no_notification_emails()	{
+    $emails = kbs_get_option( 'no_notify_received_emails', array() );
+
+    if ( ! empty( $emails ) )   {
+        $emails = array_map( 'trim', explode( "\n", $emails ) );
+        $emails = array_unique( $emails );
+        $emails = array_map( 'sanitize_text_field', $emails );
+
+        if ( ! empty( $emails ) )   {
+            foreach( $emails as $id => $email )	{
+                if ( ! is_email( $email ) )	{
+                    if ( $email[0] != '@' )	{
+                        unset( $emails[ $id ] );
+                    }
+                }
+            }
+        }
+    }
+
+	return apply_filters( 'no_notify_received_emails', $emails );
+} // kbs_get_ticket_received_no_notification_emails
+
+/**
+ * Determines if an email should be removed from the notification list.
+ *
+ * @since	1.2.7
+ * @param	string	$email	Email address to check	
+ * @return	bool	true if the email address should be removed
+ */
+function kbs_maybe_remove_email_from_notification( $email = '' ) {
+
+	if ( empty( $email ) ) {
+		return false;
+	}
+
+	$no_notify   = kbs_get_ticket_received_no_notification_emails();
+	$remove      = false;
+	$check_email = strtolower( trim( $email ) );
+
+	if ( empty( $no_notify ) )	{
+		return false;
+	}
+
+	foreach( $no_notify as $no_notify_email )	{
+		$no_notify_email = strtolower( trim( $no_notify_email ) );
+
+		if ( is_email( $no_notify_email ) )	{
+			$return = ( $no_notify_email == $check_email ? true : false );
+		} else {
+			$return = ( stristr( $check_email, $no_notify_email ) ? true : false );
+		}
+
+		if ( true === $return ) {
+			break;
+		}
+	}
+
+	return apply_filters( 'kbs_remove_email_from_notification', $return, $email );
+
+} // kbs_maybe_remove_email_from_notification
+
+/**
  * Email the ticket details to the customer.
  *
  * @since	1.0
@@ -43,35 +110,38 @@ function kbs_email_ticket_received( $ticket_id, $admin_notice = true, $resend = 
 	$ticket       = new KBS_Ticket( $ticket_id );
 	$ticket_data  = $ticket->get_meta();
 
-	$from_name    = kbs_get_option( 'from_name', wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) );
-	$from_name    = apply_filters( 'kbs_ticket_from_name', $from_name, $ticket_id, $ticket_data );
+    $to_email     = $ticket->email;
+    $to_email     = apply_filters( 'kbs_ticket_received_to_email', $to_email, $ticket );
 
-	$from_email   = kbs_get_option( 'from_email', get_bloginfo( 'admin_email' ) );
-	$from_email   = apply_filters( 'kbs_ticket_from_address', $from_email, $ticket_id, $ticket_data );
+    if ( is_email( $to_email ) )    {
+        $from_name    = kbs_get_option( 'from_name', wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) );
+        $from_name    = apply_filters( 'kbs_ticket_from_name', $from_name, $ticket_id, $ticket_data );
 
-	$to_email     = $ticket->email;
+        $from_email   = kbs_get_option( 'from_email', get_bloginfo( 'admin_email' ) );
+        $from_email   = apply_filters( 'kbs_ticket_from_address', $from_email, $ticket_id, $ticket_data );
 
-	$subject      = kbs_get_option( 'ticket_subject', sprintf( __( 'Support %s Details', 'kb-support' ), $single ) );
-	$subject      = apply_filters( 'kbs_ticket_subject', wp_strip_all_tags( $subject ), $ticket_id );
-	$subject      = kbs_do_email_tags( $subject, $ticket_id );
+        $subject      = kbs_get_option( 'ticket_subject', sprintf( __( 'Support %s Details', 'kb-support' ), $single ) );
+        $subject      = apply_filters( 'kbs_ticket_subject', wp_strip_all_tags( $subject ), $ticket_id );
+        $subject      = kbs_do_email_tags( $subject, $ticket_id );
 
-	$heading      = kbs_get_option( 'ticket_heading', sprintf( __( 'Support %s Details', 'kb-support' ), $single ) );
-	$heading      = apply_filters( 'kbs_ticket_heading', $heading, $ticket_id, $ticket_data );
-	$heading      = kbs_do_email_tags( $heading, $ticket_id );
+        $heading      = kbs_get_option( 'ticket_heading', sprintf( __( 'Support %s Details', 'kb-support' ), $single ) );
+        $heading      = apply_filters( 'kbs_ticket_heading', $heading, $ticket_id, $ticket_data );
+        $heading      = kbs_do_email_tags( $heading, $ticket_id );
 
-	$message      = kbs_do_email_tags( kbs_get_ticket_logged_email_body_content( $ticket_id, $ticket_data ), $ticket_id );
-    $attachments  = apply_filters( 'kbs_ticket_attachments', array(), $ticket_id, $ticket_data );
+        $message      = kbs_do_email_tags( kbs_get_ticket_logged_email_body_content( $ticket_id, $ticket_data ), $ticket_id );
+        $attachments  = apply_filters( 'kbs_ticket_attachments', array(), $ticket_id, $ticket_data );
 
-	$emails       = KBS()->emails;
+        $emails       = KBS()->emails;
 
-	$emails->__set( 'from_name', $from_name );
-	$emails->__set( 'from_email', $from_email );
-	$emails->__set( 'heading', $heading );
+        $emails->__set( 'from_name', $from_name );
+        $emails->__set( 'from_email', $from_email );
+        $emails->__set( 'heading', $heading );
 
-	$headers = apply_filters( 'kbs_ticket_headers', $emails->get_headers(), $ticket_id, $ticket_data );
-	$emails->__set( 'headers', $headers );
+        $headers = apply_filters( 'kbs_ticket_headers', $emails->get_headers(), $ticket_id, $ticket_data );
+        $emails->__set( 'headers', $headers );
 
-	$emails->send( $to_email, $subject, $message, $attachments );
+        $emails->send( $to_email, $subject, $message, $attachments );
+    }
 
 	if ( $admin_notice && ! kbs_admin_notices_disabled( $ticket_id ) ) {
 		do_action( 'kbs_admin_ticket_notice', $ticket_id, $ticket_data );
@@ -111,35 +181,38 @@ function kbs_email_ticket_reply( $ticket_id, $reply_id ) {
 
 	$ticket_data  = $ticket->get_meta();
 
-	$from_name    = kbs_get_option( 'from_name', wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) );
-	$from_name    = apply_filters( 'kbs_ticket_reply_from_name', $from_name, $ticket_id, $ticket_data, $reply_id );
+    $to_email     = $ticket->email;
+    $to_email     = apply_filters( 'kbs_ticket_reply_to_email', $to_email, $ticket );
 
-	$from_email   = kbs_get_option( 'from_email', get_bloginfo( 'admin_email' ) );
-	$from_email   = apply_filters( 'kbs_ticket_reply_from_address', $from_email, $ticket_id, $ticket_data, $reply_id );
+    if ( is_email( $to_email ) )    {
+        $from_name    = kbs_get_option( 'from_name', wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) );
+        $from_name    = apply_filters( 'kbs_ticket_reply_from_name', $from_name, $ticket_id, $ticket_data, $reply_id );
 
-	$to_email     = $ticket->email;
+        $from_email   = kbs_get_option( 'from_email', get_bloginfo( 'admin_email' ) );
+        $from_email   = apply_filters( 'kbs_ticket_reply_from_address', $from_email, $ticket_id, $ticket_data, $reply_id );
 
-	$subject      = kbs_get_option( 'ticket_reply_subject', sprintf( __( 'Your Support %s Received a Reply - ##{ticket_id}##', 'kb-support' ), $single ) );
-	$subject      = apply_filters( 'kbs_ticket_reply_subject', wp_strip_all_tags( $subject ), $ticket_id, $reply_id );
-	$subject      = kbs_do_email_tags( $subject, $ticket_id );
+        $subject      = kbs_get_option( 'ticket_reply_subject', sprintf( __( 'Your Support %s Received a Reply - ##{ticket_id}##', 'kb-support' ), $single ) );
+        $subject      = apply_filters( 'kbs_ticket_reply_subject', wp_strip_all_tags( $subject ), $ticket_id, $reply_id );
+        $subject      = kbs_do_email_tags( $subject, $ticket_id );
 
-	$heading      = kbs_get_option( 'ticket_reply_heading', sprintf( __( 'Support %s Update for #{ticket_id}', 'kb-support' ), $single ) );
-	$heading      = apply_filters( 'kbs_ticket_reply_heading', $heading, $ticket_id, $ticket_data, $reply_id );
-	$heading      = kbs_do_email_tags( $heading, $ticket_id );
+        $heading      = kbs_get_option( 'ticket_reply_heading', sprintf( __( 'Support %s Update for #{ticket_id}', 'kb-support' ), $single ) );
+        $heading      = apply_filters( 'kbs_ticket_reply_heading', $heading, $ticket_id, $ticket_data, $reply_id );
+        $heading      = kbs_do_email_tags( $heading, $ticket_id );
 
-	$message      = kbs_do_email_tags( kbs_get_ticket_reply_email_body_content( $ticket_id, $ticket_data ), $ticket_id );
-	$attachments  = apply_filters( 'kbs_ticket_reply_attachments', array(), $ticket_id, $ticket_data, $reply_id );
+        $message      = kbs_do_email_tags( kbs_get_ticket_reply_email_body_content( $ticket_id, $ticket_data ), $ticket_id );
+        $attachments  = apply_filters( 'kbs_ticket_reply_attachments', array(), $ticket_id, $ticket_data, $reply_id );
 
-	$emails       = KBS()->emails;
+        $emails       = KBS()->emails;
 
-	$emails->__set( 'from_name', $from_name );
-	$emails->__set( 'from_email', $from_email );
-	$emails->__set( 'heading', $heading );
+        $emails->__set( 'from_name', $from_name );
+        $emails->__set( 'from_email', $from_email );
+        $emails->__set( 'heading', $heading );
 
-	$headers = apply_filters( 'kbs_ticket_reply_headers', $emails->get_headers(), $ticket_id, $ticket_data, $reply_id );
-	$emails->__set( 'headers', $headers );
+        $headers = apply_filters( 'kbs_ticket_reply_headers', $emails->get_headers(), $ticket_id, $ticket_data, $reply_id );
+        $emails->__set( 'headers', $headers );
 
-	$emails->send( $to_email, $subject, $message, $attachments );
+        $emails->send( $to_email, $subject, $message, $attachments );
+    }
 
 } // kbs_email_ticket_reply
 add_action( 'kbs_reply_to_ticket', 'kbs_email_ticket_reply', 999, 2 );
@@ -170,35 +243,38 @@ function kbs_email_ticket_closed( $ticket_id ) {
 
 	$ticket_data  = $ticket->get_meta();
 
-	$from_name    = kbs_get_option( 'from_name', wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) );
-	$from_name    = apply_filters( 'kbs_ticket_closed_from_name', $from_name, $ticket_id, $ticket_data );
+    $to_email     = $ticket->email;
+    $to_email     = apply_filters( 'kbs_ticket_closed_to_email', $to_email, $ticket );
 
-	$from_email   = kbs_get_option( 'from_email', get_bloginfo( 'admin_email' ) );
-	$from_email   = apply_filters( 'kbs_ticket_closed_from_address', $from_email, $ticket_id, $ticket_data );
+    if ( is_email( $to_email ) )    {
+        $from_name    = kbs_get_option( 'from_name', wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) );
+        $from_name    = apply_filters( 'kbs_ticket_closed_from_name', $from_name, $ticket_id, $ticket_data );
 
-	$to_email     = $ticket->email;
+        $from_email   = kbs_get_option( 'from_email', get_bloginfo( 'admin_email' ) );
+        $from_email   = apply_filters( 'kbs_ticket_closed_from_address', $from_email, $ticket_id, $ticket_data );
 
-	$subject      = kbs_get_option( 'ticket_closed_subject', sprintf( __( 'Your Support %s is Closed ##{ticket_id}##', 'kb-support' ), $single ) );
-	$subject      = apply_filters( 'kbs_ticket_closed_subject', wp_strip_all_tags( $subject ), $ticket_id );
-	$subject      = kbs_do_email_tags( $subject, $ticket_id );
+        $subject      = kbs_get_option( 'ticket_closed_subject', sprintf( __( 'Your Support %s is Closed ##{ticket_id}##', 'kb-support' ), $single ) );
+        $subject      = apply_filters( 'kbs_ticket_closed_subject', wp_strip_all_tags( $subject ), $ticket_id );
+        $subject      = kbs_do_email_tags( $subject, $ticket_id );
 
-	$heading      = kbs_get_option( 'ticket_closed_heading', sprintf( __( 'Support %s #{ticket_id} Closed', 'kb-support' ), $single ) );
-	$heading      = apply_filters( 'kbs_ticket_closed_heading', $heading, $ticket_id, $ticket_data );
-	$heading      = kbs_do_email_tags( $heading, $ticket_id );
+        $heading      = kbs_get_option( 'ticket_closed_heading', sprintf( __( 'Support %s #{ticket_id} Closed', 'kb-support' ), $single ) );
+        $heading      = apply_filters( 'kbs_ticket_closed_heading', $heading, $ticket_id, $ticket_data );
+        $heading      = kbs_do_email_tags( $heading, $ticket_id );
 
-	$message      = kbs_do_email_tags( kbs_get_ticket_closed_email_body_content( $ticket_id, $ticket_data ), $ticket_id );
-    $attachments  = apply_filters( 'kbs_ticket_closed_attachments', array(), $ticket_id, $ticket_data );
+        $message      = kbs_do_email_tags( kbs_get_ticket_closed_email_body_content( $ticket_id, $ticket_data ), $ticket_id );
+        $attachments  = apply_filters( 'kbs_ticket_closed_attachments', array(), $ticket_id, $ticket_data );
 
-	$emails       = KBS()->emails;
+        $emails       = KBS()->emails;
 
-	$emails->__set( 'from_name', $from_name );
-	$emails->__set( 'from_email', $from_email );
-	$emails->__set( 'heading', $heading );
+        $emails->__set( 'from_name', $from_name );
+        $emails->__set( 'from_email', $from_email );
+        $emails->__set( 'heading', $heading );
 
-	$headers = apply_filters( 'kbs_ticket_closed_headers', $emails->get_headers(), $ticket_id, $ticket_data );
-	$emails->__set( 'headers', $headers );
+        $headers = apply_filters( 'kbs_ticket_closed_headers', $emails->get_headers(), $ticket_id, $ticket_data );
+        $emails->__set( 'headers', $headers );
 
-	$emails->send( $to_email, $subject, $message, $attachments );
+        $emails->send( $to_email, $subject, $message, $attachments );
+    }
 
 } // kbs_email_ticket_closed
 add_action( 'kbs_close_ticket', 'kbs_email_ticket_closed', 999 );
