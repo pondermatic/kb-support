@@ -503,3 +503,26 @@ function kbs_cleanup_after_deleting_ticket( $ticket_id = 0 )	{
 
 } // kbs_cleanup_after_deleting_ticket
 add_action( 'after_delete_post', 'kbs_cleanup_after_deleting_ticket' );
+
+/**
+ * Monitor for new ticket replies via the WordPress heartbeat.
+ *
+ * @since   1.2.8
+ * @param   array   $response   Heartbeat response data
+ * @param   array   $data       Data received (unslashed)
+ * @return  array   Heartbeat response data
+ */
+function kbs_monitor_heartbeat_for_new_ticket_replies( $response, $data )   {
+    if ( ! empty( $data['kbs_last_reply'] ) && ! empty( $data['kbs_ticket_id'] ) )   {
+        $last_reply   = $data['kbs_last_reply'];
+        $ticket_id    = $data['kbs_ticket_id'];
+        $latest_reply = kbs_get_last_reply( $ticket_id );
+
+        if ( $last_reply < $latest_reply->ID )  {
+            $response['has_new_reply'] = $latest_reply->ID;
+        }
+    }
+
+    return $response;
+} // kbs_monitor_heartbeat_for_new_ticket_replies
+add_filter( 'heartbeat_received', 'kbs_monitor_heartbeat_for_new_ticket_replies', 10, 2 );

@@ -118,7 +118,6 @@ function kbs_register_styles() {
     $is_submission = kbs_is_submission_form();
     $shortcodes    = array( 'kbs_tickets', 'kbs_login', 'kbs_register', 'kbs_profile_editor' );
 	$needs_bs4     = $post->ID == kbs_get_option( 'tickets_page' );
-    $needs_bs4     = false;
 
     if ( ! $needs_bs4 && ! empty( $post ) && is_a( $post, 'WP_Post' ) )	{
         foreach( $shortcodes as $shortcode )    {
@@ -276,8 +275,10 @@ function kbs_load_admin_scripts( $hook ) {
 		}
 	}
 
+    $singular = kbs_get_ticket_label_singular();
+
 	wp_localize_script( 'kbs-admin-scripts', 'kbs_vars', array(
-		'add_new_ticket'          => sprintf( __( 'Add New %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
+		'add_new_ticket'          => sprintf( __( 'Add New %s', 'kb-support' ), $singular ),
 		'admin_url'               => admin_url(),
 		'ajax_loader'             => KBS_PLUGIN_URL . 'assets/images/loading.gif',
         'delete_reply_warn'       => __( "You will permanently delete this reply.\n\nDepending on configuration, your customer may have already received it via email.\n\nClick 'Cancel' to stop, 'OK' to delete.", 'kb-support' ),
@@ -295,10 +296,11 @@ function kbs_load_admin_scripts( $hook ) {
         'hide_submission'         => __( 'Hide submission data', 'kb-support' ),
 		'kbs_version'             => KBS_VERSION,
 		'new_media_ui'            => apply_filters( 'kbs_use_35_media_ui', 1 ),
+        'new_reply_notice'        => sprintf( __( 'A new reply has been added to this %s. Click OK to reload replies now, or Cancel to ignore.', 'kb-support' ), strtolower( $singular ) ),
 		'no_note_content'         => __( 'There is no content in your note', 'kb-support' ),
 		'no_ticket_reply_content' => __( 'There is no content in your reply', 'kb-support' ),
 		'note_not_added'          => __( 'Your note could not be added', 'kb-support' ),
-		'one_option'              => sprintf( __( 'Choose a %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
+		'one_option'              => sprintf( __( 'Choose a %s', 'kb-support' ), $singular ),
 		'one_or_more_option'      => sprintf( __( 'Choose one or more %s', 'kb-support' ), kbs_get_ticket_label_plural() ),
 		'post_id'                 => isset( $post->ID ) ? $post->ID : null,
 		'post_type'               => isset( $_GET['post'] ) ? get_post_type( $_GET['post'] ) : false,
@@ -307,7 +309,7 @@ function kbs_load_admin_scripts( $hook ) {
         'send_closure_email'      => __( 'Send closure email?', 'kb-support' ),
 		'ticket_confirm_close'    => __( 'Are you sure you wish to close this ticket? Click OK to close, or Cancel to return.', 'kb-support' ),
 		'ticket_reply_added'      => 'ticket_reply_added',
-		'ticket_reply_failed'     => sprintf( __( 'Could not add %s Reply', 'kb-support' ), kbs_get_ticket_label_singular() ),
+		'ticket_reply_failed'     => sprintf( __( 'Could not add %s Reply', 'kb-support' ), $singular ),
 		'type_to_search'          => sprintf( __( 'Type to search %s', 'kb-support' ), kbs_get_article_label_plural() ),
         'view_reply'              => __( 'View Reply', 'kb-support' ),
 		'view_note'               => __( 'View Note', 'kb-support' ),
