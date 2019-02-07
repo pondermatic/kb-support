@@ -335,6 +335,35 @@ jQuery(document).ready(function ($) {
 
 		reply : function() {
 
+            // Listen for new replies via WP heartbeat
+            if( kbs_vars.editing_ticket === '1' )   {
+                $( document ).on( 'heartbeat-send', function ( event, data ) {
+
+                    var kbs_last_reply = $( '#kbs-latest-reply' ).val();
+
+                    if ( kbs_last_reply === '0' )   {
+                        return;
+                    }
+
+                    data.kbs_last_reply = kbs_last_reply;
+                    data.kbs_ticket_id  = kbs_vars.post_id;
+                });
+
+                // Check for data on heartbeat reply and process
+                $( document ).on( 'heartbeat-tick', function ( event, data ) {
+
+                    if ( ! data.has_new_reply ) {
+                        return;
+                    }
+
+                    $( '#kbs-latest-reply' ).val(data.has_new_reply);
+                    if ( confirm( kbs_vars.new_reply_notice ) ) {
+                        $('.kbs-historic-reply-option-fields').empty();
+                        kbs_load_ticket_replies( kbs_vars.post_id, 0, 1 );
+                    }
+                });
+            }
+
             // Delete a reply
             $( document.body ).on( 'click', '.reply-delete', function(event) {
                 event.preventDefault();

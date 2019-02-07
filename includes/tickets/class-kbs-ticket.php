@@ -2039,7 +2039,14 @@ class KBS_Ticket {
 			);
 		}
 
-		return apply_filters( 'kbs_show_form_data', $output );
+		if ( ! empty( $this->ip ) )	{
+			$output .= sprintf( '<p class="description">%s: %s</p>',
+				sprintf( __( 'This %s was logged from the IP Address', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+				esc_html( $this->ip )
+			);
+		}
+
+		return apply_filters( 'kbs_show_form_data_output', $output );
 	} // show_form_data
 
 } // KBS_Ticket

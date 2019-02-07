@@ -14,6 +14,23 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Disable notification emails if the To address is included in the no notification list.
+ *
+ * @since	1.2.8
+ * @param   string	$email      Email address
+ * @param   object  $ticket     KBS_Ticket Ticket Object
+ * @return  string|false        The email address to send to, or false
+ */
+function kbs_disable_emails_to_no_notification_addresses( $email, $ticket )	{
+	if ( kbs_maybe_remove_email_from_notification( $ticket->email ) )  {
+        $email = false;
+	}
+
+	return $email;
+} // kbs_disable_emails_to_no_notification_addresses
+add_filter( 'kbs_ticket_received_to_email', 'kbs_disable_emails_to_no_notification_addresses', 999, 2 );
+
+/**
  * Triggers Ticket Received email to be sent after the ticket status is updated
  *
  * @since	1.0

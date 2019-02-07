@@ -271,6 +271,10 @@ function kbs_settings_contextual_help() {
 				'<li>' . sprintf( __( '<strong>Disable this Email</strong> - Select to stop emails being sent to the customer when they have logged a %1$s.', 'kb-support' ),
 				strtolower( $ticket_singular )
 				) . '</li>' .
+                '<li>' . sprintf( __( '<strong>No Notification Emails</strong> - Email addresses entered here will not receive the initial <strong>%s Received</strong> email when they log a %s. Note that because the WordPress email system requires at least one <strong>To</strong> address, emails will not be sent to anyone due to receive a copy of the email either. Enter one email address per line and to stop sending to an entire domain, add the domain prefixed with <code>@</code>. Example: <em>(@domain.com)</em>', 'kb-support' ),
+                $ticket_singular,
+				strtolower( $ticket_singular )
+				) . '</li>' .
 				'<li>' . sprintf( __( '<strong>Email Subject</strong> - Enter the subject for the email sent to customers when a %1$s is logged by them.', 'kb-support' ),
 				strtolower( $ticket_singular )
 				) . '</li>' .
