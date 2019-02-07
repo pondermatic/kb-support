@@ -4,7 +4,7 @@ Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
 Tested up to: 5.0.3
 Requires PHP: 5.4
-Stable tag: 1.2.7
+Stable tag: 1.2.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -123,6 +123,27 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.2.8 =
+
+**Thursday, 7th February 2019**
+
+**New**
+
+* Added **No Notification Emails** setting option to the **Ticket Logged** setting screen within the emails setting tab. Addresses entered here will not receive acknowledgement of ticket receipt via email
+* New replies are now monitored in real-time whilst editing a ticket. If a reply is added whilst an agent is on the edit screen, a notice is displayed where the agent can choose to reload the replies to include the latest
+* Ticket admin post screen columns now display well for smaller screens
+
+**Tweaks**
+
+* Switched the title and dates columns position for easier identification on mobile devices
+* Made company URL clickable on company listing screen
+* Removed the slug metabox from the ticket post screen
+* Added IP address in use during ticket form submission to the submission data on the edit ticket page
+
+**Dev**
+
+* Added `kbs_ticket_received_to_email`, `kbs_ticket_reply_to_email` and `kbs_ticket_closed_to_email` filters to enable filtering of the To address for respective customer emails
 
 = 1.2.7 =
 
