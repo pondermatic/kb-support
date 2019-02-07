@@ -341,10 +341,6 @@ jQuery(document).ready(function ($) {
 
                     var kbs_last_reply = $( '#kbs-latest-reply' ).val();
 
-                    /*if ( kbs_last_reply === '0' )   {
-                        return;
-                    }*/
-
                     data.kbs_last_reply = kbs_last_reply;
                     data.kbs_ticket_id  = kbs_vars.post_id;
                 });
