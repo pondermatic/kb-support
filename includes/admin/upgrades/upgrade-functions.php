@@ -84,6 +84,10 @@ function kbs_do_automatic_upgrades() {
 		kbs_v126_upgrades();
 	}
 
+	if ( version_compare( $kbs_version, '1.2.8', '<' ) ) {
+		kbs_v128_upgrades();
+	}
+	
 	if ( version_compare( $kbs_version, KBS_VERSION, '<' ) )	{
 
 		// Let us know that an upgrade has happened
@@ -548,3 +552,23 @@ function kbs_v126_upgrades()	{
         kbs_update_option( $option, $value );
     }
 } // kbs_v126_upgrades
+
+/**
+ * Upgrade routine for version 1.2.8.
+ *
+ * - Add default options for new settings.
+ *
+ * @since	1.2.8
+ * @return	void
+ */
+function kbs_v128_upgrades()	{
+
+    $new_options = array(
+        'no_notify_received_emails' => ''
+    );
+
+    foreach( $new_options as $option => $value )    {
+        kbs_update_option( $option, $value );
+    }
+} // kbs_v128_upgrades
+
