@@ -518,7 +518,7 @@ function kbs_monitor_heartbeat_for_new_ticket_replies( $response, $data )   {
         $ticket_id    = $data['kbs_ticket_id'];
         $latest_reply = kbs_get_last_reply( $ticket_id );
 
-        if ( ! empty( $latest_reply) && $last_reply < $latest_reply->ID )  {
+        if ( ! empty( $latest_reply ) && $last_reply < $latest_reply->ID )  {
             $response['has_new_reply'] = $latest_reply->ID;
         }
     }
