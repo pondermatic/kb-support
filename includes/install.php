@@ -72,6 +72,7 @@ function kbs_run_install() {
 	// Setup the Custom Taxonomies
 	kbs_setup_kbs_ticket_category_taxonomy();
 	kbs_setup_kbs_ticket_tag_taxonomy();
+    kbs_setup_kbs_ticket_source_taxonomy();
 	kbs_setup_kbs_ticket_department_taxonomy();
 
 	// Clear the permalinks
@@ -82,6 +83,47 @@ function kbs_run_install() {
 	if ( $current_version ) {
 		update_option( 'kbs_version_upgraded_from', $current_version );
 	}
+
+    // Add Ticket source default terms
+    $sources = array(
+        array(
+            'slug' => 'kbs-website',
+            'name' => __( 'Website', 'kb-support' ),
+            'desc' => sprintf( __( '%s received via website', 'kb-support' ), kbs_get_ticket_label_plural() )
+        ),
+        array(
+            'slug' => 'kbs-email',
+            'name' => __( 'Email', 'kb-support' ),
+            'desc' => sprintf( __( '%s received via email', 'kb-support' ), kbs_get_ticket_label_plural() )
+        ),
+        array(
+            'slug' => 'kbs-telephone',
+            'name' => __( 'Telephone', 'kb-support' ),
+            'desc' => sprintf( __( '%s received via telephone', 'kb-support' ), kbs_get_ticket_label_plural() )
+        ),
+        array(
+            'slug' => 'kbs-other',
+            'name' => __( 'Other', 'kb-support' ),
+            'desc' => sprintf( __( '%s received via another means', 'kb-support' ), kbs_get_ticket_label_plural() )
+        )
+    );
+
+    $sources = apply_filters( 'kbs_ticket_log_sources', $sources );
+
+    foreach( $sources as $source )  {
+        $name = trim( sanitize_text_field( $source['name'] ) );
+        $desc = sanitize_text_field( $source['desc'] );
+        $slug = sanitize_text_field( $source['slug'] );
+
+        $insert = wp_insert_term(
+            $name,
+            'ticket_source',
+            array(
+                'description' => $desc,
+                'slug'        => $slug
+            )
+        );
+    }
 
 	// Setup some default options
 	$options = array();
@@ -201,16 +243,18 @@ function kbs_run_install() {
 	// Add a temporary option to note that KBS pages have been created
 	set_transient( '_kbs_installed', $merged_options, 30 );
 
-	/*if ( ! $current_version ) {
+	if ( ! $current_version ) {
 		require_once KBS_PLUGIN_DIR . 'includes/admin/upgrades/upgrade-functions.php';
 
 		// When new upgrade routines are added, mark them as complete on fresh install
-		$upgrade_routines = array();
+		$upgrade_routines = array(
+            'upgrade_ticket_sources'
+        );
 
 		foreach ( $upgrade_routines as $upgrade ) {
 			kbs_set_upgrade_complete( $upgrade );
 		}
-	}*/
+	}
 
 	// Bail if activating from network, or bulk
 	if ( is_network_admin() || isset( $_GET['activate-multi'] ) ) {

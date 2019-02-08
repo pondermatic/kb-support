@@ -87,7 +87,11 @@ function kbs_do_automatic_upgrades() {
 	if ( version_compare( $kbs_version, '1.2.8', '<' ) ) {
 		kbs_v128_upgrades();
 	}
-	
+
+    if ( version_compare( $kbs_version, '1.2.9', '<' ) ) {
+		kbs_v129_upgrades();
+	}
+
 	if ( version_compare( $kbs_version, KBS_VERSION, '<' ) )	{
 
 		// Let us know that an upgrade has happened
@@ -149,11 +153,19 @@ function kbs_show_upgrade_notice()	{
 			);
 		}
 
+        if ( version_compare( $kbs_version, '1.2.9', '<' ) || ! kbs_has_upgrade_completed( 'upgrade_ticket_sources' ) )	{
+			printf(
+				'<div class="notice notice-error"><p>' . __( 'KB Support needs to perform an upgrade to existing %s. Click <a href="%s">here</a> to start the upgrade.', 'kb-support' ) . '</p></div>',
+				kbs_get_ticket_label_plural( true ),
+				esc_url( admin_url( 'index.php?page=kbs-upgrades&kbs-upgrade-action=upgrade_ticket_sources' ) )
+			);
+		}
+
 		/*
 		 *  NOTICE:
 		 *
 		 *  When adding new upgrade notices, please be sure to put the action into the upgrades array during install:
-		 *  /includes/install.php @ Appox Line 198
+		 *  /includes/install.php @ Appox Line 250
 		 *
 		 */
 
@@ -224,6 +236,39 @@ function kbs_set_upgrade_complete( $upgrade_action = '' ) {
 
 	return update_option( 'kbs_completed_upgrades', $completed_upgrades );
 } // kbs_set_upgrade_complete
+
+/**
+ * Check if the upgrade routine has been run for a specific action
+ *
+ * @since   1.2.9
+ * @param   string  $upgrade_action     The upgrade action to check completion for
+ * @return  bool    If the action has been added to the copmleted actions array
+ */
+function kbs_has_upgrade_completed( $upgrade_action = '' )	{
+
+	if ( empty( $upgrade_action ) )	{
+		return false;
+	}
+
+	$completed_upgrades = kbs_get_completed_upgrades();
+
+	return in_array( $upgrade_action, $completed_upgrades );
+
+} // kbs_has_upgrade_completed
+
+/**
+ * Retrieve the array of completed upgrade actions.
+ *
+ * @since   1.2.9
+ * @return  array   The array of completed upgrades.
+ */
+function kbs_get_completed_upgrades()	{
+
+	$completed_upgrades = get_option( 'kbs_completed_upgrades', array() );
+
+	return $completed_upgrades;
+
+} // kbs_get_completed_upgrades
 
 /**
  * Upgrade routine to remove upload_files capability from Support Customer.
@@ -572,3 +617,175 @@ function kbs_v128_upgrades()	{
     }
 } // kbs_v128_upgrades
 
+/**
+ * Upgrade routine for version 1.2.9.
+ *
+ * - Create ticket source terms.
+ *
+ * @since	1.2.9
+ * @return	void
+ */
+function kbs_v129_upgrades()	{
+
+    $source_terms = get_terms( array(
+        'taxonomy' => 'ticket_source',
+        'hide_empty' => false
+    ) );
+
+    if ( empty( $source_terms ) && ! is_wp_error( $source_terms ) )   {
+        $sources = array(
+            1  => array(
+                'slug' => 'kbs-website',
+                'name' => __( 'Website', 'kb-support' ),
+                'desc' => sprintf( __( '%s received via website', 'kb-support' ), kbs_get_ticket_label_plural() )
+            ),
+            2  => array(
+                'slug' => 'kbs-email',
+                'name' => __( 'Email', 'kb-support' ),
+                'desc' => sprintf( __( '%s received via email', 'kb-support' ), kbs_get_ticket_label_plural() )
+            ),
+            3  => array(
+                'slug' => 'kbs-telephone',
+                'name' => __( 'Telephone', 'kb-support' ),
+                'desc' => sprintf( __( '%s received via telephone', 'kb-support' ), kbs_get_ticket_label_plural() )
+            ),
+            99 => array(
+                'slug' => 'kbs-other',
+                'name' => __( 'Other', 'kb-support' ),
+                'desc' => sprintf( __( '%s received via another means', 'kb-support' ), kbs_get_ticket_label_plural() )
+            )
+        );
+
+        $sources = apply_filters( 'kbs_ticket_log_sources', $sources );
+
+        foreach( $sources as $key => $source )  {
+            $name = trim( sanitize_text_field( $source['name'] ) );
+            $desc = sanitize_text_field( $source['desc'] );
+            $slug = sanitize_text_field( $source['slug'] );
+
+            $insert = wp_insert_term(
+                $name,
+                'ticket_source',
+                array(
+                    'description' => $desc,
+                    'slug'        => $slug
+                )
+            );
+        }
+    }
+
+} // kbs_v129_upgrades
+
+/**
+ * Upgrades for KBS v1.2.9 and ticket sources.
+ *
+ * @since	1.2.9
+ * @return	void
+ */
+function kbs_v129_upgrade_ticket_sources()	{
+
+	if ( ! current_user_can( 'manage_ticket_settings' ) )	{
+		wp_die( __( 'You do not have permission to perform upgrades', 'kb-support' ), __( 'Error', 'kb-support' ), array( 'response' => 403 ) );
+	}
+
+	ignore_user_abort( true );
+
+	if ( ! kbs_is_func_disabled( 'set_time_limit' ) )	{
+		set_time_limit( 0 );
+	}
+
+	$step  = isset( $_GET['step'] )  ? absint( $_GET['step'] )  : 1;
+	$total = isset( $_GET['total'] ) ? absint( $_GET['total'] ) : false;
+
+	if ( empty( $total ) || $total <= 1 ) {
+		$tickets = kbs_count_tickets();
+		foreach( $tickets as $status ) {
+			$total += $status;
+		}
+	}
+
+	$args = array(
+		'number' => 50,
+		'page'   => $step,
+		'status' => 'any',
+		'order'  => 'ASC'
+	);
+
+	$tickets = new KBS_Tickets_Query( $args );
+	$tickets = $tickets->get_tickets();
+
+    $sources = array(
+        1  => array(
+            'slug' => 'kbs-website',
+            'name' => __( 'Website', 'kb-support' ),
+            'desc' => sprintf( __( '%s received via website', 'kb-support' ), kbs_get_ticket_label_plural() )
+        ),
+        2  => array(
+            'slug' => 'kbs-email',
+            'name' => __( 'Email', 'kb-support' ),
+            'desc' => sprintf( __( '%s received via email', 'kb-support' ), kbs_get_ticket_label_plural() )
+        ),
+        3  => array(
+            'slug' => 'kbs-telephone',
+            'name' => __( 'Telephone', 'kb-support' ),
+            'desc' => sprintf( __( '%s received via telephone', 'kb-support' ), kbs_get_ticket_label_plural() )
+        ),
+        99 => array(
+            'slug' => 'kbs-other',
+            'name' => __( 'Other', 'kb-support' ),
+            'desc' => sprintf( __( '%s received via another means', 'kb-support' ), kbs_get_ticket_label_plural() )
+        )
+    );
+
+    $sources = apply_filters( 'kbs_ticket_log_sources', $sources );
+
+	if ( $tickets )	{
+
+		foreach( $tickets as $ticket )	{
+
+			// Retrieve current source
+			$old_source = get_post_meta( $ticket->ID, '_kbs_ticket_source', true );
+            $old_source = ! empty( $old_source ) ? absint( $old_source ) : 1;
+
+			// Map to new source term and use Website as the default
+            if ( isset( $sources[ $old_source ] ) && ! empty( $sources[ $old_source ]['slug'] ) )   {
+                $new_source = $sources[ $old_source ]['slug'];
+            } else  {
+                $new_source = 'kbs-website';
+            }
+
+			// Add source term to ticket
+            $add_term = wp_set_object_terms( $ticket->ID, $new_source, 'ticket_source' );
+
+            if ( ! is_wp_error( $add_term ) )   {
+                delete_post_meta( $ticket->ID, '_kbs_ticket_source' );
+            }
+
+		}
+
+		// Tickets found so upgrade them
+		$step++;
+		$redirect = add_query_arg( array(
+			'page'        => 'kbs-upgrades',
+			'kbs-upgrade' => 'upgrade_ticket_sources',
+			'step'        => $step,
+			'total'       => $total
+		), admin_url( 'index.php' ) );
+
+		wp_redirect( $redirect );
+        exit;
+
+	} else {
+		// No more tickets found, finish up
+		kbs_set_upgrade_complete( 'upgrade_ticket_sources' );
+		delete_option( 'kbs_doing_upgrade' );
+
+		wp_redirect( add_query_arg( array(
+            'post_type'   => 'kbs_ticket',
+            'kbs-message' => 'ticket-sources-updated'
+            ), admin_url( 'edit.php' ) ) );
+		exit;
+	}
+
+} // kbs_v129_upgrade_ticket_sources
+add_action( 'kbs-upgrade-upgrade_ticket_sources', 'kbs_v129_upgrade_ticket_sources' );
