@@ -273,7 +273,7 @@ class KBS_Ticket {
 	 * @since	1.0
 	 * @var		str
 	 */
-	protected $source = 1;
+	protected $source = 'kbs-website';
 
 	/**
 	 * Array of items that have changed since the last save() was run.
@@ -842,7 +842,9 @@ class KBS_Ticket {
 						break;
 
 					case 'source':
-						$this->update_meta( '_kbs_ticket_source', $this->source );
+                        if ( ! empty( $this->source ) ) {
+                            wp_set_object_terms( $this->ID, $source_term, 'ticket_source' );
+                        }
 						break;
 
 					case 'status':
@@ -902,7 +904,6 @@ class KBS_Ticket {
 			$new_meta = array(
 				'agent_id'      => $this->agent_id,
                 'agents'        => $this->agents,
-				'source'        => $this->source,
 				'sla'           => array( 'respond' => $this->sla_respond, 'resolve' => $this->sla_resolve ),
 				'user_info'     => is_array( $this->user_info ) ? $this->user_info : array(),
 				'user_ip'       => $this->ip,
@@ -1808,13 +1809,13 @@ class KBS_Ticket {
 	 * @return	str
 	 */
 	public function get_source() {
-		$sources = kbs_get_ticket_log_sources();
+		$return = false;
 
-		if ( array_key_exists( $source, $sources ) )	{
-			$return = $sources[ $this->source ];
-		} else	{
-			$return = __( 'Source could not be found', 'kb-support' );
-		}
+        $sources = get_the_terms( $this->ID, 'ticket_source' );
+
+        if ( $sources && ! is_wp_error( $sources ) ) {
+            $return = absint( $sources[0]->term_id );
+        }
 
 		return apply_filters( 'kbs_get_source', $return );
 	} // get_source

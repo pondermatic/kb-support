@@ -463,6 +463,47 @@ function kbs_get_inactive_ticket_statuses()	{
 } // kbs_get_inactive_ticket_statuses
 
 /**
+ * Retrieve ticket source terms.
+ *
+ *
+ *
+ * @since   1.2.9
+ * @param   array   $args   Array of args to parse
+ * @return  array|int|WP_Error List of WP_Term instances
+ */
+function kbs_get_ticket_source_terms( $args = array() )  {
+    $defaults = array(
+        'taxonomy'   => 'ticket_source',
+        'hide_empty' => false
+    );
+
+    $args = wp_parse_args( $args, $defaults );
+
+    return get_terms( $args );
+} // kbs_get_ticket_source_terms
+
+/**
+ * Retrieve protected ticket source terms.
+ *
+ * @since   1.2.9
+ * @return  Array of term objects
+ */
+function kbs_get_protected_ticket_source_term_ids()    {
+    $protected = array();
+    $sources   = kbs_get_ticket_source_terms();
+
+    if ( ! empty( $sources ) )  {
+        foreach( $sources as $source )  {
+            if ( false !== strpos( $source->slug, 'kbs-' ) )    {
+                $protected[] = $source->term_id;
+            }
+        }
+    }
+
+    return $protected;
+} // kbs_get_protected_ticket_source_term_ids
+
+/**
  * Retrieve the possible sources for logging a ticket.
  *
  * Custom sources can be added by hooking the `kbs_ticket_log_sources` filter.
@@ -471,19 +512,14 @@ function kbs_get_inactive_ticket_statuses()	{
  * @return	arr	Array of $key => value sources for logging a ticket.
  */
 function kbs_get_ticket_log_sources()	{
+    $categories = get_terms( 'ticket_source', apply_filters( 'kbs_ticket_source_dropdown', array( 'hide_empty' => false ) ) );
+	$sources    = array();
 
-	$sources = array(
-		1  => __( 'Website', 'kb-support' ),
-		2  => __( 'Email', 'kb-support' ),
-		3  => __( 'Telephone', 'kb-support' ),
-		99 => __( 'Other', 'kb-support' )
-	);
-	
+    foreach ( $categories as $category ) {
+        $sources[ absint( $category->term_id ) ] = esc_html( $category->name );
+    }
+
 	$sources = apply_filters( 'kbs_ticket_log_sources', $sources );
-	
-	if ( isset( $key ) )	{
-		return $sources[ $key ];
-	}
 	
 	return $sources;
 
