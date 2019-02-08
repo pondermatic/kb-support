@@ -548,6 +548,9 @@ a.kbs_ticket_form_data	{
 #kbs-ticket-status-select {
 	padding-bottom: 7px;
 }
+#kbs-source-select {
+    padding-top: 7px;
+}
 .kbs_default_side_wrapper { width: 100px; }
 #kbs-delete-post { padding-top: 3px; }
 

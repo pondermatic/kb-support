@@ -108,7 +108,57 @@ function kbs_setup_kbs_ticket_tag_taxonomy()	{
 add_action( 'init', 'kbs_setup_kbs_ticket_tag_taxonomy', 2 );
 
 /**
- * Registers the Categories taxonomy for the kbs_ticket custom post types.
+ * Registers the Source taxonomy for the kbs_ticket custom post types.
+ *
+ * @since	1.0
+ * @return	void
+*/
+function kbs_setup_kbs_ticket_source_taxonomy()	{
+
+    $ticket_singular = kbs_get_ticket_label_singular();
+
+	$source_labels = array(
+		'name'              => sprintf( _x( '%s Source', 'taxonomy general name', 'kb-support' ), $ticket_singular ),
+		'singular_name'     => sprintf( _x( '%s Source', 'taxonomy singular name', 'kb-support' ), $ticket_singular ),
+		'search_items'      => sprintf( __( 'Search %s Sources', 'kb-support' ), $ticket_singular ),
+		'all_items'         => sprintf( __( 'All %s Sources', 'kb-support' ), $ticket_singular ),
+		'parent_item'       => sprintf( __( 'Parent %s Source', 'kb-support' ), $ticket_singular ),
+		'parent_item_colon' => sprintf( __( 'Parent %s Source:', 'kb-support' ), $ticket_singular ),
+		'edit_item'         => sprintf( __( 'Edit %s Source', 'kb-support' ), $ticket_singular ),
+		'update_item'       => sprintf( __( 'Update %s Source', 'kb-support' ), $ticket_singular ),
+		'add_new_item'      => sprintf( __( 'Add %s Source', 'kb-support' ), $ticket_singular ),
+		'new_item_name'     => sprintf( __( 'New %s Source Name', 'kb-support' ), $ticket_singular ),
+		'menu_name'         => sprintf( __( '%s Sources', 'kb-support' ), $ticket_singular ),
+		'not_found'         => sprintf( __( 'No %s sources found', 'kb-support' ), strtolower( $ticket_singular ) ),
+        'back_to_items'     => sprintf( __( 'Back to %s sources', 'kb-support' ), strtolower( $ticket_singular ) )
+	);
+
+	$source_args = apply_filters( 'kbs_ticket_source_args', array(
+			'hierarchical' => false,
+			'labels'       => apply_filters( 'kbs_ticket_source_labels', $source_labels ),
+			'public'       => false,
+			'show_in_menu' => true,
+			'show_ui'      => true,
+			'rewrite'      => false,
+			'capabilities' => array(
+				'manage_terms' => 'manage_ticket_terms',
+				'edit_terms'   => 'edit_ticket_terms',
+				'assign_terms' => 'assign_ticket_terms',
+				'delete_terms' => 'delete_ticket_terms'
+			),
+			'update_count_callback' => '_update_generic_term_count'
+		)
+	);
+
+	register_taxonomy( 'ticket_source', array( 'kbs_ticket', 'kbs_ticket_reply' ), $source_args );
+	register_taxonomy_for_object_type( 'ticket_source', 'kbs_ticket' );
+    register_taxonomy_for_object_type( 'ticket_source', 'kbs_ticket_reply' );
+
+} // kbs_setup_kbs_ticket_source_taxonomy
+add_action( 'init', 'kbs_setup_kbs_ticket_source_taxonomy', 2 );
+
+/**
+ * Registers the Department taxonomy for the kbs_ticket custom post types.
  *
  * @since	1.0
  * @return	void
@@ -169,7 +219,7 @@ function kbs_get_taxonomy_labels( $taxonomy = 'ticket_category' ) {
 
 	$allowed_taxonomies = apply_filters(
 		'kbs_allowed_taxonomies',
-		array( 'ticket_category', 'ticket_tag', 'department', 'article_category', 'article_tag' )
+		array( 'ticket_category', 'ticket_tag', 'ticket_source', 'department', 'article_category', 'article_tag' )
 	);
 
 	if ( ! in_array( $taxonomy, $allowed_taxonomies ) ) {
