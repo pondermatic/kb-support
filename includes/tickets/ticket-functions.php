@@ -465,7 +465,7 @@ function kbs_get_inactive_ticket_statuses()	{
 /**
  * Retrieve ticket source terms.
  *
- *
+ * A simple helper function for get_terms()
  *
  * @since   1.2.9
  * @param   array   $args   Array of args to parse
@@ -512,7 +512,7 @@ function kbs_get_protected_ticket_source_term_ids()    {
  * @return	arr	Array of $key => value sources for logging a ticket.
  */
 function kbs_get_ticket_log_sources()	{
-    $categories = get_terms( 'ticket_source', apply_filters( 'kbs_ticket_source_dropdown', array( 'hide_empty' => false ) ) );
+    $categories = kbs_get_ticket_source_terms();
 	$sources    = array();
 
     foreach ( $categories as $category ) {
