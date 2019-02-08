@@ -705,14 +705,15 @@ function kbs_v129_upgrade_ticket_sources()	{
 	}
 
 	$args = array(
-		'number' => 50,
-		'page'   => $step,
-		'status' => 'any',
-		'order'  => 'ASC'
+		'posts_per_page' => 50,
+		'paged'          => $step,
+		'status'         => 'any',
+		'order'          => 'ASC',
+		'post_type'      => array( 'kbs_ticket', 'kbs_ticket_reply' )
 	);
 
-	$tickets = new KBS_Tickets_Query( $args );
-	$tickets = $tickets->get_tickets();
+	$tickets = new WP_Query( $args );
+	$tickets = $tickets->posts;
 
     $sources = array(
         1  => array(
@@ -744,7 +745,8 @@ function kbs_v129_upgrade_ticket_sources()	{
 		foreach( $tickets as $ticket )	{
 
 			// Retrieve current source
-			$old_source = get_post_meta( $ticket->ID, '_kbs_ticket_source', true );
+			$meta_key = 'kbs_ticket' == $ticket->post_type ? '_kbs_ticket_source' : '_kbs_reply_source';
+			$old_source = get_post_meta( $ticket->ID, $meta_key, true );
             $old_source = ! empty( $old_source ) ? absint( $old_source ) : 1;
 
 			// Map to new source term and use Website as the default
@@ -758,7 +760,7 @@ function kbs_v129_upgrade_ticket_sources()	{
             $add_term = wp_set_object_terms( $ticket->ID, $new_source, 'ticket_source' );
 
             if ( ! is_wp_error( $add_term ) )   {
-                delete_post_meta( $ticket->ID, '_kbs_ticket_source' );
+                delete_post_meta( $ticket->ID, $meta_key );
             }
 
 		}
