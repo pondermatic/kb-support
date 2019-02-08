@@ -1880,8 +1880,6 @@ class KBS_Ticket {
 			'meta_input'   => array()
 		);
 
-		$args['meta_input']['_kbs_reply_source'] = ! empty( $reply_data['source'] ) ? $reply_data['source'] : 1;
-
 		if ( isset( $reply_data['customer_id'] ) )	{
 			$args['meta_input']['_kbs_reply_customer_id'] = $reply_data['customer_id'];
 		}
@@ -1910,6 +1908,9 @@ class KBS_Ticket {
 		if ( empty( $reply_id ) )	{
 			return false;
 		}
+
+		$source = ! empty( $reply_data['source'] ) ? $reply_data['source'] : 'kbs-website';
+		wp_set_object_terms( $reply_id, $source, 'ticket_source' );
 
 		if ( $close )	{
 			$this->update_status( 'closed' );
