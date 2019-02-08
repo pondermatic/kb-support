@@ -103,6 +103,34 @@ class KBS_HTML_Elements {
 		return $output;
 	} // ticket_category_dropdown
 
+    /**
+	 * Renders an HTML Dropdown of all the Ticket Sources
+	 *
+	 * @access	public
+	 * @since	1.2.9
+	 * @param	string	$name		Name attribute of the dropdown
+	 * @param	int		$selected	Category to select automatically
+	 * @return	string	$output		Category dropdown
+	 */
+	public function ticket_source_dropdown( $name = 'kbs_ticket_source', $selected = 0 ) {
+		$category_labels = kbs_get_taxonomy_labels( 'ticket_source' );
+		$output = $this->select( array(
+			'name'             => $name,
+			'selected'         => $selected,
+			'options'          => kbs_get_ticket_log_sources(),
+            'placeholder'      => sprintf( __( 'Select a %s', 'kb-support' ), $category_labels['name'] ),
+			'show_option_all'  => false,
+			'show_option_none' => sprintf( _x( 'Select a %1$s', 'plural: Example: "Select a %1$s"', 'kb-support' ), $category_labels['name'] ),
+            'chosen'           => true,
+            'data'             => array(
+				'search-type'        => 'ticket_source',
+				'search-placeholder' => sprintf( __( 'Type to search all %s', 'kb-support' ), strtolower( $category_labels['name'] ) )
+			)
+		) );
+
+		return $output;
+	} // ticket_source_dropdown
+
 	/**
 	 * Renders an HTML Dropdown of all the KB Articles
 	 *

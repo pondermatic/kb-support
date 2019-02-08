@@ -808,6 +808,12 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
 		$ticket->__set( 'status', $_POST['ticket_status'] );
 	}
 
+    if ( isset( $_POST['kbs_ticket_source'] ) )  {
+        $source = absint( $_POST['kbs_ticket_source'] );
+
+        $ticket->__set( 'source', $source );
+    }
+
 	$ticket->save();
 
 	add_post_meta( $post_id, '_kbs_ticket_version_created', KBS_VERSION, true );

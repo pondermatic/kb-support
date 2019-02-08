@@ -39,6 +39,7 @@ function kbs_ticket_metabox_fields() {
 function kbs_ticket_remove_meta_boxes()	{
 	$metaboxes = array(
         array( 'submitdiv', 'kbs_ticket', 'side' ),
+        array( 'tagsdiv-ticket_source', 'kbs_ticket', 'side' ),
         array( 'tagsdiv-department', 'kbs_ticket', 'side' ),
         array( 'comments', 'kbs_ticket', 'normal' ),
 		array( 'commentsdiv', 'kbs_ticket', 'normal' ),
@@ -355,6 +356,14 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
                 </div>
 
                 <?php do_action( 'kbs_ticket_metabox_save_after_customer', $ticket_id ); ?>
+
+                <?php if ( ! $kbs_ticket_update ) : ?>
+                    <div id="kbs-source-select">
+                        <?php echo KBS()->html->ticket_source_dropdown( 'kbs_ticket_source', $kbs_ticket->source ); ?>
+                    </div>
+
+                    <?php do_action( 'kbs_ticket_metabox_save_after_source', $ticket_id ); ?>
+                <?php endif; ?>
 
                 <p><a href="<?php echo wp_get_referer(); ?>"><?php printf( __( 'Back to %s', 'kb-support' ), kbs_get_ticket_label_plural() ); ?></a>
 
