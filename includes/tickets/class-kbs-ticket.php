@@ -459,13 +459,13 @@ class KBS_Ticket {
 		$this->closed_date     = $this->setup_closed_date();
 		$this->status          = $ticket->post_status;
 		$this->post_status     = $this->status;
+        $this->source          = $this->get_source();
 
 		$this->status_nicename = kbs_get_post_status_label( $this->status );
 
 		// Content & Replies
 		$this->ticket_title    = $ticket->post_title;
 		$this->ticket_content  = $ticket->post_content;
-		//$this->replies         = $this->get_replies();
 		$this->files           = $this->get_files();
 
 		// User data
@@ -1806,15 +1806,20 @@ class KBS_Ticket {
 	 * Retrieve the source used for logging the ticket.
 	 *
 	 * @since	1.0
-	 * @return	str
+     * @param   string  $field  The field to return. See WP_Term.
+	 * @return	string  The term slug
 	 */
-	public function get_source() {
+	public function get_source( $field = 'slug' ) {
 		$return = false;
 
-        $sources = get_the_terms( $this->ID, 'ticket_source' );
+        $sources = get_the_terms( $this->ID, 'ticket_source' );        
 
         if ( $sources && ! is_wp_error( $sources ) ) {
-            $return = absint( $sources[0]->term_id );
+            $return = $sources[0]->$field;
+
+            if ( 'term_id' == $field || 'term_taxonomy_id' == $field )  {
+                $return = absint( $return );
+            }
         }
 
 		return apply_filters( 'kbs_get_source', $return );
