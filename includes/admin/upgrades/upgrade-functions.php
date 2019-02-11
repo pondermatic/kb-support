@@ -697,13 +697,6 @@ function kbs_v129_upgrade_ticket_sources()	{
 	$step  = isset( $_GET['step'] )  ? absint( $_GET['step'] )  : 1;
 	$total = isset( $_GET['total'] ) ? absint( $_GET['total'] ) : false;
 
-	if ( empty( $total ) || $total <= 1 ) {
-		$tickets = kbs_count_tickets();
-		foreach( $tickets as $status ) {
-			$total += $status;
-		}
-	}
-
 	$args = array(
 		'posts_per_page' => 50,
 		'paged'          => $step,
@@ -712,8 +705,12 @@ function kbs_v129_upgrade_ticket_sources()	{
 		'post_type'      => array( 'kbs_ticket', 'kbs_ticket_reply' )
 	);
 
-	$tickets = new WP_Query( $args );
-	$tickets = $tickets->posts;
+	$query   = new WP_Query( $args );
+	$tickets = $query->posts;
+
+    if ( empty( $total ) || $total <= 1 ) {
+        $total = $query->found_posts;
+	}
 
     $sources = array(
         1  => array(
