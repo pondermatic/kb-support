@@ -782,8 +782,7 @@ class KBS_Ticket {
 						break;
 
 					case 'department':
-						$term = intval( $this->department );
-						wp_set_object_terms( $this->ID, $term, 'department' );
+						wp_set_object_terms( $this->ID, intval( $this->department ), 'department' );
 
 						break;
 
@@ -843,13 +842,13 @@ class KBS_Ticket {
 
 					case 'source':
                         if ( ! empty( $this->source ) ) {
-                            wp_set_object_terms( $this->ID, $source_term, 'ticket_source' );
+                            wp_set_object_terms( $this->ID, $this->source, 'ticket_source' );
                         }
 						break;
 
 					case 'status':
 						$this->update_status( $this->status );
-            break;
+                        break;
 
 					case 'privacy_accepted':
 						$this->update_meta( '_kbs_ticket_privacy_accepted', $this->privacy_accepted );
