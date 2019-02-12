@@ -966,3 +966,36 @@ function kbs_get_country_list() {
 
 	return apply_filters( 'kbs_countries', $countries );
 } // kbs_get_country_list
+
+/**
+ * Check if the upgrade routine has been run for a specific action
+ *
+ * @since   1.2.9
+ * @param   string  $upgrade_action     The upgrade action to check completion for
+ * @return  bool    If the action has been added to the copmleted actions array
+ */
+function kbs_has_upgrade_completed( $upgrade_action = '' )	{
+
+	if ( empty( $upgrade_action ) )	{
+		return false;
+	}
+
+	$completed_upgrades = kbs_get_completed_upgrades();
+
+	return in_array( $upgrade_action, $completed_upgrades );
+
+} // kbs_has_upgrade_completed
+
+/**
+ * Retrieve the array of completed upgrade actions.
+ *
+ * @since   1.2.9
+ * @return  array   The array of completed upgrades.
+ */
+function kbs_get_completed_upgrades()	{
+
+	$completed_upgrades = get_option( 'kbs_completed_upgrades', array() );
+
+	return $completed_upgrades;
+
+} // kbs_get_completed_upgrades
