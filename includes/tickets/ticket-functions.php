@@ -573,7 +573,6 @@ function kbs_add_ticket( $ticket_data )	{
 	$ticket->ip               = kbs_get_ip();
 	$ticket->sla_respond      = kbs_calculate_sla_target_response();
 	$ticket->sla_resolve      = kbs_calculate_sla_target_resolution();
-	$ticket->source           = '';
 	$ticket->new_files        = $ticket_data['attachments'];
 	$ticket->form_data        = ! empty( $ticket_data['form_data'] ) ? $ticket_data['form_data'] : array();
 	$ticket->privacy_accepted = isset( $ticket_data['privacy_accepted'] ) ? $ticket_data['privacy_accepted'] : false;
@@ -585,6 +584,10 @@ function kbs_add_ticket( $ticket_data )	{
 
 	if ( isset( $ticket_data['post_date'] ) ) {
 		$ticket->date = $ticket_data['post_date'];
+	}
+
+	if ( ! empty( $ticket_data['source'] ) )	{
+		$ticket->source = sanitize_text_field( $ticket_data['source'] );
 	}
 
 	do_action( 'kbs_before_add_ticket', $ticket->ID, $ticket_data );

@@ -1809,7 +1809,7 @@ class KBS_Ticket {
 	 * @return	string  The term slug
 	 */
 	public function get_source( $field = 'slug' ) {
-		$return = false;
+		$return = $this->source;
 
         $sources = get_the_terms( $this->ID, 'ticket_source' );        
 
