@@ -596,7 +596,7 @@ jQuery(document).ready(function ($) {
 					$('#kbs_meta_field_input_class_wrap').show();
 				}
 
-				if ( 'text' === kbs_selected_field || 'email' === kbs_selected_field || 'hidden' === kbs_selected_field || 'url' === kbs_selected_field || 'textarea' === kbs_selected_field || 'rich_editor' === kbs_selected_field )	{
+				if ( 'text' === kbs_selected_field || 'email' === kbs_selected_field || 'hidden' === kbs_selected_field || 'url' === kbs_selected_field || 'textarea' === kbs_selected_field || 'rich_editor' === kbs_selected_field || 'department' === kbs_selected_field )	{
 					$('#kbs_meta_field_mapping_wrap').show();
 				} else	{
 					$('#kbs_meta_field_mapping_wrap').hide();
