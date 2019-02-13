@@ -782,8 +782,7 @@ class KBS_Ticket {
 						break;
 
 					case 'department':
-						wp_set_object_terms( $this->ID, intval( $this->department ), 'department' );
-
+						wp_set_object_terms( $this->ID, intval( $value ), 'department' );
 						break;
 
 					case 'email':
