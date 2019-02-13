@@ -344,7 +344,7 @@ function kbs_render_field_type_row( $post_id, $args )	{
 		<p><strong><?php _e( 'Type', 'kb-support' ); ?></strong><br />
 		<label for="kbs_field_type">
 			<?php echo KBS()->html->field_types_dropdown( array(
-				'selected'         => ! empty( $kbs_edit_field ) ? $kbs_edit_field->settings['type'] : 0
+				'selected' => ! empty( $kbs_edit_field ) ? $kbs_edit_field->settings['type'] : 0
 			) ); ?>
 		</label></p>
 	</div>
@@ -354,14 +354,14 @@ function kbs_render_field_type_row( $post_id, $args )	{
 add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_type_row', 20, 2 );
 
 /**
- * Render the row for setting the default value.
+ * Render the row for selecting the mapping.
  *
  * @since	1.0
  * @param	int		$post_id	The form post ID.
  * @param	arr		$args		Function arguments
  * @return	str
  */
-function kbs_render_field_value_row( $post_id, $args )	{
+function kbs_render_field_mapping_row( $post_id, $args )	{
 	global $kbs_edit_field;
 
 	$options = kbs_get_available_mappings( $post_id );
@@ -380,24 +380,29 @@ function kbs_render_field_value_row( $post_id, $args )	{
 				'class'            => 'kbs_field_mapping',
 				'show_option_all'  => false,
 				'show_option_none' =>'',
-				'options'          => $options
+                'chosen'           => true,
+				'options'          => $options,
+                'data'             => array(
+                    'search-type'        => 'fields',
+                    'search-placeholder' => __( 'Type to search all mappings', 'kb-support' ),
+                )
 			) ); ?>
 		</label></p>
 	</div>
 	<?php
 
-} // kbs_render_field_value_row
-add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_value_row', 25, 2 );
+} // kbs_render_field_mapping_row
+add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_mapping_row', 25, 2 );
 
 /**
- * Render the row for selecting the mapping.
+ * Render the row for setting the default value.
  *
  * @since	1.0
  * @param	int		$post_id	The form post ID.
  * @param	arr		$args		Function arguments
  * @return	str
  */
-function kbs_render_field_mapping_row( $post_id, $args )	{
+function kbs_render_field_value_row( $post_id, $args )	{
 	global $kbs_edit_field;
 
 	$options = kbs_get_available_mappings( $post_id );
@@ -419,8 +424,8 @@ function kbs_render_field_mapping_row( $post_id, $args )	{
 	</div>
 	<?php
 
-} // kbs_render_field_mapping_row
-add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_mapping_row', 30, 2 );
+} // kbs_render_field_value_row
+add_action( 'kbs_form_mb_add_form_field', 'kbs_render_field_value_row', 30, 2 );
 
 /**
  * Render the row for setting as required.
