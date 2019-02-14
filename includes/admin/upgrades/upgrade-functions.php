@@ -186,7 +186,7 @@ function kbs_show_upgrade_notice()	{
                         add_query_arg( array(
                             'page'               => 'kbs-upgrades',
                             'kbs-upgrade-action' => $upgrade_needed['action']
-                        ), 'index.php' )
+                        ), admin_url( 'index.php' ) )
                     ); ?></p>
                 </div>
             <?php endforeach;
