@@ -311,6 +311,7 @@ final class KB_Support {
 			require_once KBS_PLUGIN_DIR . 'includes/admin/import-export/import/import-functions.php';
             require_once KBS_PLUGIN_DIR . 'includes/admin/import-export/export/export-functions.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/extensions.php';
+            require_once KBS_PLUGIN_DIR . 'includes/admin/upgrades/upgrade-actions.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/upgrades/upgrade-functions.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/upgrades/upgrades.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/welcome.php';
