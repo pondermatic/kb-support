@@ -353,6 +353,12 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
 						'selected' => $kbs_ticket->customer_id,
 						'chosen'   => true
 					) ); ?>
+                    <?php if ( ! $kbs_ticket_update && kbs_can_edit_customers() ) : ?>
+                        <br>
+                        <span class="add-ticket-customer">
+                            <a href="#"><?php _e( 'Add New', 'kb-support' ); ?></a>
+                        </span>
+                    <?php endif; ?>
                 </div>
 
                 <?php do_action( 'kbs_ticket_metabox_save_after_customer', $ticket_id ); ?>
