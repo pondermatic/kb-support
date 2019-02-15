@@ -29,9 +29,7 @@ function kbs_edit_customer()	{
 		wp_die( __( "Cheatin' eh?!", 'kb-support' ) );
 	}
 
-	$customer_edit_role = apply_filters( 'kbs_edit_customers_role', 'manage_ticket_settings' );
-
-	if ( ! is_admin() || ! current_user_can( $customer_edit_role ) ) {
+	if ( ! is_admin() || ! kbs_can_edit_customers() ) {
 		wp_die( __( 'You do not have permission to edit this customer.', 'kb-support' ) );
 	}
 
@@ -201,9 +199,7 @@ function kbs_disconnect_customer_user_id() {
 		wp_die( __( "Cheatin' eh?!", 'kb-support' ) );
 	}
 
-	$customer_edit_role = apply_filters( 'kbs_edit_customers_role', 'manage_ticket_settings' );
-
-	if ( ! is_admin() || ! current_user_can( $customer_edit_role ) ) {
+	if ( ! is_admin() || ! kbs_can_edit_customers() ) {
 		wp_die( __( 'You do not have permission to edit this customer.', 'kb-support' ) );
 	}
 
@@ -257,9 +253,7 @@ function kbs_add_customer_email()	{
 		return;
 	}
 
-	$customer_edit_role = apply_filters( 'kbs_edit_customers_role', 'manage_ticket_settings' );
-
-	if ( ! is_admin() || ! current_user_can( $customer_edit_role ) ) {
+	if ( ! is_admin() || ! kbs_can_edit_customers() ) {
 		wp_die( __( 'You do not have permission to edit this customer.', 'kb-support' ) );
 	}
 
@@ -521,9 +515,7 @@ function kbs_customer_delete() {
 		wp_die( __( "Cheatin' eh?!", 'kb-support' ) );
 	}
 
-	$customer_edit_role = apply_filters( 'kbs_edit_customers_role', 'manage_ticket_settings' );
-
-	if ( ! is_admin() || ! current_user_can( $customer_edit_role ) ) {
+	if ( ! is_admin() || ! kbs_can_edit_customers() ) {
 		wp_die( __( 'You do not have permission to delete this customer.', 'kb-support' ) );
 	}
 

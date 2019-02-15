@@ -16,6 +16,27 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Whether or not a user can edit customers.
+ *
+ * @since   1.2.9
+ * @param   int     $user_id    The user ID to check
+ * @return  bool
+ */
+function kbs_can_edit_customers( $user_id = 0 ) {
+    $customer_edit_role = apply_filters( 'kbs_edit_customers_role', 'manage_ticket_settings' );
+    $can_edit           = false;
+    $user_id            = ! empty( $user_id ) ? absint( $user_id ) : get_current_user_id();
+
+    if ( ! empty( $user_id ) )    {
+        $can_edit = user_can( $user_id, $customer_edit_role );
+    }
+
+    $can_edit = apply_filters( 'kbs_can_edit_customers', $can_edit, $user_id );
+
+    return $can_edit;
+} // kbs_can_edit_customers
+
+/**
  * Retrieve the customer ID from a ticket.
  *
  * @since	1.0
