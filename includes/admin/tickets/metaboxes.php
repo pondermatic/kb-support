@@ -569,12 +569,13 @@ function kbs_ticket_metabox_customer_section( $ticket_id )	{
 
 	global $kbs_ticket, $kbs_ticket_update;
 
-	$user_info   = $kbs_ticket->user_info;
-    $customer_id = $kbs_ticket->customer_id;
-    $user_id     = $kbs_ticket->user_id;
-    $edit_user   = '';
+	$user_info       = $kbs_ticket->user_info;
+    $customer_id     = $kbs_ticket->customer_id;
+    $customer_exists = kbs_customer_exists( $customer_id );
+    $user_id         = $kbs_ticket->user_id;
+    $edit_user       = '';
 
-    if ( '-1' == $customer_id || empty( $customer_id ) )    {
+    if ( '-1' == $customer_id || empty( $customer_id ) || ! $customer_exists )    {
         $customer = __( 'No customer assigned', 'kb-support' );
     } else  {
         if ( ! empty( $user_id ) )  {
