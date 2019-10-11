@@ -92,28 +92,44 @@ function kbs_get_upload_dir( $key = false )	{
  * Change Tickets Upload Directory.
  *
  * This function works by hooking on the WordPress Media Uploader
- * and moving the uploading files that are used for KBS to a kbs
+ * and moving the uploaded files that are used for KBS to a kbs
  * directory under wp-content/uploads/ therefore,
  * the new directory is wp-content/uploads/kbs/{year}/{month}.
  *
  * @since	1.0
  * @global	$pagenow
- * @return	void
+ * @param   array   $upload_path    DIR path data for uploads
+ * @return	array   DIR path data for uploads
  */
-function kbs_change_tickets_upload_dir() {
+function kbs_change_tickets_upload_dir( $upload_path ) {
+    global $pagenow;
 
-	global $pagenow;
+    $ticket_dir = false;
 
-	if ( ! empty( $_REQUEST['post_id'] ) && ( 'async-upload.php' == $pagenow || 'media-upload.php' == $pagenow ) )	{
+    if ( ( 'async-upload.php' == $pagenow || 'media-upload.php' == $pagenow ) ) {
 
-		if ( 'kbs_ticket' == get_post_type( $_REQUEST['post_id'] ) ) {
-			add_filter( 'upload_dir', 'kbs_set_upload_dir' );
-		}
+        if ( false !== strpos( wp_get_referer(), 'post_type=kbs_ticket' ) ) {
 
-	}
+            $ticket_dir = true;
 
+        } elseif ( false !== strpos( wp_get_referer(), 'post.php?post=' ) ) {
+            $url_parts = parse_url( wp_get_referer() );
+            parse_str( $url_parts['query'], $url_query_string );
+            $post_id = $url_query_string['post'];
+
+            if ( 'kbs_ticket' == get_post_type( $post_id ) )    {
+                $ticket_dir = true;
+            }
+        }
+
+        if ( $ticket_dir )  {
+            $upload_path = kbs_set_upload_dir( $upload_path );
+        }
+    }
+
+    return $upload_path;
 } // kbs_change_tickets_upload_dir
-add_action( 'admin_init', 'kbs_change_tickets_upload_dir', 999 );
+add_filter( 'upload_dir', 'kbs_change_tickets_upload_dir'  );
 
 /**
  * Sets the enctype for file upload forms.
