@@ -148,7 +148,7 @@ function kbs_show_upgrade_notice()	{
 		if ( get_option( 'kbs_upgrade_sequential' ) && kbs_get_tickets() )    {
             $upgrades_needed[] = array(
                 'name'        => sprintf(
-                    __( 'KB Support needs to update existing %s.' ),
+                    __( 'KB Support needs to update existing %s.', 'kb-support' ),
                     kbs_get_ticket_label_plural( true )
                 ),
                 'description' => sprintf(
@@ -162,7 +162,7 @@ function kbs_show_upgrade_notice()	{
         if ( version_compare( $kbs_version, '1.2.9', '<' ) || ! kbs_has_upgrade_completed( 'upgrade_ticket_sources' ) ) {
             $upgrades_needed[] = array(
                 'name'        => sprintf(
-                    __( 'KB Support needs to update existing %s.' ),
+                    __( 'KB Support needs to update existing %s.', 'kb-support' ),
                     kbs_get_ticket_label_plural( true )
                 ),
                 'description' => sprintf(
