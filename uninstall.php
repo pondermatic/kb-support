@@ -52,7 +52,7 @@ function kbs_uninstall()    {
     if ( kbs_get_option( 'remove_on_uninstall' ) )	{
 
         // Delete the Custom Post Types
-        $kbs_taxonomies = array( 'ticket_category', 'ticket_tag', 'article_category', 'article_tag', 'kbs_log_type', 'department' );
+        $kbs_taxonomies = array( 'ticket_category', 'ticket_tag', 'article_category', 'article_tag', 'kbs_log_type', 'ticket_source', 'department' );
         $kbs_post_types = array( 'kbs_ticket', 'kbs_ticket_reply', 'article', 'kbs_form', 'kbs_form_field', 'kbs_company', 'kbs_log' );
 
         foreach ( $kbs_post_types as $post_type ) {
@@ -113,6 +113,7 @@ function kbs_uninstall()    {
 
         // Delete all Plugin Options
         delete_option( 'kbs_last_ticket_number' );
+		delete_option( 'kbs_completed_upgrades' );
         delete_option( '_kbs_table_check' );
         delete_option( 'kbs_settings' );
         delete_option( 'kbs_version' );

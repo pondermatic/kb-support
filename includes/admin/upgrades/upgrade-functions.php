@@ -87,7 +87,11 @@ function kbs_do_automatic_upgrades() {
 	if ( version_compare( $kbs_version, '1.2.8', '<' ) ) {
 		kbs_v128_upgrades();
 	}
-	
+
+    if ( version_compare( $kbs_version, '1.2.9', '<' ) ) {
+		kbs_v129_upgrades();
+	}
+
 	if ( version_compare( $kbs_version, KBS_VERSION, '<' ) )	{
 
 		// Let us know that an upgrade has happened
@@ -137,23 +141,68 @@ function kbs_show_upgrade_notice()	{
 		);
 
 	} else {
-
+        $upgrades_needed = array();
 		// Include all 'Stepped' upgrade process notices in this else statement,
 		// to avoid having a pending, and new upgrade suggested at the same time
 
-		if ( get_option( 'kbs_upgrade_sequential' ) && kbs_get_tickets() ) {
-			printf(
-				'<div class="updated"><p>' . __( 'KB Support needs to upgrade existing %s numbers to make them sequential, click <a href="%s">here</a> to start the upgrade.', 'kb-support' ) . '</p></div>',
-				kbs_get_ticket_label_singular( true ),
-				admin_url( 'index.php?page=kbs-upgrades&kbs-upgrade-action=upgrade_sequential_ticket_numbers' )
-			);
-		}
+		if ( get_option( 'kbs_upgrade_sequential' ) && kbs_get_tickets() )    {
+            $upgrades_needed[] = array(
+                'name'        => sprintf(
+                    __( 'KB Support needs to update existing %s.' ),
+                    kbs_get_ticket_label_plural( true )
+                ),
+                'description' => sprintf(
+                    __( 'This process will update every existing %1$s in order to apply sequential %1$s numbering.', 'kb-support' ),
+                    kbs_get_ticket_label_singular( true )
+                ),
+                'action'      => 'upgrade_sequential_ticket_numbers'
+            );
+        }
+
+        if ( version_compare( $kbs_version, '1.2.9', '<' ) || ! kbs_has_upgrade_completed( 'upgrade_ticket_sources' ) ) {
+            $upgrades_needed[] = array(
+                'name'        => sprintf(
+                    __( 'KB Support needs to update existing %s.' ),
+                    kbs_get_ticket_label_plural( true )
+                ),
+                'description' => sprintf(
+                    __( 'This upgrade process will update every existing %1$s, and %1$s reply, storing the source by which they were logged within the new %2$s Sources taxonomy.', 'kb-support' ),
+                    kbs_get_ticket_label_singular( true ),
+                    kbs_get_ticket_label_singular()
+                ),
+                'action'      => 'upgrade_ticket_sources'
+            );
+        }
+
+        $upgrades_needed = apply_filters( 'kbs_upgrades_needed', $upgrades_needed, $kbs_version );
+
+        if ( ! empty( $upgrades_needed ) )  {
+            foreach( $upgrades_needed as $upgrade_needed ) : ?>
+				<?php
+				if ( ! empty( $upgrade_needed['depends'] ) && ! kbs_has_upgrade_completed( $upgrade_needed['depends'] ) )	{
+					continue;
+				}
+				?>
+
+                <div class="notice notice-error">
+                    <p><strong><?php echo esc_html( $upgrade_needed['name'] ); ?></strong></p>
+                    <p class="description"><?php echo $upgrade_needed['description']; ?></p>
+                    <p><?php printf(
+                        __( '<a href="%s" class="button-primary">Start Upgrade</a>', 'kb-support' ),
+                        add_query_arg( array(
+                            'page'               => 'kbs-upgrades',
+                            'kbs-upgrade-action' => $upgrade_needed['action']
+                        ), admin_url( 'index.php' ) )
+                    ); ?></p>
+                </div>
+            <?php endforeach;
+        }
 
 		/*
 		 *  NOTICE:
 		 *
 		 *  When adding new upgrade notices, please be sure to put the action into the upgrades array during install:
-		 *  /includes/install.php @ Appox Line 198
+		 *  /includes/install.php @ Appox Line 250
 		 *
 		 */
 
@@ -323,90 +372,6 @@ function kbs_v11_upgrades()	{
 } // kbs_v11_upgrades
 
 /**
- * Upgrades for KBS v1.1 and sequential ticket numbers.
- *
- * @since	1.1
- * @return	void
- */
-function kbs_v11_upgrade_sequential_ticket_numbers()	{
-
-	if ( ! current_user_can( 'manage_ticket_settings' ) )	{
-		wp_die( __( 'You do not have permission to perform upgrades', 'kb-support' ), __( 'Error', 'kb-support' ), array( 'response' => 403 ) );
-	}
-
-	ignore_user_abort( true );
-
-	if ( ! kbs_is_func_disabled( 'set_time_limit' ) )	{
-		set_time_limit( 0 );
-	}
-
-	$step  = isset( $_GET['step'] )  ? absint( $_GET['step'] )  : 1;
-	$total = isset( $_GET['total'] ) ? absint( $_GET['total'] ) : false;
-
-	if ( empty( $total ) || $total <= 1 ) {
-		$tickets = kbs_count_tickets();
-		foreach( $tickets as $status ) {
-			$total += $status;
-		}
-	}
-
-	$args = array(
-		'number' => 50,
-		'page'   => $step,
-		'status' => 'any',
-		'order'  => 'ASC'
-	);
-
-	$tickets = new KBS_Tickets_Query( $args );
-	$tickets = $tickets->get_tickets();
-
-	if ( $tickets )	{
-
-		$prefix = kbs_get_option( 'ticket_prefix' );
-		$suffix = kbs_get_option( 'ticket_suffix' );
-		$number = ! empty( $_GET['custom'] ) ? absint( $_GET['custom'] ) : intval( kbs_get_option( 'sequential_start', 1 ) );
-
-		foreach( $tickets as $ticket )	{
-
-			// Re-add the prefix and suffix
-			$ticket_number = $prefix . $number . $suffix;
-
-			kbs_update_ticket_meta( $ticket->ID, '_kbs_ticket_number', $ticket_number );
-
-			// Increment the ticket number
-            update_option( 'kbs_last_ticket_number', $number );
-			$number++;
-		}
-
-		// Tickets found so upgrade them
-		$step++;
-		$redirect = add_query_arg( array(
-			'page'        => 'kbs-upgrades',
-			'kbs-upgrade' => 'upgrade_sequential_ticket_numbers',
-			'step'        => $step,
-			'custom'      => $number,
-			'total'       => $total
-		), admin_url( 'index.php' ) );
-
-		wp_redirect( $redirect );
-        exit;
-
-	} else {
-		// No more tickets found, finish up
-		delete_option( 'kbs_upgrade_sequential' );
-		delete_option( 'kbs_doing_upgrade' );
-
-		wp_redirect( add_query_arg( array(
-            'post_type'   => 'kbs_ticket',
-            'kbs-message' => 'sequential-numbers-updated'
-            ), admin_url( 'edit.php' ) ) );
-		exit;
-	}
-
-} // kbs_v11_upgrade_sequential_ticket_numbers
-add_action( 'kbs-upgrade-upgrade_sequential_ticket_numbers', 'kbs_v11_upgrade_sequential_ticket_numbers' );
-
-/**
  * Upgrade routine for version 1.1.9.
  *
  * - Add setting for attach files. Default to false for existing users.
@@ -572,3 +537,306 @@ function kbs_v128_upgrades()	{
     }
 } // kbs_v128_upgrades
 
+/**
+ * Upgrade routine for version 1.2.9.
+ *
+ * - Create ticket source terms.
+ *
+ * @since	1.2.9
+ * @return	void
+ */
+function kbs_v129_upgrades()	{
+
+    $source_terms = get_terms( array(
+        'taxonomy' => 'ticket_source',
+        'hide_empty' => false
+    ) );
+
+    if ( empty( $source_terms ) && ! is_wp_error( $source_terms ) )   {
+        $sources = array(
+            1  => array(
+                'slug' => 'kbs-website',
+                'name' => __( 'Website', 'kb-support' ),
+                'desc' => sprintf( __( '%s received via website', 'kb-support' ), kbs_get_ticket_label_plural() )
+            ),
+            2  => array(
+                'slug' => 'kbs-email',
+                'name' => __( 'Email', 'kb-support' ),
+                'desc' => sprintf( __( '%s received via email', 'kb-support' ), kbs_get_ticket_label_plural() )
+            ),
+            3  => array(
+                'slug' => 'kbs-telephone',
+                'name' => __( 'Telephone', 'kb-support' ),
+                'desc' => sprintf( __( '%s received via telephone', 'kb-support' ), kbs_get_ticket_label_plural() )
+            ),
+            99 => array(
+                'slug' => 'kbs-other',
+                'name' => __( 'Other', 'kb-support' ),
+                'desc' => sprintf( __( '%s received via another means', 'kb-support' ), kbs_get_ticket_label_plural() )
+            )
+        );
+
+        $sources = apply_filters( 'kbs_ticket_log_sources', $sources );
+
+        foreach( $sources as $key => $source )  {
+            $name = trim( sanitize_text_field( $source['name'] ) );
+            $desc = sanitize_text_field( $source['desc'] );
+            $slug = sanitize_text_field( $source['slug'] );
+
+            $insert = wp_insert_term(
+                $name,
+                'ticket_source',
+                array(
+                    'description' => $desc,
+                    'slug'        => $slug
+                )
+            );
+        }
+    }
+
+} // kbs_v129_upgrades
+
+/**
+ * Update sequential ticket numbers.
+ *
+ * @since	1.2.9
+ * @return	void
+ */
+function kbs_upgrade_render_upgrade_sequential_ticket_numbers() {
+    $needs_migration = get_option( 'kbs_upgrade_sequential' );
+
+    if ( ! $needs_migration ) : ?>
+        <div id="kbs-migration-complete" class="notice notice-success">
+			<p>
+				<?php printf( __( '<strong>Update complete:</strong> You have already completed the update to %s numbers.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ); ?>
+			</p>
+            <p class="return-to-dashboard">
+                <a href="<?php echo admin_url(); ?>">
+                    <?php _e( 'WordPress Dashboard', 'kb-support' ); ?>
+                </a>&nbsp;&#124;&nbsp;
+                <a href="<?php echo esc_url( self_admin_url( 'edit.php?post_type=kbs_ticket' ) ); ?>">
+                    <?php printf( __( 'KBS %s', 'kb-support' ), kbs_get_ticket_label_plural() ); ?>
+                </a>
+            </p>
+		</div>
+		<?php return; ?>
+    <?php endif; ?>
+
+    <div id="kbs-migration-ready" class="notice notice-success" style="display: none;">
+		<p>
+			<?php printf(
+                __( '<strong>%s Update Complete:</strong> All %s numbers have been updated.', 'kb-support' ),
+                kbs_get_ticket_label_singular(),
+                kbs_get_ticket_label_singular( true )
+            ); ?>
+			<br /><br />
+			<?php _e( 'You may now leave this page.', 'kb-support' ); ?>
+		</p>
+        <p class="return-to-dashboard">
+            <a href="<?php echo admin_url(); ?>">
+                <?php _e( 'WordPress Dashboard', 'kb-support' ); ?>
+            </a>&nbsp;&#124;&nbsp;
+            <a href="<?php echo esc_url( self_admin_url( 'edit.php?post_type=kbs_ticket' ) ); ?>">
+                <?php printf( __( 'KBS %s', 'kb-support' ), kbs_get_ticket_label_plural() ); ?>
+            </a>
+        </p>
+	</div>
+
+	<div id="kbs-migration-nav-warn" class="notice notice-info">
+		<p>
+			<?php _e( '<strong>Important:</strong> Please leave this screen open and do not navigate away until the process completes.', 'kb-support' ); ?>
+		</p>
+	</div>
+
+	<style>
+		.dashicons.dashicons-yes { display: none; color: rgb(0, 128, 0); vertical-align: middle; }
+	</style>
+	<script>
+		jQuery( function($) {
+			$(document).ready(function () {
+				$(document).on("DOMNodeInserted", function (e) {
+					var element = e.target;
+
+					if (element.id === 'kbs-batch-success') {
+						element = $(element);
+
+						element.parent().prev().find('.kbs-migration.allowed').hide();
+						element.parent().prev().find('.kbs-migration.unavailable').show();
+						var element_wrapper = element.parents().eq(4);
+						element_wrapper.find('.dashicons.dashicons-yes').show();
+
+						var next_step_wrapper = element_wrapper.next();
+						if (next_step_wrapper.find('.postbox').length) {
+							next_step_wrapper.find('.kbs-migration.allowed').show();
+							next_step_wrapper.find('.kbs-migration.unavailable').hide();
+
+							if (auto_start_next_step) {
+								next_step_wrapper.find('.kbs-export-form').submit();
+							}
+						} else {
+							$('#kbs-migration-nav-warn').hide();
+							$('#kbs-migration-ready').slideDown();
+						}
+
+					}
+				});
+			});
+		});
+	</script>
+
+	<div class="metabox-holder">
+		<div class="postbox">
+			<h2 class="hndle">
+				<span><?php printf( __( 'Update %s numbers', 'kb-support' ), kbs_get_ticket_label_singular( true ) ); ?></span>
+				<span class="dashicons dashicons-yes"></span>
+			</h2>
+			<div class="inside update-ticket-numbers-control">
+				<p>
+					<?php printf( __( 'This will update each %s to use sequential numbering.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ); ?>
+				</p>
+				<form method="post" id="kbs-update-ticket-numbers-form" class="kbs-export-form kbs-import-export-form">
+			<span class="step-instructions-wrapper">
+
+				<?php wp_nonce_field( 'kbs_ajax_export', 'kbs_ajax_export' ); ?>
+
+				<?php if ( $needs_migration ) : ?>
+					<span class="kbs-migration allowed">
+						<input type="submit" id="update-ticket-numbers-submit" value="<?php printf( __( 'Update %s Numbers', 'kb-support' ), kbs_get_ticket_label_singular() ); ?>" class="button-primary"/>
+					</span>
+				<?php else: ?>
+					<input type="submit" disabled="disabled" id="update-ticket-numbers-submit" value="<?php printf( __( 'Update %s Numbers', 'kb-support' ), kbs_get_ticket_label_singular() ); ?>" class="button-secondary"/>
+					&mdash; <?php printf( __( '%s numbers have already been updated.', 'kb-support' ), kbs_get_ticket_label_singular() ); ?>
+				<?php endif; ?>
+
+				<input type="hidden" name="kbs-export-class" value="KBS_Ticket_Sequential_Numbering_Migration" />
+				<span class="spinner"></span>
+
+			</span>
+				</form>
+			</div><!-- .inside -->
+		</div><!-- .postbox -->
+	</div>
+
+	<?php
+} // kbs_upgrade_render_upgrade_sequential_ticket_numbers
+
+/**
+ * Upgrades for KBS v1.2.9 and ticket sources.
+ *
+ * @since	1.2.9
+ * @return	void
+ */
+function kbs_upgrade_render_upgrade_ticket_sources()	{
+	$migration_complete = kbs_has_upgrade_completed( 'upgrade_ticket_sources' );
+
+	if ( $migration_complete ) : ?>
+		<div id="kbs-migration-complete" class="notice notice-success">
+			<p>
+				<?php printf( __( '<strong>Migration complete:</strong> You have already completed the update to %s sources.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ); ?>
+			</p>
+            <p class="return-to-dashboard">
+                <a href="<?php echo admin_url(); ?>">
+                    <?php _e( 'WordPress Dashboard', 'kb-support' ); ?>
+                </a>&nbsp;&#124;&nbsp;
+                <a href="<?php echo esc_url( self_admin_url( 'edit.php?post_type=kbs_ticket' ) ); ?>">
+                    <?php printf( __( 'KBS %s', 'kb-support' ), kbs_get_ticket_label_plural() ); ?>
+                </a>
+            </p>
+		</div>
+		<?php return; ?>
+	<?php endif; ?>
+
+	<div id="kbs-migration-ready" class="notice notice-success" style="display: none;">
+		<p>
+			<?php printf( __( '<strong>%s Upgrade Complete:</strong> All database upgrades have been completed.', 'kb-support' ), kbs_get_ticket_label_singular() ); ?>
+			<br /><br />
+			<?php _e( 'You may now leave this page.', 'kb-support' ); ?>
+		</p>
+        <p class="return-to-dashboard">
+            <a href="<?php echo admin_url(); ?>">
+                <?php _e( 'WordPress Dashboard', 'kb-support' ); ?>
+            </a>&nbsp;&nbsp;&#124;&nbsp;&nbsp;
+            <a href="<?php echo esc_url( self_admin_url( 'edit.php?post_type=kbs_ticket' ) ); ?>">
+                <?php printf( __( 'KBS %s', 'kb-support' ), kbs_get_ticket_label_plural() ); ?>
+            </a>
+        </p>
+	</div>
+
+	<div id="kbs-migration-nav-warn" class="notice notice-info">
+		<h3><?php _e( 'Important', 'kb-support' ); ?></h3>
+		<p>
+			<?php _e( 'Please leave this screen open and do not navigate away until the process completes.', 'kb-support' ); ?>
+		</p>
+	</div>
+
+	<style>
+		.dashicons.dashicons-yes { display: none; color: rgb(0, 128, 0); vertical-align: middle; }
+	</style>
+	<script>
+		jQuery( function($) {
+			$(document).ready(function () {
+				$(document).on("DOMNodeInserted", function (e) {
+					var element = e.target;
+
+					if (element.id === 'kbs-batch-success') {
+						element = $(element);
+
+						element.parent().prev().find('.kbs-migration.allowed').hide();
+						element.parent().prev().find('.kbs-migration.unavailable').show();
+						var element_wrapper = element.parents().eq(4);
+						element_wrapper.find('.dashicons.dashicons-yes').show();
+
+						var next_step_wrapper = element_wrapper.next();
+						if (next_step_wrapper.find('.postbox').length) {
+							next_step_wrapper.find('.kbs-migration.allowed').show();
+							next_step_wrapper.find('.kbs-migration.unavailable').hide();
+
+							if (auto_start_next_step) {
+								next_step_wrapper.find('.kbs-export-form').submit();
+							}
+						} else {
+							$('#kbs-migration-nav-warn').hide();
+							$('#kbs-migration-ready').slideDown();
+						}
+
+					}
+				});
+			});
+		});
+	</script>
+
+	<div class="metabox-holder">
+		<div class="postbox">
+			<h2 class="hndle">
+				<span><?php printf( __( 'Update %s sources', 'kb-support' ), kbs_get_ticket_label_singular( true ) ); ?></span>
+				<span class="dashicons dashicons-yes"></span>
+			</h2>
+			<div class="inside migrate-ticket-sources-control">
+				<p>
+					<?php printf( __( 'This will update each %s and use the new %s Source taxonomy to identify the means by which it was logged.', 'kb-support' ), kbs_get_ticket_label_singular( true ), kbs_get_ticket_label_singular() ); ?>
+				</p>
+				<form method="post" id="kbs-update-ticket-sources-form" class="kbs-export-form kbs-import-export-form">
+			<span class="step-instructions-wrapper">
+
+				<?php wp_nonce_field( 'kbs_ajax_export', 'kbs_ajax_export' ); ?>
+
+				<?php if ( ! $migration_complete ) : ?>
+					<span class="kbs-migration allowed">
+						<input type="submit" id="update-ticket-sources-submit" value="<?php printf( __( 'Update %s Sources', 'kb-support' ), kbs_get_ticket_label_singular() ); ?>" class="button-primary"/>
+					</span>
+				<?php else: ?>
+					<input type="submit" disabled="disabled" id="update-ticket-sources-submit" value="<?php printf( __( 'Update %s Sources', 'kb-support' ), kbs_get_ticket_label_singular() ); ?>" class="button-secondary"/>
+					&mdash; <?php printf( __( '%s Sources have already been updated.', 'kb-support' ), kbs_get_ticket_label_singular() ); ?>
+				<?php endif; ?>
+
+				<input type="hidden" name="kbs-export-class" value="KBS_Ticket_Sources_Migration" />
+				<span class="spinner"></span>
+
+			</span>
+				</form>
+			</div><!-- .inside -->
+		</div><!-- .postbox -->
+	</div>
+
+	<?php
+} // kbs_upgrade_render_upgrade_ticket_sources

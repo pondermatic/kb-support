@@ -2,9 +2,9 @@
 Contributors: kbsupport, mikeyhoward1977
 Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
-Tested up to: 5.0.3
+Tested up to: 5.2.3
 Requires PHP: 5.4
-Stable tag: 1.2.8
+Stable tag: 1.2.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -123,6 +123,18 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.2.9 =
+
+**Friday, 11th October 2019**
+
+* The Ticket Source taxonomy has been added
+* Ensure all ticket media files are stored within the kbs folder
+* Upgrade procedures have been improved
+* Corrected spelling of "Log in"
+* Only enqueue KBS admin styles on KBS admin pages
+* Mapping field option was missing from form when Department field was selected
+* New ticket replies were not loaded if no existing replies existed
 
 = 1.2.8 =
 

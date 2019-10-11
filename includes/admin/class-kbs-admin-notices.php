@@ -348,6 +348,10 @@ class KBS_Admin_Notices	{
                     case 'sequential-numbers-updated':
                         $notices['updated']['kbs-sequential-numbers-updated'] = sprintf( __( '%s numbers have been successfully upgraded.', 'kb-support' ), $ticket_singular );
                         break;
+
+                    case 'ticket-sources-updated':
+                        $notices['updated']['kbs-ticket-sources-updated'] = sprintf( __( '%s sources have been successfully updated.', 'kb-support' ), $ticket_singular );
+                        break;
                 }
             }
         }

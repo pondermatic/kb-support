@@ -34,9 +34,13 @@ function kbs_load_scripts() {
 	wp_enqueue_script( 'kbs-ajax' );
 
 	$is_submission = kbs_is_submission_form();
-	$needs_bs4     = $post->ID == kbs_get_option( 'tickets_page' );
+	$needs_bs4     = false;
     $user_id       = get_current_user_id();
     $shortcodes    = array( 'kbs_tickets' );
+
+    if ( ! empty( $post ) && ! empty( $post->ID ) ) {
+        $needs_bs4 = $post->ID == kbs_get_option( 'tickets_page' );
+    }
 
     if ( ! $needs_bs4 && ! empty( $post ) && is_a( $post, 'WP_Post' ) )	{
         foreach( $shortcodes as $shortcode )    {
@@ -117,7 +121,11 @@ function kbs_register_styles() {
 
     $is_submission = kbs_is_submission_form();
     $shortcodes    = array( 'kbs_tickets', 'kbs_login', 'kbs_register', 'kbs_profile_editor' );
-	$needs_bs4     = $post->ID == kbs_get_option( 'tickets_page' );
+	$needs_bs4     = false;
+
+    if ( ! empty( $post ) && ! empty( $post->ID ) ) {
+        $needs_bs4 = $post->ID == kbs_get_option( 'tickets_page' );
+    }
 
     if ( ! $needs_bs4 && ! empty( $post ) && is_a( $post, 'WP_Post' ) )	{
         foreach( $shortcodes as $shortcode )    {
@@ -206,6 +214,10 @@ add_action( 'wp_enqueue_scripts', 'kbs_register_styles' );
  * @return	void
  */
 function kbs_load_admin_styles( $hook ) {
+
+    if ( ! apply_filters( 'kbs_load_admin_styles', kbs_is_admin_page(), $hook ) ) {
+		return;
+	}
 
 	$css_dir = KBS_PLUGIN_URL . 'assets/css/';
 	$suffix  = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';

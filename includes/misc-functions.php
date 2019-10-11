@@ -302,7 +302,7 @@ function kbs_get_notices( $notice = '', $notice_only = false )	{
 		),
 		'profile_login' => array(
 			'class'  => 'info',
-			'notice' => __( 'You must login to manage your profile.', 'kb-support' )
+			'notice' => __( 'You must log in to manage your profile.', 'kb-support' )
 		),
 		'username_incorrect' => array(
 			'class'  => 'error',
@@ -374,7 +374,7 @@ function kbs_get_notices( $notice = '', $notice_only = false )	{
 		),
 		'ticket_login' => array(
 			'class'  => 'info',
-			'notice' => sprintf( __( 'You must login to view your %s.', 'kb-support' ), kbs_get_ticket_label_plural( true ) )
+			'notice' => sprintf( __( 'You must log in to view your %s.', 'kb-support' ), kbs_get_ticket_label_plural( true ) )
 		),
 		'category_restricted' => array(
 			'class'  => 'info',
@@ -382,7 +382,7 @@ function kbs_get_notices( $notice = '', $notice_only = false )	{
 		),
 		'category_restricted_login' => array(
 			'class'  => 'info',
-			'notice' => sprintf( __( 'Access to %s in this category is restricted. Login to continue.', 'kb-support' ), kbs_get_article_label_plural() )
+			'notice' => sprintf( __( 'Access to %s in this category is restricted. Log in to continue.', 'kb-support' ), kbs_get_article_label_plural() )
 		),
 		'tag_restricted' => array(
 			'class'  => 'info',
@@ -390,7 +390,7 @@ function kbs_get_notices( $notice = '', $notice_only = false )	{
 		),
 		'tag_restricted_login' => array(
 			'class'  => 'info',
-			'notice' => sprintf( __( 'Access to %s with this tag is restricted. Login to continue.', 'kb-support' ), kbs_get_article_label_plural() )
+			'notice' => sprintf( __( 'Access to %s with this tag is restricted. Log in to continue.', 'kb-support' ), kbs_get_article_label_plural() )
 		),
 		'missing_reply' => array(
 			'class'  => 'error',
@@ -966,3 +966,36 @@ function kbs_get_country_list() {
 
 	return apply_filters( 'kbs_countries', $countries );
 } // kbs_get_country_list
+
+/**
+ * Check if the upgrade routine has been run for a specific action
+ *
+ * @since   1.2.9
+ * @param   string  $upgrade_action     The upgrade action to check completion for
+ * @return  bool    If the action has been added to the copmleted actions array
+ */
+function kbs_has_upgrade_completed( $upgrade_action = '' )	{
+
+	if ( empty( $upgrade_action ) )	{
+		return false;
+	}
+
+	$completed_upgrades = kbs_get_completed_upgrades();
+
+	return in_array( $upgrade_action, $completed_upgrades );
+
+} // kbs_has_upgrade_completed
+
+/**
+ * Retrieve the array of completed upgrade actions.
+ *
+ * @since   1.2.9
+ * @return  array   The array of completed upgrades.
+ */
+function kbs_get_completed_upgrades()	{
+
+	$completed_upgrades = get_option( 'kbs_completed_upgrades', array() );
+
+	return $completed_upgrades;
+
+} // kbs_get_completed_upgrades

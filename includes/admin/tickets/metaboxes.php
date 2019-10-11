@@ -39,6 +39,7 @@ function kbs_ticket_metabox_fields() {
 function kbs_ticket_remove_meta_boxes()	{
 	$metaboxes = array(
         array( 'submitdiv', 'kbs_ticket', 'side' ),
+        array( 'tagsdiv-ticket_source', 'kbs_ticket', 'side' ),
         array( 'tagsdiv-department', 'kbs_ticket', 'side' ),
         array( 'comments', 'kbs_ticket', 'normal' ),
 		array( 'commentsdiv', 'kbs_ticket', 'normal' ),
@@ -356,6 +357,14 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
 
                 <?php do_action( 'kbs_ticket_metabox_save_after_customer', $ticket_id ); ?>
 
+                <?php if ( ! $kbs_ticket_update ) : ?>
+                    <div id="kbs-source-select">
+                        <?php echo KBS()->html->ticket_source_dropdown( 'kbs_ticket_source', $kbs_ticket->source ); ?>
+                    </div>
+
+                    <?php do_action( 'kbs_ticket_metabox_save_after_source', $ticket_id ); ?>
+                <?php endif; ?>
+
                 <p><a href="<?php echo wp_get_referer(); ?>"><?php printf( __( 'Back to %s', 'kb-support' ), kbs_get_ticket_label_plural() ); ?></a>
 
 					<?php submit_button( 
@@ -560,12 +569,13 @@ function kbs_ticket_metabox_customer_section( $ticket_id )	{
 
 	global $kbs_ticket, $kbs_ticket_update;
 
-	$user_info   = $kbs_ticket->user_info;
-    $customer_id = $kbs_ticket->customer_id;
-    $user_id     = $kbs_ticket->user_id;
-    $edit_user   = '';
+	$user_info       = $kbs_ticket->user_info;
+    $customer_id     = $kbs_ticket->customer_id;
+    $customer_exists = kbs_customer_exists( $customer_id );
+    $user_id         = $kbs_ticket->user_id;
+    $edit_user       = '';
 
-    if ( '-1' == $customer_id || empty( $customer_id ) )    {
+    if ( '-1' == $customer_id || empty( $customer_id ) || ! $customer_exists )    {
         $customer = __( 'No customer assigned', 'kb-support' );
     } else  {
         if ( ! empty( $user_id ) )  {

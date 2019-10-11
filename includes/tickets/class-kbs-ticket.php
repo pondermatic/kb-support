@@ -273,7 +273,7 @@ class KBS_Ticket {
 	 * @since	1.0
 	 * @var		str
 	 */
-	protected $source = 1;
+	protected $source = 'kbs-website';
 
 	/**
 	 * Array of items that have changed since the last save() was run.
@@ -459,13 +459,13 @@ class KBS_Ticket {
 		$this->closed_date     = $this->setup_closed_date();
 		$this->status          = $ticket->post_status;
 		$this->post_status     = $this->status;
+        $this->source          = $this->get_source();
 
 		$this->status_nicename = kbs_get_post_status_label( $this->status );
 
 		// Content & Replies
 		$this->ticket_title    = $ticket->post_title;
 		$this->ticket_content  = $ticket->post_content;
-		//$this->replies         = $this->get_replies();
 		$this->files           = $this->get_files();
 
 		// User data
@@ -782,9 +782,7 @@ class KBS_Ticket {
 						break;
 
 					case 'department':
-						$term = intval( $this->department );
-						wp_set_object_terms( $this->ID, $term, 'department' );
-
+						wp_set_object_terms( $this->ID, intval( $value ), 'department' );
 						break;
 
 					case 'email':
@@ -842,12 +840,14 @@ class KBS_Ticket {
 						break;
 
 					case 'source':
-						$this->update_meta( '_kbs_ticket_source', $this->source );
+                        if ( ! empty( $this->source ) ) {
+                            wp_set_object_terms( $this->ID, $this->source, 'ticket_source' );
+                        }
 						break;
 
 					case 'status':
 						$this->update_status( $this->status );
-            break;
+                        break;
 
 					case 'privacy_accepted':
 						$this->update_meta( '_kbs_ticket_privacy_accepted', $this->privacy_accepted );
@@ -902,7 +902,6 @@ class KBS_Ticket {
 			$new_meta = array(
 				'agent_id'      => $this->agent_id,
                 'agents'        => $this->agents,
-				'source'        => $this->source,
 				'sla'           => array( 'respond' => $this->sla_respond, 'resolve' => $this->sla_resolve ),
 				'user_info'     => is_array( $this->user_info ) ? $this->user_info : array(),
 				'user_ip'       => $this->ip,
@@ -1805,16 +1804,21 @@ class KBS_Ticket {
 	 * Retrieve the source used for logging the ticket.
 	 *
 	 * @since	1.0
-	 * @return	str
+     * @param   string  $field  The field to return. See WP_Term.
+	 * @return	string  The term slug
 	 */
-	public function get_source() {
-		$sources = kbs_get_ticket_log_sources();
+	public function get_source( $field = 'slug' ) {
+		$return = $this->source;
 
-		if ( array_key_exists( $source, $sources ) )	{
-			$return = $sources[ $this->source ];
-		} else	{
-			$return = __( 'Source could not be found', 'kb-support' );
-		}
+        $sources = get_the_terms( $this->ID, 'ticket_source' );        
+
+        if ( $sources && ! is_wp_error( $sources ) ) {
+            $return = $sources[0]->$field;
+
+            if ( 'term_id' == $field || 'term_taxonomy_id' == $field )  {
+                $return = absint( $return );
+            }
+        }
 
 		return apply_filters( 'kbs_get_source', $return );
 	} // get_source
@@ -1879,8 +1883,6 @@ class KBS_Ticket {
 			'meta_input'   => array()
 		);
 
-		$args['meta_input']['_kbs_reply_source'] = ! empty( $reply_data['source'] ) ? $reply_data['source'] : 1;
-
 		if ( isset( $reply_data['customer_id'] ) )	{
 			$args['meta_input']['_kbs_reply_customer_id'] = $reply_data['customer_id'];
 		}
@@ -1909,6 +1911,9 @@ class KBS_Ticket {
 		if ( empty( $reply_id ) )	{
 			return false;
 		}
+
+		$source = ! empty( $reply_data['source'] ) ? $reply_data['source'] : 'kbs-website';
+		wp_set_object_terms( $reply_id, $source, 'ticket_source' );
 
 		if ( $close )	{
 			$this->update_status( 'closed' );

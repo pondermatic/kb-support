@@ -513,12 +513,12 @@ add_action( 'after_delete_post', 'kbs_cleanup_after_deleting_ticket' );
  * @return  array   Heartbeat response data
  */
 function kbs_monitor_heartbeat_for_new_ticket_replies( $response, $data )   {
-    if ( ! empty( $data['kbs_last_reply'] ) && ! empty( $data['kbs_ticket_id'] ) )   {
-        $last_reply   = $data['kbs_last_reply'];
+    if ( ! empty( $data['kbs_ticket_id'] ) )   {
+        $last_reply   = isset( $data['kbs_last_reply'] ) ? $data['kbs_last_reply'] : 0;
         $ticket_id    = $data['kbs_ticket_id'];
         $latest_reply = kbs_get_last_reply( $ticket_id );
 
-        if ( $last_reply < $latest_reply->ID )  {
+        if ( ! empty( $latest_reply ) && $last_reply < $latest_reply->ID )  {
             $response['has_new_reply'] = $latest_reply->ID;
         }
     }

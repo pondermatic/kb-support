@@ -825,7 +825,7 @@ function kbs_display_form_text_field( $field, $settings )	{
 		}
 
 		// Allow plugins to filter values for mapped fields
-		apply_filters( 'kbs_mapped_form_field_value', $value, $settings, $field );
+		$value = apply_filters( 'kbs_mapped_form_field_value', $value, $settings, $field );
 
 	} elseif ( ! empty( $settings['value'] ) )	{
 		$value = ' value="' . esc_attr( $settings['value'] ) . '"';

@@ -248,7 +248,7 @@ function kb_tickets_post_column_date( $ticket_id, $kbs_ticket )	{
 function kb_tickets_post_column_customer( $ticket_id, $kbs_ticket )	{
 	do_action( 'kbs_tickets_pre_column_customer', $kbs_ticket );
 
-	if ( ! empty( $kbs_ticket->customer_id ) )	{
+	if ( ! empty( $kbs_ticket->customer_id ) && kbs_customer_exists( $kbs_ticket->customer_id ) )	{
 
 		$customer = new KBS_Customer( $kbs_ticket->customer_id );
 
@@ -807,6 +807,12 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
 
 		$ticket->__set( 'status', $_POST['ticket_status'] );
 	}
+
+    if ( isset( $_POST['kbs_ticket_source'] ) )  {
+        $source = absint( $_POST['kbs_ticket_source'] );
+
+        $ticket->__set( 'source', $source );
+    }
 
 	$ticket->save();
 
