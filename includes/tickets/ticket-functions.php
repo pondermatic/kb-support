@@ -590,6 +590,10 @@ function kbs_add_ticket( $ticket_data )	{
 		$ticket->source = sanitize_text_field( $ticket_data['source'] );
 	}
 
+    if ( ! empty( $ticket_data['submission_origin'] ) )    {
+        $ticket->submission_origin = $ticket_data['submission_origin'];
+    }
+
 	do_action( 'kbs_before_add_ticket', $ticket->ID, $ticket_data );
 
 	$ticket->save();
@@ -621,6 +625,11 @@ function kbs_add_ticket_from_form( $form_id, $form_data )	{
 	$privacy_accepted = false;
 	$terms_agreed     = false;
 
+    if ( ! empty( $form_data['submission_origin'] ) )  {
+        $submission_origin = $form_data['submission_origin'];
+        unset( $form_data['submission_origin'] );
+    }
+
 	if ( isset( $form_data['privacy_accepted'] ) )	{
 		$privacy_accepted = $form_data['privacy_accepted'];
 		unset( $form_data['privacy_accepted'] );
@@ -632,11 +641,12 @@ function kbs_add_ticket_from_form( $form_id, $form_data )	{
 	}
 
 	$ticket_data = array(
-		'user_info'        => array(),
-		'attachments'      => array(),
-		'privacy_accepted' => $privacy_accepted,
-		'terms_agreed'     => $terms_agreed,
-		'form_data'        => array(
+		'user_info'         => array(),
+		'attachments'       => array(),
+        'submission_origin' => $submission_origin,
+		'privacy_accepted'  => $privacy_accepted,
+		'terms_agreed'      => $terms_agreed,
+		'form_data'         => array(
 			'id'   => (int)$form_id,
 			'data' => $form_data
 		)

@@ -943,7 +943,8 @@ function kbs_get_registered_settings() {
 						'id'   => 'show_agree_to_privacy_policy',
 						'name' => __( 'Agree to Privacy Policy?', 'kb-support' ),
 						'desc' => sprintf( __( 'Check this to show an agree to terms on the submission page that users must agree to before submitting their %s.', 'kb-support' ), strtolower( $single ) ),
-						'type' => 'checkbox'
+						'type' => 'checkbox',
+						'std'  => false
 					),
 					'agree_privacy_label' => array(
 						'id'   => 'agree_privacy_label',

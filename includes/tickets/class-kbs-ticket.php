@@ -243,6 +243,14 @@ class KBS_Ticket {
 	 */
 	protected $participants = array();
 
+    /**
+     * Origin of ticket. i.e. URL of submission form
+     *
+     * @since   1.2.10
+     * @var     string
+     */
+    protected $submission_origin = '';
+
 	/**
 	 * Timestamp of when privacu policy was agreed
 	 *
@@ -539,16 +547,17 @@ class KBS_Ticket {
 				'additional_phone' => isset( $this->user_info['additional_phone'] ) ? $this->user_info['additional_phone'] : '',
 				'website'          => isset( $this->user_info['website'] )          ? $this->user_info['website']          : ''
 			),
-			'company_id'       => $this->company_id,
-			'participants'     => $this->participants,
-			'sla_respond'      => $this->sla_respond,
-			'sla_resolve'      => $this->sla_resolve,
-			'status'           => $this->status,
-			'source'           => $this->source,
-			'privacy_accepted' => $this->privacy_accepted,
-			'terms_agree'      => $this->terms_agreed,
-			'files'            => $this->new_files,
-			'form_data'        => $this->form_data
+			'company_id'        => $this->company_id,
+			'participants'      => $this->participants,
+			'sla_respond'       => $this->sla_respond,
+			'sla_resolve'       => $this->sla_resolve,
+			'status'            => $this->status,
+			'source'            => $this->source,
+            'submission_origin' => $this->submission_origin,
+			'privacy_accepted'  => $this->privacy_accepted,
+			'terms_agree'       => $this->terms_agreed,
+			'files'             => $this->new_files,
+			'form_data'         => $this->form_data
 		);
 
 		$args = apply_filters( 'kbs_insert_ticket_args', array(
@@ -644,6 +653,10 @@ class KBS_Ticket {
 
 			if ( ! empty( $this->new_files ) )	{
 				$this->pending['files'] = $this->new_files;
+			}
+
+            if ( ! empty( $this->submission_origin ) )	{
+				$this->pending['submission_origin'] = $this->submission_origin;
 			}
 
 			if ( ! empty( $this->privacy_accepted ) )	{
@@ -847,6 +860,10 @@ class KBS_Ticket {
 
 					case 'status':
 						$this->update_status( $this->status );
+                        break;
+
+                    case 'submission_origin':
+                        $this->update_meta( '_kbs_ticket_submission_origin', $this->submission_origin );
                         break;
 
 					case 'privacy_accepted':
@@ -2043,6 +2060,14 @@ class KBS_Ticket {
 				date_i18n( $date_format, $terms_agreed )
 			);
 		}
+
+        $submission_origin = $this->get_meta( '_kbs_ticket_submission_origin', true );
+        if ( ! empty( $submission_origin ) )    {
+            $output .= sprintf( '<p class="description">%s: %s</p>',
+				__( 'Submitted from', 'kb-support' ),
+				$submission_origin
+			);
+        }
 
 		if ( ! empty( $this->ip ) )	{
 			$output .= sprintf( '<p class="description">%s: %s</p>',
