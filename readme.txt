@@ -2,9 +2,9 @@
 Contributors: kbsupport, mikeyhoward1977
 Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
-Tested up to: 5.2.3
+Tested up to: 5.2.4
 Requires PHP: 5.4
-Stable tag: 1.2.9
+Stable tag: 1.2.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -123,6 +123,13 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.2.10 =
+
+**Tuesday, 15th October 2019**
+
+* **New**: Display URL from which ticket was submitted within submission data window
+* **Bug**: Unable to deselect **Agree to Privacy Policy** checkbox  
 
 = 1.2.9 =
 
