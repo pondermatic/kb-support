@@ -58,6 +58,8 @@ function kbs_company_add_meta_boxes( $post )	{
 		array()
 	);
 
+    do_action( 'kbs_company_metaboxes_after_contact_details', $post );
+
 	if ( $kbs_company_update )	{
 		add_meta_box(
 			'kbs-company-metabox-tickets',
