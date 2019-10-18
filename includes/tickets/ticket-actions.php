@@ -88,6 +88,30 @@ function kbs_process_ticket_submission()	{
 add_action( 'init', 'kbs_process_ticket_submission' );
 
 /**
+* When a ticket is assigned to a department, set some additional meta keys.
+* This enables us to perform query's better within the admin ticket list
+* as meta_query OR tax_query is not possible.
+*
+* @since    1.3
+* @param    int    $ticket_id  Object ID.
+* @param    array  $terms      An array of object terms.
+* @param    array  $tt_ids     An array of term taxonomy IDs.
+* @param    string $taxonomy   Taxonomy slug.
+*/
+function kbs_ticket_assign_department_action( $ticket_id, $terms, $tt_ids, $taxonomy )   {
+    if ( 'kbs_ticket' != get_post_type( $ticket_id ) || $taxonomy != 'department' )  {
+        return;
+    }
+
+    if ( empty( $terms ) )  {
+        return delete_post_meta( 'ticket_id', '_kbs_ticket_department' );
+    }
+
+    update_post_meta( $ticket_id, '_kbs_ticket_department', (int) $terms[0], true );
+}
+add_action( 'set_object_terms', 'kbs_ticket_assign_department_action', 10, 4 );
+
+/**
  * When a customer closes a ticket via the {close_ticket} email tag.
  *
  * @since	1.0
