@@ -103,7 +103,7 @@ function kbs_ticket_assign_department_action( $ticket_id, $terms, $tt_ids, $taxo
         return;
     }
 
-    if ( empty( $terms ) )  {
+    if ( empty( $terms ) || empty( $terms[0] ) )  {
         return delete_post_meta( 'ticket_id', '_kbs_ticket_department' );
     }
 
