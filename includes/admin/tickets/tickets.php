@@ -837,6 +837,8 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
         $ticket->__set( 'source', $source );
     }
 
+	do_action( 'kbs_pre_save_ticket', $ticket, $post_id );
+
 	$ticket->save();
 
 	add_post_meta( $post_id, '_kbs_ticket_version_created', KBS_VERSION, true );
