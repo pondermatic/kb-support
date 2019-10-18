@@ -281,14 +281,37 @@ function kb_tickets_post_column_customer( $ticket_id, $kbs_ticket )	{
 function kb_tickets_post_column_agent( $ticket_id, $kbs_ticket )	{
 	do_action( 'kbs_tickets_pre_column_agent', $kbs_ticket );
 
+    $output = '';
+
 	if ( ! empty( $kbs_ticket->agent_id ) && $agent = new KBS_Agent( (int) $kbs_ticket->agent_id ) )	{
-		$output = sprintf( '<a href="%s">%s</a>',
+		$output .= sprintf( '<a href="%s">%s</a>',
 			get_edit_user_link( $kbs_ticket->agent_id ),
 			$agent->name
 		);
 	} else	{
-		$output = __( 'No Agent Assigned', 'kb-support' );
+		$output .= __( 'No Agent Assigned', 'kb-support' );
 	}
+
+    if ( kbs_departments_enabled() )    {
+        $department = kbs_get_department_for_ticket( $ticket_id );
+        if ( ! empty( $department ) )  {
+            $output .= '<br>';
+            $output .= sprintf(
+                '<span class="description"><a href="%s">%s</a></span>',
+                add_query_arg( array(
+                    'post_status'    => 'all',
+                    'post_type'      => 'kbs_ticket',
+                    'action'         => -1,
+                    'm'              => 0,
+                    'department'     => 'support',
+                    'filter_action'  => 'Filter',
+                    'paged'          => 1,
+                    'action2'        => -1
+                ), 'edit.php' ),
+                $department->name
+            );
+        }
+    }
 
 	do_action( 'kbs_tickets_post_column_agent', $kbs_ticket );
 
