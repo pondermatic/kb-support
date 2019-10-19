@@ -235,7 +235,18 @@ function kbs_agent_can_access_ticket( $ticket = '', $agent_id = '' )	{
     $return   = false;
 	$restrict = kbs_get_option( 'restrict_agent_view' );
 
-    if ( empty( $ticket->agent_id ) || $agent_id == $ticket->agent_id )	{
+	if ( ! empty( $ticket->agent_id ) && $agent_id == $ticket->agent_id )	{
+		$return = true;
+	} elseif ( kbs_departments_enabled() )	{
+		$departments       = kbs_get_agent_departments( $agent_id );
+		$ticket_department = kbs_get_department_for_ticket( $ticket->ID );
+
+		if ( ! empty( $departments ) && ! empty( $ticket_department ) && ! empty( $ticket_department->term_id ) )	{
+			if ( $agent_id == $ticket->agent_id || in_array( $ticket_department->term_id, $departments ) )	{
+				$return = true;
+			}
+		}
+	} elseif ( empty( $ticket->agent_id ) || $agent_id == $ticket->agent_id )	{
 		$return = true;
 	}
 
@@ -361,6 +372,36 @@ function kbs_auto_assign_agent( $ticket_data )	{
 
 } // kbs_auto_assign_agent
 add_filter( 'kbs_add_ticket_data', 'kbs_auto_assign_agent' );
+
+/**
+ * Retrieve all departments that an agent belongs to.
+ *
+ * @since	1.3
+ * @param	int		$agent_id	The agent WP user ID
+ * @return	array	Array of department IDs for which the agent belongs
+ */
+function kbs_get_agent_departments( $agent_id )	{
+	global $wpdb;
+
+	$agent_departments = array();
+
+	$results = $wpdb->get_results( $wpdb->prepare(
+		"
+		SELECT term_id
+		FROM $wpdb->termmeta
+		WHERE
+			meta_key = '%s'
+			AND
+			meta_value LIKE %s
+		", 'kbs_department_agents', '%' . sprintf( ':%d;', $agent_id ) . '%'
+	) );
+
+	foreach( $results as $result )	{
+		$agent_departments[] = $result->term_id;
+	}
+
+	return $agent_departments;
+} // kbs_get_agent_departments
 
 /**
  * Log an agents online status.

@@ -407,23 +407,35 @@ function kbs_restrict_agent_ticket_view( $query )	{
 	if ( kbs_get_option( 'restrict_agent_view', false ) )	{
 		$agent_id = get_current_user_id();
 
-        $meta_query = array(
-            'relation' => 'OR',
-            array(
-                'key'     => '_kbs_ticket_agent_id',
-                'value'   => $agent_id,
-                'type'    => 'NUMERIC'
-            ),
-            array(
-                'key'     => '_kbs_ticket_agent_id',
-                'value'   => ''
-            ),
-            array(
-                'key'     => '_kbs_ticket_agent_id',
-                'value'   => 'anything',
-                'compare' => 'NOT EXISTS'
-            )
-        );
+		$meta_query = array(
+			'relation' => 'OR',
+			array(
+				'key'     => '_kbs_ticket_agent_id',
+				'value'   => $agent_id,
+				'type'    => 'NUMERIC'
+			)
+		);
+
+		if ( kbs_departments_enabled() )	{
+			$departments  = kbs_get_agent_departments( $agent_id );
+			foreach( $departments as $department )	{
+				$meta_query[] = array(
+					'key'   => '_kbs_ticket_department',
+					'value' => (int) $department,
+					'type'  => 'NUMERIC'
+				);
+			}
+		} else	{
+			$meta_query[] = array(
+				'key'   => '_kbs_ticket_agent_id',
+				'value' => ''
+			);
+			$meta_query[] = array(
+				'key'     => '_kbs_ticket_agent_id',
+				'value'   => 'anything',
+				'compare' => 'NOT EXISTS'
+			);
+		}
 
         if ( kbs_multiple_agents() )    {
             $meta_query[] = array(
@@ -434,7 +446,6 @@ function kbs_restrict_agent_ticket_view( $query )	{
         }
 
         $query->set( 'meta_query', $meta_query );
-
   }
 
 } // kbs_restrict_agent_ticket_view
