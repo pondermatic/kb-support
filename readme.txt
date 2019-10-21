@@ -4,7 +4,7 @@ Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
 Tested up to: 5.2.4
 Requires PHP: 5.4
-Stable tag: 1.2.10
+Stable tag: 1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -123,6 +123,20 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.3 =
+
+**Tuesday, 22nd October 2019**
+
+**IMPORTANT**: This release adjusts the rules dictating which tickets an agent can view. Please read [this article](https://kb-support.com/articles/agent-ticket-access/) for more details.
+
+* **New**: We've improved the way KBS utilises departments to support our new [Advanced Ticket Assignment](https://kb-support.com/downloads/advanced-ticket-assignment/) extension
+* **New**: You can now add a new customer when opening a new ticket within admin
+
+* **Tweak**: Cleanup when a department is deleted
+* **Tweak**: Added the department name to the agent column if a ticket is assigned to a department
+* **Tweak**: Added the `kbs_company_metaboxes_after_contact_details` hook
+* **Tweak**: Added the `kbs_pre_save_ticket` hook
 
 = 1.2.10 =
 
