@@ -48,6 +48,23 @@ function kbs_get_customer_id_from_ticket( $ticket_id )	{
 } // kbs_get_customer_id_from_ticket
 
 /**
+ * Whether or not a customer exists.
+ *
+ * @since	1.0
+ * @param	int		$customer_id	The customer ID
+ * @return	bool	True or false
+ */
+function kbs_customer_exists( $customer_id )	{
+	$customer = new KBS_Customer( $customer_id );
+
+    if ( empty( $customer->id ) )  {
+        return false;
+    }
+
+    return true;
+} // kbs_customer_exists
+
+/**
  * Adds a customer to a company.
  *
  * @since   1.2

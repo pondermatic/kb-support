@@ -215,6 +215,10 @@ add_action( 'wp_enqueue_scripts', 'kbs_register_styles' );
  */
 function kbs_load_admin_styles( $hook ) {
 
+    if ( ! apply_filters( 'kbs_load_admin_styles', kbs_is_admin_page(), $hook ) ) {
+		return;
+	}
+
 	$css_dir = KBS_PLUGIN_URL . 'assets/css/';
 	$suffix  = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 

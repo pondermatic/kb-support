@@ -74,12 +74,17 @@ function kbs_get_ticket_reply_label()	{
  * @return	str
  */
 function kbs_render_hidden_form_fields( $form_id )	{
+    global $wp;
+
+    $page_url = kbs_get_current_page_url();
+
 	$hidden_fields = array(
-		'kbs_form_id'  => $form_id,
-		'kbs_honeypot' => '',
-		'redirect'     => kbs_get_current_page_url(),
-		'kbs_nonce'    => wp_create_nonce( 'kbs_submission_nonce' ),
-		'action'       => 'kbs_validate_ticket_form'
+		'kbs_form_id'           => $form_id,
+		'kbs_honeypot'          => '',
+		'redirect'              => $page_url,
+		'kbs_nonce'             => wp_create_nonce( 'kbs_submission_nonce' ),
+		'action'                => 'kbs_validate_ticket_form',
+        'kbs_submission_origin' => $page_url
 	);
 
 	$hidden_fields = apply_filters( 'kbs_form_hidden_fields', $hidden_fields, $form_id );

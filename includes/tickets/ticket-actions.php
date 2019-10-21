@@ -31,10 +31,11 @@ function kbs_process_ticket_submission()	{
 
 	kbs_do_honeypot_check( $_POST );
 
-	$form_id          = ! empty( $_POST['kbs_form_id'] )              ? $_POST['kbs_form_id'] : '';
-	$redirect         = ! empty( $_POST['redirect'] )                 ? $_POST['redirect']    : '';
-	$privacy_accepted = ! empty( $_POST['kbs_agree_privacy_policy'] ) ? true                  : false;
-	$terms_agreed     = ! empty( $_POST['kbs_agree_terms'] )          ? true                  : false;
+	$form_id           = ! empty( $_POST['kbs_form_id'] )              ? $_POST['kbs_form_id'] : '';
+	$redirect          = ! empty( $_POST['redirect'] )                 ? $_POST['redirect']    : '';
+	$privacy_accepted  = ! empty( $_POST['kbs_agree_privacy_policy'] ) ? true                  : false;
+	$terms_agreed      = ! empty( $_POST['kbs_agree_terms'] )          ? true                  : false;
+    $submission_origin = ! empty( $_POST['kbs_submission_origin'] )    ? $_POST['kbs_submission_origin'] : false;
 
 	$posted = array();
 	$ignore = kbs_form_ignore_fields();
@@ -51,6 +52,10 @@ function kbs_process_ticket_submission()	{
 
 		}
 	}
+
+    if ( $submission_origin && FALSE !== filter_var( $submission_origin, FILTER_VALIDATE_URL ) )   {
+        $posted['submission_origin'] = $submission_origin;
+    }
 
 	if ( $privacy_accepted )	{
 		$posted['privacy_accepted'] = current_time( 'timestamp' );
