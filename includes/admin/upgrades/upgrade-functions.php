@@ -174,6 +174,20 @@ function kbs_show_upgrade_notice()	{
             );
         }
 
+		 if ( version_compare( $kbs_version, '1.3', '<' ) || ! kbs_has_upgrade_completed( 'upgrade_ticket_departments' ) ) {
+            $upgrades_needed[] = array(
+                'name'        => sprintf(
+                    __( 'KB Support needs to update existing %s.', 'kb-support' ),
+                    kbs_get_ticket_label_plural( true )
+                ),
+                'description' => sprintf(
+                    __( 'This upgrade process will update all %s to support new department features.', 'kb-support' ),
+                    kbs_get_ticket_label_plural( true )
+                ),
+                'action'      => 'upgrade_ticket_departments'
+            );
+        }
+
         $upgrades_needed = apply_filters( 'kbs_upgrades_needed', $upgrades_needed, $kbs_version );
 
         if ( ! empty( $upgrades_needed ) )  {
@@ -840,3 +854,124 @@ function kbs_upgrade_render_upgrade_ticket_sources()	{
 
 	<?php
 } // kbs_upgrade_render_upgrade_ticket_sources
+
+/**
+ * Upgrades for KBS v1.3 and ticket departments.
+ *
+ * @since	1.3
+ * @return	void
+ */
+function kbs_upgrade_render_upgrade_ticket_departments()	{
+	$migration_complete = kbs_has_upgrade_completed( 'upgrade_ticket_departments' );
+
+	if ( $migration_complete ) : ?>
+		<div id="kbs-migration-complete" class="notice notice-success">
+			<p>
+				<?php printf( __( '<strong>Migration complete:</strong> You have already completed the update to %s departments.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ); ?>
+			</p>
+            <p class="return-to-dashboard">
+                <a href="<?php echo admin_url(); ?>">
+                    <?php _e( 'WordPress Dashboard', 'kb-support' ); ?>
+                </a>&nbsp;&#124;&nbsp;
+                <a href="<?php echo esc_url( self_admin_url( 'edit.php?post_type=kbs_ticket' ) ); ?>">
+                    <?php printf( __( 'KBS %s', 'kb-support' ), kbs_get_ticket_label_plural() ); ?>
+                </a>
+            </p>
+		</div>
+		<?php return; ?>
+	<?php endif; ?>
+
+	<div id="kbs-migration-ready" class="notice notice-success" style="display: none;">
+		<p>
+			<?php printf( __( '<strong>%s Upgrade Complete:</strong> All database upgrades have been completed.', 'kb-support' ), kbs_get_ticket_label_singular() ); ?>
+			<br /><br />
+			<?php _e( 'You may now leave this page.', 'kb-support' ); ?>
+		</p>
+        <p class="return-to-dashboard">
+            <a href="<?php echo admin_url(); ?>">
+                <?php _e( 'WordPress Dashboard', 'kb-support' ); ?>
+            </a>&nbsp;&nbsp;&#124;&nbsp;&nbsp;
+            <a href="<?php echo esc_url( self_admin_url( 'edit.php?post_type=kbs_ticket' ) ); ?>">
+                <?php printf( __( 'KBS %s', 'kb-support' ), kbs_get_ticket_label_plural() ); ?>
+            </a>
+        </p>
+	</div>
+
+	<div id="kbs-migration-nav-warn" class="notice notice-info">
+		<h3><?php _e( 'Important', 'kb-support' ); ?></h3>
+		<p>
+			<?php _e( 'Please leave this screen open and do not navigate away until the process completes.', 'kb-support' ); ?>
+		</p>
+	</div>
+
+	<style>
+		.dashicons.dashicons-yes { display: none; color: rgb(0, 128, 0); vertical-align: middle; }
+	</style>
+	<script>
+		jQuery( function($) {
+			$(document).ready(function () {
+				$(document).on("DOMNodeInserted", function (e) {
+					var element = e.target;
+
+					if (element.id === 'kbs-batch-success') {
+						element = $(element);
+
+						element.parent().prev().find('.kbs-migration.allowed').hide();
+						element.parent().prev().find('.kbs-migration.unavailable').show();
+						var element_wrapper = element.parents().eq(4);
+						element_wrapper.find('.dashicons.dashicons-yes').show();
+
+						var next_step_wrapper = element_wrapper.next();
+						if (next_step_wrapper.find('.postbox').length) {
+							next_step_wrapper.find('.kbs-migration.allowed').show();
+							next_step_wrapper.find('.kbs-migration.unavailable').hide();
+
+							if (auto_start_next_step) {
+								next_step_wrapper.find('.kbs-export-form').submit();
+							}
+						} else {
+							$('#kbs-migration-nav-warn').hide();
+							$('#kbs-migration-ready').slideDown();
+						}
+
+					}
+				});
+			});
+		});
+	</script>
+
+	<div class="metabox-holder">
+		<div class="postbox">
+			<h2 class="hndle">
+				<span><?php printf( __( 'Update %s departments', 'kb-support' ), kbs_get_ticket_label_singular( true ) ); ?></span>
+				<span class="dashicons dashicons-yes"></span>
+			</h2>
+			<div class="inside migrate-ticket-departments-control">
+				<p>
+					<?php printf( __( 'This will update each %s adding additional data to support department features.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ); ?>
+				</p>
+				<form method="post" id="kbs-update-ticket-departments-form" class="kbs-export-form kbs-import-export-form">
+			<span class="step-instructions-wrapper">
+
+				<?php wp_nonce_field( 'kbs_ajax_export', 'kbs_ajax_export' ); ?>
+
+				<?php if ( ! $migration_complete ) : ?>
+					<span class="kbs-migration allowed">
+						<input type="submit" id="update-ticket-departments-submit" value="<?php printf( __( 'Update %s Departments', 'kb-support' ), kbs_get_ticket_label_singular() ); ?>" class="button-primary"/>
+					</span>
+				<?php else: ?>
+					<input type="submit" disabled="disabled" id="update-ticket-departments-submit" value="<?php printf( __( 'Update %s Departments', 'kb-support' ), kbs_get_ticket_label_singular() ); ?>" class="button-secondary"/>
+					&mdash; <?php printf( __( '%s Departments have already been updated.', 'kb-support' ), kbs_get_ticket_label_singular() ); ?>
+				<?php endif; ?>
+
+				<input type="hidden" name="kbs-export-class" value="KBS_Ticket_Department_Migration" />
+				<span class="spinner"></span>
+
+			</span>
+				</form>
+			</div><!-- .inside -->
+		</div><!-- .postbox -->
+	</div>
+
+	<?php
+} // kbs_upgrade_render_upgrade_ticket_departments

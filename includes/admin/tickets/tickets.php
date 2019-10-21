@@ -281,14 +281,37 @@ function kb_tickets_post_column_customer( $ticket_id, $kbs_ticket )	{
 function kb_tickets_post_column_agent( $ticket_id, $kbs_ticket )	{
 	do_action( 'kbs_tickets_pre_column_agent', $kbs_ticket );
 
+    $output = '';
+
 	if ( ! empty( $kbs_ticket->agent_id ) && $agent = new KBS_Agent( (int) $kbs_ticket->agent_id ) )	{
-		$output = sprintf( '<a href="%s">%s</a>',
+		$output .= sprintf( '<a href="%s">%s</a>',
 			get_edit_user_link( $kbs_ticket->agent_id ),
 			$agent->name
 		);
 	} else	{
-		$output = __( 'No Agent Assigned', 'kb-support' );
+		$output .= __( 'No Agent Assigned', 'kb-support' );
 	}
+
+    if ( kbs_departments_enabled() )    {
+        $department = kbs_get_department_for_ticket( $ticket_id );
+        if ( ! empty( $department ) )  {
+            $output .= '<br>';
+            $output .= sprintf(
+                '<span class="description"><a href="%s">%s</a></span>',
+                add_query_arg( array(
+                    'post_status'    => 'all',
+                    'post_type'      => 'kbs_ticket',
+                    'action'         => -1,
+                    'm'              => 0,
+                    'department'     => 'support',
+                    'filter_action'  => 'Filter',
+                    'paged'          => 1,
+                    'action2'        => -1
+                ), 'edit.php' ),
+                $department->name
+            );
+        }
+    }
 
 	do_action( 'kbs_tickets_post_column_agent', $kbs_ticket );
 
@@ -384,23 +407,35 @@ function kbs_restrict_agent_ticket_view( $query )	{
 	if ( kbs_get_option( 'restrict_agent_view', false ) )	{
 		$agent_id = get_current_user_id();
 
-        $meta_query = array(
-            'relation' => 'OR',
-            array(
-                'key'     => '_kbs_ticket_agent_id',
-                'value'   => $agent_id,
-                'type'    => 'NUMERIC'
-            ),
-            array(
-                'key'     => '_kbs_ticket_agent_id',
-                'value'   => ''
-            ),
-            array(
-                'key'     => '_kbs_ticket_agent_id',
-                'value'   => 'anything',
-                'compare' => 'NOT EXISTS'
-            )
-        );
+		$meta_query = array(
+			'relation' => 'OR',
+			array(
+				'key'     => '_kbs_ticket_agent_id',
+				'value'   => $agent_id,
+				'type'    => 'NUMERIC'
+			)
+		);
+
+		if ( kbs_departments_enabled() )	{
+			$departments  = kbs_get_agent_departments( $agent_id );
+			foreach( $departments as $department )	{
+				$meta_query[] = array(
+					'key'   => '_kbs_ticket_department',
+					'value' => (int) $department,
+					'type'  => 'NUMERIC'
+				);
+			}
+		} else	{
+			$meta_query[] = array(
+				'key'   => '_kbs_ticket_agent_id',
+				'value' => ''
+			);
+			$meta_query[] = array(
+				'key'     => '_kbs_ticket_agent_id',
+				'value'   => 'anything',
+				'compare' => 'NOT EXISTS'
+			);
+		}
 
         if ( kbs_multiple_agents() )    {
             $meta_query[] = array(
@@ -411,7 +446,6 @@ function kbs_restrict_agent_ticket_view( $query )	{
         }
 
         $query->set( 'meta_query', $meta_query );
-
   }
 
 } // kbs_restrict_agent_ticket_view
@@ -813,6 +847,8 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
 
         $ticket->__set( 'source', $source );
     }
+
+	do_action( 'kbs_pre_save_ticket', $ticket, $post_id );
 
 	$ticket->save();
 

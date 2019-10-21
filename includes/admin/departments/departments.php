@@ -133,3 +133,29 @@ function kbs_save_department_agents( $term_id )	{
 } // kbs_save_department_agents
 add_action( 'edited_department', 'kbs_save_department_agents', 10 );
 add_action( 'create_department', 'kbs_save_department_agents', 10 );
+
+/**
+ * When a department term is deleted, remove ticket associations from meta table.
+ *
+ * @since   1.0
+ * @param   int     $term_id      Term ID.
+ * @param   int     $tt_id        Term taxonomy ID.
+ * @param   mixed   $deleted_term Copy of the already-deleted term, in the form specified
+ *                              by the parent function. WP_Error otherwise.
+ * @param   array   $object_ids   List of term object IDs.
+ */
+function kbs_ticket_cleanup_ticket_department_meta_action( $term_id, $tt_id, $deleted_term, $object_ids )   {
+    global $wpdb;
+
+    $wpdb->query( 
+        $wpdb->prepare( 
+            "
+            DELETE FROM $wpdb->postmeta
+            WHERE meta_key = %s
+            AND meta_value = %d
+            ",
+	        '_kbs_ticket_department', $term_id
+        )
+    );
+} // kbs_ticket_cleanup_ticket_department_meta_action
+add_action( 'delete_department', 'kbs_ticket_cleanup_ticket_department_meta_action', 10, 4 );
