@@ -355,8 +355,8 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
 					) ); ?>
                     <?php if ( ! $kbs_ticket_update && kbs_can_edit_customers() ) : ?>
                         <br>
-                        <span class="add-ticket-customer">
-                            <a href="#"><?php _e( 'Add New', 'kb-support' ); ?></a>
+                        <span class="add-ticket-customer description">
+                            <a href="#TB_inline?width=400&height=350&inlineId=add-customer" title="<?php _e( 'Add a New Customer', 'kb-support' ); ?>" class="thickbox kbs-thickbox" style="padding-left: .4em;"><?php _e( 'Add New', 'kb-support' ); ?></a>
                         </span>
                     <?php endif; ?>
                 </div>

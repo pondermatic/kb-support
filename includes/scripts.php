@@ -293,6 +293,8 @@ function kbs_load_admin_scripts( $hook ) {
 		'add_new_ticket'          => sprintf( __( 'Add New %s', 'kb-support' ), $singular ),
 		'admin_url'               => admin_url(),
 		'ajax_loader'             => KBS_PLUGIN_URL . 'assets/images/loading.gif',
+        'customer_email_required' => __( 'Customer email address is required', 'kb-support' ),
+        'customer_name_required'  => __( 'Customer name is required', 'kb-support' ),
         'delete_reply_warn'       => __( "You will permanently delete this reply.\n\nDepending on configuration, your customer may have already received it via email.\n\nClick 'Cancel' to stop, 'OK' to delete.", 'kb-support' ),
         'delete_ticket_warn'      => sprintf(
             __( "You are about to permanently delete this %s.\n\nThis action cannot be undone.\n\nClick 'Cancel' to stop, 'OK' to delete.", 'kb-support' ), kbs_get_ticket_label_singular( true )

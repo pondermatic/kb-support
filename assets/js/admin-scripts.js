@@ -797,6 +797,7 @@ jQuery(document).ready(function ($) {
 		},
 		init : function() {
 			this.add_customer();
+            this.new_customer();
 			this.edit_customer();
 			this.cancel_edit();
 			this.add_email();
@@ -852,6 +853,69 @@ jQuery(document).ready(function ($) {
 
 			});
 		},
+        new_customer: function() {
+            $( document.body ).on( 'click', '#kbs-new-customer-save', function( e ) {
+                e.preventDefault();
+
+                var button  = $(this);
+
+                var customer_name    = $('#kbs_name').val(),
+                    customer_email   = $('#kbs_email').val(),
+                    customer_company = $('#kbs_company').val();
+
+				// Return early if no name or email is entered
+				if ('' === customer_name) {
+					alert(kbs_vars.customer_name_required);
+					return;
+				}
+                if ('' === customer_email) {
+					alert(kbs_vars.customer_email_required);
+					return;
+				}
+
+                var postData = {
+					action             : 'kbs_new_customer_for_ticket',
+					customer_name      : customer_name,
+                    customer_email     : customer_email,
+					customer_company   : customer_company
+				};
+
+                $.ajax({
+					type: 'POST',
+					dataType: 'json',
+					data: postData,
+					url: ajaxurl,
+					beforeSend: function()	{
+						button.attr('disabled', true);
+                        $('#add-customer').addClass('kbs-mute');
+					},
+					success: function (response)	{
+						if ( response.success )	{
+							// Update customer list and exit
+                            $('#kbs_customer_id').append(response.data.option);
+                            $('#kbs_customer_id').val(response.data.id);
+                            $('#kbs_customer_id').trigger('chosen:updated');
+                            button.attr('disabled', false);
+                            $('#kbs_name').val('');
+                            $('#kbs_email').val('');
+                            $('#kbs_company').val('-1');
+                            $('#kbs_company').trigger('chosen:updated');
+                            tb_remove();
+						} else	{
+							button.attr('disabled', false);
+                            if ( response.data.message )    {
+                                alert(response.data.message);
+                            }
+						}
+					}
+				}).fail(function (data) {
+					if ( window.console && window.console.log ) {
+						console.log( data );
+					}
+				});
+
+            });
+        },
 		edit_customer: function() {
 			$( document.body ).on( 'click', '#edit-customer', function( e ) {
 				e.preventDefault();

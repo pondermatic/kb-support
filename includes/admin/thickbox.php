@@ -37,8 +37,9 @@ function kbs_media_button()	{
 	/** Only run in post/page creation and edit screens */
 	if ( in_array( $pagenow, array( 'post.php', 'page.php', 'post-new.php', 'post-edit.php' ) ) && in_array( $typenow, $post_types ) ) {
 
+        $title = sprintf( __( 'Link %s to %s', 'kb-support' ), kbs_get_article_label_singular(), kbs_get_ticket_label_singular() );
 		$img = '<span class="wp-media-buttons-icon dashicons dashicons-admin-links" id="kbs-media-button"></span> ';
-		$output = '<a href="#TB_inline?width=640&inlineId=choose-article" class="thickbox button kbs-thickbox" style="padding-left: .4em;">' . $img . sprintf( __( 'Link %s', 'kb-support' ), kbs_get_article_label_singular() ) . '</a>';
+		$output = '<a href="#TB_inline?width=640&inlineId=choose-article" title="' . $title . '" class="thickbox button kbs-thickbox" style="padding-left: .4em;">' . $img . sprintf( __( 'Link %s', 'kb-support' ), kbs_get_article_label_singular() ) . '</a>';
 
 	}
 	echo $output;
@@ -120,3 +121,67 @@ function kbs_admin_footer_for_thickbox() {
 
 } // kbs_admin_footer_for_thickbox
 add_action( 'admin_footer', 'kbs_admin_footer_for_thickbox' );
+
+/**
+ * Admin Footer For Add Customer Thickbox.
+ *
+ * Prints the footer code needed for the Add Customer link.
+ *
+ * @since	1.3
+ * @global	$pagenow
+ * @global	$typenow
+ * @return	void
+ */
+function kbs_admin_footer_for_add_customer_thickbox() {
+
+	global $pagenow, $typenow;
+
+    $post_types = array( 'kbs_ticket' );
+	$post_types = apply_filters( 'kbs_add_customer_link_post_types', $post_types );
+
+	// Only run in post/page creation and edit screens
+	if ( in_array( $pagenow, array( 'post.php', 'page.php', 'post-new.php', 'post-edit.php' ) ) && in_array( $typenow, $post_types ) )	{
+
+		?>
+		<div id="add-customer" style="display: none;">
+			<div class="wrap" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+				<p>
+                    <label for="kbs_name"><strong><?php _e( 'Customer Name', 'kb-support' ); ?></strong>:</label><br>
+                	<input type="text" class="regular-text" size="30" id="kbs_name" value="" />
+				</p>
+
+                <p>
+				    <label for="kbs_email"><strong><?php _e( 'Email Address', 'kb-support' ); ?></strong>:</label><br>
+                	<input type="text" class="regular-text" size="30" id="kbs_email" value="" />
+				</p>
+
+                <?php if ( kbs_has_companies() ) : ?>
+                    <p>
+                        <label for="kbs_company"><strong><?php _e( 'Select Company', 'kb-support' ); ?></strong>:</label><br>
+                        <?php echo KBS()->html->company_dropdown( array(
+                            'name' => 'kbs_company',
+                            'placeholder'      => __( 'Select a Company', 'kb-support' ),
+                            'show_option_none' => __( 'No Company', 'kb-support' ),
+                            'number'           => -1,
+                            'data'        => array(
+                                'search-type'        => 'company',
+                                'search-placeholder' => __( 'Type to search all companies', 'kb-support' )
+                            )
+                        ) ); ?>
+                    </p>
+                <?php else : ?>
+                    <input type="hidden" name="kbs_company" id="kbs_company" value="" />
+                <?php endif; ?>
+
+				<p class="submit">
+					<input type="button" id="kbs-new-customer-save" class="button-primary" value="<?php _e( 'Create Customer', 'kb-support' ); ?>" />
+					<a id="kbs-cancel-add-customer" class="button-secondary" onclick="tb_remove();"><?php _e( 'Cancel', 'kb-support' ); ?></a>
+				</p>
+			</div>
+		</div>
+
+	<?php
+	}
+
+} // kbs_admin_footer_for_add_customer_thickbox
+add_action( 'admin_footer', 'kbs_admin_footer_for_add_customer_thickbox' );

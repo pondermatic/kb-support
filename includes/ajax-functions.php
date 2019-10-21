@@ -734,7 +734,7 @@ function kbs_ajax_get_customer_data()	{
 add_action( 'wp_ajax_kbs_get_customer_data', 'kbs_ajax_get_customer_data' );
 
 /**
- * Adds a new customer.
+ * Adds a new customer via the customer screen.
  *
  * @since	1.0
  * @return	void
@@ -800,6 +800,74 @@ function kbs_ajax_add_customer()	{
 
 } // kbs_ajax_add_customer
 add_action( 'wp_ajax_kbs_add_customer', 'kbs_ajax_add_customer' );
+
+/**
+ * Adds a new customer via the ticket screen.
+ *
+ * @since	1.0
+ * @return	void
+ */
+function kbs_ajax_new_customer_for_ticket()	{
+
+	if ( ! is_email( $_POST['customer_email'] ) )	{
+		wp_send_json_error( array(
+			'message' => __( 'Invalid email address.', 'kb-support' )
+		) );
+	}
+
+	// If a WP user exists with this email, link the customer account
+	$user_id   = 0;
+	$user_data = get_user_by( 'email', $_POST['customer_email'] );
+	if ( ! empty( $user_data ) )	{
+		$user_id = $user_data->ID;
+	}
+
+    $customer      = new stdClass;
+    $company_id    = isset( $_POST['customer_company'] ) ? $_POST['customer_company'] : 0;
+
+    if ( '-1' == $company_id )  {
+        $company_id = 0;
+    }
+
+	$customer_data = array(
+		'name'       => strip_tags( stripslashes( $_POST['customer_name'] ) ),
+		'company_id' => kbs_sanitize_company_id( $company_id ),
+		'email'      => $_POST['customer_email'],
+		'user_id'    => $user_id
+	);
+
+	$customer_data = apply_filters( 'kbs_new_customer_for_ticket_info', $customer_data );
+	$customer_data = array_map( 'sanitize_text_field', $customer_data );
+
+	$customer = new KBS_Customer( $customer_data['email'] );
+
+    if ( ! empty( $customer->id ) ) {
+		wp_send_json_error( array(
+			'message' => sprintf(
+				__( 'Customer email address already exists for customer #%s - %s.', 'kb-support' ), $customer->id, $customer->name )
+		) );
+	}
+
+	$customer->create( $customer_data );
+
+	if ( empty( $customer->id ) )	{
+		wp_send_json_error( array(
+			'message' => __( 'Could not create customer.', 'kb-support' )
+		) );
+	}
+
+    $customer_id = absint( $customer->id );
+    $option = sprintf(
+        '<option value="%d">%s</option>',
+        $customer_id,
+        esc_html( $customer->name )
+    );
+    wp_send_json_success( array(
+        'id'     => $customer_id,
+        'option' => $option
+    ) );
+} // kbs_ajax_new_customer_for_ticket
+add_action( 'wp_ajax_kbs_new_customer_for_ticket', 'kbs_ajax_new_customer_for_ticket' );
 
 /**
  * Searches for users via ajax and returns a list of results.
