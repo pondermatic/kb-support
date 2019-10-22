@@ -2,7 +2,7 @@
 Contributors: kbsupport, mikeyhoward1977
 Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
-Tested up to: 5.2.4
+Tested up to: 5.3
 Requires PHP: 5.4
 Stable tag: 1.3
 License: GPLv2 or later
@@ -126,7 +126,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 = 1.3 =
 
-**Tuesday, 22nd October 2019**
+**Wednesday, 23rd October 2019**
 
 **IMPORTANT**: This release adjusts the rules dictating which tickets an agent can view. Please read [this article](https://kb-support.com/articles/agent-ticket-access/) for more details.
 

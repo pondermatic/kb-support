@@ -4,7 +4,7 @@
  * Plugin URI: https://kb-support.com/
  * Description: The ultimate ticket system, help desk and knowledge base support tool plugin for WordPress.
  * Version: 1.3
- * Date: 22 October 2019
+ * Date: 23 October 2019
  * Author: KB Support Team
  * Author URI: https://kb-support.com/
  * Text Domain: kb-support
