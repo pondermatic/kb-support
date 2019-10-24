@@ -248,7 +248,9 @@ function kbs_run_install() {
 
 		// When new upgrade routines are added, mark them as complete on fresh install
 		$upgrade_routines = array(
-            'upgrade_ticket_sources'
+            'upgrade_ticket_sources',
+            'upgrade_ticket_departments',
+            
         );
 
 		foreach ( $upgrade_routines as $upgrade ) {
