@@ -858,10 +858,6 @@ class KBS_Ticket {
                         }
 						break;
 
-					case 'status':
-						$this->update_status( $this->status );
-                        break;
-
                     case 'submission_origin':
                         $this->update_meta( '_kbs_ticket_submission_origin', $this->submission_origin );
                         break;
@@ -981,7 +977,11 @@ class KBS_Ticket {
 
 			do_action( 'kbs_before_ticket_status_change', $this->ID, $status, $old_status, $this );
 
-			$update_fields = array( 'ID' => $this->ID, 'post_status' => $status, 'edit_date' => current_time( 'mysql' ) );
+			$update_fields = array(
+                'ID'          => $this->ID,
+                'post_status' => $status,
+                'edit_date'   => current_time( 'mysql' )
+            );
 			$update_fields = apply_filters( 'kbs_update_ticket_status_fields', $update_fields );
 
 			$updated = wp_update_post( $update_fields );
