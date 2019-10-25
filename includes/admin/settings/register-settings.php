@@ -384,13 +384,6 @@ function kbs_get_registered_settings() {
 						'name'    => sprintf( __( 'Hide Closed %s?', 'kb-support' ), $plural ),
 						'desc'    => sprintf( __( 'Enable this option to remove closed %1$s from the default view on the admin %1$s screen', 'kb-support' ), strtolower( $plural ) ),
 						'type'    => 'checkbox'
-					),
-                    'customer_can_repoen' => array(
-						'id'      => 'customer_can_repoen',
-						'name'    => sprintf( __( 'Re-open %s?', 'kb-support' ), $plural ),
-						'desc'    => sprintf( __( 'If enabled, by replying to a closed %1$s, customers can re-open the %1$s', 'kb-support' ), strtolower( $single ) ),
-						'type'    => 'checkbox',
-                        'std'     => '0'
 					)
 				),
 				'submit' => array(
@@ -456,6 +449,15 @@ function kbs_get_registered_settings() {
 						'std'     => kbs_get_default_file_types()
 					)
 				),
+                'replies' => array(
+                    'customer_can_repoen' => array(
+						'id'      => 'customer_can_repoen',
+						'name'    => sprintf( __( 'Re-open %s?', 'kb-support' ), $plural ),
+						'desc'    => sprintf( __( 'If enabled, by replying to a closed %1$s, customers can re-open the %1$s', 'kb-support' ), strtolower( $single ) ),
+						'type'    => 'checkbox',
+                        'std'     => '0'
+					)
+                ),
 				'agents' => array(
 					'agent_settings_header' => array(
 						'id'   => 'agent_settings_header',
@@ -1363,6 +1365,7 @@ function kbs_get_registered_settings_sections() {
 		'tickets'    => apply_filters( 'kbs_settings_sections_tickets', array(
 			'main'                 => sprintf( __( 'General %s Settings', 'kb-support' ), $single ),
 			'submit'               => __( 'Submission Settings', 'kb-support' ),
+            'replies'              => __( 'Reply Settings', 'kb-support' ),
 			'agents'               => __( 'Agent Settings', 'kb-support' ),
 			'sla'                  => __( 'Service Levels', 'kb-support' )
 		) ),
@@ -2325,3 +2328,51 @@ function kbs_get_resolve_time_options()	{
 	
 	return apply_filters( 'kbs_target_resolve_time_options', $resolve_times );
 } // kbs_get_resolve_time_options
+
+/**
+ * Adds the settings for ticket status replies.
+ *
+ * @since   1.3.1
+ * @param   array   $settings   Array of settings
+ * @return  array   Array of settings
+ */
+function kbs_settings_for_status_replies( $settings )   {
+    $all_statuses   = kbs_get_ticket_statuses();
+    $select_options = array();
+
+    foreach( $all_statuses as $status => $label )   {
+        if ( 'closed' == $status )  {
+            continue;
+        }
+
+        $select_options[ $status ] = $label;
+    }
+
+    foreach( $all_statuses as $status => $label )   {
+        if ( 'open' == $status )    {
+            continue;
+        }
+
+        $class = 'status_reply_' . $status;
+
+        if ( 'closed' == $status && ! kbs_get_option( 'customer_can_repoen' ) ) {
+            $class .= ' kbs-hidden';
+        }
+
+        $status_id = 'status_on_reply_' . $status;
+
+        $settings['replies'][ $status_id ] = array(
+            'id'      => $status_id,
+            'name'    => sprintf( __( '%s on Reply?', 'kb-support' ), $label ),
+            'desc'    => sprintf( __( 'When a reply to a %1$s with the status %2$s is received from a customer, what status should the %1$s change to?', 'kb-support' ), kbs_get_ticket_label_singular( true ), $label ),
+            'type'    => 'select',
+            'options' => $select_options,
+            'chosen'  => true,
+            'std'     => 'closed' != $status ? $status : 'open',
+            'class'   => $class
+        );
+    }
+
+    return $settings;
+} // kbs_settings_for_status_replies
+add_filter( 'kbs_ticket_settings', 'kbs_settings_for_status_replies' );
