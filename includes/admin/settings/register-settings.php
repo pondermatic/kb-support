@@ -2359,11 +2359,11 @@ function kbs_settings_for_status_replies( $settings )   {
             $class .= ' kbs-hidden';
         }
 
-        $status_id = 'status_on_reply_' . $status;
+        $status_id = 'reply_while_status_' . $status;
 
         $settings['replies'][ $status_id ] = array(
             'id'      => $status_id,
-            'name'    => sprintf( __( '%s on Reply?', 'kb-support' ), $label ),
+            'name'    => sprintf( __( 'Reply whilst %s?', 'kb-support' ), $label ),
             'desc'    => sprintf( __( 'When a reply to a %1$s with the status %2$s is received from a customer, what status should the %1$s change to?', 'kb-support' ), kbs_get_ticket_label_singular( true ), $label ),
             'type'    => 'select',
             'options' => $select_options,
