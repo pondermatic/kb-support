@@ -858,10 +858,6 @@ class KBS_Ticket {
                         }
 						break;
 
-					case 'status':
-						$this->update_status( $this->status );
-                        break;
-
                     case 'submission_origin':
                         $this->update_meta( '_kbs_ticket_submission_origin', $this->submission_origin );
                         break;

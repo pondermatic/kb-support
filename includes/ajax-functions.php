@@ -924,7 +924,7 @@ function kbs_ajax_article_search()	{
 
 	$output      = false;
 	$results     = false;
-	$search_term = urlencode( $_POST['term'] );
+	$search_term = sanitize_text_field( $_POST['term'] );
 
 	$args = array(
 		'number'  => kbs_get_option( 'article_num_posts_ajax', 5 ),
