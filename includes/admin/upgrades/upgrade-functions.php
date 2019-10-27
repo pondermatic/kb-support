@@ -92,6 +92,10 @@ function kbs_do_automatic_upgrades() {
 		kbs_v129_upgrades();
 	}
 
+	if ( version_compare( $kbs_version, '1.3.1', '<' ) ) {
+		kbs_v131_upgrades();
+	}
+
 	if ( version_compare( $kbs_version, KBS_VERSION, '<' ) )	{
 
 		// Let us know that an upgrade has happened
@@ -609,6 +613,38 @@ function kbs_v129_upgrades()	{
     }
 
 } // kbs_v129_upgrades
+
+/**
+ * Upgrade routine for version 1.3.1.
+ *
+ * - Add ticket status reply options.
+ *
+ * @since	1.3.1
+ * @return	void
+ */
+function kbs_v131_upgrades()	{
+	$all_statuses = kbs_get_ticket_statuses();
+    $options      = array();
+
+    foreach( $all_statuses as $status => $label )   {
+        if ( 'open' == $status )  {
+            continue;
+        }
+
+		$option_id = 'reply_while_status_' . $status;
+
+		if ( 'closed' == $status )	{
+			$options[ $option_id ] = 'open';
+		} else	{
+			$options[ $option_id ] = $status;
+		}
+    }
+
+	foreach( $options as $key => $value )	{
+		kbs_update_option( $key, $value );
+	}
+
+} // kbs_v131_upgrades
 
 /**
  * Update sequential ticket numbers.

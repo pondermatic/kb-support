@@ -110,11 +110,6 @@ function kbs_settings_contextual_help() {
 					strtolower( $ticket_singular ),
 					strtolower( $ticket_plural )
 				) . '</li>' .
-                '<li>' . sprintf( 
-					__( '<strong>Re-open %1$s</strong> - By enabling this option, a customer will be able to add a reply to a %2$s that is closed. When adding the reply, the %2$s will be reopened unless the customer also checks the <strong>This %2$s can be closed</strong> option within the reply form. By default, this option is not enabled.', 'kb-support' ),
-					$ticket_plural,
-					strtolower( $ticket_singular )
-				) . '</li>' .
 			'</ul>' .
 			'<p>' . __( '<strong>Submission Settings</strong>', 'kb-support' ) . '</p>' .
 			'<ul>' .
@@ -142,6 +137,18 @@ function kbs_settings_contextual_help() {
 				'<li>' . sprintf( 
 					__( '<strong>Allowed File Types</strong> - Enter the file extensions that a customer can upload when submitting a %1$s. Seperate each file extension with a comma. If a customer attempts to upload a file with an extension that is not listed, they will receive an error.', 'kb-support' ),
 					$ticket_singular
+				) . '</li>' .
+			'</ul>' .
+			'<p>' . __( '<strong>Reply Settings</strong>', 'kb-support' ) . '</p>' .
+			'<ul>' .
+			   '<li>' . sprintf( 
+					__( '<strong>Re-open %1$s</strong> - By enabling this option, a customer will be able to add a reply to a %2$s that is closed. When adding the reply, the %2$s will be reopened unless the customer also checks the <strong>This %2$s can be closed</strong> option within the reply form. By default, this option is not enabled.', 'kb-support' ),
+					$ticket_plural,
+					strtolower( $ticket_singular )
+				) . '</li>' .
+				'<li>' . sprintf( 
+					__( '<strong>Reply whilst <code>Status</code></strong> - For each of the specified %1$s status options, you can select which status the %1$s would change to when a reply is added by a customer.', 'kb-support' ),
+					strtolower( $ticket_singular )
 				) . '</li>' .
 			'</ul>' .
 			'<p>' . __( '<strong>Agent Settings</strong>', 'kb-support' ) . '</p>' .
