@@ -973,7 +973,14 @@ class KBS_Ticket {
 			return false; // Don't permit status changes that aren't changes
 		}
 
-		$do_change = apply_filters( 'kbs_should_update_ticket_status', true, $this->ID, $status, $old_status, $this );
+		$do_change = apply_filters(
+			'kbs_should_update_ticket_status',
+			true,
+			$this->ID,
+			$status,
+			$old_status,
+			$this
+		);
 
 		$updated = false;
 
@@ -981,8 +988,18 @@ class KBS_Ticket {
 
 			do_action( 'kbs_before_ticket_status_change', $this->ID, $status, $old_status, $this );
 
-			$update_fields = array( 'ID' => $this->ID, 'post_status' => $status, 'edit_date' => current_time( 'mysql' ) );
-			$update_fields = apply_filters( 'kbs_update_ticket_status_fields', $update_fields );
+			$update_fields = array(
+				'ID'          => $this->ID,
+				'post_status' => $status,
+				'edit_date'   => current_time( 'mysql' )
+			);
+
+			$update_fields = apply_filters(
+				'kbs_update_ticket_status_fields',
+				$update_fields,
+				$this->ID,
+				$old_status
+			);
 
 			$updated = wp_update_post( $update_fields );
 
@@ -1941,6 +1958,13 @@ class KBS_Ticket {
             if ( 'closed' == $this->post_status )	{
                 $update_args['post_status'] = apply_filters( 'kbs_set_ticket_status_when_reopened', 'open', $this->ID );
             }
+
+			$update_args = apply_filters(
+				'kbs_add_ticket_update_args',
+				$update_args,
+				$this->post_status,
+				$this->ID
+			);
 
 			$update = wp_update_post( $update_args );
 
