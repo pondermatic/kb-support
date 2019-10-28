@@ -128,6 +128,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 * **New**: New ***Reply Settings*** section added to Tickets settings tab
 * **New**: Choose which status a ticket should transition to when a customer reply is received
+* **New**: You can now send email notifications to agents assigned to tickets as additional agents. Enter `{code}` into the notifications setting option. Tickets -> Settings -> Emails -> Notifications
 
 * **Tweak**: Duplicate switch removed
 
