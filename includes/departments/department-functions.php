@@ -190,7 +190,7 @@ function kbs_remove_agent_from_department( $department_id, $agent_id = '' )	{
 } // kbs_remove_agent_from_department
 
 /**
- * Retrieves the department name from the ticket
+ * Retrieves the department from the ticket
  *
  * @since   1.2
  * @param   int     $ticket_id  The ticket ID

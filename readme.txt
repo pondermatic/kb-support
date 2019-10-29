@@ -124,6 +124,17 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 == Changelog ==
 
+= 1.3.1 =
+
+* **New**: New ***Reply Settings*** section added to Tickets settings tab
+* **New**: Choose which status a ticket should transition to when a customer reply is received
+
+* **Tweak**: Duplicate switch removed
+
+* **Bug**: Article live search was not supporting foregin characters
+* **Bug**: Remove PHP notice when DIVI theme in use
+* **Bug**: New installations should not prompt for an upgrade
+
 = 1.3 =
 
 **Wednesday, 23rd October 2019**

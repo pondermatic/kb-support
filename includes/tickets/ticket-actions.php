@@ -160,6 +160,31 @@ function kbs_customer_close_ticket_from_url()	{
 add_action( 'template_redirect', 'kbs_customer_close_ticket_from_url' );
 
 /**
+ * Set ticket status on reply if needed.
+ *
+ * @since	1.3.1
+ * @param	array	$args			Array of args being passed to wp_update_post
+ * @param	string	$post_status	The current ticket status
+ * @param	int		$ticket_id		Ticket ID
+ * @return	array	Array of args being passed to wp_update_post
+ */
+function kbs_set_ticket_status_on_reply( $args, $post_status, $ticket_id )	{
+	$option     = 'reply_while_status_' . $post_status;
+	$new_status = kbs_get_option( $option );
+
+	if ( $new_status && $new_status != $post_status && ! kbs_is_agent() )	{
+		if ( ( 'closed' == $post_status && kbs_customers_can_repoen_tickets() ) || 'closed' != $post_status )	{
+			if ( in_array( $new_status, kbs_get_ticket_status_keys() ) )	{
+				$args['post_status'] = $new_status;
+			}
+		}
+	}
+
+	return $args;
+} // kbs_set_ticket_status_on_reply
+add_filter( 'kbs_add_ticket_update_args', 'kbs_set_ticket_status_on_reply', 10, 3 );
+
+/**
  * Re-open a closed ticket.
  *
  * @since	1.0
