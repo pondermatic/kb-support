@@ -899,9 +899,9 @@ function kbs_get_registered_settings() {
 						'id'   => 'admin_notice_emails',
 						'name' => sprintf( __( '%s Notification Emails', 'kb-support' ), $single ),
 						'desc' => sprintf(
-							__( 'Enter the email address(es) that should receive a notification anytime a %1$s is logged, one per line. Enter <code>{agent}</code> to insert the assigned agent\'s email address. Entering <code>{agents}</code> also notifies all additional %1$s agents.', 'kb-support' ), strtolower( $single ) ),
+							__( 'Enter the email address(es) that should receive a notification anytime a %s is logged, one per line. Enter <code>{agent}</code> to insert the assigned agent\'s email address', 'kb-support' ), strtolower( $single ), '{agent}' ),
 						'type' => 'textarea',
-						'std'  => get_bloginfo( 'admin_email' ) . "\n" . '{agent}'
+						'std'  => get_bloginfo( 'admin_email' )
 					),
                     'agent_notices' => array(
 						'id'   => 'agent_notices',

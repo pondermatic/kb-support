@@ -513,23 +513,6 @@ function kbs_get_admin_notice_emails( $ticket_id = 0 )	{
 				$emails = str_replace( '{agent}', $agent_data->user_email, $emails );
 			}
 		}
-
-        if ( ( $key = array_search( '{agents}', $emails ) ) !== false )   {
-
-            unset( $emails[ $key ] );
-
-            $add_agents = kbs_get_workers_of_ticket( $ticket_id );
-
-            if ( ! empty( $add_agents ) )   {
-                foreach( $add_agents as $add_agent_id )  {
-                    $add_agent_data = get_userdata( $add_agent_id );
-                    if ( ! empty( $add_agent_data ) )    {
-                        $emails[] = $add_agent_data->user_email;
-                    }
-                }
-            }
-        }
-
 	}
 
 	return apply_filters( 'kbs_admin_notice_emails', $emails );
