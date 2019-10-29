@@ -4,7 +4,7 @@ Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
 Tested up to: 5.3
 Requires PHP: 5.4
-Stable tag: 1.3
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -126,10 +126,10 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 = 1.3.1 =
 
+**Wednesday, 30th October 2019**
+
 * **New**: New ***Reply Settings*** section added to Tickets settings tab
 * **New**: Choose which status a ticket should transition to when a customer reply is received
-
-* **Tweak**: Duplicate switch removed
 
 * **Bug**: Article live search was not supporting foregin characters
 * **Bug**: Remove PHP notice when DIVI theme in use

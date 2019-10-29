@@ -3,8 +3,8 @@
  * Plugin Name: KB Support
  * Plugin URI: https://kb-support.com/
  * Description: The ultimate ticket system, help desk and knowledge base support tool plugin for WordPress.
- * Version: 1.3
- * Date: 23 October 2019
+ * Version: 1.3.1
+ * Date: 30 October 2019
  * Author: KB Support Team
  * Author URI: https://kb-support.com/
  * Text Domain: kb-support
@@ -30,7 +30,7 @@
  * @package		KBS
  * @category	Core
  * @author		Mike Howard
- * @version		1.3
+ * @version		1.3.1
  */
 
 // Exit if accessed directly.
@@ -186,7 +186,7 @@ final class KB_Support {
 	private function setup_constants()	{
 
 		if ( ! defined( 'KBS_VERSION' ) )	{
-			define( 'KBS_VERSION', '1.3' );
+			define( 'KBS_VERSION', '1.3.1' );
 		}
 
 		if ( ! defined( 'KBS_PLUGIN_DIR' ) )	{
