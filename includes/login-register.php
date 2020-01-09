@@ -170,7 +170,7 @@ function kbs_process_register_form() {
 
     $required_name_fields = kbs_get_option( 'require_name_fields' );
 
-    if ( 'first' == $required_name_fields || 'both' == $required_name_fields && empty( $_POST['kbs_user_first_name'] ) ) {
+    if ( ( 'first' == $required_name_fields || 'both' == $required_name_fields ) && empty( $_POST['kbs_user_first_name'] ) ) {
         $error = 'empty_first_name';
     } elseif ( 'both' == $required_name_fields && empty( $_POST['kbs_user_last_name'] ) ) {
         $error = 'empty_last_name';
