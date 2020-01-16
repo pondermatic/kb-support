@@ -155,49 +155,95 @@ function kbs_load_dashboard_tickets_widget() {
 		</div>
 		<div style="clear: both"></div>
         <?php do_action( 'kbs_ticket_summary_widget_after_stats', $stats ); ?>
-        <?php
-		$popular_articles_query = new KBS_Articles_Query( array(
+
+		<?php
+		$articles_query = new KBS_Articles_Query( array(
 			'number'  => 5
 		) );
 
-		$popular_articles = $popular_articles_query->get_articles();
+		$total_articles = $articles_query->get_articles();
+		?>
 
-		if ( $popular_articles ) : ?>
-		<div class="table popular_articles">
-			<table>
-				<thead>
-					<tr>
-						<td colspan="2">
-							<?php printf( __( 'Most Popular %s', 'kb-support' ), kbs_get_article_label_plural() ); ?>
-							<a href="<?php echo admin_url( 'edit.php?post_type=' . KBS()->KB->post_type ); ?>">&nbsp;&ndash;&nbsp;<?php _e( 'View All', 'kb-support' ); ?></a>
-						</td>
-					</tr>
-				</thead>
-				<tbody>
-					<?php
-					foreach ( $popular_articles as $popular_article ) : ?>
-                    	<?php
-						$url   = get_permalink( $popular_article->ID );
-						$views = kbs_get_article_view_count( $popular_article->ID );
-						?>
+		<?php if ( $total_articles ) : ?>
+			<h3>
+				<?php printf( __( 'Most Popular %s', 'kb-support' ), kbs_get_article_label_plural() ); ?>
+				&nbsp;&ndash;&nbsp;<a href="<?php echo admin_url( 'edit.php?post_type=' . KBS()->KB->post_type ); ?>"><?php _e( 'View All', 'kb-support' ); ?></a>
+			</h3>
+
+			<div class="table table_left table_current_month">
+				<table>
+					<thead>
 						<tr>
-							<td class="t popular">
-								<a href="<?php echo $url; ?>">
-									<?php echo get_the_title( $popular_article->ID ); ?>
-                                </a>
-								<?php printf(
-                                    _n( '(%s view)', '(%s views)', $views, 'kb-support' ),
-                                    number_format_i18n( $views )
-                                ); ?>
-							</td>
+							<td colspan="2"><?php _e( 'All Time', 'kb-support' ) ?></td>
 						</tr>
+					</thead>
+					<tbody>
 						<?php
-					endforeach; ?>
-				</tbody>
-			</table>
-		</div>
+						foreach ( $total_articles as $total_article ) : ?>
+							<?php
+							$url   = get_permalink( $total_article->ID );
+							$views = kbs_get_article_view_count( $total_article->ID );
+							?>
+							<tr>
+								<td class="t popular">
+									<a href="<?php echo $url; ?>"><?php echo get_the_title( $total_article->ID ); ?></a>
+									<?php printf(
+										_n( '(%s view)', '(%s views)', $views, 'kb-support' ),
+										number_format_i18n( $views )
+									); ?>
+								</td>
+							</tr>
+							<?php
+						endforeach; ?>
+					</tbody>
+				</table>
+			</div>
+			<?php
+			$articles_query = new KBS_Articles_Query( array(
+				'number'  => 5,
+				'orderby' => 'views_month'
+			) );
+
+			$month_articles = $articles_query->get_articles();
+			?>
+			<div class="table table_right table_totals">
+				<table>
+					<thead>
+						<tr>
+							<td colspan="2"><?php _e( 'This Month', 'kb-support' ) ?></td>
+						</tr>
+					</thead>
+					<tbody>
+						<?php if ( $month_articles ) :
+							foreach ( $month_articles as $month_article ) : ?>
+								<?php
+								$url   = get_permalink( $month_article->ID );
+								$views = kbs_get_article_view_count( $month_article->ID, false );
+								?>
+								<tr>
+									<td class="t popular">
+										<a href="<?php echo $url; ?>"><?php echo get_the_title( $month_article->ID ); ?></a>
+										<?php printf(
+											_n( '(%s view)', '(%s views)', $views, 'kb-support' ),
+											number_format_i18n( $views )
+										); ?>
+									</td>
+								</tr>
+								<?php
+							endforeach;
+						else : ?>
+							<tr>
+								<td class="t popular">
+									<?php _e( 'No data yet', 'kb-support' ); ?>
+								</td>
+							</tr>
+						<?php endif; ?>
+					</tbody>
+				</table>
+			</div>
 		<?php endif; ?>
-		<?php do_action( 'kbs_ticket_summary_widget_after_popular_articles', $popular_articles ); ?>
+		<div style="clear: both"></div>
+		<?php do_action( 'kbs_ticket_summary_widget_after_popular_articles', $total_articles ); ?>
     </div>
 
 	<?php

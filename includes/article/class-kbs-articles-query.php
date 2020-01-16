@@ -269,10 +269,18 @@ class KBS_Articles_Query extends KBS_Stats {
 	 * @return	void
 	 */
 	public function orderby() {
+		$total_views_key = kbs_get_article_view_count_meta_key_name();
+		$month_views_key = kbs_get_article_view_count_meta_key_name( false );
+
 		switch ( $this->args['orderby'] ) {
 			case 'views':
 			default:
-				$this->__set( 'meta_key', '_kbs_article_views' );
+				$this->__set( 'meta_key', $total_views_key );
+				$this->__set( 'orderby', 'meta_value_num' );
+				break;
+
+			case 'views_month':
+				$this->__set( 'meta_key', $month_views_key );
 				$this->__set( 'orderby', 'meta_value_num' );
 				break;
 

@@ -236,7 +236,7 @@ function kbs_article_posts_orderby_by_custom_column( $query )	{
 
 	switch ( $orderby )	{
 		case 'views':
-			$query->set( 'meta_key', '_kbs_article_views' );
+			$query->set( 'meta_key', kbs_get_article_view_count_meta_key_name() );
 			$query->set( 'orderby', 'meta_value_num' );
 			break;
 
@@ -271,7 +271,11 @@ function kbs_article_post_save( $post_id, $post, $update )	{
 	remove_action( 'save_post_article', 'kbs_article_post_save', 10, 3 );
 
 	if ( ! $update )	{
-		add_post_meta( $post_id, '_kbs_article_views', 0, true );
+		$total_key = kbs_get_article_view_count_meta_key_name();
+		$month_key = kbs_get_article_view_count_meta_key_name( false );
+
+		add_post_meta( $post_id, $total_key, 0, true );
+		add_post_meta( $post_id, $month_key, 0, true );
 	}
 
 	$url = remove_query_arg( 'kbs-message' );
