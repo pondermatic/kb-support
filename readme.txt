@@ -129,6 +129,8 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 * **New**: Agents can now choose whether or not to be alerted if a reply is added whilst they are editing a ticket. The **Ticket Reply Alerts** option resides within each agents user profile and is disabled by default
 
+* **Bug**: The `{agent}` template tag may cause ticket notification emails to fail if no agent is assigned to the ticket
+
 = 1.3.3 =
 
 **Friday, 17th January 2020**
