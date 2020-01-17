@@ -124,6 +124,14 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 == Changelog ==
 
+= 1.3.3 =
+
+**DATE**
+
+* **New**: KB Articles now count monthly views
+* **New**: Display the total and monthly views for KB Articles within the KB Support dashboard widget
+* **New**: Added `Show Views on Dashboard` option to toggle the display of article view counts within the KB Support dashboard widget
+
 = 1.3.2 =
 
 **Thursday, 9th January 2020**
