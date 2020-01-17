@@ -167,7 +167,7 @@ function kbs_load_dashboard_tickets_widget() {
 			<?php if ( $total_articles ) : ?>
 				<h3 style="font-weight: bold;">
 					<?php printf( __( 'Most Popular %s', 'kb-support' ), kbs_get_article_label_plural() ); ?>
-					&nbsp;<span style="font-size: smaller; font-weight: normal;"><a href="<?php echo admin_url( 'edit.php?post_type=' . KBS()->KB->post_type ); ?>">(<?php _e( 'View All', 'kb-support' ); ?>)</a></span>
+					&nbsp;<span style="font-size: smaller; font-weight: normal;"><a href="<?php echo admin_url( 'edit.php?post_type=' . KBS()->KB->post_type ); ?>"><?php _e( 'View All', 'kb-support' ); ?></a></span>
 				</h3>
 
 				<div class="table table_left table_current_month">
