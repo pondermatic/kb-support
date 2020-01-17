@@ -7,7 +7,6 @@ Requires PHP: 5.4
 Stable tag: 1.3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Donate link: https://kb-support.com/donate-kb-support/
 
 The ultimate support ticket system, helpdesk and knowledge base tool plugin for WordPress.
 
