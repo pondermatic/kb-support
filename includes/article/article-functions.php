@@ -42,7 +42,10 @@ function kbs_add_article( $args = array(), $ticket = 0 )	{
 
 	remove_action( 'save_post_article', 'kbs_article_post_save', 10, 3 );
 
-	$ticket_id = 0;
+	$ticket_id   = 0;
+	$total_views = kbs_get_article_view_count_meta_key_name();
+	$month_views = kbs_get_article_view_count_meta_key_name( false );
+
 	$defaults = array(
 		'post_type'    => KBS()->KB->post_type,
 		'post_author'  => get_current_user_id(),
@@ -50,7 +53,8 @@ function kbs_add_article( $args = array(), $ticket = 0 )	{
 		'post_title'   => '',
 		'post_content' => '',
 		'meta_input'   => array(
-			'_kbs_article_views' => 0
+			$total_views => 0,
+			$month_views => 0
 		)
 	);
 
@@ -208,20 +212,40 @@ function kbs_count_articles( $args = array() ) {
 } // kbs_count_articles
 
 /**
+ * Retrieves the meta key name for the article view count.
+ *
+ * @since	1.3
+ * @param	bool	$total		True returns total views, false monthly
+ * @return	string	The meta key name
+ */
+function kbs_get_article_view_count_meta_key_name( $total = true )	{
+	$key = '_kbs_article_views';
+
+	if ( ! $total )	{
+		$month = date( 'Y-m' );
+		$key   = $key . '_' . $month;
+	}
+
+	return apply_filters( 'kbs_article_view_count_meta_key_name', $key );
+} // kbs_get_article_view_count_meta_key_name
+
+/**
  * Retrieve the total view count for a KB Article.
  *
  * @since	1.0
- * @param	int		$article_id		Post ID
+ * @param	int		$article_id	Post ID
+ * @param	bool	$total		True returns total views, false monthly
  * @return	int
  */
-function kbs_get_article_view_count( $article_id )	{
-	$view_count = get_post_meta( $article_id, '_kbs_article_views', true );
+function kbs_get_article_view_count( $article_id, $total = true )	{
+	$key        = kbs_get_article_view_count_meta_key_name( $total );
+	$view_count = get_post_meta( $article_id, $key, true );
 	
 	if ( ! $view_count )	{
 		$view_count = 0;
 	}
 	
-	return apply_filters( 'kbs_article_view_count', absint( $view_count ), $article_id );
+	return apply_filters( 'kbs_article_view_count', absint( $view_count ), $article_id, $total );
 } // kbs_get_article_view_count
 
 /**
@@ -232,16 +256,32 @@ function kbs_get_article_view_count( $article_id )	{
  * @return	bool
  */
 function kbs_increment_article_view_count( $article_id )	{
-	$view_count = kbs_get_article_view_count( $article_id );
+	$total_view_count = kbs_get_article_view_count( $article_id );
+	$month_view_count = kbs_get_article_view_count( $article_id, false );
 
-	if ( ! $view_count )	{
-		$view_count = 0;
-	}
+	$total_view_count = $total_view_count ? $total_view_count : 0;
+	$month_view_count = $month_view_count ? $month_view_count : 0;
 
-	$view_count++;
+	$total_view_count++;
+	$month_view_count++;
 
-	return update_post_meta( $article_id, '_kbs_article_views', $view_count );
+	$total_key = kbs_get_article_view_count_meta_key_name();
+	$month_key = kbs_get_article_view_count_meta_key_name( false );
+
+	update_post_meta( $article_id, $month_key, $month_view_count );
+
+	return update_post_meta( $article_id, $total_key, $total_view_count );
 } // kbs_increment_article_view_count
+
+/**
+ * Whether to show article view counts on the dashboard widget.
+ *
+ * @since	1.3
+ * @return	bool
+ */
+function kbs_show_dashboard_article_view_counts()	{
+	return kbs_get_option( 'article_views_dashboard' );
+} // kbs_show_dashboard_article_view_counts
 
 /**
  * Retrieve article terms.

@@ -229,7 +229,12 @@ function kbs_articles_shortcode( $atts )	{
 	}
 
 	if ( 'views' == $args['orderby'] )	{
-		$args['meta_key'] = '_kbs_article_views';
+		$args['meta_key'] = kbs_get_article_view_count_meta_key_name();
+		$args['orderby']  = 'meta_value_num';
+	}
+
+	if ( 'views_month' == $args['orderby'] )	{
+		$args['meta_key'] = kbs_get_article_view_count_meta_key_name( false );
 		$args['orderby']  = 'meta_value_num';
 	}
 

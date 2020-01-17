@@ -250,6 +250,7 @@ function kbs_run_install() {
 		$upgrade_routines = array(
             'upgrade_ticket_sources',
             'upgrade_ticket_departments',
+			'upgrade_article_monthly_count'
             
         );
 

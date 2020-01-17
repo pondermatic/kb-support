@@ -4,7 +4,7 @@ Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
 Tested up to: 5.3.2
 Requires PHP: 5.4
-Stable tag: 1.3.2
+Stable tag: 1.3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://kb-support.com/donate-kb-support/
@@ -123,6 +123,16 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.3.3 =
+
+**Friday, 17th January 2020**
+
+* **New**: KB Articles now count monthly views
+* **New**: Display the total and monthly views for KB Articles within the KB Support dashboard widget
+* **New**: Added `Show Views on Dashboard` option to toggle the display of article view counts within the KB Support dashboard widget
+
+* **Tweak**: Removed excess whitespace from article links within KB Support dashboard widget
 
 = 1.3.2 =
 

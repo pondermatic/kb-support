@@ -120,7 +120,11 @@ function kbs_reset_article_view_count()	{
 		return;
 	}
 
-	if ( update_post_meta( $_GET['article_id'], '_kbs_article_views', 0 ) )	{
+	$article_id = absint( $_GET['article_id'] );
+	$total_key  = kbs_get_article_view_count_meta_key_name();
+	$month_key  = kbs_get_article_view_count_meta_key_name( false );
+
+	if ( update_post_meta( $article_id, $total_key, 0 ) && update_post_meta( $article_id, $month_key, 0 ) )	{
 		$message = 'reset_article_views';
 	} else	{
 		$message = 'reset_article_views_failed';

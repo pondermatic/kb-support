@@ -646,6 +646,13 @@ function kbs_get_registered_settings() {
 						'step'    => '5',
 						'size'    => 'small',
 						'std'     => '0'
+					),
+					'article_views_dashboard' => array(
+						'id'      => 'article_views_dashboard',
+						'name'    => __( 'Show Views on Dashboard', 'kb-support' ),
+						'desc'    => sprintf( __( 'Enable to display %s view counts within the KB Support dashboard widget.', 'kb-support' ), kbs_get_article_label_singular() ),
+						'type'    => 'checkbox',
+						'std'     => 1
 					)
 				),
 				'restricted_notices' => array(
