@@ -274,6 +274,16 @@ function kbs_increment_article_view_count( $article_id )	{
 } // kbs_increment_article_view_count
 
 /**
+ * Whether to show article view counts on the dashboard widget.
+ *
+ * @since	1.3
+ * @return	bool
+ */
+function kbs_show_dashboard_article_view_counts()	{
+	return kbs_get_option( 'article_views_dashboard' );
+} // kbs_show_dashboard_article_view_counts
+
+/**
  * Retrieve article terms.
  *
  * @since	1.0
