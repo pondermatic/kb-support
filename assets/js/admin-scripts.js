@@ -336,7 +336,7 @@ jQuery(document).ready(function ($) {
 		reply : function() {
 
             // Listen for new replies via WP heartbeat
-            if( kbs_vars.editing_ticket === '1' )   {
+            if( kbs_vars.editing_ticket === '1' && kbs_vars.reply_alerts === '1' )   {
                 $( document ).on( 'heartbeat-send', function ( event, data ) {
 
                     var kbs_last_reply = $( '#kbs-latest-reply' ).val();

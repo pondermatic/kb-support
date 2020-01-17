@@ -123,6 +123,12 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 == Changelog ==
 
+= 1.3.4 =
+
+**DATE**
+
+* **New**: Agents can now choose whether or not to be alerted if a reply is added whilst they are editing a ticket. The **Ticket Reply Alerts** option resides within each agents user profile and is disabled by default
+
 = 1.3.3 =
 
 **Friday, 17th January 2020**

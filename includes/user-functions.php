@@ -30,7 +30,8 @@ function kbs_register_user_profile_fields( $user )	{
 		$fields = array(
 			0 => 'replies_to_load',
 			1 => 'redirect_reply',
-			2 => 'redirect_closed'
+			2 => 'redirect_closed',
+            3 => 'reply_alerts'
 		);
 
 		if ( kbs_departments_enabled() )    {
@@ -105,7 +106,9 @@ function kbs_render_user_profile_replies_to_load_field( $user )  {
 	ob_start(); ?>
 
     <tr>
-        <th><label for="kbs-agent-load-replies"><?php _e( 'Replies to Load', 'kb-support' ); ?></label></th>
+        <th scope="row">
+            <label for="kbs-agent-load-replies"><?php _e( 'Replies to Load', 'kb-support' ); ?></label>
+        </th>
         <td>
             <input class="small-text" type="number" name="kbs_load_replies" id="kbs-load-replies" value="<?php echo (int)$replies_to_load; ?>" step="1" min="0" />
             <p class="description"><?php printf( __( 'Choose the number of replies to initially load when accessing the %s page. <code>0</code> loads all.', 'kb-support' ), kbs_get_ticket_label_plural( true ) ); ?></p>
@@ -135,7 +138,9 @@ function kbs_render_agent_user_profile_redirect_reply_field( $user )  {
 	ob_start(); ?>
 
     <tr>
-        <th><label for="kbs-agent-redirect-reply"><?php _e( 'Redirect After Reply', 'kb-support' ); ?></label></th>
+        <th scope="row">
+            <label for="kbs-agent-redirect-reply"><?php _e( 'Redirect After Reply', 'kb-support' ); ?></label>
+        </th>
         <td>
         	<?php echo KBS()->html->select( array(
 				'name'             => 'kbs_agent_redirect_reply',
@@ -174,7 +179,9 @@ function kbs_render_agent_user_profile_redirect_close_field( $user )  {
 	ob_start(); ?>
 
     <tr>
-        <th><label for="kbs-agent-redirect-close"><?php _e( 'Redirect After Close', 'kb-support' ); ?></label></th>
+        <th scope="row">
+            <label for="kbs-agent-redirect-close"><?php _e( 'Redirect After Close', 'kb-support' ); ?></label>
+        </th>
         <td>
         	<?php echo KBS()->html->select( array(
 				'name'             => 'kbs_agent_redirect_close',
@@ -199,6 +206,44 @@ add_action( 'kbs_display_agent_user_profile_fields', 'kbs_render_agent_user_prof
 /**
  * Adds the department options field to the user profile for agents.
  *
+ * @since	1.3.4
+ * @param   object	$user	The WP_User object
+ */
+function kbs_render_agent_user_profile_reply_alerts_field( $user )  {
+    if ( ! kbs_departments_enabled() || ! kbs_is_agent( $user->ID ) || ( get_current_user_id() != $user->ID && ! current_user_can( 'manage_ticket_settings' ) ) )  {
+        return;
+    }
+
+    $alert   = kbs_alert_agent_ticket_reply( $user->ID );
+    $checked = checked( $alert, true, false );
+    $label   = sprintf(
+        __( 'When enabled, agents will be alerted if a new reply is added whilst they are editing a %s', 'kb-support' ),
+        kbs_get_ticket_label_singular( true )
+    );
+
+    ob_start(); ?>
+
+    <tr>
+        <th scope="row">
+            <?php printf( __( '%s Reply Alerts', 'kb-support' ), kbs_get_ticket_label_singular() ); ?>
+        </th>
+        <td>
+            <?php printf(
+                '<input type="checkbox" name="kbs_agent_reply_alerts" id="kbs-agent-reply-alerts" value="1"%s />',
+                $checked
+            ); ?>
+            <label for="kbs-agent-reply-alerts"><?php echo $label; ?></label>
+        </td>
+    </tr>
+
+    <?php echo ob_get_clean();
+
+} // kbs_render_agent_user_profile_reply_alerts_field
+add_action( 'kbs_display_agent_user_profile_fields', 'kbs_render_agent_user_profile_reply_alerts_field', 5 );
+
+/**
+ * Adds the department options field to the user profile for agents.
+ *
  * @since	1.2
  * @param   object	$user	The WP_User object
  */
@@ -215,7 +260,7 @@ function kbs_render_agent_user_profile_department_field( $user )  {
         ob_start(); ?>
 
         <tr>
-            <th><label for="kbs_department"><?php _e( 'Departments', 'kb-support' ); ?></label></th>
+            <th scope="row"><?php _e( 'Departments', 'kb-support' ); ?></th>
             <td>
                 <?php foreach( $departments as $department ) : ?>
                     <?php $output[] = sprintf(
@@ -320,6 +365,26 @@ function kbs_save_user_redirect_close( $user_id ) {
 } // kbs_save_user_redirect_close
 add_action( 'personal_options_update', 'kbs_save_user_redirect_close' );
 add_action( 'edit_user_profile_update', 'kbs_save_user_redirect_close' );
+
+/**
+ * Saves the ticket reply alerts option.
+ *
+ * @since	1.3.4
+ * @param	int		$user_id	WP User ID
+ */
+function kbs_save_user_reply_alerts( $user_id ) {
+
+	if ( ! kbs_is_agent( $user_id ) || ! current_user_can( 'edit_user', $user_id ) )	{
+		return;
+	}
+
+	$alert = ! empty( $_POST['kbs_agent_reply_alerts'] ) ? absint( $_POST['kbs_agent_reply_alerts'] ) : 0;
+
+	update_user_meta( $user_id, '_kbs_reply_alerts', $alert );
+
+} // kbs_save_user_reply_alerts
+add_action( 'personal_options_update', 'kbs_save_user_reply_alerts' );
+add_action( 'edit_user_profile_update', 'kbs_save_user_reply_alerts' );
 
 /**
  * Saves the departments fields.
