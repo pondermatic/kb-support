@@ -647,6 +647,13 @@ function kbs_get_registered_settings() {
 						'size'    => 'small',
 						'std'     => '0'
 					),
+					'count_agent_article_views' => array(
+						'id'      => 'count_agent_article_views',
+						'name'    => __( 'Count Agent Views?', 'kb-support' ),
+						'desc'    => sprintf( __( 'Enable to increment %1$s counts when an agent is viewing the %1$s.', 'kb-support' ), kbs_get_article_label_singular() ),
+						'type'    => 'checkbox',
+						'std'     => 0
+					),
 					'article_views_dashboard' => array(
 						'id'      => 'article_views_dashboard',
 						'name'    => __( 'Show Views on Dashboard', 'kb-support' ),

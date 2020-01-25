@@ -100,6 +100,10 @@ function kbs_do_automatic_upgrades() {
 		kbs_v133_upgrades();
 	}
 
+	if ( version_compare( $kbs_version, '1.3.4', '<' ) ) {
+		kbs_v134_upgrades();
+	}
+
 	if ( version_compare( $kbs_version, KBS_VERSION, '<' ) )	{
 
 		// Let us know that an upgrade has happened
@@ -681,6 +685,24 @@ function kbs_v133_upgrades()	{
 		kbs_update_option( $key, $value );
 	}
 } // kbs_v133_upgrades
+
+/**
+ * Upgrade routine for version 1.3.4.
+ *
+ * - Add agent article view count option.
+ *
+ * @since	1.3.4
+ * @return	void
+ */
+function kbs_v134_upgrades()	{
+    $options      = array(
+		'count_agent_article_views' => 0
+	);
+
+	foreach( $options as $key => $value )	{
+		kbs_update_option( $key, $value );
+	}
+} // kbs_v134_upgrades
 
 /**
  * Update sequential ticket numbers.

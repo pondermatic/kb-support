@@ -212,6 +212,19 @@ function kbs_count_articles( $args = array() ) {
 } // kbs_count_articles
 
 /**
+ * Whether or not to count agent article views.
+ *
+ * @since	1.3.4
+ * @return	bool	True to count, otherwise false
+ */
+function kbs_count_agent_article_views()	{
+	$count = kbs_get_option( 'count_agent_article_views', false );
+	$count = apply_filters( 'kbs_increment_count_agent_article_views', $count );
+
+	return (bool) $count;
+} // kbs_count_agent_article_views
+
+/**
  * Retrieves the meta key name for the article view count.
  *
  * @since	1.3
