@@ -129,7 +129,9 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 * **New**: Agents can now enable/disable the alert that is displayed if a reply is added whilst they are editing a ticket. The **Ticket Reply Alerts** option resides within each agents user profile and is disabled by default
 
-* **New**: You can now choose to have agent article visits increment the article count via the `Count Agent Views?` setting option
+* **New**: You can now choose to have agent article visits increment the article count via the `Count Agent Views?` setting option. Disabled by default
+
+* **Tweak**: Added monthly view count to article list screen
 
 * **Bug**: The `{agent}` template tag may cause ticket notification emails to fail if no agent is assigned to the ticket
 
