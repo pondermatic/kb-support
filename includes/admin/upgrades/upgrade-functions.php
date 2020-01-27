@@ -696,8 +696,7 @@ function kbs_v133_upgrades()	{
  */
 function kbs_v134_upgrades()	{
     $options      = array(
-		'count_agent_article_views' => 0,
-        'delete_ticket_media'       => 0
+		'count_agent_article_views' => 0
 	);
 
 	foreach( $options as $key => $value )	{

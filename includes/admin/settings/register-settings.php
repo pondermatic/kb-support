@@ -384,13 +384,6 @@ function kbs_get_registered_settings() {
 						'name'    => sprintf( __( 'Hide Closed %s?', 'kb-support' ), $plural ),
 						'desc'    => sprintf( __( 'Enable this option to remove closed %1$s from the default view on the admin %1$s screen', 'kb-support' ), strtolower( $plural ) ),
 						'type'    => 'checkbox'
-					),
-                    'delete_ticket_media' => array(
-						'id'      => 'delete_ticket_media',
-						'name'    => sprintf( __( 'Delete %s Attachments?', 'kb-support' ), $single ),
-						'desc'    => sprintf( __( 'If enabled, any attachments associated with a %1$s, or its replies, will be deleted when a %1$s is deleted.', 'kb-support' ), strtolower( $single ) ),
-						'type'    => 'checkbox',
-						'std'     => '0'
 					)
 				),
 				'submit' => array(
