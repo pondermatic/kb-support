@@ -498,8 +498,9 @@ function kbs_before_ticket_is_deleted( $ticket_id = 0 )	{
 
 	global $wpdb;
 
-	$types = "'" . implode( "','", kbs_ticket_deleted_item_post_types() ) . "'";
-	$key   = '_kbs_deleted_ticket_items_' . $ticket_id;
+	$types   = "'" . implode( "','", kbs_ticket_deleted_item_post_types() ) . "'";
+	$key     = '_kbs_deleted_ticket_items_' . $ticket_id;
+    $key_att = $key . '_' . 'attachments';
 
 	$items = $wpdb->get_col( $wpdb->prepare(
 		"SELECT ID
@@ -511,6 +512,21 @@ function kbs_before_ticket_is_deleted( $ticket_id = 0 )	{
 
 	if ( $items )	{
 		set_transient( $key, $items, HOUR_IN_SECONDS );
+
+        $items[]  = $ticket_id;
+        $item_ids = implode( ',', array_map( 'intval', $items ) );
+        $media    = $wpdb->get_col( $wpdb->prepare(
+            "SELECT ID
+            FROM $wpdb->posts
+            WHERE post_parent IN( {$item_ids} )
+            AND post_type = %s",
+            'attachment'
+        ) );
+
+        if ( $media )   {
+            set_transient( $key_att, $media, HOUR_IN_SECONDS );
+        }
+        
 	}
 
 } // kbs_before_ticket_is_deleted
@@ -536,8 +552,22 @@ function kbs_cleanup_after_deleting_ticket( $ticket_id = 0 )	{
 
 	global $wpdb;
 
-	$key   = '_kbs_deleted_ticket_items_' . $ticket_id;
-	$items = get_transient( $key );
+	$key     = '_kbs_deleted_ticket_items_' . $ticket_id;
+    $key_att = $key . '_' . 'attachments';
+	$items   = get_transient( $key );
+    $media   = get_transient( $media );
+
+    if ( kbs_delete_media_with_ticket() && false !== $media ) {
+        foreach( $media as $media_id )  {
+            wp_delete_attachment( (int) $media_id, true );
+
+            if ( false !== $items && ( $array_key = array_search( $media_id, $items ) ) !== false ) {
+                unset( $items[ $array_key ] );
+            }
+        }
+
+        delete_transient( $key_att );
+    }
 
 	if ( false !== $items )	{
 		$item_ids = implode( ',', array_map( 'intval', $items ) );

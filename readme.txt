@@ -129,6 +129,8 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 * **New**: Agents can now enable/disable the alert that is displayed if a reply is added whilst they are editing a ticket. The **Ticket Reply Alerts** option resides within each agents user profile and is disabled by default
 
+* **New**: Enabling the **Delete Ticket Attachments?** option will delete any media files associated with a ticket, or its replies, when a ticket is deleted
+
 * **New**: You can now choose to have agent article visits increment the article count via the `Count Agent Views?` setting option. Disabled by default
 
 * **Tweak**: Added monthly view count to article list screen

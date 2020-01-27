@@ -1618,3 +1618,13 @@ function kbs_ticket_deleted_item_post_types()	{
 	$post_types = array( 'kbs_ticket_reply', 'kbs_log' );
 	return apply_filters( 'kbs_ticket_deleted_item_post_types', $post_types );
 } // kbs_ticket_deleted_item_post_types
+
+/**
+ * Whether or not to delete attached media when a ticket is deleted.
+ *
+ * @since   1.3.4
+ * @return  bool    True deletes, false does not
+ */
+function kbs_delete_media_with_ticket() {
+    return (bool) kbs_get_option( 'delete_ticket_media', false );
+} // kbs_delete_media_with_ticket
