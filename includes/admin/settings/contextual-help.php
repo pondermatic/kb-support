@@ -110,11 +110,6 @@ function kbs_settings_contextual_help() {
 					strtolower( $ticket_singular ),
 					strtolower( $ticket_plural )
 				) . '</li>' .
-                '<li>' . sprintf(
-					__( '<strong>Delete %s Attachments?</strong> - With this option enabled, any attachments (images, files etc.) will also be deleted when a %s is deleted. If these attachments are referenced elsewhere within your WordPress site, it may result in broken links.', 'kb-support' ),
-                    $ticket_singular,
-                    strtolower( $ticket_singular )
-				). '</li>' .
 			'</ul>' .
 			'<p>' . __( '<strong>Submission Settings</strong>', 'kb-support' ) . '</p>' .
 			'<ul>' .
