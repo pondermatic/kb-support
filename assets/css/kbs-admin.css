@@ -859,6 +859,15 @@ td.kbs_article_label {
 	max-width: 80%;
 }
 
+h3.kbs_popular_articles_label {
+    font-weight: 600 !important;
+    color: #23282d !important;
+    font-size: 14px;
+    padding: 8px 12px;
+    margin: 0;
+    line-height: 1.4;
+}
+
 /* System Info page styles
 -------------------------------------------------------------- */
 #system-info-textarea {
