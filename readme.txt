@@ -127,6 +127,14 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 **DATE**
 
+***Note: The view-ticket.php template file has been updated. Please review changes if you have copied this file to your child theme***
+
+* **New**: Admins can now set the `Default Replies to Expand` option to determine how many replies should auto expand on the view ticket screen for customers by default
+
+* **New**: Customers can choose the number of replies to auto expand on the view ticket screen by changing the `Replies to Expand` option within their user profile
+
+* **New**: Agents can choose the number of replies to auto expand on the ticket admin screen by changing the `Replies to Expand` option within their user profile
+
 * **New**: Agents can now enable/disable the alert that is displayed if a reply is added whilst they are editing a ticket. The **Ticket Reply Alerts** option resides within each agents user profile and is disabled by default
 
 * **New**: You can now choose to have agent article visits increment the article count via the `Count Agent Views?` setting option. Disabled by default
