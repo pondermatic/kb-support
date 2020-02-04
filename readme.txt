@@ -139,6 +139,8 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 * **New**: You can now choose to have agent article visits increment the article count via the `Count Agent Views?` setting option. Disabled by default
 
+* **New**: You can now add a blank entry to any dropdown field within your submission form by enabling the **Blank First** option
+
 * **Tweak**: Added monthly view count to article list screen
 
 * **Bug**: The `{agent}` template tag may cause ticket notification emails to fail if no agent is assigned to the ticket

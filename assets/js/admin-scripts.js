@@ -569,8 +569,10 @@ jQuery(document).ready(function ($) {
 				}
 
 				if ( 'select' === kbs_selected_field || 'department' === kbs_selected_field || 'ticket_category_dropdown' === kbs_selected_field )	{
+                    $('#kbs_meta_field_select_blank_wrap').show();
 					$('#kbs_meta_field_select_searchable_wrap').show();
 				} else	{
+                    $('#kbs_meta_field_select_blank_wrap').hide();
 					$('#kbs_meta_field_select_searchable_wrap').hide();
 				}
 
@@ -660,6 +662,7 @@ jQuery(document).ready(function ($) {
 				var return_url       = $('#form_return_url').val();			
 				var postData         = {
 					action           : 'kbs_add_form_field',
+                    blank            : $('#kbs_field_select_blank').val(),
 					chosen           : ( $('#kbs_field_select_chosen').is(':checked') )   ? $('#kbs_field_select_chosen').val()   : 0,
                     chosen_search    : $('#kbs_field_select_chosen_search').val(),
 					description      : $('#kbs_field_description').val(),
@@ -721,6 +724,7 @@ jQuery(document).ready(function ($) {
 				var return_url       = $('#form_return_url').val();			
 				var postData         = {
 					action           : 'kbs_save_form_field',
+                    blank            : $('#kbs_field_select_blank').val(),
 					chosen           : ( $('#kbs_field_select_chosen').is(':checked') )   ? $('#kbs_field_select_chosen').val()   : 0,
                     chosen_search    : $('#kbs_field_select_chosen_search').val(),
 					description      : $('#kbs_field_description').val(),

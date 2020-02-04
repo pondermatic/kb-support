@@ -911,6 +911,7 @@ function kbs_display_form_select_field( $field, $settings )	{
 
 	$class         = ! empty( $settings['input_class'] )     ? esc_attr( $settings['input_class'] )   : '';
 	$multiple      = ! empty( $settings['select_multiple'] ) ? ' ' . ' multiple'                      : false;
+    $blank_first   = ! empty( $settings['blank'] )           ? true                                   : false;
     $chosen        = ! empty( $settings['chosen'] )          ? true                                   : false;
     $chosen_search = ! empty( $settings['chosen_search'] )   ? esc_html( $settings['chosen_search'] ) : false;
     $data_array    = ! empty( $settings['data'] )            ? $settings['data']                      : array();
@@ -943,6 +944,12 @@ function kbs_display_form_select_field( $field, $settings )	{
 		$multiple,
         $data_elements
 	);
+
+    if ( $blank_first )	{
+		$output .= '<option value="">';
+        $output .= '';
+        $output .= '</option>';
+	}
 
     if ( ! empty( $settings['placeholder'] ) )	{
 		$output .= '<option value="0">';
