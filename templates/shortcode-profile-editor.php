@@ -155,6 +155,15 @@ if ( ! is_user_logged_in() ) : ?>
 
                         <?php do_action( 'kbs_profile_editor_after_replies_to_load' ); ?>
 
+						<div class="kbs_profile_editor_replies_to_expand">
+                            <p>
+                            	<label for="kbs_expand_replies"><?php _e( 'Replies to Expand', 'kb-support' ); ?></label>
+                                <input type="number" class="kbs-input" name="kbs_expand_replies" id="kbs-expand-replies" value="<?php echo esc_attr( $customer->get_replies_to_expand() ); ?>" min="0" max="50" step="1" /><span class="kbs-description"><?php printf( __( 'How many replies do you want to initially expand on the %s Manager page? <code>0</code> expands none.', 'kb-support' ), kbs_get_ticket_label_singular() ); ?></span>
+                            </p>
+                        </div>
+
+                        <?php do_action( 'kbs_profile_editor_after_replies_to_expand' ); ?>
+
                         <?php $hide_closed = kbs_customer_maybe_hide_closed_tickets( $customer->user_id ); ?>
 
                         <div class="kbs_profile_editor_hide_closed">

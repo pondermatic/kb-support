@@ -175,6 +175,8 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 
 							$replies_query = new KBS_Replies_Query( $args );
 							$replies       = $replies_query->get_replies();
+							$count_expand  = 1;
+							$expand        = kbs_get_customer_replies_to_expand();
 							?>
 
 							<?php if ( ! empty( $replies ) ) : ?>
@@ -184,6 +186,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
                                         <?php
                                         $reply_content = apply_filters( 'the_content', $reply->post_content );
                                         $reply_content = str_replace( ']]>', ']]&gt;', $reply_content );
+										$show          = $expand > 0 && $expand >= $count_expand ? ' show' : '';
                                         $files         = kbs_ticket_has_files( $reply->ID );
                                         $file_count    = ( $files ? count( $files ) : false );
                                         $heading       = apply_filters( 'kbs_front_replies_title', sprintf(
@@ -206,7 +209,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
                                                 </span>
                                             </div>
 
-                                            <div id="kbs_ticket_reply-<?php echo $reply->ID; ?>" class="collapse" aria-labelledby="kbs_ticket_reply-<?php echo $reply->ID; ?>-heading" data-parent="#kbs-ticket-replies">
+                                            <div id="kbs_ticket_reply-<?php echo $reply->ID; ?>" class="collapse<?php echo $show; ?>" aria-labelledby="kbs_ticket_reply-<?php echo $reply->ID; ?>-heading" data-parent="#kbs-ticket-replies">
                                                 <div class="card-body">
                                                     <?php echo $reply_content; ?>
                                                     <?php if ( $files ) : ?>
@@ -229,6 +232,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
                                                 </div>
                                             </div>
                                         </div>
+										<?php $count_expand++; ?>
                                     <?php endforeach; ?>
                                     <div id="kbs-loading-replies"></div>
                                 </div><!-- .kbs-accordian -->

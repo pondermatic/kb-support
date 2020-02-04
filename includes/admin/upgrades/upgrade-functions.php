@@ -696,7 +696,8 @@ function kbs_v133_upgrades()	{
  */
 function kbs_v134_upgrades()	{
     $options      = array(
-		'count_agent_article_views' => 0
+		'count_agent_article_views' => 0,
+		'replies_to_expand'         => 1
 	);
 
 	foreach( $options as $key => $value )	{
