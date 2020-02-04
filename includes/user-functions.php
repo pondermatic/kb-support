@@ -152,7 +152,7 @@ function kbs_render_user_profile_replies_to_expand_field( $user )  {
 	<?php echo ob_get_clean();
 
 } // kbs_render_user_profile_replies_to_expand_field
-//add_action( 'kbs_display_agent_user_profile_fields', 'kbs_render_user_profile_replies_to_expand_field', 5 );
+add_action( 'kbs_display_agent_user_profile_fields', 'kbs_render_user_profile_replies_to_expand_field', 5 );
 add_action( 'kbs_display_customer_user_profile_fields', 'kbs_render_user_profile_replies_to_expand_field', 5 );
 
 /**
