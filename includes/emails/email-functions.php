@@ -499,20 +499,26 @@ function kbs_email_agent_assigned_to_ticket( $ticket_id = 0, $agent_id = 0, $pre
  * @return	mixed
  */
 function kbs_get_admin_notice_emails( $ticket_id = 0 )	{
-	$emails = kbs_get_option( 'admin_notice_emails', false );
-	$emails = strlen( trim( $emails ) ) > 0 ? $emails : get_bloginfo( 'admin_email' );
-	$emails = array_map( 'trim', explode( "\n", $emails ) );
-
-	if ( ! empty( $ticket_id ) )	{
+	$emails  = kbs_get_option( 'admin_notice_emails', false );
+	$emails  = strlen( trim( $emails ) ) > 0 ? $emails : get_bloginfo( 'admin_email' );
+	$emails  = array_map( 'trim', explode( "\n", $emails ) );
+    $has_tag = strpos( $emails, '{agent}' );
+    
+	if ( ! empty( $ticket_id ) && false !== $has_tag )	{
 		$agent_id = kbs_get_agent( $ticket_id );
 
 		if ( ! empty( $agent_id ) )	{
 			$agent_data = get_userdata( $agent_id );
 
 			if ( ! empty( $agent_data ) )	{
-				$emails = str_replace( '{agent}', $agent_data->user_email, $emails );
+				$emails   = str_replace( '{agent}', $agent_data->user_email, $emails );
+                $done_tag = true;
 			}
 		}
+
+        if ( empty( $done_tag ) )   {
+            str_replace( '{agent}', '', $emails );
+        }
 	}
 
 	return apply_filters( 'kbs_admin_notice_emails', $emails );

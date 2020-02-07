@@ -624,6 +624,16 @@ function kbs_render_field_options_rows( $post_id )	{
         </p>
     </div>
 
+    <div id="kbs_meta_field_select_blank_wrap">
+    	<p><label for="kbs_field_select_blank">
+			<?php echo KBS()->html->checkbox( array(
+				'name' => 'kbs_field_select_blank',
+				'current' => ! empty( $kbs_edit_field->settings['blank'] ) ? $kbs_edit_field->settings['blank'] : null
+			) ); ?>
+			<strong><?php _e( 'Blank First?', 'kb-support' ); ?></strong></label>
+        </p>
+    </div>
+
     <div id="kbs_meta_field_select_searchable_wrap">
     	<p><label for="kbs_field_select_chosen">
 			<?php echo KBS()->html->checkbox( array(

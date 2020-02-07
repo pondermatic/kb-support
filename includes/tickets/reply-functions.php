@@ -98,9 +98,10 @@ function kbs_get_last_reply( $ticket_id, $args = array() )	{
  * @since	1.0
  * @param	obj|int	$reply		The reply object or ID
  * @param	int		$ticket_id	The ticket ID the reply is connected to
+ * @param   bool    $expand     Whether or not to auto expand the reply
  * @return	str
  */
-function kbs_get_reply_html( $reply, $ticket_id = 0 ) {
+function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
 
 	if ( is_numeric( $reply ) ) {
 		$reply = get_post( $reply );
@@ -110,6 +111,7 @@ function kbs_get_reply_html( $reply, $ticket_id = 0 ) {
 	$date_format = get_option( 'date_format' ) . ', ' . get_option( 'time_format' );
 	$files       = kbs_ticket_has_files( $reply->ID );
 	$file_count  = ( $files ? count( $files ) : false );
+    $show        = $expand ? ' style="display: block;"' : '';
 
 	$create_article_link = add_query_arg( array(
 		'kbs-action' => 'create_article',
@@ -183,7 +185,7 @@ function kbs_get_reply_html( $reply, $ticket_id = 0 ) {
         </span>
     </div>
 
-    <div class="kbs-replies-content-wrap">
+    <div class="kbs-replies-content-wrap"<?php echo $show; ?></div>
         <div class="kbs-replies-content-sections">
         	<?php do_action( 'kbs_before_reply_content_section', $reply ); ?>
             <div id="kbs-reply-option-section-<?php echo $reply->ID; ?>" class="kbs-replies-content-section">

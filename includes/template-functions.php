@@ -212,8 +212,10 @@ function kbs_article_maybe_increment_views()	{
 		return;
 	}
 
-	if ( is_user_logged_in() && kbs_is_agent( get_current_user_id() ) )	{
-		return;
+	if ( ! kbs_count_agent_article_views() )	{
+		if ( is_user_logged_in() && kbs_is_agent( get_current_user_id() ) )	{
+			return;
+		}
 	}
 
 	$article_id = get_the_ID();

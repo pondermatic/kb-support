@@ -320,6 +320,16 @@ function kbs_get_registered_settings() {
 						'max'     => '50',
 						'std'     => '5'
 					),
+					'replies_to_expand' => array(
+						'id'      => 'replies_to_expand',
+						'name'    => __( 'Default Replies to Expand', 'kb-support' ),
+						'desc'    => sprintf( __( 'Enter the number of replies that should auto expand for a customer on the %s Manager screen. Enter <code>0</code> to expand none. Registered customers can change this setting on their profile page.', 'kb-support' ), strtolower( $single ) ),
+						'type'    => 'number',
+						'size'    => 'small',
+                        'min'     => '0',
+						'max'     => '50',
+						'std'     => 0
+					),
                     'hide_closed_front' => array(
 						'id'      => 'hide_closed_front',
 						'name'    => sprintf( __( 'Hide Closed %s?', 'kb-support' ), $plural ),
@@ -646,6 +656,13 @@ function kbs_get_registered_settings() {
 						'step'    => '5',
 						'size'    => 'small',
 						'std'     => '0'
+					),
+					'count_agent_article_views' => array(
+						'id'      => 'count_agent_article_views',
+						'name'    => __( 'Count Agent Views?', 'kb-support' ),
+						'desc'    => sprintf( __( 'Enable to increment %1$s counts when an agent is viewing the %1$s.', 'kb-support' ), kbs_get_article_label_singular() ),
+						'type'    => 'checkbox',
+						'std'     => 0
 					),
 					'article_views_dashboard' => array(
 						'id'      => 'article_views_dashboard',

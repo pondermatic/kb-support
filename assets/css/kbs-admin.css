@@ -280,6 +280,7 @@ span.price_restricted:before {
 #kbs_meta_field_select_options_wrap,
 #kbs_meta_field_select_multiple_wrap,
 #kbs_meta_field_option_selected_wrap,
+#kbs_meta_field_select_blank_wrap,
 #kbs_meta_field_select_searchable_wrap,
 #kbs_meta_field_select_search_text_wrap,
 #kbs_meta_field_maxfiles_wrap,
@@ -857,6 +858,15 @@ div .term-agents-wrap .kbs_select_chosen {
 td.kbs_article_label {
 	min-width: 30%;
 	max-width: 80%;
+}
+
+h3.kbs_popular_articles_label {
+    font-weight: 600 !important;
+    color: #23282d !important;
+    font-size: 14px;
+    padding: 8px 12px;
+    margin: 0;
+    line-height: 1.4;
 }
 
 /* System Info page styles

@@ -94,7 +94,10 @@ function kbs_set_articles_column_data( $column_name, $post_id ) {
 			break;
 
 		case 'views':
-			echo kbs_get_article_view_count( $post_id );
+			$total   = kbs_get_article_view_count( $post_id );
+			$monthly = kbs_get_article_view_count( $post_id, false );
+
+			echo $total . ' / ' . $monthly;
 			break;
 
 		case 'visibility':

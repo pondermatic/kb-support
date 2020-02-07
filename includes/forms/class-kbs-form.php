@@ -157,6 +157,7 @@ class KBS_Form {
 		}
 
 		$settings = array(
+            'blank'           => ! empty( $data['blank'] )           ? true                                          : false,
 			'chosen'          => ! empty( $data['chosen'] )          ? true                                          : false,
             'chosen_search'   => ! empty( $data['chosen_search'] )   ? sanitize_text_field( $data['chosen_search'] ) : '',
 			'description'     => ! empty( $data['description'] )     ? sanitize_text_field( $data['description'] )   : '',
@@ -244,6 +245,7 @@ class KBS_Form {
 		}
 
 		$settings = array(
+            'blank'           => ! empty( $data['blank'] )           ? true                                          : false,
 			'chosen'          => ! empty( $data['chosen'] )          ? true                                          : false,
             'chosen_search'   => ! empty( $data['chosen_search'] )   ? sanitize_text_field( $data['chosen_search'] ) : '',
 			'description'     => ! empty( $data['description'] )     ? sanitize_text_field( $data['description'] )   : '',

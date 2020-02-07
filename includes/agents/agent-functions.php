@@ -520,6 +520,22 @@ function kbs_get_online_agent_count()	{
 } // kbs_get_online_agent_count
 
 /**
+ * Whether or not an agent should be alerted when a reply is received during ticket editing.
+ *
+ * @since   1.3.4
+ * @param   int     $agent_id   WP User ID of agent. Default to current user
+ * @return  bool    True to notify, otherwise false
+ */
+function kbs_alert_agent_ticket_reply( $agent_id = 0 ) {
+    $agent_id = ! empty( $agent_id ) ? absint( $agent_id ) : get_current_user_id();
+
+    $alert = get_user_meta( $agent_id, '_kbs_reply_alerts', true );
+    $alert = absint( $alert );
+
+    return apply_filters( 'kbs_alert_agent_ticket_reply', $alert, $agent_id );
+} // kbs_alert_agent_ticket_reply
+
+/**
  * Redirect when an agent replies to or closes a ticket within admin.
  *
  * @since   1.2.4

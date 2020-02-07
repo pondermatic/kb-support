@@ -4,7 +4,7 @@ Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
 Tested up to: 5.3.2
 Requires PHP: 5.4
-Stable tag: 1.3.3
+Stable tag: 1.3.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,6 +122,22 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.3.4 =
+
+**7th February 2020**
+
+***Note: The view-ticket.php template file has been updated. Please review changes if you have copied this file to your child theme and made customisations***
+* **New**: Admins can now set the **Default Replies to Expand** option to determine how many replies should auto expand on the view ticket screen for customers by default
+* **New**: Customers can choose the number of replies to auto expand on the view ticket screen by changing the **Replies to Expand** option within their user profile
+* **New**: Agents can choose the number of replies to auto expand on the ticket admin screen by changing the **Replies to Expand** option within their user profile
+* **New**: Agents can now enable/disable the alert that is displayed if a reply is added whilst they are editing a ticket. The **Ticket Reply Alerts** option resides within each agents user profile and is disabled by default
+* **New**: You can now choose to have agent article visits increment the article count via the **Count Agent Views?** setting option. Disabled by default
+* **New**: You can now add a blank entry to any dropdown field within your submission form by enabling the **Blank First** option
+
+* **Tweak**: Added monthly view count to article list screen
+
+* **Bug**: The `{agent}` template tag may cause ticket notification emails to fail if no agent is assigned to the ticket
 
 = 1.3.3 =
 
