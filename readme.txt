@@ -4,7 +4,7 @@ Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
 Tested up to: 5.3.2
 Requires PHP: 5.4
-Stable tag: 1.3.3
+Stable tag: 1.3.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -125,7 +125,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 = 1.3.4 =
 
-**DATE**
+**7th February 2020**
 
 ***Note: The view-ticket.php template file has been updated. Please review changes if you have copied this file to your child theme and made customisations***
 * **New**: Admins can now set the **Default Replies to Expand** option to determine how many replies should auto expand on the view ticket screen for customers by default
