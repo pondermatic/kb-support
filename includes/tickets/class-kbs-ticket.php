@@ -1675,8 +1675,8 @@ class KBS_Ticket {
 
 		if ( $id && $data )	{
 			$form_data = array(
-				'id'   => $this->get_meta( '_kbs_ticket_form_id', true ),
-				'data' => $this->get_meta( '_kbs_ticket_form_data', true )
+				'id'   => $id,
+				'data' => $data
 			);
 		}
 
@@ -1980,6 +1980,17 @@ class KBS_Ticket {
 
 	} // add_reply
 
+	/**
+	 * Whether or not a 3rd party form was submitted.
+	 *
+	 * @since	1.3.5
+	 */
+	public function is_3rd_party_form()	{
+		$thirdparty = $this->get_meta( '_kbs_ticket_form_thirdparty', true );
+
+		return $thirdparty;
+	} // is_3rd_party_form
+
     /**
      * Retrieve the form name from which the ticket was submitted.
      *
@@ -1991,7 +2002,20 @@ class KBS_Ticket {
 			return;
 		}
 
-        return sprintf( __( 'Form: %s', 'kb-support' ), get_the_title( $this->form_data['id'] ) );
+		$form_title = '';
+		$thirdparty = $this->is_3rd_party_form();
+
+		if ( ! $thirdparty )	{
+			$form_title = sprintf(
+				__( 'Form: %s', 'kb-support' ),
+				get_the_title( $this->form_data['id'] )
+			);
+		} else	{
+			$filter     = 'kbs_get_submission_form_name_' . $thirdparty;
+			$form_title = apply_filters( $filter, '', $this->form_data['id'], $this->ID );
+		}
+
+        return $form_title;
     } // get_form_name
 
 	public function show_form_data()	{
@@ -1999,66 +2023,73 @@ class KBS_Ticket {
 			return;
 		}
 
-		$form   = new KBS_Form( $this->form_data['id'] );
-        $output = '';
+		$thirdparty = $this->is_3rd_party_form();
+		$output     = '';
 
-		foreach( $this->form_data['data'] as $field => $value )	{
+		if ( ! $thirdparty )	{
+			$form   = new KBS_Form( $this->form_data['id'] );
 
-			$form_field = kbs_get_field_by( 'name', $field );
+			foreach( $this->form_data['data'] as $field => $value )	{
 
-			if ( empty( $form_field ) )	{
-				continue;
-			}
+				$form_field = kbs_get_field_by( 'name', $field );
 
-			$settings = $form->get_field_settings( $form_field->ID );
-
-			if ( 'recaptcha' == $settings['type'] )	{
-				continue;
-			}
-
-			if ( 'department' == $settings['mapping'] )	{
-				$department = kbs_get_department( $value );
-				if ( isset( $department ) && ! is_wp_error( $department ) )	{
-					$department = $department->name;
-				} else	{
-					$department = sprintf( __( 'Department %s not found', 'kb-support' ), $value );
+				if ( empty( $form_field ) )	{
+					continue;
 				}
 
-				$value = $department;
-			}
+				$settings = $form->get_field_settings( $form_field->ID );
 
-			if ( 'post_category' == $settings['mapping'] )	{
-				$value = is_array( $value ) ? $value : array( $value );
-				$cats  = array();
-				foreach( $value as $category )	{
-					$term = get_term( $category );
-					if ( $term )	{
-						$cats[] = $term->name;
+				if ( 'recaptcha' == $settings['type'] )	{
+					continue;
+				}
+
+				if ( 'department' == $settings['mapping'] )	{
+					$department = kbs_get_department( $value );
+					if ( isset( $department ) && ! is_wp_error( $department ) )	{
+						$department = $department->name;
 					} else	{
-						$cats[] = sprintf( __( 'Term %s no longer exists', 'kb-support' ), $category );
+						$department = sprintf( __( 'Department %s not found', 'kb-support' ), $value );
 					}
+
+					$value = $department;
 				}
-				$value = $cats;
+
+				if ( 'post_category' == $settings['mapping'] )	{
+					$value = is_array( $value ) ? $value : array( $value );
+					$cats  = array();
+					foreach( $value as $category )	{
+						$term = get_term( $category );
+						if ( $term )	{
+							$cats[] = $term->name;
+						} else	{
+							$cats[] = sprintf( __( 'Term %s no longer exists', 'kb-support' ), $category );
+						}
+					}
+					$value = $cats;
+				}
+
+				if ( is_array( $value ) )	{
+					$value = implode( ', ', $value );
+				}
+
+				if ( 'email' == $settings['type'] && is_email( $value ) )	{
+					$value = sprintf( '<a href="mailto:%1$s">%1$s</a>', sanitize_email( $value ) );
+				}
+
+				if ( 'url' == $settings['type'] )	{
+					$value = sprintf( '<a href="%1$s" target="_blank">%1$s</a>', esc_url( $value ) );
+				}
+
+				$value = apply_filters( 'kbs_show_form_data', $value, $form_field->ID, $settings );
+
+				$output .= sprintf( '<p><strong>%s</strong>: %s</p>',
+					get_the_title( $form_field->ID ),
+					$value
+				);
 			}
-
-			if ( is_array( $value ) )	{
-				$value = implode( ', ', $value );
-			}
-
-			if ( 'email' == $settings['type'] && is_email( $value ) )	{
-				$value = sprintf( '<a href="mailto:%1$s">%1$s</a>', sanitize_email( $value ) );
-			}
-
-			if ( 'url' == $settings['type'] )	{
-				$value = sprintf( '<a href="%1$s" target="_blank">%1$s</a>', esc_url( $value ) );
-			}
-
-			$value = apply_filters( 'kbs_show_form_data', $value, $form_field->ID, $settings );
-
-			$output .= sprintf( '<p><strong>%s</strong>: %s</p>',
-				get_the_title( $form_field->ID ),
-				$value
-			);
+		} else	{
+			$filter = 'kbs_ticket_show_form_data_' . $thirdparty;
+			$output = apply_filters( $filter, $output, $this->form_data['id'], $this->ID );
 		}
 
 		$privacy_accepted = $this->get_meta( '_kbs_ticket_privacy_accepted', true );
