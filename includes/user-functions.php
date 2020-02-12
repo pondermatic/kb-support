@@ -616,7 +616,8 @@ function kbs_process_profile_editor_updates( $data ) {
 		}
 	}
 
-	if ( ! $error && $email != $old_user_data->user_email ) {
+	// Force email to lower case to ensure we're checking like for like
+	if ( ! $error && strtolower( $email ) != strtolower( $old_user_data->user_email ) ) {
 
 		if ( ! is_email( $email ) ) {
 			$error = 'email_invalid';

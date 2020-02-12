@@ -123,6 +123,13 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 == Changelog ==
 
+= 1.3.5 =
+
+**12th February 2020**
+
+* **New**: Enabled support for the 3rd party forms. Ninja Forms extension coming soon!
+* **Bug**: User profile updates fail if email address upper/lower casing do not match 
+
 = 1.3.4 =
 
 **7th February 2020**
