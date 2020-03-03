@@ -501,8 +501,8 @@ function kbs_email_agent_assigned_to_ticket( $ticket_id = 0, $agent_id = 0, $pre
 function kbs_get_admin_notice_emails( $ticket_id = 0 )	{
 	$emails  = kbs_get_option( 'admin_notice_emails', false );
 	$emails  = strlen( trim( $emails ) ) > 0 ? $emails : get_bloginfo( 'admin_email' );
-	$emails  = array_map( 'trim', explode( "\n", $emails ) );
     $has_tag = strpos( $emails, '{agent}' );
+	$emails  = array_map( 'trim', explode( "\n", $emails ) );
     
 	if ( ! empty( $ticket_id ) && false !== $has_tag )	{
 		$agent_id = kbs_get_agent( $ticket_id );
