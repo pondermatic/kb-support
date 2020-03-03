@@ -123,6 +123,13 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 == Changelog ==
 
+= 1.3.6 =
+
+**4th March 2020**
+
+* **Bug**: PHP warning generated during customer ticket submission
+* **Tweak**: Do not CC company contact if email matches that of of customer submitting ticket
+
 = 1.3.5 =
 
 **12th February 2020**
