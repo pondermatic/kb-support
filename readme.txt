@@ -4,7 +4,7 @@ Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
 Tested up to: 5.3.2
 Requires PHP: 5.4
-Stable tag: 1.3.5
+Stable tag: 1.3.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,6 +122,13 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.3.6 =
+
+**4th March 2020**
+
+* **Bug**: PHP warning generated during customer ticket submission
+* **Tweak**: Do not CC company contact if email matches that of of customer submitting ticket
 
 = 1.3.5 =
 

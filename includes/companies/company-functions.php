@@ -160,7 +160,7 @@ function kbs_maybe_cc_company_contact( $headers, $ticket_id, $ticket_data ) {
         if ( ! empty( $ticket->company_id ) )   {
             $email = is_email( kbs_get_company_email( $ticket->company_id ) );
 
-            if ( $email )   {
+            if ( $email && $email != $ticket->email )   {
                 $headers[] = 'Cc: ' . $email;
             }
         }
