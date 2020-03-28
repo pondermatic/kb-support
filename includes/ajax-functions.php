@@ -218,6 +218,7 @@ function kbs_ajax_insert_ticket_reply()	{
 	$reply_data = array(
 		'ticket_id'   => $_POST['ticket_id'],
 		'response'    => $_POST['response'],
+		'status'      => $_POST['status'],
 		'close'       => $_POST['close_ticket'],
 		'customer_id' => $ticket->customer_id,
 		'agent_id'    => $ticket->agent_id,

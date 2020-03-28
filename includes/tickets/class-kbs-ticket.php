@@ -1900,7 +1900,10 @@ class KBS_Ticket {
 			return false;
 		}
 
-		$close = ! empty( $reply_data['close'] ) ? isset( $reply_data['close'] ) : false;
+		$ticket_id  = absint( $reply_data['ticket_id'] );
+		$new_status = $reply_data['status'];
+		$close  = ! empty( $reply_data['close'] ) ? isset( $reply_data['close'] ) : false;
+		$close  = ! $close && 'closed' == $new_status && 'closed' != $this->post_status ? true : $close;
 
 		do_action( 'kbs_pre_reply_to_ticket', $reply_data, $this );
 
@@ -1908,7 +1911,7 @@ class KBS_Ticket {
 			'post_type'    => 'kbs_ticket_reply',
 			'post_status'  => 'publish',
 			'post_content' => $reply_data['response'],
-			'post_parent'  => $reply_data['ticket_id'],
+			'post_parent'  => $ticket_id,
 			'post_author'  => ! empty( $reply_data['author'] ) ? (int) $reply_data['author'] : get_current_user_id(),
 			'meta_input'   => array()
 		);
@@ -1949,11 +1952,13 @@ class KBS_Ticket {
 			$this->update_status( 'closed' );
 			$this->update_meta( '_kbs_resolution_id', $reply_id );
 		} else	{
-            $update_args = array( 'ID' => $reply_data['ticket_id'] );
+            $update_args = array( 'ID' => $ticket_id );
 
             if ( 'closed' == $this->post_status )	{
                 $update_args['post_status'] = apply_filters( 'kbs_set_ticket_status_when_reopened', 'open', $this->ID );
-            }
+            } elseif( $new_status != $this->post_status )	{
+				$update_args['post_status'] = $new_status;
+			}
 
 			$update_args = apply_filters(
 				'kbs_add_ticket_update_args',
@@ -1964,7 +1969,7 @@ class KBS_Ticket {
 
 			$update = wp_update_post( $update_args );
 
-            if ( isset( $update_args['post_status'] ) && $update )	{
+            if ( $update && 'closed' == $this->post_status && 'closed' != $new_status )	{
                 if ( kbs_is_agent( $args['post_author'] ) ) {
                     $customer_or_agent = 'agent';
                 } else  {

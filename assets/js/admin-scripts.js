@@ -376,6 +376,7 @@ jQuery(document).ready(function ($) {
 
 				var ticket_id      = kbs_vars.post_id;
 				var ticketResponse = '';
+				var ticketStatus   = $('#ticket_reply_status').val();
 				var tinymceActive  = (typeof tinyMCE !== 'undefined') && tinyMCE.activeEditor && ! tinyMCE.activeEditor.isHidden();
 
 				if (tinymceActive) {
@@ -389,7 +390,7 @@ jQuery(document).ready(function ($) {
 					return false;
 				}
 
-				if ( 'kbs-reply-close' === event.target.id )	{
+				if ( 'kbs-reply-close' === event.target.id || 'closed' === ticketStatus )	{
 					var confirmClose = confirm( kbs_vars.ticket_confirm_close );
 
 					if (confirmClose === false) {
@@ -400,6 +401,7 @@ jQuery(document).ready(function ($) {
 				var postData         = {
 					ticket_id    : ticket_id,
 					response     : ticketResponse,
+					status       : ticketStatus,
 					close_ticket : ( 'kbs-reply-close' === event.target.id ? 1 : 0 ),
 					action       : 'kbs_insert_ticket_reply'
 				};
