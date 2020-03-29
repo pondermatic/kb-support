@@ -714,6 +714,7 @@ function kbs_v134_upgrades()	{
  *
  * - Set default for Agents Set Reply Status option.
  * - Set default for Agent Reply Status option.
+ * - Set colours for ticket status and replies.
  *
  * @since	1.4
  * @return	void
@@ -723,6 +724,28 @@ function kbs_v14_upgrades()	{
 		'agent_update_status_reply' => 0,
 		'agent_reply_status'        => 0
 	);
+
+	$status_colours = array(
+		'open'   => '#82b74b',
+		'hold'   => '#0074a2',
+		'closed' => '#dd3333'
+	);
+
+	foreach( $status_colours as $status => $status_colour )	{
+		$key = 'colour_' . $status;
+		$options[ $key ] = $status_colour;
+	}
+
+	$reply_colours = array(
+		'admin'    => '#6b5b95',
+		'agent'    => '#6b5b95',
+		'customer' => '#c94c4c'
+	);
+
+	foreach( $reply_colours as $replier => $reply_colour )	{
+		$key = 'colour_reply_' . $replier;
+		$options[ $key ] = $reply_colour;
+	}
 
 	foreach( $options as $key => $value )	{
 		kbs_update_option( $key, $value );
