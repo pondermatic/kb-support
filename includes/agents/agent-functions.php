@@ -44,6 +44,43 @@ function kbs_multiple_agents()  {
 } // kbs_multiple_agents
 
 /**
+ * Whether or not agents can select ticket status during reply.
+ *
+ * @since	1.4
+ * @return	bool	True or false
+ */
+function kbs_agent_can_set_status_on_reply()	{
+	$can_set = kbs_get_option( 'agent_update_status_reply' );
+	$can_set = apply_filters( 'kbs_agent_can_set_status_on_reply', $can_set );
+
+	return (bool) $can_set;
+} // kbs_agent_can_set_status_on_reply
+
+/**
+ * Which status should be set by default when an agent replies?
+ *
+ * @since	1.4
+ * @param	int		$ticket_id	The ticket ID
+ * @return	string	Status that should be selected by default
+ */
+function kbs_agent_get_default_reply_status( $ticket_id = 0 )	{
+	$status   = kbs_get_option( 'agent_reply_status' );
+	$statuses = kbs_get_ticket_statuses();
+
+	if ( $status && ( ! is_array( $statuses ) || ! array_key_exists( $status, $statuses ) ) )	{
+		$status = false;
+	}
+
+	if ( ! $status && ! empty( $ticket_id ) )	{
+		$status = get_post_status( $ticket_id );
+	}
+
+	$status = apply_filters( 'kbs_agent_default_reply_status', $status );
+
+	return $status;
+} // kbs_agent_get_default_reply_status
+
+/**
  * Retrieve the agent ID from a ticket.
  *
  * @since	1.0

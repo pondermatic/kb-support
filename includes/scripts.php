@@ -291,11 +291,13 @@ function kbs_load_admin_scripts( $hook ) {
 
 	wp_localize_script( 'kbs-admin-scripts', 'kbs_vars', array(
 		'add_new_ticket'          => sprintf( __( 'Add New %s', 'kb-support' ), $singular ),
+		'agent_set_status'        => kbs_agent_can_set_status_on_reply(),
 		'admin_url'               => admin_url(),
 		'ajax_loader'             => KBS_PLUGIN_URL . 'assets/images/loading.gif',
         'customer_email_required' => __( 'Customer email address is required', 'kb-support' ),
         'customer_name_required'  => __( 'Customer name is required', 'kb-support' ),
         'delete_reply_warn'       => __( "You will permanently delete this reply.\n\nDepending on configuration, your customer may have already received it via email.\n\nClick 'Cancel' to stop, 'OK' to delete.", 'kb-support' ),
+		'default_reply_status'    => kbs_agent_get_default_reply_status(),
         'delete_ticket_warn'      => sprintf(
             __( "You are about to permanently delete this %s.\n\nThis action cannot be undone.\n\nClick 'Cancel' to stop, 'OK' to delete.", 'kb-support' ), kbs_get_ticket_label_singular( true )
         ),

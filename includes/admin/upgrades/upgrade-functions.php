@@ -104,6 +104,10 @@ function kbs_do_automatic_upgrades() {
 		kbs_v134_upgrades();
 	}
 
+	if ( version_compare( $kbs_version, '1.4', '<' ) ) {
+		kbs_v14_upgrades();
+	}
+
 	if ( version_compare( $kbs_version, KBS_VERSION, '<' ) )	{
 
 		// Let us know that an upgrade has happened
@@ -704,6 +708,26 @@ function kbs_v134_upgrades()	{
 		kbs_update_option( $key, $value );
 	}
 } // kbs_v134_upgrades
+
+/**
+ * Upgrade routine for version 1.4.
+ *
+ * - Set default for Agents Set Reply Status option.
+ * - Set default for Agent Reply Status option.
+ *
+ * @since	1.4
+ * @return	void
+ */
+function kbs_v14_upgrades()	{
+    $options      = array(
+		'agent_update_status_reply' => 0,
+		'agent_reply_status'        => 0
+	);
+
+	foreach( $options as $key => $value )	{
+		kbs_update_option( $key, $value );
+	}
+} // kbs_v14_upgrades
 
 /**
  * Update sequential ticket numbers.

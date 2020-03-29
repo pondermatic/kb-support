@@ -466,6 +466,13 @@ function kbs_get_registered_settings() {
 						'desc'    => sprintf( __( 'If enabled, by replying to a closed %1$s, customers can re-open the %1$s', 'kb-support' ), strtolower( $single ) ),
 						'type'    => 'checkbox',
                         'std'     => '0'
+					),
+					'agent_update_status_reply' => array(
+						'id'      => 'agent_update_status_reply',
+						'name'    => __( 'Agents Set Reply Status?', 'kb-support' ),
+						'desc'    => sprintf( __( 'If enabled, agents will be able to update a %s status whilst replying.', 'kb-support' ), strtolower( $plural ) ),
+						'type'    => 'checkbox',
+						'std'     => '1'
 					)
                 ),
 				'agents' => array(
@@ -2371,6 +2378,20 @@ function kbs_settings_for_status_replies( $settings )   {
 
         $select_options[ $status ] = $label;
     }
+
+	$agent_reply_options = array( 0 => __( 'Current Status', 'kb-support' ) );
+	$agent_reply_options = array_merge( $agent_reply_options, $select_options );
+
+	$settings['replies']['agent_reply_status'] = array(
+		'id'      => 'agent_reply_status',
+		'name'    => __( 'Agent Reply Status', 'kb-support' ),
+		'desc'    => sprintf( __( 'When an agent replies to a %1$s what should the status change to by default? Agents may be able to change this whilst replying.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+		'type'    => 'select',
+		'options' => $agent_reply_options,
+		'chosen'  => true,
+		'std'     => 0,
+		'class'   => 'status_reply_agent'
+	);
 
     foreach( $all_statuses as $status => $label )   {
         if ( 'open' == $status )    {

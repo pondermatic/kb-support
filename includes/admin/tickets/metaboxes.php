@@ -875,18 +875,25 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 		 * @param	int	$post_id	The Ticket post ID
 		 */
 		do_action( 'kbs_ticket_before_reply_buttons', $ticket_id );
-		?>
-        <p><label>
-			<?php printf(
-				__( '<strong>Set status to</strong> %s <strong>and</strong>&nbsp;', 'kb-support' ),
-				KBS()->html->ticket_status_dropdown( array(
-					'name'     => 'ticket_reply_status',
-					'selected' => $kbs_ticket->post_status,
-					'chosen'   => true
-				) )
-			); ?> <a id="kbs-reply-update" class="button button-primary"><?php _e( 'Reply', 'kb-support' ); ?></a></label>
-		</p>
-		<p><a id="kbs-reply-close" class="button button-secondary"><?php _e( 'Reply and Close', 'kb-support' ); ?></a></p>
+
+		if ( kbs_agent_can_set_status_on_reply() ) : ?>
+			<p><label>
+				<?php printf(
+					__( '<strong>Set status to</strong> %s <strong>and</strong>&nbsp;', 'kb-support' ),
+					KBS()->html->ticket_status_dropdown( array(
+						'name'     => 'ticket_reply_status',
+						'selected' => kbs_agent_get_default_reply_status( $kbs_ticket->ID ),
+						'chosen'   => true
+					) )
+				); ?> <a id="kbs-reply-update" class="button button-primary"><?php _e( 'Reply', 'kb-support' ); ?></a></label>
+			</p>
+			<p><a id="kbs-reply-close" class="button button-secondary"><?php _e( 'Reply and Close', 'kb-support' ); ?></a></p>
+		<?php else : ?>
+			<div id="kbs-ticket-reply-container">
+				<div class="kbs-reply"><a id="kbs-reply-update" class="button button-primary"><?php _e( 'Reply', 'kb-support' ); ?></a></div>
+				<div class="kbs-reply"><a id="kbs-reply-close" class="button button-secondary"><?php _e( 'Reply and Close', 'kb-support' ); ?></a></div>
+			</div>
+		<?php endif; ?>
         <div id="kbs-new-reply-loader"></div>
 
 	<?php endif;

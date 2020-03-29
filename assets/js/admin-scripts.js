@@ -376,7 +376,7 @@ jQuery(document).ready(function ($) {
 
 				var ticket_id      = kbs_vars.post_id;
 				var ticketResponse = '';
-				var ticketStatus   = $('#ticket_reply_status').val();
+				var ticketStatus   = kbs_vars.agent_set_status ? $('#ticket_reply_status').val() : kbs_vars.default_reply_status;
 				var tinymceActive  = (typeof tinyMCE !== 'undefined') && tinyMCE.activeEditor && ! tinyMCE.activeEditor.isHidden();
 
 				if (tinymceActive) {
