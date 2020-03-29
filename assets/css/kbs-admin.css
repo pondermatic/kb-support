@@ -76,8 +76,37 @@
 .kbs-currency {
 	width: 75px;
 }
+
 /* General Settings Styles
 -------------------------------------------------------------- */
+.kbs-label {
+	display: inline-block;
+	padding: 2px 8px;
+	font-weight: bold;
+	color: #fff;
+	vertical-align: baseline;
+	background-color: #999;
+	border-radius: 3px;
+}
+
+.kbs-label a,
+.kbs-label a:hover,
+.kbs-label a:visited {
+	color: #fff;
+}
+
+.kbs-label.kbs-reply-status	{
+	font-weight: normal;
+}
+
+.kbs-label + .kbs-label {
+	margin-top: 5px;
+}
+
+table.wp-list-table thead tr th, .kbs-label {
+	white-space: nowrap;
+}
+
 .kbs_ticket_page_kbs-settings .form-table label { color: #666; font-size: 14px; font-style: italic; margin: 4px 0 0; }
 .kbs_ticket_page_kbs-settings .form-table select + label,
 .kbs_ticket_page_kbs-settings .form-table input.regular-text ~ label { display:block; }

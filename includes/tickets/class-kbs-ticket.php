@@ -341,6 +341,14 @@ class KBS_Ticket {
 	protected $replies = array();
 
 	/**
+	 * Who created the last reply.
+	 *
+	 * @since	1.4
+	 * @var		int
+	 */
+	protected $last_replier = null;
+
+	/**
 	 * Array of private notes for this ticket.
 	 *
 	 * @since	1.0
@@ -475,6 +483,7 @@ class KBS_Ticket {
 		$this->ticket_title    = $ticket->post_title;
 		$this->ticket_content  = $ticket->post_content;
 		$this->files           = $this->get_files();
+		$this->last_replier    = $this->get_last_reply_by();
 
 		// User data
 		$this->ip              = $this->setup_ip();
@@ -1217,6 +1226,8 @@ class KBS_Ticket {
 			add_post_meta( $this->ID, '_kbs_ticket_closed_by', $closed_by, true );
 		}
 
+		$this->delete_last_reply_by();
+
 		do_action( 'kbs_close_ticket', $this->ID, $this );
 	} // process_closed
 
@@ -1901,7 +1912,7 @@ class KBS_Ticket {
 		}
 
 		$ticket_id  = absint( $reply_data['ticket_id'] );
-		$new_status = $reply_data['status'];
+		$new_status = isset( $reply_data['status'] ) ? $reply_data['status'] : $this->post_status ;
 		$close  = ! empty( $reply_data['close'] ) ? isset( $reply_data['close'] ) : false;
 		$close  = ! $close && 'closed' == $new_status && 'closed' != $this->post_status ? true : $close;
 
@@ -1969,13 +1980,30 @@ class KBS_Ticket {
 
 			$update = wp_update_post( $update_args );
 
-            if ( $update && 'closed' == $this->post_status && 'closed' != $new_status )	{
-                if ( kbs_is_agent( $args['post_author'] ) ) {
+            if ( $update )	{
+				if ( kbs_is_ticket_admin( $args['post_author'] ) )	{
+					$customer_or_agent = 'agent';
+					$last_reply_by     = $args['post_author'] == $this->agent_id ? 2 : 1;
+				} elseif ( kbs_is_agent( $args['post_author'] ) ) {
                     $customer_or_agent = 'agent';
+					$last_reply_by     = 2;
                 } else  {
                     $customer_or_agent = 'customer';
+					$last_reply_by     = 3;
                 }
-                kbs_insert_note( $reply_data['ticket_id'], sprintf( __( '%s re-opened by %s reply.', 'kb-support' ), kbs_get_ticket_label_singular(), $customer_or_agent ) ); 
+
+				$this->log_last_reply_by( $last_reply_by );
+
+				if ( 'closed' == $this->post_status && 'closed' != $new_status )	{
+					kbs_insert_note(
+						$reply_data['ticket_id'],
+						sprintf(
+							__( '%s re-opened by %s reply.', 'kb-support' ),
+							kbs_get_ticket_label_singular(),
+							$customer_or_agent
+						)
+					);
+				}
             }
 		}
 
@@ -1984,6 +2012,69 @@ class KBS_Ticket {
 		return $reply_id;
 
 	} // add_reply
+
+	/**
+	 * Get reply by values.
+	 *
+	 * @since	1.4
+	 * @return	array	Array of values of who last reply was logged by
+	 */
+	public function get_last_reply_by_values()	{
+		$reply_from = array(
+			1 => __( 'Admin', 'kb-support' ),
+			2 => __( 'Agent', 'kb-support' ),
+			3 => __( 'Customer', 'kb-support' )
+		);
+
+		$reply_from = apply_filters( 'last_reply_by_defaults', $reply_from );
+
+		return $reply_from;
+	} // get_last_reply_by_values
+
+	/**
+	 * Log who the last reply was from.
+	 *
+	 * @since	1.4
+	 * @param	int		$key	Key of who replied. (see array)
+	 * @return	void
+	 */
+	public function log_last_reply_by( $key = 2 )	{
+		$reply_from = $this->get_last_reply_by_values();
+
+		if ( ! array_key_exists( $key, $reply_from ) )	{
+			$key = 2;
+		}
+
+		$this->update_meta( '_kbs_ticket_last_reply_by', $key );
+	} // log_last_reply_by
+
+	/**
+	 * Retrieve who the last reply was from.
+	 *
+	 * @since	1.4
+	 * @return	false|string	Agent | Customer or false if no value
+	 */
+	public function get_last_reply_by()	{
+		$last_reply_by = $this->get_meta( '_kbs_ticket_last_reply_by' );
+		$reply_from    = $this->get_last_reply_by_values();
+
+		if ( '' == $last_reply_by || ! array_key_exists( $last_reply_by, $reply_from ) )	{
+			return false;
+		}
+
+		return $reply_from[ $last_reply_by ];
+	} // get_last_reply_by
+
+	/**
+	 * Delete the log of who the last reply was from.
+	 *
+	 * @since	1.4
+	 * @param	int		$key	Key of who replied. (see array)
+	 * @return	void
+	 */
+	public function delete_last_reply_by()	{
+		delete_post_meta( $this->ID, '_kbs_ticket_last_reply_by' );
+	} // delete_last_reply_by
 
 	/**
 	 * Whether or not a 3rd party form was submitted.

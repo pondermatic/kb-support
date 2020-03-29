@@ -129,6 +129,8 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 * **New**: Agents can now update the ticket status during reply. Enable via ***Tickets -> Settings -> Tickets -> Reply Settings -> Agents Set Reply Status?***
 * **New**: Select the default status a ticket should be set to when an agent replies. ***Tickets -> Settings -> Tickets -> Reply Settings -> Agent Reply Status***
+* **New**: Ticket status colour indicators are now displayed on the admin screen
+* **New**: The admin tickets list now displays who the last reply was from for each ticket
 
 * **Bug**: Corrected Show Reply/Hide Reply link for auto expended replies on admin screen
 

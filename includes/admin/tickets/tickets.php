@@ -208,9 +208,22 @@ add_action( 'manage_kbs_ticket_posts_custom_column' , 'kbs_set_kbs_ticket_column
 function kb_tickets_post_column_id( $ticket_id, $kbs_ticket )	{
 	do_action( 'kbs_tickets_pre_column_id', $kbs_ticket );
 
-	$output = '<a href="' . get_edit_post_link( $ticket_id ) . '">' . kbs_format_ticket_number( kbs_get_ticket_number( $ticket_id ) ) . '</a>';
-	$output .= '<br />';
-	$output .= get_post_status_object( $kbs_ticket->post_status )->label;
+	$output = sprintf( '<span class="kbs-label kbs-label-status" style="background-color: %s;"><a href="%s" title="%s">%s</a></span>',
+		kbs_get_ticket_status_colour( get_post_status_object( $kbs_ticket->post_status )->name ),
+		get_edit_post_link( $ticket_id ),
+		get_post_status_object( $kbs_ticket->post_status )->label,
+		kbs_format_ticket_number( kbs_get_ticket_number( $ticket_id ) )
+	);
+
+	if ( $kbs_ticket->last_replier )	{
+		$output .= '<p>';
+		$output .= sprintf(
+			__( '<span class="kbs-label kbs-reply-status" style="background-color: %s;">%s replied</span>', 'kb-support' ),
+			kbs_get_ticket_reply_status_colour( $kbs_ticket->last_replier ),
+			$kbs_ticket->last_replier
+		);
+		$output .= '</p>';
+	}
 
 	do_action( 'kbs_tickets_post_column_id', $kbs_ticket );
 

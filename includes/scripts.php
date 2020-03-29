@@ -342,6 +342,9 @@ function kbs_load_admin_scripts( $hook ) {
     wp_register_script( 'kbs-font-awesome', '//use.fontawesome.com/releases/v5.0.8/js/all.js', array(), KBS_VERSION ); 
 	wp_enqueue_script( 'kbs-font-awesome' );
 
+	wp_enqueue_style( 'wp-color-picker' );
+	wp_enqueue_script( 'wp-color-picker' );
+
 	wp_register_script( 'jquery-chosen', $js_dir . 'chosen.jquery' . $suffix . '.js', array( 'jquery' ), KBS_VERSION );
 	wp_enqueue_script( 'jquery-chosen' );
 

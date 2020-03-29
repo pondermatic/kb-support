@@ -1070,15 +1070,15 @@ function kbs_get_registered_settings() {
 			array(
 				'main' => array(
 					'style_settings' => array(
-						'id'   => 'style_settings',
-						'name' => '<h3>' . __( 'Style Settings', 'kb-support' ) . '</h3>',
-						'type' => 'header'
+						'id'    => 'style_settings',
+						'name'  => '<h3>' . __( 'Style Settings', 'kb-support' ) . '</h3>',
+						'type'  => 'header'
 					),
 					'disable_styles' => array(
-						'id'   => 'disable_styles',
-						'name' => __( 'Disable Styles', 'kb-support' ),
-						'desc' => __( 'Check this to disable all KB Support default styling of buttons, fields, and all other elements.', 'kb-support' ),
-						'type' => 'checkbox'
+						'id'    => 'disable_styles',
+						'name'  => __( 'Disable Styles', 'kb-support' ),
+						'desc'  => __( 'Check this to disable all KB Support default styling of buttons, fields, and all other elements.', 'kb-support' ),
+						'type'  => 'checkbox'
 					)
 				)
 			)
@@ -1335,7 +1335,7 @@ function kbs_get_settings_tabs() {
 
 	$tabs = apply_filters( 'kbs_settings_tabs_before_styles', $tabs );
 
-	$tabs['styles']   = __( 'Styles', 'kb-support' );
+	$tabs['styles'] = __( 'Styles', 'kb-support' );
 
 	$tabs = apply_filters( 'kbs_settings_tabs_after_styles', $tabs );
 
@@ -1388,35 +1388,36 @@ function kbs_get_registered_settings_sections() {
 
 	$single   = kbs_get_ticket_label_singular();
 	$sections = array(
-		'general'    => apply_filters( 'kbs_settings_sections_general', array(
+		'general' => apply_filters( 'kbs_settings_sections_general', array(
 			'main'                 => __( 'General Settings', 'kb-support' ),
 			'pages'                => __( 'Pages Settings', 'kb-support' ),
             'customers'            => __( 'Customer Settings', 'kb-support' )
 		) ),
-		'tickets'    => apply_filters( 'kbs_settings_sections_tickets', array(
+		'tickets' => apply_filters( 'kbs_settings_sections_tickets', array(
 			'main'                 => sprintf( __( 'General %s Settings', 'kb-support' ), $single ),
 			'submit'               => __( 'Submission Settings', 'kb-support' ),
             'replies'              => __( 'Reply Settings', 'kb-support' ),
 			'agents'               => __( 'Agent Settings', 'kb-support' ),
 			'sla'                  => __( 'Service Levels', 'kb-support' )
 		) ),
-		'articles'   => apply_filters( 'kbs_settings_sections_articles', array(
+		'articles' => apply_filters( 'kbs_settings_sections_articles', array(
 			'main'                 => sprintf( __( 'General %s Settings', 'kb-support' ), kbs_get_article_label_singular() ),
 			'restricted_notices'   => __( 'Restricted Content Notices', 'kb-support' )
 		) ),
-		'emails'     => apply_filters( 'kbs_settings_sections_emails', array(
+		'emails' => apply_filters( 'kbs_settings_sections_emails', array(
 			'main'                 => __( 'Email Settings', 'kb-support' ),
 			'ticket_logged'        => sprintf( __( '%s Logged', 'kb-support' ), $single ),
 			'ticket_reply'         => __( 'Reply Added', 'kb-support' ),
 			'ticket_closed'        => sprintf( __( '%s Closed', 'kb-support' ), $single ),
 			'ticket_notifications' => __( 'Notifications', 'kb-support' ),
 		) ),
-		'terms_compliance'  => apply_filters( 'kbs_settings_sections_terms_compliance', array(
+		'terms_compliance' => apply_filters( 'kbs_settings_sections_terms_compliance', array(
 			'privacy'              => __( 'Privacy Policy', 'kb-support' ),
 			'terms_conditions'     => __( 'Terms and Conditions', 'kb-support' )
 		) ),
-		'styles'     => apply_filters( 'kbs_settings_sections_styles', array(
-			'main'                 => __( 'Styles', 'kb-support' )
+		'styles' => apply_filters( 'kbs_settings_sections_styles', array(
+			'main'                 => __( 'Styles', 'kb-support' ),
+			'status_colours'       => sprintf( __( '%s Status Colours', 'kb-support' ), $single )
 		) ),
 		'extensions' => apply_filters( 'kbs_settings_sections_extensions', array(
 			'main'                 => __( 'Main', 'kb-support' )
@@ -1785,7 +1786,35 @@ function kbs_color_select_callback( $args ) {
 } // kbs_color_select_callback
 
 /**
- * Color select Callback
+ * Color picker Callback
+ *
+ * Renders color picker fields.
+ *
+ * @since	1.4
+ * @param	array	$args	Arguments passed by the setting
+ * @return	void
+ */
+function kbs_color_callback( $args ) {
+	$kbs_option = kbs_get_option( $args['id'] );
+
+	if ( $kbs_option ) {
+		$value = $kbs_option;
+	} else {
+		$value = isset( $args['std'] ) ? $args['std'] : '';
+	}
+
+	$default = isset( $args['std'] ) ? $args['std'] : '';
+
+	$class = kbs_sanitize_html_class( $args['field_class'] );
+
+	$html = '<input type="text" class="' . $class . ' kbs-color-picker" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . esc_attr( $args['id'] ) . ']" value="' . esc_attr( $value ) . '" data-default-color="' . esc_attr( $default ) . '" />';
+	$html .= '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"> '  . wp_kses_post( $args['desc'] ) . '</label>';
+
+	echo apply_filters( 'kbs_after_setting_output', $html, $args );
+} // kbs_color_callback
+
+/**
+ * Support Hours Callback
  *
  * Renders support hours callback.
  *
@@ -1956,36 +1985,6 @@ function kbs_upload_callback( $args ) {
 
 	echo apply_filters( 'kbs_after_setting_output', $html, $args );
 } // kbs_upload_callback
-
-
-/**
- * Color picker Callback
- *
- * Renders color picker fields.
- *
- * @since	1.0
- * @param	arr		$args	Arguments passed by the setting
- * @global	$kbs_options	Array of all the KBS Options
- * @return	void
- */
-function kbs_color_callback( $args ) {
-	$kbs_option = kbs_get_option( $args['id'] );
-
-	if ( $kbs_option )	{
-		$value = $kbs_option;
-	} else	{
-		$value = isset( $args['std'] ) ? $args['std'] : '';
-	}
-
-	$default = isset( $args['std'] ) ? $args['std'] : '';
-
-	$class = kbs_sanitize_html_class( $args['field_class'] );
-
-	$html = '<input type="text" class="kbs-color-picker" id="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']" name="kbs_settings[' . esc_attr( $args['id'] ) . ']" value="' . esc_attr( $value ) . '" data-default-color="' . esc_attr( $default ) . '" />';
-	$html .= '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"> '  . wp_kses_post( $args['desc'] ) . '</label>';
-
-	echo apply_filters( 'kbs_after_setting_output', $html, $args );
-} // kbs_color_callback
 
 /**
  * Descriptive text callback.
@@ -2421,3 +2420,66 @@ function kbs_settings_for_status_replies( $settings )   {
     return $settings;
 } // kbs_settings_for_status_replies
 add_filter( 'kbs_ticket_settings', 'kbs_settings_for_status_replies' );
+
+/**
+ * Adds the settings for ticket status colours.
+ *
+ * @since   1.4
+ * @param   array   $settings   Array of settings
+ * @return  array   Array of settings
+ */
+function kbs_settings_for_status_colours( $settings )   {
+	$default_statuses = kbs_get_default_ticket_statuses();
+    $all_statuses     = kbs_get_ticket_statuses();
+	$status_options   = array();
+
+	foreach( $default_statuses as $default_status )	{
+		$status_options[ $default_status ] = $all_statuses[ $default_status ];
+		unset( $all_statuses[ $default_status ] );
+	}
+
+	$status_options = array_merge( $status_options, $all_statuses );
+
+	foreach( $status_options as $status => $label )   {
+		$id = 'colour_' . $status;
+
+		$settings['status_colours'][ $id ] = array(
+            'id'      => $id,
+            'name'    => sprintf( __( '%s Status', 'kb-support' ), $label ),
+            'desc'    => sprintf( __( 'Select the colour to use for %s in the %s status', 'kb-support' ), kbs_get_ticket_label_plural( true ), $label ),
+            'type'    => 'color',
+            'std'     => kbs_get_ticket_status_colour( $status, true ),
+			'default' => str_replace( '#', '', kbs_get_ticket_status_colour( $status, true ) )
+        );
+	}
+
+	$settings['status_colours']['colour_reply_admin'] = array(
+		'id'      => 'colour_reply_admin',
+		'name'    => __( 'Admin Replied', 'kb-support' ),
+		'desc'    => sprintf( __( 'Select the colour to use when an agent has replied to a %s', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+		'type'    => 'color',
+		'std'     => kbs_get_ticket_reply_status_colour( 'agent' ),
+		'default' => '6b5b95'
+	);
+
+	$settings['status_colours']['colour_reply_agent'] = array(
+		'id'      => 'colour_reply_agent',
+		'name'    => __( 'Agent Replied', 'kb-support' ),
+		'desc'    => sprintf( __( 'Select the colour to use when an agent has replied to a %s', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+		'type'    => 'color',
+		'std'     => kbs_get_ticket_reply_status_colour( 'agent' ),
+		'default' => '6b5b95'
+	);
+
+	$settings['status_colours']['colour_reply_customer'] = array(
+		'id'      => 'colour_reply_customer',
+		'name'    => __( 'Customer Replied', 'kb-support' ),
+		'desc'    => sprintf( __( 'Select the colour to use when a customer has replied to a %s', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+		'type'    => 'color',
+		'std'     => kbs_get_ticket_reply_status_colour( 'customer' ),
+		'default' => 'c94c4c'
+	);
+
+	return $settings;
+} // kbs_settings_for_status_colours
+add_filter( 'kbs_settings_styles', 'kbs_settings_for_status_colours' );

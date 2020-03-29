@@ -398,6 +398,56 @@ function kbs_get_ticket_status( $ticket, $return_label = false ) {
 } // kbs_get_ticket_status
 
 /**
+ * Retrieve default ticket statuses.
+ *
+ * @since	1.4
+ * @param	bool	$can_select		True to only return selectable status. False for all.
+ * @return	arr
+ */
+function kbs_get_default_ticket_statuses( $can_select = true )	{
+	$default_statuses = array( 'open', 'hold', 'closed' );
+
+	$default_statuses = apply_filters( 'kbs_default_ticket_statuses', $default_statuses );
+
+	return $default_statuses;
+} // kbs_get_default_ticket_statuses
+
+/**
+ * Get the ticket status colours.
+ *
+ * @since	1.4
+ * @param	string	$status		Ticket status name
+ * @param	bool	$default	Whether or not to return the default colour
+ * @return	string	Ticket status colour
+ */
+function kbs_get_ticket_status_colour( $status, $default = false )	{
+	$defaults = apply_filters( 'kbs_default_ticket_status_colours', array(
+		'open'   => '#82b74b',
+		'hold'   => '#0074a2',
+		'closed' => '#dd3333'
+	) );
+
+	if ( $default )	{
+		if ( ! array_key_exists( $status, $defaults ) )	{
+			$status = 'open';
+		}
+
+		return $defaults[ $status ];
+	}
+
+	$default_colour = '';
+
+	if ( array_key_exists( $status, $defaults ) )	{
+		$default_colour = $defaults[ $status ];
+	}
+
+	$colour = kbs_get_option( 'colour_' . $status, $default_colour );
+	$colour = apply_filters( 'kbs_ticket_status_colour_' . $status, $colour );
+
+	return $colour;
+} // kbs_get_ticket_status_colour
+
+/**
  * Retrieve all ticket statuses.
  *
  * @since	1.0
