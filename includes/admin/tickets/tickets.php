@@ -573,15 +573,35 @@ function kbs_add_ticket_filters() {
             }
         }
 
+		// Awaiting reply
+		echo '<select name="reply_status" id="reply_status" class="postform">';
+			$selected = '';
+			if ( isset( $_GET ) && isset( $_GET['reply_status'] ) && '' != $_GET['reply_status'] )	{
+				$selected = $_GET['reply_status'];
+			}
+			printf(
+				'<option value=""%s>%s</option>',
+				'' == $selected ? ' selected="selected"' : '',
+				__( 'All Reply Statuses', 'kb-support' )
+			);
+			printf(
+				'<option value="awaiting_support"%s>%s</option>',
+				'awaiting_support' == $selected ? ' selected="selected"' : '',
+				__( 'Awaiting Support Reply', 'kb-support' )
+			);
+			printf(
+				'<option value="awaiting_customer"%s>%s</option>',
+				'awaiting_customer' == $selected ? ' selected="selected"' : '',
+				__( 'Awaiting Customer Reply', 'kb-support' )
+			);
+
+		echo "</select>";
+
 		if ( isset( $_REQUEST['all_posts'] ) && '1' === $_REQUEST['all_posts'] )	{
-
 			echo '<input type="hidden" name="all_posts" value="1" />';
-
 		} elseif ( ! current_user_can( 'view_ticket_reports' ) )	{
-
 			$author_id = get_current_user_id();
 			echo '<input type="hidden" name="author" value="' . esc_attr( $author_id ) . '" />';
-
 		}
 	}
 
@@ -606,7 +626,7 @@ function kbs_filter_customer_tickets( $query )	{
 add_action( 'pre_get_posts', 'kbs_filter_customer_tickets' );
 
 /**
- * Filter tickets by copmany.
+ * Filter tickets by company.
  *
  * @since	1.0
  * @return	void
@@ -621,6 +641,49 @@ function kbs_filter_company_tickets( $query )	{
 	$query->set( 'meta_type', 'NUMERIC' );
 } // kbs_filter_customer_tickets
 add_action( 'pre_get_posts', 'kbs_filter_company_tickets' );
+
+/**
+ * Filter tickets by reply status.
+ *
+ * @since	1.4
+ * @return	void
+ */
+function kbs_filter_tickets_by_reply_status( $query )	{
+	if ( ! is_admin() || 'kbs_ticket' != $query->get( 'post_type' ) || empty( $_GET['reply_status'] ) )	{
+		return;
+	}
+
+	$selected = $_GET['reply_status'];
+
+	if ( 'awaiting_support' == $selected )	{
+
+		$query->set( 'meta_key', '_kbs_ticket_last_reply_by' );
+		$query->set( 'meta_value', 3 );
+		$query->set( 'meta_type', 'NUMERIC' );
+
+	} elseif ( 'awaiting_customer' == $selected )	{
+
+		$current_meta = $query->get('meta_query');
+		$current_meta = empty( $current_meta ) ? array() : $current_meta;
+		$custom_meta  = array(
+			'relation' => 'OR',
+			array(
+				'key'   => '_kbs_ticket_last_reply_by',
+				'type'  => 'NUMERIC',
+				'value' => 1
+			),
+			array(
+				'key'   => '_kbs_ticket_last_reply_by',
+				'type'  => 'NUMERIC',
+				'value' => 2
+			)
+		);
+
+		$meta_query = $current_meta[] = $custom_meta;
+		$query->set( 'meta_query', array( $meta_query ) );
+	}
+} // kbs_filter_tickets_by_reply_status
+add_action( 'pre_get_posts', 'kbs_filter_tickets_by_reply_status' );
 
 /**
  * Hide inactive tickets from the 'all' tickets list.
