@@ -2445,7 +2445,7 @@ function kbs_settings_for_status_colours( $settings )   {
 
 		$settings['status_colours'][ $id ] = array(
             'id'      => $id,
-            'name'    => sprintf( __( '%s Status', 'kb-support' ), $label ),
+            'name'    => $label,
             'desc'    => sprintf( __( 'Select the colour to use for %s in the %s status', 'kb-support' ), kbs_get_ticket_label_plural( true ), $label ),
             'type'    => 'color',
             'std'     => kbs_get_ticket_status_colour( $status, true ),
@@ -2456,7 +2456,7 @@ function kbs_settings_for_status_colours( $settings )   {
 	$settings['status_colours']['colour_reply_admin'] = array(
 		'id'      => 'colour_reply_admin',
 		'name'    => __( 'Admin Replied', 'kb-support' ),
-		'desc'    => sprintf( __( 'Select the colour to use when an agent has replied to a %s', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+		'desc'    => sprintf( __( 'Select the colour to use when an admin has replied to a %s', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
 		'type'    => 'color',
 		'std'     => kbs_get_ticket_reply_status_colour( 'agent' ),
 		'default' => '6b5b95'
