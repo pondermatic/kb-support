@@ -112,6 +112,7 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
 	$files       = kbs_ticket_has_files( $reply->ID );
 	$file_count  = ( $files ? count( $files ) : false );
     $show        = $expand ? ' style="display: block;"' : '';
+	$show_hide   = $expand ? __( 'Hide', 'kb-support' ) : __( 'View', 'kb-support' );
 
 	$create_article_link = add_query_arg( array(
 		'kbs-action' => 'create_article',
@@ -122,7 +123,7 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
 	$create_article_link = apply_filters( 'kbs_create_article_link', $create_article_link, $ticket_id, $reply );
 
     $actions = array(
-        'read_reply'     => '<a href="#" class="toggle-view-reply-option-section">' . __( 'View Reply', 'kb-support' ) . '</a>',
+        'read_reply'     => '<a href="#" class="toggle-view-reply-option-section">' . sprintf( __( '%s Reply', 'kb-support' ), $show_hide ) . '</a>',
         'create_article' => '<a href="' . $create_article_link . '" class="toggle-reply-option-create-article">' . sprintf( __( 'Create %s', 'kb-support' ), kbs_get_article_label_singular() ) . '</a>'
     );
 
