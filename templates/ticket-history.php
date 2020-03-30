@@ -8,8 +8,12 @@ if ( is_user_logged_in() )	: ?>
 	<?php global $current_user;
 
 	$per_page = kbs_get_customer_tickets_per_page( $current_user->ID );
+	$orderby  = kbs_get_user_tickets_orderby_setting( $current_user->ID );
+	$order    = kbs_get_user_tickets_order_setting( $current_user->ID );
 	$args     = array(
-		'number' => $per_page
+		'number'  => $per_page,
+		'orderby' => $orderby,
+		'order'   => $order
 	);
 
 	$customer = new KBS_Customer( $current_user->ID, true );

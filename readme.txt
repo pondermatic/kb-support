@@ -136,6 +136,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 * **New**: Added reply status filter so agents can filter tickets by those awaiting agent or customer replies
 * **New**: Added open ticket count to menu bar. **Show Count on Menu Bar?** must be enabled. ***Tickets -> Settings -> Tickets -> Show Count on Menu Bar?***
 * **New**: Customers can now choose how many Tickets per Page to load on the ticket manager screen by editing their profile and setting the Tickets per Page option
+* **New**: Agents and customers can now select default ticket order by and order options within their profiles
 
 * **Tweak**: Remove the Manage Ticket quick edit link from admin tickets list
 * **Tweak**: Changed menu icon

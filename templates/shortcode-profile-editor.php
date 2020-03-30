@@ -169,6 +169,63 @@ if ( ! is_user_logged_in() ) : ?>
                             </p>
                         </div>
 
+						<?php do_action( 'kbs_profile_editor_after_tickets_per_page' ); ?>
+
+						<?php
+							$orderby = $customer->get_tickets_orderby();
+							$orderby_options = kbs_get_ticket_orderby_options();
+						?>
+						<div class="kbs_profile_editor_tickets_orderby">
+                            <p>
+                            	<label for="kbs-tickets-orderby">
+									<?php
+										printf( __( 'Default %s Orderby', 'kb-support' ),
+										kbs_get_ticket_label_plural() );
+									?>
+								</label>
+								<select name="kbs_tickets_orderby" id="kbs-tickets-orderby">
+									<?php foreach( $orderby_options as $ob_value => $ob_label ) : ?>
+										<?php $selected = selected( $orderby, $ob_value, false ); ?>
+										<option value="<?php echo $ob_value; ?>"<?php echo $selected; ?>>
+											<?php echo $ob_label ?>
+										</option>
+									<?php endforeach; ?>
+								</select>
+                                <span class="kbs-description"><?php printf( __( 'Choose how to order your %s by default', 'kb-support' ), kbs_get_ticket_label_plural( true ) ); ?></span>
+                            </p>
+                        </div>
+
+						<?php do_action( 'kbs_profile_editor_after_orderby' ); ?>
+
+						<?php
+							$order = $orderby = $customer->get_tickets_order();
+							$order_options = array(
+								'DESC' => __( 'Descending Order', 'kb-support' ),
+								'ASC'  => __( 'Ascending Order', 'kb-support' )
+							);
+						?>
+						<div class="kbs_profile_editor_tickets_order">
+                            <p>
+                            	<label for="kbs-tickets-order">
+									<?php
+										printf( __( 'Default %s Order', 'kb-support' ),
+										kbs_get_ticket_label_plural() );
+									?>
+								</label>
+								<select name="kbs_tickets_order" id="kbs-tickets-order">
+									<?php foreach( $order_options as $o_value => $o_label ) : ?>
+										<?php $selected = selected( $order, $o_value, false ); ?>
+										<option value="<?php echo $o_value; ?>"<?php echo $selected; ?>>
+											<?php echo $o_label ?>
+										</option>
+									<?php endforeach; ?>
+								</select>
+                                <span class="kbs-description"><?php printf( __( 'Choose how to order your %s by default', 'kb-support' ), kbs_get_ticket_label_plural( true ) ); ?></span>
+                            </p>
+                        </div>
+
+						<?php do_action( 'kbs_profile_editor_after_orderby' ); ?>
+
 						<div class="kbs_profile_editor_replies_to_load">
                             <p>
                             	<label for="kbs_number_replies"><?php _e( 'Replies to Load', 'kb-support' ); ?></label>

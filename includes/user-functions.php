@@ -144,6 +144,93 @@ function kbs_render_user_profile_tickets_per_page_field( $user )  {
 add_action( 'kbs_display_customer_user_profile_fields', 'kbs_render_user_profile_tickets_per_page_field', 5 );
 
 /**
+ * Adds the ticket orderby option field to the user profile.
+ *
+ * @since	1.4
+ * @param   object	$user	The WP_User object
+ */
+function kbs_render_user_profile_tickets_orderby_field( $user )  {
+
+	$orderby = get_user_meta( $user->ID, '_kbs_tickets_orderby', true );
+	$orderby = '' != $orderby ? $orderby : 'date';
+	$options = kbs_get_ticket_orderby_options();
+
+	ob_start(); ?>
+
+    <tr>
+        <th scope="row">
+            <label for="kbs-customer-tickets-orderby">
+				<?php printf( __( 'Default %s Orderby', 'kb-support' ), kbs_get_ticket_label_plural() ); ?>
+			</label>
+        </th>
+        <td>
+            <select name="kbs_tickets_orderby" id="kbs-customer-tickets-orderby">
+				<?php foreach( $options as $value => $label ) : ?>
+					<?php $selected = selected( $orderby, $value, false ); ?>
+					<?php printf(
+						'<option value="%s"%s>%s</option>',
+						$value,
+						$selected,
+						$label
+					); ?>
+				<?php endforeach; ?>
+			</select>
+            <p class="description"><?php printf( __( 'Select how you would like %s to be ordered by default.', 'kb-support' ), kbs_get_ticket_label_plural( true ) ); ?></p>
+        </td>
+    </tr>
+
+	<?php echo ob_get_clean();
+
+} // kbs_render_user_profile_tickets_orderby_field
+add_action( 'kbs_display_agent_user_profile_fields', 'kbs_render_user_profile_tickets_orderby_field', 5 );
+add_action( 'kbs_display_customer_user_profile_fields', 'kbs_render_user_profile_tickets_orderby_field', 5 );
+
+/**
+ * Adds the ticket order option field to the user profile.
+ *
+ * @since	1.4
+ * @param   object	$user	The WP_User object
+ */
+function kbs_render_user_profile_tickets_order_field( $user )  {
+
+	$order = get_user_meta( $user->ID, '_kbs_tickets_order', true );
+	$order = '' != $order ? $order : 'DESC';
+	$options = array(
+		'DESC' => __( 'Descending Order', 'kb-support' ),
+		'ASC'  => __( 'Ascending Order', 'kb-support' )
+	);
+
+	ob_start(); ?>
+
+    <tr>
+        <th scope="row">
+            <label for="kbs-customer-tickets-order">
+				<?php printf( __( 'Default %s Order', 'kb-support' ), kbs_get_ticket_label_plural() ); ?>
+			</label>
+        </th>
+        <td>
+            <select name="kbs_tickets_order" id="kbs-customer-tickets-order">
+				<?php foreach( $options as $value => $label ) : ?>
+					<?php $selected = selected( $order, $value, false ); ?>
+					<?php printf(
+						'<option value="%s"%s>%s</option>',
+						$value,
+						$selected,
+						$label
+					); ?>
+				<?php endforeach; ?>
+			</select>
+            <p class="description"><?php printf( __( 'Select whether to order %s in ascending or descending order.', 'kb-support' ), kbs_get_ticket_label_plural( true ) ); ?></p>
+        </td>
+    </tr>
+
+	<?php echo ob_get_clean();
+
+} // kbs_render_user_profile_tickets_order_field
+add_action( 'kbs_display_agent_user_profile_fields', 'kbs_render_user_profile_tickets_order_field', 5 );
+add_action( 'kbs_display_customer_user_profile_fields', 'kbs_render_user_profile_tickets_order_field', 5 );
+
+/**
  * Adds the Replies to Load option field to the user profile for agents.
  *
  * @since	1.2
@@ -408,6 +495,46 @@ function kbs_save_user_hide_closed_tickets( $user_id ) {
 } // kbs_save_user_hide_closed_tickets
 add_action( 'personal_options_update', 'kbs_save_user_hide_closed_tickets' );
 add_action( 'edit_user_profile_update', 'kbs_save_user_hide_closed_tickets' );
+
+/**
+ * Saves the tickets orderby field.
+ *
+ * @since	1.4
+ * @param	int		$user_id	WP User ID
+ */
+function kbs_save_user_tickets_orderby( $user_id ) {
+
+	if ( ! current_user_can( 'edit_user', $user_id ) )	{
+		return;
+	}
+
+	$orderby = sanitize_text_field( $_POST['kbs_tickets_orderby'] );
+
+	update_user_meta( $user_id, '_kbs_tickets_orderby', $orderby );
+
+} // kbs_save_user_tickets_orderby
+add_action( 'personal_options_update', 'kbs_save_user_tickets_orderby' );
+add_action( 'edit_user_profile_update', 'kbs_save_user_tickets_orderby' );
+
+/**
+ * Saves the tickets order field.
+ *
+ * @since	1.4
+ * @param	int		$user_id	WP User ID
+ */
+function kbs_save_user_tickets_order( $user_id ) {
+
+	if ( ! current_user_can( 'edit_user', $user_id ) )	{
+		return;
+	}
+
+	$order = sanitize_text_field( $_POST['kbs_tickets_order'] );
+
+	update_user_meta( $user_id, '_kbs_tickets_order', $order );
+
+} // kbs_save_user_tickets_order
+add_action( 'personal_options_update', 'kbs_save_user_tickets_order' );
+add_action( 'edit_user_profile_update', 'kbs_save_user_tickets_order' );
 
 /**
  * Saves the load replies field.
@@ -705,6 +832,20 @@ function kbs_process_profile_editor_updates( $data ) {
 		update_user_meta( $user_id, '_kbs_tickets_per_page', $new_per_page );
 	}
 
+	$old_orderby      = get_user_meta( $user_id, '_kbs_tickets_orderby', true );
+	$new_orderby      = ! empty( $_POST['kbs_tickets_orderby'] ) ? $_POST['kbs_tickets_orderby'] : false;
+
+	if ( $new_orderby != $old_orderby )	{
+		update_user_meta( $user_id, '_kbs_tickets_orderby', $new_orderby );
+	}
+
+	$old_order        = get_user_meta( $user_id, '_kbs_tickets_order', true );
+	$new_order        = ! empty( $_POST['kbs_tickets_order'] ) ? $_POST['kbs_tickets_order'] : false;
+
+	if ( $new_order != $old_order )	{
+		update_user_meta( $user_id, '_kbs_tickets_order', $new_order );
+	}
+
 	$old_hide_closed = get_user_meta( $user_id, '_kbs_hide_closed', true );
     $new_hide_closed = ! empty( $_POST['kbs_hide_closed'] ) ? $_POST['kbs_hide_closed'] : false;
 
@@ -746,6 +887,63 @@ function kbs_process_profile_editor_updates( $data ) {
 
 } // kbs_process_profile_editor_updates
 add_action( 'init', 'kbs_process_profile_editor_updates' );
+
+/**
+ * Retrieve the orderby option for tickets.
+ *
+ * @since   1.4
+ * @param   int     $user_id    The User ID of the current user
+ * @return  string	Post field to order by
+ */
+function kbs_get_user_tickets_orderby_setting( $user_id = 0 )   {
+    $default = 'date';
+
+    if ( empty( $user_id ) )    {
+        $user_id = get_current_user_id();
+    }
+
+    if ( ! empty( $user_id ) )    {
+        $orderby = get_user_meta( $user_id, '_kbs_tickets_orderby', true );
+
+        if ( '' == $orderby )   {
+            $orderby = $default;
+        }
+
+    } else  {
+        $orderby = $default;
+    }
+
+    $orderby = ! empty( $orderby ) ? $orderby : $default;
+
+    $orderby = apply_filters( 'kbs_user_tickets_orderby', $orderby, $user_id );
+
+    return $orderby;
+} // kbs_get_user_tickets_orderby_setting
+
+/**
+ * Retrieve the users defined ticket order setting.
+ *
+ * @since	1.4
+ * @param	int		$user_id	WP User ID
+ * @return	string	ASC|DESC
+ */
+function kbs_get_user_tickets_order_setting( $user_id = 0 )	{
+	if ( empty( $user_id ) )	{
+		$user_id = get_current_user_id();
+	}
+
+	$order = 'DESC';
+
+	if ( $user_id )	{
+		$setting = get_user_meta( $user_id, '_kbs_tickets_order', true );
+
+		if ( '' != $setting )	{
+			$order = $setting;
+		}
+	}
+
+	return $order;
+} // kbs_get_user_tickets_order_setting
 
 /**
  * Process the 'remove' email address action on the profile editor form.
