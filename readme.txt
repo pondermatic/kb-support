@@ -135,6 +135,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 * **Tweak**: Added open ticket count to menu bar. ***Show Ticket Count*** must be enabled
 * **Tweak**: Remove the Manage Ticket quick edit link from admin tickets list
+* **Tweak**: Changed menu icon
 
 * **Bug**: Corrected Show Reply/Hide Reply link for auto expended replies on admin screen
 

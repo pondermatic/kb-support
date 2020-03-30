@@ -54,7 +54,7 @@ function kbs_setup_post_types() {
 		'publicly_queryable' => false,
 		'show_ui'            => true,
 		'show_in_menu'       => true,
-		'menu_icon'          => 'dashicons-tickets-alt',
+		'menu_icon'          => 'dashicons-sos',
 		'query_var'          => true,
 		'rewrite'            => false,
 		'capability_type'    => 'ticket',
