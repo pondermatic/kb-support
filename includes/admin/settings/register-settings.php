@@ -379,10 +379,23 @@ function kbs_get_registered_settings() {
 					),
 					'show_count' => array(
 						'id'      => 'show_count',
-						'name'    => sprintf( __( 'Show %s Count', 'kb-support' ), $single ),
-						'desc'    => sprintf( __( 'Whether or not to display the open %s count next to the %s menu and on the menu bar', 'kb-support' ), strtolower( $single ), $plural ),
+						'name'    => sprintf( __( 'Show %s Count?', 'kb-support' ), $single ),
+						'desc'    => sprintf( __( 'Whether or not to display the open %s count next to the %s menu', 'kb-support' ), strtolower( $single ), $plural ),
 						'type'    => 'checkbox'
 					),
+                    'show_count_menubar' => array(
+                        'id'      => 'show_count_menubar',
+						'name'    => sprintf( __( 'Show Count on Menu Bar?', 'kb-support' ), $single ),
+						'desc'    => sprintf( __( 'Choose an option for displaying the open %s count on the WordPress menu bar', 'kb-support' ), strtolower( $single ), $plural ),
+						'type'    => 'select',
+                        'options' => array(
+                            'none'        => __( 'Do not display', 'kb-support' ),
+                            'admin_front' => __( 'Both Admin and Front End', 'kb-support' ),
+                            'admin'       => __( 'Admin only', 'kb-support' ),
+                            'front'       => __( 'Front End Only', 'kb-support' )
+                        ),
+                        'std'     => 'front'
+                    ),
 					'enable_participants' => array(
 						'id'      => 'enable_participants',
 						'name'    => __( 'Enable Participants?', 'kb-support' ),

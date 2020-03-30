@@ -722,7 +722,8 @@ function kbs_v134_upgrades()	{
 function kbs_v14_upgrades()	{
     $options      = array(
 		'agent_update_status_reply' => 0,
-		'agent_reply_status'        => 0
+		'agent_reply_status'        => 0,
+        'show_count_menubar'        => 'front'
 	);
 
 	$status_colours = array(

@@ -134,8 +134,8 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 * **New**: Ticket status colour indicators are now displayed on the admin screen and the customer front end ticket manager page
 * **New**: The admin tickets list now displays who the last reply was from for each ticket
 * **New**: Added reply status filter so agents can filter tickets by those awaiting agent or customer replies
+* **New**: Added open ticket count to menu bar. **Show Count on Menu Bar?** must be enabled. ***Tickets -> Settings -> Tickets -> Show Count on Menu Bar?***
 
-* **Tweak**: Added open ticket count to menu bar. ***Show Ticket Count*** must be enabled
 * **Tweak**: Remove the Manage Ticket quick edit link from admin tickets list
 * **Tweak**: Changed menu icon
 

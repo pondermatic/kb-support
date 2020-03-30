@@ -105,9 +105,13 @@ function kbs_settings_contextual_help() {
 					strtolower( $ticket_singular )
 				) . '</li>' .
                 '<li>' . sprintf( 
-					__( '<strong>Show %1$s Count?</strong> - If enabled, the current open %1$s count will be displayed next to the %2$s menu item on both the main menu, and the menu bar. The menu bar is also displayed on the website front end.', 'kb-support' ),
+					__( '<strong>Show %1$s Count?</strong> - If enabled, the current open %1$s count will be displayed next to the %2$s menu item on the main menu.', 'kb-support' ),
 					$ticket_singular,
 					strtolower( $ticket_plural )
+				) . '</li>' .
+                '<li>' . sprintf( 
+					__( '<strong>Show Count on Menu Bar?</strong> - Choose whether or not to display the open %s count on the WordPress menu bar. You can choose which environments you want it displayed, or turn it off altogether. By default it will display on the website front end only.', 'kb-support' ),
+					strtolower( $ticket_singular )
 				) . '</li>' .
                '<li>' . sprintf( 
 					__( '<strong>Enable Participants?</strong> - If enabled, participants can be added to a %1$s if requested by the customer. Participants can then contribute towards %2$s by reading and creating replies, helping towards resolution.', 'kb-support' ),

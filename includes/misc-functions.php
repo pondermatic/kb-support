@@ -58,7 +58,13 @@ function kbs_get_contextual_help_sidebar_text() {
  * @return  void
  */
 function kbs_admin_bar_menu_items( $admin_bar ) {
-    if ( ! kbs_get_option( 'show_count', false ) || ! kbs_is_agent() ) {
+    $show_menu_bar = kbs_get_option( 'show_count_menubar', 'none' );
+
+    if ( 'none' == $show_menu_bar || ! kbs_is_agent() ) {
+        return;
+    }
+
+    if ( ( 'front' == $show_menu_bar && is_admin() ) || ( 'admin' == $show_menu_bar && ! is_admin() ) )  {
         return;
     }
 
