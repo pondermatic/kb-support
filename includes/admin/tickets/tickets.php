@@ -811,19 +811,6 @@ function kbs_tickets_remove_ticket_post_actions( $actions )	{
 				continue;
 			}
 
-			if ( doing_filter( 'post_row_actions' ) && 'edit' == $remove_action && kbs_agent_can_access_ticket( $post->ID ) )	{
-				$actions['edit'] = sprintf(
-					'<a href="%s" aria-label="%s">%s</a>',
-					get_edit_post_link( $post->ID ),
-					/* translators: %s: Ticket*/
-					esc_attr( sprintf(
-						__( 'Manage %s', 'kb-support' ), kbs_format_ticket_number( kbs_get_ticket_number( $post->ID ) )
-					) ),
-					sprintf( __( 'Manage %s', 'kb-support' ), $singular )
-				);
-				continue;
-			}
-
 			if ( isset( $actions[ $remove_action ] ) )	{
 				unset( $actions[ $remove_action ] );
 			}

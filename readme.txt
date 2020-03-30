@@ -133,6 +133,8 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 * **New**: The admin tickets list now displays who the last reply was from for each ticket
 * **New**: Added reply status filter so agents can filter tickets by those awaiting agent or customer replies
 
+* **Tweak**: Remove the Manage Ticket quick edit link from admin tickets list
+
 * **Bug**: Corrected Show Reply/Hide Reply link for auto expended replies on admin screen
 
 = 1.3.6 =
