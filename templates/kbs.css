@@ -282,6 +282,22 @@ span.kbs-time    {
 
 /* = Tickets
 -------------------------------------------------------------- */
+.kbs-label {
+	display: inline-block;
+	padding: 2px 8px;
+	font-weight: bold;
+	color: #fff;
+	vertical-align: baseline;
+	background-color: #999;
+	border-radius: 3px;
+}
+
+.kbs-label a,
+.kbs-label a:hover,
+.kbs-label a:visited {
+	color: #fff;
+}
+
 #kbs_item_wrapper .left {
 	float: left;
 }
