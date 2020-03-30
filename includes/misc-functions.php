@@ -76,9 +76,9 @@ function kbs_admin_bar_menu_items( $admin_bar ) {
         return;
     }
 
+    $icon  = '<span class="ab-icon dashicons dashicons-sos"></span> ';
     $title = sprintf( 
-        '<span class="kbs-ticket-count">%s <span class="kbs-ticket-counter count-%d">%d</span></span>',
-        kbs_get_ticket_label_plural(),
+        '<span class="kbs-ticket-counter count-%d">%d</span>',
         absint( $count ),
         number_format_i18n( $count )
     );
@@ -87,7 +87,7 @@ function kbs_admin_bar_menu_items( $admin_bar ) {
         'id'     => 'kbs-ticket-count',
         'parent' => null,
         'group'  => null,
-        'title'  => $title,
+        'title'  => $icon . $title,
         'href'   => admin_url( 'edit.php?post_type=kbs_ticket' ),
         'meta'   => array(
             'title' => sprintf( __( 'Open %s', 'textdomain' ), kbs_get_ticket_label_plural() )
