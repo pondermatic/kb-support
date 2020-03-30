@@ -146,6 +146,29 @@ if ( ! is_user_logged_in() ) : ?>
 
                         <p class="kbs_form_section_heading"><?php _e( 'Update Preferences', 'kb-support' ); ?></p>
 
+						<?php $hide_closed = kbs_customer_maybe_hide_closed_tickets( $customer->user_id ); ?>
+
+                        <div class="kbs_profile_editor_hide_closed">
+                            <p>
+                            	<label for="kbs_hide_closed"><?php printf( __( 'Hide Closed %s', 'kb-support' ), kbs_get_ticket_label_plural() ); ?></label>
+                                <input type="checkbox" name="kbs_hide_closed" id="kbs-hide-closed" value="1"<?php checked( '1', $hide_closed ); ?> />
+                            </p>
+                        </div>
+
+						<?php do_action( 'kbs_profile_editor_after_hide_closed' ); ?>
+
+						<div class="kbs_profile_editor_tickets_per_page">
+                            <p>
+                            	<label for="kbs_tickets_per_page">
+									<?php
+										printf( __( '%s per Page', 'kb-support' ),
+										kbs_get_ticket_label_plural() );
+									?>
+								</label>
+                                <input type="number" class="kbs-input" name="kbs_tickets_per_page" id="kbs-tickets-per-page" value="<?php echo esc_attr( $customer->get_tickets_per_page() ); ?>" min="1" max="50" step="1" /><span class="kbs-description"><?php printf( __( 'How many %s do you want to load per page on the %s Manager page?', 'kb-support' ), kbs_get_ticket_label_plural( true ), kbs_get_ticket_label_singular() ); ?></span>
+                            </p>
+                        </div>
+
 						<div class="kbs_profile_editor_replies_to_load">
                             <p>
                             	<label for="kbs_number_replies"><?php _e( 'Replies to Load', 'kb-support' ); ?></label>
@@ -163,17 +186,6 @@ if ( ! is_user_logged_in() ) : ?>
                         </div>
 
                         <?php do_action( 'kbs_profile_editor_after_replies_to_expand' ); ?>
-
-                        <?php $hide_closed = kbs_customer_maybe_hide_closed_tickets( $customer->user_id ); ?>
-
-                        <div class="kbs_profile_editor_hide_closed">
-                            <p>
-                            	<label for="kbs_hide_closed"><?php printf( __( 'Hide Closed %s', 'kb-support' ), kbs_get_ticket_label_plural() ); ?></label>
-                                <input type="checkbox" name="kbs_hide_closed" id="kbs-hide-closed" value="1"<?php checked( '1', $hide_closed ); ?> />
-                            </p>
-                        </div>
-
-						<?php do_action( 'kbs_profile_editor_after_hide_closed' ); ?>
 
                         <p class="kbs_form_section_heading"><?php _e( 'Change Password', 'kb-support' ); ?></p>
 						<div class="kbs_profile_editor_password">

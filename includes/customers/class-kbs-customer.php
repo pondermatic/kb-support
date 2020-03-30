@@ -454,6 +454,16 @@ class KBS_Customer {
 
 	} // set_primary_email
 
+	/**
+	 * Retrieve the number of tickets the customer wants to load per page
+	 *
+	 * @since	1.4
+	 * @return	int		Number of tickets to load per page
+	 */
+	public function get_tickets_per_page()	{
+        return kbs_get_customer_tickets_per_page( $this->user_id );
+	} // get_tickets_per_page
+
     /**
 	 * Retrieve the number of replies the customer wants to load
 	 *

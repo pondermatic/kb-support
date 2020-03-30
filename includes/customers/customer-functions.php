@@ -293,6 +293,38 @@ function kbs_get_customer_ticket_count( $customer )	{
 } // kbs_get_customer_ticket_count
 
 /**
+ * Retrieve the number of tickets to load per page.
+ *
+ * @since   1.4
+ * @param   int     $user_id    The User ID of the current user
+ * @return  int     The number of replies to load
+ */
+function kbs_get_customer_tickets_per_page( $user_id = 0 )   {
+    $default = get_option( 'posts_per_page', 10 );
+
+    if ( empty( $user_id ) )    {
+        $user_id = get_current_user_id();
+    }
+
+    if ( ! empty( $user_id ) )    {
+        $tickets = get_user_meta( $user_id, '_kbs_tickets_per_page', true );
+
+        if ( '' == $tickets )   {
+            $tickets = $default;
+        }
+
+    } else  {
+        $tickets = $default;
+    }
+
+    $tickets = ! empty( $tickets ) ? $tickets : $default;
+
+    $tickets = apply_filters( 'kbs_customer_tickets_per_page', $tickets, $user_id );
+
+    return (int)$tickets;
+} // kbs_get_customer_tickets_per_page
+
+/**
  * Retrieve the number of replies to load (front end).
  *
  * @since   1.2.6
