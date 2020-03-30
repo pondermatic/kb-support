@@ -58,7 +58,7 @@ function kbs_get_contextual_help_sidebar_text() {
  * @return  void
  */
 function kbs_admin_bar_menu_items( $admin_bar ) {
-    if ( ! kbs_is_agent() ) {
+    if ( ! kbs_get_option( 'show_count', false ) || ! kbs_is_agent() ) {
         return;
     }
 
