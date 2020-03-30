@@ -119,7 +119,7 @@ function kbs_settings_contextual_help() {
 					strtolower( $ticket_plural )
 				) . '</li>' .
 				'<li>' . sprintf( 
-					__( '<strong>Hide Closed %s?</strong> - By default when you view the admin %2$s screen, the <code>All</code> view includes all %2$s with all stauses. With this option enabled, closed %3$s will not be displayed unless you click the Closed view.', 'kb-support' ),
+					__( '<strong>Hide Closed %1$s?</strong> - By default when you view the admin %2$s screen, the <code>All</code> view includes all %2$s with all stauses. With this option enabled, closed %3$s will not be displayed unless you click the Closed view.', 'kb-support' ),
 					$ticket_plural,
 					strtolower( $ticket_singular ),
 					strtolower( $ticket_plural )
