@@ -380,7 +380,7 @@ function kbs_get_registered_settings() {
 					'show_count' => array(
 						'id'      => 'show_count',
 						'name'    => sprintf( __( 'Show %s Count', 'kb-support' ), $single ),
-						'desc'    => sprintf( __( 'Whether or not to display the open %s count next to the %s menu', 'kb-support' ), strtolower( $single ), $plural ),
+						'desc'    => sprintf( __( 'Whether or not to display the open %s count next to the %s menu and on the menu bar', 'kb-support' ), strtolower( $single ), $plural ),
 						'type'    => 'checkbox'
 					),
 					'enable_participants' => array(
