@@ -127,6 +127,8 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 **March 2020**
 
+**Note**: ***The view-ticket.php and ticket-history.php template files have been updated. Please review changes if you have copied this file to your child theme and made customisations*** 
+
 * **New**: Agents can now update the ticket status during reply. Enable via ***Tickets -> Settings -> Tickets -> Reply Settings -> Agents Set Reply Status?***
 * **New**: Select the default status a ticket should be set to when an agent replies. ***Tickets -> Settings -> Tickets -> Reply Settings -> Agent Reply Status***
 * **New**: Ticket status colour indicators are now displayed on the admin screen and the customer front end ticket manager page
@@ -137,7 +139,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 * **Tweak**: Remove the Manage Ticket quick edit link from admin tickets list
 * **Tweak**: Changed menu icon
 
-* **Bug**: Corrected Show Reply/Hide Reply link for auto expended replies on admin screen
+* **Bug**: Corrected Show Reply/Hide Reply link for auto expanded replies on admin screen
 
 = 1.3.6 =
 
