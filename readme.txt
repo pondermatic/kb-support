@@ -135,10 +135,12 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 * **New**: The admin tickets list now displays who the last reply was from for each ticket
 * **New**: Added reply status filter so agents can filter tickets by those awaiting agent or customer replies
 * **New**: Added open ticket count to menu bar. **Show Count on Menu Bar?** must be enabled. ***Tickets -> Settings -> Tickets -> Show Count on Menu Bar?***
+* **New**: Customers can now choose how many Tickets per Page to load on the ticket manager screen by editing their profile and setting the Tickets per Page option
 
 * **Tweak**: Remove the Manage Ticket quick edit link from admin tickets list
 * **Tweak**: Changed menu icon
 
+* **Bug**: Corrected pagination links on customer ticket manager page
 * **Bug**: Corrected Show Reply/Hide Reply link for auto expanded replies on admin screen
 
 = 1.3.6 =
