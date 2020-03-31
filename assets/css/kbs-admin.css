@@ -82,7 +82,7 @@
 .kbs-label {
 	display: inline-block;
 	padding: 2px 8px;
-	font-weight: bold;
+	font-weight: 600;
 	color: #fff;
 	vertical-align: baseline;
 	background-color: #999;
@@ -107,9 +107,10 @@ table.wp-list-table thead tr th, .kbs-label {
 	white-space: nowrap;
 }
 
-.kbs-label span.count    {
-    color: #fff;
-    font-weight: bold;
+.kbs-label span.count,
+.kbs-label a.current {
+    color: #fff !important;
+    font-weight: 600 !important;
 }
 
 .kbs_ticket_page_kbs-settings .form-table label { color: #666; font-size: 14px; font-style: italic; margin: 4px 0 0; }

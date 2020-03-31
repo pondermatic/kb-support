@@ -2443,7 +2443,7 @@ add_filter( 'kbs_ticket_settings', 'kbs_settings_for_status_replies' );
  */
 function kbs_settings_for_status_colours( $settings )   {
 	$default_statuses = kbs_get_default_ticket_statuses();
-    $all_statuses     = kbs_get_ticket_statuses();
+    $all_statuses     = kbs_get_ticket_statuses( false );
 	$status_options   = array();
 
 	foreach( $default_statuses as $default_status )	{

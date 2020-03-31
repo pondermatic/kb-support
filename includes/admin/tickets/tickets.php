@@ -746,6 +746,8 @@ add_action( 'pre_get_posts', 'kbs_remove_inactive_tickets' );
 function kbs_ticket_filter_views( $views )	{
 
 	$active_only = kbs_get_option( 'hide_closed' );
+    $span_string = '<span class="kbs-label kbs-label-status" style="background-color: %s;">';
+    $all_colour  = kbs_get_ticket_status_colour( 'all', true );
 
 	if ( isset( $views['mine'] ) )	{
 		unset( $views['mine'] );
@@ -757,16 +759,17 @@ function kbs_ticket_filter_views( $views )	{
 
     if ( ! $active_only )   {
         foreach( $views as $status => $label )  {
+            $colour = kbs_get_ticket_status_colour( $status );
+
             if ( 'all' == $status ) {
                 $search       = __( 'All', 'kb-support' );
                 $replace      = sprintf( __( 'All %s', 'kb-support' ), kbs_get_ticket_label_plural() ); 
                 $views['all'] = str_replace( $search, $replace, $views['all'] );
-                continue;
+                $colour       = $all_colour;
             }
 
-            $colour = kbs_get_ticket_status_colour( $status );
-            $span   = sprintf(
-                '<span class="kbs-label kbs-label-status" style="background-color: %s;">',
+            $span = sprintf(
+                $span_string,
                 $colour
             );
 
@@ -780,6 +783,7 @@ function kbs_ticket_filter_views( $views )	{
         }
 
         $all_statuses      = kbs_get_ticket_status_keys( false );
+        $default_statuses  = array_reverse( kbs_get_default_ticket_statuses() );
         $inactive_statuses = kbs_get_inactive_ticket_statuses();
         $num_posts         = kbs_count_tickets( $args );
         $count             = 0;
@@ -788,7 +792,7 @@ function kbs_ticket_filter_views( $views )	{
             foreach( $num_posts as $status => $status_count )	{
                 $colour = kbs_get_ticket_status_colour( $status );
                 $span   = sprintf(
-                    '<span class="kbs-label kbs-label-status" style="background-color: %s;">',
+                    $span_string,
                     $colour
                 );
 
@@ -809,6 +813,10 @@ function kbs_ticket_filter_views( $views )	{
             $search       = __( 'All', 'kb-support' );
             $replace      = sprintf( __( 'Active %s', 'kb-support' ), kbs_get_ticket_label_plural() ); 
             $views['all'] = str_replace( $search, $replace, $views['all'] );
+            $views['all'] = sprintf(
+                $span_string . $views['all'] . '</span>',
+                $all_colour
+            );
         }
 
         foreach( $views as $status => $link )	{
@@ -816,6 +824,21 @@ function kbs_ticket_filter_views( $views )	{
                 unset( $views[ $status ] );
             }
         }
+
+        foreach( $default_statuses as $default_status ) {
+            if ( ! isset( $views[ $default_status ] ) ) {
+                continue;
+            }
+
+            if ( 'closed' != $default_status )  {
+                $views = array( $default_status => $views[ $default_status ] ) + $views;
+            } else  {
+                $views = $views + array( $default_status => $views[ $default_status ] );
+            }
+        }
+
+        // Return the All view to the front
+        $views = array( 'all' => $views['all'] ) + $views;
 
         // Force trash view to end
         if ( isset( $views['trash'] ) )	{
