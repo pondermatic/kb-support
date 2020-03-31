@@ -2,9 +2,9 @@
 Contributors: kbsupport, mikeyhoward1977
 Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
-Tested up to: 5.3.2
+Tested up to: 5.4
 Requires PHP: 5.4
-Stable tag: 1.3.6
+Stable tag: 1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -127,7 +127,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 **March 2020**
 
-**Note**: ***The view-ticket.php and ticket-history.php template files have been updated. Please review changes if you have copied these files to your child theme and made customisations*** 
+**Note**: ***The view-ticket.php, ticket-history.php and shortcode-profile-editor.php template files have been updated. Please review changes if you have copied these files to your child theme and made customisations*** 
 
 * **New**: Agents can now update the ticket status during reply. Enable via ***Tickets -> Settings -> Tickets -> Reply Settings -> Agents Set Reply Status?***
 * **New**: Select the default status a ticket should be set to when an agent replies. ***Tickets -> Settings -> Tickets -> Reply Settings -> Agent Reply Status***
@@ -141,6 +141,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 * **Tweak**: Remove the Manage Ticket quick edit link from admin tickets list
 * **Tweak**: Changed menu icon
 * **Tweak**: Updated contextual help with new and missing items
+* **Tweak**: Use new `apply_shortcodes()` function in preference of `do_shortcode()` per WordPress 5.4 guidelines
 
 * **Bug**: Corrected pagination links on customer ticket manager page
 * **Bug**: Corrected Show Reply/Hide Reply link for auto expanded replies on admin screen
