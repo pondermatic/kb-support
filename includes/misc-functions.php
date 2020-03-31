@@ -96,7 +96,7 @@ function kbs_admin_bar_menu_items( $admin_bar ) {
         'title'  => $icon . $title,
         'href'   => admin_url( 'edit.php?post_type=kbs_ticket' ),
         'meta'   => array(
-            'title' => sprintf( __( 'Open %s', 'textdomain' ), kbs_get_ticket_label_plural() )
+            'title' => sprintf( __( 'Open %s', 'kb-support' ), kbs_get_ticket_label_plural() )
         )
     ) );
 } // kbs_admin_bar_menu_items
