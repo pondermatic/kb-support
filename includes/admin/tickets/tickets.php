@@ -762,8 +762,16 @@ function kbs_ticket_filter_views( $views )	{
 
 	if ( ! empty( $num_posts ) )	{
 		foreach( $num_posts as $status => $status_count )	{
+            $colour = kbs_get_ticket_status_colour( $status );
+            $span   = sprintf(
+                '<span class="kbs-label kbs-label-status" style="background-color: %s;">',
+                $colour
+            );
+
 			if ( ! empty( $num_posts->$status ) && in_array( $status, $all_statuses ) )	{
 				$views[ $status ] = preg_replace( '/\(.+\)/U', '(' . number_format_i18n( $num_posts->$status ) . ')', $views[ $status ] );
+
+                $views[ $status ] = $span . $views[ $status ] . '</span>';
 			}
 			if ( ! in_array( $status, $inactive_statuses ) )	{
 				$count += $status_count;
