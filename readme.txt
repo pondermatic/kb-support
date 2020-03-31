@@ -125,7 +125,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 = 1.4 =
 
-**March 2020**
+**31st March 2020**
 
 **Note**: ***The view-ticket.php, ticket-history.php and shortcode-profile-editor.php template files have been updated. Please review changes if you have copied these files to your child theme and made customisations*** 
 
