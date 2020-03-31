@@ -584,6 +584,7 @@ function kbs_add_ticket_filters() {
         $awaiting_customer = $awaiting_customer > 0 ? ' (' . $awaiting_customer . ')' : '';
         $awaiting_agent    = (int)kbs_count_tickets_by_reply_status( 'agent' );
         $awaiting_agent    = $awaiting_agent > 0    ? ' (' . $awaiting_agent . ')'    : '';
+
 		echo '<select name="reply_status" id="reply_status" class="postform">';
 			$selected = '';
 			if ( isset( $_GET ) && isset( $_GET['reply_status'] ) && '' != $_GET['reply_status'] )	{
