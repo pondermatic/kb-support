@@ -1081,7 +1081,13 @@ function kbs_render_agree_to_privacy_policy_field()	{
 
 	<div id="kbs-ticket-privacy-policy" class="kbs_hidden">
 		<?php do_action( 'kbs_before_privacy_policy' ); ?>
-		<?php echo wpautop( do_shortcode( stripslashes( $privacy_text ) ) ); ?>
+
+        <?php if ( function_exists( 'apply_shortcodes' ) ) : ?>
+            <?php echo wpautop( apply_shortcodes( stripslashes( $privacy_text ) ) ); ?>
+        <?php else : ?>
+            <?php echo wpautop( do_shortcode( stripslashes( $privacy_text ) ) ); ?>
+        <?php endif; ?>
+
 		<?php do_action( 'kbs_after_privacy_policy' ); ?>
     </div>
 
