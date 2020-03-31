@@ -21,7 +21,7 @@ if ( is_user_logged_in() )	: ?>
 
 	<?php if ( ! empty( $tickets ) ) : ?>
         <?php
-			$args['number'] = null;
+			$args['number'] = 9999999;
 			$total_tickets  = count( kbs_get_customer_tickets( $customer->id, $args, false, false ) );
 
             $hide_closed = kbs_customer_maybe_hide_closed_tickets( $customer->user_id ) && kbs_customer_has_closed_tickets( $customer->id );
