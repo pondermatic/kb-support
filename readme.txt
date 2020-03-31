@@ -129,6 +129,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 * **Tweak**: Added post status colours to the status view links on the tickets edit screen
 * **Tweak**: Added counts to reply filter dropdown on edit screen
+* **Tweak**: If you are not hiding closed tickets, the 'All' view link now displays 'All Tickets'
 
 = 1.4 =
 
