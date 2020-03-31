@@ -128,6 +128,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 **31st March 2020**
 
 * **Tweak**: Added post status colours to the status view links on the tickets edit screen
+* **Tweak**: Also allow setting of status colour for tickets in the New status
 * **Tweak**: Make sure the Open link is always first and the Closed link is always last on the edit tickets page
 * **Tweak**: Added counts to reply filter dropdown on edit screen
 * **Tweak**: If you are not hiding closed tickets, the 'All' view link now displays 'All Tickets'
