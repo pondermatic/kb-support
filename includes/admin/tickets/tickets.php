@@ -751,59 +751,76 @@ function kbs_ticket_filter_views( $views )	{
 		unset( $views['mine'] );
 	}
 
-	if ( 'kbs_ticket' != get_post_type() || ! $active_only )	{
+	if ( 'kbs_ticket' != get_post_type() )	{
 		return $views;
 	}
 
-	$args = array();
-	if ( kbs_get_option( 'restrict_agent_view' ) && ! current_user_can( 'manage_ticket_settings' ) )	{
-		$args['agent'] = get_current_user_id();
-	}
+    if ( ! $active_only )   {
+        foreach( $views as $status => $label )  {
+            if ( 'all' == $status ) {
+                continue;
+            }
 
-	$all_statuses      = kbs_get_ticket_status_keys( false );
-	$inactive_statuses = kbs_get_inactive_ticket_statuses();
-	$num_posts         = kbs_count_tickets( $args );
-	$count             = 0;
-
-	if ( ! empty( $num_posts ) )	{
-		foreach( $num_posts as $status => $status_count )	{
             $colour = kbs_get_ticket_status_colour( $status );
             $span   = sprintf(
                 '<span class="kbs-label kbs-label-status" style="background-color: %s;">',
                 $colour
             );
 
-			if ( ! empty( $num_posts->$status ) && in_array( $status, $all_statuses ) )	{
-				$views[ $status ] = preg_replace( '/\(.+\)/U', '(' . number_format_i18n( $num_posts->$status ) . ')', $views[ $status ] );
+            $views[ $status ] = $span . $views[ $status ] . '</span>';
+        }
+    } else  {
 
-                $views[ $status ] = $span . $views[ $status ] . '</span>';
-			}
-			if ( ! in_array( $status, $inactive_statuses ) )	{
-				$count += $status_count;
-			}
-		}
-	}
+        $args = array();
+        if ( kbs_get_option( 'restrict_agent_view' ) && ! current_user_can( 'manage_ticket_settings' ) )	{
+            $args['agent'] = get_current_user_id();
+        }
 
-	$views['all'] = preg_replace( '/\(.+\)/U', '(' . number_format_i18n( $count ) . ')', $views['all'] );
+        $all_statuses      = kbs_get_ticket_status_keys( false );
+        $inactive_statuses = kbs_get_inactive_ticket_statuses();
+        $num_posts         = kbs_count_tickets( $args );
+        $count             = 0;
 
-	if ( $active_only )	{
-		$search       = __( 'All', 'kb-support' );
-		$replace      = sprintf( __( 'Active %s', 'kb-support' ), kbs_get_ticket_label_plural() ); 
-		$views['all'] = str_replace( $search, $replace, $views['all'] );
-	}
+        if ( ! empty( $num_posts ) )	{
+            foreach( $num_posts as $status => $status_count )	{
+                $colour = kbs_get_ticket_status_colour( $status );
+                $span   = sprintf(
+                    '<span class="kbs-label kbs-label-status" style="background-color: %s;">',
+                    $colour
+                );
 
-	foreach( $views as $status => $link )	{
-		if ( 'all' != $status && 'trash' != $status && ! in_array( $status, $all_statuses ) )	{
-			unset( $views[ $status ] );
-		}
-	}
+                if ( ! empty( $num_posts->$status ) && in_array( $status, $all_statuses ) )	{
+                    $views[ $status ] = preg_replace( '/\(.+\)/U', '(' . number_format_i18n( $num_posts->$status ) . ')', $views[ $status ] );
 
-	// Force trash view to end
-	if ( isset( $views['trash'] ) )	{
-		$trashed = $views['trash'];
-		unset( $views['trash'] );
-		$views['trash'] = $trashed;
-	}
+                    $views[ $status ] = $span . $views[ $status ] . '</span>';
+                }
+                if ( ! in_array( $status, $inactive_statuses ) )	{
+                    $count += $status_count;
+                }
+            }
+        }
+
+        $views['all'] = preg_replace( '/\(.+\)/U', '(' . number_format_i18n( $count ) . ')', $views['all'] );
+
+        if ( $active_only )	{
+            $search       = __( 'All', 'kb-support' );
+            $replace      = sprintf( __( 'Active %s', 'kb-support' ), kbs_get_ticket_label_plural() ); 
+            $views['all'] = str_replace( $search, $replace, $views['all'] );
+        }
+
+        foreach( $views as $status => $link )	{
+            if ( 'all' != $status && 'trash' != $status && ! in_array( $status, $all_statuses ) )	{
+                unset( $views[ $status ] );
+            }
+        }
+
+        // Force trash view to end
+        if ( isset( $views['trash'] ) )	{
+            $trashed = $views['trash'];
+            unset( $views['trash'] );
+            $views['trash'] = $trashed;
+        }
+    }
 
 	return apply_filters( 'kbs_ticket_views', $views );
 
