@@ -758,6 +758,9 @@ function kbs_ticket_filter_views( $views )	{
     if ( ! $active_only )   {
         foreach( $views as $status => $label )  {
             if ( 'all' == $status ) {
+                $search       = __( 'All', 'kb-support' );
+                $replace      = sprintf( __( 'All %s', 'kb-support' ), kbs_get_ticket_label_plural() ); 
+                $views['all'] = str_replace( $search, $replace, $views['all'] );
                 continue;
             }
 
