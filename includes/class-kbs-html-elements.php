@@ -58,6 +58,8 @@ class KBS_HTML_Elements {
 			$options[ $ticket_status->name ] = esc_html( $ticket_status->label );
 		}
 
+		$options = apply_filters( 'kbs_ticket_status_dropdown_options', $options, $args );
+
 		$output = $this->select( array(
 			'name'             => $args['name'],
 			'selected'         => $args['selected'],
