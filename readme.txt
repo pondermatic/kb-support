@@ -127,7 +127,8 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 **31st March 2020**
 
-**Tweak**: Added post status colours to the status view links on the tickets edit screen
+* **Tweak**: Added post status colours to the status view links on the tickets edit screen
+* **Tweak**: Added counts to reply filter dropdown on edit screen
 
 = 1.4 =
 

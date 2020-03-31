@@ -580,6 +580,10 @@ function kbs_add_ticket_filters() {
         }
 
 		// Awaiting reply
+        $awaiting_customer = (int)kbs_count_tickets_by_reply_status( 'customer' );
+        $awaiting_customer = $awaiting_customer > 0 ? ' (' . $awaiting_customer . ')' : '';
+        $awaiting_agent    = (int)kbs_count_tickets_by_reply_status( 'agent' );
+        $awaiting_agent    = $awaiting_agent > 0    ? ' (' . $awaiting_agent . ')'    : '';
 		echo '<select name="reply_status" id="reply_status" class="postform">';
 			$selected = '';
 			if ( isset( $_GET ) && isset( $_GET['reply_status'] ) && '' != $_GET['reply_status'] )	{
@@ -593,12 +597,12 @@ function kbs_add_ticket_filters() {
 			printf(
 				'<option value="awaiting_support"%s>%s</option>',
 				'awaiting_support' == $selected ? ' selected="selected"' : '',
-				__( 'Awaiting Support Reply', 'kb-support' )
+				__( 'Awaiting Support Reply', 'kb-support' ) . $awaiting_agent
 			);
 			printf(
 				'<option value="awaiting_customer"%s>%s</option>',
 				'awaiting_customer' == $selected ? ' selected="selected"' : '',
-				__( 'Awaiting Customer Reply', 'kb-support' )
+				__( 'Awaiting Customer Reply', 'kb-support' ) . $awaiting_customer
 			);
 
 		echo "</select>";
