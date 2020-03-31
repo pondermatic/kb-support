@@ -6,12 +6,24 @@
  */
 if ( is_user_logged_in() )	: ?>
 	<?php global $current_user;
-	
+
+	$per_page = kbs_get_customer_tickets_per_page( $current_user->ID );
+	$orderby  = kbs_get_user_tickets_orderby_setting( $current_user->ID );
+	$order    = kbs_get_user_tickets_order_setting( $current_user->ID );
+	$args     = array(
+		'number'  => $per_page,
+		'orderby' => $orderby,
+		'order'   => $order
+	);
+
 	$customer = new KBS_Customer( $current_user->ID, true );
-	$tickets  = kbs_get_customer_tickets( $customer->id, array(), false, true ); ?>
+	$tickets  = kbs_get_customer_tickets( $customer->id, $args, false, true ); ?>
 
 	<?php if ( ! empty( $tickets ) ) : ?>
         <?php
+			$args['number'] = 9999999;
+			$total_tickets  = count( kbs_get_customer_tickets( $customer->id, $args, false, false ) );
+
             $hide_closed = kbs_customer_maybe_hide_closed_tickets( $customer->user_id ) && kbs_customer_has_closed_tickets( $customer->id );
             $hide_closed = ( $hide_closed && ( ! isset( $_REQUEST['show_closed'] ) || '1' != $_REQUEST['show_closed'] ) );
             $hide_notice = sprintf(
@@ -25,7 +37,7 @@ if ( is_user_logged_in() )	: ?>
         <?php endif; ?>
         <div id="kbs_item_wrapper" class="kbs_ticket_history_wrapper" style="float: left">
             <div class="ticket_info_wrapper data_section">
-				<?php do_action( 'kbs_before_ticket_history_table', $tickets, $customer ); ?>
+				<?php do_action( 'kbs_before_ticket_history_table', $tickets, $customer, $total_tickets ); ?>
                 <table id="ticket_history">
                     <thead>
                         <tr id="ticket_history_header">
@@ -44,14 +56,14 @@ if ( is_user_logged_in() )	: ?>
                             <td class="the_ticket_id"><a href="<?php echo esc_url( $ticket_url ); ?>"><?php echo kbs_format_ticket_number( kbs_get_ticket_number( $ticket->ID ) ); ?></a></td>
 							<td class="title"><?php echo esc_html( $ticket->post_title ); ?></td>
 							<td class="date"><?php echo date_i18n( get_option( 'date_format' ), strtotime( $ticket->post_date ) ); ?></td>
-                            <td class="status"><?php echo kbs_get_ticket_status( $ticket, true ); ?></td>
+                            <td class="status"><span class="kbs-label kbs-label-status" style="background-color: <?php echo kbs_get_ticket_status_colour( $ticket->post_status ); ?>;"><?php echo kbs_get_ticket_status( $ticket, true ); ?></span></td>
                             <td class="actions"><a href="<?php echo esc_url( $ticket_url ); ?>"><?php _e( 'View', 'kb-support' ); ?></a></td>
                         </tr>
 
                     <?php endforeach; ?>
 
                 </table>
-                <?php do_action( 'kbs_after_ticket_history_table', $tickets, $customer ); ?>
+                <?php do_action( 'kbs_after_ticket_history_table', $tickets, $customer, $total_tickets ); ?>
 
             </div>
     
@@ -62,7 +74,7 @@ if ( is_user_logged_in() )	: ?>
                     'base'    => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
                     'format'  => '?paged=%#%',
                     'current' => max( 1, get_query_var( 'paged' ) ),
-                    'total'   => ceil( kbs_get_customer_ticket_count( $customer->id ) / 20 ) // 20 items per page
+                    'total'   => ceil( $total_tickets / $per_page )
                 ) );
                 ?>
             </div>

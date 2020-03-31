@@ -208,9 +208,22 @@ add_action( 'manage_kbs_ticket_posts_custom_column' , 'kbs_set_kbs_ticket_column
 function kb_tickets_post_column_id( $ticket_id, $kbs_ticket )	{
 	do_action( 'kbs_tickets_pre_column_id', $kbs_ticket );
 
-	$output = '<a href="' . get_edit_post_link( $ticket_id ) . '">' . kbs_format_ticket_number( kbs_get_ticket_number( $ticket_id ) ) . '</a>';
-	$output .= '<br />';
-	$output .= get_post_status_object( $kbs_ticket->post_status )->label;
+	$output = sprintf( '<span class="kbs-label kbs-label-status" style="background-color: %s;"><a href="%s" title="%s">%s</a></span>',
+		kbs_get_ticket_status_colour( get_post_status_object( $kbs_ticket->post_status )->name ),
+		get_edit_post_link( $ticket_id ),
+		get_post_status_object( $kbs_ticket->post_status )->label,
+		kbs_format_ticket_number( kbs_get_ticket_number( $ticket_id ) )
+	);
+
+	if ( $kbs_ticket->last_replier )	{
+		$output .= '<p>';
+		$output .= sprintf(
+			__( '<span class="kbs-label kbs-reply-status" style="background-color: %s;">%s replied</span>', 'kb-support' ),
+			kbs_get_ticket_reply_status_colour( $kbs_ticket->last_replier ),
+			$kbs_ticket->last_replier
+		);
+		$output .= '</p>';
+	}
 
 	do_action( 'kbs_tickets_post_column_id', $kbs_ticket );
 
@@ -352,10 +365,11 @@ function kbs_order_admin_tickets( $query )	{
 		return;
 	}
 
-    return;
+	$orderby_setting = kbs_get_user_tickets_orderby_setting();
+	$order_setting   = kbs_get_user_tickets_order_setting();
 
-	$orderby = '' == $query->get( 'orderby' ) ? 'date' : $query->get( 'orderby' );
-	$order   = '' == $query->get( 'order' )   ? 'DESC' : $query->get( 'order' );
+	$orderby = '' != $query->get( 'orderby' ) ? $query->get( 'orderby' ) : $orderby_setting;
+	$order   = '' != $query->get( 'order' )   ? $query->get( 'order' )   : $order_setting;
 
 	switch( $orderby )	{
 		case 'ID':
@@ -371,8 +385,13 @@ function kbs_order_admin_tickets( $query )	{
 			$query->set( 'order',  $order );
 			break;
 
+		case 'modified':
+			$query->set( 'orderby',  'modified' );
+			$query->set( 'order',  $order );
+			break;
+
 		case 'title':
-			$query->set( 'orderby',  'ID' );
+			$query->set( 'orderby',  'title' );
 			$query->set( 'order',  $order );
 			break;			
 	}
@@ -560,15 +579,35 @@ function kbs_add_ticket_filters() {
             }
         }
 
+		// Awaiting reply
+		echo '<select name="reply_status" id="reply_status" class="postform">';
+			$selected = '';
+			if ( isset( $_GET ) && isset( $_GET['reply_status'] ) && '' != $_GET['reply_status'] )	{
+				$selected = $_GET['reply_status'];
+			}
+			printf(
+				'<option value=""%s>%s</option>',
+				'' == $selected ? ' selected="selected"' : '',
+				__( 'All Reply Statuses', 'kb-support' )
+			);
+			printf(
+				'<option value="awaiting_support"%s>%s</option>',
+				'awaiting_support' == $selected ? ' selected="selected"' : '',
+				__( 'Awaiting Support Reply', 'kb-support' )
+			);
+			printf(
+				'<option value="awaiting_customer"%s>%s</option>',
+				'awaiting_customer' == $selected ? ' selected="selected"' : '',
+				__( 'Awaiting Customer Reply', 'kb-support' )
+			);
+
+		echo "</select>";
+
 		if ( isset( $_REQUEST['all_posts'] ) && '1' === $_REQUEST['all_posts'] )	{
-
 			echo '<input type="hidden" name="all_posts" value="1" />';
-
 		} elseif ( ! current_user_can( 'view_ticket_reports' ) )	{
-
 			$author_id = get_current_user_id();
 			echo '<input type="hidden" name="author" value="' . esc_attr( $author_id ) . '" />';
-
 		}
 	}
 
@@ -593,7 +632,7 @@ function kbs_filter_customer_tickets( $query )	{
 add_action( 'pre_get_posts', 'kbs_filter_customer_tickets' );
 
 /**
- * Filter tickets by copmany.
+ * Filter tickets by company.
  *
  * @since	1.0
  * @return	void
@@ -608,6 +647,49 @@ function kbs_filter_company_tickets( $query )	{
 	$query->set( 'meta_type', 'NUMERIC' );
 } // kbs_filter_customer_tickets
 add_action( 'pre_get_posts', 'kbs_filter_company_tickets' );
+
+/**
+ * Filter tickets by reply status.
+ *
+ * @since	1.4
+ * @return	void
+ */
+function kbs_filter_tickets_by_reply_status( $query )	{
+	if ( ! is_admin() || 'kbs_ticket' != $query->get( 'post_type' ) || empty( $_GET['reply_status'] ) )	{
+		return;
+	}
+
+	$selected = $_GET['reply_status'];
+
+	if ( 'awaiting_support' == $selected )	{
+
+		$query->set( 'meta_key', '_kbs_ticket_last_reply_by' );
+		$query->set( 'meta_value', 3 );
+		$query->set( 'meta_type', 'NUMERIC' );
+
+	} elseif ( 'awaiting_customer' == $selected )	{
+
+		$current_meta = $query->get('meta_query');
+		$current_meta = empty( $current_meta ) ? array() : $current_meta;
+		$custom_meta  = array(
+			'relation' => 'OR',
+			array(
+				'key'   => '_kbs_ticket_last_reply_by',
+				'type'  => 'NUMERIC',
+				'value' => 1
+			),
+			array(
+				'key'   => '_kbs_ticket_last_reply_by',
+				'type'  => 'NUMERIC',
+				'value' => 2
+			)
+		);
+
+		$meta_query = $current_meta[] = $custom_meta;
+		$query->set( 'meta_query', array( $meta_query ) );
+	}
+} // kbs_filter_tickets_by_reply_status
+add_action( 'pre_get_posts', 'kbs_filter_tickets_by_reply_status' );
 
 /**
  * Hide inactive tickets from the 'all' tickets list.
@@ -732,19 +814,6 @@ function kbs_tickets_remove_ticket_post_actions( $actions )	{
 		foreach( $remove_actions as $remove_action )	{
 
 			if ( doing_filter( 'bulk_actions-edit-kbs_ticket' ) && current_user_can( 'manage_ticket_settings' ) && 'trash' == $remove_action )	{
-				continue;
-			}
-
-			if ( doing_filter( 'post_row_actions' ) && 'edit' == $remove_action && kbs_agent_can_access_ticket( $post->ID ) )	{
-				$actions['edit'] = sprintf(
-					'<a href="%s" aria-label="%s">%s</a>',
-					get_edit_post_link( $post->ID ),
-					/* translators: %s: Ticket*/
-					esc_attr( sprintf(
-						__( 'Manage %s', 'kb-support' ), kbs_format_ticket_number( kbs_get_ticket_number( $post->ID ) )
-					) ),
-					sprintf( __( 'Manage %s', 'kb-support' ), $singular )
-				);
 				continue;
 			}
 

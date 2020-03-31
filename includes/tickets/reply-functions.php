@@ -45,6 +45,42 @@ function kbs_get_reply_count( $ticket_id )	{
 } // kbs_get_reply_count
 
 /**
+ * Get the ticket reply status colours.
+ *
+ * @since	1.4
+ * @param	string	$replier	Who replied last
+ * @param	bool	$default	Whether or not to return the default colour
+ * @return	string	Ticket reply status colour
+ */
+function kbs_get_ticket_reply_status_colour( $replier, $default = false )	{
+	$replier  = strtolower( $replier );
+	$defaults = apply_filters( 'kbs_default_ticket_reply_status_colours', array(
+		'admin'    => '#6b5b95',
+		'agent'    => '#6b5b95',
+		'customer' => '#c94c4c'
+	) );
+
+	if ( $default )	{
+		if ( ! array_key_exists( $replier, $defaults ) )	{
+			$replier = 'agent';
+		}
+
+		return $defaults[ $status ];
+	}
+
+	$default_colour = '';
+
+	if ( array_key_exists( $replier, $defaults ) )	{
+		$default_colour = $defaults[ $replier ];
+	}
+
+	$colour = kbs_get_option( 'colour_reply_' . $replier, $default_colour );
+	$colour = apply_filters( 'kbs_ticket_reply_status_colour' . $replier, $colour );
+
+	return $colour;
+} // kbs_get_ticket_reply_status_colour
+
+/**
  * Whether or not an agent has replied to a ticket.
  *
  * @since	1.0
@@ -112,6 +148,7 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
 	$files       = kbs_ticket_has_files( $reply->ID );
 	$file_count  = ( $files ? count( $files ) : false );
     $show        = $expand ? ' style="display: block;"' : '';
+	$show_hide   = $expand ? __( 'Hide', 'kb-support' ) : __( 'View', 'kb-support' );
 
 	$create_article_link = add_query_arg( array(
 		'kbs-action' => 'create_article',
@@ -122,7 +159,7 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
 	$create_article_link = apply_filters( 'kbs_create_article_link', $create_article_link, $ticket_id, $reply );
 
     $actions = array(
-        'read_reply'     => '<a href="#" class="toggle-view-reply-option-section">' . __( 'View Reply', 'kb-support' ) . '</a>',
+        'read_reply'     => '<a href="#" class="toggle-view-reply-option-section">' . sprintf( __( '%s Reply', 'kb-support' ), $show_hide ) . '</a>',
         'create_article' => '<a href="' . $create_article_link . '" class="toggle-reply-option-create-article">' . sprintf( __( 'Create %s', 'kb-support' ), kbs_get_article_label_singular() ) . '</a>'
     );
 

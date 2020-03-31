@@ -2,9 +2,9 @@
 Contributors: kbsupport, mikeyhoward1977
 Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
-Tested up to: 5.3.2
+Tested up to: 5.4
 Requires PHP: 5.4
-Stable tag: 1.3.6
+Stable tag: 1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,6 +122,29 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.4 =
+
+**March 2020**
+
+**Note**: ***The view-ticket.php, ticket-history.php and shortcode-profile-editor.php template files have been updated. Please review changes if you have copied these files to your child theme and made customisations*** 
+
+* **New**: Agents can now update the ticket status during reply. Enable via ***Tickets -> Settings -> Tickets -> Reply Settings -> Agents Set Reply Status?***
+* **New**: Select the default status a ticket should be set to when an agent replies. ***Tickets -> Settings -> Tickets -> Reply Settings -> Agent Reply Status***
+* **New**: Ticket status colour indicators are now displayed on the admin screen and the customer front end ticket manager page
+* **New**: The admin tickets list now displays who the last reply was from for each ticket
+* **New**: Added reply status filter so agents can filter tickets by those awaiting agent or customer replies
+* **New**: Added open ticket count to menu bar. **Show Count on Menu Bar?** must be enabled. ***Tickets -> Settings -> Tickets -> Show Count on Menu Bar?***
+* **New**: Customers can now choose how many Tickets per Page to load on the ticket manager screen by editing their profile and setting the Tickets per Page option
+* **New**: Agents and customers can now select default ticket order by and order options within their profiles
+
+* **Tweak**: Remove the Manage Ticket quick edit link from admin tickets list
+* **Tweak**: Changed menu icon
+* **Tweak**: Updated contextual help with new and missing items
+* **Tweak**: Use new `apply_shortcodes()` function in preference of `do_shortcode()` per WordPress 5.4 guidelines
+
+* **Bug**: Corrected pagination links on customer ticket manager page
+* **Bug**: Corrected Show Reply/Hide Reply link for auto expanded replies on admin screen
 
 = 1.3.6 =
 

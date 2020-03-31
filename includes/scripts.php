@@ -193,12 +193,15 @@ function kbs_register_styles() {
 	wp_register_style( 'kbs-styles', $url, array(), KBS_VERSION, 'all' );
 	wp_enqueue_style( 'kbs-styles' );
 
-	if ( $is_submission )	{
+    if ( is_admin_bar_showing() )   {
+        wp_register_style( 'kbs-admin-bar', $css_dir . 'kbs-admin-bar' . $suffix . '.css', array(), KBS_VERSION, 'all' );
+    	wp_enqueue_style( 'kbs-admin-bar' );
+    }
 
+	if ( $is_submission )	{
 		// Register the chosen styles here, but we enqueue within kbs_display_form_select_field when needed
 		wp_register_style( 'jquery-chosen-css', $css_dir . 'chosen' . $suffix . '.css', array(), KBS_VERSION );
 		wp_enqueue_style( 'jquery-chosen-css' );
-
 	}
 
 } // kbs_register_styles
@@ -207,7 +210,7 @@ add_action( 'wp_enqueue_scripts', 'kbs_register_styles' );
 /**
  * Load Admin Styles
  *
- * Enqueues the required admin scripts.
+ * Enqueues the required admin styles.
  *
  * @since	1.0
  * @param	str		$hook	Page hook
@@ -237,6 +240,11 @@ function kbs_load_admin_styles( $hook ) {
 
 	wp_register_style( 'kbs-admin', $css_dir . 'kbs-admin' . $suffix . '.css', array(), KBS_VERSION );
 	wp_enqueue_style( 'kbs-admin' );
+
+    if ( is_admin_bar_showing() )   {
+        wp_register_style( 'kbs-admin-bar', $css_dir . 'kbs-admin-bar' . $suffix . '.css', array(), KBS_VERSION, 'all' );
+    	wp_enqueue_style( 'kbs-admin-bar' );
+    }
 
 	wp_register_style( 'jquery-chosen-css', $css_dir . 'chosen' . $suffix . '.css', array(), KBS_VERSION );
 	wp_enqueue_style( 'jquery-chosen-css' );
@@ -291,11 +299,13 @@ function kbs_load_admin_scripts( $hook ) {
 
 	wp_localize_script( 'kbs-admin-scripts', 'kbs_vars', array(
 		'add_new_ticket'          => sprintf( __( 'Add New %s', 'kb-support' ), $singular ),
+		'agent_set_status'        => kbs_agent_can_set_status_on_reply(),
 		'admin_url'               => admin_url(),
 		'ajax_loader'             => KBS_PLUGIN_URL . 'assets/images/loading.gif',
         'customer_email_required' => __( 'Customer email address is required', 'kb-support' ),
         'customer_name_required'  => __( 'Customer name is required', 'kb-support' ),
         'delete_reply_warn'       => __( "You will permanently delete this reply.\n\nDepending on configuration, your customer may have already received it via email.\n\nClick 'Cancel' to stop, 'OK' to delete.", 'kb-support' ),
+		'default_reply_status'    => kbs_agent_get_default_reply_status(),
         'delete_ticket_warn'      => sprintf(
             __( "You are about to permanently delete this %s.\n\nThis action cannot be undone.\n\nClick 'Cancel' to stop, 'OK' to delete.", 'kb-support' ), kbs_get_ticket_label_singular( true )
         ),
@@ -339,6 +349,9 @@ function kbs_load_admin_scripts( $hook ) {
 
     wp_register_script( 'kbs-font-awesome', '//use.fontawesome.com/releases/v5.0.8/js/all.js', array(), KBS_VERSION ); 
 	wp_enqueue_script( 'kbs-font-awesome' );
+
+	wp_enqueue_style( 'wp-color-picker' );
+	wp_enqueue_script( 'wp-color-picker' );
 
 	wp_register_script( 'jquery-chosen', $js_dir . 'chosen.jquery' . $suffix . '.js', array( 'jquery' ), KBS_VERSION );
 	wp_enqueue_script( 'jquery-chosen' );

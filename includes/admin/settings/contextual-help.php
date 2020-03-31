@@ -104,8 +104,22 @@ function kbs_settings_contextual_help() {
 					$ticket_singular,
 					strtolower( $ticket_singular )
 				) . '</li>' .
+                '<li>' . sprintf( 
+					__( '<strong>Show %1$s Count?</strong> - If enabled, the current open %1$s count will be displayed next to the %2$s menu item on the main menu.', 'kb-support' ),
+					$ticket_singular,
+					strtolower( $ticket_plural )
+				) . '</li>' .
+                '<li>' . sprintf( 
+					__( '<strong>Show Count on Menu Bar?</strong> - Choose whether or not to display the open %s count on the WordPress menu bar. You can choose which environments you want it displayed, or turn it off altogether. By default it will display on the website front end only.', 'kb-support' ),
+					strtolower( $ticket_singular )
+				) . '</li>' .
+               '<li>' . sprintf( 
+					__( '<strong>Enable Participants?</strong> - If enabled, participants can be added to a %1$s if requested by the customer. Participants can then contribute towards %2$s by reading and creating replies, helping towards resolution.', 'kb-support' ),
+					strtolower( $ticket_singular ),
+					strtolower( $ticket_plural )
+				) . '</li>' .
 				'<li>' . sprintf( 
-					__( '<strong>Hide Closed %s?</strong> - By default when you view the admin %2$s screen, the <code>All</code> view includes all %2$s with all stauses. With this option enabled, closed %3$s will not be displayed unless you click the Closed view.', 'kb-support' ),
+					__( '<strong>Hide Closed %1$s?</strong> - By default when you view the admin %2$s screen, the <code>All</code> view includes all %2$s with all stauses. With this option enabled, closed %3$s will not be displayed unless you click the Closed view.', 'kb-support' ),
 					$ticket_plural,
 					strtolower( $ticket_singular ),
 					strtolower( $ticket_plural )
@@ -144,6 +158,10 @@ function kbs_settings_contextual_help() {
 			   '<li>' . sprintf( 
 					__( '<strong>Re-open %1$s</strong> - By enabling this option, a customer will be able to add a reply to a %2$s that is closed. When adding the reply, the %2$s will be reopened unless the customer also checks the <strong>This %2$s can be closed</strong> option within the reply form. By default, this option is not enabled.', 'kb-support' ),
 					$ticket_plural,
+					strtolower( $ticket_singular )
+				) . '</li>' .
+                '<li>' . sprintf( 
+					__( '<strong>Agents Set Reply Status</strong> - By enabling this option, agents will be able to select a status to transition the %s to when replying.', 'kb-support' ),
 					strtolower( $ticket_singular )
 				) . '</li>' .
 				'<li>' . sprintf( 
@@ -391,7 +409,9 @@ function kbs_settings_contextual_help() {
 		'id'      => 'kbs-settings-styles',
 		'title'   => __( 'Styles', 'kb-support' ),
 		'content' => apply_filters( 'kbs_settings_styles_contextual_help',
-			'<p>' . __( '<strong>Disable Styles</strong> - Select this option to stop KB Support loading its CSS style sheet. All default formatting of forms, fields and all other elements will be inherited from your currently active theme.', 'kb-support' ) . '</p>'
+			'<p>' . __( '<strong>Disable Styles</strong> - Select this option to stop KB Support loading its CSS style sheet. All default formatting of forms, fields and all other elements will be inherited from your currently active theme.', 'kb-support' ) . '</p>' .
+            '<p>' . sprintf( __( '<strong>%s Status Colours</strong>', 'kb-support' ), $ticket_singular ) . '<br />' .
+				sprintf( __( 'Choose colour codes for each individual %s status, as well as for when an agent or customer has recently replied.', 'kb-support' ), strtolower( $ticket_singular ) ) . '</p>'
         )
 	) );
 

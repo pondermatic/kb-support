@@ -51,6 +51,58 @@ function kbs_get_contextual_help_sidebar_text() {
 } // kbs_get_contextual_help_sidebar_text
 
 /**
+ * Add the ticket notification to the WordPress toolbar.
+ *
+ * @since   1.4
+ * @param   object  $admin_bar  WP_Admin_Bar class object
+ * @return  void
+ */
+function kbs_admin_bar_menu_items( $admin_bar ) {
+    $show_menu_bar = kbs_get_option( 'show_count_menubar', 'none' );
+
+    if ( 'none' == $show_menu_bar || ! kbs_is_agent() ) {
+        return;
+    }
+
+    if ( ( 'front' == $show_menu_bar && is_admin() ) || ( 'admin' == $show_menu_bar && ! is_admin() ) )  {
+        return;
+    }
+
+    if ( kbs_is_ticket_admin() || ! kbs_get_option( 'restrict_agent_view' ) )	{
+		$count = kbs_get_open_ticket_count( 'open' );
+	} else	{
+		$agent = new KBS_Agent( $current_user->ID );
+
+		if ( $agent )	{
+			$count = $agent->open_tickets;
+		}
+	}
+
+    if ( empty( $count ) )  {
+        return;
+    }
+
+    $icon  = '<span class="ab-icon dashicons dashicons-sos"></span> ';
+    $title = sprintf( 
+        '<span class="kbs-ticket-counter count-%d">%d</span>',
+        absint( $count ),
+        number_format_i18n( $count )
+    );
+
+    $admin_bar->add_menu( array(
+        'id'     => 'kbs-ticket-count',
+        'parent' => null,
+        'group'  => null,
+        'title'  => $icon . $title,
+        'href'   => admin_url( 'edit.php?post_type=kbs_ticket' ),
+        'meta'   => array(
+            'title' => sprintf( __( 'Open %s', 'kb-support' ), kbs_get_ticket_label_plural() )
+        )
+    ) );
+} // kbs_admin_bar_menu_items
+add_action( 'admin_bar_menu', 'kbs_admin_bar_menu_items', 500 );
+
+/**
  * Checks if Guest checkout is enabled
  *
  * @since	1.0

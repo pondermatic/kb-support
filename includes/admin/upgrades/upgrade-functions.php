@@ -104,6 +104,10 @@ function kbs_do_automatic_upgrades() {
 		kbs_v134_upgrades();
 	}
 
+	if ( version_compare( $kbs_version, '1.4', '<' ) ) {
+		kbs_v14_upgrades();
+	}
+
 	if ( version_compare( $kbs_version, KBS_VERSION, '<' ) )	{
 
 		// Let us know that an upgrade has happened
@@ -704,6 +708,50 @@ function kbs_v134_upgrades()	{
 		kbs_update_option( $key, $value );
 	}
 } // kbs_v134_upgrades
+
+/**
+ * Upgrade routine for version 1.4.
+ *
+ * - Set default for Agents Set Reply Status option.
+ * - Set default for Agent Reply Status option.
+ * - Set colours for ticket status and replies.
+ *
+ * @since	1.4
+ * @return	void
+ */
+function kbs_v14_upgrades()	{
+    $options      = array(
+		'agent_update_status_reply' => 0,
+		'agent_reply_status'        => 0,
+        'show_count_menubar'        => 'front'
+	);
+
+	$status_colours = array(
+		'open'   => '#82b74b',
+		'hold'   => '#0074a2',
+		'closed' => '#dd3333'
+	);
+
+	foreach( $status_colours as $status => $status_colour )	{
+		$key = 'colour_' . $status;
+		$options[ $key ] = $status_colour;
+	}
+
+	$reply_colours = array(
+		'admin'    => '#6b5b95',
+		'agent'    => '#6b5b95',
+		'customer' => '#c94c4c'
+	);
+
+	foreach( $reply_colours as $replier => $reply_colour )	{
+		$key = 'colour_reply_' . $replier;
+		$options[ $key ] = $reply_colour;
+	}
+
+	foreach( $options as $key => $value )	{
+		kbs_update_option( $key, $value );
+	}
+} // kbs_v14_upgrades
 
 /**
  * Update sequential ticket numbers.
