@@ -454,6 +454,36 @@ class KBS_Customer {
 
 	} // set_primary_email
 
+	/**
+	 * Retrieve the number of tickets the customer wants to load per page
+	 *
+	 * @since	1.4
+	 * @return	int		Number of tickets to load per page
+	 */
+	public function get_tickets_per_page()	{
+        return kbs_get_customer_tickets_per_page( $this->user_id );
+	} // get_tickets_per_page
+
+	/**
+	 * Retrieve the default orderby option for the customer.
+	 *
+	 * @since	1.4
+	 * @return	string	Post field to order by
+	 */
+	public function get_tickets_orderby()	{
+        return kbs_get_user_tickets_orderby_setting( $this->user_id );
+	} // get_tickets_orderby
+
+	/**
+	 * Retrieve the default order option for the customer.
+	 *
+	 * @since	1.4
+	 * @return	string	Post field to order by
+	 */
+	public function get_tickets_order()	{
+        return kbs_get_user_tickets_order_setting( $this->user_id );
+	} // get_tickets_order
+
     /**
 	 * Retrieve the number of replies the customer wants to load
 	 *

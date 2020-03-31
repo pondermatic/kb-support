@@ -143,6 +143,25 @@ function kbs_get_ticket_category_options()	{
 	return $options;
 } // kbs_get_ticket_category_options
 
+/*
+ * Retrieve ticket orderby options.
+ *
+ * @since	1.4
+ * @return	array	Array of ticket orderby options
+ */
+function kbs_get_ticket_orderby_options()	{
+	$options = array(
+		'ID'       => __( 'ID', 'kb-support' ),
+		'title'    => __( 'Subject', 'kb-support' ),
+		'date'     => __( 'Date Created', 'kb-support' ),
+		'modified' => __( 'Date Modified', 'kb-support' )
+	);
+
+	$options = apply_filters( 'kbs_ticket_orderby_options', $options );
+
+	return $options;
+} // kbs_get_ticket_orderby_options
+
 /**
  * Count Tickets
  *
