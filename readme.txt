@@ -138,6 +138,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 * **Tweak**: Remove the Manage Ticket quick edit link from admin tickets list
 * **Tweak**: Changed menu icon
+* **Tweak**: Updated contextual help with new and missing items
 
 * **Bug**: Corrected Show Reply/Hide Reply link for auto expanded replies on admin screen
 
