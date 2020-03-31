@@ -183,7 +183,7 @@ if ( ! is_user_logged_in() ) : ?>
 										kbs_get_ticket_label_plural() );
 									?>
 								</label>
-								<select name="kbs_tickets_orderby" id="kbs-tickets-orderby">
+								<select name="kbs_tickets_orderby" id="kbs-tickets-orderby" class="select kbs-select kbs-input">
 									<?php foreach( $orderby_options as $ob_value => $ob_label ) : ?>
 										<?php $selected = selected( $orderby, $ob_value, false ); ?>
 										<option value="<?php echo $ob_value; ?>"<?php echo $selected; ?>>
@@ -212,7 +212,7 @@ if ( ! is_user_logged_in() ) : ?>
 										kbs_get_ticket_label_plural() );
 									?>
 								</label>
-								<select name="kbs_tickets_order" id="kbs-tickets-order">
+								<select name="kbs_tickets_order" id="kbs-tickets-order" class="select kbs-select kbs-input">
 									<?php foreach( $order_options as $o_value => $o_label ) : ?>
 										<?php $selected = selected( $order, $o_value, false ); ?>
 										<option value="<?php echo $o_value; ?>"<?php echo $selected; ?>>
