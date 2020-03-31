@@ -365,10 +365,11 @@ function kbs_order_admin_tickets( $query )	{
 		return;
 	}
 
-    return;
+	$orderby_setting = kbs_get_user_tickets_orderby_setting();
+	$order_setting   = kbs_get_user_tickets_order_setting();
 
-	$orderby = '' == $query->get( 'orderby' ) ? 'date' : $query->get( 'orderby' );
-	$order   = '' == $query->get( 'order' )   ? 'DESC' : $query->get( 'order' );
+	$orderby = '' != $query->get( 'orderby' ) ? $query->get( 'orderby' ) : $orderby_setting;
+	$order   = '' != $query->get( 'order' )   ? $query->get( 'order' )   : $order_setting;
 
 	switch( $orderby )	{
 		case 'ID':
@@ -384,8 +385,13 @@ function kbs_order_admin_tickets( $query )	{
 			$query->set( 'order',  $order );
 			break;
 
+		case 'modified':
+			$query->set( 'orderby',  'modified' );
+			$query->set( 'order',  $order );
+			break;
+
 		case 'title':
-			$query->set( 'orderby',  'ID' );
+			$query->set( 'orderby',  'title' );
 			$query->set( 'order',  $order );
 			break;			
 	}
