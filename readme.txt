@@ -123,6 +123,13 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 == Changelog ==
 
+= 1.4.2 =
+
+**DATE 2020**
+
+* **Tweak**: Only display the `Send Closure Email` option on the edit ticket screen
+* **Tweak**: Removed the bulk actions drop down menus from the tickets list screen
+
 = 1.4.1 =
 
 **1st April 2020**
