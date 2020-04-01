@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KB Support 1.4\n"
 "Report-Msgid-Bugs-To: https://kb-support.com/\n"
-"POT-Creation-Date: 2020-03-31 08:34:10+00:00\n"
+"POT-Creation-Date: 2020-04-01 17:53:40+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -53,7 +53,7 @@ msgstr ""
 #: includes/admin/upgrades/classes/class-ticket-department-migration.php:119
 #: includes/admin/upgrades/classes/class-ticket-sequential-numbering-migration.php:122
 #: includes/admin/upgrades/classes/class-ticket-source-migration.php:154
-#: includes/admin/upgrades/upgrade-functions.php:269
+#: includes/admin/upgrades/upgrade-functions.php:273
 #: includes/class-kbs-license-handler.php:313
 msgid "Error"
 msgstr ""
@@ -426,7 +426,7 @@ msgstr ""
 #: includes/admin/customers/customers-page.php:400
 #: includes/admin/import-export/export/class-batch-export-customers.php:45
 #: includes/admin/upgrades/classes/class-ticket-source-migration.php:69
-#: includes/admin/upgrades/upgrade-functions.php:608 includes/install.php:96
+#: includes/admin/upgrades/upgrade-functions.php:612 includes/install.php:96
 msgid "Email"
 msgstr ""
 
@@ -513,10 +513,10 @@ msgstr ""
 #: includes/admin/import-export/export/class-batch-export-tickets.php:49
 #: includes/admin/tickets/tickets.php:63
 #: includes/tickets/class-kbs-ticket.php:2026
-#: includes/tickets/reply-functions.php:170
-#: includes/tickets/reply-functions.php:273
-#: includes/tickets/reply-functions.php:299
-#: includes/tickets/reply-functions.php:311
+#: includes/tickets/reply-functions.php:201
+#: includes/tickets/reply-functions.php:304
+#: includes/tickets/reply-functions.php:330
+#: includes/tickets/reply-functions.php:342
 msgid "Customer"
 msgstr ""
 
@@ -537,7 +537,7 @@ msgstr ""
 
 #: includes/admin/companies/metaboxes.php:159
 #: includes/admin/upgrades/classes/class-ticket-source-migration.php:64
-#: includes/admin/upgrades/upgrade-functions.php:603 includes/install.php:91
+#: includes/admin/upgrades/upgrade-functions.php:607 includes/install.php:91
 #: includes/privacy-functions.php:590
 msgid "Website"
 msgstr ""
@@ -578,7 +578,7 @@ msgid "Unnamed Customer"
 msgstr ""
 
 #: includes/admin/customers/class-kbs-customer-table.php:158
-#: includes/tickets/reply-functions.php:151 templates/ticket-history.php:60
+#: includes/tickets/reply-functions.php:182 templates/ticket-history.php:60
 msgid "View"
 msgstr ""
 
@@ -849,7 +849,7 @@ msgstr ""
 #: includes/admin/customers/customers-page.php:367
 #: includes/admin/customers/customers-page.php:640
 #: includes/admin/forms/metaboxes.php:560 includes/admin/thickbox.php:114
-#: includes/admin/thickbox.php:178 includes/class-kbs-html-elements.php:1188
+#: includes/admin/thickbox.php:178 includes/class-kbs-html-elements.php:1190
 msgid "Cancel"
 msgstr ""
 
@@ -1342,12 +1342,12 @@ msgstr ""
 #: includes/admin/import-export/export/class-batch-export-tickets.php:50
 #: includes/admin/tickets/tickets.php:66
 #: includes/tickets/class-kbs-ticket.php:2025
-#: includes/tickets/reply-functions.php:284 templates/view-ticket.php:105
+#: includes/tickets/reply-functions.php:315 templates/view-ticket.php:105
 msgid "Agent"
 msgstr ""
 
 #: includes/admin/import-export/export/class-batch-export-tickets.php:51
-#: includes/admin/tickets/metaboxes.php:485
+#: includes/admin/tickets/metaboxes.php:489
 msgid "Additional Agents"
 msgstr ""
 
@@ -2506,8 +2506,8 @@ msgid "The label for the %s reply form submit button."
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:456
-#: includes/admin/tickets/metaboxes.php:888
-#: includes/admin/tickets/metaboxes.php:893 includes/template-functions.php:66
+#: includes/admin/tickets/metaboxes.php:892
+#: includes/admin/tickets/metaboxes.php:897 includes/template-functions.php:66
 msgid "Reply"
 msgstr ""
 
@@ -2985,7 +2985,7 @@ msgstr ""
 #: includes/admin/settings/register-settings.php:920
 #: includes/admin/settings/register-settings.php:939
 #: includes/admin/settings/register-settings.php:973
-#: includes/admin/upgrades/upgrade-functions.php:408
+#: includes/admin/upgrades/upgrade-functions.php:412
 #: includes/emails/email-template.php:161
 #: includes/emails/email-template.php:260
 #: includes/emails/email-template.php:295
@@ -3069,7 +3069,7 @@ msgstr ""
 #: includes/admin/settings/register-settings.php:916
 #: includes/admin/settings/register-settings.php:935
 #: includes/admin/settings/register-settings.php:968
-#: includes/admin/upgrades/upgrade-functions.php:403
+#: includes/admin/upgrades/upgrade-functions.php:407
 #: includes/emails/email-template.php:256
 #: includes/emails/email-template.php:291
 #: includes/emails/email-template.php:322
@@ -3141,7 +3141,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:961
-#: includes/admin/upgrades/upgrade-functions.php:402
+#: includes/admin/upgrades/upgrade-functions.php:406
 msgid "A %s Has Been Assigned to You - ##{ticket_id}##"
 msgstr ""
 
@@ -3156,13 +3156,13 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:969
-#: includes/admin/upgrades/upgrade-functions.php:404
+#: includes/admin/upgrades/upgrade-functions.php:408
 #: includes/emails/email-template.php:323
 msgid "A %s has been assigned to you at {sitename}."
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:971
-#: includes/admin/upgrades/upgrade-functions.php:406
+#: includes/admin/upgrades/upgrade-functions.php:410
 #: includes/emails/email-template.php:325
 msgid "Please login to view and update the %s."
 msgstr ""
@@ -3236,7 +3236,7 @@ msgid "Label shown next to the agree to terms checkbox."
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:1053
-#: includes/admin/upgrades/upgrade-functions.php:496
+#: includes/admin/upgrades/upgrade-functions.php:500
 msgid "I have read and agree to the terms and conditions"
 msgstr ""
 
@@ -3257,7 +3257,7 @@ msgid "Heading for the agree to terms thickbox."
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:1069
-#: includes/admin/upgrades/upgrade-functions.php:498
+#: includes/admin/upgrades/upgrade-functions.php:502
 #: includes/forms/form-functions.php:1115
 msgid "Terms and Conditions for Support %s"
 msgstr ""
@@ -3736,15 +3736,15 @@ msgstr ""
 msgid "Select Company"
 msgstr ""
 
-#: includes/admin/thickbox.php:163 includes/class-kbs-html-elements.php:540
+#: includes/admin/thickbox.php:163 includes/class-kbs-html-elements.php:542
 msgid "Select a Company"
 msgstr ""
 
-#: includes/admin/thickbox.php:164 includes/class-kbs-html-elements.php:541
+#: includes/admin/thickbox.php:164 includes/class-kbs-html-elements.php:543
 msgid "No Company"
 msgstr ""
 
-#: includes/admin/thickbox.php:168 includes/class-kbs-html-elements.php:545
+#: includes/admin/thickbox.php:168 includes/class-kbs-html-elements.php:547
 msgid "Type to search all companies"
 msgstr ""
 
@@ -3773,7 +3773,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/tickets/contextual-help.php:58
-#: includes/tickets/reply-functions.php:163
+#: includes/tickets/reply-functions.php:194
 msgid "Create %s"
 msgstr ""
 
@@ -3830,7 +3830,7 @@ msgid "Create"
 msgstr ""
 
 #: includes/admin/tickets/metaboxes.php:87
-#: includes/admin/tickets/metaboxes.php:378
+#: includes/admin/tickets/metaboxes.php:382
 msgid "Update"
 msgstr ""
 
@@ -3862,103 +3862,103 @@ msgstr ""
 msgid "Delete %s"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:359
+#: includes/admin/tickets/metaboxes.php:363
 msgid "Add a New Customer"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:359
+#: includes/admin/tickets/metaboxes.php:363
 msgid "Add New"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:374
+#: includes/admin/tickets/metaboxes.php:378
 msgid "Back to %s"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:378
+#: includes/admin/tickets/metaboxes.php:382
 msgid "Add"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:432
+#: includes/admin/tickets/metaboxes.php:436
 #: includes/admin/tickets/tickets.php:70
 msgid "SLA Status"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:492
+#: includes/admin/tickets/metaboxes.php:496
 msgid "Select Additional Agents"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:528
+#: includes/admin/tickets/metaboxes.php:532
 msgid "Received: %s"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:535
+#: includes/admin/tickets/metaboxes.php:539
 msgid "Updated: %s"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:585
+#: includes/admin/tickets/metaboxes.php:589
 msgid "No customer assigned"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:591
+#: includes/admin/tickets/metaboxes.php:595
 msgid "User Profile"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:664
+#: includes/admin/tickets/metaboxes.php:668
 msgid "%s Content"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:696
+#: includes/admin/tickets/metaboxes.php:700
 msgid "Attachments"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:731
+#: includes/admin/tickets/metaboxes.php:735
 msgid "Participants"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:744
+#: includes/admin/tickets/metaboxes.php:748
 msgid ""
 "Add participants by selecting an existing customer, or entering an email "
 "address below."
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:752
+#: includes/admin/tickets/metaboxes.php:756
 msgid "Select a participant"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:762
+#: includes/admin/tickets/metaboxes.php:766
 msgid "or enter any email address"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:768
+#: includes/admin/tickets/metaboxes.php:772
 msgid "Add Participant"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:851
+#: includes/admin/tickets/metaboxes.php:855
 msgid "This %1$s is currently closed. <a href=\"%2$s\">Re-open %3$s.</a>"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:865
+#: includes/admin/tickets/metaboxes.php:869
 msgid "Add a New Reply"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:882
+#: includes/admin/tickets/metaboxes.php:886
 msgid "<strong>Set status to</strong> %s <strong>and</strong>&nbsp;"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:890
 #: includes/admin/tickets/metaboxes.php:894
+#: includes/admin/tickets/metaboxes.php:898
 msgid "Reply and Close"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:944
+#: includes/admin/tickets/metaboxes.php:948
 msgid "Add a New Note"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:948
+#: includes/admin/tickets/metaboxes.php:952
 msgid "Notes are only visible to support workers"
 msgstr ""
 
-#: includes/admin/tickets/metaboxes.php:961
+#: includes/admin/tickets/metaboxes.php:965
 msgid "Add Note"
 msgstr ""
 
@@ -3977,26 +3977,28 @@ msgid "No Agent Assigned"
 msgstr ""
 
 #: includes/admin/tickets/tickets.php:571
+#: includes/admin/tickets/tickets.php:766
 msgid "All %s"
 msgstr ""
 
-#: includes/admin/tickets/tickets.php:591
+#: includes/admin/tickets/tickets.php:596
 msgid "All Reply Statuses"
 msgstr ""
 
-#: includes/admin/tickets/tickets.php:596
+#: includes/admin/tickets/tickets.php:601
 msgid "Awaiting Support Reply"
 msgstr ""
 
-#: includes/admin/tickets/tickets.php:601
+#: includes/admin/tickets/tickets.php:606
 msgid "Awaiting Customer Reply"
 msgstr ""
 
-#: includes/admin/tickets/tickets.php:777
+#: includes/admin/tickets/tickets.php:765
+#: includes/admin/tickets/tickets.php:812
 msgid "All"
 msgstr ""
 
-#: includes/admin/tickets/tickets.php:778
+#: includes/admin/tickets/tickets.php:813
 msgid "Active %s"
 msgstr ""
 
@@ -4079,32 +4081,32 @@ msgid "%s numbers updated successfully."
 msgstr ""
 
 #: includes/admin/upgrades/classes/class-ticket-source-migration.php:65
-#: includes/admin/upgrades/upgrade-functions.php:604 includes/install.php:92
+#: includes/admin/upgrades/upgrade-functions.php:608 includes/install.php:92
 msgid "%s received via website"
 msgstr ""
 
 #: includes/admin/upgrades/classes/class-ticket-source-migration.php:70
-#: includes/admin/upgrades/upgrade-functions.php:609 includes/install.php:97
+#: includes/admin/upgrades/upgrade-functions.php:613 includes/install.php:97
 msgid "%s received via email"
 msgstr ""
 
 #: includes/admin/upgrades/classes/class-ticket-source-migration.php:74
-#: includes/admin/upgrades/upgrade-functions.php:613 includes/install.php:101
+#: includes/admin/upgrades/upgrade-functions.php:617 includes/install.php:101
 msgid "Telephone"
 msgstr ""
 
 #: includes/admin/upgrades/classes/class-ticket-source-migration.php:75
-#: includes/admin/upgrades/upgrade-functions.php:614 includes/install.php:102
+#: includes/admin/upgrades/upgrade-functions.php:618 includes/install.php:102
 msgid "%s received via telephone"
 msgstr ""
 
 #: includes/admin/upgrades/classes/class-ticket-source-migration.php:79
-#: includes/admin/upgrades/upgrade-functions.php:618 includes/install.php:106
+#: includes/admin/upgrades/upgrade-functions.php:622 includes/install.php:106
 msgid "Other"
 msgstr ""
 
 #: includes/admin/upgrades/classes/class-ticket-source-migration.php:80
-#: includes/admin/upgrades/upgrade-functions.php:619 includes/install.php:107
+#: includes/admin/upgrades/upgrade-functions.php:623 includes/install.php:107
 msgid "%s received via another means"
 msgstr ""
 
@@ -4112,205 +4114,205 @@ msgstr ""
 msgid "%s sources updated successfully."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:155
+#: includes/admin/upgrades/upgrade-functions.php:159
 msgid ""
 "KB Support needs to complete an upgrade that was previously started. Click "
 "<a href=\"%s\">here</a> to resume the upgrade."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:167
-#: includes/admin/upgrades/upgrade-functions.php:181
-#: includes/admin/upgrades/upgrade-functions.php:196
-#: includes/admin/upgrades/upgrade-functions.php:210
+#: includes/admin/upgrades/upgrade-functions.php:171
+#: includes/admin/upgrades/upgrade-functions.php:185
+#: includes/admin/upgrades/upgrade-functions.php:200
+#: includes/admin/upgrades/upgrade-functions.php:214
 msgid "KB Support needs to update existing %s."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:171
+#: includes/admin/upgrades/upgrade-functions.php:175
 msgid ""
 "This process will update every existing %1$s in order to apply sequential "
 "%1$s numbering."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:185
+#: includes/admin/upgrades/upgrade-functions.php:189
 msgid ""
 "This upgrade process will update every existing %1$s, and %1$s reply, "
 "storing the source by which they were logged within the new %2$s Sources "
 "taxonomy."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:200
+#: includes/admin/upgrades/upgrade-functions.php:204
 msgid "This upgrade process will update all %s to support new department features."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:214
+#: includes/admin/upgrades/upgrade-functions.php:218
 msgid ""
 "This upgrade process will update all %s to support new monthly view count "
 "features."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:235
+#: includes/admin/upgrades/upgrade-functions.php:239
 msgid "<a href=\"%s\" class=\"button-primary\">Start Upgrade</a>"
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:269
+#: includes/admin/upgrades/upgrade-functions.php:273
 msgid "You do not have permission to do perform KBS upgrades"
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:768
+#: includes/admin/upgrades/upgrade-functions.php:790
 msgid ""
 "<strong>Update complete:</strong> You have already completed the update to "
 "%s numbers."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:772
 #: includes/admin/upgrades/upgrade-functions.php:794
-#: includes/admin/upgrades/upgrade-functions.php:896
-#: includes/admin/upgrades/upgrade-functions.php:914
-#: includes/admin/upgrades/upgrade-functions.php:1017
-#: includes/admin/upgrades/upgrade-functions.php:1035
-#: includes/admin/upgrades/upgrade-functions.php:1138
-#: includes/admin/upgrades/upgrade-functions.php:1156
+#: includes/admin/upgrades/upgrade-functions.php:816
+#: includes/admin/upgrades/upgrade-functions.php:918
+#: includes/admin/upgrades/upgrade-functions.php:936
+#: includes/admin/upgrades/upgrade-functions.php:1039
+#: includes/admin/upgrades/upgrade-functions.php:1057
+#: includes/admin/upgrades/upgrade-functions.php:1160
+#: includes/admin/upgrades/upgrade-functions.php:1178
 #: includes/admin/welcome.php:498
 msgid "WordPress Dashboard"
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:775
 #: includes/admin/upgrades/upgrade-functions.php:797
-#: includes/admin/upgrades/upgrade-functions.php:899
-#: includes/admin/upgrades/upgrade-functions.php:917
-#: includes/admin/upgrades/upgrade-functions.php:1020
-#: includes/admin/upgrades/upgrade-functions.php:1038
-#: includes/admin/upgrades/upgrade-functions.php:1141
-#: includes/admin/upgrades/upgrade-functions.php:1159
+#: includes/admin/upgrades/upgrade-functions.php:819
+#: includes/admin/upgrades/upgrade-functions.php:921
+#: includes/admin/upgrades/upgrade-functions.php:939
+#: includes/admin/upgrades/upgrade-functions.php:1042
+#: includes/admin/upgrades/upgrade-functions.php:1060
+#: includes/admin/upgrades/upgrade-functions.php:1163
+#: includes/admin/upgrades/upgrade-functions.php:1181
 msgid "KBS %s"
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:785
+#: includes/admin/upgrades/upgrade-functions.php:807
 msgid "<strong>%s Update Complete:</strong> All %s numbers have been updated."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:790
-#: includes/admin/upgrades/upgrade-functions.php:910
-#: includes/admin/upgrades/upgrade-functions.php:1031
-#: includes/admin/upgrades/upgrade-functions.php:1152
+#: includes/admin/upgrades/upgrade-functions.php:812
+#: includes/admin/upgrades/upgrade-functions.php:932
+#: includes/admin/upgrades/upgrade-functions.php:1053
+#: includes/admin/upgrades/upgrade-functions.php:1174
 msgid "You may now leave this page."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:804
+#: includes/admin/upgrades/upgrade-functions.php:826
 msgid ""
 "<strong>Important:</strong> Please leave this screen open and do not "
 "navigate away until the process completes."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:847
+#: includes/admin/upgrades/upgrade-functions.php:869
 msgid "Update %s numbers"
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:852
+#: includes/admin/upgrades/upgrade-functions.php:874
 msgid "This will update each %s to use sequential numbering."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:861
-#: includes/admin/upgrades/upgrade-functions.php:864
+#: includes/admin/upgrades/upgrade-functions.php:883
+#: includes/admin/upgrades/upgrade-functions.php:886
 msgid "Update %s Numbers"
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:865
+#: includes/admin/upgrades/upgrade-functions.php:887
 msgid "%s numbers have already been updated."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:892
+#: includes/admin/upgrades/upgrade-functions.php:914
 msgid ""
 "<strong>Migration complete:</strong> You have already completed the update "
 "to %s sources."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:908
-#: includes/admin/upgrades/upgrade-functions.php:1029
-#: includes/admin/upgrades/upgrade-functions.php:1150
+#: includes/admin/upgrades/upgrade-functions.php:930
+#: includes/admin/upgrades/upgrade-functions.php:1051
+#: includes/admin/upgrades/upgrade-functions.php:1172
 msgid ""
 "<strong>%s Upgrade Complete:</strong> All database upgrades have been "
 "completed."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:923
-#: includes/admin/upgrades/upgrade-functions.php:1044
-#: includes/admin/upgrades/upgrade-functions.php:1165
+#: includes/admin/upgrades/upgrade-functions.php:945
+#: includes/admin/upgrades/upgrade-functions.php:1066
+#: includes/admin/upgrades/upgrade-functions.php:1187
 msgid "Important"
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:925
-#: includes/admin/upgrades/upgrade-functions.php:1046
-#: includes/admin/upgrades/upgrade-functions.php:1167
+#: includes/admin/upgrades/upgrade-functions.php:947
+#: includes/admin/upgrades/upgrade-functions.php:1068
+#: includes/admin/upgrades/upgrade-functions.php:1189
 msgid ""
 "Please leave this screen open and do not navigate away until the process "
 "completes."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:968
+#: includes/admin/upgrades/upgrade-functions.php:990
 msgid "Update %s sources"
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:973
+#: includes/admin/upgrades/upgrade-functions.php:995
 msgid ""
 "This will update each %s and use the new %s Source taxonomy to identify the "
 "means by which it was logged."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:982
-#: includes/admin/upgrades/upgrade-functions.php:985
+#: includes/admin/upgrades/upgrade-functions.php:1004
+#: includes/admin/upgrades/upgrade-functions.php:1007
 msgid "Update %s Sources"
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:986
+#: includes/admin/upgrades/upgrade-functions.php:1008
 msgid "%s Sources have already been updated."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:1013
+#: includes/admin/upgrades/upgrade-functions.php:1035
 msgid ""
 "<strong>Migration complete:</strong> You have already completed the update "
 "to %s departments."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:1089
+#: includes/admin/upgrades/upgrade-functions.php:1111
 msgid "Update %s departments"
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:1094
+#: includes/admin/upgrades/upgrade-functions.php:1116
 msgid ""
 "This will update each %s adding additional data to support department "
 "features."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:1103
-#: includes/admin/upgrades/upgrade-functions.php:1106
+#: includes/admin/upgrades/upgrade-functions.php:1125
+#: includes/admin/upgrades/upgrade-functions.php:1128
 msgid "Update %s Departments"
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:1107
+#: includes/admin/upgrades/upgrade-functions.php:1129
 msgid "%s Departments have already been updated."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:1134
+#: includes/admin/upgrades/upgrade-functions.php:1156
 msgid ""
 "<strong>Migration complete:</strong> You have already completed the update "
 "to %s monthly view counts."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:1210
+#: includes/admin/upgrades/upgrade-functions.php:1232
 msgid "Update %s monthly view counts"
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:1215
+#: includes/admin/upgrades/upgrade-functions.php:1237
 msgid "This will update each %s adding monthly view counts."
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:1224
-#: includes/admin/upgrades/upgrade-functions.php:1227
+#: includes/admin/upgrades/upgrade-functions.php:1246
+#: includes/admin/upgrades/upgrade-functions.php:1249
 msgid "Update %s"
 msgstr ""
 
-#: includes/admin/upgrades/upgrade-functions.php:1228
+#: includes/admin/upgrades/upgrade-functions.php:1250
 msgid "%s have already been updated."
 msgstr ""
 
@@ -4667,7 +4669,7 @@ msgstr ""
 msgid "Customer email address already exists for customer #%s - %s."
 msgstr ""
 
-#: includes/ajax-functions.php:914 includes/class-kbs-html-elements.php:439
+#: includes/ajax-functions.php:914 includes/class-kbs-html-elements.php:441
 msgid "No users found"
 msgstr ""
 
@@ -4680,8 +4682,8 @@ msgid "Once Weekly"
 msgstr ""
 
 #: includes/class-kbs-html-elements.php:44
-#: includes/class-kbs-html-elements.php:121
-#: includes/class-kbs-html-elements.php:152
+#: includes/class-kbs-html-elements.php:123
+#: includes/class-kbs-html-elements.php:154
 msgid "Select a %s"
 msgstr ""
 
@@ -4689,67 +4691,67 @@ msgstr ""
 msgid "Type to search all %s statuses"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:127
-#: includes/class-kbs-html-elements.php:156 includes/scripts.php:333
+#: includes/class-kbs-html-elements.php:129
+#: includes/class-kbs-html-elements.php:158 includes/scripts.php:333
 msgid "Type to search all %s"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:326
-#: includes/class-kbs-html-elements.php:330
+#: includes/class-kbs-html-elements.php:328
+#: includes/class-kbs-html-elements.php:332
 msgid "Select a Customer"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:333
+#: includes/class-kbs-html-elements.php:335
 msgid "Type to search all customers"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:349
+#: includes/class-kbs-html-elements.php:351
 msgid "No customer attached"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:360
+#: includes/class-kbs-html-elements.php:362
 msgid "No customers found"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:414
+#: includes/class-kbs-html-elements.php:416
 msgid "Select a User"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:420
+#: includes/class-kbs-html-elements.php:422
 msgid "Type to search all users"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:493
 #: includes/class-kbs-html-elements.php:495
+#: includes/class-kbs-html-elements.php:497
 msgid "Choose a Field Type"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:498
+#: includes/class-kbs-html-elements.php:500
 msgid "Type to search all fields"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:566
+#: includes/class-kbs-html-elements.php:568
 msgid "No companies found"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:617
-#: includes/class-kbs-html-elements.php:622
+#: includes/class-kbs-html-elements.php:619
+#: includes/class-kbs-html-elements.php:624
 msgid "Select an Agent"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:625
+#: includes/class-kbs-html-elements.php:627
 msgid "Type to search all agents"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:673
+#: includes/class-kbs-html-elements.php:675
 msgid "Select a Department"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:676
+#: includes/class-kbs-html-elements.php:678
 msgid "Type to search all departments"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:1173
+#: includes/class-kbs-html-elements.php:1175
 msgid "Enter username"
 msgstr ""
 
@@ -6219,7 +6221,7 @@ msgstr ""
 msgid "Type to search %s"
 msgstr ""
 
-#: includes/scripts.php:340 includes/tickets/ticket-functions.php:1534
+#: includes/scripts.php:340 includes/tickets/ticket-functions.php:1544
 msgid "View Note"
 msgstr ""
 
@@ -6315,45 +6317,45 @@ msgstr ""
 msgid "This %s was logged from the IP Address"
 msgstr ""
 
-#: includes/tickets/reply-functions.php:151
+#: includes/tickets/reply-functions.php:182
 msgid "Hide"
 msgstr ""
 
-#: includes/tickets/reply-functions.php:162
+#: includes/tickets/reply-functions.php:193
 msgid "%s Reply"
 msgstr ""
 
-#: includes/tickets/reply-functions.php:170
-#: includes/tickets/reply-functions.php:290
-#: includes/tickets/reply-functions.php:302
-#: includes/tickets/reply-functions.php:305
+#: includes/tickets/reply-functions.php:201
+#: includes/tickets/reply-functions.php:321
+#: includes/tickets/reply-functions.php:333
+#: includes/tickets/reply-functions.php:336
 msgid "Participant"
 msgstr ""
 
-#: includes/tickets/reply-functions.php:175
+#: includes/tickets/reply-functions.php:206
 msgid "Read by customer on"
 msgstr ""
 
-#: includes/tickets/reply-functions.php:181
+#: includes/tickets/reply-functions.php:212
 msgid "Customer has not read"
 msgstr ""
 
-#: includes/tickets/reply-functions.php:196
+#: includes/tickets/reply-functions.php:227
 msgid "Delete Reply"
 msgstr ""
 
-#: includes/tickets/reply-functions.php:206
+#: includes/tickets/reply-functions.php:237
 msgid "attached file"
 msgid_plural "attached files"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/tickets/reply-functions.php:216
-#: includes/tickets/ticket-functions.php:1548
+#: includes/tickets/reply-functions.php:247
+#: includes/tickets/ticket-functions.php:1558
 msgid "%s by %s"
 msgstr ""
 
-#: includes/tickets/reply-functions.php:272
+#: includes/tickets/reply-functions.php:303
 msgid "Unknown"
 msgstr ""
 
@@ -6378,11 +6380,11 @@ msgstr ""
 msgid "Date Modified"
 msgstr ""
 
-#: includes/tickets/ticket-functions.php:1521
+#: includes/tickets/ticket-functions.php:1531
 msgid "KBS Bot"
 msgstr ""
 
-#: includes/tickets/ticket-functions.php:1535
+#: includes/tickets/ticket-functions.php:1545
 msgid "Delete Note"
 msgstr ""
 
@@ -6724,23 +6726,23 @@ msgctxt "verb"
 msgid "Trash"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:99
-#: includes/class-kbs-html-elements.php:235
+#: includes/class-kbs-html-elements.php:101
+#: includes/class-kbs-html-elements.php:237
 msgctxt "plural: Example: \"All Categories\""
 msgid "All %s"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:123
+#: includes/class-kbs-html-elements.php:125
 msgctxt "plural: Example: \"Select a %1$s\""
 msgid "Select a %1$s"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:723
+#: includes/class-kbs-html-elements.php:725
 msgctxt "all dropdown items"
 msgid "All"
 msgstr ""
 
-#: includes/class-kbs-html-elements.php:724
+#: includes/class-kbs-html-elements.php:726
 msgctxt "no dropdown items"
 msgid "None"
 msgstr ""
