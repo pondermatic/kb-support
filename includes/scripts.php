@@ -390,6 +390,40 @@ function kbs_load_admin_scripts( $hook ) {
 add_action( 'admin_enqueue_scripts', 'kbs_load_admin_scripts' );
 
 /**
+ * Adds the mention script to the tickets post page.
+ *
+ * @since	1.4
+ * @return	string
+ */
+function kbs_ticket_post_mentions()	{
+	$screen = get_current_screen();
+
+	if ( 'post' != $screen->base && 'kbs_ticket' != $screen->id )	{
+		return;
+	}
+
+	$agents = kbs_get_agents();
+
+	ob_start(); ?>
+
+	<script>
+		var tribute = new Tribute({
+		  values: [
+			<?php foreach( $agents as $agent ) : ?>
+				{ key: '<?php echo $agent->display_name; ?>', value: '<?php echo $agent->user_login; ?>' },
+			<?php endforeach; ?>
+		  ]
+		});
+
+		tribute.attach(document.getElementById('kbs_new_note'));
+	</script>
+	<?php
+
+	echo ob_get_clean();
+} // kbs_ticket_post_mentions
+add_action( 'in_admin_footer', 'kbs_ticket_post_mentions' );
+
+/**
  * At a Glance Icons
  *
  * Echoes the CSS for the ticket and article post type icons.

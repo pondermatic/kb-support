@@ -944,6 +944,8 @@ function kbs_ticket_metabox_add_note_row( $ticket_id )	{
 
 	global $kbs_ticket, $kbs_ticket_update; ?>
 
+	<?php $agents = kbs_get_agents(); ?>
+
 	<div id="kbs-ticket-add-note-container">
     	<p><label for="kbs_new_note"><strong><?php _e( 'Add a New Note', 'kb-support' ); ?></strong></label><br />
 			<?php echo KBS()->html->textarea( array(
@@ -954,6 +956,7 @@ function kbs_ticket_metabox_add_note_row( $ticket_id )	{
                 'rows'  => 5
             ) ); ?>
         </p>
+
         <?php
         /*
          * Fires immediately before the add note button is output.
