@@ -125,7 +125,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 = 1.4.1 =
 
-**31st March 2020**
+**2nd April 2020**
 
 * **Bug**: Ticket status may default to unexpected status when creating a new ticket within admin
 
