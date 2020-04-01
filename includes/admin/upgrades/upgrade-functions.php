@@ -108,6 +108,10 @@ function kbs_do_automatic_upgrades() {
 		kbs_v14_upgrades();
 	}
 
+    if ( version_compare( $kbs_version, '1.4.1', '<' ) ) {
+		kbs_v141_upgrades();
+	}
+
 	if ( version_compare( $kbs_version, KBS_VERSION, '<' ) )	{
 
 		// Let us know that an upgrade has happened
@@ -752,6 +756,24 @@ function kbs_v14_upgrades()	{
 		kbs_update_option( $key, $value );
 	}
 } // kbs_v14_upgrades
+
+/**
+ * Upgrade routine for version 1.4.1.
+ *
+ * - Set default colour for tickets in the 'New' status.
+ *
+ * @since	1.4.1
+ * @return	void
+ */
+function kbs_v141_upgrades()	{
+    $options      = array(
+		'colour_new' => '#827a93'
+	);
+
+	foreach( $options as $key => $value )	{
+		kbs_update_option( $key, $value );
+	}
+} // kbs_v141_upgrades
 
 /**
  * Update sequential ticket numbers.

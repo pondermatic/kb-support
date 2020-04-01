@@ -123,6 +123,19 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 == Changelog ==
 
+= 1.4.1 =
+
+**2nd April 2020**
+
+* **Bug**: Ticket status may default to unexpected status when creating a new ticket within admin
+
+* **Tweak**: Ticket statuses are now always in alphabetical order with the exception of Open & Closed which will display first and last respectively
+* **Tweak**: Added post status colours to the status view links on the tickets edit screen
+* **Tweak**: Also allow setting of status colour for tickets in the New status
+* **Tweak**: Make sure the Open link is always first and the Closed link is always last on the edit tickets page
+* **Tweak**: Added counts to reply filter dropdown on edit screen
+* **Tweak**: If you are not hiding closed tickets, the 'All' view link now displays 'All Tickets'
+
 = 1.4 =
 
 **31st March 2020**

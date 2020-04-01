@@ -45,6 +45,37 @@ function kbs_get_reply_count( $ticket_id )	{
 } // kbs_get_reply_count
 
 /**
+ * Count tickets by reply status.
+ *
+ * @since   1.4.1
+ * @param   string  $waiting_from   Count tickets awaiting replys from
+ * @return  int     Count of tickets
+ */
+function kbs_count_tickets_by_reply_status( $waiting_from = 'all' )   {
+    global $wpdb;
+
+    $where = "WHERE meta_key = '_kbs_ticket_last_reply_by'";
+
+    if ( 'agent' == $waiting_from ) {
+        $where .= " AND meta_value = 3";
+    } elseif ( 'customer' == $waiting_from )    {
+        $where .= " AND ( meta_value = 1 OR meta_value = 2 )";
+    }
+
+    $where = apply_filters( 'kbs_count_tickets_by_reply_status_where', $where, $waiting_from );
+
+    $count = $wpdb->get_var(
+        "
+        SELECT COUNT(*)
+        FROM $wpdb->postmeta
+        $where
+        "
+    );
+
+    return $count;
+} // kbs_count_tickets_by_reply_status
+
+/**
  * Get the ticket reply status colours.
  *
  * @since	1.4

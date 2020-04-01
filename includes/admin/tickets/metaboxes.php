@@ -314,7 +314,11 @@ function kbs_ticket_metabox_notes_callback()	{
  */
 function kbs_ticket_metabox_save_row( $ticket_id )	{
 
-	global $kbs_ticket, $kbs_ticket_update; ?>
+	global $kbs_ticket, $kbs_ticket_update;
+
+    $ticket_status = $kbs_ticket_update && 'new' != $kbs_ticket->post_status ? $kbs_ticket->post_status : 'open'
+
+    ?>
 
 	<div class="submitbox" id="submitpost">
 		<div id="minor-publishing">
@@ -340,7 +344,7 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
 				<div id="kbs-ticket-status-select">
 					<?php echo KBS()->html->ticket_status_dropdown( array(
 						'name'     => 'ticket_status',
-						'selected' => $kbs_ticket->post_status,
+						'selected' => $ticket_status,
 						'chosen'   => true
 					) ); ?>
 				</div>

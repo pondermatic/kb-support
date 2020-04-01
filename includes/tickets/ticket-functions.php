@@ -424,7 +424,7 @@ function kbs_get_ticket_status( $ticket, $return_label = false ) {
  * @return	arr
  */
 function kbs_get_default_ticket_statuses( $can_select = true )	{
-	$default_statuses = array( 'open', 'hold', 'closed' );
+	$default_statuses = array( 'open', 'new', 'hold', 'closed' );
 
 	$default_statuses = apply_filters( 'kbs_default_ticket_statuses', $default_statuses );
 
@@ -441,8 +441,10 @@ function kbs_get_default_ticket_statuses( $can_select = true )	{
  */
 function kbs_get_ticket_status_colour( $status, $default = false )	{
 	$defaults = apply_filters( 'kbs_default_ticket_status_colours', array(
+        'all'    => '#868686',
+        'new'    => '#827a93',
 		'open'   => '#82b74b',
-		'hold'   => '#0074a2',
+		'hold'   => '#dd9933',
 		'closed' => '#dd3333'
 	) );
 
@@ -476,10 +478,18 @@ function kbs_get_ticket_status_colour( $status, $default = false )	{
 function kbs_get_ticket_statuses( $can_select = true )	{
 	$ticket_statuses = kbs_get_post_statuses( 'labels', $can_select );
 	$statuses        = array();
+    $defaults        = kbs_get_default_ticket_statuses();
 	
 	foreach ( $ticket_statuses as $ticket_status ) {
 		$statuses[ $ticket_status->name ] = esc_html( $ticket_status->label );
 	}
+
+    // Order the array
+    asort( $statuses );
+    $statuses = array( 'open' => $statuses['open'] ) + $statuses;
+    $closed = $statuses['closed'];
+    unset( $statuses['closed'] );
+    $statuses = $statuses + array( 'closed' => $closed );
 
 	$statuses = apply_filters( 'kbs_ticket_statuses', $statuses );
 
