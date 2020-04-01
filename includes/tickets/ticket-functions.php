@@ -484,13 +484,6 @@ function kbs_get_ticket_statuses( $can_select = true )	{
 		$statuses[ $ticket_status->name ] = esc_html( $ticket_status->label );
 	}
 
-    // Order the array
-    asort( $statuses );
-    $statuses = array( 'open' => $statuses['open'] ) + $statuses;
-    $closed = $statuses['closed'];
-    unset( $statuses['closed'] );
-    $statuses = $statuses + array( 'closed' => $closed );
-
 	$statuses = apply_filters( 'kbs_ticket_statuses', $statuses );
 
 	return $statuses;

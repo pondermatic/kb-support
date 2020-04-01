@@ -843,6 +843,12 @@ function kbs_ticket_filter_views( $views )	{
         }
     }
 
+	if ( isset( $views['closed'] ) )	{
+		$closed = $views['closed'];
+		unset( $views['closed'] );
+		$views = $views + array( 'closed' => $closed );
+	}
+
 	return apply_filters( 'kbs_ticket_views', $views );
 
 } // kbs_ticket_filter_views
