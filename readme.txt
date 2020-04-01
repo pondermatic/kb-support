@@ -4,7 +4,7 @@ Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
 Tested up to: 5.4
 Requires PHP: 5.4
-Stable tag: 1.4
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -125,7 +125,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 = 1.4.1 =
 
-**2nd April 2020**
+**1st April 2020**
 
 * **Bug**: Ticket status may default to unexpected status when creating a new ticket within admin
 
