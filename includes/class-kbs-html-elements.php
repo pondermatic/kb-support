@@ -51,11 +51,11 @@ class KBS_HTML_Elements {
 
 		$args = wp_parse_args( $args, $defaults );
 
-		$ticket_statuses = kbs_get_post_statuses( 'labels', true );
+		$ticket_statuses = kbs_get_ticket_statuses();
 		$options         = array();
 		
-		foreach ( $ticket_statuses as $ticket_status ) {
-			$options[ $ticket_status->name ] = esc_html( $ticket_status->label );
+		foreach ( $ticket_statuses as $ticket_status => $ticket_label ) {
+			$options[ $ticket_status ] = esc_html( $ticket_label );
 		}
 
 		$options = apply_filters( 'kbs_ticket_status_dropdown_options', $options, $args );

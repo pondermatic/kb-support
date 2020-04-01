@@ -782,8 +782,7 @@ function kbs_ticket_filter_views( $views )	{
             $args['agent'] = get_current_user_id();
         }
 
-        $all_statuses      = kbs_get_ticket_status_keys( false );
-        $default_statuses  = array_reverse( kbs_get_default_ticket_statuses() );
+        $all_statuses      = array_keys( kbs_get_ticket_statuses() );
         $inactive_statuses = kbs_get_inactive_ticket_statuses();
         $num_posts         = kbs_count_tickets( $args );
         $count             = 0;
@@ -822,18 +821,6 @@ function kbs_ticket_filter_views( $views )	{
         foreach( $views as $status => $link )	{
             if ( 'all' != $status && 'trash' != $status && ! in_array( $status, $all_statuses ) )	{
                 unset( $views[ $status ] );
-            }
-        }
-
-        foreach( $default_statuses as $default_status ) {
-            if ( ! isset( $views[ $default_status ] ) ) {
-                continue;
-            }
-
-            if ( 'closed' != $default_status )  {
-                $views = array( $default_status => $views[ $default_status ] ) + $views;
-            } else  {
-                $views = $views + array( $default_status => $views[ $default_status ] );
             }
         }
 

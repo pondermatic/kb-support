@@ -478,10 +478,18 @@ function kbs_get_ticket_status_colour( $status, $default = false )	{
 function kbs_get_ticket_statuses( $can_select = true )	{
 	$ticket_statuses = kbs_get_post_statuses( 'labels', $can_select );
 	$statuses        = array();
+    $defaults        = kbs_get_default_ticket_statuses();
 	
 	foreach ( $ticket_statuses as $ticket_status ) {
 		$statuses[ $ticket_status->name ] = esc_html( $ticket_status->label );
 	}
+
+    // Order the array
+    asort( $statuses );
+    $statuses = array( 'open' => $statuses['open'] ) + $statuses;
+    $closed = $statuses['closed'];
+    unset( $statuses['closed'] );
+    $statuses = $statuses + array( 'closed' => $closed );
 
 	$statuses = apply_filters( 'kbs_ticket_statuses', $statuses );
 
