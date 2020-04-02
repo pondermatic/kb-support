@@ -126,7 +126,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 = 1.4.2 =
 
 **DATE 2020**
-
+* **Bug**: Admin bar ticket count was not being displayed for non-agents. PHP warning may have been displayed
 * **Tweak**: Only display the `Send Closure Email` option on the edit ticket screen
 * **Tweak**: Removed the bulk actions drop down menus from the tickets list screen
 * **Tweak**: Force the Closed status link to display last in the ticket status views

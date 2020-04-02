@@ -71,7 +71,7 @@ function kbs_admin_bar_menu_items( $admin_bar ) {
     if ( kbs_is_ticket_admin() || ! kbs_get_option( 'restrict_agent_view' ) )	{
 		$count = kbs_get_open_ticket_count( 'open' );
 	} else	{
-		$agent = new KBS_Agent( $current_user->ID );
+		$agent = new KBS_Agent( get_current_user_id() );
 
 		if ( $agent )	{
 			$count = $agent->open_tickets;
