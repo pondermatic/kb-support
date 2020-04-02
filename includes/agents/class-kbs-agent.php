@@ -244,7 +244,6 @@ class KBS_Agent {
      */
     public function count_open_tickets()    {
         $count = get_user_option( 'kbs_open_tickets', $this->id );
-        //$count = false;
 
 		if ( false === $count ) {
 			$count = count( $this->get_open_tickets() );
