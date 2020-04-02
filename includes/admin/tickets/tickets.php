@@ -44,14 +44,6 @@ add_action( 'load-edit.php', 'kbs_disable_ticket_post_lock' );
 add_action( 'load-post.php', 'kbs_disable_ticket_post_lock' );
 
 /**
- * Remove the bulk actions dropdown from the tickets screen.
- *
- * @since	1.4.2
- * @return	array	An empty array removes the dropdown
- */
-add_filter( 'bulk_actions-edit-kbs_ticket', '__return_empty_array', 100 );
-
-/**
  * Define the columns that should be displayed for the KBS ticket post lists screen
  *
  * @since	1.0
@@ -64,6 +56,7 @@ function kbs_set_kbs_ticket_post_columns( $columns ) {
 	$tag_labels      = kbs_get_taxonomy_labels( 'ticket_tag' );
 
 	$columns = array(
+        'cb'               => '<input type="checkbox" />',
         'id'               => '#',
 		'title'            => __( 'Title', 'kb-support' ),
 		'dates'            => __( 'Date', 'kb-support' ),
