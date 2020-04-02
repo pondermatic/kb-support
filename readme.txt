@@ -126,6 +126,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 = 1.4.2 =
 
 **DATE 2020**
+
 * **Bug**: Admin bar ticket count was not being displayed for non-agents. PHP warning may have been displayed
 * **Bug**: Agent ticket count may display incorrect value for non support managers and admins
 * **Tweak**: When either the ***View participants*** or ***View submission data*** action links are clicked, auto scroll to the respective element
