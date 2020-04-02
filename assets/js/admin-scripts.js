@@ -219,12 +219,18 @@ jQuery(document).ready(function ($) {
                 var show = $(this).html() === kbs_vars.view_participants ? true : false;
 
                 if ( show ) {
-                    $(this).html( kbs_vars.hide_participants );
+					$(this).html( kbs_vars.hide_participants );
                 } else {
                     $(this).html( kbs_vars.view_participants );
                 }
 
                 $('#kbs-ticket-participants-fields').slideToggle();
+
+				if ( show )	{
+					$('html, body').animate({
+						scrollTop: $('#kbs-ticket-participants-fields').offset().top
+					}, 500 );
+				}
             });
 
             // Toggle display of submission form data
@@ -239,6 +245,12 @@ jQuery(document).ready(function ($) {
                 }
 
                 $('#kbs-ticket-formdata-fields').slideToggle();
+
+				if ( show )	{
+					$('html, body').animate({
+						scrollTop: $('#kbs-ticket-formdata-fields').offset().top
+					}, 500 );
+				}
             });
             
         },
