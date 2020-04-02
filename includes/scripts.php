@@ -224,7 +224,6 @@ function kbs_load_admin_styles( $hook ) {
 
 	$assets_dir  = trailingslashit( KBS_PLUGIN_URL . 'assets' );
 	$css_dir     = trailingslashit( $assets_dir . 'css' );
-	$library_dir = trailingslashit( $assets_dir . 'libraries' );
 	$suffix      = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
 	$ui_style = ( 'classic' == get_user_option( 'admin_color' ) ) ? 'classic' : 'fresh';
@@ -233,9 +232,6 @@ function kbs_load_admin_styles( $hook ) {
 
 		if ( isset( $_GET['post'] ) && 'kbs_ticket' == get_post_type( $_GET['post'] ) )	{
 			$ui_style = 'humanity';
-
-			wp_register_style( 'kbs-tribute', $library_dir . 'tribute/tribute.css', array(), '5.1.3' );
-			wp_enqueue_style( 'kbs-tribute' );
 		}
 		
 	}
@@ -277,7 +273,6 @@ function kbs_load_admin_scripts( $hook ) {
 
 	$assets_dir  = trailingslashit( KBS_PLUGIN_URL . 'assets' );
 	$js_dir      = trailingslashit( $assets_dir . 'js' );
-	$library_dir = trailingslashit( $assets_dir . 'libraries' );
 	$suffix      = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
 	$admin_deps = array();
@@ -353,19 +348,9 @@ function kbs_load_admin_scripts( $hook ) {
 	}
 
 	if ( 'post.php' == $hook || 'post-new.php' == $hook )	{
-
 		if ( isset( $_GET['post'] ) && 'kbs_ticket' == get_post_type( $_GET['post'] ) )	{
 			$ui_style = 'humanity';
-
-			wp_register_script(
-				'kbs-tribute',
-				$library_dir . 'tribute/tribute' . $suffix . '.js',
-				array( 'jquery' ),
-				'5.1.3'
-			);
-			wp_enqueue_script( 'kbs-tribute' );
 		}
-		
 	}
 
     wp_register_script( 'kbs-font-awesome', '//use.fontawesome.com/releases/v5.0.8/js/all.js', array(), KBS_VERSION ); 
@@ -386,40 +371,6 @@ function kbs_load_admin_scripts( $hook ) {
 
 } // kbs_load_admin_scripts
 add_action( 'admin_enqueue_scripts', 'kbs_load_admin_scripts' );
-
-/**
- * Adds the mention script to the tickets post page.
- *
- * @since	1.4
- * @return	string
- */
-function kbs_ticket_post_mentions()	{
-	$screen = get_current_screen();
-
-	if ( 'post' != $screen->base && 'kbs_ticket' != $screen->id )	{
-		return;
-	}
-
-	$agents = kbs_get_agents();
-
-	ob_start(); ?>
-
-	<script>
-		var tribute = new Tribute({
-		  values: [
-			<?php foreach( $agents as $agent ) : ?>
-				{ key: '<?php echo $agent->display_name; ?>', value: '<?php echo $agent->user_login; ?>' },
-			<?php endforeach; ?>
-		  ]
-		});
-
-		tribute.attach(document.getElementById('kbs_new_note'));
-	</script>
-	<?php
-
-	echo ob_get_clean();
-} // kbs_ticket_post_mentions
-add_action( 'in_admin_footer', 'kbs_ticket_post_mentions' );
 
 /**
  * At a Glance Icons
