@@ -64,7 +64,6 @@ function kbs_set_kbs_ticket_post_columns( $columns ) {
 	$tag_labels      = kbs_get_taxonomy_labels( 'ticket_tag' );
 
 	$columns = array(
-        'cb'               => '<input type="checkbox" />',
         'id'               => '#',
 		'title'            => __( 'Title', 'kb-support' ),
 		'dates'            => __( 'Date', 'kb-support' ),
@@ -835,12 +834,6 @@ function kbs_ticket_filter_views( $views )	{
         // Return the All view to the front
         $views = array( 'all' => $views['all'] ) + $views;
 
-        // Force trash view to end
-        if ( isset( $views['trash'] ) )	{
-            $trashed = $views['trash'];
-            unset( $views['trash'] );
-            $views['trash'] = $trashed;
-        }
     }
 
 	if ( isset( $views['closed'] ) )	{
@@ -848,6 +841,13 @@ function kbs_ticket_filter_views( $views )	{
 		unset( $views['closed'] );
 		$views = $views + array( 'closed' => $closed );
 	}
+
+    // Force trash view to end
+    if ( isset( $views['trash'] ) )	{
+        $trashed = $views['trash'];
+        unset( $views['trash'] );
+        $views['trash'] = $trashed;
+    }
 
 	return apply_filters( 'kbs_ticket_views', $views );
 
