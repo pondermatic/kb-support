@@ -243,7 +243,8 @@ class KBS_Agent {
      * @return  bool    Open ticket count
      */
     public function count_open_tickets()    {
-        $count = get_user_option( 'kbs_open_tickets', $this->id );
+        //$count = get_user_option( 'kbs_open_tickets', $this->id );
+        $count = false;
 
 		if ( false === $count ) {
 			$count = count( $this->get_open_tickets() );
@@ -262,11 +263,7 @@ class KBS_Agent {
 	 */
 	public function increase_open_tickets( $count = 1 ) {
 
-		// Make sure it's numeric and not negative
-		if ( ! is_numeric( $count ) || $count != absint( $count ) ) {
-			return false;
-		}
-
+        $count     = absint( $count );
 		$new_total = (int) $this->open_tickets + (int) $count;
 
 		do_action( 'kbs_agent_pre_increase_open_tickets', $count, $this->id );
@@ -289,11 +286,7 @@ class KBS_Agent {
 	 */
 	public function decrease_open_tickets( $count = 1 ) {
 
-		// Make sure it's numeric and not negative
-		if ( ! is_numeric( $count ) || $count != absint( $count ) ) {
-			return false;
-		}
-
+		$count     = absint( $count );
 		$new_total = (int) $this->open_tickets - (int) $count;
 
 		if( $new_total < 0 ) {
