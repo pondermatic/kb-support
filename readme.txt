@@ -131,7 +131,6 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 * **Bug**: Agent ticket count may display incorrect value for non support managers and admins
 * **Tweak**: When either the ***View participants*** or ***View submission data*** action links are clicked, auto scroll to the respective element
 * **Tweak**: Only display the `Send Closure Email` option on the edit ticket screen
-* **Tweak**: Removed the bulk actions drop down menus from the tickets list screen
 * **Tweak**: Force the Closed status link to display last in the ticket status views
 
 = 1.4.1 =
