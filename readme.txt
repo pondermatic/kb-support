@@ -129,6 +129,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 * **Bug**: Admin bar ticket count was not being displayed for non-agents. PHP warning may have been displayed
 * **Bug**: Agent ticket count may display incorrect value for non support managers and admins
+* **Tweak**: Only show the ticket Reply Status filters dropdown if there are tickets awaiting customer/agent replies
 * **Tweak**: When either the ***View participants*** or ***View submission data*** action links are clicked, auto scroll to the respective element
 * **Tweak**: Only display the `Send Closure Email` option on the edit ticket screen
 * **Tweak**: Force the Closed status link to display last in the ticket status views
