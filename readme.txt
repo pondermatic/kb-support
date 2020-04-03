@@ -133,6 +133,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 * **Tweak**: When either the ***View participants*** or ***View submission data*** action links are clicked, auto scroll to the respective element
 * **Tweak**: Only display the `Send Closure Email` option on the edit ticket screen
 * **Tweak**: Force the Closed status link to display last in the ticket status views
+* **Tweak**: Adjusted class name for input labels within admin ticket screen
 
 = 1.4.1 =
 

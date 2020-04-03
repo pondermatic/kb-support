@@ -978,7 +978,7 @@ class KBS_HTML_Elements {
 
 		$output = '<span id="kbs-' . kbs_sanitize_key( $args['name'] ) . '-wrap">';
 
-			$output .= '<label class="kbs-label" for="' . kbs_sanitize_key( $args['id'] ) . '">' . esc_html( $args['label'] ) . '</label>';
+			$output .= '<label class="kbs-input-label" for="' . kbs_sanitize_key( $args['id'] ) . '">' . esc_html( $args['label'] ) . '</label>';
 
 			if ( ! empty( $args['desc'] ) ) {
 				$output .= '<span class="kbs-description">' . esc_html( $args['desc'] ) . '</span>';
@@ -1057,7 +1057,7 @@ class KBS_HTML_Elements {
 
 		$output = '<span id="kbs-' . kbs_sanitize_key( $args['name'] ) . '-wrap">';
 
-			$output .= '<label class="kbs-label" for="' . kbs_sanitize_key( $args['name'] ) . '">' . esc_html( $args['label'] ) . '</label>';
+			$output .= '<label class="kbs-input-label" for="' . kbs_sanitize_key( $args['name'] ) . '">' . esc_html( $args['label'] ) . '</label>';
 
 			$output .= '<textarea name="' . esc_attr( $args['name'] ) . '" id="' . kbs_sanitize_key( $args['name'] ) . '" class="' . $class . '"' . $rows . $cols . $disabled . $placeholder . '>' . esc_attr( $args['value'] ) . '</textarea>';
 
@@ -1121,7 +1121,7 @@ class KBS_HTML_Elements {
 
 		$output = '<span id="kbs-' . kbs_sanitize_key( $args['name'] ) . '-wrap">';
 
-			$output .= '<label class="kbs-label" for="' . kbs_sanitize_key( $args['id'] ) . '">' . esc_html( $args['label'] ) . '</label>';
+			$output .= '<label class="kbs-input-label" for="' . kbs_sanitize_key( $args['id'] ) . '">' . esc_html( $args['label'] ) . '</label>';
 
 			if ( ! empty( $args['desc'] ) ) {
 				$output .= '<span class="kbs-description">' . esc_html( $args['desc'] ) . '</span>';
