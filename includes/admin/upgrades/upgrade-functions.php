@@ -112,6 +112,10 @@ function kbs_do_automatic_upgrades() {
 		kbs_v141_upgrades();
 	}
 
+    if ( version_compare( $kbs_version, '1.4.2', '<' ) ) {
+		kbs_v142_upgrades();
+	}
+
 	if ( version_compare( $kbs_version, KBS_VERSION, '<' ) )	{
 
 		// Let us know that an upgrade has happened
@@ -774,6 +778,24 @@ function kbs_v141_upgrades()	{
 		kbs_update_option( $key, $value );
 	}
 } // kbs_v141_upgrades
+
+/**
+ * Upgrade routine for version 1.4.2.
+ *
+ * Reset all agent ticket counts.
+ *
+ * @since	1.4.2
+ * @return	void
+ */
+function kbs_v142_upgrades()	{
+    $agents = kbs_get_agents( true );
+
+    if ( ! empty( $agents ) )   {
+        foreach( $agents as $agent_id ) {
+            delete_user_option( $agent_id, 'kbs_open_tickets' );
+        }
+    }
+} // kbs_v142_upgrades
 
 /**
  * Update sequential ticket numbers.

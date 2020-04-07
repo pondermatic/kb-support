@@ -222,8 +222,9 @@ function kbs_load_admin_styles( $hook ) {
 		return;
 	}
 
-	$css_dir = KBS_PLUGIN_URL . 'assets/css/';
-	$suffix  = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+	$assets_dir  = trailingslashit( KBS_PLUGIN_URL . 'assets' );
+	$css_dir     = trailingslashit( $assets_dir . 'css' );
+	$suffix      = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
 	$ui_style = ( 'classic' == get_user_option( 'admin_color' ) ) ? 'classic' : 'fresh';
 
@@ -270,10 +271,9 @@ function kbs_load_admin_scripts( $hook ) {
 
 	global $wp_version, $post;
 
-	$js_dir  = KBS_PLUGIN_URL . 'assets/js/';
-
-	// Use minified libraries if SCRIPT_DEBUG is turned off
-	$suffix  = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+	$assets_dir  = trailingslashit( KBS_PLUGIN_URL . 'assets' );
+	$js_dir      = trailingslashit( $assets_dir . 'js' );
+	$suffix      = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
 	$admin_deps = array();
 	if ( ! kbs_is_admin_page( $hook, 'edit' ) && ! kbs_is_admin_page( $hook, 'new' ) ) {
@@ -347,6 +347,12 @@ function kbs_load_admin_scripts( $hook ) {
 		wp_enqueue_media();
 	}
 
+	if ( 'post.php' == $hook || 'post-new.php' == $hook )	{
+		if ( isset( $_GET['post'] ) && 'kbs_ticket' == get_post_type( $_GET['post'] ) )	{
+			$ui_style = 'humanity';
+		}
+	}
+
     wp_register_script( 'kbs-font-awesome', '//use.fontawesome.com/releases/v5.0.8/js/all.js', array(), KBS_VERSION ); 
 	wp_enqueue_script( 'kbs-font-awesome' );
 
@@ -376,7 +382,7 @@ add_action( 'admin_enqueue_scripts', 'kbs_load_admin_scripts' );
 */
 function kbs_admin_icons() {
 
-	$tickets_icon  = '\f524';
+	$tickets_icon  = '\f468';
 	$articles_icon = '\f118';
 	?>
 	<style type="text/css" media="screen">

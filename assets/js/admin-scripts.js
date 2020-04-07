@@ -191,7 +191,7 @@ jQuery(document).ready(function ($) {
             });
 
             $( document.body ).on( 'change', '#ticket_status', function() {
-                if ( 'closed' === $(this).val() && ! kbs_vars.disable_closure_email ) {
+                if ( 'kbs_ticket' === kbs_vars.post_type && 'closed' === $(this).val() && ! kbs_vars.disable_closure_email ) {
                     $(this).parent().append('<br id="kbs-closure-option">');
                     $(this).parent().append('<input type="checkbox" id="kbs-closure-email" name="kbs_closure_email" value="1" style="margin-top:0; margin-left: 4px;">');
                     $(this).parent().append('<label for="kbs-closure-email">' + kbs_vars.send_closure_email + '</label>');
@@ -219,12 +219,18 @@ jQuery(document).ready(function ($) {
                 var show = $(this).html() === kbs_vars.view_participants ? true : false;
 
                 if ( show ) {
-                    $(this).html( kbs_vars.hide_participants );
+					$(this).html( kbs_vars.hide_participants );
                 } else {
                     $(this).html( kbs_vars.view_participants );
                 }
 
                 $('#kbs-ticket-participants-fields').slideToggle();
+
+				if ( show )	{
+					$('html, body').animate({
+						scrollTop: $('#kbs-ticket-participants-fields').offset().top
+					}, 500 );
+				}
             });
 
             // Toggle display of submission form data
@@ -239,6 +245,12 @@ jQuery(document).ready(function ($) {
                 }
 
                 $('#kbs-ticket-formdata-fields').slideToggle();
+
+				if ( show )	{
+					$('html, body').animate({
+						scrollTop: $('#kbs-ticket-formdata-fields').offset().top
+					}, 500 );
+				}
             });
             
         },

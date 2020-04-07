@@ -585,28 +585,36 @@ function kbs_add_ticket_filters() {
         $awaiting_agent    = (int)kbs_count_tickets_by_reply_status( 'agent' );
         $awaiting_agent    = $awaiting_agent > 0    ? ' (' . $awaiting_agent . ')'    : '';
 
-		echo '<select name="reply_status" id="reply_status" class="postform">';
-			$selected = '';
-			if ( isset( $_GET ) && isset( $_GET['reply_status'] ) && '' != $_GET['reply_status'] )	{
-				$selected = $_GET['reply_status'];
-			}
-			printf(
-				'<option value=""%s>%s</option>',
-				'' == $selected ? ' selected="selected"' : '',
-				__( 'All Reply Statuses', 'kb-support' )
-			);
-			printf(
-				'<option value="awaiting_support"%s>%s</option>',
-				'awaiting_support' == $selected ? ' selected="selected"' : '',
-				__( 'Awaiting Support Reply', 'kb-support' ) . $awaiting_agent
-			);
-			printf(
-				'<option value="awaiting_customer"%s>%s</option>',
-				'awaiting_customer' == $selected ? ' selected="selected"' : '',
-				__( 'Awaiting Customer Reply', 'kb-support' ) . $awaiting_customer
-			);
+		if ( ! empty( $awaiting_customer ) || ! empty( $awaiting_agent ) )	{
+			echo '<select name="reply_status" id="reply_status" class="postform">';
+				$selected = '';
+				if ( isset( $_GET ) && isset( $_GET['reply_status'] ) && '' != $_GET['reply_status'] )	{
+					$selected = $_GET['reply_status'];
+				}
+				printf(
+					'<option value=""%s>%s</option>',
+					'' == $selected ? ' selected="selected"' : '',
+					__( 'All Reply Statuses', 'kb-support' )
+				);
 
-		echo "</select>";
+			if ( ! empty( $awaiting_agent ) )	{
+				printf(
+					'<option value="awaiting_support"%s>%s</option>',
+					'awaiting_support' == $selected ? ' selected="selected"' : '',
+					__( 'Awaiting Support Reply', 'kb-support' ) . $awaiting_agent
+				);
+			}
+
+			if ( ! empty( $awaiting_customer ) )	{
+				printf(
+					'<option value="awaiting_customer"%s>%s</option>',
+					'awaiting_customer' == $selected ? ' selected="selected"' : '',
+					__( 'Awaiting Customer Reply', 'kb-support' ) . $awaiting_customer
+				);
+			}
+
+			echo "</select>";
+		}
 
 		if ( isset( $_REQUEST['all_posts'] ) && '1' === $_REQUEST['all_posts'] )	{
 			echo '<input type="hidden" name="all_posts" value="1" />';
@@ -827,12 +835,19 @@ function kbs_ticket_filter_views( $views )	{
         // Return the All view to the front
         $views = array( 'all' => $views['all'] ) + $views;
 
-        // Force trash view to end
-        if ( isset( $views['trash'] ) )	{
-            $trashed = $views['trash'];
-            unset( $views['trash'] );
-            $views['trash'] = $trashed;
-        }
+    }
+
+	if ( isset( $views['closed'] ) )	{
+		$closed = $views['closed'];
+		unset( $views['closed'] );
+		$views = $views + array( 'closed' => $closed );
+	}
+
+    // Force trash view to end
+    if ( isset( $views['trash'] ) )	{
+        $trashed = $views['trash'];
+        unset( $views['trash'] );
+        $views['trash'] = $trashed;
     }
 
 	return apply_filters( 'kbs_ticket_views', $views );
