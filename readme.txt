@@ -4,7 +4,7 @@ Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
 Tested up to: 5.4
 Requires PHP: 5.4
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -125,7 +125,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 = 1.4.2 =
 
-**DATE 2020**
+**7th April 2020**
 
 * **Bug**: Admin bar ticket count was not being displayed for non-agents. PHP warning may have been displayed
 * **Bug**: Agent ticket count may display incorrect value for non support managers and admins
