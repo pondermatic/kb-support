@@ -269,29 +269,20 @@ function kbs_run_install() {
 } // kbs_run_install
 
 /**
- * When a new Blog is created in multisite, see if KBS is network activated, and run the installer
+ * When a new Blog is created in multisite, see if KBS is network activated, and run the installer.
  *
  * @since	1.0
- * @param	int		$blog_id	The Blog ID created
- * @param	int		$user_id	The User ID set as the admin
- * @param	str		$domain		The URL
- * @param	str		$path		Site Path
- * @param	int		$site_id	The Site ID
- * @param	arr		$meta		Blog Meta
+ * @param	object	$site	The WP_Site object for the new site
  * @return	void
  */
-function kbs_new_blog_created( $blog_id, $user_id, $domain, $path, $site_id, $meta ) {
-
+function kbs_new_blog_created( $site ) {
 	if ( is_plugin_active_for_network( plugin_basename( KBS_PLUGIN_FILE ) ) ) {
-
 		switch_to_blog( $blog_id );
 		kbs_install();
 		restore_current_blog();
-
 	}
-
 } // kbs_new_blog_created
-add_action( 'wpmu_new_blog', 'kbs_new_blog_created', 10, 6 );
+add_action( 'wp_insert_site', 'kbs_new_blog_created' );
 
 /**
  * Drop our custom tables when an mu site is deleted

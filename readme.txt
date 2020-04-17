@@ -123,6 +123,10 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 == Changelog ==
 
+= 1.5 =
+
+* **Tweak**: `wpmu_new_blog` is deprecated. Now using `wp_insert_site` to run KBS install procedures when a new MU site is created and KBS is network activated
+
 = 1.4.2 =
 
 **7th April 2020**
