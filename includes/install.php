@@ -277,7 +277,7 @@ function kbs_run_install() {
  */
 function kbs_new_blog_created( $site ) {
 	if ( is_plugin_active_for_network( plugin_basename( KBS_PLUGIN_FILE ) ) ) {
-		switch_to_blog( $blog_id );
+		switch_to_blog( $site->blog_id );
 		kbs_install();
 		restore_current_blog();
 	}
