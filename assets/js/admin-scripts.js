@@ -389,6 +389,7 @@ jQuery(document).ready(function ($) {
 				var ticket_id      = kbs_vars.post_id;
 				var ticketResponse = '';
 				var ticketStatus   = kbs_vars.agent_set_status ? $('#ticket_reply_status').val() : kbs_vars.default_reply_status;
+				var formData       = $('#post').serialize();
 				var tinymceActive  = (typeof tinyMCE !== 'undefined') && tinyMCE.activeEditor && ! tinyMCE.activeEditor.isHidden();
 
 				if (tinymceActive) {
@@ -415,6 +416,7 @@ jQuery(document).ready(function ($) {
 					response     : ticketResponse,
 					status       : ticketStatus,
 					close_ticket : ( 'kbs-reply-close' === event.target.id ? 1 : 0 ),
+					form_data    : formData,
 					action       : 'kbs_insert_ticket_reply'
 				};
 
