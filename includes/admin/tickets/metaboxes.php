@@ -619,26 +619,39 @@ function kbs_ticket_metabox_customer_section( $ticket_id )	{
 				<?php echo $customer; ?>
 			</span>
 
+			<?php do_action( 'kbs_ticket_metabox_after_customer_name', $customer_id ); ?>
+
 			<?php if ( ! empty( $kbs_ticket->company_id ) ) : ?>
 				<span class="kbs-customer-ticket-attr customer-company">
 					<?php echo kbs_get_company_name( $kbs_ticket->company_id ); ?>
 				</span>
+				
+				<?php do_action( 'kbs_ticket_metabox_after_company_name', $customer_id ); ?>
+
 			<?php endif; ?>
 
 			<span class="kbs-customer-ticket-attr customer-email">
 				<?php printf( '<a href="mailto:%1$s">%1$s</a>', $kbs_ticket->email ); ?>
 			</span>
 
+			<?php do_action( 'kbs_ticket_metabox_after_customer_email', $customer_id ); ?>
+
 			<?php if ( ! empty( $user_info['website'] ) ) : ?>
 				<span class="kbs-customer-ticket-attr customer-website">
 					<?php printf( '<a href="%1$s" target="_blank">%1$s</a>', esc_url( $user_info['website'] ) ); ?>
 				</span>
+				
+				<?php do_action( 'kbs_ticket_metabox_after_customer_website', $customer_id ); ?>
+
 			<?php endif; ?>
 
             <?php if ( ! empty( $edit_user ) ) : ?>
 				<span class="kbs-customer-ticket-attr customer-user">
 					<?php echo $edit_user; ?>
 				</span>
+
+				<?php do_action( 'kbs_ticket_metabox_after_customer_user_profile', $customer_id ); ?>
+
 			<?php endif; ?>
 
 		</span>
