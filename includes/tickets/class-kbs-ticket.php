@@ -931,6 +931,8 @@ class KBS_Ticket {
 				'files'         => $this->files
 			);
 
+			$new_meta = apply_filters( 'kbs_ticket_new_meta', $new_meta, $this );
+
 			// Do some merging of user_info before we merge it all
 			if ( ! empty( $this->ticket_meta['user_info'] ) ) {
 				$new_meta[ 'user_info' ] = array_replace_recursive( $new_meta[ 'user_info' ], $this->ticket_meta[ 'user_info' ] );
