@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: KB Support 1.4.2\n"
+"Project-Id-Version: KB Support 1.4.3\n"
 "Report-Msgid-Bugs-To: https://kb-support.com/\n"
-"POT-Creation-Date: 2020-04-07 13:45:52+00:00\n"
+"POT-Creation-Date: 2020-05-04 21:24:57+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -512,7 +512,7 @@ msgstr ""
 #: includes/admin/customers/class-kbs-customer-table.php:73
 #: includes/admin/import-export/export/class-batch-export-tickets.php:49
 #: includes/admin/tickets/tickets.php:63
-#: includes/tickets/class-kbs-ticket.php:2026
+#: includes/tickets/class-kbs-ticket.php:2028
 #: includes/tickets/reply-functions.php:201
 #: includes/tickets/reply-functions.php:304
 #: includes/tickets/reply-functions.php:330
@@ -1341,7 +1341,7 @@ msgstr ""
 
 #: includes/admin/import-export/export/class-batch-export-tickets.php:50
 #: includes/admin/tickets/tickets.php:66
-#: includes/tickets/class-kbs-ticket.php:2025
+#: includes/tickets/class-kbs-ticket.php:2027
 #: includes/tickets/reply-functions.php:315 templates/view-ticket.php:105
 msgid "Agent"
 msgstr ""
@@ -6273,47 +6273,47 @@ msgstr ""
 msgid "New %s"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:1077
+#: includes/tickets/class-kbs-ticket.php:1079
 msgid "Show more&hellip;"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:1838
+#: includes/tickets/class-kbs-ticket.php:1840
 msgid "ago"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:2001
+#: includes/tickets/class-kbs-ticket.php:2003
 msgid "%s re-opened by %s reply."
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:2024
+#: includes/tickets/class-kbs-ticket.php:2026
 msgid "Admin"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:2106
+#: includes/tickets/class-kbs-ticket.php:2108
 msgid "Form: %s"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:2147
+#: includes/tickets/class-kbs-ticket.php:2149
 msgid "Department %s not found"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:2161
+#: includes/tickets/class-kbs-ticket.php:2163
 msgid "Term %s no longer exists"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:2196
+#: includes/tickets/class-kbs-ticket.php:2198
 msgid "The privacy policy was acknowledged"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:2206
+#: includes/tickets/class-kbs-ticket.php:2208
 msgid "The terms and conditions were accepted"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:2214
+#: includes/tickets/class-kbs-ticket.php:2216
 msgid "Submitted from"
 msgstr ""
 
-#: includes/tickets/class-kbs-ticket.php:2221
+#: includes/tickets/class-kbs-ticket.php:2223
 msgid "This %s was logged from the IP Address"
 msgstr ""
 
@@ -6526,7 +6526,7 @@ msgstr ""
 msgid "Display View Count:"
 msgstr ""
 
-#: kb-support.php:164 kb-support.php:176
+#: kb-support.php:163 kb-support.php:175
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
