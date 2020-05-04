@@ -456,7 +456,9 @@ a.kbs_ticket_form_data	{
 }
 
 /* Hidden Sections */
-.kbs-custom-ticket-sections-wrap {
+.kbs-custom-ticket-sections-wrap,
+.kbs-replies-content-wrap,
+.kbs-notes-content-wrap {
     display: none;
 	border-width: 0 1px 1px;
 	border-style: solid;
@@ -465,15 +467,6 @@ a.kbs_ticket_form_data	{
 	width: 100%;
 }
 
-.kbs-replies-content-wrap,
-.kbs-notes-content-wrap {
-	display: none;
-	border-width: 0 1px 1px;
-	border-style: solid;
-	border-color: #e5e5e5;
-	box-sizing: border-box;
-	width: 100%;
-}
 .kbs-custom-ticket-section,
 .kbs-replies-content-section,
 .kbs-replies-files-section,

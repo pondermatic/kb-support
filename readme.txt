@@ -2,9 +2,9 @@
 Contributors: kbsupport, mikeyhoward1977
 Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
-Tested up to: 5.4
+Tested up to: 5.4.1
 Requires PHP: 5.4
-Stable tag: 1.4.2
+Stable tag: 1.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -126,6 +126,14 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 = 1.5 =
 
 * **Tweak**: `wpmu_new_blog` is deprecated. Now using `wp_insert_site` to run KBS install procedures when a new MU site is created and KBS is network activated
+
+= 1.4.3 =
+
+**5th May 2020**
+
+* **Tweak**: Added additional filtering during new ticket creation
+* **Tweak**: Consolidation of some CSS rules
+* **Tweak**: Allow extensions to parse JS parameters
 
 = 1.4.2 =
 
