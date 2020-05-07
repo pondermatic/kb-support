@@ -24,7 +24,14 @@ function kbs_add_tools_menu_link() {
 
 	global $kbs_tools_page;
 
-	$kbs_tools_page = add_submenu_page( 'edit.php?post_type=kbs_ticket', __( 'Tools', 'kb-support' ), __( 'Tools', 'kb-support' ), 'manage_ticket_settings', 'kbs-tools', 'kbs_tools_page' );
+	$kbs_tools_page = add_submenu_page(
+        'edit.php?post_type=kbs_ticket',
+        __( 'Tools', 'kb-support' ),
+        __( 'Tools', 'kb-support' ),
+        'manage_ticket_settings',
+        'kbs-tools',
+        'kbs_tools_page'
+    );
 
 } // kbs_add_tools_menu_link
 add_action( 'admin_menu', 'kbs_add_tools_menu_link', 99 );
@@ -80,6 +87,7 @@ function kbs_get_tools_page_tabs()	{
 	$tabs = array(
 		'general'     => __( 'General', 'kb-support' ),
 		'system_info' => __( 'System Info', 'kb-support' ),
+        'api_keys'    => __( 'API Keys', 'kb-support' ),
         'import'      => __( 'Import', 'kb-support' ),
         'export'      => __( 'Export', 'kb-support' )
 	);
@@ -152,6 +160,41 @@ function kbs_tools_system_info_display()	{
 
 } // kbs_tools_system_info_display
 add_action( 'kbs_tools_tab_system_info', 'kbs_tools_system_info_display' );
+
+/**
+ * Display the API keys
+ *
+ * @since   1.5
+ * @return  void
+ */
+function kbs_tools_api_keys_display()   {
+    if ( ! current_user_can( 'manage_ticket_settings' ) ) {
+		return;
+	}
+
+    ?>
+    <p>
+		<?php printf(
+			__( 'These API keys enable external applications to use the WordPress Rest API to retrieve %s data.', 'kb-support' ),
+			kbs_get_ticket_label_singular( true )
+		); ?>
+    </p>
+    <?php
+
+	do_action( 'kbs_tools_api_keys_top' );
+
+	require_once KBS_PLUGIN_DIR . 'includes/api/class-api-keys-table.php';
+
+    $api_keys_table = new KBS_API_Keys_Table();
+	$api_keys_table->prepare_items();
+	$api_keys_table->display();
+	?>
+
+	<?php
+
+	do_action( 'edd_tools_api_keys_after' );
+} // kbs_tools_api_keys_display
+add_action( 'kbs_tools_tab_api_keys', 'kbs_tools_api_keys_display' );
 
 /**
  * Save banned emails
