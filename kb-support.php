@@ -55,7 +55,7 @@ final class KB_Support {
 	/**
 	 * KBS Roles Object.
 	 *
-	 * @var		obj		KBS_Roles
+	 * @var		object		KBS_Roles
 	 * @since	1.0
 	 */
 	public $roles;
@@ -63,7 +63,7 @@ final class KB_Support {
 	/**
 	 * KBS Emails.
 	 *
-	 * @var		obj		KBS_Emails
+	 * @var		object		KBS_Emails
 	 * @since	1.0
 	 */
 	public $emails;
@@ -71,7 +71,7 @@ final class KB_Support {
 	/**
 	 * KBS Email Tags.
 	 *
-	 * @var		obj		KBS_Email_Template_Tags
+	 * @var		object		KBS_Email_Template_Tags
 	 * @since	1.0
 	 */
 	public $email_tags;
@@ -79,7 +79,7 @@ final class KB_Support {
 	/**
 	 * KBS HTML Elements.
 	 *
-	 * @var		obj		KBS_HTML_Elements
+	 * @var		object		KBS_HTML_Elements
 	 * @since	1.0
 	 */
 	public $html;
@@ -87,7 +87,7 @@ final class KB_Support {
 	/**
 	 * KBS Customers.
 	 *
-	 * @var		obj		KBS_DB_Customers
+	 * @var		object		KBS_DB_Customers
 	 * @since	1.0
 	 */
 	public $customers;
@@ -95,7 +95,7 @@ final class KB_Support {
 	/**
 	 * KBS Customer Meta.
 	 *
-	 * @var		obj		KBS_DB_Customer_Meta
+	 * @var		object		KBS_DB_Customer_Meta
 	 * @since	1.0
 	 */
 	public $customer_meta;
@@ -103,10 +103,15 @@ final class KB_Support {
 	/**
 	 * KBS Knowledgebase.
 	 *
-	 * @var		obj		KBS_Knowledgebase
-	 * @since	1.0
+	 * @var		object		KBS_Knowledgebase
+	 * @since	1.5
 	 */
-	public $KB;
+	public $api;
+
+    /**
+     * KBS API
+     *
+     * @var object
 
 	/**
 	 * Main KB_Support Instance.
@@ -135,6 +140,7 @@ final class KB_Support {
 
 			self::$instance->includes();
 			self::$instance->roles         = new KBS_Roles();
+            self::$instance->api           = new KBS_API();
 			self::$instance->emails        = new KBS_Emails();
 			self::$instance->email_tags    = new KBS_Email_Template_Tags();
 			self::$instance->html          = new KBS_HTML_Elements();
@@ -278,6 +284,7 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/sla.php';
 		require_once KBS_PLUGIN_DIR . 'includes/widgets.php';
         require_once KBS_PLUGIN_DIR . 'includes/compatibility-functions.php';
+        require_once KBS_PLUGIN_DIR . 'includes/api/class-kbs-api.php';
 
 		if ( is_admin() )	{
 			require_once KBS_PLUGIN_DIR . 'includes/admin/admin-pages.php';
