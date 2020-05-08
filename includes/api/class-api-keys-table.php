@@ -136,13 +136,21 @@ class KBS_API_Keys_Table extends WP_List_Table {
 
 		$actions['reissue'] = sprintf(
 			'<a href="%s" class="kbs-regenerate-api-key">%s</a>',
-			esc_url( wp_nonce_url( add_query_arg( array( 'user_id' => $item['id'], 'kbs_action' => 'process_api_key', 'kbs_api_process' => 'regenerate' ) ), 'kbs-api-nonce' ) ),
+			esc_url( wp_nonce_url( add_query_arg( array(
+				'user_id'         => $item['id'],
+				'kbs_action'      => 'process_api_key',
+				'kbs_api_process' => 'regenerate'
+			) ), 'kbs-api-nonce' ) ),
 			__( 'Reissue', 'kb-support' )
 		);
 
 		$actions['revoke'] = sprintf(
 			'<a href="%s" class="kbs-revoke-api-key kbs-delete">%s</a>',
-			esc_url( wp_nonce_url( add_query_arg( array( 'user_id' => $item['id'], 'kbs_action' => 'process_api_key', 'kbs_api_process' => 'revoke' ) ), 'kbs-api-nonce' ) ),
+			esc_url( wp_nonce_url( add_query_arg( array(
+				'user_id'         => $item['id'],
+				'kbs_action'      => 'process_api_key',
+				'kbs_api_process' => 'revoke'
+			) ), 'kbs-api-nonce' ) ),
 			__( 'Revoke', 'kb-support' )
 		);
 

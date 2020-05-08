@@ -20,7 +20,12 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	void
 */
 function kbs_admin_addons_notices() {
-	add_settings_error( 'kbs-notices', 'kbs-addons-feed-error', __( 'There seems to be an issue with the server. Please try again in a few minutes.', 'kb-support' ), 'error' );
+	add_settings_error(
+		'kbs-notices',
+		'kbs-addons-feed-error',
+		__( 'There seems to be an issue with the server. Please try again in a few minutes.', 'kb-support' ), 'error'
+	);
+
 	settings_errors( 'kbs-notices' );
 } // kbs_admin_addons_notices
 
@@ -352,6 +357,26 @@ class KBS_Admin_Notices	{
                     case 'ticket-sources-updated':
                         $notices['updated']['kbs-ticket-sources-updated'] = sprintf( __( '%s sources have been successfully updated.', 'kb-support' ), $ticket_singular );
                         break;
+
+					case 'api-key-generated' :	
+						$notices['updated']['kbs-api-key-generated'] = sprintf( __( 'API keys successfully generated.', 'kb-support' ) );
+					break;
+
+					case 'api-key-exists' :	
+						$notices['error']['kbs-api-key-exists'] = sprintf( __( 'The specified user already has API keys.', 'kb-support' ) );
+					break;
+
+					case 'api-key-regenerated' :	
+						$notices['updated']['kbs-api-key-regenerated'] = sprintf( __( 'API keys successfully regenerated.', 'kb-support' ) );
+					break;
+
+					case 'api-key-revoked' :	
+						$notices['updated']['kbs-api-key-revoked'] = sprintf( __( 'API keys successfully revoked.', 'kb-support' ) );
+					break;
+
+					case 'api-key-failed' :	
+						$notices['error']['kbs-api-key-failed'] = sprintf( __( 'API key generation failed.', 'kb-support' ) );
+					break;
                 }
             }
         }

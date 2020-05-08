@@ -43,6 +43,27 @@ class KBS_Agent {
 	public $open_tickets = 0;
 
 	/**
+	 * The agent's username
+	 *
+	 * @since       1.5
+	 */
+	public $username;
+
+	/**
+	 * The agent's first name
+	 *
+	 * @since       1.5
+	 */
+	public $first_name;
+
+	/**
+	 * The agent's last name
+	 *
+	 * @since       1.5
+	 */
+	public $last_name;
+
+	/**
 	 * The agent's email
 	 *
 	 * @since       1.2.5
@@ -142,7 +163,10 @@ class KBS_Agent {
             $this->is_agent = kbs_is_agent( $this->id );
 
             if ( $this->is_agent )  {
+				$this->username     = $defaults['user_login'];
                 $this->email        = $defaults['user_email'];
+				$this->first_name   = $defaults['first_name'];
+				$this->last_name    = $defaults['last_name'];
                 $this->name         = $defaults['display_name'];
                 $this->open_tickets = $this->count_open_tickets();
                 $this->data         = $defaults;
@@ -168,6 +192,8 @@ class KBS_Agent {
 		$defaults = apply_filters( 'kbs_agent_data_defaults', array(
 			'ID'              => '',
 			'user_login'      => '',
+			'first_name'      => '',
+			'last_name'       => '',
 			'user_nicename'   => '',
 			'user_email'      => '',
 			'user_url'        => '',
