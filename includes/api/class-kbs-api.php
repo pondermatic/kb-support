@@ -147,6 +147,7 @@ class KBS_API {
 			$agents     = array();
 			$categories = array();
 			$tags       = array();
+			$files      = array();
 
 			foreach( $ticket->agents as $_agent_id )	{
 				$_agent = new KBS_Agent( $_agent_id );
@@ -180,6 +181,13 @@ class KBS_API {
 						'name'    => $term->name
                     );
                 }
+			}
+
+			foreach( $ticket->files as $file )	{
+				$files[] = array(
+					'filename' => get_the_title( $file->ID ),
+					'url'      => $file->guid
+				);
 			}
 
 			$response = array(
@@ -219,7 +227,10 @@ class KBS_API {
 					'logo'    => $company ? $company->logo : '',
 				),
 				'participants'  => $ticket->participants,
-				'source'        => $ticket->get_source( 'name' )
+				'source'        => $ticket->get_source( 'name' ),
+				'subject'       => $ticket->ticket_title,
+				'content'       => $ticket->ticket_content,
+				'attachments'   => $files
 			);
 		}
 
