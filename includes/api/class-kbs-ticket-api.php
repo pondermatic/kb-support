@@ -3,7 +3,7 @@
  * KB Support REST API
  *
  * @package     KBS
- * @subpackage  Classes/REST API
+ * @subpackage  Classes/Ticket REST API
  * @copyright   Copyright (c) 2020, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.5
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
- * KBS_API Class
+ * KBS_Ticket_API Class
  *
  * @since	1.0.8
  */
@@ -41,9 +41,10 @@ class KBS_Ticket_API extends KBS_API {
      * Get ticket routes
      *
      * @since   1.5
+	 * @param	array	$routes		Array of api routes for kbs_tickets
      * @return  array   Array of api routes for kbs_tickets
      */
-    public function ticket_routes()    {
+    public function ticket_routes( $routes )    {
         $ticket_routes = array();
 
 		// Get ticket by Post ID
@@ -66,7 +67,7 @@ class KBS_Ticket_API extends KBS_API {
 
         $ticket_routes = apply_filters( 'kbs_ticket_api_routes', $ticket_routes );
 
-        return $ticket_routes;
+        return array_merge( $ticket_routes, $routes );
     } // ticket_routes
 
 	/**
@@ -83,7 +84,7 @@ class KBS_Ticket_API extends KBS_API {
 		}
 
 		return $this->format_response();
-    } // process_request
+    } // send_response
 
 	/**
 	 * Get ticket by number.
@@ -116,6 +117,10 @@ class KBS_Ticket_API extends KBS_API {
 	 * @return	array
 	 */
 	public function format_response()	{
+		if ( ! kbs_agent_can_access_ticket( $this->ticket_id, $this->user_id ) )	{
+			return $this->errors( 'no_permission' );
+		}
+
 		return $this->format_ticket_response();
 	} // format_response
 

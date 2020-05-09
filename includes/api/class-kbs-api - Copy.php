@@ -18,21 +18,14 @@ if ( ! defined( 'ABSPATH' ) )
  *
  * @since	1.0.8
  */
-class KBS_API extends WP_REST_Controller {
-	/**
-	 * Version
-	 *
-	 * @since	1.5
-	 * @var		int
-	 */
-	protected $version = '1';
+class KBS_API {
     /**
      * Namespace
      *
      * @since   1.5
      * @var     string
      */
-    protected $namespace = 'kbs/v';
+    private $namespace = 'kbs/v1';
 
     /**
      * Routes
@@ -65,42 +58,186 @@ class KBS_API extends WP_REST_Controller {
 	 */
 	public function __construct()	{
 		add_action( 'admin_init',	 array( $this, 'process_api_key' ) );
+
+		add_action( 'init',          array( $this, 'setup_routes' ), 11 );
+        add_action( 'rest_api_init', array( $this, 'register_routes' ) );
+
+		$this->includes();
 	} // __construct
 
+	/**
+	 * Include class files.
+	 *
+	 * @since	1.5
+	 * @return	void
+	 */
+	public function includes()	{
+		require_once KBS_PLUGIN_DIR . 'includes/api/class-kbs-ticket-api.php';
+		require_once KBS_PLUGIN_DIR . 'includes/api/class-kbs-tickets-api.php';
+
+		do_action( 'kbs_api_includes' );
+	} // includes
+
     /**
-     * Checks if a given request has access to read an object.
+     * Register routes.
      *
      * @since   1.5
-     * @param	WP_REST_Request	$request	Full details about the request
-	 * @return	bool|WP_Error	True if the request has read access for the item, WP_Error object otherwise
+     * @return  void
      */
-    public function get_item_permissions_check( $request ) {
+    public function register_routes()  {
+		error_log( var_export( $this->routes, true ) );
+        foreach( $this->routes as $route_type => $route_data ) {
+            foreach( $route_data as $_route => $data )  {
+                register_rest_route(
+                    $this->namespace,
+                    '/' . $route_type . '/' . $data['expression'],
+                    $data['args']
+                );
+            }
+        }
+    } // register_routes
+
+    /**
+     * Define routes for the api
+     *
+     * @since   1.5
+     * @return  void
+     */
+    public function setup_routes() {
+        $this->routes = apply_filters( 'kbs_api_routes', $this->routes );
+    } // setup_routes
+
+	/**
+	 * Send the response.
+	 *
+	 * @since	1.5
+	 * @return	mixed	API request response
+	 */
+	public function send_response()	{
+		return $this->errors( 'no_response' );
+	} // send_response
+
+    /**
+     * Process a Rest API request
+     *
+     * @since   1.5
+     * @param   array   $request    Array of request data received by api request
+     * @return  mixed   Response to API request
+     */
+    public function process_request( $request ) {
 		if ( ! $this->is_authenticated( $request ) )	{
-			return new WP_Error(
-				'rest_forbidden_context',
-				$this->errors( 'no_auth' ),
-				array( 'status' => rest_authorization_required_code() )
+			return $this->errors( 'no_auth' );
+		}
+
+		$this->request = $request;
+
+		return $this->send_response();
+    } // process_request
+
+	/**
+	 * Format the response for tickets.
+	 *
+	 * @since	1.5
+	 * @return	array
+	 */
+	public function format_ticket_response()	{
+		$ticket = new KBS_Ticket( $this->ticket_id );
+
+		if ( ! empty( $ticket->ID ) )	{
+			$agent      = new KBS_Agent( $ticket->agent_id );
+			$company    = new KBS_Company( $ticket->company_id );
+			$agents     = array();
+			$categories = array();
+			$tags       = array();
+			$files      = array();
+
+			foreach( $ticket->agents as $_agent_id )	{
+				$_agent = new KBS_Agent( $_agent_id );
+
+				$agents[] = array(
+					'user_id'      => $_agent_id,
+					'first_name'   => $_agent ? $_agent->first_name : '',
+					'last_name'    => $_agent ? $_agent->last_name : '',
+					'display_name' => $_agent ? $_agent->name : '',
+					'email'        => $_agent ? $_agent->email : '',
+				);
+			}
+
+			$terms = wp_get_post_terms( $ticket->ID, 'ticket_category' );
+			if ( $terms )	{
+                foreach( $terms as $term )  {
+                    $categories[] = array(
+						'term_id' => $term->term_id,
+						'slug'    => $term->slug,
+						'name'    => $term->name
+                    );
+                }
+			}
+
+			$terms = wp_get_post_terms( $ticket->ID, 'ticket_tag' );
+			if ( $terms )	{
+                foreach( $terms as $term )  {
+                    $tags[] = array(
+						'term_id' => $term->term_id,
+						'slug'    => $term->slug,
+						'name'    => $term->name
+                    );
+                }
+			}
+
+			foreach( $ticket->files as $file )	{
+				$files[] = array(
+					'filename' => get_the_title( $file->ID ),
+					'url'      => $file->guid
+				);
+			}
+
+			$response = array(
+				'ID'            => $ticket->ID,
+				'number'        => $ticket->number,
+				'key'           => $ticket->key,
+				'status'        => $ticket->status_nicename,
+				'date'          => $ticket->date,
+				'modified_date' => $ticket->modified_date,
+				'resolved_date' => $ticket->resolved_date,
+				'subject'       => $ticket->ticket_title,
+				'content'       => $ticket->ticket_content,
+				'attachments'   => $files,
+				'categories'    => $categories,
+				'tags'          => $tags,
+				'agent'         => array(
+					'user_id'      => $ticket->agent_id,
+					'first_name'   => $agent ? $agent->first_name : '',
+					'last_name'    => $agent ? $agent->last_name : '',
+					'display_name' => $agent ? $agent->name : '',
+					'email'        => $agent ? $agent->email : '',
+				),
+				'agents'        => $agents,
+				'customer'      => array(
+					'id'         => $ticket->customer_id,
+					'first_name' => $ticket->first_name,
+					'last_name'  => $ticket->last_name,
+					'email'      => $ticket->email
+				),
+				'email'         => $ticket->email,
+				'user_id'       => $ticket->user_id,
+				'user_info'     => $ticket->user_info,
+				'company'       => array(
+					'id'      => $ticket->company_id,
+					'name'    => $company ? $company->name : '',
+					'contact' => $company ? $company->contact : '',
+					'email'   => $company ? $company->email : '',
+					'phone'   => $company ? $company->phone : '',
+					'website' => $company ? $company->website : '',
+					'logo'    => $company ? $company->logo : '',
+				),
+				'participants'  => $ticket->participants,
+				'source'        => $ticket->get_source( 'name' )
 			);
 		}
 
-		return $this->validate_user();
-    } // get_item_permissions_check
-
-	/**
-	 * Log in and validate the user.
-	 *
-	 * @since	1.5
-	 * @return	bool	Whether or not the user is logged in
-	 */
-	function validate_user()	{
-		if ( ! is_user_logged_in() || $this->user_id != $this->user_id )	{
-			wp_clear_auth_cookie();
-			wp_set_current_user ( $this->user_id );
-			wp_set_auth_cookie  ( $this->user_id );
-		}
-
-		return is_user_logged_in();
-	} // validate_user
+		return $response;
+	} // format_response
 
 	/**
 	 * Whether or not the user is authenticated.
