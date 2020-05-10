@@ -16,6 +16,39 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Retrieve the required capability for viewing customers.
+ *
+ * @since	1.5
+ * @return	string	The permission to check for viewing customers
+ */
+function kbs_get_view_customers_required_capability()	{
+	$capability = apply_filters( 'kbs_view_customers_role', 'view_ticket_reports' ); // Backwards compat
+	$capability = apply_filters( 'kbs_view_customers_capability', $capability );
+
+	return $capability;
+} // kbs_get_view_customers_required_capability
+
+/**
+ * Whether or not a user can view customers.
+ *
+ * @since   1.5
+ * @param   int     $user_id    The user ID to check
+ * @return  bool
+ */
+function kbs_can_view_customers( $user_id = 0 ) {
+    $can_view           = false;
+    $user_id            = ! empty( $user_id ) ? absint( $user_id ) : get_current_user_id();
+
+    if ( ! empty( $user_id ) )    {
+        $can_view = user_can( $user_id, kbs_view_customers_required_capability() );
+    }
+
+    $can_view = apply_filters( 'kbs_can_view_customers', $can_view, $user_id );
+
+    return $can_view;
+} // kbs_can_view_customers
+
+/**
  * Whether or not a user can edit customers.
  *
  * @since   1.2.9

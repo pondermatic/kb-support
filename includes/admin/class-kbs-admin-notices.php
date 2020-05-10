@@ -277,7 +277,7 @@ class KBS_Admin_Notices	{
             }
 
             // Customer notices
-            if ( current_user_can( apply_filters( 'kbs_view_customers_role', 'view_ticket_reports' ) ) )    {
+            if ( kbs_can_view_customers() )    {
                 switch( $_GET['kbs-message'] )  {
                     case 'customer_created':
                         $notices['updated']['kbs-customer-added'] = __( 'Customer added successfully.', 'kb-support' );

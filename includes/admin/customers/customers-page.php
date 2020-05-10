@@ -105,12 +105,11 @@ function kbs_customers_list() {
 function kbs_render_customer_view( $view, $callbacks ) {
 
 	$render             = isset( $_GET['render'] ) ? $_GET['render'] : true;
-	$customer_view_role = apply_filters( 'kbs_view_customers_role', 'view_ticket_reports' );
 	$url                = remove_query_arg( array( 'kbs-message', 'render' ) );
 	$customer_tabs      = kbs_customer_tabs();
 	$active_tab         = isset( $_GET['tab'] ) && array_key_exists( $_GET['tab'], $customer_tabs ) ? $_GET['tab'] : 'general';
 
-	if ( ! current_user_can( $customer_view_role ) ) {
+	if ( ! kbs_can_view_customers() ) {
 		wp_safe_redirect( add_query_arg( array(
 			'kbs_message' => 'customer_list_permission',
 			'render'      => 0
