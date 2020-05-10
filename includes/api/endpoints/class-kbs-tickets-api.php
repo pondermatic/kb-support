@@ -69,7 +69,7 @@ class KBS_Tickets_API extends KBS_API {
 
 		register_rest_route(
 			$this->namespace . $this->version,
-			'/' . $this->rest_base . '/id=(?P<id>\d+)',
+			'/' . $this->rest_base . '/(?P<id>\d+)',
 			array(
 				'args'   => array(
 					'id' => array(
@@ -90,7 +90,7 @@ class KBS_Tickets_API extends KBS_API {
 
 		register_rest_route(
 			$this->namespace . $this->version,
-			'/' . $this->rest_base . '/number=(?P<number>[a-zA-Z0-9-]+)',
+			'/' . $this->rest_base . '/(?P<number>[a-zA-Z0-9-]+)',
 			array(
 				'args'   => array(
 					'id' => array(
@@ -264,11 +264,11 @@ class KBS_Tickets_API extends KBS_API {
 			$data['number'] = $ticket->number;
 		}
 
-		if ( ! empty( $ticket->key) )	{
+		if ( ! empty( $ticket->key ) )	{
 			$data['key'] = $ticket->key;
 		}
 
-		if ( ! empty( $ticket->status ) )	{
+		if ( ! empty( $ticket->status_nicename ) )	{
 			$data['status'] = $ticket->status_nicename;
 		}
 
@@ -399,6 +399,9 @@ class KBS_Tickets_API extends KBS_API {
 
 		// Wrap the data in a response object.
 		$response = rest_ensure_response( $data );
+		$links    = $this->prepare_links( $ticket );
+
+		$response->add_links( $links );
 
 		/**
 		 * Filters the ticket data for a response.
@@ -578,5 +581,49 @@ class KBS_Tickets_API extends KBS_API {
 
 		return $can_access;
 	} // check_read_permission
+
+	/**
+	 * Prepares links for the request.
+	 *
+	 * @since	1.5
+	 * @param	KBS_Ticket	$ticket		KBS Ticket object
+	 * @return	array		Links for the given post
+	 */
+	protected function prepare_links( $ticket ) {
+		$base = sprintf( '%s/%s', $this->namespace . $this->version, $this->rest_base );
+
+		// Entity meta.
+		$links = array(
+			'self'       => array(
+				'href' => rest_url( trailingslashit( $base ) . $ticket->ID ),
+			),
+			'collection' => array(
+				'href' => rest_url( $base ),
+			)
+		);
+
+		if ( ! empty( $ticket->customer_id ) )	{
+			$links['customer'] = array(
+				'href'       => rest_url( 'kbs/v1/customers/' . $ticket->customer_id ),
+				'embeddable' => true,
+			);
+		}
+
+		if ( ! empty( $ticket->user_id ) )	{
+			$links['user'] = array(
+				'href'       => rest_url( 'wp/v2/users/' . $ticket->user_id ),
+				'embeddable' => true
+			);
+		}
+
+		if ( ! empty( $ticket->company_id ) )	{
+			$links['company'] = array(
+				'href'       => rest_url( 'kbs/v1/companies/' . $ticket->company_id ),
+				'embeddable' => true,
+			);
+		}
+
+		return $links;
+	} // prepare_links
 
 } // KBS_Tickets_API

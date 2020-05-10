@@ -40,7 +40,7 @@ function kbs_can_view_customers( $user_id = 0 ) {
     $user_id            = ! empty( $user_id ) ? absint( $user_id ) : get_current_user_id();
 
     if ( ! empty( $user_id ) )    {
-        $can_view = user_can( $user_id, kbs_view_customers_required_capability() );
+        $can_view = user_can( $user_id, kbs_get_view_customers_required_capability() );
     }
 
     $can_view = apply_filters( 'kbs_can_view_customers', $can_view, $user_id );

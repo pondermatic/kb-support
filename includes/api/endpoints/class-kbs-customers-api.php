@@ -35,6 +35,8 @@ class KBS_Customers_API extends KBS_API {
 	 */
 	public function __construct()	{
 		$this->rest_base = 'customers';
+
+		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
 	} // __construct
 
 	/**
@@ -59,7 +61,7 @@ class KBS_Customers_API extends KBS_API {
 
 		register_rest_route(
 			$this->namespace . $this->version,
-			'/' . $this->rest_base . '/id=(?P<id>\d+)',
+			'/' . $this->rest_base . '/(?P<id>[\d]+)',
 			array(
 				'args'   => array(
 					'id' => array(
@@ -74,28 +76,10 @@ class KBS_Customers_API extends KBS_API {
 				)
 			)
 		);
-
-		register_rest_route(
-			$this->namespace . $this->version,
-			'/' . $this->rest_base . '/email=(?P<email>\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i)',
-			array(
-				'args'   => array(
-					'id' => array(
-						'type'        => 'string',
-						'description' => __( 'Unique identifier for the customer.', 'kb-support' )
-					)
-				),
-				array(
-					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => array( $this, 'get_ticket' ),
-					'permission_callback' => array( $this, 'get_item_permissions_check' )
-				)
-			)
-		);
     } // register_routes
 
 	/**
-     * Checks if a given request has access to read a ticket.
+     * Checks if a given request has access to read a customer.
      *
      * @since   1.5
      * @param	WP_REST_Request	$request	Full details about the request.
@@ -110,7 +94,11 @@ class KBS_Customers_API extends KBS_API {
 			);
 		}
 
-		return $this->validate_user();
+		if ( $this->validate_user() )	{
+			return kbs_can_view_customers( $this->user_id );
+		}
+
+		return false;
     } // get_item_permissions_check
 
 	/**
@@ -121,15 +109,9 @@ class KBS_Customers_API extends KBS_API {
 	 * @return	WP_REST_Response|WP_Error	Response object on success, or WP_Error object on failure.
 	 */
 	public function get_customer( $request ) {
-		$this->ticket_id = isset( $request['id'] ) ? $request['id'] : $this->get_ticket_by_number( $request );
+		$customer = new KBS_Customer( $request['id'] );
 
-		$ticket = new KBS_Ticket( absint( $this->ticket_id ) );
-
-		if ( empty( $ticket->ID ) )	{
-			return $ticket;
-		}
-
-		if ( ! $this->check_read_permission( $ticket ) )	{
+		if ( ! $this->check_read_permission( $customer ) )	{
 			return new WP_Error(
 				'rest_forbidden_context',
 				$this->errors( 'no_permission' ),
@@ -137,36 +119,11 @@ class KBS_Customers_API extends KBS_API {
 			);
 		}
 
-		$data     = $this->prepare_ticket_for_response( $ticket, $request );
+		$data     = $this->prepare_customer_for_response( $customer, $request );
 		$response = rest_ensure_response( $data );
 
 		return $response;
 	} // get_customer
-
-	/**
-	 * Get customer by email.
-	 *
-	 * @since	1.5
-	 * @param	WP_REST_Request	$request	Full details about the request
-	 * @return	object	KBS_Ticket object or false
-	 */
-	public function get_customer_by_email( $request )	{
-		global $wpdb;
-
-		$ticket_id = $wpdb->get_var( $wpdb->prepare(
-			"
-			SELECT post_id
-			FROM $wpdb->postmeta
-			WHERE meta_key = '%s'
-			AND meta_value = '%s'
-			LIMIT 1
-			",
-			'_kbs_ticket_number',
-			trim( $request['number'] )
-		) );
-
-		return $ticket_id;
-	} // get_customer_by_email
 
 	/**
      * Checks if a given request has access to read customers.
@@ -189,42 +146,65 @@ class KBS_Customers_API extends KBS_API {
 	function get_customers( $request )	{
 		// Retrieve the list of registered collection query parameters.
 		$registered = $this->get_collection_params();
-		$args       = array();
 
-		// Only set arg values for allowed args
-		foreach( $registered as $api_param => $collection_param )	{
-			if ( isset( $request[ $api_param ] ) )	{
-				$args[ $api_param ] = $request[ $api_param ];
+		/*
+		 * This array defines mappings between public API query parameters whose
+		 * values are accepted as-passed, and their internal KBS_Customer_DB parameter
+		 * name equivalents (some are the same). Only values which are also
+		 * present in $registered will be set.
+		 */
+		$parameter_mappings = array(
+			'exclude'  => 'exclude_id',
+			'include'  => 'include_id',
+			'company'  => 'company_id',
+			'order'    => 'order',
+			'per_page' => 'number'
+		);
+
+		$prepared_args = array();
+
+		/*
+		 * For each known parameter which is both registered and present in the request,
+		 * set the parameter's value on the query $prepared_args.
+		 */
+		foreach ( $parameter_mappings as $api_param => $wp_param ) {
+			if ( isset( $registered[ $api_param ], $request[ $api_param ] ) ) {
+				$prepared_args[ $wp_param ] = $request[ $api_param ];
 			}
 		}
 
-		// Force the post_type argument, since it's not a user input variable.
-		$args['post_type'] = $this->post_type;
+		if ( isset( $registered['offset'] ) && ! empty( $request['offset'] ) ) {
+			$prepared_args['offset'] = $request['offset'];
+		} else {
+			$prepared_args['offset'] = ( $request['page'] - 1 ) * $prepared_args['number'];
+		}
 
 		/**
 		 * Filters the query arguments for a request.
 		 *
-		 * Enables adding extra arguments or setting defaults for a ticket collection request.
+		 * Enables adding extra arguments or setting defaults for a customer collection request.
 		 *
 		 * @since	1.5
-		 * @param	array			$args		Key value array of query var to query value
-		 * @param	WP_REST_Request	$request	The request used
+		 * @param	array			$prepared_args	Key value array of query var to query value
+		 * @param	WP_REST_Request	$request		The request used
 		 */
-		$args = apply_filters( "rest_{$this->post_type}_query", $args, $request );
+		$prepared_args = apply_filters( "rest_kbs_customer_query", $prepared_args, $request );
 
-		$tickets_query = new KBS_Tickets_Query( $args );
-		$query_result  = $tickets_query->get_tickets();
+		$query         = new KBS_DB_Customers( $prepared_args );
+		$customers     = array();
+		$query_result  = $query->get_customers();
 
-		foreach ( $query_result as $ticket ) {
-			if ( ! $this->check_read_permission( $ticket ) ) {
+		foreach ( $query_result as $_customer ) {
+			if ( ! $this->check_read_permission( $_customer ) ) {
 				continue;
 			}
 
-			$data            = $this->prepare_ticket_for_response( $ticket, $request );
-			$this->tickets[] = $this->prepare_response_for_collection( $data );
+			$customer    = new KBS_Customer( $_customer->id );
+			$data        = $this->prepare_customer_for_response( $customer, $request );
+			$customers[] = $this->prepare_response_for_collection( $data );
 		}
 
-		$response = rest_ensure_response( $this->tickets );
+		$response = rest_ensure_response( $customers );
 
 		return $response;
 	} // get_customers
@@ -233,167 +213,112 @@ class KBS_Customers_API extends KBS_API {
 	 * Prepares a single customer output for response.
 	 *
 	 * @since	1.5
-	 * @param	WP_Post				$ticket		KBS_Ticket Ticket object
+	 * @param	KBS_Customer		$customer	KBS_Customer object
 	 * @param	WP_REST_Request		$request	Request object
 	 * @return	WP_REST_Response	Response object
 	 */
-	public function prepare_customer_for_response( $ticket, $request )	{
-		$agent      = new KBS_Agent( $ticket->agent_id );
-		$company    = new KBS_Company( $ticket->company_id );
+	public function prepare_customer_for_response( $customer, $request )	{
+		$company    = new KBS_Company( $customer->company_id );
 		$data       = array();
 
-		$data['id'] = $ticket->ID;
+		$data['id'] = $customer->id;
 
-		if ( ! empty( $ticket->number ) )	{
-			$data['number'] = $ticket->number;
+		if ( ! empty( $customer->name ) )	{
+			$data['name'] = $customer->name;
 		}
 
-		if ( ! empty( $ticket->key) )	{
-			$data['key'] = $ticket->key;
+		if ( ! empty( $customer->user_id ) )	{
+			$data['user_id'] = $customer->user_id;
 		}
 
-		if ( ! empty( $ticket->status ) )	{
-			$data['status'] = $ticket->status_nicename;
+		if ( ! empty( $customer->email ) )	{
+			$data['email'] = $customer->email;
 		}
 
-		if ( ! empty( $ticket->date ) )	{
-			$data['date'] = $ticket->date;
-		}
+		if ( ! empty( $customer->emails ) )	{
+			$data['additional_emails'] = array();
 
-		if ( ! empty( $ticket->modified_date ) )	{
-			$data['modified_date'] = $ticket->modified_date;
-		}
+			foreach ( $customer->emails as $email ) {
+				if ( $customer->email === $email ) {
+					continue;
+				}
 
-		if ( ! empty( $ticket->resolved_date ) )	{
-			$data['resolved_date'] = $ticket->resolved_date;
-		}
-
-		if ( ! empty( $ticket->ticket_title ) )	{
-			$data['subject'] = get_the_title( $ticket->ID );
-		}
-
-		if ( ! empty( $ticket->ticket_content ) )	{
-			$data['content'] = $ticket->get_content();
-		}
-
-		if ( ! empty( $ticket->files ) )	{
-			$files = array();
-
-			foreach( $ticket->files as $file )	{
-				$files[] = array(
-					'filename' => get_the_title( $file->ID ),
-					'url'      => $file->guid
-				);
+				$data['additional_emails'][] = $email;
 			}
-
-			$data['attachments'] = $files;
 		}
 
-		if ( $terms = wp_get_post_terms( $ticket->ID, 'ticket_category' ) )	{
-			$categories = array();
+		if ( ! empty( $customer->primary_phone ) )	{
+			$data['phone']   = array();
+			$data['phone']['primary'] = $customer->primary_phone;
 
-			foreach( $terms as $term )  {
-				$categories[] = array(
-					'term_id' => $term->term_id,
-					'slug'    => $term->slug,
-					'name'    => $term->name
-				);
+			if ( ! empty( $customer->additional_phone ) )	{
+				$data['phone']['additional'] = $customer->additional_phone;
 			}
-
-			$data['categories'] = $categories;
 		}
 
-		if ( $terms = wp_get_post_terms( $ticket->ID, 'ticket_tag' ) )	{
-			$tags = array();
-
-			foreach( $terms as $term )  {
-				$tags[] = array(
-					'term_id' => $term->term_id,
-					'slug'    => $term->slug,
-					'name'    => $term->name
-				);
-			}
-
-			$data['tags'] = $tags;
+		if ( ! empty( $customer->website ) )	{
+			$data['website'] = $customer->website;
 		}
 
-		$data['agent'] = array(
-			'user_id'      => $ticket->agent_id,
-			'first_name'   => $agent ? $agent->first_name : '',
-			'last_name'    => $agent ? $agent->last_name : '',
-			'display_name' => $agent ? $agent->name : '',
-			'email'        => $agent ? $agent->email : '',
+		$address = $customer->get_meta( 'address', true );
+		$defaults = array(
+			'line1'   => '',
+			'line2'   => '',
+			'city'    => '',
+			'state'   => '',
+			'country' => '',
+			'zip'     => ''
 		);
 
-		if ( ! empty( $ticket->agents ) )	{
-			foreach( $ticket->agents as $agent_id )	{
-				$_agent = new KBS_Agent( $agent_id );
+		$address     = wp_parse_args( $address, $defaults );
+		$has_address = false;
 
-				$data['additional_agents']   = array();
-				$data['additional_agents'][] = array(
-					'user_id'      => $agent_id,
-					'first_name'   => $_agent ? $_agent->first_name : '',
-					'last_name'    => $_agent ? $_agent->last_name : '',
-					'display_name' => $_agent ? $_agent->name : '',
-					'email'        => $_agent ? $_agent->email : '',
-				);
+		foreach ( $address as $address_field )	{
+			if ( ! empty( $address_field ) )	{
+				$has_address = true;
 			}
 		}
 
-		if ( ! empty( $ticket->customer_id ) )	{
-			$data['customer'] = array(
-				'id'         => $ticket->customer_id,
-				'first_name' => $ticket->first_name,
-				'last_name'  => $ticket->last_name,
-				'email'      => $ticket->email
-			);
+		if ( $has_address )	{
+			$data['address'] = $address;
 		}
 
-		if ( ! empty( $ticket->email ) )	{
-			$data['email'] = $ticket->email;
+		if ( ! empty( $customer->company ) )	{
+			$data['company']['id']         = $customer->company_id;
+			$data['company']['name']       = $customer->company;
+			$data['company']['is_contact'] = $company->customer == $customer->id;
 		}
 
-		if ( ! empty( $ticket->user_id ) )	{
-			$data['user_id'] = $ticket->user_id;
+		if ( ! empty( $customer->date_created ) )	{
+			$data['date_created'] = $customer->date_created;
 		}
 
-		if ( ! empty( $ticket->user_info ) )	{
-			$data['user_info'] = $ticket->user_info;
+		if ( ! empty( $customer->notes ) && is_array( $customer->notes ) )	{
+			$data['notes'] = array();
+
+			foreach( $customer->notes as $note )	{
+				$data['notes'][] = stripslashes( $note );
+			}
 		}
 
-		if ( ! empty( $this->company_id ) )	{
-			$data['company'] = array(
-				'id'      => $ticket->company_id,
-				'name'    => $company ? $company->name : '',
-				'contact' => $company ? $company->contact : '',
-				'email'   => $company ? $company->email : '',
-				'phone'   => $company ? $company->phone : '',
-				'website' => $company ? $company->website : '',
-				'logo'    => $company ? $company->logo : ''
-			);
-		}
-
-		if ( ! empty( $ticket->participants ) )	{
-			$data['participants'] = $ticket->participants;
-		}
-
-		if ( ! empty( $ticket->participants ) )	{
-			$data['source'] = $ticket->get_source( 'name' );
-		}
+		$data['ticket_count'] = kbs_get_customer_ticket_count( $customer );
 
 		// Wrap the data in a response object.
 		$response = rest_ensure_response( $data );
+		$links    = $this->prepare_links( $customer );
+
+		$response->add_links( $links );
 
 		/**
-		 * Filters the ticket data for a response.
+		 * Filters the customer data for a response.
 		 *
 		 * @since	1.5
 		 *
 		 * @param WP_REST_Response	$response	The response object
-		 * @param KBS_Ticket		$ticket		Ticket object
+		 * @param KBS_Customer		$customer	Customer object
 		 * @param WP_REST_Request	$request	Request object
 		 */
-		return apply_filters( "rest_prepare_{$this->post_type}", $response, $ticket, $request );
+		return apply_filters( "rest_prepare_kbs_customer", $response, $customer, $request );
 	} // prepare_customer_for_response
 
 	/**
@@ -403,158 +328,149 @@ class KBS_Customers_API extends KBS_API {
 	 * @return	array	Collection parameters
 	 */
 	public function get_collection_params() {
-		$singular     = kbs_get_ticket_label_singular();
-		$plural       = kbs_get_ticket_label_plural();
 		$query_params = parent::get_collection_params();
 
 		$query_params['context']['default'] = 'view';
 
+		$query_params['id'] = array(
+			'description' => __( 'Only include specific IDs in the result set.', 'kb-support' ),
+			'type'        => 'array',
+			'items'       => array(
+				'type' => 'integer'
+			)
+		);
+
+		$query_params['name'] = array(
+			'description' => __( 'Only include specific customer names in the result set.', 'kb-support' ),
+			'type'        => 'string'
+		);
+
 		$query_params['number'] = array(
-			'description'       => sprintf( 
-				__( 'Maximum number of %s to be returned in result set.', 'kb-support' ),
-				strtolower( $plural )
-			),
-			'type'              => 'integer',
-			'default'           => 20,
-			'minimum'           => 1,
-			'maximum'           => 100,
-			'sanitize_callback' => 'absint',
-			'validate_callback' => 'rest_validate_request_arg'
+			'description' => __( 'Number of results to return.', 'kb-support' ),
+			'type'        => 'integer',
+			'default'     => '20'
 		);
 
-		$query_params['page'] = array(
-			'description'       => __( 'Current page of the collection.' ),
-			'type'              => 'integer',
-			'default'           => 1,
-			'sanitize_callback' => 'absint',
-			'validate_callback' => 'rest_validate_request_arg',
-			'minimum'           => 1
-		);
-
-		$query_params['ticket_ids'] = array(
-			'description' => __( 'Limit result set to specific IDs.' ),
+		$query_params['exclude_id'] = array(
+			'description' => __( 'Ensure result set excludes specific IDs.', 'kb-support' ),
 			'type'        => 'array',
 			'items'       => array(
 				'type' => 'integer',
 			),
-			'default'     => null
+			'default'     => array(),
 		);
 
-		$query_params['orderby'] = array(
-			'description' => __( 'Sort collection by object attribute.' ),
-			'type'        => 'string',
-			'default'     => 'ID',
-			'enum'        => array(
-				'ID',
-				'date',
-				'customer',
-				'agent',
-				'modified',
-				'relevance',
-				'ticket_ids',
-				'title'
+		$query_params['user_id'] = array(
+			'description' => __( 'Only include specific User IDs in the result set.', 'kb-support' ),
+			'type'        => 'array',
+			'items'       => array(
+				'type' => 'integer'
 			)
-		);
-
-		$query_params['order'] = array(
-			'description' => __( 'Order sort attribute ascending or descending.' ),
-			'type'        => 'string',
-			'default'     => 'desc',
-			'enum'        => array( 'asc', 'desc' )
-		);
-
-		$query_params['user']         = array(
-			'description' => sprintf(
-				__( 'Limit result set to %s from a specific customer WP user account.' ),
-				strtolower( $plural )
-			),
-			'type'        => 'integer',
-			'default'     => null
-		);
-
-		$query_params['customer'] = array(
-			'description' => sprintf(
-				__( 'Limit result set to %s from a specific customer.' ),
-				strtolower( $plural )
-			),
-			'type'        => 'integer',
-			'default'     => null
 		);
 
 		$query_params['company'] = array(
-			'description' => sprintf(
-				__( 'Limit result set to %s from a specific company.' ),
-				strtolower( $plural )
-			),
-			'type'        => 'integer',
-			'default'     => null
+			'description' => __( 'Only include users from specific Company IDs in the result set.', 'kb-support' ),
+			'type'        => 'array',
+			'items'       => array(
+				'type' => 'integer'
+			)
 		);
 
-		$query_params['agent'] = array(
-			'description' => sprintf(
-				__( 'Limit result set to %s assigned to a specific agent.' ),
-				strtolower( $plural )
-			),
-			'type'        => 'integer',
-			'default'     => null
-		);
-
-		$query_params['agents'] = array(
-			'description' => sprintf(
-				__( 'Limit result set to %s assigned to specific agents.' ),
-				strtolower( $plural )
-			),
+		$query_params['include'] = array(
+			'description' => __( 'Limit result set to specific IDs.', 'kb-support' ),
 			'type'        => 'array',
 			'items'       => array(
 				'type' => 'integer',
 			),
-			'default'     => null
+			'default'     => array(),
 		);
 
-		$query_params['status'] = array(
-			'default'     => kbs_get_ticket_status_keys( false ),
-			'description' => sprintf(
-				__( 'Limit result set to %s assigned one or more statuses.', 'kb-support' ),
-				strtolower( $singular )
+		$query_params['offset'] = array(
+			'description' => __( 'Offset the result set by a specific number of items.', 'kb-support' ),
+			'type'        => 'integer',
+		);
+
+		$query_params['order'] = array(
+			'default'     => 'desc',
+			'description' => __( 'Order sort attribute ascending or descending.', 'kb-support' ),
+			'enum'        => array( 'asc', 'desc' ),
+			'type'        => 'string',
+		);
+
+		$query_params['orderby'] = array(
+			'default'     => 'id',
+			'description' => __( 'Sort collection by object attribute.', 'kb-support' ),
+			'enum'        => array(
+				'id',
+				'user_id',
+				'name',
+				'email',
+				'company_id',
+				'date'
 			),
-			'type'        => 'array',
-			'items'       => array(
-				'enum' => array_keys( kbs_get_post_statuses() ),
-				'type' => 'string'
-			)
+			'type'        => 'string',
 		);
-
-		$post_type = get_post_type_object( $this->post_type );
 
 		/**
-		 * Filter collection parameters for the tickets controller.
-		 *
-		 * The dynamic part of the filter `$this->post_type` refers to the post
-		 * type slug for the controller.
+		 * Filter collection parameters for the customers controller.
 		 *
 		 * This filter registers the collection parameter, but does not map the
-		 * collection parameter to an internal WP_Query parameter. Use the
-		 * `rest_{$this->post_type}_query` filter to set WP_Query parameters.
+		 * collection parameter to an internal KBS_DB_Customers parameter.
 		 *
 		 * @since	1.5
-		 *
-		 * @param	array			$query_params	JSON Schema-formatted collection parameters.
-		 * @param	WP_Post_Type	$post_type		Post type object.
+		 * @param	array	$query_params	JSON Schema-formatted collection parameters.
 		 */
-		return apply_filters( "rest_{$this->post_type}_collection_params", $query_params, $post_type );
+		return apply_filters( 'rest_kbs_customer_collection_params', $query_params );
 	} // get_collection_params
 
 	/**
-	 * Checks if a ticket can be read.
+	 * Checks if a customer can be accessed.
 	 *
 	 * @since	1.5
-	 * @param	object	KBS_Ticket object
+	 * @param	object	KBS_Customer object
 	 * @return	bool	Whether the post can be read.
 	 */
-	public function check_read_permission( $ticket )	{
-		$customer_view_role = apply_filters( 'kbs_view_customers_role', 'view_ticket_reports' );
-
-		return current_user_can( $customer_view_role );
+	public function check_read_permission( $customer )	{
+		return kbs_can_view_customers( $this->user_id );
 	} // check_read_permission
 
+	/**
+	 * Prepares links for the request.
+	 *
+	 * @since	1.5
+	 * @param	KBS_Customer	$customer	KBS Customer object
+	 * @return	array			Links for the given post
+	 */
+	protected function prepare_links( $customer ) {
+		$base = sprintf( '%s/%s', $this->namespace . $this->version, $this->rest_base );
+
+		// Entity meta.
+		$links = array(
+			'self'       => array(
+				'href' => rest_url( trailingslashit( $base ) . $customer->id ),
+			),
+			'collection' => array(
+				'href' => rest_url( $base ),
+			)
+		);
+
+		if ( ! empty( $customer->user_id ) )	{
+			$links['user'] = array(
+				'href'       => rest_url( 'wp/v2/users/' . $customer->user_id ),
+				'embeddable' => true
+			);
+		}
+
+		if ( ! empty( $customer->company_id ) )	{
+			$links['company'] = array(
+				'href'       => rest_url( 'kbs/v1/companies/' . $customer->company_id ),
+				'embeddable' => true,
+			);
+		}
+
+		return $links;
+	} // prepare_links
+
 } // KBS_Customers_API
+
+new KBS_Customers_API();
