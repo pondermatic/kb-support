@@ -3,7 +3,7 @@
  * KB Support REST API
  *
  * @package     KBS
- * @subpackage  Classes/Tickets REST API
+ * @subpackage  Classes/Customers REST API
  * @copyright   Copyright (c) 2020, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.5
@@ -14,38 +14,27 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
- * KBS_Tickets_API Class
+ * KBS_Customers_API Class
  *
  * @since	1.0.8
  */
-class KBS_Tickets_API extends KBS_API {
+class KBS_Customers_API extends KBS_API {
 
 	/**
-	 * Ticket ID
+	 * Customer ID
 	 *
 	 * @since	1.5
-	 * @var		ing
+	 * @var		int
 	 */
-	protected $ticket_id = 0;
-
-	/**
-	 * Tickets
-	 *
-	 * @since	1.5
-	 * @var		array
-	 */
-	protected $tickets = array();
+	protected $customer_id = 0;
 
 	/**
 	 * Get things going
 	 *
 	 * @since	1.5
 	 */
-	public function __construct( $post_type )	{
-		$this->post_type = $post_type;
-		$obj             = get_post_type_object( $post_type );
-		$this->rest_base = ! empty( $obj->rest_base ) ? $obj->rest_base : $obj->name;
-
+	public function __construct()	{
+		$this->rest_base = 'customers';
 	} // __construct
 
 	/**
@@ -61,7 +50,7 @@ class KBS_Tickets_API extends KBS_API {
 			array(
 				array(
 					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => array( $this, 'get_tickets' ),
+					'callback'            => array( $this, 'get_customers' ),
 					'permission_callback' => array( $this, 'get_items_permissions_check' ),
 					'args'                => $this->get_collection_params(),
 				)
@@ -75,15 +64,12 @@ class KBS_Tickets_API extends KBS_API {
 				'args'   => array(
 					'id' => array(
 						'type'        => 'integer',
-						'description' => sprintf(
-							__( 'Unique identifier for the %s.', 'kb-support' ),
-							kbs_get_ticket_label_singular( true )
-						)
+						'description' => __( 'Unique identifier for the %s.', 'kb-support' )
 					)
 				),
 				array(
 					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => array( $this, 'get_ticket' ),
+					'callback'            => array( $this, 'get_customer' ),
 					'permission_callback' => array( $this, 'get_item_permissions_check' )
 				)
 			)
@@ -91,15 +77,12 @@ class KBS_Tickets_API extends KBS_API {
 
 		register_rest_route(
 			$this->namespace . $this->version,
-			'/' . $this->rest_base . '/number=(?P<number>[a-zA-Z0-9-]+)',
+			'/' . $this->rest_base . '/email=(?P<email>\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i)',
 			array(
 				'args'   => array(
 					'id' => array(
 						'type'        => 'string',
-						'description' => sprintf(
-							__( 'Unique identifier for the %s.', 'kb-support' ),
-							kbs_get_ticket_label_singular( true )
-						)
+						'description' => __( 'Unique identifier for the customer.', 'kb-support' )
 					)
 				),
 				array(
@@ -131,13 +114,13 @@ class KBS_Tickets_API extends KBS_API {
     } // get_item_permissions_check
 
 	/**
-	 * Retrieves a single ticket.
+	 * Retrieves a single customer.
 	 *
 	 * @since	1.5
 	 * @param	WP_REST_Request	$request	Full details about the request
 	 * @return	WP_REST_Response|WP_Error	Response object on success, or WP_Error object on failure.
 	 */
-	public function get_ticket( $request ) {
+	public function get_customer( $request ) {
 		$this->ticket_id = isset( $request['id'] ) ? $request['id'] : $this->get_ticket_by_number( $request );
 
 		$ticket = new KBS_Ticket( absint( $this->ticket_id ) );
@@ -158,16 +141,16 @@ class KBS_Tickets_API extends KBS_API {
 		$response = rest_ensure_response( $data );
 
 		return $response;
-	} // get_ticket
+	} // get_customer
 
 	/**
-	 * Get ticket by number.
+	 * Get customer by email.
 	 *
 	 * @since	1.5
 	 * @param	WP_REST_Request	$request	Full details about the request
 	 * @return	object	KBS_Ticket object or false
 	 */
-	public function get_ticket_by_number( $request )	{
+	public function get_customer_by_email( $request )	{
 		global $wpdb;
 
 		$ticket_id = $wpdb->get_var( $wpdb->prepare(
@@ -183,10 +166,10 @@ class KBS_Tickets_API extends KBS_API {
 		) );
 
 		return $ticket_id;
-	} // get_ticket_by_number
+	} // get_customer_by_email
 
 	/**
-     * Checks if a given request has access to read multiple tickets.
+     * Checks if a given request has access to read customers.
      *
      * @since   1.5
      * @param	WP_REST_Request	$request	Full details about the request.
@@ -197,13 +180,13 @@ class KBS_Tickets_API extends KBS_API {
     } // get_items_permissions_check
 
 	/**
-	 * Retrieves a collection of tickets.
+	 * Retrieves a collection of customers.
 	 *
 	 * @since	1.5
 	 * @param	WP_REST_Request		$request	Full details about the request
 	 * @return	WP_REST_Response|WP_Error		Response object on success, or WP_Error object on failure
 	 */
-	function get_tickets( $request )	{
+	function get_customers( $request )	{
 		// Retrieve the list of registered collection query parameters.
 		$registered = $this->get_collection_params();
 		$args       = array();
@@ -244,17 +227,17 @@ class KBS_Tickets_API extends KBS_API {
 		$response = rest_ensure_response( $this->tickets );
 
 		return $response;
-	} // get_tickets
+	} // get_customers
 
 	/**
-	 * Prepares a single ticket output for response.
+	 * Prepares a single customer output for response.
 	 *
 	 * @since	1.5
 	 * @param	WP_Post				$ticket		KBS_Ticket Ticket object
 	 * @param	WP_REST_Request		$request	Request object
 	 * @return	WP_REST_Response	Response object
 	 */
-	public function prepare_ticket_for_response( $ticket, $request )	{
+	public function prepare_customer_for_response( $ticket, $request )	{
 		$agent      = new KBS_Agent( $ticket->agent_id );
 		$company    = new KBS_Company( $ticket->company_id );
 		$data       = array();
@@ -411,7 +394,7 @@ class KBS_Tickets_API extends KBS_API {
 		 * @param WP_REST_Request	$request	Request object
 		 */
 		return apply_filters( "rest_prepare_{$this->post_type}", $response, $ticket, $request );
-	} // prepare_ticket_for_response
+	} // prepare_customer_for_response
 
 	/**
 	 * Retrieves the query params for the posts collection.
@@ -569,15 +552,9 @@ class KBS_Tickets_API extends KBS_API {
 	 * @return	bool	Whether the post can be read.
 	 */
 	public function check_read_permission( $ticket )	{
-		$can_access = false;
+		$customer_view_role = apply_filters( 'kbs_view_customers_role', 'view_ticket_reports' );
 
-		if ( kbs_is_agent( $this->user_id ) )	{
-			$can_access = kbs_agent_can_access_ticket( $ticket->ID, $this->user_id );
-		} else	{
-			$can_access = kbs_customer_can_access_ticket( $ticket->ID );
-		}
-
-		return $can_access;
+		return current_user_can( $customer_view_role );
 	} // check_read_permission
 
-} // KBS_Tickets_API
+} // KBS_Customers_API
