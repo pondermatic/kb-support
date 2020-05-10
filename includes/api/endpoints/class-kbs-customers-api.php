@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) )
 /**
  * KBS_Customers_API Class
  *
- * @since	1.0.8
+ * @since	1.5
  */
 class KBS_Customers_API extends KBS_API {
 

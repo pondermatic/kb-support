@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) )
 /**
  * KBS_Tickets_API Class
  *
- * @since	1.0.8
+ * @since	1.5
  */
 class KBS_Tickets_API extends KBS_API {
 

@@ -189,17 +189,20 @@ function kbs_setup_post_types() {
 	);
 
 	$company_args = array(
-		'labels'             => $company_labels,
-		'public'             => false,
-		'show_ui'            => true,
-		'rewrite'            => false,
-		'capability_type'    => 'customer',
-		'show_in_menu'       => false,
-		'map_meta_cap'       => true,
-		'has_archive'        => false,
-		'hierarchical'       => false,
-		'supports'           => apply_filters( 'kbs_company_supports', array( 'title', 'thumbnail' ) ),
-		'can_export'         => true
+		'labels'                => $company_labels,
+		'public'                => false,
+		'show_ui'               => true,
+		'rewrite'               => false,
+		'capability_type'       => 'customer',
+		'show_in_menu'          => false,
+		'map_meta_cap'          => true,
+		'has_archive'           => false,
+		'hierarchical'          => false,
+		'supports'              => apply_filters( 'kbs_company_supports', array( 'title', 'thumbnail' ) ),
+		'can_export'            => true,
+		'show_in_rest'          => true,
+		'rest_base'             => 'companies',
+		'rest_controller_class' => 'KBS_Companies_API'
 	);
 
 	register_post_type( 'kbs_company', apply_filters( 'kbs_ticket_company_post_type_args', $company_args ) );
