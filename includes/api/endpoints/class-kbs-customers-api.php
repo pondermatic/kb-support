@@ -119,7 +119,7 @@ class KBS_Customers_API extends KBS_API {
 			);
 		}
 
-		$data     = $this->prepare_customer_for_response( $customer, $request );
+		$data     = $this->prepare_item_for_response( $customer, $request );
 		$response = rest_ensure_response( $data );
 
 		return $response;
@@ -200,7 +200,7 @@ class KBS_Customers_API extends KBS_API {
 			}
 
 			$customer    = new KBS_Customer( $_customer->id );
-			$data        = $this->prepare_customer_for_response( $customer, $request );
+			$data        = $this->prepare_item_for_response( $customer, $request );
 			$customers[] = $this->prepare_response_for_collection( $data );
 		}
 
@@ -217,7 +217,7 @@ class KBS_Customers_API extends KBS_API {
 	 * @param	WP_REST_Request		$request	Request object
 	 * @return	WP_REST_Response	Response object
 	 */
-	public function prepare_customer_for_response( $customer, $request )	{
+	public function prepare_item_for_response( $customer, $request )	{
 		$company    = new KBS_Company( $customer->company_id );
 		$data       = array();
 
@@ -319,7 +319,7 @@ class KBS_Customers_API extends KBS_API {
 		 * @param WP_REST_Request	$request	Request object
 		 */
 		return apply_filters( "rest_prepare_kbs_customer", $response, $customer, $request );
-	} // prepare_customer_for_response
+	} // prepare_item_for_response
 
 	/**
 	 * Retrieves the query params for the posts collection.

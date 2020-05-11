@@ -131,7 +131,7 @@ class KBS_Companies_API extends KBS_API {
 			);
 		}
 
-		$data     = $this->prepare_company_for_response( $company, $request );
+		$data     = $this->prepare_item_for_response( $company, $request );
 		$response = rest_ensure_response( $data );
 
 		return $response;
@@ -214,7 +214,7 @@ class KBS_Companies_API extends KBS_API {
 			}
 
 			$company     = new KBS_Company( $_company->ID );
-			$data        = $this->prepare_company_for_response( $company, $request );
+			$data        = $this->prepare_item_for_response( $company, $request );
 			$companies[] = $this->prepare_response_for_collection( $data );
 		}
 
@@ -276,7 +276,7 @@ class KBS_Companies_API extends KBS_API {
 	 * @param	WP_REST_Request		$request	Request object
 	 * @return	WP_REST_Response	Response object
 	 */
-	public function prepare_company_for_response( $company, $request )	{
+	public function prepare_item_for_response( $company, $request )	{
 		$data     = array();
 
 		$data['id'] = $company->ID;
@@ -333,7 +333,7 @@ class KBS_Companies_API extends KBS_API {
 		 * @param WP_REST_Request	$request	Request object
 		 */
 		return apply_filters( "rest_prepare_{$this->post_type}", $response, $company, $request );
-	} // prepare_company_for_response
+	} // prepare_item_for_response
 
 	/**
 	 * Retrieves the query params for the posts collection.
