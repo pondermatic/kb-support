@@ -153,7 +153,8 @@ class KBS_Knowledgebase {
 			'has_archive'        => $article_archives,
 			'hierarchical'       => false,
 			'supports'           => apply_filters( 'kbs_article_supports', array( 'title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'author', 'trackbacks', 'comments' ) ),
-			'can_export'         => true
+			'can_export'         => true,
+            'show_in_rest'       => true
 		);
 
 		register_post_type( 'article', $article_args );
