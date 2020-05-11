@@ -21,20 +21,12 @@ if ( ! defined( 'ABSPATH' ) )
 class KBS_Articles_API extends KBS_API {
 
 	/**
-	 * Ticket ID
+	 * Post type.
 	 *
-	 * @since	1.5
-	 * @var		int
+	 * @since 4.7.0
+	 * @var string
 	 */
-	protected $article_id = 0;
-
-	/**
-	 * Tickets
-	 *
-	 * @since	1.5
-	 * @var		array
-	 */
-	protected $articles = array();
+	protected $post_type;
 
 	/**
 	 * Get things going
@@ -122,47 +114,22 @@ class KBS_Articles_API extends KBS_API {
 			return $article;
 		}
 
-		if ( ! $this->check_read_permission( $article ) )	{
+		if ( ! kbs_article_user_can_access( $article->ID ) )	{
 			return new WP_Error(
 				'rest_forbidden_context',
-				$this->errors( 'no_permission' ),
+				$this->errors( 'restricted_article' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
 
-		$data     = $this->prepare_item_for_response( $ticket, $request );
+		$data     = $this->prepare_item_for_response( $article, $request );
 		$response = rest_ensure_response( $data );
 
 		return $response;
 	} // get_item
 
 	/**
-	 * Get ticket ID by number.
-	 *
-	 * @since	1.5
-	 * @param	WP_REST_Request	$request	Full details about the request
-	 * @return	object	KBS_Ticket object or false
-	 */
-	public function get_ticket_id_by_number( $request )	{
-		global $wpdb;
-
-		$ticket_id = $wpdb->get_var( $wpdb->prepare(
-			"
-			SELECT post_id
-			FROM $wpdb->postmeta
-			WHERE meta_key = '%s'
-			AND meta_value = '%s'
-			LIMIT 1
-			",
-			'_kbs_ticket_number',
-			trim( $request['number'] )
-		) );
-
-		return $ticket_id;
-	} // get_ticket_id_by_number
-
-	/**
-     * Checks if a given request has access to read multiple tickets.
+     * Checks if a given request has access to read multiple articles.
      *
      * @since   1.5
      * @param	WP_REST_Request	$request	Full details about the request.
@@ -173,13 +140,13 @@ class KBS_Articles_API extends KBS_API {
     } // get_items_permissions_check
 
 	/**
-	 * Retrieves a collection of tickets.
+	 * Retrieves a collection of articles.
 	 *
 	 * @since	1.5
 	 * @param	WP_REST_Request		$request	Full details about the request
 	 * @return	WP_REST_Response|WP_Error		Response object on success, or WP_Error object on failure
 	 */
-	function get_tickets( $request )	{
+	function get_items( $request )	{
 		// Retrieve the list of registered collection query parameters.
 		$registered = $this->get_collection_params();
 		$args       = array();
@@ -229,47 +196,11 @@ class KBS_Articles_API extends KBS_API {
 			$args['posts_per_page'] = $request['per_page'];
 		}
 
-        // By a ticket's key
-        if ( isset( $registered['key'], $request['key'] ) ) {
+        // Show restricted
+        if ( isset( $registered['restricted'], $request['restricted'] ) ) {
             $meta_query[] = array(
-                'key'   => '_kbs_ticket_key',
-                'value' => $request['key']
-            );
-        }
-
-        // By a customer's WordPress user ID
-        if ( isset( $registered['user'], $request['user'] ) ) {
-            $meta_query[] = array(
-                'key'   => '_kbs_ticket_user_id',
-                'value' => (int) $request['user'],
-                'type'  => 'NUMERIC'
-            );
-        }
-
-        // By a customer's ID
-        if ( isset( $registered['customer'], $request['customer'] ) ) {
-            $meta_query[] = array(
-                'key'   => '_kbs_ticket_customer_id',
-                'value' => (int) $request['customer'],
-                'type'  => 'NUMERIC'
-            );
-        }
-
-        // By a company ID
-        if ( isset( $registered['company'], $request['company'] ) ) {
-            $meta_query[] = array(
-                'key'   => '_kbs_ticket_company_id',
-                'value' => (int) $request['company'],
-                'type'  => 'NUMERIC'
-            );
-        }
-
-        // By an agent ID
-        if ( isset( $registered['agent'], $request['agent'] ) ) {
-            $meta_query[] = array(
-                'key'   => '_kbs_ticket_agent_id',
-                'value' => (int) $request['agent'],
-                'type'  => 'NUMERIC'
+                'key'   => '_kbs_article_restricted',
+                'value' => '1'
             );
         }
 
@@ -279,43 +210,42 @@ class KBS_Articles_API extends KBS_API {
 		/**
 		 * Filters the query arguments for a request.
 		 *
-		 * Enables adding extra arguments or setting defaults for a ticket collection request.
+		 * Enables adding extra arguments or setting defaults for an article collection request.
 		 *
 		 * @since	1.5
 		 * @param	array			$args		Key value array of query var to query value
 		 * @param	WP_REST_Request	$request	The request used
 		 */
-		$args          = apply_filters( "rest_{$this->post_type}_query", $args, $request );
-		$query_args    = $this->prepare_items_query( $args, $request );
+		$args           = apply_filters( "rest_{$this->post_type}_query", $args, $request );
+		$query_args     = $this->prepare_items_query( $args, $request );
 
-		$tickets_query = new WP_Query();
-		$query_result  = $tickets_query->query( $query_args );
+		$articles_query = new WP_Query();
+		$query_result   = $articles_query->query( $query_args );
 
-		foreach ( $query_result as $_ticket ) {
-			if ( ! $this->check_read_permission( $_ticket ) ) {
+		foreach ( $query_result as $article ) {
+			if ( ! $this->check_read_permission( $article ) || ! kbs_article_user_can_access( $article->ID ) ) {
 				continue;
 			}
 
-            $ticket          = new KBS_Ticket( $_ticket->ID );
-			$data            = $this->prepare_item_for_response( $ticket, $request );
-			$this->tickets[] = $this->prepare_response_for_collection( $data );
+			$data       = $this->prepare_item_for_response( $article, $request );
+			$articles[] = $this->prepare_response_for_collection( $data );
 		}
 
-        $page          = (int) $query_args['paged'];
-		$total_tickets = $tickets_query->found_posts;
+        $page           = (int) $query_args['paged'];
+		$total_articles = $articles_query->found_posts;
 
-		if ( $total_tickets < 1 ) {
+		if ( $total_articles < 1 ) {
 			// Out-of-bounds, run the query again without LIMIT for total count.
 			unset( $query_args['paged'] );
 
 			$count_query   = new WP_Query();
 			$count_query->query( $query_args );
-			$total_tickets = $count_query->found_posts;
+			$total_articles = $count_query->found_posts;
 		}
 
-		$max_pages = ceil( $total_tickets / (int) $tickets_query->query_vars['posts_per_page'] );
+		$max_pages = ceil( $total_articles / (int) $articles_query->query_vars['posts_per_page'] );
 
-		if ( $page > $max_pages && $total_tickets > 0 ) {
+		if ( $page > $max_pages && $total_articles > 0 ) {
 			return new WP_Error(
 				'rest_post_invalid_page_number',
 				__( 'The page number requested is larger than the number of pages available.' ),
@@ -323,9 +253,9 @@ class KBS_Articles_API extends KBS_API {
 			);
 		}
 
-		$response = rest_ensure_response( $this->tickets );
+		$response = rest_ensure_response( $articles );
 
-		$response->header( 'X-WP-Total', (int) $total_tickets );
+		$response->header( 'X-WP-Total', (int) $total_articles );
 		$response->header( 'X-WP-TotalPages', (int) $max_pages );
 
 		$request_params = $request->get_query_params();
@@ -349,187 +279,276 @@ class KBS_Articles_API extends KBS_API {
 		}
 
 		return $response;
-	} // get_tickets
+	} // get_items
 
 	/**
-	 * Prepares a single ticket output for response.
+	 * Prepares a single article output for response.
 	 *
 	 * @since	1.5
-	 * @param	WP_Post				$ticket		KBS_Ticket Ticket object
+	 * @param	WP_Post				$article	WP_Post Article object
 	 * @param	WP_REST_Request		$request	Request object
 	 * @return	WP_REST_Response	Response object
 	 */
-	public function prepare_item_for_response( $ticket, $request )	{
-		$agent      = new KBS_Agent( $ticket->agent_id );
-		$company    = new KBS_Company( $ticket->company_id );
-		$data       = array();
+	public function prepare_item_for_response( $article, $request )	{
+		$GLOBALS['post'] = $article;
 
-		$data['id'] = $ticket->ID;
+		setup_postdata( $article );
 
-		if ( ! empty( $ticket->number ) )	{
-			$data['number'] = $ticket->number;
+		// Base fields for every post.
+		$data = array();
+
+		$data['id'] = $article->ID;
+
+		if ( ! empty( $request['date'] ) ) {
+			$data['date'] = $this->prepare_date_response( $article->post_date_gmt, $article->post_date );
 		}
 
-		if ( ! empty( $ticket->key ) )	{
-			$data['key'] = $ticket->key;
-		}
-
-		if ( ! empty( $ticket->status_nicename ) )	{
-			$data['status'] = $ticket->status_nicename;
-		}
-
-		if ( ! empty( $ticket->date ) )	{
-			$data['date'] = $ticket->date;
-		}
-
-		if ( ! empty( $ticket->modified_date ) )	{
-			$data['modified_date'] = $ticket->modified_date;
-		}
-
-		if ( ! empty( $ticket->resolved_date ) )	{
-			$data['resolved_date'] = $ticket->resolved_date;
-		}
-
-		if ( ! empty( $ticket->ticket_title ) )	{
-			$data['subject'] = get_the_title( $ticket->ID );
-		}
-
-		if ( ! empty( $ticket->ticket_content ) )	{
-			$data['content'] = $ticket->get_content();
-		}
-
-		if ( ! empty( $ticket->files ) )	{
-			$files = array();
-
-			foreach( $ticket->files as $file )	{
-				$files[] = array(
-					'filename' => get_the_title( $file->ID ),
-					'url'      => $file->guid
-				);
+		if ( ! empty( $request['date_gmt'] ) ) {
+			/*
+			 * For drafts, `post_date_gmt` may not be set, indicating that the date
+			 * of the draft should be updated each time it is saved (see #38883).
+			 * In this case, shim the value based on the `post_date` field
+			 * with the site's timezone offset applied.
+			 */
+			if ( '0000-00-00 00:00:00' === $article->post_date_gmt ) {
+				$post_date_gmt = get_gmt_from_date( $article->post_date );
+			} else {
+				$post_date_gmt = $article->post_date_gmt;
 			}
-
-			$data['attachments'] = $files;
+			$data['date_gmt'] = $this->prepare_date_response( $post_date_gmt );
 		}
 
-		if ( $terms = wp_get_post_terms( $ticket->ID, 'ticket_category' ) )	{
-			$categories = array();
-
-			foreach( $terms as $term )  {
-				$categories[] = array(
-					'term_id' => $term->term_id,
-					'slug'    => $term->slug,
-					'name'    => $term->name
-				);
-			}
-
-			$data['categories'] = $categories;
-		}
-
-		if ( $terms = wp_get_post_terms( $ticket->ID, 'ticket_tag' ) )	{
-			$tags = array();
-
-			foreach( $terms as $term )  {
-				$tags[] = array(
-					'term_id' => $term->term_id,
-					'slug'    => $term->slug,
-					'name'    => $term->name
-				);
-			}
-
-			$data['tags'] = $tags;
-		}
-
-		$data['agent'] = array(
-			'user_id'      => $ticket->agent_id,
-			'first_name'   => $agent ? $agent->first_name : '',
-			'last_name'    => $agent ? $agent->last_name : '',
-			'display_name' => $agent ? $agent->name : '',
-			'email'        => $agent ? $agent->email : '',
-		);
-
-		if ( ! empty( $ticket->agents ) )	{
-			foreach( $ticket->agents as $agent_id )	{
-				$_agent = new KBS_Agent( $agent_id );
-
-				$data['additional_agents']   = array();
-				$data['additional_agents'][] = array(
-					'user_id'      => $agent_id,
-					'first_name'   => $_agent ? $_agent->first_name : '',
-					'last_name'    => $_agent ? $_agent->last_name : '',
-					'display_name' => $_agent ? $_agent->name : '',
-					'email'        => $_agent ? $_agent->email : '',
-				);
-			}
-		}
-
-		if ( ! empty( $ticket->customer_id ) )	{
-			$data['customer'] = array(
-				'id'         => $ticket->customer_id,
-				'first_name' => $ticket->first_name,
-				'last_name'  => $ticket->last_name,
-				'email'      => $ticket->email
+		if ( ! empty( $request['guid'] ) ) {
+			$data['guid'] = array(
+				/** This filter is documented in wp-includes/post-template.php */
+				'rendered' => apply_filters( 'get_the_guid', $article->guid, $article->ID ),
+				'raw'      => $article->guid,
 			);
 		}
 
-		if ( ! empty( $ticket->email ) )	{
-			$data['email'] = $ticket->email;
+		if ( ! empty( $request['modified'] ) ) {
+			$data['modified'] = $this->prepare_date_response( $article->post_modified_gmt, $article->post_modified );
 		}
 
-		if ( ! empty( $ticket->user_id ) )	{
-			$data['user_id'] = $ticket->user_id;
+		if ( ! empty( $request['modified_gmt'] ) ) {
+			/*
+			 * For drafts, `post_modified_gmt` may not be set (see `post_date_gmt` comments
+			 * above). In this case, shim the value based on the `post_modified` field
+			 * with the site's timezone offset applied.
+			 */
+			if ( '0000-00-00 00:00:00' === $article->post_modified_gmt ) {
+				$post_modified_gmt = gmdate( 'Y-m-d H:i:s', strtotime( $article->post_modified ) - ( get_option( 'gmt_offset' ) * 3600 ) );
+			} else {
+				$post_modified_gmt = $article->post_modified_gmt;
+			}
+			$data['modified_gmt'] = $this->prepare_date_response( $post_modified_gmt );
 		}
 
-		if ( ! empty( $ticket->user_info ) )	{
-			$data['user_info'] = $ticket->user_info;
+		if ( ! empty( $request['password'] ) ) {
+			$data['password'] = $article->post_password;
 		}
 
-		if ( ! empty( $this->company_id ) )	{
-			$data['company'] = array(
-				'id'      => $ticket->company_id,
-				'name'    => $company ? $company->name : '',
-				'contact' => $company ? $company->contact : '',
-				'email'   => $company ? $company->email : '',
-				'phone'   => $company ? $company->phone : '',
-				'website' => $company ? $company->website : '',
-				'logo'    => $company ? $company->logo : ''
+		if ( ! empty( $request['slug'] ) ) {
+			$data['slug'] = $article->post_name;
+		}
+
+		if ( ! empty( $request['status'] ) ) {
+			$data['status'] = $article->post_status;
+		}
+
+		if ( ! empty( $request['type'] ) ) {
+			$data['type'] = $article->post_type;
+		}
+
+		if ( ! empty( $request['link'] ) ) {
+			$data['link'] = get_permalink( $article->ID );
+		}
+
+		if ( ! empty( $request['title'] ) ) {
+			$data['title'] = array();
+		}
+		if ( ! empty( $request['title.raw'] ) ) {
+			$data['title']['raw'] = $article->post_title;
+		}
+		if ( ! empty( $request['title.rendered'] ) ) {
+			add_filter( 'protected_title_format', array( $this, 'protected_title_format' ) );
+
+			$data['title']['rendered'] = get_the_title( $article->ID );
+
+			remove_filter( 'protected_title_format', array( $this, 'protected_title_format' ) );
+		}
+
+		$has_password_filter = false;
+
+		if ( $this->can_access_password_content( $post, $request ) ) {
+			// Allow access to the post, permissions already checked before.
+			add_filter( 'post_password_required', '__return_false' );
+
+			$has_password_filter = true;
+		}
+
+		if ( ! empty( $request['content'] ) ) {
+			$data['content'] = array();
+		}
+		if ( ! empty( $request['content.raw'] ) ) {
+			$data['content']['raw'] = $article->post_content;
+		}
+		if ( ! empty( $request['content.rendered'] ) ) {
+			/** This filter is documented in wp-includes/post-template.php */
+			$data['content']['rendered'] = post_password_required( $post ) ? '' : apply_filters( 'the_content', $article->post_content );
+		}
+		if ( ! empty( $request['content.protected'] ) ) {
+			$data['content']['protected'] = (bool) $article->post_password;
+		}
+		if ( ! empty( $request['content.block_version'] ) ) {
+			$data['content']['block_version'] = block_version( $article->post_content );
+		}
+
+		if ( ! empty( $request['excerpt'] ) ) {
+			/** This filter is documented in wp-includes/post-template.php */
+			$excerpt = apply_filters( 'get_the_excerpt', $article->post_excerpt, $post );
+
+			/** This filter is documented in wp-includes/post-template.php */
+			$excerpt = apply_filters( 'the_excerpt', $excerpt );
+
+			$data['excerpt'] = array(
+				'raw'       => $article->post_excerpt,
+				'rendered'  => post_password_required( $post ) ? '' : $excerpt,
+				'protected' => (bool) $article->post_password,
 			);
 		}
 
-		if ( ! empty( $ticket->participants ) )	{
-			$data['participants'] = $ticket->participants;
+		if ( $has_password_filter ) {
+			// Reset filter.
+			remove_filter( 'post_password_required', '__return_false' );
 		}
 
-		if ( ! empty( $ticket->participants ) )	{
-			$data['source'] = $ticket->get_source( 'name' );
+		if ( ! empty( $request['author'] ) ) {
+			$data['author'] = (int) $article->post_author;
 		}
+
+		if ( ! empty( $request['featured_media'] ) ) {
+			$data['featured_media'] = (int) get_post_thumbnail_id( $article->ID );
+		}
+
+		if ( ! empty( $request['parent'] ) ) {
+			$data['parent'] = (int) $article->post_parent;
+		}
+
+		if ( ! empty( $request['menu_order'] ) ) {
+			$data['menu_order'] = (int) $article->menu_order;
+		}
+
+		if ( ! empty( $request['comment_status'] ) ) {
+			$data['comment_status'] = $article->comment_status;
+		}
+
+		if ( ! empty( $request['ping_status'] ) ) {
+			$data['ping_status'] = $article->ping_status;
+		}
+
+		if ( ! empty( $request['sticky'] ) ) {
+			$data['sticky'] = is_sticky( $article->ID );
+		}
+
+		if ( ! empty( $request['template'] ) ) {
+			$template = get_page_template_slug( $article->ID );
+			if ( $template ) {
+				$data['template'] = $template;
+			} else {
+				$data['template'] = '';
+			}
+		}
+
+		if ( ! empty( $request['format'] ) ) {
+			$data['format'] = get_post_format( $article->ID );
+
+			// Fill in blank post format.
+			if ( empty( $data['format'] ) ) {
+				$data['format'] = 'standard';
+			}
+		}
+
+		if ( ! empty( $request['meta'] ) ) {
+			$data['meta'] = $this->meta->get_value( $article->ID, $request );
+		}
+
+		$taxonomies = wp_list_filter( get_object_taxonomies( $this->post_type, 'objects' ), array( 'show_in_rest' => true ) );
+
+		foreach ( $taxonomies as $taxonomy ) {
+			$base = ! empty( $taxonomy->rest_base ) ? $taxonomy->rest_base : $taxonomy->name;
+
+			if ( ! empty( $request[ $base ] ) ) {
+				$terms         = get_the_terms( $post, $taxonomy->name );
+				$data[ $base ] = $terms ? array_values( wp_list_pluck( $terms, 'term_id' ) ) : array();
+			}
+		}
+
+		$post_type_obj = get_post_type_object( $article->post_type );
+		if ( is_post_type_viewable( $post_type_obj ) && $post_type_obj->public ) {
+			$permalink_template_requested = ! empty( $request['permalink_template'] );
+			$generated_slug_requested     = ! empty( $request['generated_slug'] );
+
+			if ( $permalink_template_requested || $generated_slug_requested ) {
+				if ( ! function_exists( 'get_sample_permalink' ) ) {
+					require_once ABSPATH . 'wp-admin/includes/post.php';
+				}
+
+				$sample_permalink = get_sample_permalink( $article->ID, $article->post_title, '' );
+
+				if ( $permalink_template_requested ) {
+					$data['permalink_template'] = $sample_permalink[0];
+				}
+
+				if ( $generated_slug_requested ) {
+					$data['generated_slug'] = $sample_permalink[1];
+				}
+			}
+		}
+
+		$context = ! empty( $request['context'] ) ? $request['context'] : 'view';
+
+		$data['total_views']   = kbs_get_article_view_count( $article->ID );
+		$data['current_month'] = kbs_get_article_view_count( $article->ID, false );
+		$data['is_restricted'] = kbs_article_is_restricted( $article->ID );
 
 		// Wrap the data in a response object.
 		$response = rest_ensure_response( $data );
-		$links    = $this->prepare_links( $ticket );
 
+		$links = $this->prepare_links( $post );
 		$response->add_links( $links );
 
+		if ( ! empty( $links['self']['href'] ) ) {
+			$actions = $this->get_available_actions( $post, $request );
+
+			$self = $links['self']['href'];
+
+			foreach ( $actions as $rel ) {
+				$response->add_link( $rel, $self );
+			}
+		}
+
 		/**
-		 * Filters the ticket data for a response.
+		 * Filters the article data for a response.
 		 *
 		 * @since	1.5
 		 *
 		 * @param WP_REST_Response	$response	The response object
-		 * @param KBS_Ticket		$ticket		Ticket object
+		 * @param WP_Post			$article	Post object
 		 * @param WP_REST_Request	$request	Request object
 		 */
-		return apply_filters( "rest_prepare_{$this->post_type}", $response, $ticket, $request );
+		return apply_filters( "rest_prepare_{$this->post_type}", $response, $article, $request );
 	} // prepare_item_for_response
 
 	/**
-	 * Retrieves the query params for the tickets collection.
+	 * Retrieves the query params for the articles collection.
 	 *
 	 * @since	1.5
 	 * @return	array	Collection parameters
 	 */
 	public function get_collection_params() {
-		$singular     = kbs_get_ticket_label_singular();
-		$plural       = kbs_get_ticket_label_plural();
+		$singular     = kbs_get_article_label_singular();
+		$plural       = kbs_get_article_label_plural();
 		$query_params = parent::get_collection_params();
 
 		$query_params['context']['default'] = 'view';
@@ -540,8 +559,33 @@ class KBS_Articles_API extends KBS_API {
                 strtolower( $plural )
             ),
 			'type'        => 'string',
-			'format'      => 'date-time',
+			'format'      => 'date-time'
 		);
+
+		if ( post_type_supports( $this->post_type, 'author' ) ) {
+			$query_params['author']         = array(
+				'description' => sprintf(
+					__( 'Limit result set to %s assigned to specific authors.', 'kb-support' ),
+					strtolower( $plural )
+				),
+				'type'        => 'array',
+				'items'       => array(
+					'type' => 'integer'
+				),
+				'default'     => array()
+			);
+			$query_params['author_exclude'] = array(
+				'description' => sprintf(
+					__( 'Ensure result set excludes %s assigned to specific authors.', 'kb-support' ),
+					strtolower( $plural )
+				),
+				'type'        => 'array',
+				'items'       => array(
+					'type' => 'integer'
+				),
+				'default'     => array()
+			);
+		}
 
         $query_params['before'] = array(
 			'description' => sprintf(
@@ -549,16 +593,16 @@ class KBS_Articles_API extends KBS_API {
                 strtolower( $plural )
             ),
 			'type'        => 'string',
-			'format'      => 'date-time',
+			'format'      => 'date-time'
 		);
 
         $query_params['exclude'] = array(
 			'description' => __( 'Ensure result set excludes specific IDs.', 'kb-support' ),
 			'type'        => 'array',
 			'items'       => array(
-				'type' => 'integer',
+				'type' => 'integer'
 			),
-			'default'     => array(),
+			'default'     => array()
 		);
 
 		$query_params['include'] = array(
@@ -570,16 +614,26 @@ class KBS_Articles_API extends KBS_API {
 			'default'     => array()
 		);
 
+		if ( 'page' === $this->post_type || post_type_supports( $this->post_type, 'page-attributes' ) ) {
+			$query_params['menu_order'] = array(
+				'description' => sprintf(
+                __( 'Limit result set to %s with a specific menu_order value.', 'kb-support' ),
+					strtolower( $plural )
+				),
+				'type'        => 'integer'
+			);
+		}
+
         $query_params['offset'] = array(
 			'description' => __( 'Offset the result set by a specific number of items.', 'kb-support' ),
-			'type'        => 'integer',
+			'type'        => 'integer'
 		);
 
         $query_params['order'] = array(
 			'description' => __( 'Order sort attribute ascending or descending.', 'kb-support' ),
 			'type'        => 'string',
 			'default'     => 'desc',
-			'enum'        => array( 'asc', 'desc' ),
+			'enum'        => array( 'asc', 'desc' )
 		);
 
 		$query_params['orderby'] = array(
@@ -587,60 +641,56 @@ class KBS_Articles_API extends KBS_API {
 			'type'        => 'string',
 			'default'     => 'ID',
 			'enum'        => array(
-				'ID',
+				'author',
 				'date',
-                'agent',
-				'customer',
-				'agent',
-				'modified',
+				'id',
 				'include',
-				'title'
+				'modified',
+				'parent',
+				'relevance',
+				'slug',
+				'include_slugs',
+				'title',
+				'views',
+				'views_month'
 			)
 		);
 
-        $query_params['key'] = array(
-			'description' => sprintf(
-				__( 'Limit result set to a %s with a specific key.', 'kb-support' ),
-				strtolower( $plural )
-			),
-			'type'        => 'string',
-			'default'     => null
-		);
+		if ( 'page' === $this->post_type || post_type_supports( $this->post_type, 'page-attributes' ) ) {
+			$query_params['orderby']['enum'][] = 'menu_order';
+		}
 
-		$query_params['user'] = array(
-			'description' => sprintf(
-				__( 'Limit result set to %s from a specific customer WP user account.', 'kb-support' ),
-				strtolower( $plural )
-			),
-			'type'        => 'integer',
-			'default'     => null
-		);
+		$post_type = get_post_type_object( $this->post_type );
 
-		$query_params['customer'] = array(
-			'description' => sprintf(
-				__( 'Limit result set to %s from a specific customer.', 'kb-support' ),
-				strtolower( $plural )
-			),
-			'type'        => 'integer',
-			'default'     => null
-		);
+		if ( $post_type->hierarchical || 'attachment' === $this->post_type ) {
+			$query_params['parent']         = array(
+				'description' => __( 'Limit result set to items with particular parent IDs.', 'kb-support' ),
+				'type'        => 'array',
+				'items'       => array(
+					'type' => 'integer',
+				),
+				'default'     => array(),
+			);
+			$query_params['parent_exclude'] = array(
+				'description' => __( 'Limit result set to all items except those of a particular parent ID.', 'kb-support' ),
+				'type'        => 'array',
+				'items'       => array(
+					'type' => 'integer',
+				),
+				'default'     => array(),
+			);
+		}
 
-		$query_params['company'] = array(
-			'description' => sprintf(
-				__( 'Limit result set to %s from a specific company.', 'kb-support' ),
+		$query_params['slug'] = array(
+			'description'       => sprintf(
+				__( 'Limit result set to posts with one or more specific slugs.', 'kb-support' ),
 				strtolower( $plural )
 			),
-			'type'        => 'integer',
-			'default'     => null
-		);
-
-		$query_params['agent'] = array(
-			'description' => sprintf(
-				__( 'Limit result set to %s assigned to a specific agent.', 'kb-support' ),
-				strtolower( $plural )
+			'type'              => 'array',
+			'items'             => array(
+				'type' => 'string',
 			),
-			'type'        => 'integer',
-			'default'     => null
+			'sanitize_callback' => 'wp_parse_slug_list',
 		);
 
 		$query_params['status'] = array(
@@ -656,7 +706,13 @@ class KBS_Articles_API extends KBS_API {
 			)
 		);
 
-		$post_type = get_post_type_object( $this->post_type );
+		$query_params['restricted'] = array(
+			'default'     => 'null',
+			'description' => sprintf(
+				__( 'Limit result set to restricted %s.', 'kb-support' ),
+				strtolower( $plural )
+			)
+		);
 
 		/**
 		 * Filter collection parameters for the tickets controller.
@@ -677,22 +733,46 @@ class KBS_Articles_API extends KBS_API {
 	} // get_collection_params
 
 	/**
-	 * Checks if a ticket can be read.
+	 * Checks if an article can be read.
 	 *
 	 * @since	1.5
-	 * @param	object	KBS_Ticket object
+	 * @param	object	KBS_Article object
 	 * @return	bool	Whether the post can be read.
 	 */
-	public function check_read_permission( $ticket )	{
-		$can_access = false;
+	public function check_read_permission( $article )	{
+		$post_type = get_post_type_object( $article->post_type );
 
-		if ( kbs_is_agent( $this->user_id ) )	{
-			$can_access = kbs_agent_can_access_ticket( $ticket->ID, $this->user_id );
-		} else	{
-			$can_access = kbs_customer_can_access_ticket( $ticket->ID );
+		if ( ! $this->check_is_post_type_allowed( $post_type ) ) {
+			return false;
 		}
 
-		return $can_access;
+		// Is the post readable?
+		if ( 'publish' === $article->post_status || current_user_can( $post_type->cap->read_post, $article->ID ) ) {
+			return true;
+		}
+
+		$post_status_obj = get_post_status_object( $article->post_status );
+		if ( $post_status_obj && $post_status_obj->public ) {
+			return true;
+		}
+
+		// Can we read the parent if we're inheriting?
+		if ( 'inherit' === $article->post_status && $article->post_parent > 0 ) {
+			$parent = get_post( $article->post_parent );
+			if ( $parent ) {
+				return $this->check_read_permission( $parent );
+			}
+		}
+
+		/*
+		 * If there isn't a parent, but the status is set to inherit, assume
+		 * it's published (as per get_post_status()).
+		 */
+		if ( 'inherit' === $article->post_status ) {
+			return true;
+		}
+
+		return false;
 	} // check_read_permission
 
     /**
@@ -732,51 +812,69 @@ class KBS_Articles_API extends KBS_API {
 			}
 		}
 
+		if ( isset( $request['orderby'] ) )	{
+			if ( 'views' == $request['orderby'] || 'views_month' == $request['orderby'] )	{
+				if ( 'views' == $request['orderby'] )	{
+					$views_key = kbs_get_article_view_count_meta_key_name();
+				} else	{
+					$views_key = kbs_get_article_view_count_meta_key_name( false );
+				}
+
+				$query_args['meta_key'] = $views_key;
+				$query_args['orderby']  = 'meta_value_num';
+			}
+				
+		}
+
 		return $query_args;
 	} // prepare_items_query
+
+	/**
+	 * Checks the post_date_gmt or modified_gmt and prepare any post or
+	 * modified date for single post output.
+	 *
+	 * @since	1.5
+	 *
+	 * @param	string		$date_gmt	GMT publication time
+	 * @param	string|null	$date		Optional. Local publication time. Default null
+	 * @return	string|null	ISO8601/RFC3339 formatted datetime
+	 */
+	protected function prepare_date_response( $date_gmt, $date = null ) {
+		// Use the date if passed.
+		if ( isset( $date ) ) {
+			return mysql_to_rfc3339( $date );
+		}
+
+		// Return null if $date_gmt is empty/zeros.
+		if ( '0000-00-00 00:00:00' === $date_gmt ) {
+			return null;
+		}
+
+		// Return the formatted datetime.
+		return mysql_to_rfc3339( $date_gmt );
+	} // prepare_date_response
 
 	/**
 	 * Prepares links for the request.
 	 *
 	 * @since	1.5
-	 * @param	KBS_Ticket	$ticket		KBS Ticket object
+	 * @param	WP_Post		$article		WP_Post object
 	 * @return	array		Links for the given post
 	 */
-	protected function prepare_links( $ticket ) {
+	protected function prepare_links( $article ) {
 		$base = sprintf( '%s/%s', $this->namespace . $this->version, $this->rest_base );
 
 		// Entity meta.
 		$links = array(
 			'self'       => array(
-				'href' => rest_url( trailingslashit( $base ) . $ticket->ID ),
+				'href' => rest_url( trailingslashit( $base ) . $article->ID ),
 			),
 			'collection' => array(
 				'href' => rest_url( $base ),
 			)
 		);
 
-		if ( ! empty( $ticket->customer_id ) )	{
-			$links['customer'] = array(
-				'href'       => rest_url( 'kbs/v1/customers/' . $ticket->customer_id ),
-				'embeddable' => true,
-			);
-		}
-
-		if ( ! empty( $ticket->user_id ) )	{
-			$links['user'] = array(
-				'href'       => rest_url( 'wp/v2/users/' . $ticket->user_id ),
-				'embeddable' => true
-			);
-		}
-
-		if ( ! empty( $ticket->company_id ) )	{
-			$links['company'] = array(
-				'href'       => rest_url( 'kbs/v1/companies/' . $ticket->company_id ),
-				'embeddable' => true,
-			);
-		}
-
 		return $links;
 	} // prepare_links
 
-} // KBS_Tickets_API
+} // KBS_Articles_API
