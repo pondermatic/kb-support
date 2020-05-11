@@ -131,8 +131,12 @@ class KBS_API extends WP_REST_Controller {
 	 */
 	public function errors( $error )	{
 		$errors = array(
-			'no_auth'       => __( 'Authentication failed.', 'kb-support' ),
-			'no_permission' => __( 'Access denied.', 'kb-support' )
+			'no_auth'            => __( 'Authentication failed.', 'kb-support' ),
+			'no_permission'      => __( 'Access denied.', 'kb-support' ),
+			'restricted_article' => sprintf(
+				__( 'Criteria not met to access restricted %s.', 'kb-support' ),
+				kbs_get_article_label_singular( true )
+			)
 		);
 
 		$errors = apply_filters( 'kbs_api_errors', $errors );
