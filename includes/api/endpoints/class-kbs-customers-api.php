@@ -52,7 +52,7 @@ class KBS_Customers_API extends KBS_API {
 			array(
 				array(
 					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => array( $this, 'get_customers' ),
+					'callback'            => array( $this, 'get_items' ),
 					'permission_callback' => array( $this, 'get_items_permissions_check' ),
 					'args'                => $this->get_collection_params(),
 				)
@@ -71,7 +71,7 @@ class KBS_Customers_API extends KBS_API {
 				),
 				array(
 					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => array( $this, 'get_customer' ),
+					'callback'            => array( $this, 'get_item' ),
 					'permission_callback' => array( $this, 'get_item_permissions_check' )
 				)
 			)
@@ -108,7 +108,7 @@ class KBS_Customers_API extends KBS_API {
 	 * @param	WP_REST_Request	$request	Full details about the request
 	 * @return	WP_REST_Response|WP_Error	Response object on success, or WP_Error object on failure.
 	 */
-	public function get_customer( $request ) {
+	public function get_item( $request ) {
 		$customer = new KBS_Customer( $request['id'] );
 
 		if ( ! $this->check_read_permission( $customer ) )	{
@@ -123,7 +123,7 @@ class KBS_Customers_API extends KBS_API {
 		$response = rest_ensure_response( $data );
 
 		return $response;
-	} // get_customer
+	} // get_item
 
 	/**
      * Checks if a given request has access to read customers.
@@ -143,7 +143,7 @@ class KBS_Customers_API extends KBS_API {
 	 * @param	WP_REST_Request		$request	Full details about the request
 	 * @return	WP_REST_Response|WP_Error		Response object on success, or WP_Error object on failure
 	 */
-	function get_customers( $request )	{
+	function get_items( $request )	{
 		// Retrieve the list of registered collection query parameters.
 		$registered = $this->get_collection_params();
 
@@ -207,7 +207,7 @@ class KBS_Customers_API extends KBS_API {
 		$response = rest_ensure_response( $customers );
 
 		return $response;
-	} // get_customers
+	} // get_items
 
 	/**
 	 * Prepares a single customer output for response.

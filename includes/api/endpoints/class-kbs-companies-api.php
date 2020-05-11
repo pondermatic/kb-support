@@ -60,7 +60,7 @@ class KBS_Companies_API extends KBS_API {
 			array(
 				array(
 					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => array( $this, 'get_companies' ),
+					'callback'            => array( $this, 'get_items' ),
 					'permission_callback' => array( $this, 'get_items_permissions_check' ),
 					'args'                => $this->get_collection_params(),
 				)
@@ -79,7 +79,7 @@ class KBS_Companies_API extends KBS_API {
 				),
 				array(
 					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => array( $this, 'get_company' ),
+					'callback'            => array( $this, 'get_item' ),
 					'permission_callback' => array( $this, 'get_item_permissions_check' )
 				)
 			)
@@ -116,7 +116,7 @@ class KBS_Companies_API extends KBS_API {
 	 * @param	WP_REST_Request	$request	Full details about the request
 	 * @return	WP_REST_Response|WP_Error	Response object on success, or WP_Error object on failure.
 	 */
-	public function get_company( $request ) {
+	public function get_item( $request ) {
 		$company = new KBS_Company( absint( $request['id'] ) );
 
 		if ( empty( $company->ID ) )	{
@@ -135,7 +135,7 @@ class KBS_Companies_API extends KBS_API {
 		$response = rest_ensure_response( $data );
 
 		return $response;
-	} // get_company
+	} // get_item
 
 	/**
      * Checks if a given request has access to read multiple companies.
@@ -155,7 +155,7 @@ class KBS_Companies_API extends KBS_API {
 	 * @param	WP_REST_Request		$request	Full details about the request
 	 * @return	WP_REST_Response|WP_Error		Response object on success, or WP_Error object on failure
 	 */
-	function get_companies( $request )	{
+	function get_items( $request )	{
 		// Retrieve the list of registered collection query parameters.
 		$registered = $this->get_collection_params();
 		$args       = array();
@@ -266,7 +266,7 @@ class KBS_Companies_API extends KBS_API {
 		}
 
 		return $response;
-	} // get_companies
+	} // get_items
 
 	/**
 	 * Prepares a single company output for response.
@@ -316,6 +316,8 @@ class KBS_Companies_API extends KBS_API {
 		if ( ! empty( $company->date_modified ) )	{
 			$data['date_modified'] = $company->date_modified;
 		}
+
+        $data['ticket_count'] = kbs_count_company_tickets( $company );
 
 		// Wrap the data in a response object.
 		$response = rest_ensure_response( $data );

@@ -3,7 +3,7 @@
  * KB Support REST API
  *
  * @package     KBS
- * @subpackage  Classes/Tickets REST API
+ * @subpackage  Classes/Articles REST API
  * @copyright   Copyright (c) 2020, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.5
@@ -14,11 +14,11 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
- * KBS_Tickets_API Class
+ * KBS_Articles_API Class
  *
  * @since	1.5
  */
-class KBS_Tickets_API extends KBS_API {
+class KBS_Articles_API extends KBS_API {
 
 	/**
 	 * Ticket ID
@@ -26,7 +26,7 @@ class KBS_Tickets_API extends KBS_API {
 	 * @since	1.5
 	 * @var		int
 	 */
-	protected $ticket_id = 0;
+	protected $article_id = 0;
 
 	/**
 	 * Tickets
@@ -34,7 +34,7 @@ class KBS_Tickets_API extends KBS_API {
 	 * @since	1.5
 	 * @var		array
 	 */
-	protected $tickets = array();
+	protected $articles = array();
 
 	/**
 	 * Get things going
@@ -76,7 +76,7 @@ class KBS_Tickets_API extends KBS_API {
 						'type'        => 'integer',
 						'description' => sprintf(
 							__( 'Unique identifier for the %s.', 'kb-support' ),
-							kbs_get_ticket_label_singular( true )
+							kbs_get_article_label_singular( true )
 						)
 					)
 				),
@@ -88,26 +88,6 @@ class KBS_Tickets_API extends KBS_API {
 			)
 		);
 
-		register_rest_route(
-			$this->namespace . $this->version,
-			'/' . $this->rest_base . '/(?P<number>[a-zA-Z0-9-]+)',
-			array(
-				'args'   => array(
-					'id' => array(
-						'type'        => 'string',
-						'description' => sprintf(
-							__( 'Unique identifier for the %s.', 'kb-support' ),
-							kbs_get_ticket_label_singular( true )
-						)
-					)
-				),
-				array(
-					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => array( $this, 'get_ticket' ),
-					'permission_callback' => array( $this, 'get_item_permissions_check' )
-				)
-			)
-		);
     } // register_routes
 
 	/**
@@ -130,22 +110,19 @@ class KBS_Tickets_API extends KBS_API {
     } // get_item_permissions_check
 
 	/**
-	 * Retrieves a single ticket.
+	 * Retrieves a single article.
 	 *
 	 * @since	1.5
 	 * @param	WP_REST_Request	$request	Full details about the request
 	 * @return	WP_REST_Response|WP_Error	Response object on success, or WP_Error object on failure.
 	 */
 	public function get_item( $request ) {
-		$this->ticket_id = isset( $request['id'] ) ? $request['id'] : $this->get_ticket_id_by_number( $request );
-
-		$ticket = new KBS_Ticket( absint( $this->ticket_id ) );
-
-		if ( empty( $ticket->ID ) )	{
-			return $ticket;
+        $article = $this->get_post( $request['id'] );
+		if ( is_wp_error( $article ) ) {
+			return $article;
 		}
 
-		if ( ! $this->check_read_permission( $ticket ) )	{
+		if ( ! $this->check_read_permission( $article ) )	{
 			return new WP_Error(
 				'rest_forbidden_context',
 				$this->errors( 'no_permission' ),
@@ -202,7 +179,7 @@ class KBS_Tickets_API extends KBS_API {
 	 * @param	WP_REST_Request		$request	Full details about the request
 	 * @return	WP_REST_Response|WP_Error		Response object on success, or WP_Error object on failure
 	 */
-	function get_items( $request )	{
+	function get_tickets( $request )	{
 		// Retrieve the list of registered collection query parameters.
 		$registered = $this->get_collection_params();
 		$args       = array();
@@ -252,6 +229,14 @@ class KBS_Tickets_API extends KBS_API {
 			$args['posts_per_page'] = $request['per_page'];
 		}
 
+        // By a ticket's key
+        if ( isset( $registered['key'], $request['key'] ) ) {
+            $meta_query[] = array(
+                'key'   => '_kbs_ticket_key',
+                'value' => $request['key']
+            );
+        }
+
         // By a customer's WordPress user ID
         if ( isset( $registered['user'], $request['user'] ) ) {
             $meta_query[] = array(
@@ -290,10 +275,6 @@ class KBS_Tickets_API extends KBS_API {
 
 		// Force the post_type argument, since it's not a user input variable.
 		$args['post_type'] = $this->post_type;
-
-        if ( ! empty( $meta_query ) )   {
-            $args['meta_query'] = $meta_query;
-        }
 
 		/**
 		 * Filters the query arguments for a request.
@@ -368,7 +349,7 @@ class KBS_Tickets_API extends KBS_API {
 		}
 
 		return $response;
-	} // get_items
+	} // get_tickets
 
 	/**
 	 * Prepares a single ticket output for response.
@@ -414,9 +395,7 @@ class KBS_Tickets_API extends KBS_API {
 		}
 
 		if ( ! empty( $ticket->ticket_content ) )	{
-            $data['content'] = array();
-            $data['content']['raw'] = $ticket->ticket_content;
-            $data['content']['rendered'] = apply_filters( 'the_content', $ticket->ticket_content );
+			$data['content'] = $ticket->get_content();
 		}
 
 		if ( ! empty( $ticket->files ) )	{
@@ -617,6 +596,15 @@ class KBS_Tickets_API extends KBS_API {
 				'include',
 				'title'
 			)
+		);
+
+        $query_params['key'] = array(
+			'description' => sprintf(
+				__( 'Limit result set to a %s with a specific key.', 'kb-support' ),
+				strtolower( $plural )
+			),
+			'type'        => 'string',
+			'default'     => null
 		);
 
 		$query_params['user'] = array(
