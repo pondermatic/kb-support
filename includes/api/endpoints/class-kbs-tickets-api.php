@@ -137,7 +137,7 @@ class KBS_Tickets_API extends KBS_API {
 	 * @return	WP_REST_Response|WP_Error	Response object on success, or WP_Error object on failure.
 	 */
 	public function get_ticket( $request ) {
-		$this->ticket_id = isset( $request['id'] ) ? $request['id'] : $this->get_ticket_by_number( $request );
+		$this->ticket_id = isset( $request['id'] ) ? $request['id'] : $this->get_ticket_id_by_number( $request );
 
 		$ticket = new KBS_Ticket( absint( $this->ticket_id ) );
 
@@ -153,20 +153,20 @@ class KBS_Tickets_API extends KBS_API {
 			);
 		}
 
-		$data     = $this->prepare_ticket_for_response( $ticket, $request );
+		$data     = $this->prepare_item_for_response( $ticket, $request );
 		$response = rest_ensure_response( $data );
 
 		return $response;
 	} // get_ticket
 
 	/**
-	 * Get ticket by number.
+	 * Get ticket ID by number.
 	 *
 	 * @since	1.5
 	 * @param	WP_REST_Request	$request	Full details about the request
 	 * @return	object	KBS_Ticket object or false
 	 */
-	public function get_ticket_by_number( $request )	{
+	public function get_ticket_id_by_number( $request )	{
 		global $wpdb;
 
 		$ticket_id = $wpdb->get_var( $wpdb->prepare(
@@ -182,7 +182,7 @@ class KBS_Tickets_API extends KBS_API {
 		) );
 
 		return $ticket_id;
-	} // get_ticket_by_number
+	} // get_ticket_id_by_number
 
 	/**
      * Checks if a given request has access to read multiple tickets.
@@ -206,13 +206,95 @@ class KBS_Tickets_API extends KBS_API {
 		// Retrieve the list of registered collection query parameters.
 		$registered = $this->get_collection_params();
 		$args       = array();
+        $meta_query = array();
 
-		// Only set arg values for allowed args
-		foreach( $registered as $api_param => $collection_param )	{
-			if ( isset( $request[ $api_param ] ) )	{
-				$args[ $api_param ] = $request[ $api_param ];
+        /*
+		 * This array defines mappings between public API query parameters whose
+		 * values are accepted as-passed, and their internal WP_Query parameter
+		 * name equivalents (some are the same). Only values which are also
+		 * present in $registered will be set.
+		 */
+		$parameter_mappings = array(
+			'exclude'        => 'post__not_in',
+			'include'        => 'post__in',
+			'offset'         => 'offset',
+			'order'          => 'order',
+			'orderby'        => 'orderby',
+			'page'           => 'paged',
+			'status'         => 'post_status'
+		);
+
+		/*
+		 * For each known parameter which is both registered and present in the request,
+		 * set the parameter's value on the query $args.
+		 */
+		foreach ( $parameter_mappings as $api_param => $wp_param ) {
+			if ( isset( $registered[ $api_param ], $request[ $api_param ] ) ) {
+				$args[ $wp_param ] = $request[ $api_param ];
 			}
 		}
+
+        // Check for & assign any parameters which require special handling or setting.
+		$args['date_query'] = array();
+
+		// Set before into date query. Date query must be specified as an array of an array.
+		if ( isset( $registered['before'], $request['before'] ) ) {
+			$args['date_query'][0]['before'] = $request['before'];
+		}
+
+		// Set after into date query. Date query must be specified as an array of an array.
+		if ( isset( $registered['after'], $request['after'] ) ) {
+			$args['date_query'][0]['after'] = $request['after'];
+		}
+
+        // Ensure our per_page parameter overrides any provided posts_per_page filter.
+		if ( isset( $registered['per_page'] ) ) {
+			$args['posts_per_page'] = $request['per_page'];
+		}
+
+        // By a ticket's key
+        if ( isset( $registered['key'], $request['key'] ) ) {
+            $meta_query[] = array(
+                'key'   => '_kbs_ticket_key',
+                'value' => $request['key']
+            );
+        }
+
+        // By a customer's WordPress user ID
+        if ( isset( $registered['user'], $request['user'] ) ) {
+            $meta_query[] = array(
+                'key'   => '_kbs_ticket_user_id',
+                'value' => (int) $request['user'],
+                'type'  => 'NUMERIC'
+            );
+        }
+
+        // By a customer's ID
+        if ( isset( $registered['customer'], $request['customer'] ) ) {
+            $meta_query[] = array(
+                'key'   => '_kbs_ticket_customer_id',
+                'value' => (int) $request['customer'],
+                'type'  => 'NUMERIC'
+            );
+        }
+
+        // By a company ID
+        if ( isset( $registered['company'], $request['company'] ) ) {
+            $meta_query[] = array(
+                'key'   => '_kbs_ticket_company_id',
+                'value' => (int) $request['company'],
+                'type'  => 'NUMERIC'
+            );
+        }
+
+        // By an agent ID
+        if ( isset( $registered['agent'], $request['agent'] ) ) {
+            $meta_query[] = array(
+                'key'   => '_kbs_ticket_agent_id',
+                'value' => (int) $request['agent'],
+                'type'  => 'NUMERIC'
+            );
+        }
 
 		// Force the post_type argument, since it's not a user input variable.
 		$args['post_type'] = $this->post_type;
@@ -226,21 +308,68 @@ class KBS_Tickets_API extends KBS_API {
 		 * @param	array			$args		Key value array of query var to query value
 		 * @param	WP_REST_Request	$request	The request used
 		 */
-		$args = apply_filters( "rest_{$this->post_type}_query", $args, $request );
+		$args          = apply_filters( "rest_{$this->post_type}_query", $args, $request );
+		$query_args    = $this->prepare_items_query( $args, $request );
 
-		$tickets_query = new KBS_Tickets_Query( $args );
-		$query_result  = $tickets_query->get_tickets();
+		$tickets_query = new WP_Query();
+		$query_result  = $tickets_query->query( $query_args );
 
-		foreach ( $query_result as $ticket ) {
-			if ( ! $this->check_read_permission( $ticket ) ) {
+		foreach ( $query_result as $_ticket ) {
+			if ( ! $this->check_read_permission( $_ticket ) ) {
 				continue;
 			}
 
-			$data            = $this->prepare_ticket_for_response( $ticket, $request );
+            $ticket          = new KBS_Ticket( $_ticket->ID );
+			$data            = $this->prepare_item_for_response( $ticket, $request );
 			$this->tickets[] = $this->prepare_response_for_collection( $data );
 		}
 
+        $page          = (int) $query_args['paged'];
+		$total_tickets = $tickets_query->found_posts;
+
+		if ( $total_tickets < 1 ) {
+			// Out-of-bounds, run the query again without LIMIT for total count.
+			unset( $query_args['paged'] );
+
+			$count_query   = new WP_Query();
+			$count_query->query( $query_args );
+			$total_tickets = $count_query->found_posts;
+		}
+
+		$max_pages = ceil( $total_tickets / (int) $tickets_query->query_vars['posts_per_page'] );
+
+		if ( $page > $max_pages && $total_tickets > 0 ) {
+			return new WP_Error(
+				'rest_post_invalid_page_number',
+				__( 'The page number requested is larger than the number of pages available.' ),
+				array( 'status' => 400 )
+			);
+		}
+
 		$response = rest_ensure_response( $this->tickets );
+
+		$response->header( 'X-WP-Total', (int) $total_tickets );
+		$response->header( 'X-WP-TotalPages', (int) $max_pages );
+
+		$request_params = $request->get_query_params();
+		$base           = add_query_arg( urlencode_deep( $request_params ), rest_url( sprintf( '%s/%s', $this->namespace, $this->rest_base ) ) );
+
+		if ( $page > 1 ) {
+			$prev_page = $page - 1;
+
+			if ( $prev_page > $max_pages ) {
+				$prev_page = $max_pages;
+			}
+
+			$prev_link = add_query_arg( 'page', $prev_page, $base );
+			$response->link_header( 'prev', $prev_link );
+		}
+		if ( $max_pages > $page ) {
+			$next_page = $page + 1;
+			$next_link = add_query_arg( 'page', $next_page, $base );
+
+			$response->link_header( 'next', $next_link );
+		}
 
 		return $response;
 	} // get_tickets
@@ -253,7 +382,7 @@ class KBS_Tickets_API extends KBS_API {
 	 * @param	WP_REST_Request		$request	Request object
 	 * @return	WP_REST_Response	Response object
 	 */
-	public function prepare_ticket_for_response( $ticket, $request )	{
+	public function prepare_item_for_response( $ticket, $request )	{
 		$agent      = new KBS_Agent( $ticket->agent_id );
 		$company    = new KBS_Company( $ticket->company_id );
 		$data       = array();
@@ -413,10 +542,10 @@ class KBS_Tickets_API extends KBS_API {
 		 * @param WP_REST_Request	$request	Request object
 		 */
 		return apply_filters( "rest_prepare_{$this->post_type}", $response, $ticket, $request );
-	} // prepare_ticket_for_response
+	} // prepare_item_for_response
 
 	/**
-	 * Retrieves the query params for the posts collection.
+	 * Retrieves the query params for the tickets collection.
 	 *
 	 * @since	1.5
 	 * @return	array	Collection parameters
@@ -428,63 +557,82 @@ class KBS_Tickets_API extends KBS_API {
 
 		$query_params['context']['default'] = 'view';
 
-		$query_params['number'] = array(
-			'description'       => sprintf( 
-				__( 'Maximum number of %s to be returned in result set.', 'kb-support' ),
-				strtolower( $plural )
-			),
-			'type'              => 'integer',
-			'default'           => 20,
-			'minimum'           => 1,
-			'maximum'           => 100,
-			'sanitize_callback' => 'absint',
-			'validate_callback' => 'rest_validate_request_arg'
+        $query_params['after'] = array(
+			'description' => sprintf(
+                __( 'Limit response to %s published after a given ISO8601 compliant date.', 'kb-support' ),
+                strtolower( $plural )
+            ),
+			'type'        => 'string',
+			'format'      => 'date-time',
 		);
 
-		$query_params['page'] = array(
-			'description'       => __( 'Current page of the collection.' ),
-			'type'              => 'integer',
-			'default'           => 1,
-			'sanitize_callback' => 'absint',
-			'validate_callback' => 'rest_validate_request_arg',
-			'minimum'           => 1
+        $query_params['before'] = array(
+			'description' => sprintf(
+                __( 'Limit response to %s published before a given ISO8601 compliant date.', 'kb-support' ),
+                strtolower( $plural )
+            ),
+			'type'        => 'string',
+			'format'      => 'date-time',
 		);
 
-		$query_params['ticket_ids'] = array(
-			'description' => __( 'Limit result set to specific IDs.' ),
+        $query_params['exclude'] = array(
+			'description' => __( 'Ensure result set excludes specific IDs.', 'kb-support' ),
 			'type'        => 'array',
 			'items'       => array(
 				'type' => 'integer',
 			),
-			'default'     => null
+			'default'     => array(),
+		);
+
+		$query_params['include'] = array(
+			'description' => __( 'Limit result set to specific IDs.', 'kb-support' ),
+			'type'        => 'array',
+			'items'       => array(
+				'type' => 'integer',
+			),
+			'default'     => array()
+		);
+
+        $query_params['offset'] = array(
+			'description' => __( 'Offset the result set by a specific number of items.', 'kb-support' ),
+			'type'        => 'integer',
+		);
+
+        $query_params['order'] = array(
+			'description' => __( 'Order sort attribute ascending or descending.', 'kb-support' ),
+			'type'        => 'string',
+			'default'     => 'desc',
+			'enum'        => array( 'asc', 'desc' ),
 		);
 
 		$query_params['orderby'] = array(
-			'description' => __( 'Sort collection by object attribute.' ),
+			'description' => __( 'Sort collection by object attribute.', 'kb-support' ),
 			'type'        => 'string',
 			'default'     => 'ID',
 			'enum'        => array(
 				'ID',
 				'date',
+                'agent',
 				'customer',
 				'agent',
 				'modified',
-				'relevance',
-				'ticket_ids',
+				'include',
 				'title'
 			)
 		);
 
-		$query_params['order'] = array(
-			'description' => __( 'Order sort attribute ascending or descending.' ),
+        $query_params['key'] = array(
+			'description' => sprintf(
+				__( 'Limit result set to a %s with a specific key.', 'kb-support' ),
+				strtolower( $plural )
+			),
 			'type'        => 'string',
-			'default'     => 'desc',
-			'enum'        => array( 'asc', 'desc' )
+			'default'     => null
 		);
 
-		$query_params['user']         = array(
+		$query_params['user'] = array(
 			'description' => sprintf(
-				__( 'Limit result set to %s from a specific customer WP user account.' ),
+				__( 'Limit result set to %s from a specific customer WP user account.', 'kb-support' ),
 				strtolower( $plural )
 			),
 			'type'        => 'integer',
@@ -493,7 +641,7 @@ class KBS_Tickets_API extends KBS_API {
 
 		$query_params['customer'] = array(
 			'description' => sprintf(
-				__( 'Limit result set to %s from a specific customer.' ),
+				__( 'Limit result set to %s from a specific customer.', 'kb-support' ),
 				strtolower( $plural )
 			),
 			'type'        => 'integer',
@@ -502,7 +650,7 @@ class KBS_Tickets_API extends KBS_API {
 
 		$query_params['company'] = array(
 			'description' => sprintf(
-				__( 'Limit result set to %s from a specific company.' ),
+				__( 'Limit result set to %s from a specific company.', 'kb-support' ),
 				strtolower( $plural )
 			),
 			'type'        => 'integer',
@@ -511,22 +659,10 @@ class KBS_Tickets_API extends KBS_API {
 
 		$query_params['agent'] = array(
 			'description' => sprintf(
-				__( 'Limit result set to %s assigned to a specific agent.' ),
+				__( 'Limit result set to %s assigned to a specific agent.', 'kb-support' ),
 				strtolower( $plural )
 			),
 			'type'        => 'integer',
-			'default'     => null
-		);
-
-		$query_params['agents'] = array(
-			'description' => sprintf(
-				__( 'Limit result set to %s assigned to specific agents.' ),
-				strtolower( $plural )
-			),
-			'type'        => 'array',
-			'items'       => array(
-				'type' => 'integer',
-			),
 			'default'     => null
 		);
 
@@ -581,6 +717,46 @@ class KBS_Tickets_API extends KBS_API {
 
 		return $can_access;
 	} // check_read_permission
+
+    /**
+	 * Determines the allowed query_vars for a get_items() response and prepares
+	 * them for WP_Query.
+	 *
+	 * @since  1.5
+	 * @param  array           $prepared_args  Optional. Prepared WP_Query arguments. Default empty array.
+	 * @param  WP_REST_Request $request        Optional. Full details about the request.
+	 * @return array           Items query arguments.
+	 */
+	protected function prepare_items_query( $prepared_args = array(), $request = null ) {
+		$query_args = array();
+
+		foreach ( $prepared_args as $key => $value ) {
+			/**
+			 * Filters the query_vars used in get_items() for the constructed query.
+			 *
+			 * The dynamic portion of the hook name, `$key`, refers to the query_var key.
+			 *
+			 * @since    1.5
+			 *
+			 * @param    string  $value  The query_var value.
+			 */
+			$query_args[ $key ] = apply_filters( "rest_query_var-{$key}", $value ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
+		}
+
+		// Map to proper WP_Query orderby param.
+		if ( isset( $query_args['orderby'] ) && isset( $request['orderby'] ) ) {
+			$orderby_mappings = array(
+				'id'            => 'ID',
+				'include'       => 'post__in'
+			);
+
+			if ( isset( $orderby_mappings[ $request['orderby'] ] ) ) {
+				$query_args['orderby'] = $orderby_mappings[ $request['orderby'] ];
+			}
+		}
+
+		return $query_args;
+	} // prepare_items_query
 
 	/**
 	 * Prepares links for the request.
