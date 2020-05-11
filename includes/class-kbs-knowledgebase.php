@@ -142,19 +142,21 @@ class KBS_Knowledgebase {
 		}
 
 		$article_args = array(
-			'labels'             => $article_labels,
-			'public'             => true,
-			'show_in_menu'       => true,
-			'menu_icon'          => 'dashicons-welcome-learn-more',
-			'query_var'          => true,
-			'rewrite'            => $articles_rewrite,
-			'capability_type'    => 'article',
-			'map_meta_cap'       => true,
-			'has_archive'        => $article_archives,
-			'hierarchical'       => false,
-			'supports'           => apply_filters( 'kbs_article_supports', array( 'title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'author', 'trackbacks', 'comments' ) ),
-			'can_export'         => true,
-            'show_in_rest'       => true
+			'labels'                => $article_labels,
+			'public'                => true,
+			'show_in_menu'          => true,
+			'menu_icon'             => 'dashicons-welcome-learn-more',
+			'query_var'             => true,
+			'rewrite'               => $articles_rewrite,
+			'capability_type'       => 'article',
+			'map_meta_cap'          => true,
+			'has_archive'           => $article_archives,
+			'hierarchical'          => false,
+			'supports'              => apply_filters( 'kbs_article_supports', array( 'title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'author', 'trackbacks', 'comments' ) ),
+			'can_export'            => true,
+            'show_in_rest'          => true,
+			'rest_base'             => 'articles',
+			'rest_controller_class' => 'KBS_Articles_API'
 		);
 
 		register_post_type( 'article', $article_args );

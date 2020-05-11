@@ -23,7 +23,7 @@ class KBS_Articles_API extends KBS_API {
 	/**
 	 * Post type.
 	 *
-	 * @since 4.7.0
+	 * @since	1.5
 	 * @var string
 	 */
 	protected $post_type;
@@ -102,6 +102,37 @@ class KBS_Articles_API extends KBS_API {
     } // get_item_permissions_check
 
 	/**
+	 * Checks if the user can access password-protected content.
+	 *
+	 * This method determines whether we need to override the regular password
+	 * check in core with a filter.
+	 *
+	 * @since	1.5
+	 * @param	WP_Post			$post		Post to check against.
+	 * @param	WP_REST_Request	$request	Request data to check.
+	 * @return	bool			True if the user can access password-protected content, otherwise false.
+	 */
+	public function can_access_password_content( $post, $request ) {
+		if ( empty( $post->post_password ) ) {
+			// No filter required.
+			return false;
+		}
+
+		// Edit context always gets access to password-protected posts.
+		if ( 'edit' === $request['context'] ) {
+			return true;
+		}
+
+		// No password, no auth.
+		if ( empty( $request['password'] ) ) {
+			return false;
+		}
+
+		// Double-check the request password.
+		return hash_equals( $post->post_password, $request['password'] );
+	} // can_access_password_content
+
+	/**
 	 * Retrieves a single article.
 	 *
 	 * @since	1.5
@@ -151,6 +182,7 @@ class KBS_Articles_API extends KBS_API {
 		$registered = $this->get_collection_params();
 		$args       = array();
         $meta_query = array();
+		$articles   = array();
 
         /*
 		 * This array defines mappings between public API query parameters whose
@@ -197,15 +229,20 @@ class KBS_Articles_API extends KBS_API {
 		}
 
         // Show restricted
-        if ( isset( $registered['restricted'], $request['restricted'] ) ) {
+        if ( ! empty( $request['restricted'] ) ) {
             $meta_query[] = array(
                 'key'   => '_kbs_article_restricted',
-                'value' => '1'
+                'value' => '1',
+				'type'  => 'NUMERIC'
             );
         }
 
 		// Force the post_type argument, since it's not a user input variable.
 		$args['post_type'] = $this->post_type;
+
+		if ( ! empty( $meta_query ) )	{
+			$args['meta_query'] = $meta_query;
+		}
 
 		/**
 		 * Filters the query arguments for a request.
@@ -282,6 +319,32 @@ class KBS_Articles_API extends KBS_API {
 	} // get_items
 
 	/**
+	 * Get the article post, if the ID is valid.
+	 *
+	 * @since	1.5
+	 * @param	int				$id	Supplied ID.
+	 * @return	WP_Post|WP_Error Post object if ID is valid, WP_Error otherwise.
+	 */
+	protected function get_post( $id ) {
+		$error = new WP_Error(
+			'rest_post_invalid_id',
+			sprintf( __( 'Invalid %s ID.', 'kb-support' ), kbs_get_article_label_singular( true ) ),
+			array( 'status' => 404 )
+		);
+
+		if ( (int) $id <= 0 ) {
+			return $error;
+		}
+
+		$post = get_post( (int) $id );
+		if ( empty( $post ) || empty( $post->ID ) || $this->post_type !== $post->post_type ) {
+			return $error;
+		}
+
+		return $post;
+	} // get_post
+
+	/**
 	 * Prepares a single article output for response.
 	 *
 	 * @since	1.5
@@ -299,11 +362,11 @@ class KBS_Articles_API extends KBS_API {
 
 		$data['id'] = $article->ID;
 
-		if ( ! empty( $request['date'] ) ) {
+		if ( ! empty( $article->date ) ) {
 			$data['date'] = $this->prepare_date_response( $article->post_date_gmt, $article->post_date );
 		}
 
-		if ( ! empty( $request['date_gmt'] ) ) {
+		if ( ! empty( $article->date_gmt ) ) {
 			/*
 			 * For drafts, `post_date_gmt` may not be set, indicating that the date
 			 * of the draft should be updated each time it is saved (see #38883).
@@ -318,7 +381,7 @@ class KBS_Articles_API extends KBS_API {
 			$data['date_gmt'] = $this->prepare_date_response( $post_date_gmt );
 		}
 
-		if ( ! empty( $request['guid'] ) ) {
+		if ( ! empty( $article->guid ) ) {
 			$data['guid'] = array(
 				/** This filter is documented in wp-includes/post-template.php */
 				'rendered' => apply_filters( 'get_the_guid', $article->guid, $article->ID ),
@@ -326,11 +389,11 @@ class KBS_Articles_API extends KBS_API {
 			);
 		}
 
-		if ( ! empty( $request['modified'] ) ) {
+		if ( ! empty( $article->modified ) ) {
 			$data['modified'] = $this->prepare_date_response( $article->post_modified_gmt, $article->post_modified );
 		}
 
-		if ( ! empty( $request['modified_gmt'] ) ) {
+		if ( ! empty( $article->modified_gmt ) ) {
 			/*
 			 * For drafts, `post_modified_gmt` may not be set (see `post_date_gmt` comments
 			 * above). In this case, shim the value based on the `post_modified` field
@@ -344,33 +407,33 @@ class KBS_Articles_API extends KBS_API {
 			$data['modified_gmt'] = $this->prepare_date_response( $post_modified_gmt );
 		}
 
-		if ( ! empty( $request['password'] ) ) {
+		if ( ! empty( $article->password ) ) {
 			$data['password'] = $article->post_password;
 		}
 
-		if ( ! empty( $request['slug'] ) ) {
+		if ( ! empty( $article->slug ) ) {
 			$data['slug'] = $article->post_name;
 		}
 
-		if ( ! empty( $request['status'] ) ) {
+		if ( ! empty( $article->status ) ) {
 			$data['status'] = $article->post_status;
 		}
 
-		if ( ! empty( $request['type'] ) ) {
+		if ( ! empty( $article->type ) ) {
 			$data['type'] = $article->post_type;
 		}
 
-		if ( ! empty( $request['link'] ) ) {
+		if ( ! empty( $article->link ) ) {
 			$data['link'] = get_permalink( $article->ID );
 		}
 
-		if ( ! empty( $request['title'] ) ) {
+		if ( ! empty( $article->title	 ) ) {
 			$data['title'] = array();
 		}
-		if ( ! empty( $request['title.raw'] ) ) {
+		if ( ! empty( $article->title ) ) {
 			$data['title']['raw'] = $article->post_title;
 		}
-		if ( ! empty( $request['title.rendered'] ) ) {
+		if ( ! empty( $article->title ) ) {
 			add_filter( 'protected_title_format', array( $this, 'protected_title_format' ) );
 
 			$data['title']['rendered'] = get_the_title( $article->ID );
@@ -380,31 +443,28 @@ class KBS_Articles_API extends KBS_API {
 
 		$has_password_filter = false;
 
-		if ( $this->can_access_password_content( $post, $request ) ) {
+		if ( $this->can_access_password_content( $article, $request ) ) {
 			// Allow access to the post, permissions already checked before.
 			add_filter( 'post_password_required', '__return_false' );
 
 			$has_password_filter = true;
 		}
 
-		if ( ! empty( $request['content'] ) ) {
+		if ( ! empty( $article->post_content ) ) {
 			$data['content'] = array();
 		}
-		if ( ! empty( $request['content.raw'] ) ) {
+		if ( ! empty( $article->post_content ) ) {
 			$data['content']['raw'] = $article->post_content;
 		}
-		if ( ! empty( $request['content.rendered'] ) ) {
+		if ( ! empty( $article->post_content ) ) {
 			/** This filter is documented in wp-includes/post-template.php */
-			$data['content']['rendered'] = post_password_required( $post ) ? '' : apply_filters( 'the_content', $article->post_content );
+			$data['content']['rendered'] = post_password_required( $article ) ? '' : apply_filters( 'the_content', $article->post_content );
 		}
-		if ( ! empty( $request['content.protected'] ) ) {
-			$data['content']['protected'] = (bool) $article->post_password;
-		}
-		if ( ! empty( $request['content.block_version'] ) ) {
+		if ( ! empty( $article->post_content ) ) {
 			$data['content']['block_version'] = block_version( $article->post_content );
 		}
 
-		if ( ! empty( $request['excerpt'] ) ) {
+		if ( ! empty( $article->excerpt ) ) {
 			/** This filter is documented in wp-includes/post-template.php */
 			$excerpt = apply_filters( 'get_the_excerpt', $article->post_excerpt, $post );
 
@@ -423,35 +483,35 @@ class KBS_Articles_API extends KBS_API {
 			remove_filter( 'post_password_required', '__return_false' );
 		}
 
-		if ( ! empty( $request['author'] ) ) {
+		if ( ! empty( $article->author ) ) {
 			$data['author'] = (int) $article->post_author;
 		}
 
-		if ( ! empty( $request['featured_media'] ) ) {
+		if ( ! empty( $article->featured_media ) ) {
 			$data['featured_media'] = (int) get_post_thumbnail_id( $article->ID );
 		}
 
-		if ( ! empty( $request['parent'] ) ) {
+		if ( ! empty( $article->parent ) ) {
 			$data['parent'] = (int) $article->post_parent;
 		}
 
-		if ( ! empty( $request['menu_order'] ) ) {
+		if ( ! empty( $article->menu_order ) ) {
 			$data['menu_order'] = (int) $article->menu_order;
 		}
 
-		if ( ! empty( $request['comment_status'] ) ) {
+		if ( ! empty( $article->comment_status ) ) {
 			$data['comment_status'] = $article->comment_status;
 		}
 
-		if ( ! empty( $request['ping_status'] ) ) {
+		if ( ! empty( $article->ping_status ) ) {
 			$data['ping_status'] = $article->ping_status;
 		}
 
-		if ( ! empty( $request['sticky'] ) ) {
+		if ( ! empty( $article->sticky ) ) {
 			$data['sticky'] = is_sticky( $article->ID );
 		}
 
-		if ( ! empty( $request['template'] ) ) {
+		if ( ! empty( $article->template ) ) {
 			$template = get_page_template_slug( $article->ID );
 			if ( $template ) {
 				$data['template'] = $template;
@@ -460,7 +520,7 @@ class KBS_Articles_API extends KBS_API {
 			}
 		}
 
-		if ( ! empty( $request['format'] ) ) {
+		if ( ! empty( $article->format ) ) {
 			$data['format'] = get_post_format( $article->ID );
 
 			// Fill in blank post format.
@@ -469,7 +529,7 @@ class KBS_Articles_API extends KBS_API {
 			}
 		}
 
-		if ( ! empty( $request['meta'] ) ) {
+		if ( ! empty( $article->meta ) ) {
 			$data['meta'] = $this->meta->get_value( $article->ID, $request );
 		}
 
@@ -486,8 +546,8 @@ class KBS_Articles_API extends KBS_API {
 
 		$post_type_obj = get_post_type_object( $article->post_type );
 		if ( is_post_type_viewable( $post_type_obj ) && $post_type_obj->public ) {
-			$permalink_template_requested = ! empty( $request['permalink_template'] );
-			$generated_slug_requested     = ! empty( $request['generated_slug'] );
+			$permalink_template_requested = ! empty( $article->permalink_template );
+			$generated_slug_requested     = ! empty( $article->generated_slug );
 
 			if ( $permalink_template_requested || $generated_slug_requested ) {
 				if ( ! function_exists( 'get_sample_permalink' ) ) {
@@ -506,20 +566,21 @@ class KBS_Articles_API extends KBS_API {
 			}
 		}
 
-		$context = ! empty( $request['context'] ) ? $request['context'] : 'view';
+		$context = ! empty( $article->context ) ? $article->context : 'view';
 
-		$data['total_views']   = kbs_get_article_view_count( $article->ID );
-		$data['current_month'] = kbs_get_article_view_count( $article->ID, false );
-		$data['is_restricted'] = kbs_article_is_restricted( $article->ID );
+		$data['views']          = array();
+		$data['views']['total'] = kbs_get_article_view_count( $article->ID );
+		$data['views']['month'] = kbs_get_article_view_count( $article->ID, false );
+		$data['is_restricted']  = kbs_article_is_restricted( $article->ID );
 
 		// Wrap the data in a response object.
 		$response = rest_ensure_response( $data );
 
-		$links = $this->prepare_links( $post );
+		$links = $this->prepare_links( $article );
 		$response->add_links( $links );
 
 		if ( ! empty( $links['self']['href'] ) ) {
-			$actions = $this->get_available_actions( $post, $request );
+			$actions = $this->get_available_actions( $article, $request );
 
 			$self = $links['self']['href'];
 
@@ -639,7 +700,7 @@ class KBS_Articles_API extends KBS_API {
 		$query_params['orderby'] = array(
 			'description' => __( 'Sort collection by object attribute.', 'kb-support' ),
 			'type'        => 'string',
-			'default'     => 'ID',
+			'default'     => 'id',
 			'enum'        => array(
 				'author',
 				'date',
@@ -694,14 +755,14 @@ class KBS_Articles_API extends KBS_API {
 		);
 
 		$query_params['status'] = array(
-			'default'     => kbs_get_ticket_status_keys( false ),
+			'default'     => 'publish',
 			'description' => sprintf(
 				__( 'Limit result set to %s assigned one or more statuses.', 'kb-support' ),
 				strtolower( $singular )
 			),
 			'type'        => 'array',
 			'items'       => array(
-				'enum' => array_keys( kbs_get_post_statuses() ),
+				'enum' => array_merge( array_keys( get_post_stati() ), array( 'any' ) ),
 				'type' => 'string'
 			)
 		);
@@ -731,6 +792,26 @@ class KBS_Articles_API extends KBS_API {
 		 */
 		return apply_filters( "rest_{$this->post_type}_collection_params", $query_params, $post_type );
 	} // get_collection_params
+
+	/**
+	 * Checks if a given post type can be viewed or managed.
+	 *
+	 * @since	1.5
+	 *
+	 * @param	WP_Post_Type|string	$post_type	Post type name or object.
+	 * @return	bool				Whether the post type is allowed in REST.
+	 */
+	protected function check_is_post_type_allowed( $post_type ) {
+		if ( ! is_object( $post_type ) ) {
+			$post_type = get_post_type_object( $post_type );
+		}
+
+		if ( ! empty( $post_type ) && ! empty( $post_type->show_in_rest ) ) {
+			return true;
+		}
+
+		return false;
+	} // check_is_post_type_allowed
 
 	/**
 	 * Checks if an article can be read.
@@ -876,5 +957,61 @@ class KBS_Articles_API extends KBS_API {
 
 		return $links;
 	} // prepare_links
+
+	/**
+	 * Get the link relations available for the post and current user.
+	 *
+	 * @since	1.5
+	 * @param	WP_Post			$post		Post object
+	 * @param	WP_REST_Request	$request	Request object
+	 * @return	array			List of link relations
+	 */
+	protected function get_available_actions( $post, $request ) {
+
+		if ( 'edit' !== $request['context'] ) {
+			return array();
+		}
+
+		$rels = array();
+
+		$post_type = get_post_type_object( $post->post_type );
+
+		if ( 'attachment' !== $this->post_type && current_user_can( $post_type->cap->publish_posts ) ) {
+			$rels[] = 'https://api.w.org/action-publish';
+		}
+
+		if ( current_user_can( 'unfiltered_html' ) ) {
+			$rels[] = 'https://api.w.org/action-unfiltered-html';
+		}
+
+		if ( 'post' === $post_type->name ) {
+			if ( current_user_can( $post_type->cap->edit_others_posts ) && current_user_can( $post_type->cap->publish_posts ) ) {
+				$rels[] = 'https://api.w.org/action-sticky';
+			}
+		}
+
+		if ( post_type_supports( $post_type->name, 'author' ) ) {
+			if ( current_user_can( $post_type->cap->edit_others_posts ) ) {
+				$rels[] = 'https://api.w.org/action-assign-author';
+			}
+		}
+
+		$taxonomies = wp_list_filter( get_object_taxonomies( $this->post_type, 'objects' ), array( 'show_in_rest' => true ) );
+
+		foreach ( $taxonomies as $tax ) {
+			$tax_base   = ! empty( $tax->rest_base ) ? $tax->rest_base : $tax->name;
+			$create_cap = is_taxonomy_hierarchical( $tax->name ) ? $tax->cap->edit_terms : $tax->cap->assign_terms;
+
+			if ( current_user_can( $create_cap ) ) {
+				$rels[] = 'https://api.w.org/action-create-' . $tax_base;
+			}
+
+			if ( current_user_can( $tax->cap->assign_terms ) ) {
+				$rels[] = 'https://api.w.org/action-assign-' . $tax_base;
+			}
+		}
+
+		return $rels;
+	} // get_available_actions
 
 } // KBS_Articles_API

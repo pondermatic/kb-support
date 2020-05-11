@@ -285,6 +285,7 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/widgets.php';
         require_once KBS_PLUGIN_DIR . 'includes/compatibility-functions.php';
         require_once KBS_PLUGIN_DIR . 'includes/api/class-kbs-api.php';
+		require_once KBS_PLUGIN_DIR . 'includes/api/endpoints/class-kbs-articles-api.php';
 		require_once KBS_PLUGIN_DIR . 'includes/api/endpoints/class-kbs-companies-api.php';
 		require_once KBS_PLUGIN_DIR . 'includes/api/endpoints/class-kbs-customers-api.php';
 		require_once KBS_PLUGIN_DIR . 'includes/api/endpoints/class-kbs-tickets-api.php';
