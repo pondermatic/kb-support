@@ -110,14 +110,18 @@ class KBS_API extends WP_REST_Controller {
 	 * @return	bool
 	 */
 	public function is_authenticated( $data )	{
-		$token  = isset( $data['token'] ) ? urldecode( $data['token'] ) : false;
-		$public = isset( $data['key'] )   ? urldecode( $data['key'] )   : false;
+        if ( is_user_logged_in() )  {
+            return true;
+        } else  {
+            $token  = isset( $data['token'] ) ? urldecode( $data['token'] ) : false;
+            $public = isset( $data['key'] )   ? urldecode( $data['key'] )   : false;
 
-		if ( $token && $public && $this->get_user( $public ) )	{
-			$secret = $this->get_user_secret_key( $this->user_id );
+            if ( $token && $public && $this->get_user( $public ) )	{
+                $secret = $this->get_user_secret_key( $this->user_id );
 
-			return $this->check_keys( $secret, $public, $token );
-		}
+                return $this->check_keys( $secret, $public, $token );
+            }
+        }
 
 		return false;
 	} // is_authenticated
