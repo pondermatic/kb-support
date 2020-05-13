@@ -385,18 +385,6 @@ class KBS_Tickets_API extends KBS_API {
 
 		$data['id'] = $ticket->ID;
 
-		if ( ! empty( $ticket->number ) )	{
-			$data['number'] = $ticket->number;
-		}
-
-		if ( ! empty( $ticket->key ) )	{
-			$data['key'] = $ticket->key;
-		}
-
-		if ( ! empty( $ticket->status_nicename ) )	{
-			$data['status'] = $ticket->status_nicename;
-		}
-
 		if ( ! empty( $ticket->date ) )	{
 			$data['date'] = $ticket->date;
 		}
@@ -405,8 +393,8 @@ class KBS_Tickets_API extends KBS_API {
 			$data['modified_date'] = $ticket->modified_date;
 		}
 
-		if ( ! empty( $ticket->resolved_date ) )	{
-			$data['resolved_date'] = $ticket->resolved_date;
+		if ( ! empty( $ticket->status_nicename ) )	{
+			$data['status'] = $ticket->post_status;
 		}
 
 		if ( ! empty( $ticket->ticket_title ) )	{
@@ -419,6 +407,20 @@ class KBS_Tickets_API extends KBS_API {
             $data['content']['rendered'] = apply_filters( 'the_content', $ticket->ticket_content );
 		}
 
+		$data['ticket_data'] = array();
+
+		if ( ! empty( $ticket->resolved_date ) )	{
+			$data['tickt_data']['resolved_date'] = $ticket->resolved_date;
+		}
+
+		if ( ! empty( $ticket->number ) )	{
+			$data['ticket_data']['number'] = $ticket->number;
+		}
+
+		if ( ! empty( $ticket->key ) )	{
+			$data['ticket_data']['key'] = $ticket->key;
+		}
+
 		if ( ! empty( $ticket->files ) )	{
 			$files = array();
 
@@ -429,38 +431,10 @@ class KBS_Tickets_API extends KBS_API {
 				);
 			}
 
-			$data['attachments'] = $files;
+			$data['ticket_data']['attachments'] = $files;
 		}
 
-		if ( $terms = wp_get_post_terms( $ticket->ID, 'ticket_category' ) )	{
-			$categories = array();
-
-			foreach( $terms as $term )  {
-				$categories[] = array(
-					'term_id' => $term->term_id,
-					'slug'    => $term->slug,
-					'name'    => $term->name
-				);
-			}
-
-			$data['categories'] = $categories;
-		}
-
-		if ( $terms = wp_get_post_terms( $ticket->ID, 'ticket_tag' ) )	{
-			$tags = array();
-
-			foreach( $terms as $term )  {
-				$tags[] = array(
-					'term_id' => $term->term_id,
-					'slug'    => $term->slug,
-					'name'    => $term->name
-				);
-			}
-
-			$data['tags'] = $tags;
-		}
-
-		$data['agent'] = array(
+		$data['ticket_data']['agent'] = array(
 			'user_id'      => $ticket->agent_id,
 			'first_name'   => $agent ? $agent->first_name : '',
 			'last_name'    => $agent ? $agent->last_name : '',
@@ -472,8 +446,8 @@ class KBS_Tickets_API extends KBS_API {
 			foreach( $ticket->agents as $agent_id )	{
 				$_agent = new KBS_Agent( $agent_id );
 
-				$data['additional_agents']   = array();
-				$data['additional_agents'][] = array(
+				$data['ticket_data']['additional_agents']   = array();
+				$data['ticket_data']['additional_agents'][] = array(
 					'user_id'      => $agent_id,
 					'first_name'   => $_agent ? $_agent->first_name : '',
 					'last_name'    => $_agent ? $_agent->last_name : '',
@@ -484,7 +458,7 @@ class KBS_Tickets_API extends KBS_API {
 		}
 
 		if ( ! empty( $ticket->customer_id ) )	{
-			$data['customer'] = array(
+			$data['ticket_data']['customer'] = array(
 				'id'         => $ticket->customer_id,
 				'first_name' => $ticket->first_name,
 				'last_name'  => $ticket->last_name,
@@ -493,19 +467,19 @@ class KBS_Tickets_API extends KBS_API {
 		}
 
 		if ( ! empty( $ticket->email ) )	{
-			$data['email'] = $ticket->email;
+			$data['ticket_data']['email'] = $ticket->email;
 		}
 
 		if ( ! empty( $ticket->user_id ) )	{
-			$data['user_id'] = $ticket->user_id;
+			$data['ticket_data']['user_id'] = $ticket->user_id;
 		}
 
 		if ( ! empty( $ticket->user_info ) )	{
-			$data['user_info'] = $ticket->user_info;
+			$data['ticket_data']['user_info'] = $ticket->user_info;
 		}
 
 		if ( ! empty( $this->company_id ) )	{
-			$data['company'] = array(
+			$data['ticket_data']['company'] = array(
 				'id'      => $ticket->company_id,
 				'name'    => $company ? $company->name : '',
 				'contact' => $company ? $company->contact : '',
@@ -517,11 +491,15 @@ class KBS_Tickets_API extends KBS_API {
 		}
 
 		if ( ! empty( $ticket->participants ) )	{
-			$data['participants'] = $ticket->participants;
+			$data['ticket_data']['participants'] = $ticket->participants;
 		}
 
 		if ( ! empty( $ticket->participants ) )	{
-			$data['source'] = $ticket->get_source( 'name' );
+			$data['ticket_data']['source'] = $ticket->get_source( 'name' );
+		}
+
+		if ( ! empty( $ticket->form_data ) )	{
+			$data['form_data'] = $ticket->form_data;
 		}
 
 		// Wrap the data in a response object.
@@ -555,60 +533,12 @@ class KBS_Tickets_API extends KBS_API {
 
 		$query_params['context']['default'] = 'view';
 
-        $query_params['after'] = array(
-			'description' => sprintf(
-                __( 'Limit response to %s published after a given ISO8601 compliant date.', 'kb-support' ),
-                strtolower( $plural )
-            ),
-			'type'        => 'string',
-			'format'      => 'date-time',
-		);
-
-        $query_params['before'] = array(
-			'description' => sprintf(
-                __( 'Limit response to %s published before a given ISO8601 compliant date.', 'kb-support' ),
-                strtolower( $plural )
-            ),
-			'type'        => 'string',
-			'format'      => 'date-time',
-		);
-
-        $query_params['exclude'] = array(
-			'description' => __( 'Ensure result set excludes specific IDs.', 'kb-support' ),
-			'type'        => 'array',
-			'items'       => array(
-				'type' => 'integer',
-			),
-			'default'     => array(),
-		);
-
-		$query_params['include'] = array(
-			'description' => __( 'Limit result set to specific IDs.', 'kb-support' ),
-			'type'        => 'array',
-			'items'       => array(
-				'type' => 'integer',
-			),
-			'default'     => array()
-		);
-
-        $query_params['offset'] = array(
-			'description' => __( 'Offset the result set by a specific number of items.', 'kb-support' ),
-			'type'        => 'integer',
-		);
-
-        $query_params['order'] = array(
-			'description' => __( 'Order sort attribute ascending or descending.', 'kb-support' ),
-			'type'        => 'string',
-			'default'     => 'desc',
-			'enum'        => array( 'asc', 'desc' ),
-		);
-
 		$query_params['orderby'] = array(
 			'description' => __( 'Sort collection by object attribute.', 'kb-support' ),
 			'type'        => 'string',
-			'default'     => 'ID',
+			'default'     => 'id',
 			'enum'        => array(
-				'ID',
+				'id',
 				'date',
                 'agent',
 				'customer',
