@@ -218,8 +218,7 @@ class KBS_Customers_API extends KBS_API {
 	 * @return	WP_REST_Response	Response object
 	 */
 	public function prepare_item_for_response( $customer, $request )	{
-		$company    = new KBS_Company( $customer->company_id );
-		$data       = array();
+		$data = array();
 
 		$data['id'] = $customer->id;
 
@@ -284,9 +283,7 @@ class KBS_Customers_API extends KBS_API {
 		}
 
 		if ( ! empty( $customer->company ) )	{
-			$data['company']['id']         = $customer->company_id;
-			$data['company']['name']       = $customer->company;
-			$data['company']['is_contact'] = $company->customer == $customer->id;
+			$data['company'] = $customer->company_id;
 		}
 
 		if ( ! empty( $customer->date_created ) )	{
@@ -464,9 +461,14 @@ class KBS_Customers_API extends KBS_API {
 		if ( ! empty( $customer->company_id ) )	{
 			$links['company'] = array(
 				'href'       => rest_url( 'kbs/v1/companies/' . $customer->company_id ),
-				'embeddable' => true,
+				'embeddable' => true
 			);
 		}
+
+		$links[ kbs_get_ticket_label_plural( true ) ] = array(
+			'href'       => rest_url( 'kbs/v1/tickets/?customer=' . $customer->id ),
+			'embeddable' => true
+		);
 
 		return $links;
 	} // prepare_links

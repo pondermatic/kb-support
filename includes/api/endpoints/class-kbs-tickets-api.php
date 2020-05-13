@@ -407,6 +407,20 @@ class KBS_Tickets_API extends KBS_API {
             $data['content']['rendered'] = apply_filters( 'the_content', $ticket->ticket_content );
 		}
 
+		$taxonomies = wp_list_filter(
+			get_object_taxonomies( $this->post_type, 'objects' ),
+			array( 'show_in_rest' => true )
+		);
+
+		foreach ( $taxonomies as $taxonomy ) {
+			$base = ! empty( $taxonomy->rest_base ) ? $taxonomy->rest_base : $taxonomy->name;
+
+			if ( ! empty( $base ) ) {
+				$terms         = get_the_terms( $ticket->ID, $taxonomy->name );
+				$data[ $base ] = $terms ? array_values( wp_list_pluck( $terms, 'term_id' ) ) : array();
+			}
+		}
+
 		$data['ticket_data'] = array();
 
 		if ( ! empty( $ticket->resolved_date ) )	{
@@ -434,36 +448,14 @@ class KBS_Tickets_API extends KBS_API {
 			$data['ticket_data']['attachments'] = $files;
 		}
 
-		$data['ticket_data']['agent'] = array(
-			'user_id'      => $ticket->agent_id,
-			'first_name'   => $agent ? $agent->first_name : '',
-			'last_name'    => $agent ? $agent->last_name : '',
-			'display_name' => $agent ? $agent->name : '',
-			'email'        => $agent ? $agent->email : '',
-		);
+		$data['ticket_data']['agent'] = $ticket->agent_id;
 
 		if ( ! empty( $ticket->agents ) )	{
-			foreach( $ticket->agents as $agent_id )	{
-				$_agent = new KBS_Agent( $agent_id );
-
-				$data['ticket_data']['additional_agents']   = array();
-				$data['ticket_data']['additional_agents'][] = array(
-					'user_id'      => $agent_id,
-					'first_name'   => $_agent ? $_agent->first_name : '',
-					'last_name'    => $_agent ? $_agent->last_name : '',
-					'display_name' => $_agent ? $_agent->name : '',
-					'email'        => $_agent ? $_agent->email : '',
-				);
-			}
+			$data['ticket_data']['additional_agents'] = $ticket->agents;
 		}
 
 		if ( ! empty( $ticket->customer_id ) )	{
-			$data['ticket_data']['customer'] = array(
-				'id'         => $ticket->customer_id,
-				'first_name' => $ticket->first_name,
-				'last_name'  => $ticket->last_name,
-				'email'      => $ticket->email
-			);
+			$data['ticket_data']['customer'] = $ticket->customer_id;
 		}
 
 		if ( ! empty( $ticket->email ) )	{
@@ -479,15 +471,7 @@ class KBS_Tickets_API extends KBS_API {
 		}
 
 		if ( ! empty( $this->company_id ) )	{
-			$data['ticket_data']['company'] = array(
-				'id'      => $ticket->company_id,
-				'name'    => $company ? $company->name : '',
-				'contact' => $company ? $company->contact : '',
-				'email'   => $company ? $company->email : '',
-				'phone'   => $company ? $company->phone : '',
-				'website' => $company ? $company->website : '',
-				'logo'    => $company ? $company->logo : ''
-			);
+			$data['ticket_data']['company'] = $ticket->company_id;
 		}
 
 		if ( ! empty( $ticket->participants ) )	{
@@ -696,6 +680,26 @@ class KBS_Tickets_API extends KBS_API {
 				'href' => rest_url( $base ),
 			)
 		);
+
+		if ( ! empty( $ticket->agent_id ) )	{
+			$links['agent'] = array(
+				'href'       => rest_url( 'wp/v2/users/' . $ticket->agent_id ),
+				'embeddable' => true,
+			);
+		}
+
+		if ( ! empty( $ticket->agents ) )	{
+			$links['additional_agents'] = array();
+			foreach( $ticket->agents as $agent_id )	{
+				if ( empty( $agent_id ) )
+					continue;
+
+				$links['additional_agents'][] = array(
+					'href'       => rest_url( 'wp/v2/users/' . $agent_id ),
+					'embeddable' => true
+				);
+			};
+		}
 
 		if ( ! empty( $ticket->customer_id ) )	{
 			$links['customer'] = array(

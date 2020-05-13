@@ -134,9 +134,14 @@ class KBS_Companies_API extends WP_REST_Posts_Controller {
 		if ( ! empty( $customer ) )	{
 			$links['customer'] = array(
 				'href'       => rest_url( 'kbs/v1/customers/' . $customer ),
-				'embeddable' => true,
+				'embeddable' => true
 			);
 		}
+
+		$links[ kbs_get_ticket_label_plural( true ) ] = array(
+			'href'       => rest_url( 'kbs/v1/tickets/company=' . $post->ID ),
+			'embeddable' => true
+		);
 
 		return $links;
 	} // prepare_links
