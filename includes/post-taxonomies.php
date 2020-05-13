@@ -49,7 +49,8 @@ function kbs_setup_kbs_ticket_category_taxonomy()	{
 				'assign_terms' => 'assign_ticket_terms',
 				'delete_terms' => 'delete_ticket_terms'
 			),
-			'update_count_callback' => '_update_generic_term_count'
+			'update_count_callback' => '_update_generic_term_count',
+			'show_in_rest' => true
 		)
 	);
 
@@ -96,7 +97,8 @@ function kbs_setup_kbs_ticket_tag_taxonomy()	{
 				'assign_terms' => 'assign_ticket_terms',
 				'delete_terms' => 'delete_ticket_terms'
 			),
-			'update_count_callback' => '_update_generic_term_count'
+			'update_count_callback' => '_update_generic_term_count',
+			'show_in_rest' => true
 		)
 	);
 
@@ -146,7 +148,8 @@ function kbs_setup_kbs_ticket_source_taxonomy()	{
 				'assign_terms' => 'assign_ticket_terms',
 				'delete_terms' => 'delete_ticket_terms'
 			),
-			'update_count_callback' => '_update_generic_term_count'
+			'update_count_callback' => '_update_generic_term_count',
+			'show_in_rest' => true
 		)
 	);
 
@@ -198,7 +201,8 @@ function kbs_setup_kbs_ticket_department_taxonomy()	{
 				'assign_terms' => 'assign_ticket_terms',
 				'delete_terms' => 'delete_ticket_terms'
 			),
-			'update_count_callback' => '_update_generic_term_count'
+			'update_count_callback' => '_update_generic_term_count',
+			'show_in_rest' => true
 		)
 	);
 
