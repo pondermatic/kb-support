@@ -197,7 +197,8 @@ class KBS_Knowledgebase {
 				'edit_terms'   => 'edit_article_terms',
 				'assign_terms' => 'assign_article_terms',
 				'delete_terms' => 'delete_article_terms'
-			)
+			),
+			'show_in_rest' => true
 		) );
 
 		register_taxonomy( 'article_category', array( 'article' ), $article_category_args );
@@ -230,7 +231,8 @@ class KBS_Knowledgebase {
 				'edit_terms'   => 'edit_article_terms',
 				'assign_terms' => 'assign_article_terms',
 				'delete_terms' => 'delete_article_terms'
-			)
+			),
+			'show_in_rest' => true
 		) );
 
 		register_taxonomy( 'article_tag', array( 'article' ), $article_tag_args );
