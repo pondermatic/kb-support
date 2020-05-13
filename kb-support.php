@@ -104,14 +104,17 @@ final class KB_Support {
 	 * KBS Knowledgebase.
 	 *
 	 * @var		object		KBS_Knowledgebase
-	 * @since	1.5
+	 * @since	1.0
 	 */
-	public $api;
+	public $KB;
 
     /**
      * KBS API
      *
-     * @var object
+     * @var		object
+	 * @since	1.5
+	 */
+	public $api;
 
 	/**
 	 * Main KB_Support Instance.
@@ -238,6 +241,7 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-logging.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-license-handler.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-knowledgebase.php';
+		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-register-meta.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/article-actions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/class-kbs-article-stats.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/class-kbs-articles-query.php';

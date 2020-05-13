@@ -198,7 +198,7 @@ function kbs_setup_post_types() {
 		'map_meta_cap'          => true,
 		'has_archive'           => false,
 		'hierarchical'          => false,
-		'supports'              => apply_filters( 'kbs_company_supports', array( 'title', 'thumbnail' ) ),
+		'supports'              => apply_filters( 'kbs_company_supports', array( 'title', 'thumbnail', 'custom-fields' ) ),
 		'can_export'            => true,
 		'show_in_rest'          => true,
 		'rest_base'             => 'companies',
