@@ -35,28 +35,12 @@ class KBS_API extends WP_REST_Controller {
     protected $namespace = 'kbs/v';
 
     /**
-     * Routes
-     *
-     * @since   1.5
-     * @var     array
-     */
-    private $routes = array();
-
-    /**
      * ID of user performing the API request.
      *
      * @since   1.5
      * @var     int
      */
     public $user_id = 0;
-
-	/**
-	 * The incoming request.
-	 *
-	 * @since	1.5
-	 * @var		object array
-	 */
-	public $request;
 
     /**
 	 * Get things going
@@ -66,6 +50,23 @@ class KBS_API extends WP_REST_Controller {
 	public function __construct()	{
 		add_action( 'admin_init',	 array( $this, 'process_api_key' ) );
 	} // __construct
+
+	/**
+	 * Magic GET function.
+	 *
+	 * @since	1.5
+	 * @param	string	$key	The property to retrieve
+	 * @return	mixed	The value retrieved
+	 */
+	public function __get( $key ) {
+		if ( method_exists( $this, 'get_' . $key ) ) {
+			$value = call_user_func( array( $this, 'get_' . $key ) );
+		} else {
+			$value = $this->$key;
+		}
+
+		return $value;
+	} // __get
 
     /**
      * Checks if a given request has access to read an object.
