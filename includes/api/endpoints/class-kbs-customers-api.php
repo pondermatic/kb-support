@@ -101,6 +101,17 @@ class KBS_Customers_API extends KBS_API {
 		return false;
     } // get_item_permissions_check
 
+    /**
+     * Checks if a given request has access to read customers.
+     *
+     * @since   1.5
+     * @param	WP_REST_Request	$request	Full details about the request.
+	 * @return	bool|WP_Error	True if the request has read access for the item, WP_Error object otherwise.
+     */
+    public function get_items_permissions_check( $request ) {
+		return $this->get_item_permissions_check( $request );
+    } // get_items_permissions_check
+
 	/**
 	 * Retrieves a single customer.
 	 *
@@ -124,17 +135,6 @@ class KBS_Customers_API extends KBS_API {
 
 		return $response;
 	} // get_item
-
-	/**
-     * Checks if a given request has access to read customers.
-     *
-     * @since   1.5
-     * @param	WP_REST_Request	$request	Full details about the request.
-	 * @return	bool|WP_Error	True if the request has read access for the item, WP_Error object otherwise.
-     */
-    public function get_items_permissions_check( $request ) {
-		return $this->get_item_permissions_check( $request );
-    } // get_items_permissions_check
 
 	/**
 	 * Retrieves a collection of customers.
