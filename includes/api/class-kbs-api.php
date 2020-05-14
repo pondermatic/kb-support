@@ -88,6 +88,57 @@ class KBS_API extends WP_REST_Controller {
     } // get_item_permissions_check
 
 	/**
+	 * Get the post, if the ID is valid.
+	 *
+	 * @since	1.5
+	 * @param	int					$id	Supplied ID.
+	 * @return	WP_Post|WP_Error	Post object if ID is valid, WP_Error otherwise.
+	 */
+	protected function get_post( $id ) {
+		$error = new WP_Error(
+			'rest_post_invalid_id',
+			__( 'Invalid post ID.', 'kb-support' ),
+			array( 'status' => 404 )
+		);
+
+		if ( (int) $id <= 0 ) {
+			return $error;
+		}
+
+		$post = get_post( (int) $id );
+		if ( empty( $post ) || empty( $post->ID ) || $this->post_type !== $post->post_type ) {
+			return $error;
+		}
+
+		return $post;
+	} // get_post
+
+	/**
+	 * Checks the post_date_gmt or modified_gmt and prepare any post or
+	 * modified date for single post output.
+	 *
+	 * @since	1.5
+	 *
+	 * @param	string		$date_gmt	GMT publication time.
+	 * @param	string|null	$date		Optional. Local publication time. Default null.
+	 * @return	string|null	ISO8601/RFC3339 formatted datetime.
+	 */
+	protected function prepare_date_response( $date_gmt, $date = null ) {
+		// Use the date if passed.
+		if ( isset( $date ) ) {
+			return mysql_to_rfc3339( $date );
+		}
+
+		// Return null if $date_gmt is empty/zeros.
+		if ( '0000-00-00 00:00:00' === $date_gmt ) {
+			return null;
+		}
+
+		// Return the formatted datetime.
+		return mysql_to_rfc3339( $date_gmt );
+	} // prepare_date_response
+
+	/**
 	 * Log in and validate the user.
 	 *
 	 * @since	1.5
