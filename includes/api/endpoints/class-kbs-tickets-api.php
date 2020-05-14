@@ -18,26 +18,35 @@ if ( ! defined( 'ABSPATH' ) )
  *
  * @since	1.5
  */
-class KBS_Tickets_API extends WP_REST_Posts_Controller {
+class KBS_Tickets_API extends KBS_API {
 
-    /**
-     * User ID.
-     *
-     * @since   1.5
-     * @var     int
-     */
-    protected $user_id;
+	/**
+	 * Post type.
+	 *
+	 * @since	1.5
+	 * @var		string
+	 */
+	protected $post_type;
+
+	/**
+	 * Instance of a post meta fields object.
+	 *
+	 * @since	1.5
+	 * @var		WP_REST_Post_Meta_Fields
+	 */
+	protected $meta;
 
 	/**
 	 * Get things going
 	 *
 	 * @since	1.5
 	 */
-	public function __construct( $post_type )	{
-        parent::__construct( $post_type );
+	public function __construct()	{
+        $this->post_type = 'kbs_ticket';
+		$obj             = get_post_type_object( $this->post_type );
+		$this->rest_base = ! empty( $obj->rest_base ) ? $obj->rest_base : $obj->name;
 
-        $this->namespace = KBS()->api->namespace;
-        $this->version   = KBS()->api->version;
+		$this->meta = new WP_REST_Post_Meta_Fields( $this->post_type );
 	} // __construct
 
 	/**
@@ -102,7 +111,7 @@ class KBS_Tickets_API extends WP_REST_Posts_Controller {
 				),
 				array(
 					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => array( $this, 'get_ticket' ),
+					'callback'            => array( $this, 'get_item' ),
 					'permission_callback' => array( $this, 'get_item_permissions_check' )
 				)
 			)
@@ -117,25 +126,24 @@ class KBS_Tickets_API extends WP_REST_Posts_Controller {
 	 * @return	bool|WP_Error	True if the request has read access for the item, WP_Error object otherwise.
      */
     public function get_item_permissions_check( $request ) {
-		if ( ! KBS()->api->is_authenticated( $request ) )	{
+		if ( ! $this->is_authenticated( $request ) )	{
 			return new WP_Error(
 				'rest_forbidden_context',
-				KBS()->api->errors( 'no_auth' ),
+				$this->errors( 'no_auth' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
 
-        $this->user_id = KBS()->api->user_id;
-
-        if ( ! KBS()->api->validate_user() )    {
+        if ( ! $this->validate_user() )    {
             return new WP_Error(
 				'rest_forbidden_context',
-				KBS()->api->errors( 'no_auth' ),
+				$this->errors( 'no_auth' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
         }
 
-        $post = $this->get_post( $request['id'] );
+		$ticket_id = isset( $request['id'] ) ? $request['id'] : $this->get_ticket_id_by_number( $request );
+        $post = $this->get_post( $ticket_id );
 
         if ( is_wp_error( $post ) ) {
 			return $post;
@@ -167,20 +175,18 @@ class KBS_Tickets_API extends WP_REST_Posts_Controller {
 	 * @return	bool|WP_Error	True if the request has read access for the item, WP_Error object otherwise.
      */
     public function get_items_permissions_check( $request ) {
-        if ( ! KBS()->api->is_authenticated( $request ) )	{
+        if ( ! $this->is_authenticated( $request ) )	{
 			return new WP_Error(
 				'rest_forbidden_context',
-				KBS()->api->errors( 'no_auth' ),
+				$this->errors( 'no_auth' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
 
-        $this->user_id = KBS()->api->user_id;
-
-        if ( ! KBS()->api->validate_user() )    {
+        if ( ! $this->validate_user() )    {
             return new WP_Error(
 				'rest_forbidden_context',
-				KBS()->api->errors( 'no_auth' ),
+				$this->errors( 'no_auth' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
         }
@@ -207,20 +213,18 @@ class KBS_Tickets_API extends WP_REST_Posts_Controller {
 	 * @return true|WP_Error   True if the request has access to update the item, WP_Error object otherwise.
 	 */
 	public function update_item_permissions_check( $request ) {
-        if ( ! KBS()->api->is_authenticated( $request ) )	{
+        if ( ! $this->is_authenticated( $request ) )	{
 			return new WP_Error(
 				'rest_forbidden_context',
-				KBS()->api->errors( 'no_auth' ),
+				$this->errors( 'no_auth' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
 
-        $this->user_id = KBS()->api->user_id;
-
-        if ( ! KBS()->api->validate_user() )    {
+        if ( ! $this->validate_user() )    {
             return new WP_Error(
 				'rest_forbidden_context',
-				KBS()->api->errors( 'no_auth' ),
+				$this->errors( 'no_auth' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
         }
@@ -423,7 +427,7 @@ class KBS_Tickets_API extends WP_REST_Posts_Controller {
 		 * @param	array			$args		Key value array of query var to query value
 		 * @param	WP_REST_Request	$request	The request used
 		 */
-		$args          = apply_filters( "rest_{$this->post_type}_query", $args, $request );
+		$args          = apply_filters( "kbs_rest_{$this->post_type}_query", $args, $request );
 		$query_args    = $this->prepare_items_query( $args, $request );
 
         $taxonomies = wp_list_filter( get_object_taxonomies( $this->post_type, 'objects' ), array( 'show_in_rest' => true ) );
@@ -547,7 +551,7 @@ class KBS_Tickets_API extends WP_REST_Posts_Controller {
 
         if ( kbs_multiple_agents() )    {
             if ( ! empty( $request['agents'] ) )    {
-                $agents = implode( ',', $request['agents'] );
+                $agents = explode( ',', $request['agents'] );
                 $agents = array_map( 'absint', $agents );
 
                 foreach( $agents as $key => $value )    {
@@ -574,6 +578,10 @@ class KBS_Tickets_API extends WP_REST_Posts_Controller {
 
         if ( ! empty( $request['category'] ) )  {
             $ticket->__set( 'ticket_category', $request['category'] );
+        }
+
+		if ( ! empty( absint( $request['department'] ) ) )  {
+            $ticket->__set( 'department', $request['department'] );
         }
 
         $ticket->save();
@@ -719,7 +727,7 @@ class KBS_Tickets_API extends WP_REST_Posts_Controller {
 
         $replies = $ticket->get_replies();
         if ( ! empty( $ticket->replies ) )  {
-            $data['replies']['total'] = count( $replies );
+            $data['replies'] = count( $replies );
         }
 
 		// Wrap the data in a response object.
@@ -752,6 +760,48 @@ class KBS_Tickets_API extends WP_REST_Posts_Controller {
 		$query_params = parent::get_collection_params();
 
 		$query_params['context']['default'] = 'view';
+
+		$query_params['after'] = array(
+			'description' => __( 'Limit response to posts published after a given ISO8601 compliant date.' ),
+			'type'        => 'string',
+			'format'      => 'date-time',
+		);
+
+		$query_params['before'] = array(
+			'description' => __( 'Limit response to posts published before a given ISO8601 compliant date.' ),
+			'type'        => 'string',
+			'format'      => 'date-time',
+		);
+
+		$query_params['exclude'] = array(
+			'description' => __( 'Ensure result set excludes specific IDs.' ),
+			'type'        => 'array',
+			'items'       => array(
+				'type' => 'integer',
+			),
+			'default'     => array(),
+		);
+
+		$query_params['include'] = array(
+			'description' => __( 'Limit result set to specific IDs.' ),
+			'type'        => 'array',
+			'items'       => array(
+				'type' => 'integer',
+			),
+			'default'     => array(),
+		);
+
+		$query_params['offset'] = array(
+			'description' => __( 'Offset the result set by a specific number of items.' ),
+			'type'        => 'integer',
+		);
+
+		$query_params['order'] = array(
+			'description' => __( 'Order sort attribute ascending or descending.' ),
+			'type'        => 'string',
+			'default'     => 'desc',
+			'enum'        => array( 'asc', 'desc' ),
+		);
 
 		$query_params['orderby'] = array(
 			'description' => __( 'Sort collection by object attribute.', 'kb-support' ),
@@ -820,6 +870,40 @@ class KBS_Tickets_API extends WP_REST_Posts_Controller {
 
 		$post_type = get_post_type_object( $this->post_type );
 
+		$taxonomies = wp_list_filter( get_object_taxonomies( $this->post_type, 'objects' ), array( 'show_in_rest' => true ) );
+
+		if ( ! empty( $taxonomies ) ) {
+			$query_params['tax_relation'] = array(
+				'description' => __( 'Limit result set based on relationship between multiple taxonomies.' ),
+				'type'        => 'string',
+				'enum'        => array( 'AND', 'OR' ),
+			);
+		}
+
+		foreach ( $taxonomies as $taxonomy ) {
+			$base = ! empty( $taxonomy->rest_base ) ? $taxonomy->rest_base : $taxonomy->name;
+
+			$query_params[ $base ] = array(
+				/* translators: %s: Taxonomy name. */
+				'description' => sprintf( __( 'Limit result set to all items that have the specified term assigned in the %s taxonomy.' ), $base ),
+				'type'        => 'array',
+				'items'       => array(
+					'type' => 'integer',
+				),
+				'default'     => array(),
+			);
+
+			$query_params[ $base . '_exclude' ] = array(
+				/* translators: %s: Taxonomy name. */
+				'description' => sprintf( __( 'Limit result set to all items except those that have the specified term assigned in the %s taxonomy.' ), $base ),
+				'type'        => 'array',
+				'items'       => array(
+					'type' => 'integer',
+				),
+				'default'     => array(),
+			);
+		}
+
 		/**
 		 * Filter collection parameters for the tickets controller.
 		 *
@@ -831,11 +915,10 @@ class KBS_Tickets_API extends WP_REST_Posts_Controller {
 		 * `rest_{$this->post_type}_query` filter to set WP_Query parameters.
 		 *
 		 * @since	1.5
-		 *
 		 * @param	array			$query_params	JSON Schema-formatted collection parameters.
 		 * @param	WP_Post_Type	$post_type		Post type object.
 		 */
-		return apply_filters( "rest_{$this->post_type}_collection_params", $query_params, $post_type );
+		return apply_filters( "kbs_rest_{$this->post_type}_collection_params", $query_params, $post_type );
 	} // get_collection_params
 
 	/**
