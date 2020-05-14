@@ -263,6 +263,32 @@ class KBS_Knowledgebase {
 					return current_user_can( "edit_{$object->name}" );
 				},
 				'show_in_rest'      => true
+			),
+			kbs_get_article_view_count_meta_key_name() => array(
+				'type'              => 'integer',
+				'description'       => sprintf(
+					__( 'Total number of all time views for this %s.', 'kb-support' ),
+					kbs_get_article_label_singular( true )
+				),
+				'single'            => true,
+				'sanitize_callback' => 'absint',
+				'auth_callback'     => function() {
+					return current_user_can( "edit_{$object->name}" );
+				},
+				'show_in_rest'      => true
+			),
+			kbs_get_article_view_count_meta_key_name( false ) => array(
+				'type'              => 'integer',
+				'description'       => sprintf(
+					__( 'Current monthly total number of times this %s has been viewed.', 'kb-support' ),
+					kbs_get_article_label_singular( true )
+				),
+				'single'            => true,
+				'sanitize_callback' => 'absint',
+				'auth_callback'     => function() {
+					return current_user_can( "edit_{$object->name}" );
+				},
+				'show_in_rest'      => true
 			)
 		);
 
