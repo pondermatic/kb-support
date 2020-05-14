@@ -960,6 +960,7 @@ class KBS_Ticket {
 
 		if ( true === $saved ) {
 			$this->setup_ticket( $this->ID );
+            do_action( 'kbs_ticket_saved', $this->ID, $this );
 		}
 
 		return $saved;
@@ -1723,9 +1724,9 @@ class KBS_Ticket {
 
 		$args = wp_parse_args( $args, $defaults );
 
-		$replies = get_posts( $args );
+		$this->replies = get_posts( $args );
 		
-		return apply_filters( 'kbs_ticket_replies', $replies );
+		return apply_filters( 'kbs_ticket_replies', $this->replies, $this->ID );
 	} // get_replies
 
 	/**
