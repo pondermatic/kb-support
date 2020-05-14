@@ -87,7 +87,11 @@ class KBS_Register_Meta {
 				'auth_callback'     => function() {
 					return current_user_can( "edit_{$object->name}" );
 				},
-				'show_in_rest'      => true
+				'show_in_rest'      => array(
+					'schema' => array(
+						'type'  => 'integer'
+					)
+				)
 			),
             '_kbs_company_contact' => array(
 				'type'              => 'string',
@@ -97,7 +101,11 @@ class KBS_Register_Meta {
 				'auth_callback'     => function() {
 					return current_user_can( "edit_{$object->name}" );
 				},
-				'show_in_rest'      => true
+				'show_in_rest'      => array(
+					'schema' => array(
+						'type'  => 'string'
+					)
+				)
 			),
             '_kbs_company_email' => array(
 				'type'              => 'string',
@@ -107,7 +115,11 @@ class KBS_Register_Meta {
 				'auth_callback'     => function() {
 					return current_user_can( "edit_{$object->name}" );
 				},
-				'show_in_rest'      => true
+				'show_in_rest'      => array(
+					'schema' => array(
+						'type'  => 'string'
+					)
+				)
 			),
             '_kbs_company_phone' => array(
 				'type'              => 'string',
@@ -117,7 +129,11 @@ class KBS_Register_Meta {
 				'auth_callback'     => function() {
 					return current_user_can( "edit_{$object->name}" );
 				},
-				'show_in_rest'      => true
+				'show_in_rest'      => array(
+					'schema' => array(
+						'type'  => 'string'
+					)
+				)
 			),
             '_kbs_company_website' => array(
 				'type'              => 'string',
@@ -127,7 +143,11 @@ class KBS_Register_Meta {
 				'auth_callback'     => function() {
 					return current_user_can( "edit_{$object->name}" );
 				},
-				'show_in_rest'      => true
+				'show_in_rest'      => array(
+					'schema' => array(
+						'type'  => 'string'
+					)
+				)
 			)
 		);
 

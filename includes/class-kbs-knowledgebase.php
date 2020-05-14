@@ -262,7 +262,11 @@ class KBS_Knowledgebase {
 				'auth_callback'     => function() {
 					return current_user_can( "edit_{$object->name}" );
 				},
-				'show_in_rest'      => true
+				'show_in_rest'      => array(
+					'schema' => array(
+						'type'  => 'integer'
+					)
+				)
 			),
 			kbs_get_article_view_count_meta_key_name() => array(
 				'type'              => 'integer',
@@ -275,7 +279,11 @@ class KBS_Knowledgebase {
 				'auth_callback'     => function() {
 					return current_user_can( "edit_{$object->name}" );
 				},
-				'show_in_rest'      => true
+				'show_in_rest'      => array(
+					'schema' => array(
+						'type'  => 'integer'
+					)
+				)
 			),
 			kbs_get_article_view_count_meta_key_name( false ) => array(
 				'type'              => 'integer',
@@ -288,7 +296,11 @@ class KBS_Knowledgebase {
 				'auth_callback'     => function() {
 					return current_user_can( "edit_{$object->name}" );
 				},
-				'show_in_rest'      => true
+				'show_in_rest'      => array(
+					'schema' => array(
+						'type'  => 'integer'
+					)
+				)
 			)
 		);
 
