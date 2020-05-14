@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) )
  *
  * @since	1.5
  */
-class KBS_Tickets_API extends KBS_API {
+class KBS_Tickets_API extends WP_REST_Posts_Controller {
 
 	/**
 	 * Ticket ID
@@ -36,15 +36,24 @@ class KBS_Tickets_API extends KBS_API {
 	 */
 	protected $tickets = array();
 
+    /**
+     * User ID.
+     *
+     * @since   1.5
+     * @var     int
+     */
+    protected $user_id;
+
 	/**
 	 * Get things going
 	 *
 	 * @since	1.5
 	 */
 	public function __construct( $post_type )	{
-		$this->post_type = $post_type;
-		$obj             = get_post_type_object( $post_type );
-		$this->rest_base = ! empty( $obj->rest_base ) ? $obj->rest_base : $obj->name;
+        parent::__construct( $post_type );
+
+        $this->namespace = KBS()->api->namespace;
+        $this->version   = KBS()->api->version;
 	} // __construct
 
 	/**
@@ -118,15 +127,17 @@ class KBS_Tickets_API extends KBS_API {
 	 * @return	bool|WP_Error	True if the request has read access for the item, WP_Error object otherwise.
      */
     public function get_item_permissions_check( $request ) {
-		if ( ! $this->is_authenticated( $request ) )	{
+		if ( ! KBS()->api->is_authenticated( $request ) )	{
 			return new WP_Error(
 				'rest_forbidden_context',
-				$this->errors( 'no_auth' ),
+				KBS()->api->errors( 'no_auth' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
 
-		return $this->validate_user();
+        $this->user_id = KBS()->api->user_id;
+
+		return KBS()->api->validate_user();
     } // get_item_permissions_check
 
 	/**
@@ -137,23 +148,23 @@ class KBS_Tickets_API extends KBS_API {
 	 * @return	WP_REST_Response|WP_Error	Response object on success, or WP_Error object on failure.
 	 */
 	public function get_item( $request ) {
-		$this->ticket_id = isset( $request['id'] ) ? $request['id'] : $this->get_ticket_id_by_number( $request );
+		$ticket_id = isset( $request['id'] ) ? $request['id'] : $this->get_ticket_id_by_number( $request );
 
-		$ticket = new KBS_Ticket( absint( $this->ticket_id ) );
+		$post = $this->get_post( absint( $ticket_id ) );
 
-		if ( empty( $ticket->ID ) )	{
-			return $ticket;
+		if ( is_wp_error( $post ) ) {
+			return $post;
 		}
 
-		if ( ! $this->check_read_permission( $ticket ) )	{
+		if ( ! $this->check_read_permission( $post ) )	{
 			return new WP_Error(
 				'rest_forbidden_context',
-				$this->errors( 'no_permission' ),
+				KBS()->api->errors( 'no_permission' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
 
-		$data     = $this->prepare_item_for_response( $ticket, $request );
+		$data     = $this->prepare_item_for_response( $post, $request );
 		$response = rest_ensure_response( $data );
 
 		return $response;
@@ -203,6 +214,24 @@ class KBS_Tickets_API extends KBS_API {
 	 * @return	WP_REST_Response|WP_Error		Response object on success, or WP_Error object on failure
 	 */
 	function get_items( $request )	{
+        // Ensure a search string is set in case the orderby is set to 'relevance'.
+		if ( ! empty( $request['orderby'] ) && 'relevance' === $request['orderby'] && empty( $request['search'] ) ) {
+			return new WP_Error(
+				'rest_no_search_term_defined',
+				__( 'You need to define a search term to order by relevance.' ),
+				array( 'status' => 400 )
+			);
+		}
+
+		// Ensure an include parameter is set in case the orderby is set to 'include'.
+		if ( ! empty( $request['orderby'] ) && 'include' === $request['orderby'] && empty( $request['include'] ) ) {
+			return new WP_Error(
+				'rest_orderby_include_missing_include',
+				__( 'You need to define an include parameter to order by include.' ),
+				array( 'status' => 400 )
+			);
+		}
+
 		// Retrieve the list of registered collection query parameters.
 		$registered = $this->get_collection_params();
 		$args       = array();
@@ -221,6 +250,8 @@ class KBS_Tickets_API extends KBS_API {
 			'order'          => 'order',
 			'orderby'        => 'orderby',
 			'page'           => 'paged',
+			'search'         => 's',
+			'slug'           => 'post_name__in',
 			'status'         => 'post_status'
 		);
 
@@ -307,34 +338,64 @@ class KBS_Tickets_API extends KBS_API {
 		$args          = apply_filters( "rest_{$this->post_type}_query", $args, $request );
 		$query_args    = $this->prepare_items_query( $args, $request );
 
-		$tickets_query = new WP_Query();
-		$query_result  = $tickets_query->query( $query_args );
+        $taxonomies = wp_list_filter( get_object_taxonomies( $this->post_type, 'objects' ), array( 'show_in_rest' => true ) );
 
-		foreach ( $query_result as $_ticket ) {
-			if ( ! $this->check_read_permission( $_ticket ) ) {
+		if ( ! empty( $request['tax_relation'] ) ) {
+			$query_args['tax_query'] = array( 'relation' => $request['tax_relation'] );
+		}
+
+		foreach ( $taxonomies as $taxonomy ) {
+			$base        = ! empty( $taxonomy->rest_base ) ? $taxonomy->rest_base : $taxonomy->name;
+			$tax_exclude = $base . '_exclude';
+
+			if ( ! empty( $request[ $base ] ) ) {
+				$query_args['tax_query'][] = array(
+					'taxonomy'         => $taxonomy->name,
+					'field'            => 'term_id',
+					'terms'            => $request[ $base ],
+					'include_children' => false,
+				);
+			}
+
+			if ( ! empty( $request[ $tax_exclude ] ) ) {
+				$query_args['tax_query'][] = array(
+					'taxonomy'         => $taxonomy->name,
+					'field'            => 'term_id',
+					'terms'            => $request[ $tax_exclude ],
+					'include_children' => false,
+					'operator'         => 'NOT IN',
+				);
+			}
+		}
+
+		$posts_query  = new WP_Query();
+		$query_result = $posts_query->query( $query_args );
+        $posts        = array();
+
+		foreach ( $query_result as $post ) {
+			if ( ! $this->check_read_permission( $post ) ) {
 				continue;
 			}
 
-            $ticket          = new KBS_Ticket( $_ticket->ID );
-			$data            = $this->prepare_item_for_response( $ticket, $request );
-			$this->tickets[] = $this->prepare_response_for_collection( $data );
+			$data    = $this->prepare_item_for_response( $post, $request );
+			$posts[] = $this->prepare_response_for_collection( $data );
 		}
 
-        $page          = (int) $query_args['paged'];
-		$total_tickets = $tickets_query->found_posts;
+        $page        = (int) $query_args['paged'];
+		$total_posts = $posts_query->found_posts;
 
-		if ( $total_tickets < 1 ) {
+		if ( $total_posts < 1 ) {
 			// Out-of-bounds, run the query again without LIMIT for total count.
 			unset( $query_args['paged'] );
 
-			$count_query   = new WP_Query();
+			$count_query = new WP_Query();
 			$count_query->query( $query_args );
-			$total_tickets = $count_query->found_posts;
+			$total_posts = $count_query->found_posts;
 		}
 
-		$max_pages = ceil( $total_tickets / (int) $tickets_query->query_vars['posts_per_page'] );
+		$max_pages = ceil( $total_posts / (int) $posts_query->query_vars['posts_per_page'] );
 
-		if ( $page > $max_pages && $total_tickets > 0 ) {
+		if ( $page > $max_pages && $total_posts > 0 ) {
 			return new WP_Error(
 				'rest_post_invalid_page_number',
 				__( 'The page number requested is larger than the number of pages available.' ),
@@ -342,9 +403,9 @@ class KBS_Tickets_API extends KBS_API {
 			);
 		}
 
-		$response = rest_ensure_response( $this->tickets );
+		$response = rest_ensure_response( $posts );
 
-		$response->header( 'X-WP-Total', (int) $total_tickets );
+		$response->header( 'X-WP-Total', (int) $total_posts );
 		$response->header( 'X-WP-TotalPages', (int) $max_pages );
 
 		$request_params = $request->get_query_params();
@@ -374,57 +435,74 @@ class KBS_Tickets_API extends KBS_API {
 	 * Prepares a single ticket output for response.
 	 *
 	 * @since	1.5
-	 * @param	WP_Post				$ticket		KBS_Ticket Ticket object
+	 * @param	WP_Post				$post		WP_Post post object
 	 * @param	WP_REST_Request		$request	Request object
 	 * @return	WP_REST_Response	Response object
 	 */
-	public function prepare_item_for_response( $ticket, $request )	{
+	public function prepare_item_for_response( $post, $request )	{
+        $GLOBALS['post'] = $post;
+
+		setup_postdata( $post );
+
+        $ticket     = new KBS_Ticket( $post->ID );
 		$agent      = new KBS_Agent( $ticket->agent_id );
 		$company    = new KBS_Company( $ticket->company_id );
-		$data       = array();
+        $data       = array();
 
-		$data['id'] = $ticket->ID;
+        $data['id']    = $post->ID;
+        $data['date'] = $this->prepare_date_response( $post->post_date_gmt, $post->post_date );
 
-		if ( ! empty( $ticket->date ) )	{
-			$data['date'] = $ticket->date;
-		}
+        if ( '0000-00-00 00:00:00' === $post->post_date_gmt ) {
+            $post_date_gmt = get_gmt_from_date( $post->post_date );
+        } else {
+            $post_date_gmt = $post->post_date_gmt;
+        }
 
-		if ( ! empty( $ticket->modified_date ) )	{
-			$data['modified_date'] = $ticket->modified_date;
-		}
+        $data['date_gmt'] = $this->prepare_date_response( $post_date_gmt );
+        $data['modified'] = $this->prepare_date_response( $post->post_modified_gmt, $post->post_modified );
 
-		if ( ! empty( $ticket->status_nicename ) )	{
-			$data['status'] = $ticket->post_status;
-		}
+        if ( '0000-00-00 00:00:00' === $post->post_modified_gmt ) {
+            $post_modified_gmt = gmdate( 'Y-m-d H:i:s', strtotime( $post->post_modified ) - ( get_option( 'gmt_offset' ) * 3600 ) );
+        } else {
+            $post_modified_gmt = $post->post_modified_gmt;
+        }
+        $data['modified_gmt'] = $this->prepare_date_response( $post_modified_gmt );
 
-		if ( ! empty( $ticket->ticket_title ) )	{
-			$data['subject'] = get_the_title( $ticket->ID );
-		}
+        $data['status'] = $post->post_status;
 
-		if ( ! empty( $ticket->ticket_content ) )	{
-            $data['content'] = array();
-            $data['content']['raw'] = $ticket->ticket_content;
-            $data['content']['rendered'] = apply_filters( 'the_content', $ticket->ticket_content );
-		}
+        $data['title'] = array();
 
-		$taxonomies = wp_list_filter(
-			get_object_taxonomies( $this->post_type, 'objects' ),
-			array( 'show_in_rest' => true )
-		);
+        $data['title']['raw'] = $post->post_title;
+
+        add_filter( 'protected_title_format', array( $this, 'protected_title_format' ) );
+
+        $data['title']['rendered'] = get_the_title( $post->ID );
+
+        remove_filter( 'protected_title_format', array( $this, 'protected_title_format' ) );
+
+        $data['content'] = array();
+        $data['content']['raw'] = $post->post_content;
+        /** This filter is documented in wp-includes/post-template.php */
+        $data['content']['rendered'] = post_password_required( $post ) ? '' : apply_filters( 'the_content', $post->post_content );
+
+		$taxonomies = wp_list_filter( get_object_taxonomies( $this->post_type, 'objects' ), array( 'show_in_rest' => true ) );
 
 		foreach ( $taxonomies as $taxonomy ) {
-			$base = ! empty( $taxonomy->rest_base ) ? $taxonomy->rest_base : $taxonomy->name;
-
-			if ( ! empty( $base ) ) {
-				$terms         = get_the_terms( $ticket->ID, $taxonomy->name );
-				$data[ $base ] = $terms ? array_values( wp_list_pluck( $terms, 'term_id' ) ) : array();
-			}
+			$base          = ! empty( $taxonomy->rest_base ) ? $taxonomy->rest_base : $taxonomy->name;
+            $terms         = get_the_terms( $post, $taxonomy->name );
+            $data[ $base ] = $terms ? array_values( wp_list_pluck( $terms, 'term_id' ) ) : array();
 		}
 
-		$data['ticket_data'] = array();
+		$post_type_obj = get_post_type_object( $post->post_type );
+
+		$context = ! empty( $request['context'] ) ? $request['context'] : 'view';
+		$data    = $this->add_additional_fields_to_object( $data, $request );
+		$data    = $this->filter_response_by_context( $data, $context );
+
+        $data['ticket_data'] = array();
 
 		if ( ! empty( $ticket->resolved_date ) )	{
-			$data['tickt_data']['resolved_date'] = $ticket->resolved_date;
+			$data['ticket_data']['resolved_date'] = $ticket->resolved_date;
 		}
 
 		if ( ! empty( $ticket->number ) )	{
