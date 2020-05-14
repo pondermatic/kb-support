@@ -20,22 +20,6 @@ if ( ! defined( 'ABSPATH' ) )
  */
 class KBS_Tickets_API extends WP_REST_Posts_Controller {
 
-	/**
-	 * Ticket ID
-	 *
-	 * @since	1.5
-	 * @var		int
-	 */
-	protected $ticket_id = 0;
-
-	/**
-	 * Tickets
-	 *
-	 * @since	1.5
-	 * @var		array
-	 */
-	protected $tickets = array();
-
     /**
      * User ID.
      *
@@ -93,7 +77,13 @@ class KBS_Tickets_API extends WP_REST_Posts_Controller {
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => array( $this, 'get_item' ),
 					'permission_callback' => array( $this, 'get_item_permissions_check' )
-				)
+				),
+                array(
+					'methods'             => WP_REST_Server::EDITABLE,
+					'callback'            => array( $this, 'update_item' ),
+					'permission_callback' => array( $this, 'update_item_permissions_check' ),
+					'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::EDITABLE ),
+				),
 			)
 		);
 
@@ -137,8 +127,125 @@ class KBS_Tickets_API extends WP_REST_Posts_Controller {
 
         $this->user_id = KBS()->api->user_id;
 
-		return KBS()->api->validate_user();
+        if ( ! KBS()->api->validate_user() )    {
+            return new WP_Error(
+				'rest_forbidden_context',
+				KBS()->api->errors( 'no_auth' ),
+				array( 'status' => rest_authorization_required_code() )
+			);
+        }
+
+        $post = $this->get_post( $request['id'] );
+
+        if ( is_wp_error( $post ) ) {
+			return $post;
+		}
+
+        if ( 'edit' === $request['context'] && $post && ! $this->check_update_permission( $post ) ) {
+			return new WP_Error(
+				'rest_forbidden_context',
+				sprintf(
+                    __( 'Sorry, you are not allowed to edit this %s.', 'kb-support' ),
+                    kbs_get_ticket_label_singular( true )
+                ),
+				array( 'status' => rest_authorization_required_code() )
+			);
+		}
+
+		if ( $post ) {
+			return $this->check_read_permission( $post );
+		}
+
+		return true;
     } // get_item_permissions_check
+
+    /**
+     * Checks if a given request has access to read multiple tickets.
+     *
+     * @since   1.5
+     * @param	WP_REST_Request	$request	Full details about the request.
+	 * @return	bool|WP_Error	True if the request has read access for the item, WP_Error object otherwise.
+     */
+    public function get_items_permissions_check( $request ) {
+        if ( ! KBS()->api->is_authenticated( $request ) )	{
+			return new WP_Error(
+				'rest_forbidden_context',
+				KBS()->api->errors( 'no_auth' ),
+				array( 'status' => rest_authorization_required_code() )
+			);
+		}
+
+        $this->user_id = KBS()->api->user_id;
+
+        if ( ! KBS()->api->validate_user() )    {
+            return new WP_Error(
+				'rest_forbidden_context',
+				KBS()->api->errors( 'no_auth' ),
+				array( 'status' => rest_authorization_required_code() )
+			);
+        }
+
+        $post_type = get_post_type_object( $this->post_type );
+
+		if ( 'edit' === $request['context'] && ! current_user_can( $post_type->cap->edit_posts ) ) {
+			return new WP_Error(
+				'rest_forbidden_context',
+				__( 'Sorry, you are not allowed to edit posts in this post type.' ),
+				array( 'status' => rest_authorization_required_code() )
+			);
+		}
+
+		return true;
+    } // get_items_permissions_check
+
+    /**
+	 * Checks if a given request has access to update a ticket.
+	 *
+	 * @since  1.5
+	 *
+	 * @param  WP_REST_Request $request    Full details about the request.
+	 * @return true|WP_Error   True if the request has access to update the item, WP_Error object otherwise.
+	 */
+	public function update_item_permissions_check( $request ) {
+        if ( ! KBS()->api->is_authenticated( $request ) )	{
+			return new WP_Error(
+				'rest_forbidden_context',
+				KBS()->api->errors( 'no_auth' ),
+				array( 'status' => rest_authorization_required_code() )
+			);
+		}
+
+        $this->user_id = KBS()->api->user_id;
+
+        if ( ! KBS()->api->validate_user() )    {
+            return new WP_Error(
+				'rest_forbidden_context',
+				KBS()->api->errors( 'no_auth' ),
+				array( 'status' => rest_authorization_required_code() )
+			);
+        }
+
+        $post = $this->get_post( $request['id'] );
+
+		if ( is_wp_error( $post ) ) {
+			return $post;
+		}
+
+		$post_type = get_post_type_object( $this->post_type );
+
+		if ( $post && ! $this->check_update_permission( $post ) ) {
+			return new WP_Error(
+				'rest_cannot_edit',
+				sprintf(
+                    __( 'Sorry, you are not allowed to edit this %s.', 'kb-support' ),
+                    kbs_get_ticket_label_singular( true )
+                ),
+				array( 'status' => rest_authorization_required_code() )
+			);
+		}
+
+        return true;
+    } // update_item_permissions_check
 
 	/**
 	 * Retrieves a single ticket.
@@ -154,14 +261,6 @@ class KBS_Tickets_API extends WP_REST_Posts_Controller {
 
 		if ( is_wp_error( $post ) ) {
 			return $post;
-		}
-
-		if ( ! $this->check_read_permission( $post ) )	{
-			return new WP_Error(
-				'rest_forbidden_context',
-				KBS()->api->errors( 'no_permission' ),
-				array( 'status' => rest_authorization_required_code() )
-			);
 		}
 
 		$data     = $this->prepare_item_for_response( $post, $request );
@@ -194,17 +293,6 @@ class KBS_Tickets_API extends WP_REST_Posts_Controller {
 
 		return $ticket_id;
 	} // get_ticket_id_by_number
-
-	/**
-     * Checks if a given request has access to read multiple tickets.
-     *
-     * @since   1.5
-     * @param	WP_REST_Request	$request	Full details about the request.
-	 * @return	bool|WP_Error	True if the request has read access for the item, WP_Error object otherwise.
-     */
-    public function get_items_permissions_check( $request ) {
-		return $this->get_item_permissions_check( $request );
-    } // get_items_permissions_check
 
 	/**
 	 * Retrieves a collection of tickets.
@@ -431,6 +519,71 @@ class KBS_Tickets_API extends WP_REST_Posts_Controller {
 		return $response;
 	} // get_items
 
+    /**
+	 * Updates a single ticket.
+	 *
+	 * @since  1.5
+	 *
+	 * @param  WP_REST_Request             $request    Full details about the request.
+	 * @return WP_REST_Response|WP_Error   Response object on success, or WP_Error object on failure.
+	 */
+	public function update_item( $request ) {
+		$valid_check = $this->get_post( $request['id'] );
+		if ( is_wp_error( $valid_check ) ) {
+			return $valid_check;
+		}
+
+        $ticket = new KBS_Ticket( $request['id'] );
+        if ( empty( $ticket->ID ) ) {
+			return $ticket;
+		}
+
+        /** This action is documented in wp-includes/rest-api/endpoints/class-wp-rest-posts-controller.php */
+		do_action( "kbs_rest_insert_{$this->post_type}", $ticket, $request, false );
+
+        if ( ! empty( $request['agent'] ) && kbs_is_agent( absint( $request['agent'] ) ) )    {
+            $ticket->__set( 'agent_id', absint( $request['agent'] ) );
+        }
+
+        if ( kbs_multiple_agents() )    {
+            if ( ! empty( $request['agents'] ) )    {
+                $agents = implode( ',', $request['agents'] );
+                $agents = array_map( 'absint', $agents );
+
+                foreach( $agents as $key => $value )    {
+                    if ( ! kbs_is_agent( $value ) ) {
+                        unset( $agents[ $key ] );
+                    }
+                }
+
+                $ticket->__set( 'agents', $agents );
+            }
+        }
+
+        if ( ! empty( $request['company'] ) && ! empty( get_post( absint( $request['company'] ) ) ) )    {
+            $ticket->__set( 'company_id', absint( $request['company'] ) );
+        }
+
+        if ( ! empty( $request['customer'] ) && kbs_customer_exists( absint( $request['customer'] ) ) )    {
+            $ticket->__set( 'customer_id', absint( $request['customer'] ) );
+        }
+
+        if ( ! empty( $request['status'] ) && in_array( $request['status'], kbs_get_ticket_status_keys() ) )    {
+            $ticket->__set( 'status', $request['status'] );
+        }
+
+        if ( ! empty( $request['category'] ) )  {
+            $ticket->__set( 'ticket_category', $request['category'] );
+        }
+
+        $ticket->save();
+
+        $post     = get_post( $request['id'] );
+        $response = $this->prepare_item_for_response( $post, $request );
+
+		return rest_ensure_response( $response );
+    } // update_item
+
 	/**
 	 * Prepares a single ticket output for response.
 	 *
@@ -483,7 +636,7 @@ class KBS_Tickets_API extends WP_REST_Posts_Controller {
         $data['content'] = array();
         $data['content']['raw'] = $post->post_content;
         /** This filter is documented in wp-includes/post-template.php */
-        $data['content']['rendered'] = post_password_required( $post ) ? '' : apply_filters( 'the_content', $post->post_content );
+        $data['content']['rendered'] = apply_filters( 'the_content', $post->post_content );
 
 		$taxonomies = wp_list_filter( get_object_taxonomies( $this->post_type, 'objects' ), array( 'show_in_rest' => true ) );
 
@@ -563,6 +716,11 @@ class KBS_Tickets_API extends WP_REST_Posts_Controller {
 		if ( ! empty( $ticket->form_data ) )	{
 			$data['form_data'] = $ticket->form_data;
 		}
+
+        $replies = $ticket->get_replies();
+        if ( ! empty( $ticket->replies ) )  {
+            $data['replies']['total'] = count( $replies );
+        }
 
 		// Wrap the data in a response object.
 		$response = rest_ensure_response( $data );
@@ -700,6 +858,23 @@ class KBS_Tickets_API extends WP_REST_Posts_Controller {
 	} // check_read_permission
 
     /**
+	 * Checks if a ticket can be updated.
+	 *
+	 * @since	1.5
+	 * @param	object	WP_Post object
+	 * @return	bool	Whether the post can be read.
+	 */
+	public function check_update_permission( $post )	{
+		$can_access = false;
+
+		if ( kbs_is_agent( $this->user_id ) )	{
+			$can_access = kbs_agent_can_access_ticket( $post->ID, $this->user_id );
+		}
+
+		return $can_access;
+	} // check_update_permission
+
+    /**
 	 * Determines the allowed query_vars for a get_items() response and prepares
 	 * them for WP_Query.
 	 *
@@ -799,6 +974,17 @@ class KBS_Tickets_API extends WP_REST_Posts_Controller {
 				'embeddable' => true,
 			);
 		}
+
+        if ( ! empty( $ticket->replies ) )  {
+            $links['replies'] = array();
+
+            foreach( $ticket->replies as $reply )   {
+                $links['replies'][] = array(
+                    'href'       => rest_url( 'kbs/v1/replies/' . $reply->ID ),
+                    'embeddable' => true,
+                );
+            }
+        }
 
 		return $links;
 	} // prepare_links
