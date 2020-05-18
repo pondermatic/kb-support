@@ -577,7 +577,27 @@ class KBS_Tickets_API extends KBS_API {
         }
 
         if ( ! empty( $request['category'] ) )  {
-            $ticket->__set( 'ticket_category', $request['category'] );
+			$terms = wp_get_post_terms( $ticket->ID, 'ticket_category', array( 'fields' => 'ids' ) );
+
+			$terms[] = $request['category'];
+
+            $ticket->__set( 'ticket_category', $terms );
+        }
+
+		if ( ! empty( $request['delete_category'] ) )  {
+			$terms = wp_get_post_terms( $ticket->ID, 'ticket_category', array( 'fields' => 'ids' ) );
+			$cats  = array();
+
+			foreach( $terms as $term )	{
+				if ( (int) $term->term_id == (int) $request['delete_category'] )	{
+					continue;
+				}
+				$cats[] = $term->term_id;
+			}
+
+			if ( $cats != $terms )	{
+				$ticket->__set( 'ticket_category', $cats );
+			}
         }
 
 		if ( ! empty( absint( $request['department'] ) ) )  {
