@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: KB Support 1.4.3\n"
+"Project-Id-Version: KB Support 1.4.4\n"
 "Report-Msgid-Bugs-To: https://kb-support.com/\n"
-"POT-Creation-Date: 2020-05-04 21:24:57+00:00\n"
+"POT-Creation-Date: 2020-05-30 15:47:10+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -3480,7 +3480,7 @@ msgid "Closed all Day"
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:1866
-#: templates/shortcode-form.php:62
+#: templates/shortcode-form.php:87
 msgid "Close"
 msgstr ""
 
@@ -6225,7 +6225,7 @@ msgstr ""
 msgid "View Note"
 msgstr ""
 
-#: includes/shortcodes.php:292
+#: includes/shortcodes.php:263
 msgid "No %s found"
 msgstr ""
 
@@ -6530,7 +6530,7 @@ msgstr ""
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
-#: templates/shortcode-form.php:64
+#: templates/shortcode-form.php:89
 msgid "Could any of the following %s help resolve your query?"
 msgstr ""
 
