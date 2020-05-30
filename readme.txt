@@ -4,7 +4,7 @@ Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
 Tested up to: 5.4.1
 Requires PHP: 5.4
-Stable tag: 1.4.3
+Stable tag: 1.4.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -126,6 +126,12 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 = 1.5 =
 
 * **Tweak**: `wpmu_new_blog` is deprecated. Now using `wp_insert_site` to run KBS install procedures when a new MU site is created and KBS is network activated
+
+= 1.4.4 =
+
+**30th May 2020**
+
+* **Bug**: Error may be presented when trying to save a page being edited with the block editor if it contains the `[kbs_submit]` shortcode
 
 = 1.4.3 =
 
