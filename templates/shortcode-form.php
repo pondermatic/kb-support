@@ -3,7 +3,32 @@
  * This template is used to display the form for submitting a ticket [kbs_form]
  */
 global $kbs_form;
-?>
+
+if ( ! kbs_user_can_submit() ) :
+		/**
+	 * Allow plugins to change the screen displayed when a user cannot submit.
+	 *
+	 * @since	1.0
+	 */
+	if ( has_action( 'kbs_user_cannot_submit' ) )	{
+		do_action( 'kbs_user_cannot_submit' );			
+	} else	{
+		ob_start();
+		echo kbs_display_notice( 'need_login' );
+
+		$register_login = kbs_get_option( 'show_register_form', 'none' );
+
+		if ( 'both' == $register_login || 'login' == $register_login )	{
+			echo kbs_login_form( kbs_get_current_page_url() );
+		}
+
+		if ( 'both' == $register_login || 'registration' == $register_login )	{
+			echo kbs_register_form( kbs_get_current_page_url() );
+		}
+
+		return ob_get_clean();
+	}
+else : ?>
 
 <div id="kbs_ticket_wrap">
 	<?php do_action( 'kbs_notices' ); ?>
@@ -92,3 +117,4 @@ global $kbs_form;
 
     </div><!--end #kbs_ticket_form_wrap-->
 </div><!-- end of #kbs_ticket_wrap -->
+<?php endif;
