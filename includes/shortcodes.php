@@ -1,6 +1,6 @@
 <?php
 /**
- * Scripts
+ * Shortcodes
  *
  * @package     KBS
  * @subpackage  Shortcodes
@@ -81,11 +81,40 @@ add_shortcode( 'kbs_profile_editor', 'kbs_profile_editor_shortcode' );
  * @return	str
  */
 function kbs_submit_form_shortcode( $atts ) {
-	$args = shortcode_atts( array(
-		'form' => 0,
-		), $atts, 'kbs_submit' );
 
-	return kbs_display_form( $args['form'] );
+	if ( ! kbs_user_can_submit() )	{
+		/**
+		 * Allow plugins to change the screen displayed when a user cannot submit.
+		 *
+		 * @since	1.0
+		 */
+		if ( has_action( 'kbs_user_cannot_submit' ) )	{
+			do_action( 'kbs_user_cannot_submit' );			
+		} else	{
+			ob_start();
+			echo kbs_display_notice( 'need_login' );
+	
+			$register_login = kbs_get_option( 'show_register_form', 'none' );
+	
+			if ( 'both' == $register_login || 'login' == $register_login )	{
+				echo kbs_login_form( kbs_get_current_page_url() );
+			}
+	
+			if ( 'both' == $register_login || 'registration' == $register_login )	{
+				echo kbs_register_form( kbs_get_current_page_url() );
+			}
+	
+			return ob_get_clean();
+		}
+	} else	{
+
+		$args = shortcode_atts( array(
+			'form' => 0,
+			), $atts, 'kbs_submit' );
+	
+		return kbs_display_form( $args['form'] );
+
+	}
 } // kbs_submit_form_shortcode
 add_shortcode( 'kbs_submit', 'kbs_submit_form_shortcode' );
 
