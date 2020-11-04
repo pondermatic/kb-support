@@ -2,7 +2,7 @@
 Contributors: kbsupport, mikeyhoward1977
 Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
-Tested up to: 5.5.1
+Tested up to: 5.5.3
 Requires PHP: 5.4
 Stable tag: 1.4.5
 License: GPLv2 or later
