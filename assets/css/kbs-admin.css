@@ -235,7 +235,7 @@ checkbox.kbs-form-error {
 	font-size: 13px;
 	margin-top: 0;
 }
-.wrap-licenses .kbs-license-data.license-expires-soon-notice a {
+.wrap-licenses .kbs-license-data.kbs-license-expires-soon-notice a {
 	color: #fff;
 }
 .wrap-licenses .kbs-license-data.kbs-license-expired a:hover,
