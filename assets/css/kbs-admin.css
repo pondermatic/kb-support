@@ -210,34 +210,41 @@ checkbox.kbs-form-error {
 .wrap-licenses .kbs-license-data[class*="kbs-license-"] a:hover {
 	text-decoration: none;
 }
-.wrap-licenses .kbs-license-data.license-expires-soon-notice {
-	background-color: #00a0d2;
-	color: #fff;
+.wrap-licenses .kbs-license-data.kbs-license-expires-soon-notice {
+	background-color: #e5f5fa;
 	border-color: #00a0d2;
 }
 .wrap-licenses .kbs-license-data.kbs-license-expired,
 .wrap-licenses .kbs-license-data.kbs-license-missing,
 .wrap-licenses .kbs-license-data.kbs-license-error,
 .wrap-licenses .kbs-license-data.kbs-license-invalid,
-.wrap-licenses .kbs-license-data.kbs-license-site_inactive {
-	background-color: #e24e4e;
-	color: #fff;
+.wrap-licenses .kbs-license-data.kbs-license-site_inactive,
+.wrap-licenses .kbs-license-data.kbs-license-item_name_mismatch {
+	background-color: #fbeaea;
 	border-color: #e24e4e;
 }
-.wrap-licenses .kbs-license-data.kbs-license-not-installed,
-.wrap-licenses .kbs-license-data.kbs-license-item_name_mismatch {
+.wrap-licenses .kbs-license-data.kbs-license-not-installed {
 	background-color: #ffebcd;
-	border-color: #ffebcd;
+	border-color: #ffb900;
+}
+.wrap-licenses .kbs-license-data.kbs-license-valid	{
+	border-color: #46b450;
+	background-color: #ecf7ed;
 }
 .wrap-licenses .kbs-license-data p {
 	font-size: 13px;
 	margin-top: 0;
 }
-.wrap-licenses .kbs-license-data.license-expires-soon-notice a,
-.wrap-licenses .kbs-license-data.kbs-license-missing a,
-.wrap-licenses .kbs-license-data.kbs-license-expired a {
+.wrap-licenses .kbs-license-data.license-expires-soon-notice a {
 	color: #fff;
 }
+.wrap-licenses .kbs-license-data.kbs-license-expired a:hover,
+.wrap-licenses .kbs-license-data.kbs-license-missing a:hover,
+.wrap-licenses .kbs-license-data.kbs-license-error a:hover,
+.wrap-licenses .kbs-license-data.kbs-license-invalid a:hover,
+.wrap-licenses .kbs-license-data.kbs-license-site_inactive a:hover,
+.wrap-licenses .kbs-license-data.kbs-license-not-installed a:hover,
+.wrap-licenses .kbs-license-data.kbs-license-item_name_mismatch a:hover,
 .wrap-licenses .kbs-license-data.license-expires-soon-notice a:hover,
 .wrap-licenses .kbs-license-data.kbs-license-expired a:hover {
 	text-decoration: none;
