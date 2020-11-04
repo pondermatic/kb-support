@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KB Support 1.4.5\n"
 "Report-Msgid-Bugs-To: https://kb-support.com/\n"
-"POT-Creation-Date: 2020-09-17 21:04:24+00:00\n"
+"POT-Creation-Date: 2020-11-04 16:15:12+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -54,51 +54,113 @@ msgstr ""
 #: includes/admin/upgrades/classes/class-ticket-sequential-numbering-migration.php:122
 #: includes/admin/upgrades/classes/class-ticket-source-migration.php:154
 #: includes/admin/upgrades/upgrade-functions.php:277
-#: includes/class-kbs-license-handler.php:313
+#: includes/class-kbs-license-handler.php:343
 msgid "Error"
 msgstr ""
 
-#: includes/admin/admin-pages.php:29 includes/post-types.php:176
+#: includes/admin/admin-pages.php:28 includes/post-types.php:176
 msgid "Companies"
 msgstr ""
 
-#: includes/admin/admin-pages.php:31 includes/admin/companies/company.php:32
+#: includes/admin/admin-pages.php:30 includes/admin/companies/company.php:32
 #: includes/admin/customers/class-kbs-customer-table.php:74
 #: includes/admin/customers/customers-page.php:79
 msgid "Customers"
 msgstr ""
 
-#: includes/admin/admin-pages.php:33 includes/user-functions.php:77
+#: includes/admin/admin-pages.php:32 includes/user-functions.php:77
 msgid "KB Support Settings"
 msgstr ""
 
-#: includes/admin/admin-pages.php:33 includes/admin/admin-plugin.php:26
+#: includes/admin/admin-pages.php:32 includes/admin/admin-plugin.php:26
 #: includes/admin/forms/metaboxes.php:156
 #: includes/admin/forms/metaboxes.php:179
 msgid "Settings"
 msgstr ""
 
-#: includes/admin/admin-pages.php:35
+#: includes/admin/admin-pages.php:34
 msgid "KBS Upgrades"
 msgstr ""
 
-#: includes/admin/admin-plugin.php:53
+#: includes/admin/admin-pages.php:49 includes/class-kbs-license-handler.php:220
+msgid "Manage Licenses"
+msgstr ""
+
+#: includes/admin/admin-plugin.php:52
 msgid "Documentation"
 msgstr ""
 
-#: includes/admin/admin-plugin.php:54 includes/admin/extensions.php:27
+#: includes/admin/admin-plugin.php:53 includes/admin/extensions.php:27
 #: includes/admin/settings/contextual-help.php:422
-#: includes/admin/settings/register-settings.php:1356
+#: includes/admin/settings/register-settings.php:1383
 #: includes/admin/welcome.php:133
 msgid "Extensions"
 msgstr ""
 
-#: includes/admin/admin-plugin.php:79
+#: includes/admin/admin-plugin.php:78
 msgid ""
 "If <strong>KB Support</strong> is helping you support your customers, "
 "please <a href=\"%s\" target=\"_blank\">leave us a ★★★★★ rating</a>. A "
 "<strong style=\"text-decoration: underline;\">huge</strong> thank you in "
 "advance!"
+msgstr ""
+
+#: includes/admin/admin-plugin.php:99
+msgid ""
+"Automate ticket assignment based on a number of rules that can be defined "
+"to provide an efficient support workflow."
+msgstr ""
+
+#: includes/admin/admin-plugin.php:106
+msgid ""
+"Save time by enabling instant content to be added to ticket replies with "
+"the single click of a button."
+msgstr ""
+
+#: includes/admin/admin-plugin.php:113
+msgid "Create additional ticket statuses to meet your business needs."
+msgstr ""
+
+#: includes/admin/admin-plugin.php:120
+msgid ""
+"Integrate KB Support with your EDD store and Software Licensing extension "
+"for the ultimate customer experience."
+msgstr ""
+
+#: includes/admin/admin-plugin.php:127
+msgid ""
+"Enable agents to register custom signatures which can be inserted into "
+"customer emails."
+msgstr ""
+
+#: includes/admin/admin-plugin.php:133
+msgid "Enable customers and agents to respond to tickets via email."
+msgstr ""
+
+#: includes/admin/admin-plugin.php:140
+msgid "Integrate your favourite knowledge base with KB Support."
+msgstr ""
+
+#: includes/admin/admin-plugin.php:146
+msgid ""
+"Enable customers to subscribe to your MailChimp lists during ticket "
+"submission."
+msgstr ""
+
+#: includes/admin/admin-plugin.php:152
+msgid ""
+"Get feedback on your performance for support tickets and quality of "
+"documentation."
+msgstr ""
+
+#: includes/admin/admin-plugin.php:158
+msgid "Add an approval process to selected agent ticket replies."
+msgstr ""
+
+#: includes/admin/admin-plugin.php:164
+msgid ""
+"Integrate KB Support with your WooCommerce store for the ultimate customer "
+"experience."
 msgstr ""
 
 #: includes/admin/article/article.php:28
@@ -159,7 +221,7 @@ msgstr ""
 #: includes/admin/article/contextual-help.php:39
 #: includes/admin/forms/contextual-help.php:72
 #: includes/admin/settings/contextual-help.php:35
-#: includes/admin/settings/register-settings.php:1343
+#: includes/admin/settings/register-settings.php:1370
 #: includes/admin/tickets/contextual-help.php:39 includes/admin/tools.php:81
 msgid "General"
 msgstr ""
@@ -751,7 +813,7 @@ msgstr ""
 #: includes/admin/customers/customer-actions.php:371
 #: includes/admin/customers/customer-actions.php:415
 #: includes/admin/import-export/export/export-actions.php:29
-#: includes/class-kbs-license-handler.php:313
+#: includes/class-kbs-license-handler.php:343
 msgid "Nonce verification failed"
 msgstr ""
 
@@ -950,12 +1012,12 @@ msgid "Today"
 msgstr ""
 
 #: includes/admin/dashboard-widgets.php:137
-#: includes/admin/settings/register-settings.php:2394
+#: includes/admin/settings/register-settings.php:2473
 msgid "Current Status"
 msgstr ""
 
 #: includes/admin/dashboard-widgets.php:142
-#: includes/admin/settings/register-settings.php:1865
+#: includes/admin/settings/register-settings.php:1892
 msgid "Open"
 msgstr ""
 
@@ -1777,7 +1839,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/contextual-help.php:277
-#: includes/admin/settings/register-settings.php:1346
+#: includes/admin/settings/register-settings.php:1373
 msgid "Emails"
 msgstr ""
 
@@ -2028,7 +2090,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/contextual-help.php:385
-#: includes/admin/settings/register-settings.php:1347
+#: includes/admin/settings/register-settings.php:1374
 msgid "Compliance"
 msgstr ""
 
@@ -2108,8 +2170,8 @@ msgid "<strong>Agreement Text</strong> - Enter your Terms and Conditions here."
 msgstr ""
 
 #: includes/admin/settings/contextual-help.php:410
-#: includes/admin/settings/register-settings.php:1351
-#: includes/admin/settings/register-settings.php:1432
+#: includes/admin/settings/register-settings.php:1378
+#: includes/admin/settings/register-settings.php:1459
 msgid "Styles"
 msgstr ""
 
@@ -2137,7 +2199,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/contextual-help.php:433
-#: includes/admin/settings/register-settings.php:1359
+#: includes/admin/settings/register-settings.php:1386
 msgid "Licenses"
 msgstr ""
 
@@ -2149,7 +2211,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/contextual-help.php:446
-#: includes/admin/settings/register-settings.php:1362
+#: includes/admin/settings/register-settings.php:1389
 msgid "Misc"
 msgstr ""
 
@@ -2436,7 +2498,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:415
-#: includes/admin/settings/register-settings.php:1411
+#: includes/admin/settings/register-settings.php:1438
 msgid "Submission Settings"
 msgstr ""
 
@@ -2787,7 +2849,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:720
-#: includes/admin/settings/register-settings.php:1421
+#: includes/admin/settings/register-settings.php:1448
 msgid "Email Settings"
 msgstr ""
 
@@ -2922,7 +2984,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:819
-#: includes/admin/settings/register-settings.php:1423
+#: includes/admin/settings/register-settings.php:1450
 msgid "Reply Added"
 msgstr ""
 
@@ -3285,7 +3347,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/register-settings.php:1113
-#: includes/admin/settings/register-settings.php:1440
+#: includes/admin/settings/register-settings.php:1467
 msgid "Misc Settings"
 msgstr ""
 
@@ -3392,315 +3454,334 @@ msgstr ""
 msgid "Normal"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1273
+#: includes/admin/settings/register-settings.php:1209
+#: includes/class-kbs-license-handler.php:173
+msgid "%1$s"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:1300
 msgid "Settings updated."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1344
-#: includes/admin/settings/register-settings.php:1345
+#: includes/admin/settings/register-settings.php:1371
+#: includes/admin/settings/register-settings.php:1372
 msgid "%s"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1405
+#: includes/admin/settings/register-settings.php:1432
 msgid "General Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1406
+#: includes/admin/settings/register-settings.php:1433
 msgid "Pages Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1407
+#: includes/admin/settings/register-settings.php:1434
 msgid "Customer Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1410
-#: includes/admin/settings/register-settings.php:1417
+#: includes/admin/settings/register-settings.php:1437
+#: includes/admin/settings/register-settings.php:1444
 msgid "General %s Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1412
+#: includes/admin/settings/register-settings.php:1439
 msgid "Reply Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1413
+#: includes/admin/settings/register-settings.php:1440
 msgid "Agent Settings"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1414
+#: includes/admin/settings/register-settings.php:1441
 msgid "Service Levels"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1418
+#: includes/admin/settings/register-settings.php:1445
 msgid "Restricted Content Notices"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1422
+#: includes/admin/settings/register-settings.php:1449
 msgid "%s Logged"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1424
+#: includes/admin/settings/register-settings.php:1451
 msgid "%s Closed"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1425
+#: includes/admin/settings/register-settings.php:1452
 msgid "Notifications"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1428
+#: includes/admin/settings/register-settings.php:1455
 msgid "Privacy Policy"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1429
+#: includes/admin/settings/register-settings.php:1456
 msgid "Terms and Conditions"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1433
+#: includes/admin/settings/register-settings.php:1460
 msgid "%s Status Colours"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1436
+#: includes/admin/settings/register-settings.php:1463
 msgid "Main"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1441
+#: includes/admin/settings/register-settings.php:1468
 #: includes/forms/form-functions.php:493
 msgid "Google reCaptcha"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1706
+#: includes/admin/settings/register-settings.php:1733
 msgid "The callback function used for the %s setting is missing."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1863
+#: includes/admin/settings/register-settings.php:1890
 msgid "Day of Week"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1864
+#: includes/admin/settings/register-settings.php:1891
 msgid "Closed all Day"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1866
+#: includes/admin/settings/register-settings.php:1893
 #: templates/shortcode-form.php:62
 msgid "Close"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:1996
+#: includes/admin/settings/register-settings.php:2023
 msgid "Upload File"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2050
+#: includes/admin/settings/register-settings.php:2077
 msgid ""
 "Your license key expired on %s. Please <a href=\"%s\" target=\"_blank\" "
 "title=\"Renew your license key\">renew your license key</a>."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2063
+#: includes/admin/settings/register-settings.php:2090
 msgid ""
 "Your license key has been disabled. Please <a href=\"%s\" "
 "target=\"_blank\">contact support</a> for more information."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2075
+#: includes/admin/settings/register-settings.php:2102
 msgid ""
 "Invalid license. Please <a href=\"%s\" target=\"_blank\" title=\"Visit "
 "account page\">visit your account page</a> and verify it."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2088
+#: includes/admin/settings/register-settings.php:2115
 msgid ""
 "Your %s is not active for this URL. Please <a href=\"%s\" target=\"_blank\" "
 "title=\"Visit account page\">visit your account page</a> to manage your "
 "license key URLs."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2100
+#: includes/admin/settings/register-settings.php:2127
 msgid "This appears to be an invalid license key for %s."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2109
+#: includes/admin/settings/register-settings.php:2136
 msgid ""
 "Your license key has reached its activation limit. <a href=\"%s\">View "
 "possible upgrades</a> now."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2118
+#: includes/admin/settings/register-settings.php:2145
 msgid ""
 "The key you entered belongs to a bundle, please use the product specific "
 "license key."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2126
+#: includes/admin/settings/register-settings.php:2153
 msgid "unknown_error"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2127
+#: includes/admin/settings/register-settings.php:2154
 msgid ""
 "There was an error with this license key: %s. Please <a href=\"%s\">contact "
 "our support team</a>."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2148
+#: includes/admin/settings/register-settings.php:2175
 msgid "License key never expires."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2155
+#: includes/admin/settings/register-settings.php:2182
 msgid ""
 "Your license key expires soon! It expires on %s. <a href=\"%s\" "
 "target=\"_blank\" title=\"Renew license\">Renew your license key</a>."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2165
+#: includes/admin/settings/register-settings.php:2192
 msgid "Your license key expires on %s."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2183
-msgid "To receive updates, please enter your valid %s license key."
+#: includes/admin/settings/register-settings.php:2210
+msgid ""
+"You must enter a valid <a href=\"%s\" target=\"_blank\">license key</a> to "
+"receive updates for %s."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2196
+#: includes/admin/settings/register-settings.php:2224
 msgid "Deactivate License"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2317
-#: includes/admin/settings/register-settings.php:2351
+#: includes/admin/settings/register-settings.php:2262
+msgid "Enter your license key"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:2271
+msgid "Demo"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:2283
+msgid "Buy Extension"
+msgstr ""
+
+#: includes/admin/settings/register-settings.php:2396
+#: includes/admin/settings/register-settings.php:2430
 msgid "1 Hour"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2318
-#: includes/admin/settings/register-settings.php:2352
+#: includes/admin/settings/register-settings.php:2397
+#: includes/admin/settings/register-settings.php:2431
 msgid "2 Hours"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2319
-#: includes/admin/settings/register-settings.php:2353
+#: includes/admin/settings/register-settings.php:2398
+#: includes/admin/settings/register-settings.php:2432
 msgid "3 Hours"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2320
-#: includes/admin/settings/register-settings.php:2354
+#: includes/admin/settings/register-settings.php:2399
+#: includes/admin/settings/register-settings.php:2433
 msgid "4 Hours"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2321
-#: includes/admin/settings/register-settings.php:2355
+#: includes/admin/settings/register-settings.php:2400
+#: includes/admin/settings/register-settings.php:2434
 msgid "5 Hours"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2322
-#: includes/admin/settings/register-settings.php:2356
+#: includes/admin/settings/register-settings.php:2401
+#: includes/admin/settings/register-settings.php:2435
 msgid "6 Hours"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2323
-#: includes/admin/settings/register-settings.php:2357
+#: includes/admin/settings/register-settings.php:2402
+#: includes/admin/settings/register-settings.php:2436
 msgid "7 Hours"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2324
-#: includes/admin/settings/register-settings.php:2358
+#: includes/admin/settings/register-settings.php:2403
+#: includes/admin/settings/register-settings.php:2437
 msgid "8 Hours"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2325
-#: includes/admin/settings/register-settings.php:2359
+#: includes/admin/settings/register-settings.php:2404
+#: includes/admin/settings/register-settings.php:2438
 msgid "12 Hours"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2326
-#: includes/admin/settings/register-settings.php:2360
+#: includes/admin/settings/register-settings.php:2405
+#: includes/admin/settings/register-settings.php:2439
 msgid "1 Day"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2327
-#: includes/admin/settings/register-settings.php:2361
+#: includes/admin/settings/register-settings.php:2406
+#: includes/admin/settings/register-settings.php:2440
 msgid "2 Days"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2328
-#: includes/admin/settings/register-settings.php:2362
+#: includes/admin/settings/register-settings.php:2407
+#: includes/admin/settings/register-settings.php:2441
 msgid "3 Days"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2329
-#: includes/admin/settings/register-settings.php:2363
+#: includes/admin/settings/register-settings.php:2408
+#: includes/admin/settings/register-settings.php:2442
 msgid "4 Days"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2330
-#: includes/admin/settings/register-settings.php:2364
+#: includes/admin/settings/register-settings.php:2409
+#: includes/admin/settings/register-settings.php:2443
 msgid "5 Days"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2331
-#: includes/admin/settings/register-settings.php:2365
+#: includes/admin/settings/register-settings.php:2410
+#: includes/admin/settings/register-settings.php:2444
 msgid "6 Days"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2332
-#: includes/admin/settings/register-settings.php:2366
+#: includes/admin/settings/register-settings.php:2411
+#: includes/admin/settings/register-settings.php:2445
 msgid "1 Week"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2333
-#: includes/admin/settings/register-settings.php:2367
+#: includes/admin/settings/register-settings.php:2412
+#: includes/admin/settings/register-settings.php:2446
 msgid "2 Weeks"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2334
-#: includes/admin/settings/register-settings.php:2368
+#: includes/admin/settings/register-settings.php:2413
+#: includes/admin/settings/register-settings.php:2447
 msgid "3 Weeks"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2335
-#: includes/admin/settings/register-settings.php:2369
+#: includes/admin/settings/register-settings.php:2414
+#: includes/admin/settings/register-settings.php:2448
 msgid "4 Weeks"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2399
+#: includes/admin/settings/register-settings.php:2478
 msgid "Agent Reply Status"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2400
+#: includes/admin/settings/register-settings.php:2479
 msgid ""
 "When an agent replies to a %1$s what should the status change to by "
 "default? Agents may be able to change this whilst replying."
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2423
+#: includes/admin/settings/register-settings.php:2502
 msgid "Reply whilst %s?"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2424
+#: includes/admin/settings/register-settings.php:2503
 msgid ""
 "When a reply to a %1$s with the status %2$s is received from a customer, "
 "what status should the %1$s change to?"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2462
+#: includes/admin/settings/register-settings.php:2541
 msgid "Select the colour to use for %s in the %s status"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2471
+#: includes/admin/settings/register-settings.php:2550
 msgid "Admin Replied"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2472
+#: includes/admin/settings/register-settings.php:2551
 msgid "Select the colour to use when an admin has replied to a %s"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2480
+#: includes/admin/settings/register-settings.php:2559
 msgid "Agent Replied"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2481
+#: includes/admin/settings/register-settings.php:2560
 msgid "Select the colour to use when an agent has replied to a %s"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2489
+#: includes/admin/settings/register-settings.php:2568
 msgid "Customer Replied"
 msgstr ""
 
-#: includes/admin/settings/register-settings.php:2490
+#: includes/admin/settings/register-settings.php:2569
 msgid "Select the colour to use when a customer has replied to a %s"
 msgstr ""
 
@@ -4862,24 +4943,30 @@ msgstr ""
 msgid "Choose from most used %s tags"
 msgstr ""
 
-#: includes/class-kbs-license-handler.php:170
-msgid "%1$s"
+#: includes/class-kbs-license-handler.php:224
+msgid "Visit Extension Store"
 msgstr ""
 
-#: includes/class-kbs-license-handler.php:203
+#: includes/class-kbs-license-handler.php:228
 msgid ""
-"Enter your extension <a href=\"%s\" target=\"_blank\">license keys</a> here "
-"to receive updates for purchased extensions. If your license key has "
+"Enter your <a href=\"%s\" target=\"_blank\">license keys</a> here to "
+"receive updates for extensions you have purchased. If your license key has "
 "expired, please <a href=\"%s\" target=\"_blank\">renew your license</a>."
 msgstr ""
 
-#: includes/class-kbs-license-handler.php:432
+#: includes/class-kbs-license-handler.php:234
+msgid ""
+"<a href=\"%1$s\" target=\"_blank\">Visit our store</a> and receive a %2$s "
+"discount on all purchases."
+msgstr ""
+
+#: includes/class-kbs-license-handler.php:462
 msgid ""
 "You have invalid or expired license keys for KB Support. Please go to the "
 "<a href=\"%s\">Licenses page</a> to correct this issue."
 msgstr ""
 
-#: includes/class-kbs-license-handler.php:470
+#: includes/class-kbs-license-handler.php:500
 msgid "Enter a valid license key for automatic updates."
 msgstr ""
 

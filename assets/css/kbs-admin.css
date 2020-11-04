@@ -215,15 +215,16 @@ checkbox.kbs-form-error {
 	color: #fff;
 	border-color: #00a0d2;
 }
-.wrap-licenses .kbs-license-data.kbs-license-expired {
+.wrap-licenses .kbs-license-data.kbs-license-expired,
+.wrap-licenses .kbs-license-data.kbs-license-missing,
+.wrap-licenses .kbs-license-data.kbs-license-error,
+.wrap-licenses .kbs-license-data.kbs-license-invalid,
+.wrap-licenses .kbs-license-data.kbs-license-site_inactive {
 	background-color: #e24e4e;
 	color: #fff;
 	border-color: #e24e4e;
 }
-.wrap-licenses .kbs-license-data.kbs-license-error,
-.wrap-licenses .kbs-license-data.kbs-license-missing,
-.wrap-licenses .kbs-license-data.kbs-license-invalid,
-.wrap-licenses .kbs-license-data.kbs-license-site_inactive,
+.wrap-licenses .kbs-license-data.kbs-license-not-installed,
 .wrap-licenses .kbs-license-data.kbs-license-item_name_mismatch {
 	background-color: #ffebcd;
 	border-color: #ffebcd;
@@ -233,6 +234,7 @@ checkbox.kbs-form-error {
 	margin-top: 0;
 }
 .wrap-licenses .kbs-license-data.license-expires-soon-notice a,
+.wrap-licenses .kbs-license-data.kbs-license-missing a,
 .wrap-licenses .kbs-license-data.kbs-license-expired a {
 	color: #fff;
 }
@@ -242,6 +244,37 @@ checkbox.kbs-form-error {
 }
 .wrap-licenses p.submit {
 	clear: both;
+}
+
+.wrap-licenses .kbs-no-license-overlay {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	z-index: 100;
+	background: rgba(255,255,255,.64);
+	text-align: center;
+	vertical-align: middle;
+}
+
+.wrap-licenses .kbs-no-license-overlay a {
+	padding: 9px 15px;
+	background: #0073aa;
+	color: #FFF;
+	text-decoration: none;
+	border-radius: 3px;
+	font-size: 14px;
+	display: inline-block;
+}
+
+.kbs-no-license-button-wrap {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-ms-transform: translate(-50%,-50%);
+	transform: translate(-50%,-50%);
+	min-width: 200px;
 }
 
 span.padlock:before {
