@@ -2172,14 +2172,14 @@ if ( ! function_exists( 'kbs_license_key_callback' ) ) {
 
 						if( 'lifetime' === $license->expires ) {
 
-							$messages[] = __( 'License key never expires.', 'kb-support' );
+							$messages[] = __( 'Your license key is valid and never expires.', 'kb-support' );
 
 							$license_status = 'license-lifetime-notice';
 
 						} elseif( $expiration > $now && $expiration - $now < ( DAY_IN_SECONDS * 30 ) ) {
 
 							$messages[] = sprintf(
-								__( 'Your license key expires soon! It expires on %s. <a href="%s" target="_blank" title="Renew license">Renew your license key</a>.', 'kb-support' ),
+								__( 'Your license key expires on %s. <a href="%s" target="_blank" title="Renew license">Renew your license key</a> to continue receiving updates and support.', 'kb-support' ),
 								date_i18n( get_option( 'date_format' ), strtotime( $license->expires, current_time( 'timestamp' ) ) ),
 								'http://kb-support.com/checkout/?edd_license_key=' . $value
 							);
@@ -2207,7 +2207,7 @@ if ( ! function_exists( 'kbs_license_key_callback' ) ) {
 			$class = 'missing';
 
 			$messages[] = sprintf(
-				__( 'You must enter a valid <a href="%s" target="_blank">license key</a> to receive updates for %s.', 'kb-support' ),
+				__( 'Enter a valid <a href="%s" target="_blank">license key</a> to receive updates for %s.', 'kb-support' ),
                 'https://kb-support.com/your-account/',
 				$args['name']
 			);
