@@ -2,9 +2,9 @@
 Contributors: kbsupport, mikeyhoward1977
 Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
-Tested up to: 5.5.1
+Tested up to: 5.5.3
 Requires PHP: 5.4
-Stable tag: 1.4.5
+Stable tag: 1.4.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,6 +122,14 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.4.6 =
+
+** 5th November 2020**
+
+* **Tweak**: Improved styling on licensing page
+* **Tweak**: Improved styling on extensions page
+* **Tweak**: Incremented WordPress tested up to version
 
 = 1.4.5 =
 

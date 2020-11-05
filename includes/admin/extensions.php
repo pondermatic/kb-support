@@ -112,13 +112,13 @@ function kbs_extensions_page()	{
                         <div class="kbs-extension-item-desc">
                             <p class="kbs-extension-item-heading"><?php echo $extension->info->title; ?></p>
                             <div class="kbs-extension-item-excerpt">
-                            	<p><?php echo $the_excerpt; ?></p>
+                            	<p class="kbs-extension-desc"><?php echo $the_excerpt; ?></p>
                             </div>
                             <div class="kbs-extension-buy-now">
                                 <?php if ( ! is_plugin_active( 'kbs-' . $slug . '/' . 'kbs-' . $slug . '.php' ) ) : ?>
-                                    <a href="<?php echo $link; ?>" class="button-primary" target="_blank"><?php printf( __( 'Buy Now from %s', 'kb-support' ), $price ); ?></a>
+                                    <a href="<?php echo $link; ?>" class="button-secondary" target="_blank"><?php printf( __( 'Buy Now from %s', 'kb-support' ), $price ); ?></a>
                                 <?php else : ?>
-                                    <p class="button-primary"><?php _e( 'Already Installed', 'kb-support' ); ?></p>
+                                    <p class="button-secondary"><?php _e( 'Already Installed', 'kb-support' ); ?></p>
                                 <?php endif; ?>
                             </div>
                         </div>
