@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: KB Support 1.4.6\n"
+"Project-Id-Version: KB Support 1.4.7\n"
 "Report-Msgid-Bugs-To: https://kb-support.com/\n"
-"POT-Creation-Date: 2020-11-05 09:21:29+00:00\n"
+"POT-Creation-Date: 2020-11-05 09:47:27+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -103,64 +103,6 @@ msgid ""
 "please <a href=\"%s\" target=\"_blank\">leave us a ★★★★★ rating</a>. A "
 "<strong style=\"text-decoration: underline;\">huge</strong> thank you in "
 "advance!"
-msgstr ""
-
-#: includes/admin/admin-plugin.php:99
-msgid ""
-"Automate ticket assignment based on a number of rules that can be defined "
-"to provide an efficient support workflow."
-msgstr ""
-
-#: includes/admin/admin-plugin.php:106
-msgid ""
-"Save time by enabling instant content to be added to ticket replies with "
-"the single click of a button."
-msgstr ""
-
-#: includes/admin/admin-plugin.php:113
-msgid "Create additional ticket statuses to meet your business needs."
-msgstr ""
-
-#: includes/admin/admin-plugin.php:120
-msgid ""
-"Integrate KB Support with your EDD store and Software Licensing extension "
-"for the ultimate customer experience."
-msgstr ""
-
-#: includes/admin/admin-plugin.php:127
-msgid ""
-"Enable agents to register custom signatures which can be inserted into "
-"customer emails."
-msgstr ""
-
-#: includes/admin/admin-plugin.php:133
-msgid "Enable customers and agents to respond to tickets via email."
-msgstr ""
-
-#: includes/admin/admin-plugin.php:140
-msgid "Integrate your favourite knowledge base with KB Support."
-msgstr ""
-
-#: includes/admin/admin-plugin.php:146
-msgid ""
-"Enable customers to subscribe to your MailChimp lists during ticket "
-"submission."
-msgstr ""
-
-#: includes/admin/admin-plugin.php:152
-msgid ""
-"Get feedback on your performance for support tickets and quality of "
-"documentation."
-msgstr ""
-
-#: includes/admin/admin-plugin.php:158
-msgid "Add an approval process to selected agent ticket replies."
-msgstr ""
-
-#: includes/admin/admin-plugin.php:164
-msgid ""
-"Integrate KB Support with your WooCommerce store for the ultimate customer "
-"experience."
 msgstr ""
 
 #: includes/admin/article/article.php:28
@@ -5630,6 +5572,64 @@ msgstr ""
 
 #: includes/misc-functions.php:693
 msgid "Subscribe"
+msgstr ""
+
+#: includes/misc-functions.php:1065
+msgid ""
+"Automate ticket assignment based on a number of rules that can be defined "
+"to provide an efficient support workflow."
+msgstr ""
+
+#: includes/misc-functions.php:1072
+msgid ""
+"Save time by enabling instant content to be added to ticket replies with "
+"the single click of a button."
+msgstr ""
+
+#: includes/misc-functions.php:1079
+msgid "Create additional ticket statuses to meet your business needs."
+msgstr ""
+
+#: includes/misc-functions.php:1086
+msgid ""
+"Integrate KB Support with your EDD store and Software Licensing extension "
+"for the ultimate customer experience."
+msgstr ""
+
+#: includes/misc-functions.php:1093
+msgid ""
+"Enable agents to register custom signatures which can be inserted into "
+"customer emails."
+msgstr ""
+
+#: includes/misc-functions.php:1099
+msgid "Enable customers and agents to respond to tickets via email."
+msgstr ""
+
+#: includes/misc-functions.php:1106
+msgid "Integrate your favourite knowledge base with KB Support."
+msgstr ""
+
+#: includes/misc-functions.php:1112
+msgid ""
+"Enable customers to subscribe to your MailChimp lists during ticket "
+"submission."
+msgstr ""
+
+#: includes/misc-functions.php:1118
+msgid ""
+"Get feedback on your performance for support tickets and quality of "
+"documentation."
+msgstr ""
+
+#: includes/misc-functions.php:1124
+msgid "Add an approval process to selected agent ticket replies."
+msgstr ""
+
+#: includes/misc-functions.php:1130
+msgid ""
+"Integrate KB Support with your WooCommerce store for the ultimate customer "
+"experience."
 msgstr ""
 
 #: includes/participant-functions.php:121
