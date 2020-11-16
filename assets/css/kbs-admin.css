@@ -210,38 +210,78 @@ checkbox.kbs-form-error {
 .wrap-licenses .kbs-license-data[class*="kbs-license-"] a:hover {
 	text-decoration: none;
 }
-.wrap-licenses .kbs-license-data.license-expires-soon-notice {
-	background-color: #00a0d2;
-	color: #fff;
+.wrap-licenses .kbs-license-data.kbs-license-expires-soon-notice {
+	background-color: #e5f5fa;
 	border-color: #00a0d2;
 }
-.wrap-licenses .kbs-license-data.kbs-license-expired {
-	background-color: #e24e4e;
-	color: #fff;
-	border-color: #e24e4e;
-}
-.wrap-licenses .kbs-license-data.kbs-license-error,
+.wrap-licenses .kbs-license-data.kbs-license-expired,
 .wrap-licenses .kbs-license-data.kbs-license-missing,
+.wrap-licenses .kbs-license-data.kbs-license-error,
 .wrap-licenses .kbs-license-data.kbs-license-invalid,
 .wrap-licenses .kbs-license-data.kbs-license-site_inactive,
 .wrap-licenses .kbs-license-data.kbs-license-item_name_mismatch {
+	background-color: #fbeaea;
+	border-color: #e24e4e;
+}
+.wrap-licenses .kbs-license-data.kbs-license-not-installed {
 	background-color: #ffebcd;
-	border-color: #ffebcd;
+	border-color: #ffb900;
+}
+.wrap-licenses .kbs-license-data.kbs-license-valid	{
+	border-color: #46b450;
+	background-color: #ecf7ed;
 }
 .wrap-licenses .kbs-license-data p {
 	font-size: 13px;
 	margin-top: 0;
 }
-.wrap-licenses .kbs-license-data.license-expires-soon-notice a,
-.wrap-licenses .kbs-license-data.kbs-license-expired a {
+.wrap-licenses .kbs-license-data.kbs-license-expires-soon-notice a {
 	color: #fff;
 }
+.wrap-licenses .kbs-license-data.kbs-license-expired a:hover,
+.wrap-licenses .kbs-license-data.kbs-license-missing a:hover,
+.wrap-licenses .kbs-license-data.kbs-license-error a:hover,
+.wrap-licenses .kbs-license-data.kbs-license-invalid a:hover,
+.wrap-licenses .kbs-license-data.kbs-license-site_inactive a:hover,
+.wrap-licenses .kbs-license-data.kbs-license-not-installed a:hover,
+.wrap-licenses .kbs-license-data.kbs-license-item_name_mismatch a:hover,
 .wrap-licenses .kbs-license-data.license-expires-soon-notice a:hover,
 .wrap-licenses .kbs-license-data.kbs-license-expired a:hover {
 	text-decoration: none;
 }
 .wrap-licenses p.submit {
 	clear: both;
+}
+
+.wrap-licenses .kbs-no-license-overlay {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	z-index: 100;
+	background: rgba(255,255,255,.64);
+	text-align: center;
+	vertical-align: middle;
+}
+
+.wrap-licenses .kbs-no-license-overlay a {
+	padding: 9px 15px;
+	background: #0073aa;
+	color: #FFF;
+	text-decoration: none;
+	border-radius: 3px;
+	font-size: 14px;
+	display: inline-block;
+}
+
+.kbs-no-license-button-wrap {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-ms-transform: translate(-50%,-50%);
+	transform: translate(-50%,-50%);
+	min-width: 200px;
 }
 
 span.padlock:before {
@@ -1171,38 +1211,38 @@ h3.kbs_popular_articles_label {
 }
 
 .kbs-extension-item {
-  width: calc(100% - 25px);
-  background: #FFFFFF;
-  margin: 25px auto;
-  text-align: left;
-  height: 425px;
-  
-  -webkit-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75);
-  -moz-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75);
-  box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75);
+	width: calc(100% - 25px);
+	background: #FFFFFF;
+	margin: 25px auto;
+	text-align: left;
+	height: 425px;
+
+	-webkit-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75);
+	-moz-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75);
+	box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75);
 }
 
 .kbs-extension-item-img {
-  position: relative;
-  width: 100%;
+	position: relative;
+	width: 100%;
 }
 
 .kbs-extension-item-img img {
-  position: relative;
-  width: 100%;
+	position: relative;
+	width: 100%;
 }
 
 .kbs-extension-item-desc {
-  position: relative;
-  padding: 25px;
+	position: relative;
+	padding: 25px;
 }
 
 .kbs-extension-item-desc a {
-  position: relative;
-  display: block;
-  font-weight: 500;
-  margin: 25px 0 0 0;
-  color: #37474F;
+	position: relative;
+	display: block;
+	font-weight: 500;
+	margin: 25px 0 0 0;
+	color: #37474F;
 }
 
 .kbs-extension-item-heading {
@@ -1212,7 +1252,11 @@ h3.kbs_popular_articles_label {
 }
 
 .kbs-extension-item-excerpt	{
-	height: 100px;
+	height: 120px;
+}
+
+p.kbs-extension-desc {
+	font-size: 14px;
 }
 
 .kbs-extension-buy-now {

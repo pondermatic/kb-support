@@ -21,7 +21,6 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	void
  */
 function kbs_add_options_link() {
-
 	global $kbs_companies_page, $kbs_customers_page, $kbs_settings_page, $kbs_upgrades_screen;
 
 	$customer_view_role  = kbs_get_view_customers_required_capability();
@@ -36,6 +35,27 @@ function kbs_add_options_link() {
 
 } // kbs_add_options_link
 add_action( 'admin_menu', 'kbs_add_options_link', 20 );
+
+/**
+ * Add a licensing link to the menu.
+ *
+ * @since   1.4.6
+ * @return  void
+ */
+function kbs_add_licensing_menu_link()  {
+    global $submenu;
+
+    $submenu['edit.php?post_type=kbs_ticket'][900] = array(
+        __( 'Manage Licenses', 'kb-support' ),
+        'manage_ticket_settings',
+        add_query_arg( array(
+            'post_type' => 'kbs_ticket',
+            'page'      => 'kbs-settings',
+            'tab'       => 'licenses'
+        ), admin_url( 'edit.php' ) )
+    );
+} // kbs_add_licensing_menu_link
+add_action( 'admin_menu', 'kbs_add_licensing_menu_link', 900 );
 
 /**
  * Display the open ticket count next to the tickets menu item.
