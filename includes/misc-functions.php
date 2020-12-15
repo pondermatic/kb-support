@@ -661,7 +661,11 @@ function kbs_get_newsletter()    {
 	    <?php printf( __( 
             'Sign up for the KB Support newsletter below to receive a <strong>15%s discount</strong> off our <a href="%s" target="_blank">extensions</a> and to stay informed of important updates and news.', 'kb-support' ),
             '%',
-            'https://kb-support.com/extensions/'
+            add_query_arg( array(
+				'utm_source'   => 'admin',
+				'utm_medium'   => 'wp-admin',
+				'utm_campaign' => 'newsletter'
+			), 'https://kb-support.com/extensions/' )
         ); ?>
     </p>
 

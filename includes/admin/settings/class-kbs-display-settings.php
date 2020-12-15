@@ -279,7 +279,7 @@ class KBS_Display_Settings	{
     /**
 	 * Output the settings pages.
 	 *
-	 * @since	1.3.11
+	 * @since	1.4.9
 	 * @return	string
 	 */
 	public function options_page()	{
@@ -308,7 +308,7 @@ class KBS_Display_Settings	{
     /**
 	 * Output the sidebar.
 	 *
-	 * @since	1.3.11
+	 * @since	1.4.9
 	 * @return	string
 	 */
 	public function output_sidebar()	{
@@ -375,7 +375,7 @@ class KBS_Display_Settings	{
     /**
      * Display notice.
      *
-     * @since   1.3.11
+     * @since   1.4.9
      */
     public function maybe_display_notice()    {
         if ( isset( $_GET['updated'] ) ) : ?>
