@@ -2273,7 +2273,13 @@ if ( ! function_exists( 'kbs_premium_extension_callback' ) ) {
 
         if ( isset( $data['purchase_url'] ) ) {
             if ( $demo )    {
-                $html .= '&nbsp;&nbsp;&nbsp;';
+                $html                .= '&nbsp;&nbsp;&nbsp;';
+				$data['purchase_url'] = add_query_arg( array(
+					'utm_source'   => 'settings',
+					'utm_medium'   => 'wp-admin',
+					'utm_campaign' => 'license_notice',
+					'utm_content'  => 'licensing'
+				), $data['purchase_url'] );
             }
 
 			$html .= sprintf(
