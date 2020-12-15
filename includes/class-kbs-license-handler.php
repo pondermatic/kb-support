@@ -230,12 +230,6 @@ if ( ! class_exists( 'KBS_License' ) )	{
 				'https://kb-support.com/articles/software-license-renewals-extensions/'
 			);
 
-            printf(
-				'<p>' . __( '<a href="%1$s" target="_blank">Visit our store</a> and receive a %2$s discount on all purchases.', 'kb-support' ) . '</p>',
-				'https://kb-support.com/extensions/?discount=15offnow',
-                '15%'
-			);
-
 			$has_ran = true;
 		} // license_help_text
 	

@@ -1069,7 +1069,7 @@ function kbs_get_premium_extension_data()	{
 		),
 		'canned_replies' => array(
 			'name'         => 'Canned Replies',
-			'desc'         => __( 'Save time and add pre-saved replies with the single click of a button.', 'kb-support' ),
+			'desc'         => __( 'Save time by enabling instant content to be added to ticket replies with the single click of a button.', 'kb-support' ),
 			'plugin_url'   => 'kbs-canned-replies/kbs-canned-replies.php',
 			'demo_url'     => 'https://kb-support.com/register-your-demo/?demo_ref=eefa9cce664b79abb6407ebd07e4e3a5',
 			'purchase_url' => 'https://kb-support.com/downloads/canned-replies/'
@@ -1083,7 +1083,7 @@ function kbs_get_premium_extension_data()	{
 		),
 		'easy_digital_downloads' => array(
 			'name'         => 'Easy Digital Downloads',
-			'desc'         => __( 'Integrate with EDD and the Software Licensing extension for the ultimate customer experience.', 'kb-support' ),
+			'desc'         => __( 'Integrate with your EDD store and Software Licensing extension for the ultimate customer experience.', 'kb-support' ),
 			'plugin_url'   => 'kbs-edd/kbs-edd.php',
 			'demo_url'     => 'https://kb-support.com/register-your-demo/?demo_ref=cb0277e636b56fe9ef4d1fcbd8603ae6',
 			'purchase_url' => 'https://kb-support.com/downloads/easy-digital-downloads/'
@@ -1136,3 +1136,73 @@ function kbs_get_premium_extension_data()	{
 
 	return $extensions;
 } // kbs_get_premium_extension_data
+
+/**
+ * Retrieve current promotions.
+ *
+ * @since   1.4.9
+ * @param   bool    $active_only    True to retrieve only active promotions
+ * @return  array   Array of promotion data, or an empty array
+ */
+function kbs_get_current_promotions( $active_only = true )   {
+    $promotions = array(
+        'BF2021' => array(
+            'name'        => __( 'Black Friday & Cyber Monday', 'kb-support' ),
+            'campaign'    => 'bfcm2021',
+            'image'       => 'bfcm-header.svg',
+            'product'     => '',
+            'start'       => strtotime( '2021-11-22 00:00:00' ),
+            'finish'      => strtotime( '2021-12-05 23:59:59' ),
+            'timezone'    => 'GMT',
+            'discount'    => '40%',
+            'cta'         => __( 'Shop Now!', 'kb-support' ),
+            'cta_url'     => 'https://kb-support.com/extensions/',
+            'description' => __( 'Save <strong>%7$s</strong> on all KB Support purchases <strong>this week</strong>.<br>Including renewals and upgrades!', 'kb-support' )
+        ),
+        'FLASH2020' => array(
+            'name'        => __( 'Flash Sale', 'kb-support' ),
+            'campaign'    => 'flash-sale',
+            'image'       => 'flash-sale-header.svg',
+            'product'     => '',
+            'start'       => strtotime( '2020-12-21 00:00:00' ),
+            'finish'      => strtotime( '2021-01-03 23:59:59' ),
+            'timezone'    => 'GMT',
+            'discount'    => '33%',
+            'cta'         => __( 'Shop Now!', 'kb-support' ),
+            'cta_url'     => 'https://kb-support.com/extensions/',
+            'description' => __( 'Save <strong>%7$s</strong> on all KB Support purchases <strong>now</strong>. Including renewals and upgrades!', 'kb-support' )
+        )
+    );
+
+    foreach( $promotions as $promotion => $data )  {
+        if ( ! empty( $data['description'] ) )  {
+            $promotions[ $promotion ]['description'] = sprintf(
+                $data['description'],
+                $data['name'],
+                $data['image'],
+                $data['product'],
+                $data['start'],
+                $data['finish'],
+                $data['timezone'],
+                $data['discount'],
+                $data['cta'],
+                $data['cta_url'],
+                $data['description']
+            );
+        }
+
+        if ( $active_only ) {
+            $now    = time();
+            $start  = $data['start'];
+            $finish = $data['finish'];
+
+            if ( ( $now > $start ) && ( $now < $finish ) ) {
+                continue;
+            }
+
+            unset( $promotions[ $promotion ] );
+        }
+    }
+
+    return $promotions;
+} // kbs_get_current_promotions

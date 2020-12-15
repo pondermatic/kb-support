@@ -124,6 +124,153 @@ table.wp-list-table thead tr th, .kbs-label {
     margin: 0 auto;
 }
 
+.kbs-settings-sub-nav {
+	margin: 0 0px 10px 0;
+	width: 100%;
+}
+
+.kbs-settings-sub-nav a {
+	padding: 13px;
+	display: block;
+}
+
+.kbs-settings-sub-nav a.current {
+	padding-bottom: 9px;
+}
+
+.kbs-settings-sidebar {
+	padding-top: 27px;
+}
+
+.kbs-settings-sidebar-content {
+	background-color: #fff;
+	text-align: center;
+	border: 1px solid #ddd;
+	box-sizing: border-box;
+	max-width: 300px;
+}
+
+.kbs-settings-sidebar-content p {
+	font-size: 14px;
+	line-height: 1.5;
+	margin-top: 0;
+}
+
+/* Settings sidebar header section */
+.kbs-sidebar-header-section {
+	background-color: #0073aa;
+	line-height: 1;
+	padding: 26px 20px 24px;
+	color: #FFFFFF;
+	font-size: 20px;
+	font-weight: 500;
+}
+
+/* Settings sidebar description section */
+.kbs-sidebar-description-section {
+	background-color: #fafafa;
+	padding: 16px 20px;
+	border-bottom: 1px solid #ddd;
+}
+
+.kbs-sidebar-description-section.kbs-upsell {
+	text-align: left;
+}
+
+.kbs-sidebar-description-section .kbs-sidebar-description {
+	margin: 0;
+}
+
+/* Settings sidebar coupon section */
+.kbs-sidebar-coupon-section {
+	font-size: 14px;
+	padding: 16px 20px;
+}
+
+.kbs-sidebar-coupon-section label {
+	display: block;
+	line-height: 1.4;
+	margin-bottom: 6px;
+}
+
+.kbs-sidebar-coupon-section label strong {
+	color: #253b51;
+	font-weight: 700;
+}
+
+.kbs-sidebar-coupon-section input {
+	background: #f4f7fa;
+	font-size: 22px;
+	font-weight: 600;
+	text-align: center;
+	padding: 10px;
+	border: 2px dashed #2794da;
+	border-radius: 4px;
+	margin-bottom: 16px;
+	box-shadow: none;
+	width: 100%;
+}
+
+.kbs-sidebar-coupon-section input:focus {
+	border: 2px dashed #2794da;
+	box-shadow: none;
+}
+
+.kbs-settings-sidebar-content .kbs-coupon-note {
+	color: #6c7883;
+	font-size: 13px;
+	font-style: italic;
+	margin: 0;
+}
+
+.kbs-settings-sidebar-content .kbs-coupon-note a {
+	color: #253b51;
+}
+
+.kbs-settings-sidebar-content .kbs-coupon-note a:hover {
+	text-decoration: none;
+}
+
+/* Settings sidebar footer section */
+.kbs-sidebar-footer-section {
+	background-color: #fafafa;
+	padding: 16px 20px;
+	border-top: 1px solid #ddd;
+}
+
+.kbs-sidebar-footer-section .kbs-cta-button {
+	display: block;
+	text-decoration: none;
+	font-size: 20px;
+	font-weight: 500;
+	text-transform: uppercase;
+	border: none;
+	width: 100%;
+}
+
+/* Settings sidebar responsive behavior */
+@media all and ( min-width: 1080px ) {
+	.kbs-has-sidebar .kbs-settings-content {
+		float: left;
+		width: 67%;
+	}
+
+	.kbs-has-sidebar .kbs-settings-sidebar {
+		float: right;
+		width: 31%;
+	}
+}
+
+@media all and ( min-width: 1240px ) {
+	.kbs-has-sidebar .kbs-settings-content {
+		width: 74%;
+	}
+
+	.kbs-has-sidebar .kbs-settings-sidebar {
+		width: 23%;
+	}
+}
+
 .kbs-form-error,
 .kbs-select-chosen .kbs-form-error {
 	color: #F00;
