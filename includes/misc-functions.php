@@ -1069,7 +1069,7 @@ function kbs_get_premium_extension_data()	{
 		),
 		'canned_replies' => array(
 			'name'         => 'Canned Replies',
-			'desc'         => __( 'Save time by enabling instant content to be added to ticket replies with the single click of a button.', 'kb-support' ),
+			'desc'         => __( 'Easily create a use Canned Replies to instantly add ticket replies.', 'kb-support' ),
 			'plugin_url'   => 'kbs-canned-replies/kbs-canned-replies.php',
 			'demo_url'     => 'https://kb-support.com/register-your-demo/?demo_ref=eefa9cce664b79abb6407ebd07e4e3a5',
 			'purchase_url' => 'https://kb-support.com/downloads/canned-replies/'
@@ -1083,7 +1083,7 @@ function kbs_get_premium_extension_data()	{
 		),
 		'easy_digital_downloads' => array(
 			'name'         => 'Easy Digital Downloads',
-			'desc'         => __( 'Integrate with your EDD store and Software Licensing extension for the ultimate customer experience.', 'kb-support' ),
+			'desc'         => __( 'Integrate with EDD and its Software Licensing extension for the ultimate customer experience.', 'kb-support' ),
 			'plugin_url'   => 'kbs-edd/kbs-edd.php',
 			'demo_url'     => 'https://kb-support.com/register-your-demo/?demo_ref=cb0277e636b56fe9ef4d1fcbd8603ae6',
 			'purchase_url' => 'https://kb-support.com/downloads/easy-digital-downloads/'
