@@ -217,10 +217,17 @@ if ( ! class_exists( 'KBS_License' ) )	{
 				return;
 			}
 
+			$url_args = array(
+				'utm_source'   => 'settings',
+                'utm_medium'   => 'wp-admin',
+                'utm_campaign' => 'licensing',
+                'utm_content'  => 'browse_extensions'
+			);
+
             echo '<h1 class="wp-heading-inline">' . __( 'Manage Licenses', 'kb-support' ) . '</h1>';
             printf(
                 '<a href="%s" target="_blank" class="page-title-action">%s</a>',
-                'https://kb-support.com/extensions/',
+                add_query_arg( $url_args, 'https://kb-support.com/extensions/' ),
                 __( 'Visit Extension Store', 'kb-support' )
             );
 

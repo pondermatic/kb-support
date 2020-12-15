@@ -2276,6 +2276,13 @@ if ( ! function_exists( 'kbs_premium_extension_callback' ) ) {
                 $html .= '&nbsp;&nbsp;&nbsp;';
             }
 
+			$data['purchase_url'] = add_query_arg( array(
+				'utm_source'   => 'settings',
+				'utm_medium'   => 'wp-admin',
+				'utm_campaign' => 'licensing',
+				'utm_content'  => 'license_box'
+			), $data['purchase_url'] );
+
 			$html .= sprintf(
                 '<a href="%s" class="button button-secondary kbs-extension-purchase" target="_blank">%s</a>',
                 esc_url( $data['purchase_url'] ),
