@@ -375,7 +375,7 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
                     <?php do_action( 'kbs_ticket_metabox_save_after_source', $ticket_id ); ?>
                 <?php endif; ?>
 
-                <p><a href="<?php echo wp_get_referer(); ?>"><?php printf( __( 'Back to %s', 'kb-support' ), kbs_get_ticket_label_plural() ); ?></a>
+                <p><a href="<?php echo admin_url( 'edit.php?post_type=kbs_ticket' ); ?>"><?php printf( __( 'Back to %s', 'kb-support' ), kbs_get_ticket_label_plural() ); ?></a>
 
 					<?php submit_button( 
                         sprintf( '%s %s',
