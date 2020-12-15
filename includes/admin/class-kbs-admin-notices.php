@@ -384,13 +384,9 @@ class KBS_Admin_Notices	{
         <div class="updated notice notice-kbs-dismiss is-dismissible" data-notice="first_extension_discount_advisory">
             <p>
                 <?php printf(
-                    __( 'Loving KB Support? Great! Did you know you can receive a <strong>%s discount</strong> on the purchase of extensions from our <a target="_blank" href="%s">plugin store</a> to further enhance the features and functionality? <a href="%s">More info</a>', 'kb-support' ),
+                    __( 'Loving KB Support? Great! Did you know you can receive a <strong>%1$s discount</strong> on the purchase of extensions from our <a target="_blank" href="%2$s">plugin store</a> to further enhance the features and functionality? <a href="%2$s">Show Now!</a>', 'kb-support' ),
                     '15%',
-                    'https://kb-support.com/extensions/',
-                    add_query_arg( array(
-                        'post_type' => 'kbs_ticket',
-                        'page'      => 'kbs-extensions'
-                    ), admin_url( 'edit.php' ) )
+                    'https://kb-support.com/extensions/'
                 ); ?>
             </p>
         </div>
