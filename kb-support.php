@@ -3,8 +3,8 @@
  * Plugin Name: KB Support
  * Plugin URI: https://kb-support.com/
  * Description: The ultimate ticket system, help desk and knowledge base support tool plugin for WordPress.
- * Version: 1.4.4
- * Date: 30 May 2020
+ * Version: 1.4.9
+ * Date: 16 December 2020
  * Author: KB Support Team
  * Author URI: https://kb-support.com/
  * Text Domain: kb-support
@@ -30,7 +30,7 @@
  * @package		KBS
  * @category	Core
  * @author		Mike Howard
- * @version		1.4.4
+ * @version		1.4.9
  */
 
 // Exit if accessed directly.
@@ -194,7 +194,7 @@ final class KB_Support {
 	private function setup_constants()	{
 
 		if ( ! defined( 'KBS_VERSION' ) )	{
-			define( 'KBS_VERSION', '1.4.4' );
+			define( 'KBS_VERSION', '1.4.9' );
 		}
 
 		if ( ! defined( 'KBS_PLUGIN_DIR' ) )	{
@@ -318,13 +318,12 @@ final class KB_Support {
 			require_once KBS_PLUGIN_DIR . 'includes/admin/forms/metaboxes.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/forms/form-actions.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/forms/contextual-help.php';
-			require_once KBS_PLUGIN_DIR . 'includes/admin/settings/display-settings.php';
+			require_once KBS_PLUGIN_DIR . 'includes/admin/settings/class-kbs-display-settings.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/settings/contextual-help.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/thickbox.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/tools.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/import-export/import/import-functions.php';
             require_once KBS_PLUGIN_DIR . 'includes/admin/import-export/export/export-functions.php';
-			require_once KBS_PLUGIN_DIR . 'includes/admin/extensions.php';
             require_once KBS_PLUGIN_DIR . 'includes/admin/upgrades/upgrade-actions.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/upgrades/upgrade-functions.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/upgrades/upgrades.php';

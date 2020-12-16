@@ -34,7 +34,6 @@ function kbs_plugin_action_links( $links, $file )	{
 } // kbs_plugin_action_links
 add_filter( 'plugin_action_links', 'kbs_plugin_action_links', 10, 2 );
 
-
 /**
  * Plugin row meta links
  *

@@ -1207,7 +1207,7 @@ function kbs_display_form_radio_field( $field, $settings )	{
 	}
 
 	foreach ( $options as $option )	{
-		$output[] = sprintf( '<input type="radio" name="%1$s[]" id="%2$s"%3$s value="%4$s" /> %5$s',
+		$output[] = sprintf( '<input type="radio" name="%1$s" id="%2$s"%3$s value="%4$s" /> %5$s',
 			esc_attr( $field->post_name ),
 			esc_attr( kbs_sanitize_key( $option ) ),
 			$class,

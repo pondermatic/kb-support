@@ -1187,7 +1187,34 @@ function kbs_get_registered_settings() {
     }
 
 	return apply_filters( 'kbs_registered_settings', $kbs_settings );
-}
+} // kbs_get_registered_settings
+
+/**
+ * Adds premium extensions not yet installed to license settings.
+ *
+ * Enables upsell opportunity
+ *
+ * @since   1.4.6
+ * @param   array   $settings   Array of license settings
+ * @return  array   Array of license settings
+ */
+function kbs_add_premium_extension_license_fields( $settings )   {
+	$plugins          = kbs_get_premium_extension_data();
+	$plugins          = apply_filters( 'kbs_upsell_extensions_settings', $plugins );
+	$license_settings = array();
+
+	foreach( $plugins as $plugin => $data ) {
+		$license_settings[] = array(
+			'id'   => "{$plugin}_license_upsell",
+			'name' => sprintf( __( '%1$s', 'kb-support' ), $data['name'] ),
+			'type' => 'premium_extension',
+			'data' => $data
+		);
+	}
+
+	return array_merge( $settings, $license_settings );
+} // kbs_add_premium_extension_license_fields
+add_filter( 'kbs_settings_licenses', 'kbs_add_premium_extension_license_fields', 100 );
 
 /**
  * Settings Sanitization.
@@ -1372,13 +1399,13 @@ function kbs_get_settings_tabs() {
  */
 function kbs_get_settings_tab_sections( $tab = false ) {
 
-	$tabs     = false;
+	$tabs     = array();
 	$sections = kbs_get_registered_settings_sections();
 
 	if( $tab && ! empty( $sections[ $tab ] ) ) {
 		$tabs = $sections[ $tab ];
 	} else if ( $tab ) {
-		$tabs = false;
+		$tabs = array();
 	}
 
 	return $tabs;
@@ -2070,7 +2097,7 @@ if ( ! function_exists( 'kbs_license_key_callback' ) ) {
 
 					case 'missing' :
 
-						$class = 'error';
+						$class = 'missing';
 						$messages[] = sprintf(
 							__( 'Invalid license. Please <a href="%s" target="_blank" title="Visit account page">visit your account page</a> and verify it.', 'kb-support' ),
 							'http://kb-support.com/your-account'
@@ -2137,50 +2164,50 @@ if ( ! function_exists( 'kbs_license_key_callback' ) ) {
 
 					case 'valid' :
 					default:
-
-						$class = 'valid';
-
+						$class      = 'valid';
 						$now        = current_time( 'timestamp' );
 						$expiration = strtotime( $license->expires, current_time( 'timestamp' ) );
 
-						if( 'lifetime' === $license->expires ) {
+						if ( 'lifetime' === $license->expires ) {
 
-							$messages[] = __( 'License key never expires.', 'kb-support' );
+							$messages[] = __( 'Your lifetime license key is valid.', 'kb-support' );
 
 							$license_status = 'license-lifetime-notice';
 
 						} elseif( $expiration > $now && $expiration - $now < ( DAY_IN_SECONDS * 30 ) ) {
 
 							$messages[] = sprintf(
-								__( 'Your license key expires soon! It expires on %s. <a href="%s" target="_blank" title="Renew license">Renew your license key</a>.', 'kb-support' ),
-								date_i18n( get_option( 'date_format' ), strtotime( $license->expires, current_time( 'timestamp' ) ) ),
+								__( 'Your license key expires on %s. <a href="%s" target="_blank" title="Renew license">Renew your license key</a> to continue receiving updates and support.', 'kb-support' ),
+								date_i18n(
+									get_option( 'date_format' ),
+									strtotime( $license->expires, current_time( 'timestamp' ) )
+								),
 								'http://kb-support.com/checkout/?edd_license_key=' . $value
 							);
 
 							$license_status = 'license-expires-soon-notice';
 
 						} else {
-
 							$messages[] = sprintf(
 								__( 'Your license key expires on %s.', 'kb-support' ),
-								date_i18n( get_option( 'date_format' ), strtotime( $license->expires, current_time( 'timestamp' ) ) )
+								date_i18n(
+									get_option( 'date_format' ),
+									strtotime( $license->expires, current_time( 'timestamp' ) )
+								)
 							);
 
 							$license_status = 'license-expiration-date-notice';
-
 						}
 
 						break;
-
 				}
-
 			}
-
 		} else	{
-			$class = 'empty';
+			$class = 'missing';
 
 			$messages[] = sprintf(
-				__( 'To receive updates, please enter your valid %s license key.', 'kb-support' ),
+				__( 'Enter a valid <a href="%s" target="_blank">license key</a> to receive updates for %s.', 'kb-support' ),
+                'https://kb-support.com/your-account/',
 				$args['name']
 			);
 
@@ -2214,6 +2241,64 @@ if ( ! function_exists( 'kbs_license_key_callback' ) ) {
 	}
 
 } // kbs_license_key_callback
+
+/**
+ * Registers the premium extension field callback.
+ *
+ * @since	1.4.6
+ * @param	array	$args	Arguments passed by the setting
+ * @global	$kbs_options	Array of all the KBS options
+ * @return void
+ */
+if ( ! function_exists( 'kbs_premium_extension_callback' ) ) {
+	function kbs_premium_extension_callback( $args )	{
+        $data = $args['data'];
+        $demo = false;
+
+        $html = sprintf(
+            '<input type="text" class="regular-text" id="kbs_settings[%1$s]" name="kbs_settings[%1$s]" value="" placeholder="%2$s" disabled="disabled" />',
+            kbs_sanitize_key( $args['name'] ),
+            __( 'Enter your license key', 'kb-support' )
+        );
+
+		if ( isset( $data['demo_url'] ) ) {
+            $demo = true;
+
+			$html .= sprintf(
+                '<a href="%s" class="button button-secondary kbs-extension-demo" target="_blank">%s</a>',
+                esc_url( $data['demo_url'] ),
+                __( 'Demo', 'kb-support' )
+            );
+		}
+
+        if ( isset( $data['purchase_url'] ) ) {
+            if ( $demo )    {
+                $html .= '&nbsp;&nbsp;&nbsp;';
+            }
+
+			$data['purchase_url'] = add_query_arg( array(
+				'utm_source'   => 'settings',
+				'utm_medium'   => 'wp-admin',
+				'utm_campaign' => 'licensing',
+				'utm_content'  => 'license_box'
+			), $data['purchase_url'] );
+
+			$html .= sprintf(
+                '<a href="%s" class="button button-secondary kbs-extension-purchase" target="_blank">%s</a>',
+                esc_url( $data['purchase_url'] ),
+                __( 'Buy Extension', 'kb-support' )
+            );
+		}
+
+		$html .= '<label for="kbs_settings[' . kbs_sanitize_key( $args['id'] ) . ']"> '  . wp_kses_post( $args['desc'] ) . '</label>';
+
+        $html .= '<div class="kbs-license-data kbs-license-not-installed license-not-installed-notice">';
+            $html .= '<p>' . $data['desc'] . '</p>';
+        $html .= '</div>';
+
+        echo $html;
+	}
+} // kbs_premium_extension_callback
 
 /**
  * Hook Callback

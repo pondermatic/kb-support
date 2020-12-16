@@ -661,7 +661,11 @@ function kbs_get_newsletter()    {
 	    <?php printf( __( 
             'Sign up for the KB Support newsletter below to receive a <strong>15%s discount</strong> off our <a href="%s" target="_blank">extensions</a> and to stay informed of important updates and news.', 'kb-support' ),
             '%',
-            'https://kb-support.com/extensions/'
+            add_query_arg( array(
+				'utm_source'   => 'admin',
+				'utm_medium'   => 'wp-admin',
+				'utm_campaign' => 'newsletter'
+			), 'https://kb-support.com/extensions/' )
         ); ?>
     </p>
 
@@ -1051,3 +1055,158 @@ function kbs_get_completed_upgrades()	{
 	return $completed_upgrades;
 
 } // kbs_get_completed_upgrades
+
+/**
+ * Premium extensions data.
+ *
+ * @since	1.4.6
+ * @return	array	Array of premium extension data
+ */
+function kbs_get_premium_extension_data()	{
+	$extensions = array(
+		'advanced_ticket_assignment' => array(
+			'name'         => 'Advanced Ticket Assignment',
+			'desc'         => __( 'Define custom rules to automate ticket assignment and enhance your workflow.', 'kb-support' ),
+			'plugin_url'   => 'kbs-advanced-ticket-assignment/kbs-advanced-ticket-assignment.php',
+			'demo_url'     => 'https://kb-support.com/register-your-demo/?demo_ref=1892bfbbcd6410b5b34a2a6ee35e50fb',
+			'purchase_url' => 'https://kb-support.com/downloads/advanced-ticket-assignment/'
+		),
+		'canned_replies' => array(
+			'name'         => 'Canned Replies',
+			'desc'         => __( 'Easily create a use Canned Replies to instantly add ticket replies.', 'kb-support' ),
+			'plugin_url'   => 'kbs-canned-replies/kbs-canned-replies.php',
+			'demo_url'     => 'https://kb-support.com/register-your-demo/?demo_ref=eefa9cce664b79abb6407ebd07e4e3a5',
+			'purchase_url' => 'https://kb-support.com/downloads/canned-replies/'
+		),
+		'custom_ticket_status' => array(
+			'name'         => 'Custom Ticket Status',
+			'desc'         => __( 'Create additional ticket statuses to meet your business needs.', 'kb-support' ),
+			'plugin_url'   => 'kbs-custom-status/kbs-custom-status.php',
+			'demo_url'     => 'https://kb-support.com/register-your-demo/?demo_ref=60cfff6b93cc42216c03bc3886a5cb11',
+			'purchase_url' => 'https://kb-support.com/downloads/custom-ticket-status/'
+		),
+		'easy_digital_downloads' => array(
+			'name'         => 'Easy Digital Downloads',
+			'desc'         => __( 'Integrate with EDD and its Software Licensing extension for the ultimate customer experience.', 'kb-support' ),
+			'plugin_url'   => 'kbs-edd/kbs-edd.php',
+			'demo_url'     => 'https://kb-support.com/register-your-demo/?demo_ref=cb0277e636b56fe9ef4d1fcbd8603ae6',
+			'purchase_url' => 'https://kb-support.com/downloads/easy-digital-downloads/'
+		),
+		'email_signatures' => array(
+			'name'         => 'Email Signatures',
+			'desc'         => __( 'Enable agents to register custom signatures which can be inserted into customer emails.', 'kb-support' ),
+			'plugin_url'   => 'kbs-email-signatures/kbs-email-signatures.php',
+			'purchase_url' => 'https://kb-support.com/downloads/email-signatures/'
+		),
+		'email_support' => array(
+			'name'         => 'Email Support',
+			'desc'         => __( 'Enable customers and agents to respond to tickets via email.', 'kb-support' ),
+			'plugin_url'   => 'kbs-email-support/kbs-email-support.php',
+			'demo_url'     => 'https://kb-support.com/register-your-demo/?demo_ref=6c847b75c663cf62807249618cc80a40',
+			'purchase_url' => 'https://kb-support.com/downloads/email-support/'
+		),
+		'knowledge_base_integrations' => array(
+			'name'         => 'Knowledge Base Integrations',
+			'desc'         => __( 'Integrate your favourite knowledge base with KB Support.', 'kb-support' ),
+			'plugin_url'   => 'kbs-kb-integrations/kbs-kb-integrations.php',
+			'purchase_url' => 'https://kb-support.com/downloads/knowledge-base-integrations/'
+		),
+		'mailchimp_integration' => array(
+			'name'         => 'MailChimp Integration',
+			'desc'         => __( 'Enable customers to subscribe to your MailChimp lists during ticket submission.', 'kb-support' ),
+			'plugin_url'   => 'kbs-mailchimp-integration/kbs-mailchimp-integration.php',
+			'purchase_url' => 'https://kb-support.com/downloads/mailchimp-integration/'
+		),
+		'ratings_and_satisfaction' => array(
+			'name'         => 'Ratings and Satisfaction',
+			'desc'         => __( 'Get feedback on your performance for support tickets and quality of documentation.', 'kb-support' ),
+			'plugin_url'   => 'kbs-ratings-satisfaction/kbs-ratings-satisfaction.php',
+			'purchase_url' => 'https://kb-support.com/downloads/ratings-and-satisfaction/'
+		),
+		'reply_approvals' => array(
+			'name'         => 'Reply Approvals',
+			'desc'         => __( 'Add an approval process to selected agent ticket replies.', 'kb-support' ),
+			'plugin_url'   => 'kbs-reply-approvals/kbs-reply-approvals.php',
+			'purchase_url' => 'https://kb-support.com/downloads/reply-approvals/'
+		),
+		'woocommerce' => array(
+			'name'         => 'WooCommerce',
+			'desc'         => __( 'Integrate with your WooCommerce store for the ultimate customer experience.', 'kb-support' ),
+			'plugin_url'   => 'kbs-woocommerce/kbs-woocommerce.php',
+			'demo_url'     => 'https://kb-support.com/register-your-demo/?demo_ref=11c28e3c2627aabf93a2b1a6c1836fe2',
+			'purchase_url' => 'https://kb-support.com/downloads/woocommerce/'
+		)
+	);
+
+	return $extensions;
+} // kbs_get_premium_extension_data
+
+/**
+ * Retrieve current promotions.
+ *
+ * @since   1.4.9
+ * @param   bool    $active_only    True to retrieve only active promotions
+ * @return  array   Array of promotion data, or an empty array
+ */
+function kbs_get_current_promotions( $active_only = true )   {
+    $promotions = array(
+        'BF2021' => array(
+            'name'        => __( 'Black Friday & Cyber Monday', 'kb-support' ),
+            'campaign'    => 'bfcm2021',
+            'image'       => 'bfcm-header.svg',
+            'product'     => '',
+            'start'       => strtotime( '2021-11-22 00:00:00' ),
+            'finish'      => strtotime( '2021-12-05 23:59:59' ),
+            'timezone'    => 'GMT',
+            'discount'    => '40%',
+            'cta'         => __( 'Shop Now!', 'kb-support' ),
+            'cta_url'     => 'https://kb-support.com/extensions/',
+            'description' => __( 'Save <strong>%7$s</strong> on all KB Support purchases <strong>this week</strong>.<br>Including renewals and upgrades!', 'kb-support' )
+        ),
+        'FLASH2020' => array(
+            'name'        => __( 'Flash Sale', 'kb-support' ),
+            'campaign'    => 'flash-sale',
+            'image'       => 'flash-sale-header.svg',
+            'product'     => '',
+            'start'       => strtotime( '2020-12-21 00:00:00' ),
+            'finish'      => strtotime( '2021-01-03 23:59:59' ),
+            'timezone'    => 'GMT',
+            'discount'    => '33%',
+            'cta'         => __( 'Shop Now!', 'kb-support' ),
+            'cta_url'     => 'https://kb-support.com/extensions/',
+            'description' => __( 'Save <strong>%7$s</strong> on all KB Support purchases <strong>now</strong>. Including renewals and upgrades!', 'kb-support' )
+        )
+    );
+
+    foreach( $promotions as $promotion => $data )  {
+        if ( ! empty( $data['description'] ) )  {
+            $promotions[ $promotion ]['description'] = sprintf(
+                $data['description'],
+                $data['name'],
+                $data['image'],
+                $data['product'],
+                $data['start'],
+                $data['finish'],
+                $data['timezone'],
+                $data['discount'],
+                $data['cta'],
+                $data['cta_url'],
+                $data['description']
+            );
+        }
+
+        if ( $active_only ) {
+            $now    = time();
+            $start  = $data['start'];
+            $finish = $data['finish'];
+
+            if ( ( $now > $start ) && ( $now < $finish ) ) {
+                continue;
+            }
+
+            unset( $promotions[ $promotion ] );
+        }
+    }
+
+    return $promotions;
+} // kbs_get_current_promotions

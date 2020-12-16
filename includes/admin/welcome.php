@@ -119,7 +119,6 @@ class KBS_Welcome {
 		$selected        = isset( $_GET['page'] ) ? $_GET['page'] : 'kbs-getting-started';
 		$about_url       = esc_url( admin_url( add_query_arg( array( 'page' => 'kbs-about' ), 'index.php' ) ) );
 		$get_started_url = esc_url( admin_url( add_query_arg( array( 'page' => 'kbs-getting-started' ), 'index.php' ) ) );
-        $extensions_url  = esc_url( admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-extensions' ) );
 		?>
 
 		<h2 class="nav-tab-wrapper wp-clearfix">			
@@ -128,9 +127,6 @@ class KBS_Welcome {
 			</a>
 			<a href="<?php echo $get_started_url; ?>" class="nav-tab <?php echo $selected == 'kbs-getting-started' ? 'nav-tab-active' : ''; ?>">
 				<?php _e( 'Getting Started', 'kb-support' ); ?>
-			</a>
-			<a href="<?php echo $extensions_url; ?>" class="nav-tab <?php echo $selected == 'kbs-extensions' ? 'nav-tab-active' : ''; ?>">
-				<?php _e( 'Extensions', 'kb-support' ); ?>
 			</a>
 		</h2>
 
@@ -355,7 +351,11 @@ class KBS_Welcome {
 				printf(
 				/* translators: %s: https://kb-support.com/support/ */
 					__( 'Welcome to the KB Support getting started guide! If you\'re a first time user, you\'re now well on your way to making your support business even more efficient. We encourage you to check out the <a href="%s" target="_blank">plugin documentation</a> and getting started guide below.', 'kb-support' ),
-					esc_url( 'https://kb-support.com/support/' )
+					esc_url( add_query_arg( array(
+						'utm_source'   => 'welcome',
+						'utm_medium'   => 'wp-admin',
+						'utm_campaign' => 'getting-started'
+					), 'https://kb-support.com/support/' ) )
 				);
 			?></p>
 
