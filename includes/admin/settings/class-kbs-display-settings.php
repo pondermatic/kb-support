@@ -207,6 +207,19 @@ class KBS_Display_Settings	{
             // Settings not updated
             $tab_url = remove_query_arg( 'settings-updated', $tab_url );
 
+            /**
+             * Allow filtering of the section URL.
+             *
+             * Enables plugin authors to insert links to non-setting pages as sections.
+             *
+             * @since	1.1.10
+             * @param	string		The section URL
+             * @param	string		The section ID (array key)
+             * @param	string		The current active tab
+             * @return	string
+             */
+            $tab_url = apply_filters( 'kbs_options_page_section_url', $tab_url, $section_id, $this->active_tab );
+
             // Class for link
             $class = ( $this->section === $section_id ) ? 'current' : '';
 
