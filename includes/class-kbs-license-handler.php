@@ -217,10 +217,17 @@ if ( ! class_exists( 'KBS_License' ) )	{
 				return;
 			}
 
+			$url_args = array(
+				'utm_source'   => 'settings',
+                'utm_medium'   => 'wp-admin',
+                'utm_campaign' => 'licensing',
+                'utm_content'  => 'browse_extensions'
+			);
+
             echo '<h1 class="wp-heading-inline">' . __( 'Manage Licenses', 'kb-support' ) . '</h1>';
             printf(
                 '<a href="%s" target="_blank" class="page-title-action">%s</a>',
-                'https://kb-support.com/extensions/',
+                add_query_arg( $url_args, 'https://kb-support.com/extensions/' ),
                 __( 'Visit Extension Store', 'kb-support' )
             );
 
@@ -228,12 +235,6 @@ if ( ! class_exists( 'KBS_License' ) )	{
 				'<p>' . __( 'Enter your <a href="%s" target="_blank">license keys</a> here to receive updates for extensions you have purchased. If your license key has expired, please <a href="%s" target="_blank">renew your license</a>.', 'kb-support' ) . '</p>',
 				'https://kb-support.com/your-account/',
 				'https://kb-support.com/articles/software-license-renewals-extensions/'
-			);
-
-            printf(
-				'<p>' . __( '<a href="%1$s" target="_blank">Visit our store</a> and receive a %2$s discount on all purchases.', 'kb-support' ) . '</p>',
-				'https://kb-support.com/extensions/?discount=15offnow',
-                '15%'
 			);
 
 			$has_ran = true;

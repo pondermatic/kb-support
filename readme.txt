@@ -2,9 +2,9 @@
 Contributors: kbsupport, mikeyhoward1977
 Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
-Tested up to: 5.5.3
+Tested up to: 5.6
 Requires PHP: 5.4
-Stable tag: 1.4.8
+Stable tag: 1.4.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,6 +122,18 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.4.9 =
+
+**16th December 2020**
+
+* **Bug**: ***Back to Tickets*** link did not work after updating a ticket
+* **Bug**: Make sure we're only filtering `upload_dir` if absolutely necessary
+* **Tweak**: Added KBS_Display_Settings class
+* **Tweak**: Enabled promotional sidebar on settings screen
+* **Tweak**: Removed extensions page
+* **Tweak**: Added campaign query args to some URLs
+* **Tweak**: Incremented WordPress tested up to version
 
 = 1.4.8 =
 
