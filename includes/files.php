@@ -105,15 +105,26 @@ function kbs_change_tickets_upload_dir( $upload_path ) {
     global $pagenow;
 
     $ticket_dir = false;
+    $referrer   = wp_get_referer();
+    $filtered   = array( 'post_type=kbs_ticket', 'post.php?post=' );
+    $bail       = true;
 
-    if ( ( 'async-upload.php' == $pagenow || 'media-upload.php' == $pagenow ) ) {
+    foreach( $filtered as $url_part )   {
+        if ( false !== strpos( $referrer, $url_part ) )   {
+            $bail = false;
+            break;
+        }
+    }
 
-        if ( false !== strpos( wp_get_referer(), 'post_type=kbs_ticket' ) ) {
+    if ( $bail )    {
+        return $upload_path;
+    }
 
+    if ( 'async-upload.php' == $pagenow || 'media-upload.php' == $pagenow ) {
+        if ( false !== strpos( $referrer, 'post_type=kbs_ticket' ) ) {
             $ticket_dir = true;
-
-        } elseif ( false !== strpos( wp_get_referer(), 'post.php?post=' ) ) {
-            $url_parts = parse_url( wp_get_referer() );
+        } elseif ( false !== strpos( $referrer, 'post.php?post=' ) ) {
+            $url_parts = parse_url( $referrer );
             parse_str( $url_parts['query'], $url_query_string );
             $post_id = $url_query_string['post'];
 
@@ -129,7 +140,7 @@ function kbs_change_tickets_upload_dir( $upload_path ) {
 
     return $upload_path;
 } // kbs_change_tickets_upload_dir
-add_filter( 'upload_dir', 'kbs_change_tickets_upload_dir'  );
+add_filter( 'upload_dir', 'kbs_change_tickets_upload_dir' );
 
 /**
  * Sets the enctype for file upload forms.

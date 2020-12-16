@@ -1399,13 +1399,13 @@ function kbs_get_settings_tabs() {
  */
 function kbs_get_settings_tab_sections( $tab = false ) {
 
-	$tabs     = false;
+	$tabs     = array();
 	$sections = kbs_get_registered_settings_sections();
 
 	if( $tab && ! empty( $sections[ $tab ] ) ) {
 		$tabs = $sections[ $tab ];
 	} else if ( $tab ) {
-		$tabs = false;
+		$tabs = array();
 	}
 
 	return $tabs;
@@ -2275,6 +2275,13 @@ if ( ! function_exists( 'kbs_premium_extension_callback' ) ) {
             if ( $demo )    {
                 $html .= '&nbsp;&nbsp;&nbsp;';
             }
+
+			$data['purchase_url'] = add_query_arg( array(
+				'utm_source'   => 'settings',
+				'utm_medium'   => 'wp-admin',
+				'utm_campaign' => 'licensing',
+				'utm_content'  => 'license_box'
+			), $data['purchase_url'] );
 
 			$html .= sprintf(
                 '<a href="%s" class="button button-secondary kbs-extension-purchase" target="_blank">%s</a>',
