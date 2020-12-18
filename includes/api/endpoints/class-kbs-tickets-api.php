@@ -96,12 +96,12 @@ class KBS_Tickets_API extends KBS_API {
 			)
 		);
 
-		register_rest_route(
+        register_rest_route(
 			$this->namespace . $this->version,
-			'/' . $this->rest_base . '/(?P<number>[a-zA-Z0-9-]+)',
+			'/' . $this->rest_base . '/(?P<number>([a-zA-Z0-9]+))',
 			array(
 				'args'   => array(
-					'id' => array(
+					'number' => array(
 						'type'        => 'string',
 						'description' => sprintf(
 							__( 'Unique identifier for the %s.', 'kb-support' ),
@@ -116,6 +116,7 @@ class KBS_Tickets_API extends KBS_API {
 				)
 			)
 		);
+
     } // register_routes
 
 	/**
@@ -134,15 +135,8 @@ class KBS_Tickets_API extends KBS_API {
 			);
 		}
 
-        if ( ! $this->validate_user() )    {
-            return new WP_Error(
-				'rest_forbidden_context',
-				$this->errors( 'no_auth' ),
-				array( 'status' => rest_authorization_required_code() )
-			);
-        }
-
 		$ticket_id = isset( $request['id'] ) ? $request['id'] : $this->get_ticket_id_by_number( $request );
+
         $post = $this->get_post( $ticket_id );
 
         if ( is_wp_error( $post ) ) {
@@ -183,14 +177,6 @@ class KBS_Tickets_API extends KBS_API {
 			);
 		}
 
-        if ( ! $this->validate_user() )    {
-            return new WP_Error(
-				'rest_forbidden_context',
-				$this->errors( 'no_auth' ),
-				array( 'status' => rest_authorization_required_code() )
-			);
-        }
-
         $post_type = get_post_type_object( $this->post_type );
 
 		if ( 'edit' === $request['context'] && ! current_user_can( $post_type->cap->edit_posts ) ) {
@@ -220,14 +206,6 @@ class KBS_Tickets_API extends KBS_API {
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
-
-        if ( ! $this->validate_user() )    {
-            return new WP_Error(
-				'rest_forbidden_context',
-				$this->errors( 'no_auth' ),
-				array( 'status' => rest_authorization_required_code() )
-			);
-        }
 
         $post = $this->get_post( $request['id'] );
 
@@ -287,8 +265,8 @@ class KBS_Tickets_API extends KBS_API {
 			"
 			SELECT post_id
 			FROM $wpdb->postmeta
-			WHERE meta_key = '%s'
-			AND meta_value = '%s'
+			WHERE meta_key = %s
+			AND meta_value = %s
 			LIMIT 1
 			",
 			'_kbs_ticket_number',
