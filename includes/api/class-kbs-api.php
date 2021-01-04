@@ -143,12 +143,6 @@ class KBS_API extends WP_REST_Controller {
 	 * @return	bool	Whether or not the user is logged in
 	 */
 	function validate_user()	{
-		if ( ! is_user_logged_in() || $this->user_id != $this->user_id )	{
-			wp_clear_auth_cookie();
-			wp_set_current_user ( $this->user_id );
-			wp_set_auth_cookie  ( $this->user_id );
-		}
-
 		return is_user_logged_in();
 	} // validate_user
 

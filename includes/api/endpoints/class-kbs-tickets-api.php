@@ -517,6 +517,7 @@ class KBS_Tickets_API extends KBS_API {
 
         $ticket = new KBS_Ticket( $request['id'] );
         if ( empty( $ticket->ID ) ) {
+			// Adding a new ticket so check required fields
 			return $ticket;
 		}
 

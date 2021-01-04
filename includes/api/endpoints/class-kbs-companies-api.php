@@ -47,11 +47,7 @@ class KBS_Companies_API extends WP_REST_Posts_Controller {
 			);
 		}
 
-		if ( KBS()->api->validate_user() )	{
-			return kbs_can_view_customers( KBS()->api->user_id );
-		}
-
-		return false;
+		return kbs_can_view_customers( KBS()->api->user_id );
     } // get_item_permissions_check
 
 	/**
@@ -139,7 +135,7 @@ class KBS_Companies_API extends WP_REST_Posts_Controller {
 		}
 
 		$links[ kbs_get_ticket_label_plural( true ) ] = array(
-			'href'       => rest_url( 'kbs/v1/tickets/company=' . $post->ID ),
+			'href'       => rest_url( 'kbs/v1/tickets/?company=' . $post->ID ),
 			'embeddable' => true
 		);
 

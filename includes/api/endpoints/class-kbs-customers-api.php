@@ -94,11 +94,7 @@ class KBS_Customers_API extends KBS_API {
 			);
 		}
 
-		if ( $this->validate_user() )	{
-			return kbs_can_view_customers( $this->user_id );
-		}
-
-		return false;
+		return kbs_can_view_customers( $this->user_id );
     } // get_item_permissions_check
 
     /**
