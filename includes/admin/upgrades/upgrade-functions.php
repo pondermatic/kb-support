@@ -116,6 +116,10 @@ function kbs_do_automatic_upgrades() {
 		kbs_v142_upgrades();
 	}
 
+	if ( version_compare( $kbs_version, '1.5', '<' ) ) {
+		kbs_v15_upgrades();
+	}
+
 	if ( version_compare( $kbs_version, KBS_VERSION, '<' ) )	{
 
 		// Let us know that an upgrade has happened
@@ -796,6 +800,30 @@ function kbs_v142_upgrades()	{
         }
     }
 } // kbs_v142_upgrades
+
+/**
+ * Upgrade routine for version 1.5.
+ *
+ * - Create REST API ticket source term.
+ *
+ * @since	1.5
+ * @return	void
+ */
+function kbs_v15_upgrades()	{
+	$name = __( 'REST API', 'kb-support' );
+	$desc = sprintf( __( '%s received via REST API', 'kb-support' ), kbs_get_ticket_label_plural() );
+	$slug = 'kbs-rest';
+
+	$insert = wp_insert_term(
+		$name,
+		'ticket_source',
+		array(
+			'description' => $desc,
+			'slug'        => $slug
+		)
+	);
+
+} // kbs_v15_upgrades
 
 /**
  * Update sequential ticket numbers.
