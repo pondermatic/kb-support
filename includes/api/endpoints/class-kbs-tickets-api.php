@@ -65,6 +65,12 @@ class KBS_Tickets_API extends KBS_API {
 					'callback'            => array( $this, 'get_items' ),
 					'permission_callback' => array( $this, 'get_items_permissions_check' ),
 					'args'                => $this->get_collection_params(),
+				),
+				array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'create_item' ),
+					'permission_callback' => array( $this, 'create_item_permissions_check' ),
+					'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::CREATABLE ),
 				)
 			)
 		);
@@ -89,8 +95,8 @@ class KBS_Tickets_API extends KBS_API {
 				),
                 array(
 					'methods'             => WP_REST_Server::EDITABLE,
-					'callback'            => array( $this, 'create_update_item' ),
-					'permission_callback' => array( $this, 'create_update_item_permissions_check' ),
+					'callback'            => array( $this, 'update_item' ),
+					'permission_callback' => array( $this, 'update_item_permissions_check' ),
 					'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::EDITABLE ),
 				)
 			)
@@ -190,29 +196,7 @@ class KBS_Tickets_API extends KBS_API {
 		return true;
     } // get_items_permissions_check
 
-    /**
-	 * Checks if a given request has access to create or update a ticket.
-	 *
-	 * @since  1.5
-	 *
-	 * @param  WP_REST_Request $request    Full details about the request.
-	 * @return true|WP_Error   True if the request has access to create or update a ticket, WP_Error object otherwise.
-	 */
-	public function create_update_item_permissions_check( $request ) {
-        if ( ! $this->is_authenticated( $request ) )	{
-			return new WP_Error(
-				'rest_forbidden_context',
-				$this->errors( 'no_auth' ),
-				array( 'status' => rest_authorization_required_code() )
-			);
-		}
-
-        $func = empty( $request['id'] ) ? 'create_item_permissions_check' : 'update_item_permissions_check';
-
-        return $this->$func( $request );
-    } // create_update_item_permissions_check
-
-    /**
+	/**
 	 * Checks if a given request has access to create a ticket.
 	 *
 	 * @since  1.5
@@ -221,16 +205,18 @@ class KBS_Tickets_API extends KBS_API {
 	 * @return true|WP_Error   True if the request has access to create the item, WP_Error object otherwise.
 	 */
 	public function create_item_permissions_check( $request ) {
-        $create = kbs_is_agent( $this->user_id );
+		$create = $this->is_authenticated( $request ) && kbs_is_agent( $this->user_id );
         $create = apply_filters( "kbs_rest_{$this->post_type}_create", $create, $request, $this );
 
-        if ( ! $create )	{
+		if ( ! $create )	{
 			return new WP_Error(
 				'rest_forbidden_context',
 				$this->errors( 'no_auth' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
+
+		return true;
     } // create_item_permissions_check
 
     /**
@@ -242,6 +228,14 @@ class KBS_Tickets_API extends KBS_API {
 	 * @return true|WP_Error   True if the request has access to update the item, WP_Error object otherwise.
 	 */
 	public function update_item_permissions_check( $request ) {
+		if ( ! $this->is_authenticated( $request ) )	{
+			return new WP_Error(
+				'rest_forbidden_context',
+				$this->errors( 'no_auth' ),
+				array( 'status' => rest_authorization_required_code() )
+			);
+		}
+
         $post = $this->get_post( $request['id'] );
 
 		if ( is_wp_error( $post ) ) {
@@ -536,21 +530,7 @@ class KBS_Tickets_API extends KBS_API {
 		return $response;
 	} // get_items
 
-    /**
-	 * Create or update a ticket.
-	 *
-	 * @since  1.5
-	 *
-	 * @param  WP_REST_Request             $request    Full details about the request.
-	 * @return WP_REST_Response|WP_Error   Response object on success, or WP_Error object on failure.
-	 */
-	public function create_update_item( $request ) {
-        $func = empty( $request['id'] ) ? 'create_item' : 'update_item';
-
-        return $this->$func( $request );
-    } // create_update_item
-
-    /**
+	/**
 	 * Creates a ticket.
 	 *
 	 * @since  1.5
@@ -559,8 +539,70 @@ class KBS_Tickets_API extends KBS_API {
 	 * @return WP_REST_Response|WP_Error   Response object on success, or WP_Error object on failure.
 	 */
 	public function create_item( $request ) {
-        
-    } // create_item
+		$ticket_data = array(
+			'user_info'        => array(),
+			'attachments'      => array(),
+			'source'           => 'kbs-rest',
+			'privacy_accepted' => false,
+			'terms_agreed'     => false
+		);
+
+		foreach( $this->get_required_fields() as $required_field )	{
+			if ( empty( $this->params[ $required_field ] ) )	{
+				return new WP_Error(
+                    'required_fields',
+                    $this->errors( 'required_fields' ),
+                    array( 'status' => 500 )
+                );
+			}
+
+			if ( 'customer_email' == $required_field )	{
+				$email = $this->params[ $required_field ];
+
+				if ( ! is_email( $email ) || kbs_check_email_from_submission( $email ) )	{
+					return new WP_Error(
+						'invalid_email',
+						$this->errors( 'invalid_email' ),
+						array( 'status' => 500 )
+					);
+				}
+			}
+		}
+
+		$ticket_data['user_info']['email']      = strtolower( $email );
+		$ticket_data['user_email']              = $ticket_data['user_info']['email'];
+		$ticket_data['user_info']['first_name'] = ucfirst( $this->params[ 'customer_first' ] );
+		$ticket_data['user_info']['last_name']  = ucfirst( $this->params[ 'customer_last' ] );
+		$ticket_data['post_title']              = ucfirst( $this->params[ 'ticket_title' ] );
+		$ticket_data['post_content']            = ucfirst( $this->params[ 'ticket_content' ] );
+
+		if ( ! empty( $this->params['customer_phone1'] ) )	{
+			$ticket_data['user_info']['primary_phone'] = $this->params['customer_phone1'];
+		}
+
+		if ( ! empty( $this->params['customer_phone1'] ) )	{
+			$ticket_data['user_info']['additional_phone'] = $this->params['customer_phone2'];
+		}
+
+		if ( ! empty( $this->params['customer_website'] ) )	{
+			$ticket_data['user_info']['website'] = $this->params['customer_website'];
+		}
+
+		$ticket_id = kbs_add_ticket( $ticket_data );
+
+		if ( ! $ticket_id )	{
+			return new WP_Error(
+				'create_failed',
+				$this->errors( 'create_failed' ),
+				array( 'status' => 500 )
+			);
+		}
+
+		$post     = get_post( $ticket_id );
+		$response = $this->prepare_item_for_response( $post, $request );
+
+		return rest_ensure_response( $response );
+	} // create_item
 
     /**
 	 * Updates a single ticket.
@@ -1130,5 +1172,25 @@ class KBS_Tickets_API extends KBS_API {
 
 		return $links;
 	} // prepare_links
+
+	/**
+	 * Retrieves an array of required parameters to create a ticket via REST.
+	 *
+	 * @since	1.5
+	 * @return	array	Array of required parameters
+	 */
+	public function get_required_fields()	{
+		$fields = array(
+			'customer_first',
+			'customer_last',
+			'customer_email',
+			'ticket_title',
+			'ticket_content'
+		);
+
+		$fields = apply_filters( 'kbs_rest_required_ticket_params', $fields );
+
+		return $fields;
+	} // get_required_fields
 
 } // KBS_Tickets_API

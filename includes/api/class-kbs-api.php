@@ -42,6 +42,14 @@ class KBS_API extends WP_REST_Controller {
      */
     public $user_id = 0;
 
+	/**
+	 * Request params.
+	 *
+	 * @since	1.5
+	 * @var		WP_REST parameters
+	 */
+	public $params = array();
+
     /**
 	 * Get things going
 	 *
@@ -65,6 +73,20 @@ class KBS_API extends WP_REST_Controller {
 
 		return $value;
 	} // __get
+
+	/**
+	 * Get request parameters.
+	 *
+	 * @since	1.5
+	 * @return	void
+	 */
+	public function get_params( $request )	{
+		$this->params = $request->get_body_params();
+
+        if ( empty( $this->params ) )   {
+            $this->params = $request->get_json_params();
+        }
+	} // get_params
 
     /**
      * Checks if a given request has access to read an object.
@@ -149,6 +171,8 @@ class KBS_API extends WP_REST_Controller {
 	/**
 	 * Whether or not the user is authenticated.
 	 *
+	 * This method also sets the request parameters.
+	 *
 	 * @since	1.5
 	 * @param	array	$data	Array of API request data
 	 * @return	bool
@@ -156,6 +180,12 @@ class KBS_API extends WP_REST_Controller {
 	public function is_authenticated( $data )	{
         if ( is_user_logged_in() )  {
             $this->user_id = get_current_user_id();
+
+			$this->params = $data->get_body_params();
+
+			if ( empty( $this->params ) )   {
+				$this->params = $data->get_json_params();
+			}
 
             return true;
         }
@@ -174,6 +204,12 @@ class KBS_API extends WP_REST_Controller {
 		$errors = array(
 			'no_auth'            => __( 'Authentication failed.', 'kb-support' ),
 			'no_permission'      => __( 'Access denied.', 'kb-support' ),
+			'required_fields'    => __( 'Required fields missing.', 'kb-support' ),
+			'invalid_email'      => __( 'Invalid email address.', 'kb-support' ),
+			'create_failed'      => sprintf(
+				__( 'Unable to create %s.', 'kb-support' ),
+				kbs_get_article_label_singular( true )
+			),
 			'restricted_article' => sprintf(
 				__( 'Criteria not met to access restricted %s.', 'kb-support' ),
 				kbs_get_article_label_singular( true )
