@@ -89,10 +89,10 @@ class KBS_Tickets_API extends KBS_API {
 				),
                 array(
 					'methods'             => WP_REST_Server::EDITABLE,
-					'callback'            => array( $this, 'update_item' ),
-					'permission_callback' => array( $this, 'write_item_permissions_check' ),
+					'callback'            => array( $this, 'create_update_item' ),
+					'permission_callback' => array( $this, 'create_update_item_permissions_check' ),
 					'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::EDITABLE ),
-				),
+				)
 			)
 		);
 
@@ -198,7 +198,7 @@ class KBS_Tickets_API extends KBS_API {
 	 * @param  WP_REST_Request $request    Full details about the request.
 	 * @return true|WP_Error   True if the request has access to create or update a ticket, WP_Error object otherwise.
 	 */
-	public function write_item_permissions_check( $request ) {
+	public function create_update_item_permissions_check( $request ) {
         if ( ! $this->is_authenticated( $request ) )	{
 			return new WP_Error(
 				'rest_forbidden_context',
@@ -210,7 +210,7 @@ class KBS_Tickets_API extends KBS_API {
         $func = empty( $request['id'] ) ? 'create_item_permissions_check' : 'update_item_permissions_check';
 
         return $this->$func( $request );
-    } // write_item_permissions_check
+    } // create_update_item_permissions_check
 
     /**
 	 * Checks if a given request has access to create a ticket.
@@ -537,6 +537,32 @@ class KBS_Tickets_API extends KBS_API {
 	} // get_items
 
     /**
+	 * Create or update a ticket.
+	 *
+	 * @since  1.5
+	 *
+	 * @param  WP_REST_Request             $request    Full details about the request.
+	 * @return WP_REST_Response|WP_Error   Response object on success, or WP_Error object on failure.
+	 */
+	public function create_update_item( $request ) {
+        $func = empty( $request['id'] ) ? 'create_item' : 'update_item';
+
+        return $this->$func( $request );
+    } // create_update_item
+
+    /**
+	 * Creates a ticket.
+	 *
+	 * @since  1.5
+	 *
+	 * @param  WP_REST_Request             $request    Full details about the request.
+	 * @return WP_REST_Response|WP_Error   Response object on success, or WP_Error object on failure.
+	 */
+	public function create_item( $request ) {
+        
+    } // create_item
+
+    /**
 	 * Updates a single ticket.
 	 *
 	 * @since  1.5
@@ -552,7 +578,6 @@ class KBS_Tickets_API extends KBS_API {
 
         $ticket = new KBS_Ticket( $request['id'] );
         if ( empty( $ticket->ID ) ) {
-			// Adding a new ticket so check required fields
 			return $ticket;
 		}
 
