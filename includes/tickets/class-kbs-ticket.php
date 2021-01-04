@@ -641,7 +641,15 @@ class KBS_Ticket {
 			}
 
             if ( ! empty( $this->agents ) )	{
-				$this->pending['agents'] = $this->agents;
+                foreach( $this->agents as $key => $value )    {
+                    if ( $this->agent_id == $value )    {
+                        unset( $this->agents[ $key ] );
+                    }
+                }
+
+                if ( ! empty( $this->agents ) ) {
+                    $this->pending['agents'] = $this->agents;
+                }
 			}
 
 			if ( ! empty( $this->participants ) )	{
