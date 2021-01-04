@@ -101,14 +101,6 @@ class KBS_Replies_API extends WP_REST_Posts_Controller {
 
         $this->user_id = KBS()->api->user_id;
 
-        if ( ! KBS()->api->validate_user() )    {
-            return new WP_Error(
-				'rest_forbidden_context',
-				KBS()->api->errors( 'no_auth' ),
-				array( 'status' => rest_authorization_required_code() )
-			);
-        }
-
         $post = $this->get_post( $request['id'] );
 
         if ( is_wp_error( $post ) ) {
@@ -148,14 +140,6 @@ class KBS_Replies_API extends WP_REST_Posts_Controller {
 
         $this->user_id = KBS()->api->user_id;
 
-        if ( ! KBS()->api->validate_user() )    {
-            return new WP_Error(
-				'rest_forbidden_context',
-				KBS()->api->errors( 'no_auth' ),
-				array( 'status' => rest_authorization_required_code() )
-			);
-        }
-
         $post_type = get_post_type_object( $this->post_type );
 
 		if ( 'edit' === $request['context'] ) {
@@ -187,14 +171,6 @@ class KBS_Replies_API extends WP_REST_Posts_Controller {
 		}
 
         $this->user_id = KBS()->api->user_id;
-
-        if ( ! KBS()->api->validate_user() )    {
-            return new WP_Error(
-				'rest_forbidden_context',
-				KBS()->api->errors( 'no_auth' ),
-				array( 'status' => rest_authorization_required_code() )
-			);
-        }
 
         $post = $this->get_post( $request['id'] );
 

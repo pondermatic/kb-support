@@ -155,6 +155,8 @@ class KBS_API extends WP_REST_Controller {
 	 */
 	public function is_authenticated( $data )	{
         if ( is_user_logged_in() )  {
+            $this->user_id = get_current_user_id();
+
             return true;
         }
 

@@ -90,7 +90,7 @@ class KBS_Tickets_API extends KBS_API {
                 array(
 					'methods'             => WP_REST_Server::EDITABLE,
 					'callback'            => array( $this, 'update_item' ),
-					'permission_callback' => array( $this, 'update_item_permissions_check' ),
+					'permission_callback' => array( $this, 'write_item_permissions_check' ),
 					'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::EDITABLE ),
 				),
 			)
@@ -191,14 +191,14 @@ class KBS_Tickets_API extends KBS_API {
     } // get_items_permissions_check
 
     /**
-	 * Checks if a given request has access to update a ticket.
+	 * Checks if a given request has access to create or update a ticket.
 	 *
 	 * @since  1.5
 	 *
 	 * @param  WP_REST_Request $request    Full details about the request.
-	 * @return true|WP_Error   True if the request has access to update the item, WP_Error object otherwise.
+	 * @return true|WP_Error   True if the request has access to create or update a ticket, WP_Error object otherwise.
 	 */
-	public function update_item_permissions_check( $request ) {
+	public function write_item_permissions_check( $request ) {
         if ( ! $this->is_authenticated( $request ) )	{
 			return new WP_Error(
 				'rest_forbidden_context',
@@ -207,6 +207,41 @@ class KBS_Tickets_API extends KBS_API {
 			);
 		}
 
+        $func = empty( $request['id'] ) ? 'create_item_permissions_check' : 'update_item_permissions_check';
+
+        return $this->$func( $request );
+    } // write_item_permissions_check
+
+    /**
+	 * Checks if a given request has access to create a ticket.
+	 *
+	 * @since  1.5
+	 *
+	 * @param  WP_REST_Request $request    Full details about the request.
+	 * @return true|WP_Error   True if the request has access to create the item, WP_Error object otherwise.
+	 */
+	public function create_item_permissions_check( $request ) {
+        $create = kbs_is_agent( $this->user_id );
+        $create = apply_filters( "kbs_rest_{$this->post_type}_create", $create, $request, $this );
+
+        if ( ! $create )	{
+			return new WP_Error(
+				'rest_forbidden_context',
+				$this->errors( 'no_auth' ),
+				array( 'status' => rest_authorization_required_code() )
+			);
+		}
+    } // create_item_permissions_check
+
+    /**
+	 * Checks if a given request has access to update a ticket.
+	 *
+	 * @since  1.5
+	 *
+	 * @param  WP_REST_Request $request    Full details about the request.
+	 * @return true|WP_Error   True if the request has access to update the item, WP_Error object otherwise.
+	 */
+	public function update_item_permissions_check( $request ) {
         $post = $this->get_post( $request['id'] );
 
 		if ( is_wp_error( $post ) ) {
@@ -522,7 +557,7 @@ class KBS_Tickets_API extends KBS_API {
 		}
 
         /** This action is documented in wp-includes/rest-api/endpoints/class-wp-rest-posts-controller.php */
-		do_action( "kbs_rest_insert_{$this->post_type}", $ticket, $request, false );
+		do_action( "kbs_rest_update_{$this->post_type}", $ticket, $request, false );
 
         if ( ! empty( $request['agent'] ) && kbs_is_agent( absint( $request['agent'] ) ) )    {
             $ticket->__set( 'agent_id', absint( $request['agent'] ) );
@@ -534,7 +569,7 @@ class KBS_Tickets_API extends KBS_API {
                 $agents = array_map( 'absint', $agents );
 
                 foreach( $agents as $key => $value )    {
-                    if ( ! kbs_is_agent( $value ) ) {
+                    if ( ! kbs_is_agent( $value ) || $value === $ticket->agent_id ) {
                         unset( $agents[ $key ] );
                     }
                 }

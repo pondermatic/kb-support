@@ -116,7 +116,7 @@ class KBS_Articles_API extends KBS_API {
 			return $post;
 		}
 
-		if ( kbs_article_is_restricted( $post->ID ) && ( ! $this->is_authenticated( $request ) || ! $this->validate_user() ) )    {
+		if ( kbs_article_is_restricted( $post->ID ) && ! $this->is_authenticated( $request ) )    {
             return new WP_Error(
 				'rest_forbidden_context',
 				$this->errors( 'restricted_article' ),
