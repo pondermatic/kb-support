@@ -42,14 +42,6 @@ class KBS_API extends WP_REST_Controller {
      */
     public $user_id = 0;
 
-	/**
-	 * Request params.
-	 *
-	 * @since	1.5
-	 * @var		WP_REST parameters
-	 */
-	public $params = array();
-
     /**
 	 * Get things going
 	 *
@@ -73,20 +65,6 @@ class KBS_API extends WP_REST_Controller {
 
 		return $value;
 	} // __get
-
-	/**
-	 * Get request parameters.
-	 *
-	 * @since	1.5
-	 * @return	void
-	 */
-	public function get_params( $request )	{
-		$this->params = $request->get_body_params();
-
-        if ( empty( $this->params ) )   {
-            $this->params = $request->get_json_params();
-        }
-	} // get_params
 
     /**
      * Checks if a given request has access to read an object.
@@ -180,12 +158,6 @@ class KBS_API extends WP_REST_Controller {
 	public function is_authenticated( $data )	{
         if ( is_user_logged_in() )  {
             $this->user_id = get_current_user_id();
-
-			$this->params = $data->get_body_params();
-
-			if ( empty( $this->params ) )   {
-				$this->params = $data->get_json_params();
-			}
 
             return true;
         }

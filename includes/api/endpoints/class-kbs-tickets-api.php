@@ -548,7 +548,7 @@ class KBS_Tickets_API extends KBS_API {
 		);
 
 		foreach( $this->get_required_fields() as $required_field )	{
-			if ( empty( $this->params[ $required_field ] ) )	{
+			if ( empty( $request[ $required_field ] ) )	{
 				return new WP_Error(
                     'required_fields',
                     $this->errors( 'required_fields' ),
@@ -557,7 +557,7 @@ class KBS_Tickets_API extends KBS_API {
 			}
 
 			if ( 'customer_email' == $required_field )	{
-				$email = $this->params[ $required_field ];
+				$email = $request[ $required_field ];
 
 				if ( ! is_email( $email ) || kbs_check_email_from_submission( $email ) )	{
 					return new WP_Error(
@@ -571,21 +571,21 @@ class KBS_Tickets_API extends KBS_API {
 
 		$ticket_data['user_info']['email']      = strtolower( $email );
 		$ticket_data['user_email']              = $ticket_data['user_info']['email'];
-		$ticket_data['user_info']['first_name'] = ucfirst( $this->params[ 'customer_first' ] );
-		$ticket_data['user_info']['last_name']  = ucfirst( $this->params[ 'customer_last' ] );
-		$ticket_data['post_title']              = ucfirst( $this->params[ 'ticket_title' ] );
-		$ticket_data['post_content']            = ucfirst( $this->params[ 'ticket_content' ] );
+		$ticket_data['user_info']['first_name'] = ucfirst( $request[ 'customer_first' ] );
+		$ticket_data['user_info']['last_name']  = ucfirst( $request[ 'customer_last' ] );
+		$ticket_data['post_title']              = ucfirst( $request[ 'ticket_title' ] );
+		$ticket_data['post_content']            = ucfirst( $request[ 'ticket_content' ] );
 
-		if ( ! empty( $this->params['customer_phone1'] ) )	{
-			$ticket_data['user_info']['primary_phone'] = $this->params['customer_phone1'];
+		if ( ! empty( $request['customer_phone1'] ) )	{
+			$ticket_data['user_info']['primary_phone'] = $request['customer_phone1'];
 		}
 
-		if ( ! empty( $this->params['customer_phone1'] ) )	{
-			$ticket_data['user_info']['additional_phone'] = $this->params['customer_phone2'];
+		if ( ! empty( $request['customer_phone1'] ) )	{
+			$ticket_data['user_info']['additional_phone'] = $request['customer_phone2'];
 		}
 
-		if ( ! empty( $this->params['customer_website'] ) )	{
-			$ticket_data['user_info']['website'] = $this->params['customer_website'];
+		if ( ! empty( $request['customer_website'] ) )	{
+			$ticket_data['user_info']['website'] = $request['customer_website'];
 		}
 
 		$ticket_id = kbs_add_ticket( $ticket_data );
