@@ -1111,17 +1111,17 @@ class KBS_Tickets_API extends KBS_API {
 		// Entity meta.
 		$links = array(
 			'self'       => array(
-				'href' => rest_url( trailingslashit( $base ) . $ticket->ID ),
+				'href' => rest_url( trailingslashit( $base ) . $ticket->ID )
 			),
 			'collection' => array(
-				'href' => rest_url( $base ),
+				'href' => rest_url( $base )
 			)
 		);
 
 		if ( ! empty( $ticket->agent_id ) )	{
 			$links['agent'] = array(
 				'href'       => rest_url( 'wp/v2/users/' . $ticket->agent_id ),
-				'embeddable' => true,
+				'embeddable' => true
 			);
 		}
 
@@ -1141,7 +1141,7 @@ class KBS_Tickets_API extends KBS_API {
 		if ( ! empty( $ticket->customer_id ) )	{
 			$links['customer'] = array(
 				'href'       => rest_url( 'kbs/v1/customers/' . $ticket->customer_id ),
-				'embeddable' => true,
+				'embeddable' => true
 			);
 		}
 
@@ -1155,17 +1155,30 @@ class KBS_Tickets_API extends KBS_API {
 		if ( ! empty( $ticket->company_id ) )	{
 			$links['company'] = array(
 				'href'       => rest_url( 'kbs/v1/companies/' . $ticket->company_id ),
-				'embeddable' => true,
+				'embeddable' => true
 			);
 		}
 
         if ( ! empty( $ticket->replies ) )  {
             $links['replies'] = array();
 
+			$links['replies']['collection'] = array(
+				'href'       => rest_url( 'kbs/v1/replies/ticket/' . $ticket->ID ),
+				'embeddable' => true
+			);
+
             foreach( $ticket->replies as $reply )   {
-                $links['replies'][] = array(
+                if ( '0000-00-00 00:00:00' === $reply->post_date_gmt ) {
+                    $post_date_gmt = get_gmt_from_date( $reply->post_date );
+                } else {
+                    $post_date_gmt = $reply->post_date_gmt;
+                }
+
+                $links['replies']['single'][] = array(
                     'href'       => rest_url( 'kbs/v1/replies/' . $reply->ID ),
-                    'embeddable' => true,
+                    'date'       => $this->prepare_date_response( $reply->post_date_gmt, $reply->post_date ),
+                    'gmt_date'   => $post_date_gmt,
+                    'embeddable' => true
                 );
             }
         }
