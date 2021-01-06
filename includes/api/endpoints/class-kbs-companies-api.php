@@ -39,7 +39,7 @@ class KBS_Companies_API extends WP_REST_Posts_Controller {
 	 * @return	bool|WP_Error	True if the request has read access for the item, WP_Error object otherwise.
      */
     public function get_item_permissions_check( $request ) {
-		if ( ! KBS()->api->is_authenticated( $request ) )	{
+		if ( ! KBS()->api->is_authenticated() )	{
 			return new WP_Error(
 				'rest_forbidden_context',
 				KBS()->api->errors( 'no_auth' ),

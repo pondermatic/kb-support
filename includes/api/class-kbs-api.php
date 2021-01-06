@@ -74,7 +74,7 @@ class KBS_API extends WP_REST_Controller {
 	 * @return	bool|WP_Error	True if the request has read access for the item, WP_Error object otherwise
      */
     public function get_item_permissions_check( $request ) {
-		if ( ! $this->is_authenticated( $request ) )	{
+		if ( ! $this->is_authenticated() )	{
 			return new WP_Error(
 				'rest_forbidden_context',
 				$this->errors( 'no_auth' ),
@@ -152,10 +152,9 @@ class KBS_API extends WP_REST_Controller {
 	 * This method also sets the request parameters.
 	 *
 	 * @since	1.5
-	 * @param	array	$data	Array of API request data
 	 * @return	bool
 	 */
-	public function is_authenticated( $data )	{
+	public function is_authenticated()	{
         if ( is_user_logged_in() )  {
             $this->user_id = get_current_user_id();
 

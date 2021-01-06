@@ -133,7 +133,7 @@ class KBS_Tickets_API extends KBS_API {
 	 * @return	bool|WP_Error	True if the request has read access for the item, WP_Error object otherwise.
      */
     public function get_item_permissions_check( $request ) {
-		if ( ! $this->is_authenticated( $request ) )	{
+		if ( ! $this->is_authenticated() )	{
 			return new WP_Error(
 				'rest_forbidden_context',
 				$this->errors( 'no_auth' ),
@@ -175,7 +175,7 @@ class KBS_Tickets_API extends KBS_API {
 	 * @return	bool|WP_Error	True if the request has read access for the item, WP_Error object otherwise.
      */
     public function get_items_permissions_check( $request ) {
-        if ( ! $this->is_authenticated( $request ) )	{
+        if ( ! $this->is_authenticated() )	{
 			return new WP_Error(
 				'rest_forbidden_context',
 				$this->errors( 'no_auth' ),
@@ -205,7 +205,7 @@ class KBS_Tickets_API extends KBS_API {
 	 * @return true|WP_Error   True if the request has access to create the item, WP_Error object otherwise.
 	 */
 	public function create_item_permissions_check( $request ) {
-		$create = $this->is_authenticated( $request ) && kbs_is_agent( $this->user_id );
+		$create = $this->is_authenticated() && kbs_is_agent( $this->user_id );
         $create = apply_filters( "kbs_rest_{$this->post_type}_create", $create, $request, $this );
 
 		if ( ! $create )	{
@@ -228,7 +228,7 @@ class KBS_Tickets_API extends KBS_API {
 	 * @return true|WP_Error   True if the request has access to update the item, WP_Error object otherwise.
 	 */
 	public function update_item_permissions_check( $request ) {
-		if ( ! $this->is_authenticated( $request ) )	{
+		if ( ! $this->is_authenticated() )	{
 			return new WP_Error(
 				'rest_forbidden_context',
 				$this->errors( 'no_auth' ),
