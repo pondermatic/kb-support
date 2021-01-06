@@ -1125,19 +1125,6 @@ class KBS_Tickets_API extends KBS_API {
 			);
 		}
 
-		if ( ! empty( $ticket->agents ) )	{
-			$links['additional_agents'] = array();
-			foreach( $ticket->agents as $agent_id )	{
-				if ( empty( $agent_id ) )
-					continue;
-
-				$links['additional_agents'][] = array(
-					'href'       => rest_url( 'wp/v2/users/' . $agent_id ),
-					'embeddable' => true
-				);
-			};
-		}
-
 		if ( ! empty( $ticket->customer_id ) )	{
 			$links['customer'] = array(
 				'href'       => rest_url( 'kbs/v1/customers/' . $ticket->customer_id ),
@@ -1166,21 +1153,6 @@ class KBS_Tickets_API extends KBS_API {
 				'href'       => rest_url( 'kbs/v1/replies/ticket/' . $ticket->ID ),
 				'embeddable' => true
 			);
-
-            foreach( $ticket->replies as $reply )   {
-                if ( '0000-00-00 00:00:00' === $reply->post_date_gmt ) {
-                    $post_date_gmt = get_gmt_from_date( $reply->post_date );
-                } else {
-                    $post_date_gmt = $reply->post_date_gmt;
-                }
-
-                $links['replies']['single'][] = array(
-                    'href'       => rest_url( 'kbs/v1/replies/' . $reply->ID ),
-                    'date'       => $this->prepare_date_response( $reply->post_date_gmt, $reply->post_date ),
-                    'gmt_date'   => $post_date_gmt,
-                    'embeddable' => true
-                );
-            }
         }
 
 		return $links;
