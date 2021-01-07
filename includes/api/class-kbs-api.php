@@ -181,6 +181,10 @@ class KBS_API extends WP_REST_Controller {
 				__( 'Unable to create %s.', 'kb-support' ),
 				kbs_get_article_label_singular( true )
 			),
+            'ticket_not_found'   => sprintf(
+				__( '% not found.', 'kb-support' ),
+				kbs_get_article_label_singular()
+			),
 			'restricted_article' => sprintf(
 				__( 'Criteria not met to access restricted %s.', 'kb-support' ),
 				kbs_get_article_label_singular( true )
