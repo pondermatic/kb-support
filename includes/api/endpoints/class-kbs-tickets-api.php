@@ -205,7 +205,7 @@ class KBS_Tickets_API extends KBS_API {
 	 * @return true|WP_Error   True if the request has access to create the item, WP_Error object otherwise.
 	 */
 	public function create_item_permissions_check( $request ) {
-		$create = $this->is_authenticated() && kbs_is_agent( $this->user_id );
+		$create = $this->is_authenticated();
         $create = apply_filters( "kbs_rest_{$this->post_type}_create", $create, $request, $this );
 
 		if ( ! $create )	{
@@ -588,6 +588,32 @@ class KBS_Tickets_API extends KBS_API {
 			$ticket_data['user_info']['website'] = $request['customer_website'];
 		}
 
+        if ( ! empty( $request['agent_id'] ) )	{
+            $agent_id = 0;
+
+            if ( is_email( $request['agent_id'] ) ) {
+                $agent = get_user_by( 'email', $request['agent_id'] );
+
+                if ( $agent )   {
+                    $agent_id = $agent->ID;
+                }
+            } else  {
+                $agent_id = $request['agent_id'];
+            }
+
+            if ( kbs_is_agent( $agent_id ) )    {
+                $ticket_data['agent_id'] = $agent_id;
+            }
+		}
+
+        if ( ! empty( $request['post_category'] ) ) {
+            $ticket_data['post_category'] = $request['post_category'];
+        }
+
+        if ( ! empty( $request['department'] ) ) {
+            $ticket_data['department'] = $request['department'];
+        }
+
 		$ticket_id = kbs_add_ticket( $ticket_data );
 
 		if ( ! $ticket_id )	{
@@ -626,8 +652,20 @@ class KBS_Tickets_API extends KBS_API {
         /** This action is documented in wp-includes/rest-api/endpoints/class-wp-rest-posts-controller.php */
 		do_action( "kbs_rest_update_{$this->post_type}", $ticket, $request, false );
 
-        if ( ! empty( $request['agent'] ) && kbs_is_agent( absint( $request['agent'] ) ) )    {
-            $ticket->__set( 'agent_id', absint( $request['agent'] ) );
+        if ( ! empty( $request['agent'] ) )    {
+            if ( is_email( $request['agent'] ) ) {
+                $agent = get_user_by( 'email', $request['agent'] );
+
+                if ( $agent )   {
+                    $agent_id = $agent->ID;
+                }
+            } else  {
+                $agent_id = $request['agent'];
+            }
+
+            if ( kbs_is_agent( absint( $request['agent'] ) ) )    {
+                $ticket->__set( 'agent_id', absint( $request['agent'] ) );
+            }
         }
 
         if ( kbs_multiple_agents() )    {
