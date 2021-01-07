@@ -699,10 +699,10 @@ class KBS_Tickets_API extends KBS_API {
             $ticket->__set( 'status', $request['status'] );
         }
 
-        if ( ! empty( $request['category'] ) )  {
+        if ( ! empty( $request['post_category'] ) )  {
 			$terms = wp_get_post_terms( $ticket->ID, 'ticket_category', array( 'fields' => 'ids' ) );
 
-			$terms[] = $request['category'];
+			$terms[] = $request['post_category'];
 
             $ticket->__set( 'ticket_category', $terms );
         }
