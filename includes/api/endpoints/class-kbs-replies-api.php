@@ -423,16 +423,20 @@ class KBS_Replies_API extends KBS_API {
             }
         }
 
-        $ticket_id = absint( $request['id'] );
-        $ticket    = new KBS_Ticket( $ticket_id );
+        $error = new WP_Error(
+			'rest_post_invalid_id',
+			__( 'Invalid post ID.', 'kb-support' ),
+			array( 'status' => 404 )
+		);
 
-        if ( empty( $ticket ) || empty( $ticket->ID ) ) {
-            return new WP_Error(
-                'ticket_not_found',
-                $this->errors( 'ticket_not_found' ),
-                array( 'status' => 400 )
-            );
-        }
+        $ticket_id = absint( $request['id'] );
+        $post      = get_post( $ticket_id );
+
+        if ( empty( $post ) || empty( $post->ID ) || 'kbs_ticket' !== $post->post_type ) {
+			return $error;
+		}
+
+        $ticket = new KBS_Ticket( $ticket_id );
 
 		$reply_data = array(
 			'ticket_id'   => $ticket->ID,
