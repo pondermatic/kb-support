@@ -687,8 +687,12 @@ class KBS_Tickets_API extends KBS_API {
             $ticket->__set( 'company_id', absint( $request['company'] ) );
         }
 
-        if ( ! empty( $request['customer'] ) && kbs_customer_exists( absint( $request['customer'] ) ) )    {
-            $ticket->__set( 'customer_id', absint( $request['customer'] ) );
+        if ( ! empty( $request['customer'] ) )    {
+            $customer = new KBS_Customer( $request['customer'] );
+
+            if ( ! empty( $customer->id ) )  {
+                $ticket->__set( 'customer_id', $customer->id );
+            }
         }
 
         if ( ! empty( $request['status'] ) && in_array( $request['status'], kbs_get_ticket_status_keys() ) )    {
