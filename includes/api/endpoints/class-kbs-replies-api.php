@@ -74,6 +74,12 @@ class KBS_Replies_API extends KBS_API {
 					'callback'            => array( $this, 'get_items' ),
 					'permission_callback' => array( $this, 'get_items_permissions_check' ),
 					'args'                => $this->get_collection_params(),
+				),
+                array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'create_item' ),
+					'permission_callback' => array( $this, 'create_item_permissions_check' ),
+					'args'                => $this->get_collection_params(),
 				)
 			)
 		);
@@ -170,6 +176,29 @@ class KBS_Replies_API extends KBS_API {
 
 		return true;
     } // get_items_permissions_check
+
+    /**
+	 * Checks if a given request has access to create a ticket reply.
+	 *
+	 * @since  1.5
+	 *
+	 * @param  WP_REST_Request $request    Full details about the request.
+	 * @return true|WP_Error   True if the request has access to create the item, WP_Error object otherwise.
+	 */
+	public function create_item_permissions_check( $request ) {
+		$create = $this->is_authenticated() && kbs_is_agent( $this->user_id );
+        $create = apply_filters( "kbs_rest_{$this->post_type}_create", $create, $request, $this );
+
+		if ( ! $create )	{
+			return new WP_Error(
+				'rest_forbidden_context',
+				$this->errors( 'no_auth' ),
+				array( 'status' => rest_authorization_required_code() )
+			);
+		}
+
+		return true;
+    } // create_item_permissions_check
 
 	/**
 	 * Retrieves a single reply.
@@ -374,6 +403,84 @@ class KBS_Replies_API extends KBS_API {
 
 		return $response;
 	} // get_items
+
+    /**
+	 * Creates a ticket reply.
+	 *
+	 * @since  1.5
+	 *
+	 * @param  WP_REST_Request             $request    Full details about the request.
+	 * @return WP_REST_Response|WP_Error   Response object on success, or WP_Error object on failure.
+	 */
+	public function create_item( $request ) {
+        foreach( $this->get_required_fields() as $received => $send )   {
+            if ( empty( $request[ $received ] ) )   {
+                return new WP_Error(
+                    'required_fields',
+                    $this->errors( 'required_fields' ),
+                    array( 'status' => 400 )
+                );
+            }
+        }
+
+        $ticket_id = absint( $request['id'] );
+        $ticket    = new KBS_Ticket( $ticket_id );
+
+        if ( empty( $ticket ) || empty( $ticket->ID ) ) {
+            return new WP_Error(
+                'ticket_not_found',
+                $this->errors( 'ticket_not_found' ),
+                array( 'status' => 400 )
+            );
+        }
+
+		$reply_data = array(
+			'ticket_id'   => $ticket->ID,
+            'response'    => $request['reply_content'],
+            'close'       => ! empty( $request['close_ticket'] ) ? true : false,
+            'customer_id' => (int) $ticket->customer_id,
+            'author'      => 0,
+            'status'      => $ticket->post_status,
+            'author'      => ! empty( $request['reply_author'] ) ? $request['reply_author'] : get_current_user_id()
+        );
+
+        if ( ! empty( $request['ticket_status'] ) && in_array( $request['ticket_status'], kbs_get_ticket_status_keys() ) )  {
+            $reply_data['status'] = $request['ticket_status'];
+        }
+
+        if ( ! empty( $request['agent'] ) ) {
+            $agent_id = 0;
+
+            if ( is_email( $request['agent'] ) ) {
+                $agent = get_user_by( 'email', $request['agent'] );
+
+                if ( $agent )   {
+                    $agent_id = $agent->ID;
+                }
+            } else  {
+                $agent_id = absint( $request['agent'] );
+            }
+
+            if ( kbs_is_agent( $agent_id ) )    {
+                $reply_data['agent_id'] = $agent_id;
+            }
+        }
+
+		$reply_id = $ticket->add_reply( $reply_data );
+
+		if ( ! $reply_id )	{
+			return new WP_Error(
+				'create_reply_failed',
+				$this->errors( 'create_reply_failed' ),
+				array( 'status' => 400 )
+			);
+		}
+
+		$post     = get_post( $reply_id );
+		$response = $this->prepare_item_for_response( $post, $request );
+
+		return rest_ensure_response( $response );
+	} // create_item
 
     /**
 	 * Prepares a single reply output for response.
@@ -648,5 +755,25 @@ class KBS_Replies_API extends KBS_API {
 
 		return $links;
 	} // prepare_links
+
+    /**
+	 * Retrieves an array of required parameters to create a ticket reply via REST.
+     *
+     * Formatted as $key = expected key received within $request, $value = key expected
+     * when adding reply.
+	 *
+	 * @since	1.5
+	 * @return	array	Array of required parameters
+	 */
+	public function get_required_fields()	{
+		$fields = array(
+			'id'            => 'ticket_id',
+			'reply_content' => 'response'
+		);
+
+		$fields = apply_filters( 'kbs_rest_required_ticket_reply_params', $fields );
+
+		return $fields;
+	} // get_required_fields
 
 } // KBS_Replies_API
