@@ -50,7 +50,9 @@ function kbs_setup_kbs_ticket_category_taxonomy()	{
 				'delete_terms' => 'delete_ticket_terms'
 			),
 			'update_count_callback' => '_update_generic_term_count',
-			'show_in_rest' => true
+			'show_in_rest'          => true,
+            'rest_base'             => 'ticket_categories',
+            'rest_controller_class' => 'WP_REST_Terms_Controller',
 		)
 	);
 
