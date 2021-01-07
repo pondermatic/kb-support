@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) )
  * @since	1.0
  */
 class KBS_Ticket {
-	
+
 	/**
 	 * The ticket ID
 	 *
@@ -714,11 +714,13 @@ class KBS_Ticket {
 	 * @return	bool	True of the save occurred, false if it failed or wasn't needed
 	 */
 	public function save() {
-		$saved = false;
+        $new_ticket = false;
+		$saved      = false;
 
 		if ( empty( $this->ID ) ) {
 
-			$ticket_id = $this->insert_ticket();
+			$ticket_id  = $this->insert_ticket();
+            $new_ticket = true;
 
 			if ( false === $ticket_id ) {
 				$saved = false;
@@ -968,7 +970,7 @@ class KBS_Ticket {
 
 		if ( true === $saved ) {
 			$this->setup_ticket( $this->ID );
-            do_action( 'kbs_ticket_saved', $this->ID, $this );
+            do_action( 'kbs_ticket_saved', $this->ID, $this, $new_ticket );
 		}
 
 		return $saved;
