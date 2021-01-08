@@ -499,10 +499,10 @@ class KBS_Replies_API extends KBS_API {
 
 		setup_postdata( $post );
 
-        $ticket     = new KBS_Ticket( $post->post_parent );
-        $data       = array();
+        $ticket = new KBS_Ticket( $post->post_parent );
+        $data   = array();
 
-        $data['id']    = $post->ID;
+        $data['id']   = $post->ID;
         $data['date'] = $this->prepare_date_response( $post->post_date_gmt, $post->post_date );
 
         if ( '0000-00-00 00:00:00' === $post->post_date_gmt ) {
@@ -548,6 +548,10 @@ class KBS_Replies_API extends KBS_API {
 
             if ( ! empty( $ticket->number ) )	{
                 $data['ticket_data']['number'] = $ticket->number;
+            }
+
+            if ( ! empty( $ticket->key ) )	{
+                $data['ticket_data']['key'] = $ticket->key;
             }
 
             if ( ! empty( $ticket->status ) )	{
