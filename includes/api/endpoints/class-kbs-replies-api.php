@@ -269,9 +269,7 @@ class KBS_Replies_API extends KBS_API {
 			'offset'         => 'offset',
 			'order'          => 'order',
 			'orderby'        => 'orderby',
-			'page'           => 'paged',
-			'search'         => 's',
-			'slug'           => 'post_name__in'
+			'page'           => 'paged'
 		);
 
 		/*
@@ -445,7 +443,8 @@ class KBS_Replies_API extends KBS_API {
             'customer_id' => (int) $ticket->customer_id,
             'author'      => 0,
             'status'      => $ticket->post_status,
-            'author'      => ! empty( $request['reply_author'] ) ? $request['reply_author'] : get_current_user_id()
+            'author'      => ! empty( $request['reply_author'] ) ? $request['reply_author'] : get_current_user_id(),
+            'source'      => 'kbs-rest'
         );
 
         if ( ! empty( $request['ticket_status'] ) && in_array( $request['ticket_status'], kbs_get_ticket_status_keys() ) )  {
@@ -602,8 +601,7 @@ class KBS_Replies_API extends KBS_API {
                 'agent',
 				'customer',
 				'modified',
-				'include',
-				'title'
+				'include'
 			)
 		);
 
