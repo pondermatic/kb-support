@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) )
  * @since	1.0
  */
 class KBS_Ticket {
-	
+
 	/**
 	 * The ticket ID
 	 *
@@ -522,7 +522,6 @@ class KBS_Ticket {
 	 * @return	int|bool	False on failure, the ticket ID on success.
 	 */
 	private function insert_ticket() {
-
 		if ( empty( $this->ticket_title ) )	{
 			$this->ticket_title = sprintf( __( 'New %s', 'kb-support' ), kbs_get_ticket_label_singular() );
 		}
@@ -641,7 +640,15 @@ class KBS_Ticket {
 			}
 
             if ( ! empty( $this->agents ) )	{
-				$this->pending['agents'] = $this->agents;
+                foreach( $this->agents as $key => $value )    {
+                    if ( $this->agent_id == $value )    {
+                        unset( $this->agents[ $key ] );
+                    }
+                }
+
+                if ( ! empty( $this->agents ) ) {
+                    $this->pending['agents'] = $this->agents;
+                }
 			}
 
 			if ( ! empty( $this->participants ) )	{
@@ -696,7 +703,6 @@ class KBS_Ticket {
 		}
 
 		return $this->ID;
-
 	} // insert_ticket
 
 	/**
@@ -706,11 +712,17 @@ class KBS_Ticket {
 	 * @return	bool	True of the save occurred, false if it failed or wasn't needed
 	 */
 	public function save() {
-		$saved = false;
+        $new_ticket = false;
+		$saved      = false;
+
+        // Is this a new ticket being inserted from admin?
+        $new_ticket_statuses = array( 'auto-draft', 'draft' );
+        if ( in_array( get_post_status( $this->ID ), $new_ticket_statuses ) ) {
+            $new_ticket = true;
+        }
 
 		if ( empty( $this->ID ) ) {
-
-			$ticket_id = $this->insert_ticket();
+			$ticket_id  = $this->insert_ticket();
 
 			if ( false === $ticket_id ) {
 				$saved = false;
@@ -722,7 +734,6 @@ class KBS_Ticket {
 				}
 				kbs_record_submission_in_log( $ticket_id, $form_id );
 			}
-
 		}
 
 		if ( $this->ID !== $this->_ID ) {
@@ -960,6 +971,7 @@ class KBS_Ticket {
 
 		if ( true === $saved ) {
 			$this->setup_ticket( $this->ID );
+            do_action( 'kbs_ticket_saved', $this->ID, $this, $new_ticket );
 		}
 
 		return $saved;
@@ -1723,9 +1735,9 @@ class KBS_Ticket {
 
 		$args = wp_parse_args( $args, $defaults );
 
-		$replies = get_posts( $args );
+		$this->replies = get_posts( $args );
 		
-		return apply_filters( 'kbs_ticket_replies', $replies );
+		return apply_filters( 'kbs_ticket_replies', $this->replies, $this->ID );
 	} // get_replies
 
 	/**

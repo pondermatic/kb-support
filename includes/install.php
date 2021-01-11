@@ -96,6 +96,11 @@ function kbs_run_install() {
             'name' => __( 'Email', 'kb-support' ),
             'desc' => sprintf( __( '%s received via email', 'kb-support' ), kbs_get_ticket_label_plural() )
         ),
+		array(
+            'slug' => 'kbs-rest',
+            'name' => __( 'REST API', 'kb-support' ),
+            'desc' => sprintf( __( '%s received via REST API', 'kb-support' ), kbs_get_ticket_label_plural() )
+        ),
         array(
             'slug' => 'kbs-telephone',
             'name' => __( 'Telephone', 'kb-support' ),

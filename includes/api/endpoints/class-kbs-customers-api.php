@@ -86,7 +86,7 @@ class KBS_Customers_API extends KBS_API {
 	 * @return	bool|WP_Error	True if the request has read access for the item, WP_Error object otherwise.
      */
     public function get_item_permissions_check( $request ) {
-		if ( ! $this->is_authenticated( $request ) )	{
+		if ( ! $this->is_authenticated() )	{
 			return new WP_Error(
 				'rest_forbidden_context',
 				$this->errors( 'no_auth' ),
@@ -94,12 +94,19 @@ class KBS_Customers_API extends KBS_API {
 			);
 		}
 
-		if ( $this->validate_user() )	{
-			return kbs_can_view_customers( $this->user_id );
-		}
-
-		return false;
+		return kbs_can_view_customers( $this->user_id );
     } // get_item_permissions_check
+
+    /**
+     * Checks if a given request has access to read customers.
+     *
+     * @since   1.5
+     * @param	WP_REST_Request	$request	Full details about the request.
+	 * @return	bool|WP_Error	True if the request has read access for the item, WP_Error object otherwise.
+     */
+    public function get_items_permissions_check( $request ) {
+		return $this->get_item_permissions_check( $request );
+    } // get_items_permissions_check
 
 	/**
 	 * Retrieves a single customer.
@@ -124,17 +131,6 @@ class KBS_Customers_API extends KBS_API {
 
 		return $response;
 	} // get_item
-
-	/**
-     * Checks if a given request has access to read customers.
-     *
-     * @since   1.5
-     * @param	WP_REST_Request	$request	Full details about the request.
-	 * @return	bool|WP_Error	True if the request has read access for the item, WP_Error object otherwise.
-     */
-    public function get_items_permissions_check( $request ) {
-		return $this->get_item_permissions_check( $request );
-    } // get_items_permissions_check
 
 	/**
 	 * Retrieves a collection of customers.
@@ -218,8 +214,7 @@ class KBS_Customers_API extends KBS_API {
 	 * @return	WP_REST_Response	Response object
 	 */
 	public function prepare_item_for_response( $customer, $request )	{
-		$company    = new KBS_Company( $customer->company_id );
-		$data       = array();
+		$data = array();
 
 		$data['id'] = $customer->id;
 
@@ -284,9 +279,7 @@ class KBS_Customers_API extends KBS_API {
 		}
 
 		if ( ! empty( $customer->company ) )	{
-			$data['company']['id']         = $customer->company_id;
-			$data['company']['name']       = $customer->company;
-			$data['company']['is_contact'] = $company->customer == $customer->id;
+			$data['company'] = $customer->company_id;
 		}
 
 		if ( ! empty( $customer->date_created ) )	{
@@ -464,9 +457,14 @@ class KBS_Customers_API extends KBS_API {
 		if ( ! empty( $customer->company_id ) )	{
 			$links['company'] = array(
 				'href'       => rest_url( 'kbs/v1/companies/' . $customer->company_id ),
-				'embeddable' => true,
+				'embeddable' => true
 			);
 		}
+
+		$links[ kbs_get_ticket_label_plural( true ) ] = array(
+			'href'       => rest_url( 'kbs/v1/tickets/?customer=' . $customer->id ),
+			'embeddable' => true
+		);
 
 		return $links;
 	} // prepare_links

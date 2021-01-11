@@ -3,7 +3,7 @@
  * Plugin Name: KB Support
  * Plugin URI: https://kb-support.com/
  * Description: The ultimate ticket system, help desk and knowledge base support tool plugin for WordPress.
- * Version: 1.4.9
+ * Version: 1.4.10
  * Date: 16 December 2020
  * Author: KB Support Team
  * Author URI: https://kb-support.com/
@@ -30,7 +30,7 @@
  * @package		KBS
  * @category	Core
  * @author		Mike Howard
- * @version		1.4.9
+ * @version		1.4.10
  */
 
 // Exit if accessed directly.
@@ -104,14 +104,17 @@ final class KB_Support {
 	 * KBS Knowledgebase.
 	 *
 	 * @var		object		KBS_Knowledgebase
-	 * @since	1.5
+	 * @since	1.0
 	 */
-	public $api;
+	public $KB;
 
     /**
      * KBS API
      *
-     * @var object
+     * @var		object
+	 * @since	1.5
+	 */
+	public $api;
 
 	/**
 	 * Main KB_Support Instance.
@@ -191,7 +194,7 @@ final class KB_Support {
 	private function setup_constants()	{
 
 		if ( ! defined( 'KBS_VERSION' ) )	{
-			define( 'KBS_VERSION', '1.4.9' );
+			define( 'KBS_VERSION', '1.4.10' );
 		}
 
 		if ( ! defined( 'KBS_PLUGIN_DIR' ) )	{
@@ -231,6 +234,7 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-cache-helper.php';
 		require_once KBS_PLUGIN_DIR . 'includes/post-types.php';
 		require_once KBS_PLUGIN_DIR . 'includes/post-taxonomies.php';
+        require_once KBS_PLUGIN_DIR . 'includes/post-meta.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-db.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-stats.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-roles.php';
@@ -238,6 +242,7 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-logging.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-license-handler.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-knowledgebase.php';
+		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-register-meta.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/article-actions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/class-kbs-article-stats.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/class-kbs-articles-query.php';
@@ -285,10 +290,12 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/widgets.php';
         require_once KBS_PLUGIN_DIR . 'includes/compatibility-functions.php';
         require_once KBS_PLUGIN_DIR . 'includes/api/class-kbs-api.php';
-		require_once KBS_PLUGIN_DIR . 'includes/api/endpoints/class-kbs-articles-api.php';
+		require_once KBS_PLUGIN_DIR . 'includes/api/endpoints/class-kbs-agents-api.php';
+        require_once KBS_PLUGIN_DIR . 'includes/api/endpoints/class-kbs-articles-api.php';
 		require_once KBS_PLUGIN_DIR . 'includes/api/endpoints/class-kbs-companies-api.php';
 		require_once KBS_PLUGIN_DIR . 'includes/api/endpoints/class-kbs-customers-api.php';
 		require_once KBS_PLUGIN_DIR . 'includes/api/endpoints/class-kbs-tickets-api.php';
+        require_once KBS_PLUGIN_DIR . 'includes/api/endpoints/class-kbs-replies-api.php';
 
 		if ( is_admin() )	{
 			require_once KBS_PLUGIN_DIR . 'includes/admin/admin-pages.php';

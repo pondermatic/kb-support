@@ -84,11 +84,11 @@ function kbs_get_customer_id_from_ticket( $ticket_id )	{
  * Whether or not a customer exists.
  *
  * @since	1.0
- * @param	int		$customer_id	The customer ID
+ * @param	mixed	$id_or_email	The customer ID or email address
  * @return	bool	True or false
  */
-function kbs_customer_exists( $customer_id )	{
-	$customer = new KBS_Customer( $customer_id );
+function kbs_customer_exists( $id_or_email )	{
+	$customer = new KBS_Customer( $id_or_email );
 
     if ( empty( $customer->id ) )  {
         return false;

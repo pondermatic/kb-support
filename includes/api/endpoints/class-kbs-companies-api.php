@@ -21,40 +21,26 @@ if ( ! defined( 'ABSPATH' ) )
 class KBS_Companies_API extends KBS_API {
 
 	/**
-	 * Company ID
-	 *
-	 * @since	1.5
-	 * @var		int
-	 */
-	protected $company_id = 0;
-
-	/**
-	 * Companies
-	 *
-	 * @since	1.5
-	 * @var		array
-	 */
-	protected $companies = array();
-
-	/**
 	 * Get things going
 	 *
 	 * @since	1.5
 	 */
 	public function __construct( $post_type )	{
-		$this->post_type = $post_type;
-		$obj             = get_post_type_object( $post_type );
+		$this->post_type = 'kbs_company';
+		$obj             = get_post_type_object( $this->post_type );
 		$this->rest_base = ! empty( $obj->rest_base ) ? $obj->rest_base : $obj->name;
+
+		$this->meta = new WP_REST_Post_Meta_Fields( $this->post_type );
 	} // __construct
 
-	/**
+    /**
 	 * Registers the routes for the objects of the controller.
 	 *
-	 * @since	4.5
+	 * @since	1.5
 	 * @see		register_rest_route()
 	 */
-    public function register_routes()    {
-        register_rest_route(
+	public function register_routes() {
+		register_rest_route(
 			$this->namespace . $this->version,
 			'/' . $this->rest_base,
 			array(
@@ -69,13 +55,13 @@ class KBS_Companies_API extends KBS_API {
 
 		register_rest_route(
 			$this->namespace . $this->version,
-			'/' . $this->rest_base . '/(?P<id>\d+)',
+			'/' . $this->rest_base . '/(?P<id>[\d]+)',
 			array(
 				'args'   => array(
 					'id' => array(
+						'description' => __( 'Unique identifier for the object.' ),
 						'type'        => 'integer',
-						'description' => __( 'Unique identifier for the %s.', 'kb-support' )
-					)
+					),
 				),
 				array(
 					'methods'             => WP_REST_Server::READABLE,
@@ -84,7 +70,7 @@ class KBS_Companies_API extends KBS_API {
 				)
 			)
 		);
-    } // register_routes
+	} // register_routes
 
 	/**
      * Checks if a given request has access to read a company.
@@ -94,7 +80,7 @@ class KBS_Companies_API extends KBS_API {
 	 * @return	bool|WP_Error	True if the request has read access for the item, WP_Error object otherwise.
      */
     public function get_item_permissions_check( $request ) {
-		if ( ! $this->is_authenticated( $request ) )	{
+		if ( ! $this->is_authenticated() )	{
 			return new WP_Error(
 				'rest_forbidden_context',
 				$this->errors( 'no_auth' ),
@@ -102,40 +88,8 @@ class KBS_Companies_API extends KBS_API {
 			);
 		}
 
-		if ( $this->validate_user() )	{
-			return kbs_can_view_customers( $this->user_id );
-		}
-
-		return false;
+		return kbs_can_view_customers( $this->user_id );
     } // get_item_permissions_check
-
-	/**
-	 * Retrieves a single company.
-	 *
-	 * @since	1.5
-	 * @param	WP_REST_Request	$request	Full details about the request
-	 * @return	WP_REST_Response|WP_Error	Response object on success, or WP_Error object on failure.
-	 */
-	public function get_item( $request ) {
-		$company = new KBS_Company( absint( $request['id'] ) );
-
-		if ( empty( $company->ID ) )	{
-			return $company;
-		}
-
-		if ( ! $this->check_read_permission( $company ) )	{
-			return new WP_Error(
-				'rest_forbidden_context',
-				$this->errors( 'no_permission' ),
-				array( 'status' => rest_authorization_required_code() )
-			);
-		}
-
-		$data     = $this->prepare_item_for_response( $company, $request );
-		$response = rest_ensure_response( $data );
-
-		return $response;
-	} // get_item
 
 	/**
      * Checks if a given request has access to read multiple companies.
@@ -148,14 +102,56 @@ class KBS_Companies_API extends KBS_API {
 		return $this->get_item_permissions_check( $request );
     } // get_items_permissions_check
 
-	/**
-	 * Retrieves a collection of companies.
+    /**
+	 * Retrieves a single post.
 	 *
 	 * @since	1.5
-	 * @param	WP_REST_Request		$request	Full details about the request
-	 * @return	WP_REST_Response|WP_Error		Response object on success, or WP_Error object on failure
+	 * @param	WP_REST_Request				$request	Full details about the request.
+	 * @return	WP_REST_Response|WP_Error	Response object on success, or WP_Error object on failure.
 	 */
-	function get_items( $request )	{
+	public function get_item( $request ) {
+		$post = $this->get_post( $request['id'] );
+		if ( is_wp_error( $post ) ) {
+			return $post;
+		}
+
+		$data     = $this->prepare_item_for_response( $post, $request );
+		$response = rest_ensure_response( $data );
+
+		if ( is_post_type_viewable( get_post_type_object( $post->post_type ) ) ) {
+			$response->link_header( 'alternate', get_permalink( $post->ID ), array( 'type' => 'text/html' ) );
+		}
+
+		return $response;
+	} // get_item
+
+    /**
+	 * Retrieves a collection of posts.
+	 *
+	 * @since	1.5
+	 * @param	WP_REST_Request				$request	Full details about the request.
+	 * @return	WP_REST_Response|WP_Error	Response object on success, or WP_Error object on failure.
+	 */
+	public function get_items( $request ) {
+
+		// Ensure a search string is set in case the orderby is set to 'relevance'.
+		if ( ! empty( $request['orderby'] ) && 'relevance' === $request['orderby'] && empty( $request['search'] ) ) {
+			return new WP_Error(
+				'rest_no_search_term_defined',
+				__( 'You need to define a search term to order by relevance.' ),
+				array( 'status' => 400 )
+			);
+		}
+
+		// Ensure an include parameter is set in case the orderby is set to 'include'.
+		if ( ! empty( $request['orderby'] ) && 'include' === $request['orderby'] && empty( $request['include'] ) ) {
+			return new WP_Error(
+				'rest_orderby_include_missing_include',
+				__( 'You need to define an include parameter to order by include.' ),
+				array( 'status' => 400 )
+			);
+		}
+
 		// Retrieve the list of registered collection query parameters.
 		$registered = $this->get_collection_params();
 		$args       = array();
@@ -169,10 +165,13 @@ class KBS_Companies_API extends KBS_API {
 		$parameter_mappings = array(
 			'exclude'        => 'post__not_in',
 			'include'        => 'post__in',
+			'menu_order'     => 'menu_order',
 			'offset'         => 'offset',
 			'order'          => 'order',
 			'orderby'        => 'orderby',
-			'page'           => 'paged'
+			'page'           => 'paged',
+			'search'         => 's',
+			'slug'           => 'post_name__in'
 		);
 
 		/*
@@ -185,9 +184,53 @@ class KBS_Companies_API extends KBS_API {
 			}
 		}
 
+		// Check for & assign any parameters which require special handling or setting.
+		$args['date_query'] = array();
+
+		// Set before into date query. Date query must be specified as an array of an array.
+		if ( isset( $registered['before'], $request['before'] ) ) {
+			$args['date_query'][0]['before'] = $request['before'];
+		}
+
+		// Set after into date query. Date query must be specified as an array of an array.
+		if ( isset( $registered['after'], $request['after'] ) ) {
+			$args['date_query'][0]['after'] = $request['after'];
+		}
+
 		// Ensure our per_page parameter overrides any provided posts_per_page filter.
 		if ( isset( $registered['per_page'] ) ) {
 			$args['posts_per_page'] = $request['per_page'];
+		}
+
+		if ( isset( $registered['sticky'], $request['sticky'] ) ) {
+			$sticky_posts = get_option( 'sticky_posts', array() );
+			if ( ! is_array( $sticky_posts ) ) {
+				$sticky_posts = array();
+			}
+			if ( $request['sticky'] ) {
+				/*
+				 * As post__in will be used to only get sticky posts,
+				 * we have to support the case where post__in was already
+				 * specified.
+				 */
+				$args['post__in'] = $args['post__in'] ? array_intersect( $sticky_posts, $args['post__in'] ) : $sticky_posts;
+
+				/*
+				 * If we intersected, but there are no post ids in common,
+				 * WP_Query won't return "no posts" for post__in = array()
+				 * so we have to fake it a bit.
+				 */
+				if ( ! $args['post__in'] ) {
+					$args['post__in'] = array( 0 );
+				}
+			} elseif ( $sticky_posts ) {
+				/*
+				 * As post___not_in will be used to only get posts that
+				 * are not sticky, we have to support the case where post__not_in
+				 * was already specified.
+				 */
+				$args['post__not_in'] = array_merge( $args['post__not_in'], $sticky_posts );
+			}
 		}
 
 		// Force the post_type argument, since it's not a user input variable.
@@ -196,30 +239,44 @@ class KBS_Companies_API extends KBS_API {
 		/**
 		 * Filters the query arguments for a request.
 		 *
-		 * Enables adding extra arguments or setting defaults for a company collection request.
+		 * Enables adding extra arguments or setting defaults for a post collection request.
 		 *
-		 * @since	1.5
-		 * @param	array			$args		Key value array of query var to query value
-		 * @param	WP_REST_Request	$request	The request used
+		 * @since 4.7.0
+		 *
+		 * @link https://developer.wordpress.org/reference/classes/wp_query/
+		 *
+		 * @param array           $args    Key value array of query var to query value.
+		 * @param WP_REST_Request $request The request used.
 		 */
-		$args            = apply_filters( "rest_{$this->post_type}_query", $args, $request );
-		$query_args      = $this->prepare_items_query( $args, $request );
-		$companies_query = new WP_Query();
-		$query_result    = $companies_query->query( $query_args );
-		$companies       = array();
+		$args       = apply_filters( "rest_{$this->post_type}_query", $args, $request );
+		$query_args = $this->prepare_items_query( $args, $request );
 
-		foreach ( $query_result as $_company ) {
-			if ( ! $this->check_read_permission( $_company ) ) {
+		$posts_query  = new WP_Query();
+		$query_result = $posts_query->query( $query_args );
+
+		// Allow access to all password protected posts if the context is edit.
+		if ( 'edit' === $request['context'] ) {
+			add_filter( 'post_password_required', '__return_false' );
+		}
+
+		$posts = array();
+
+		foreach ( $query_result as $post ) {
+			if ( ! $this->check_read_permission( $post ) ) {
 				continue;
 			}
 
-			$company     = new KBS_Company( $_company->ID );
-			$data        = $this->prepare_item_for_response( $company, $request );
-			$companies[] = $this->prepare_response_for_collection( $data );
+			$data    = $this->prepare_item_for_response( $post, $request );
+			$posts[] = $this->prepare_response_for_collection( $data );
+		}
+
+		// Reset filter.
+		if ( 'edit' === $request['context'] ) {
+			remove_filter( 'post_password_required', '__return_false' );
 		}
 
 		$page        = (int) $query_args['paged'];
-		$total_posts = $companies_query->found_posts;
+		$total_posts = $posts_query->found_posts;
 
 		if ( $total_posts < 1 ) {
 			// Out-of-bounds, run the query again without LIMIT for total count.
@@ -230,17 +287,17 @@ class KBS_Companies_API extends KBS_API {
 			$total_posts = $count_query->found_posts;
 		}
 
-		$max_pages = ceil( $total_posts / (int) $companies_query->query_vars['posts_per_page'] );
+		$max_pages = ceil( $total_posts / (int) $posts_query->query_vars['posts_per_page'] );
 
 		if ( $page > $max_pages && $total_posts > 0 ) {
 			return new WP_Error(
 				'rest_post_invalid_page_number',
-				__( 'The page number requested is larger than the number of pages available.', 'kb-support' ),
+				__( 'The page number requested is larger than the number of pages available.' ),
 				array( 'status' => 400 )
 			);
 		}
 
-		$response = rest_ensure_response( $companies );
+		$response = rest_ensure_response( $posts );
 
 		$response->header( 'X-WP-Total', (int) $total_posts );
 		$response->header( 'X-WP-TotalPages', (int) $max_pages );
@@ -268,73 +325,76 @@ class KBS_Companies_API extends KBS_API {
 		return $response;
 	} // get_items
 
-	/**
-	 * Prepares a single company output for response.
+    /**
+	 * Prepares a single post output for response.
 	 *
 	 * @since	1.5
-	 * @param	KBS_Company			$company	KBS_Company object
-	 * @param	WP_REST_Request		$request	Request object
-	 * @return	WP_REST_Response	Response object
+	 * @param	WP_Post				$post		Post object.
+	 * @param	WP_REST_Request		$request	Request object.
+	 * @return	WP_REST_Response	Response object.
 	 */
-	public function prepare_item_for_response( $company, $request )	{
-		$data     = array();
+	public function prepare_item_for_response( $post, $request ) {
+		$GLOBALS['post'] = $post;
 
-		$data['id'] = $company->ID;
+		setup_postdata( $post );
 
-		if ( ! empty( $company->name ) )	{
-			$data['name'] = $company->name;
-		}
+		$fields = $this->get_fields_for_response( $request );
 
-		if ( ! empty( $company->customer ) )	{
-			$data['customer'] = $company->customer;
-		}
+		// Base fields for every post.
+		$data = array();
 
-		if ( ! empty( $company->contact ) )	{
-			$data['contact'] = $company->contact;
-		}
+		$data['id'] = $post->ID;
 
-		if ( ! empty( $company->email ) )	{
-			$data['email'] = $company->email;
-		}
+		$data['slug'] = $post->post_name;
 
-		if ( ! empty( $company->phone ) )	{
-			$data['phone'] = $company->phone;
-		}
+        $data['title'] = array();
+        $data['title']['raw'] = $post->post_title;
 
-		if ( ! empty( $company->website ) )	{
-			$data['website'] = $company->website;
-		}
+        $data['title']['rendered'] = get_the_title( $post->ID );
 
-		if ( ! empty( $company->logo ) )	{
-			$data['logo'] = $company->logo;
-		}
+		$has_password_filter = false;
 
-		if ( ! empty( $company->date_created ) )	{
-			$data['date_created'] = $company->date_created;
-		}
+        $data['content'] = array();
+        $data['content']['raw'] = $post->post_content;
+        $data['content']['rendered'] = post_password_required( $post ) ? '' : apply_filters( 'the_content', $post->post_content );
 
-		if ( ! empty( $company->date_modified ) )	{
-			$data['date_modified'] = $company->date_modified;
-		}
+        $data['featured_media'] = (int) get_post_thumbnail_id( $post->ID );
 
-        $data['ticket_count'] = kbs_count_company_tickets( $company );
+
+        $data['meta'] = $this->meta->get_value( $post->ID, $request );
+
+		$context = ! empty( $request['context'] ) ? $request['context'] : 'view';
+		$data    = $this->add_additional_fields_to_object( $data, $request );
+		$data    = $this->filter_response_by_context( $data, $context );
 
 		// Wrap the data in a response object.
 		$response = rest_ensure_response( $data );
-		$links    = $this->prepare_links( $company );
 
+		$links = $this->prepare_links( $post );
 		$response->add_links( $links );
 
+		if ( ! empty( $links['self']['href'] ) ) {
+			$actions = $this->get_available_actions( $post, $request );
+
+			$self = $links['self']['href'];
+
+			foreach ( $actions as $rel ) {
+				$response->add_link( $rel, $self );
+			}
+		}
+
 		/**
-		 * Filters the company data for a response.
+		 * Filters the post data for a response.
 		 *
-		 * @since	1.5
+		 * The dynamic portion of the hook name, `$this->post_type`, refers to the post type slug.
 		 *
-		 * @param WP_REST_Response	$response	The response object
-		 * @param KBS_Company		$company	Company object
-		 * @param WP_REST_Request	$request	Request object
+		 * @since 4.7.0
+		 *
+		 * @param WP_REST_Response $response The response object.
+		 * @param WP_Post          $post     Post object.
+		 * @param WP_REST_Request  $request  Request object.
 		 */
-		return apply_filters( "rest_prepare_{$this->post_type}", $response, $company, $request );
+		return apply_filters( "kbs_rest_prepare_{$this->post_type}", $response, $post, $request );
 	} // prepare_item_for_response
 
 	/**
@@ -347,46 +407,6 @@ class KBS_Companies_API extends KBS_API {
 		$query_params = parent::get_collection_params();
 
 		$query_params['context']['default'] = 'view';
-
-		$query_params['number'] = array(
-			'description'       => __( 'Maximum number of companies to be returned in result set.', 'kb-support' ),
-			'type'              => 'integer',
-			'default'           => 20,
-			'minimum'           => 1,
-			'maximum'           => 100,
-			'sanitize_callback' => 'absint',
-			'validate_callback' => 'rest_validate_request_arg'
-		);
-
-		$query_params['exclude'] = array(
-			'description' => __( 'Ensure result set excludes specific IDs.' ),
-			'type'        => 'array',
-			'items'       => array(
-				'type' => 'integer'
-			),
-			'default'     => array()
-		);
-
-		$query_params['include'] = array(
-			'description' => __( 'Limit result set to specific IDs.' ),
-			'type'        => 'array',
-			'items'       => array(
-				'type' => 'integer'
-			),
-			'default'     => array()
-		);
-
-		$query_params['offset'] = array(
-			'description' => __( 'Offset the result set by a specific number of items.' ),
-			'type'        => 'integer'
-		);
-
-		$query_params['order'] = array(
-			'description' => __( 'Order sort attribute ascending or descending.' ),
-			'type'        => 'string',
-			'default'     => 'desc',
-			'enum'        => array( 'asc', 'desc' )
-		);
 
 		$query_params['orderby'] = array(
 			'description' => __( 'Sort collection by object attribute.' ),
@@ -420,66 +440,14 @@ class KBS_Companies_API extends KBS_API {
 		return apply_filters( "rest_{$this->post_type}_collection_params", $query_params, $post_type );
 	} // get_collection_params
 
-	/**
-	 * Checks if a company can be read.
-	 *
-	 * @since	1.5
-	 * @param	object	KBS_Company object
-	 * @return	bool	Whether the company can be read.
-	 */
-	public function check_read_permission( $company )	{
-		return kbs_can_view_customers( $this->user_id );
-	} // check_read_permission
-
-	/**
-	 * Prepares links for the request.
-	 *
-	 * @since	1.5
-	 * @param	KBS_Company	$company		KBS Company object
-	 * @return	array		Links for the given company
-	 */
-	protected function prepare_links( $company ) {
-		$base = sprintf( '%s/%s', $this->namespace . $this->version, $this->rest_base );
-
-		// Entity meta.
-		$links = array(
-			'self'       => array(
-				'href' => rest_url( trailingslashit( $base ) . $company->ID ),
-			),
-			'collection' => array(
-				'href' => rest_url( $base ),
-			)
-		);
-
-		// If we have a featured media, add that.
-		$featured_media = get_post_thumbnail_id( $company->ID );
-		if ( $featured_media ) {
-			$image_url = rest_url( 'wp/v2/media/' . $featured_media );
-
-			$links['https://api.w.org/featuredmedia'] = array(
-				'href'       => $image_url,
-				'embeddable' => true,
-			);
-		}
-
-		if ( ! empty( $company->customer ) )	{
-			$links['customer'] = array(
-				'href'       => rest_url( 'kbs/v1/customers/' . $company->customer ),
-				'embeddable' => true,
-			);
-		}
-
-		return $links;
-	} // prepare_links
-
-	/**
+    /**
 	 * Determines the allowed query_vars for a get_items() response and prepares
 	 * them for WP_Query.
 	 *
-	 * @since	1.5
-	 * @param	array			$prepared_args	Optional. Prepared WP_Query arguments. Default empty array
-	 * @param	WP_REST_Request	$request		Optional. Full details about the request
-	 * @return	array			Items query arguments.
+	 * @since  1.5
+	 * @param  array           $prepared_args  Optional. Prepared WP_Query arguments. Default empty array.
+	 * @param  WP_REST_Request $request        Optional. Full details about the request.
+	 * @return array           Items query arguments.
 	 */
 	protected function prepare_items_query( $prepared_args = array(), $request = null ) {
 		$query_args = array();
@@ -491,11 +459,12 @@ class KBS_Companies_API extends KBS_API {
 			 * The dynamic portion of the hook name, `$key`, refers to the query_var key.
 			 *
 			 * @since	1.5
-			 *
 			 * @param	string	$value	The query_var value.
 			 */
-			$query_args[ $key ] = apply_filters( "rest_query_var-{$key}", $value ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
+			$query_args[ $key ] = apply_filters( "kbs_rest_query_var-{$key}", $value ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 		}
+
+		$query_args['ignore_sticky_posts'] = true;
 
 		// Map to proper WP_Query orderby param.
 		if ( isset( $query_args['orderby'] ) && isset( $request['orderby'] ) ) {
@@ -513,5 +482,40 @@ class KBS_Companies_API extends KBS_API {
 
 		return $query_args;
 	} // prepare_items_query
+
+	/**
+	 * Checks if a company can be read.
+	 *
+	 * @since	1.5
+	 * @return	bool	Whether the company can be read.
+	 */
+	public function check_read_permission( $post )	{
+		return kbs_can_view_customers( $this->user_id );
+	} // check_read_permission
+
+	/**
+	 * Prepares links for the request.
+	 *
+	 * @since  1.5
+	 * @param  WP_Post $post   Post object.
+	 * @return array	Links for the given company
+	 */
+	protected function prepare_links( $post ) {
+        $customer = get_post_meta( $post->ID, '_kbs_company_customer', true );
+
+		if ( ! empty( $customer ) )	{
+			$links['customer'] = array(
+				'href'       => rest_url( 'kbs/v1/customers/' . $customer ),
+				'embeddable' => true
+			);
+		}
+
+		$links[ kbs_get_ticket_label_plural( true ) ] = array(
+			'href'       => rest_url( 'kbs/v1/tickets/?company=' . $post->ID ),
+			'embeddable' => true
+		);
+
+		return $links;
+	} // prepare_links
 
 } // KBS_Companies_API

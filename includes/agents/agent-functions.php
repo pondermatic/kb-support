@@ -220,7 +220,6 @@ function kbs_is_agent( $agent_id = 0 )	{
  * @return	bool	True if an agent can submit a ticket, otherwise false
  */
 function kbs_agent_can_submit( $can_submit )	{
-
 	if ( kbs_is_agent() )	{
 		$can_submit = apply_filters( 'kbs_agent_can_submit', false );
 
@@ -232,7 +231,6 @@ function kbs_agent_can_submit( $can_submit )	{
 	}
 
 	return $can_submit;
-
 } // kbs_agent_can_submit
 add_filter( 'kbs_user_can_submit', 'kbs_agent_can_submit', 999 );
 
@@ -245,7 +243,6 @@ add_filter( 'kbs_user_can_submit', 'kbs_agent_can_submit', 999 );
  * @return	bool	True if agent can view, otherwise false
  */
 function kbs_agent_can_access_ticket( $ticket = '', $agent_id = '' )	{
-
 	if ( empty( $ticket ) )	{
 		return false;
 	}
@@ -305,7 +302,6 @@ function kbs_agent_can_access_ticket( $ticket = '', $agent_id = '' )	{
 	$return = apply_filters( 'kbs_agent_can_access_ticket', $return, $ticket, $agent_id );
 
 	return (bool) $return;
-
 } // kbs_agent_can_access_ticket
 
 /**
@@ -441,34 +437,6 @@ function kbs_get_agent_departments( $agent_id )	{
 } // kbs_get_agent_departments
 
 /**
- * Log an agents online status.
- *
- * Sets a transient that tells us the agent is actively logged on.
- *
- * @since	1.0
- * @return	void
- */
-function kbs_set_agent_status()	{
-
-	if ( is_admin() && is_user_logged_in() )	{
-
-		$agent_id = get_current_user_id();
-
-		$expire   = MINUTE_IN_SECONDS * 30;
-		$expire   = apply_filters( 'kbs_agent_status_expire_time', $expire );
-		$screen   = get_current_screen();
-
-		if ( ! empty( $agent_id ) && kbs_is_agent( $agent_id ) )	{
-			$transient_key = 'kbs_active_agent_' . $agent_id;
-			set_transient( $transient_key, $screen->id, $expire );
-		}
-
-	}
-
-} // kbs_set_agent_status
-add_action( 'current_screen', 'kbs_set_agent_status' );
-
-/**
  * Retrieve an agents status.
  *
  * This function is a wrapper for the get_transient function
@@ -505,23 +473,6 @@ function kbs_agent_is_online( $agent_id )	{
 
 	return apply_filters( 'kbs_agent_is_online', $online, $agent_id );
 } // kbs_agent_is_online
-
-/**
- * Sets an agents status to offline during logoff.
- *
- * @since	1.0
- * @return	void
- */
-function kbs_set_agent_offline( $agent_id = 0 )	{
-	if ( empty( $agent_id ) )	{
-		$agent_id = get_current_user_id();
-	}
-
-	if ( kbs_is_agent( $agent_id ) )	{
-		delete_transient( 'kbs_active_agent_' . $agent_id );
-	}
-} // kbs_set_agent_offline
-add_action( 'login_form_logout', 'kbs_set_agent_offline' );
 
 /**
  * Retrieve an agents online status.
