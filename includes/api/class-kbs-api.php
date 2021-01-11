@@ -137,16 +137,6 @@ class KBS_API extends WP_REST_Controller {
 	} // prepare_date_response
 
 	/**
-	 * Log in and validate the user.
-	 *
-	 * @since	1.5
-	 * @return	bool	Whether or not the user is logged in
-	 */
-	function validate_user()	{
-		return is_user_logged_in();
-	} // validate_user
-
-	/**
 	 * Whether or not the user is authenticated.
 	 *
 	 * This method also sets the request parameters.
