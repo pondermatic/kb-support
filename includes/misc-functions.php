@@ -1175,6 +1175,19 @@ function kbs_get_current_promotions( $active_only = true )   {
             'cta'         => __( 'Shop Now!', 'kb-support' ),
             'cta_url'     => 'https://kb-support.com/extensions/',
             'description' => __( 'Save <strong>%7$s</strong> on all KB Support purchases <strong>now</strong>. Including renewals and upgrades!', 'kb-support' )
+        ),
+        'STAYSAFE' => array(
+            'name'        => __( 'Flash Sale', 'kb-support' ),
+            'campaign'    => 'covid-19-sale',
+            'image'       => 'flash-sale-header.svg',
+            'product'     => '',
+            'start'       => strtotime( '2021-01-11 00:00:00' ),
+            'finish'      => strtotime( '2021-01-31 23:59:59' ),
+            'timezone'    => 'GMT',
+            'discount'    => '30%',
+            'cta'         => __( 'Shop Now!', 'kb-support' ),
+            'cta_url'     => 'https://kb-support.com/extensions/',
+            'description' => __( 'We are supporting small businesses during the pandemic.<br>Save <strong>%7$s</strong> on all KB Support purchases <strong>now</strong>. Including renewals and upgrades!', 'kb-support' )
         )
     );
 
