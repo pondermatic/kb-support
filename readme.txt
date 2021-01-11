@@ -4,7 +4,7 @@ Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
 Tested up to: 5.6
 Requires PHP: 5.4
-Stable tag: 1.4.10
+Stable tag: 1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -125,7 +125,13 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 = 1.5 =
 
+**12th January 2021**
+
+* **New**: The KB Support REST API is here! Interact with the REST API to interact with tickets, replies, customers, companies, agents, articles, ticket categories and departments. [More info](https://kb-support.com/articles/using-the-rest-api/)
+* **New**: [Zapier extension released](https://kb-support.com/downloads/zapier/). Integrate KB Support with over 1,000 web based applications and services via [Zapier.com](https://zapier.com)
 * **Tweak**: `wpmu_new_blog` is deprecated. Now using `wp_insert_site` to run KBS install procedures when a new MU site is created and KBS is network activated
+* **Tweak**: Added additional filters to the settings API
+* **Tweak**: Spelling correction on upsell notice
 
 = 1.4.10 =
 

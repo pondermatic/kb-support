@@ -1108,39 +1108,6 @@ jQuery(document).ready(function ($) {
 	};
 	KBS_Company.init();
 
-    var KBS_Tools = {
-        init : function() {
-			this.revoke_api_key();
-			this.regenerate_api_key();
-			this.create_api_key();
-		},
-
-		revoke_api_key : function() {
-			$( document.body ).on( 'click', '.kbs-revoke-api-key', function( e ) {
-				return confirm( kbs_vars.revoke_api_key );
-			} );
-		},
-		regenerate_api_key : function() {
-			$( document.body ).on( 'click', '.kbs-regenerate-api-key', function( e ) {
-				return confirm( kbs_vars.regenerate_api_key );
-			} );
-		},
-		create_api_key : function() {
-			$( document.body).on( 'submit', '#api-key-generate-form', function( e ) {
-				var input = $( 'input[type="text"][name="user_id"]' );
-
-				input.css('border-color', '#ddd');
-
-				var user_id = input.val();
-				if ( user_id.length < 1 || 0 == user_id ) {
-					input.css('border-color', '#ff0000');
-					return false;
-				}
-			});
-		}
-    };
-    KBS_Tools.init();
-
     /**
 	 * Export screen JS
 	 */

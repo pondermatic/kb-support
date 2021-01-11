@@ -76,7 +76,7 @@ class KBS_Articles_API extends KBS_API {
 		);
 		if ( isset( $schema['properties']['password'] ) ) {
 			$get_item_args['password'] = array(
-				'description' => __( 'The password for the post if it is password protected.' ),
+				'description' => __( 'The password for the post if it is password protected.', 'kb-support' ),
 				'type'        => 'string',
 			);
 		}
@@ -87,7 +87,7 @@ class KBS_Articles_API extends KBS_API {
 			array(
 				'args'   => array(
 					'id' => array(
-						'description' => __( 'Unique identifier for the object.' ),
+						'description' => __( 'Unique identifier for the object.', 'kb-support' ),
 						'type'        => 'integer',
 					),
 				),
@@ -135,7 +135,7 @@ class KBS_Articles_API extends KBS_API {
 		if ( 'edit' === $request['context'] && $post && ! $this->check_update_permission( $post ) ) {
 			return new WP_Error(
 				'rest_forbidden_context',
-				__( 'Sorry, you are not allowed to edit this post.' ),
+				__( 'Sorry, you are not allowed to edit this post.', 'kb-support' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
@@ -145,7 +145,7 @@ class KBS_Articles_API extends KBS_API {
 			if ( ! hash_equals( $post->post_password, $request['password'] ) ) {
 				return new WP_Error(
 					'rest_post_incorrect_password',
-					__( 'Incorrect post password.' ),
+					__( 'Incorrect post password.', 'kb-support' ),
 					array( 'status' => 403 )
 				);
 			}
@@ -177,7 +177,7 @@ class KBS_Articles_API extends KBS_API {
 		if ( 'edit' === $request['context'] && ! current_user_can( $post_type->cap->edit_posts ) ) {
 			return new WP_Error(
 				'rest_forbidden_context',
-				__( 'Sorry, you are not allowed to edit posts in this post type.' ),
+				__( 'Sorry, you are not allowed to edit posts in this post type.', 'kb-support' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
@@ -221,7 +221,7 @@ class KBS_Articles_API extends KBS_API {
 		if ( ! empty( $request['orderby'] ) && 'relevance' === $request['orderby'] && empty( $request['search'] ) ) {
 			return new WP_Error(
 				'rest_no_search_term_defined',
-				__( 'You need to define a search term to order by relevance.' ),
+				__( 'You need to define a search term to order by relevance.', 'kb-support' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -230,7 +230,7 @@ class KBS_Articles_API extends KBS_API {
 		if ( ! empty( $request['orderby'] ) && 'include' === $request['orderby'] && empty( $request['include'] ) ) {
 			return new WP_Error(
 				'rest_orderby_include_missing_include',
-				__( 'You need to define an include parameter to order by include.' ),
+				__( 'You need to define an include parameter to order by include.', 'kb-support' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -410,7 +410,7 @@ class KBS_Articles_API extends KBS_API {
 		if ( $page > $max_pages && $total_posts > 0 ) {
 			return new WP_Error(
 				'rest_post_invalid_page_number',
-				__( 'The page number requested is larger than the number of pages available.' ),
+				__( 'The page number requested is larger than the number of pages available.', 'kb-support' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -816,7 +816,7 @@ class KBS_Articles_API extends KBS_API {
 		if ( 'attachment' !== $this->post_type ) {
 			$links[] = array(
 				'rel'          => 'https://api.w.org/action-publish',
-				'title'        => __( 'The current user can publish this post.' ),
+				'title'        => __( 'The current user can publish this post.', 'kb-support' ),
 				'href'         => $href,
 				'targetSchema' => array(
 					'type'       => 'object',
@@ -832,7 +832,7 @@ class KBS_Articles_API extends KBS_API {
 
 		$links[] = array(
 			'rel'          => 'https://api.w.org/action-unfiltered-html',
-			'title'        => __( 'The current user can post unfiltered HTML markup and JavaScript.' ),
+			'title'        => __( 'The current user can post unfiltered HTML markup and JavaScript.', 'kb-support' ),
 			'href'         => $href,
 			'targetSchema' => array(
 				'type'       => 'object',
@@ -849,7 +849,7 @@ class KBS_Articles_API extends KBS_API {
 		if ( post_type_supports( $this->post_type, 'author' ) ) {
 			$links[] = array(
 				'rel'          => 'https://api.w.org/action-assign-author',
-				'title'        => __( 'The current user can change the author on this post.' ),
+				'title'        => __( 'The current user can change the author on this post.', 'kb-support' ),
 				'href'         => $href,
 				'targetSchema' => array(
 					'type'       => 'object',
@@ -868,9 +868,9 @@ class KBS_Articles_API extends KBS_API {
 			$tax_base = ! empty( $tax->rest_base ) ? $tax->rest_base : $tax->name;
 
 			/* translators: %s: Taxonomy name. */
-			$assign_title = sprintf( __( 'The current user can assign terms in the %s taxonomy.' ), $tax->name );
+			$assign_title = sprintf( __( 'The current user can assign terms in the %s taxonomy.', 'kb-support' ), $tax->name );
 			/* translators: %s: Taxonomy name. */
-			$create_title = sprintf( __( 'The current user can create terms in the %s taxonomy.' ), $tax->name );
+			$create_title = sprintf( __( 'The current user can create terms in the %s taxonomy.', 'kb-support' ), $tax->name );
 
 			$links[] = array(
 				'rel'          => 'https://api.w.org/action-assign-' . $tax_base,
@@ -1251,31 +1251,31 @@ class KBS_Articles_API extends KBS_API {
 			// Base properties for every Post.
 			'properties' => array(
 				'date'         => array(
-					'description' => __( "The date the object was published, in the site's timezone." ),
+					'description' => __( "The date the object was published, in the site's timezone.", 'kb-support' ),
 					'type'        => array( 'string', 'null' ),
 					'format'      => 'date-time',
 					'context'     => array( 'view', 'edit', 'embed' ),
 				),
 				'date_gmt'     => array(
-					'description' => __( 'The date the object was published, as GMT.' ),
+					'description' => __( 'The date the object was published, as GMT.', 'kb-support' ),
 					'type'        => array( 'string', 'null' ),
 					'format'      => 'date-time',
 					'context'     => array( 'view', 'edit' ),
 				),
 				'guid'         => array(
-					'description' => __( 'The globally unique identifier for the object.' ),
+					'description' => __( 'The globally unique identifier for the object.', 'kb-support' ),
 					'type'        => 'object',
 					'context'     => array( 'view', 'edit' ),
 					'readonly'    => true,
 					'properties'  => array(
 						'raw'      => array(
-							'description' => __( 'GUID for the object, as it exists in the database.' ),
+							'description' => __( 'GUID for the object, as it exists in the database.', 'kb-support' ),
 							'type'        => 'string',
 							'context'     => array( 'edit' ),
 							'readonly'    => true,
 						),
 						'rendered' => array(
-							'description' => __( 'GUID for the object, transformed for display.' ),
+							'description' => __( 'GUID for the object, transformed for display.', 'kb-support' ),
 							'type'        => 'string',
 							'context'     => array( 'view', 'edit' ),
 							'readonly'    => true,
@@ -1283,34 +1283,34 @@ class KBS_Articles_API extends KBS_API {
 					),
 				),
 				'id'           => array(
-					'description' => __( 'Unique identifier for the object.' ),
+					'description' => __( 'Unique identifier for the object.', 'kb-support' ),
 					'type'        => 'integer',
 					'context'     => array( 'view', 'edit', 'embed' ),
 					'readonly'    => true,
 				),
 				'link'         => array(
-					'description' => __( 'URL to the object.' ),
+					'description' => __( 'URL to the object.', 'kb-support' ),
 					'type'        => 'string',
 					'format'      => 'uri',
 					'context'     => array( 'view', 'edit', 'embed' ),
 					'readonly'    => true,
 				),
 				'modified'     => array(
-					'description' => __( "The date the object was last modified, in the site's timezone." ),
+					'description' => __( "The date the object was last modified, in the site's timezone.", 'kb-support' ),
 					'type'        => 'string',
 					'format'      => 'date-time',
 					'context'     => array( 'view', 'edit' ),
 					'readonly'    => true,
 				),
 				'modified_gmt' => array(
-					'description' => __( 'The date the object was last modified, as GMT.' ),
+					'description' => __( 'The date the object was last modified, as GMT.', 'kb-support' ),
 					'type'        => 'string',
 					'format'      => 'date-time',
 					'context'     => array( 'view', 'edit' ),
 					'readonly'    => true,
 				),
 				'slug'         => array(
-					'description' => __( 'An alphanumeric identifier for the object unique to its type.' ),
+					'description' => __( 'An alphanumeric identifier for the object unique to its type.', 'kb-support' ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit', 'embed' ),
 					'arg_options' => array(
@@ -1318,19 +1318,19 @@ class KBS_Articles_API extends KBS_API {
 					),
 				),
 				'status'       => array(
-					'description' => __( 'A named status for the object.' ),
+					'description' => __( 'A named status for the object.', 'kb-support' ),
 					'type'        => 'string',
 					'enum'        => array_keys( get_post_stati( array( 'internal' => false ) ) ),
 					'context'     => array( 'view', 'edit' ),
 				),
 				'type'         => array(
-					'description' => __( 'Type of Post for the object.' ),
+					'description' => __( 'Type of Post for the object.', 'kb-support' ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit', 'embed' ),
 					'readonly'    => true,
 				),
 				'password'     => array(
-					'description' => __( 'A password to protect access to the content and excerpt.' ),
+					'description' => __( 'A password to protect access to the content and excerpt.', 'kb-support' ),
 					'type'        => 'string',
 					'context'     => array( 'edit' ),
 				),
@@ -1340,14 +1340,14 @@ class KBS_Articles_API extends KBS_API {
 		$post_type_obj = get_post_type_object( $this->post_type );
 		if ( is_post_type_viewable( $post_type_obj ) && $post_type_obj->public ) {
 			$schema['properties']['permalink_template'] = array(
-				'description' => __( 'Permalink template for the object.' ),
+				'description' => __( 'Permalink template for the object.', 'kb-support' ),
 				'type'        => 'string',
 				'context'     => array( 'edit' ),
 				'readonly'    => true,
 			);
 
 			$schema['properties']['generated_slug'] = array(
-				'description' => __( 'Slug automatically generated from the object title.' ),
+				'description' => __( 'Slug automatically generated from the object title.', 'kb-support' ),
 				'type'        => 'string',
 				'context'     => array( 'edit' ),
 				'readonly'    => true,
@@ -1356,7 +1356,7 @@ class KBS_Articles_API extends KBS_API {
 
 		if ( $post_type_obj->hierarchical ) {
 			$schema['properties']['parent'] = array(
-				'description' => __( 'The ID for the parent of the object.' ),
+				'description' => __( 'The ID for the parent of the object.', 'kb-support' ),
 				'type'        => 'integer',
 				'context'     => array( 'view', 'edit' ),
 			);
@@ -1398,7 +1398,7 @@ class KBS_Articles_API extends KBS_API {
 
 				case 'title':
 					$schema['properties']['title'] = array(
-						'description' => __( 'The title for the object.' ),
+						'description' => __( 'The title for the object.', 'kb-support' ),
 						'type'        => 'object',
 						'context'     => array( 'view', 'edit', 'embed' ),
 						'arg_options' => array(
@@ -1407,12 +1407,12 @@ class KBS_Articles_API extends KBS_API {
 						),
 						'properties'  => array(
 							'raw'      => array(
-								'description' => __( 'Title for the object, as it exists in the database.' ),
+								'description' => __( 'Title for the object, as it exists in the database.' , 'kb-support' ),
 								'type'        => 'string',
 								'context'     => array( 'edit' ),
 							),
 							'rendered' => array(
-								'description' => __( 'HTML title for the object, transformed for display.' ),
+								'description' => __( 'HTML title for the object, transformed for display.' , 'kb-support' ),
 								'type'        => 'string',
 								'context'     => array( 'view', 'edit', 'embed' ),
 								'readonly'    => true,
@@ -1423,7 +1423,7 @@ class KBS_Articles_API extends KBS_API {
 
 				case 'editor':
 					$schema['properties']['content'] = array(
-						'description' => __( 'The content for the object.' ),
+						'description' => __( 'The content for the object.', 'kb-support' ),
 						'type'        => 'object',
 						'context'     => array( 'view', 'edit' ),
 						'arg_options' => array(
@@ -1432,24 +1432,24 @@ class KBS_Articles_API extends KBS_API {
 						),
 						'properties'  => array(
 							'raw'           => array(
-								'description' => __( 'Content for the object, as it exists in the database.' ),
+								'description' => __( 'Content for the object, as it exists in the database.', 'kb-support' ),
 								'type'        => 'string',
 								'context'     => array( 'edit' ),
 							),
 							'rendered'      => array(
-								'description' => __( 'HTML content for the object, transformed for display.' ),
+								'description' => __( 'HTML content for the object, transformed for display.', 'kb-support' ),
 								'type'        => 'string',
 								'context'     => array( 'view', 'edit' ),
 								'readonly'    => true,
 							),
 							'block_version' => array(
-								'description' => __( 'Version of the content block format used by the object.' ),
+								'description' => __( 'Version of the content block format used by the object.', 'kb-support' ),
 								'type'        => 'integer',
 								'context'     => array( 'edit' ),
 								'readonly'    => true,
 							),
 							'protected'     => array(
-								'description' => __( 'Whether the content is protected with a password.' ),
+								'description' => __( 'Whether the content is protected with a password.', 'kb-support' ),
 								'type'        => 'boolean',
 								'context'     => array( 'view', 'edit', 'embed' ),
 								'readonly'    => true,
@@ -1460,7 +1460,7 @@ class KBS_Articles_API extends KBS_API {
 
 				case 'author':
 					$schema['properties']['author'] = array(
-						'description' => __( 'The ID for the author of the object.' ),
+						'description' => __( 'The ID for the author of the object.', 'kb-support' ),
 						'type'        => 'integer',
 						'context'     => array( 'view', 'edit', 'embed' ),
 					);
@@ -1468,7 +1468,7 @@ class KBS_Articles_API extends KBS_API {
 
 				case 'excerpt':
 					$schema['properties']['excerpt'] = array(
-						'description' => __( 'The excerpt for the object.' ),
+						'description' => __( 'The excerpt for the object.', 'kb-support' ),
 						'type'        => 'object',
 						'context'     => array( 'view', 'edit', 'embed' ),
 						'arg_options' => array(
@@ -1477,18 +1477,18 @@ class KBS_Articles_API extends KBS_API {
 						),
 						'properties'  => array(
 							'raw'       => array(
-								'description' => __( 'Excerpt for the object, as it exists in the database.' ),
+								'description' => __( 'Excerpt for the object, as it exists in the database.', 'kb-support' ),
 								'type'        => 'string',
 								'context'     => array( 'edit' ),
 							),
 							'rendered'  => array(
-								'description' => __( 'HTML excerpt for the object, transformed for display.' ),
+								'description' => __( 'HTML excerpt for the object, transformed for display.', 'kb-support' ),
 								'type'        => 'string',
 								'context'     => array( 'view', 'edit', 'embed' ),
 								'readonly'    => true,
 							),
 							'protected' => array(
-								'description' => __( 'Whether the excerpt is protected with a password.' ),
+								'description' => __( 'Whether the excerpt is protected with a password.', 'kb-support' ),
 								'type'        => 'boolean',
 								'context'     => array( 'view', 'edit', 'embed' ),
 								'readonly'    => true,
@@ -1499,7 +1499,7 @@ class KBS_Articles_API extends KBS_API {
 
 				case 'thumbnail':
 					$schema['properties']['featured_media'] = array(
-						'description' => __( 'The ID of the featured media for the object.' ),
+						'description' => __( 'The ID of the featured media for the object.', 'kb-support' ),
 						'type'        => 'integer',
 						'context'     => array( 'view', 'edit', 'embed' ),
 					);
@@ -1507,13 +1507,13 @@ class KBS_Articles_API extends KBS_API {
 
 				case 'comments':
 					$schema['properties']['comment_status'] = array(
-						'description' => __( 'Whether or not comments are open on the object.' ),
+						'description' => __( 'Whether or not comments are open on the object.', 'kb-support' ),
 						'type'        => 'string',
 						'enum'        => array( 'open', 'closed' ),
 						'context'     => array( 'view', 'edit' ),
 					);
 					$schema['properties']['ping_status']    = array(
-						'description' => __( 'Whether or not the object can be pinged.' ),
+						'description' => __( 'Whether or not the object can be pinged.', 'kb-support' ),
 						'type'        => 'string',
 						'enum'        => array( 'open', 'closed' ),
 						'context'     => array( 'view', 'edit' ),
@@ -1522,7 +1522,7 @@ class KBS_Articles_API extends KBS_API {
 
 				case 'page-attributes':
 					$schema['properties']['menu_order'] = array(
-						'description' => __( 'The order of the object in relation to other object of its type.' ),
+						'description' => __( 'The order of the object in relation to other object of its type.', 'kb-support' ),
 						'type'        => 'integer',
 						'context'     => array( 'view', 'edit' ),
 					);
@@ -1533,7 +1533,7 @@ class KBS_Articles_API extends KBS_API {
 					$formats = array_values( get_post_format_slugs() );
 
 					$schema['properties']['format'] = array(
-						'description' => __( 'The format for the object.' ),
+						'description' => __( 'The format for the object.', 'kb-support' ),
 						'type'        => 'string',
 						'enum'        => $formats,
 						'context'     => array( 'view', 'edit' ),
@@ -1548,7 +1548,7 @@ class KBS_Articles_API extends KBS_API {
 		}
 
 		$schema['properties']['template'] = array(
-			'description' => __( 'The theme file to use to display the object.' ),
+			'description' => __( 'The theme file to use to display the object.', 'kb-support' ),
 			'type'        => 'string',
 			'context'     => array( 'view', 'edit' ),
 			'arg_options' => array(
@@ -1567,7 +1567,7 @@ class KBS_Articles_API extends KBS_API {
 					'register_taxonomy',
 					sprintf(
 						/* translators: 1. The taxonomy name, 2. The property name, either 'rest_base' or 'name', 3. The conflicting value. */
-						__( 'The "%1$s" taxonomy "%2$s" property (%3$s) conflicts with an existing property on the REST API Posts Controller. Specify a custom "rest_base" when registering the taxonomy to avoid this error.' ),
+						__( 'The "%1$s" taxonomy "%2$s" property (%3$s) conflicts with an existing property on the REST API Posts Controller. Specify a custom "rest_base" when registering the taxonomy to avoid this error.', 'kb-support' ),
 						$taxonomy->name,
 						$taxonomy_field_name_with_conflict,
 						$base
@@ -1578,7 +1578,7 @@ class KBS_Articles_API extends KBS_API {
 
 			$schema['properties'][ $base ] = array(
 				/* translators: %s: Taxonomy name. */
-				'description' => sprintf( __( 'The terms assigned to the object in the %s taxonomy.' ), $taxonomy->name ),
+				'description' => sprintf( __( 'The terms assigned to the object in the %s taxonomy.', 'kb-support' ),$taxonomy->name ),
 				'type'        => 'array',
 				'items'       => array(
 					'type' => 'integer',
@@ -1611,7 +1611,7 @@ class KBS_Articles_API extends KBS_API {
 		// Emit a _doing_it_wrong warning if user tries to add new properties using this filter.
 		$new_fields = array_diff( array_keys( $schema['properties'] ), $schema_fields );
 		if ( count( $new_fields ) > 0 ) {
-			_doing_it_wrong( __METHOD__, __( 'Please use register_rest_field to add new schema properties.' ), '5.4.0' );
+			_doing_it_wrong( __METHOD__, __( 'Please use register_rest_field to add new schema properties.', 'kb-support' ), '5.4.0' );
 		}
 
 		$this->schema = $schema;
