@@ -46,6 +46,25 @@ function kbs_render_form_field_redirect_setting( $post )    {
 add_action( 'post_submitbox_misc_actions', 'kbs_render_form_field_redirect_setting' );
 
 /**
+ * Remove unwanted metaboxes.
+ *
+ * @since   1.5.1
+ * return   void
+ */
+function kbs_form_remove_metaboxes()    {
+    $remove_metaboxes = array(
+        'postcustom' => 'normal'
+    );
+
+    $remove_metaboxes = apply_filters( 'kbs_forms_remove_metaboxes', $remove_metaboxes );
+
+    foreach( $remove_metaboxes as $metabox => $priority )   {
+        remove_meta_box( $metabox, 'kbs_form', $priority );
+    }
+} // kbs_form_remove_metaboxes
+add_action( 'admin_head', 'kbs_form_remove_metaboxes', PHP_INT_MAX );
+
+/**
  * Define and add the metaboxes for the kbs_form post type.
  * Uses function_exists to verify the callback function exists.
  *
@@ -54,7 +73,6 @@ add_action( 'post_submitbox_misc_actions', 'kbs_render_form_field_redirect_setti
  * @return
  */
 function kbs_form_add_meta_boxes( $post )	{
-
 	add_meta_box(
 		'kbs_form_fields_mb',
 		__( 'Form Fields', 'kb-support' ),
