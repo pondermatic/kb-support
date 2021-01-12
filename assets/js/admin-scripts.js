@@ -663,9 +663,8 @@ jQuery(document).ready(function ($) {
 
 			// Send Add New Field Requests
 			$( document.body ).on( 'click', '#kbs-add-form-field', function(event) {
-				
+
 				event.preventDefault();
-				
 				if ( $('#kbs_field_label').val().length < 1 )	{
 					window.alert( kbs_vars.field_label_missing );
 					return false;
@@ -699,7 +698,7 @@ jQuery(document).ready(function ($) {
 					type             : $('#kbs_field_type').val(),
 					value            : $('#kbs_field_value').val()
 				};
-				
+
 				$.ajax({
 					type: 'POST',
 					dataType: 'json',

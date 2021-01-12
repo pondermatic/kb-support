@@ -25,6 +25,8 @@ function kbs_add_options_link() {
 
     do_action( 'kbs_menu_top' );
 
+	$customer_view_role  = kbs_get_view_customers_required_capability();
+
 	add_submenu_page(
         'edit.php?post_type=kbs_ticket',
         __( 'Companies', 'kb-support' ),
@@ -56,7 +58,6 @@ function kbs_add_options_link() {
     );
 
     do_action( 'kbs_menu' );
-
 } // kbs_add_options_link
 add_action( 'admin_menu', 'kbs_add_options_link', 20 );
 

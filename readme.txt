@@ -4,7 +4,7 @@ Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
 Tested up to: 5.6
 Requires PHP: 5.4
-Stable tag: 1.4.10
+Stable tag: 1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,7 @@ More information can be found at [https://kb-support.com/](https://kb-support.co
 * [Email Support](https://kb-support.com/downloads/email-support/) - Management of tickets via email for agents and customers. Automation via email for agents.
 * [Easy Digital Downloads Integration](https://kb-support.com/downloads/easy-digital-downloads/) - Integrate KB Support with your Easy Digital Downloads store providing a seamless support solution
 * [WooCommerce Integration](https://kb-support.com/downloads/woocommerce/) - Integrate KB Support with your WooCommerce store providing a seamless support solution
+* [Zapier](https://kb-support.com/downloads/zapier/) - Connect with thousands of 3rd party applications via [zapier.com](https://zapier.com) and fully automate your workflows.
 * [Knowledge Base Integrations](https://kb-support.com/downloads/knowledge-base-integrations/) - Fully integrate KB Support into your existing knowledge base solution
 * [Ratings & Satisfaction](https://kb-support.com/downloads/ratings-and-satisfaction/) - Enables customers and visitors to provide feedback on their support experience as well as the quality of your KB articles
 * [Reply Approvals](https://kb-support.com/downloads/reply-approvals/) - Adds an approval process to ticket replies created by selected agents forcing a four-eyed approach to ticket replies
@@ -122,6 +123,16 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.5 =
+
+**12th January 2021**
+
+* **New**: The KB Support REST API is here! Interact with the REST API to interact with tickets, replies, customers, companies, agents, articles, ticket categories and departments. [More info](https://kb-support.com/articles/using-the-rest-api/)
+* **New**: [Zapier extension released](https://kb-support.com/downloads/zapier/). Integrate KB Support with over 1,000 web based applications and services via [Zapier.com](https://zapier.com)
+* **Tweak**: `wpmu_new_blog` is deprecated. Now using `wp_insert_site` to run KBS install procedures when a new MU site is created and KBS is network activated
+* **Tweak**: Added additional filters to the settings API
+* **Tweak**: Spelling correction on upsell notice
 
 = 1.4.10 =
 

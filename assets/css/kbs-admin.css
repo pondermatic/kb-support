@@ -1095,6 +1095,19 @@ h3.kbs_popular_articles_label {
     display: block;
 }
 
+/* API Table Styles
+-------------------------------------------------------------- */
+
+.wp-list-table.apikeys input.code {
+	width: 100%;
+	font-size: 12px;
+	cursor: text;
+	background: #fff;
+	border: 1px solid #ddd;
+	box-shadow: none;
+	color: #555;
+}
+
 /* Export page styles
 -------------------------------------------------------------- */
 #kbs-graphs-date-options,

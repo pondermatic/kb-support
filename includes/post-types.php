@@ -49,19 +49,22 @@ function kbs_setup_post_types() {
 	}
 
 	$ticket_args = array(
-		'labels'             => $ticket_labels,
-		'public'             => false,
-		'publicly_queryable' => false,
-		'show_ui'            => true,
-		'show_in_menu'       => true,
-		'menu_icon'          => 'dashicons-sos',
-		'query_var'          => true,
-		'rewrite'            => false,
-		'capability_type'    => 'ticket',
-		'map_meta_cap'       => true,
-		'has_archive'        => false,
-		'hierarchical'       => false,
-		'supports'           => apply_filters( 'kbs_ticket_supports', array( 'title', 'editor' ) )
+		'labels'                => $ticket_labels,
+		'public'                => false,
+		'publicly_queryable'    => false,
+		'show_ui'               => true,
+		'show_in_menu'          => true,
+		'menu_icon'             => 'dashicons-sos',
+		'query_var'             => true,
+		'rewrite'               => false,
+		'capability_type'       => 'ticket',
+		'map_meta_cap'          => true,
+		'has_archive'           => false,
+		'hierarchical'          => false,
+		'supports'              => apply_filters( 'kbs_ticket_supports', array( 'title', 'editor' ) ),
+		'show_in_rest'          => true,
+		'rest_base'             => 'tickets',
+		'rest_controller_class' => 'KBS_Tickets_API'
 	);
 
 	register_post_type( 'kbs_ticket', apply_filters( 'kbs_ticket_post_type_args', $ticket_args ) );
@@ -86,17 +89,20 @@ function kbs_setup_post_types() {
 	}
 
 	$ticket_reply_args = array(
-		'labels'             => $ticket_reply_labels,
-		'public'             => false,
-		'show_ui'            => true,
-		'show_in_menu'       => false,
-		'rewrite'            => false,
-		'capability_type'    => 'ticket',
-		'map_meta_cap'       => true,
-		'has_archive'        => false,
-		'hierarchical'       => false,
-		'supports'           => apply_filters( 'kbs_ticket_reply_supports', array() ),
-		'can_export'         => true
+		'labels'                => $ticket_reply_labels,
+		'public'                => false,
+		'show_ui'               => true,
+		'show_in_menu'          => false,
+		'rewrite'               => false,
+		'capability_type'       => 'ticket',
+		'map_meta_cap'          => true,
+		'has_archive'           => false,
+		'hierarchical'          => false,
+		'supports'              => apply_filters( 'kbs_ticket_reply_supports', array() ),
+		'can_export'            => true,
+        'show_in_rest'          => true,
+		'rest_base'             => 'replies',
+		'rest_controller_class' => 'KBS_Replies_API'
 	);
 
 	register_post_type( 'kbs_ticket_reply', apply_filters( 'kbs_ticket_reply_post_type_args', $ticket_reply_args ) );
@@ -186,17 +192,20 @@ function kbs_setup_post_types() {
 	);
 
 	$company_args = array(
-		'labels'             => $company_labels,
-		'public'             => false,
-		'show_ui'            => true,
-		'rewrite'            => false,
-		'capability_type'    => 'customer',
-		'show_in_menu'       => false,
-		'map_meta_cap'       => true,
-		'has_archive'        => false,
-		'hierarchical'       => false,
-		'supports'           => apply_filters( 'kbs_company_supports', array( 'title', 'thumbnail' ) ),
-		'can_export'         => true
+		'labels'                => $company_labels,
+		'public'                => false,
+		'show_ui'               => true,
+		'rewrite'               => false,
+		'capability_type'       => 'customer',
+		'show_in_menu'          => false,
+		'map_meta_cap'          => true,
+		'has_archive'           => false,
+		'hierarchical'          => false,
+		'supports'              => apply_filters( 'kbs_company_supports', array( 'title', 'thumbnail', 'custom-fields' ) ),
+		'can_export'            => true,
+		'show_in_rest'          => true,
+		'rest_base'             => 'companies',
+		'rest_controller_class' => 'KBS_Companies_API'
 	);
 
 	register_post_type( 'kbs_company', apply_filters( 'kbs_ticket_company_post_type_args', $company_args ) );

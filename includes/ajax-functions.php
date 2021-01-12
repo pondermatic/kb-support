@@ -260,6 +260,8 @@ function kbs_ajax_display_ticket_replies()	{
 			'page'      => isset( $_POST['kbs_page'] ) ? (int)$_POST['kbs_page'] : null
 		);
 
+		$expand = isset( $args['page'] ) && (int)$_POST['kbs_page'] > 1 ? 0 : $expand;
+
 		$replies_query = new KBS_Replies_Query( $args );
 		$replies       = $replies_query->get_replies();
         $latest_reply  = false;

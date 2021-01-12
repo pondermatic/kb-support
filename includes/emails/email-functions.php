@@ -160,7 +160,7 @@ function kbs_email_ticket_received( $ticket_id, $admin_notice = true, $resend = 
  */
 function kbs_email_ticket_reply( $ticket_id, $reply_id ) {
 
-	if ( ! is_admin() && ! wp_doing_cron() )	{
+	if ( ! is_admin() && ! wp_doing_cron() && ! defined( 'REST_REQUEST' ) )	{
 		return;
 	}
 

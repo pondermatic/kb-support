@@ -56,7 +56,8 @@ class KBS_Knowledgebase {
 	 * @since	1.0.8
 	 */
 	public function __construct()	{
-		add_action( 'init',            array( $this, 'setup_kb' ) );
+		add_action( 'init',                   array( $this, 'setup_kb' ) );
+		add_action( 'init',                   array( $this, 'register_meta' ) );
 		add_action( 'kbs_kb_init_kb-support', array( $this, 'register_post_type' ) );
 		add_action( 'kbs_kb_init_kb-support', array( $this, 'register_taxonomies' ), 5 );
 	} // __construct
@@ -142,18 +143,21 @@ class KBS_Knowledgebase {
 		}
 
 		$article_args = array(
-			'labels'             => $article_labels,
-			'public'             => true,
-			'show_in_menu'       => true,
-			'menu_icon'          => 'dashicons-welcome-learn-more',
-			'query_var'          => true,
-			'rewrite'            => $articles_rewrite,
-			'capability_type'    => 'article',
-			'map_meta_cap'       => true,
-			'has_archive'        => $article_archives,
-			'hierarchical'       => false,
-			'supports'           => apply_filters( 'kbs_article_supports', array( 'title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'author', 'trackbacks', 'comments' ) ),
-			'can_export'         => true
+			'labels'                => $article_labels,
+			'public'                => true,
+			'show_in_menu'          => true,
+			'menu_icon'             => 'dashicons-welcome-learn-more',
+			'query_var'             => true,
+			'rewrite'               => $articles_rewrite,
+			'capability_type'       => 'article',
+			'map_meta_cap'          => true,
+			'has_archive'           => $article_archives,
+			'hierarchical'          => false,
+			'supports'              => apply_filters( 'kbs_article_supports', array( 'title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'author', 'trackbacks', 'comments', 'custom-fields' ) ),
+			'can_export'            => true,
+            'show_in_rest'          => true,
+			'rest_base'             => 'articles',
+			'rest_controller_class' => 'KBS_Articles_API'
 		);
 
 		register_post_type( 'article', $article_args );
@@ -193,7 +197,8 @@ class KBS_Knowledgebase {
 				'edit_terms'   => 'edit_article_terms',
 				'assign_terms' => 'assign_article_terms',
 				'delete_terms' => 'delete_article_terms'
-			)
+			),
+			'show_in_rest' => true
 		) );
 
 		register_taxonomy( 'article_category', array( 'article' ), $article_category_args );
@@ -226,11 +231,96 @@ class KBS_Knowledgebase {
 				'edit_terms'   => 'edit_article_terms',
 				'assign_terms' => 'assign_article_terms',
 				'delete_terms' => 'delete_article_terms'
-			)
+			),
+			'show_in_rest' => true
 		) );
 
 		register_taxonomy( 'article_tag', array( 'article' ), $article_tag_args );
 		register_taxonomy_for_object_type( 'article_tag', 'article' );
 	} // register_taxonomies
+
+	/**
+	 * Retrieve the meta keys for this post type.
+	 *
+	 * Array format: key = meta_name, value = $args (see register_meta)
+	 *
+	 * @since	1.5
+	 * @return	array	Array of meta key parameters
+	 */
+	public function get_meta_fields()	{
+		$object = get_post_type_object( $this->post_type );
+		
+		$meta_fields = array(
+			'_kbs_article_restricted' => array(
+				'type'              => 'integer',
+				'description'       => sprintf(
+					__( 'Specifies whether or not the %s is restricted to logged in users only.', 'kb-support' ),
+					kbs_get_article_label_singular( true )
+				),
+				'single'            => true,
+				'sanitize_callback' => 'absint',
+				'auth_callback'     => function() {
+					return current_user_can( "edit_{$object->name}" );
+				},
+				'show_in_rest'      => array(
+					'schema' => array(
+						'type'  => 'integer'
+					)
+				)
+			),
+			kbs_get_article_view_count_meta_key_name() => array(
+				'type'              => 'integer',
+				'description'       => sprintf(
+					__( 'Total number of all time views for this %s.', 'kb-support' ),
+					kbs_get_article_label_singular( true )
+				),
+				'single'            => true,
+				'sanitize_callback' => 'absint',
+				'auth_callback'     => function() {
+					return current_user_can( "edit_{$object->name}" );
+				},
+				'show_in_rest'      => array(
+					'schema' => array(
+						'type'  => 'integer'
+					)
+				)
+			),
+			kbs_get_article_view_count_meta_key_name( false ) => array(
+				'type'              => 'integer',
+				'description'       => sprintf(
+					__( 'Current monthly total number of times this %s has been viewed.', 'kb-support' ),
+					kbs_get_article_label_singular( true )
+				),
+				'single'            => true,
+				'sanitize_callback' => 'absint',
+				'auth_callback'     => function() {
+					return current_user_can( "edit_{$object->name}" );
+				},
+				'show_in_rest'      => array(
+					'schema' => array(
+						'type'  => 'integer'
+					)
+				)
+			)
+		);
+
+		$meta_fields = apply_filters( "kbs_{$this->post_type}_meta_fields", $meta_fields, $this->active_kb );
+
+		return $meta_fields;
+	} // get_meta_fields
+
+	/**
+	 * Register meta fields.
+	 *
+	 * @since	1.5
+	 * @return	void
+	 */
+	public function register_meta()	{
+		$fields = $this->get_meta_fields();
+
+		foreach( $fields as $key => $args )	{
+			register_post_meta( $this->post_type, $key, $args );
+		}
+	} // register_meta
 
 } // KBS_Knowledgebase

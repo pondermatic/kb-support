@@ -12,6 +12,23 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Remove block editor for kbs_ticket post type.
+ *
+ * @since	1.5
+ * @param	bool	$block_editor	Whether or not to use block editor
+ * @param	string	$post_type		Post type
+ * @return	bool	True to use block editor, or false
+ */
+function kbs_ticket_remove_block_editor( $block_editor, $post_type )	{
+	if ( 'kbs_ticket' == $post_type )	{
+		$block_editor = false;
+	}
+
+	return $block_editor;
+} // kbs_ticket_remove_block_editor
+add_filter( 'use_block_editor_for_post_type', 'kbs_ticket_remove_block_editor', 10, 2 );
+
+/**
  * Remove the post lock for tickets.
  *
  * By default this function does not run unless the

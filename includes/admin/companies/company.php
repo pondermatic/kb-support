@@ -12,6 +12,23 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Remove block editor for kbs_company.
+ *
+ * @since	1.5
+ * @param	bool	$block_editor	Whether or not to use block editor
+ * @param	string	$post_type		Post type
+ * @return	bool	True to use block editor, or false
+ */
+function kbs_company_remove_block_editor( $block_editor, $post_type )	{
+	if ( 'kbs_company' == $post_type )	{
+		$block_editor = false;
+	}
+
+	return $block_editor;
+} // kbs_company_remove_block_editor
+add_filter( 'use_block_editor_for_post_type', 'kbs_company_remove_block_editor', 10, 2 );
+
+/**
  * Define the columns that should be displayed for the Company post lists screen
  *
  * @since	1.0

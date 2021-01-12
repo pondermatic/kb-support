@@ -429,9 +429,10 @@ class KBS_DB_Customers extends KBS_DB  {
 			'offset'     => 0,
 			'user_id'    => 0,
 			'company_id' => 0,
-            'exclude_id' => 0,
+            'include_id' => 0,
+			'exclude_id' => 0,
 			'orderby'    => 'id',
-			'order'      => 'DESC',
+			'order'      => 'DESC'
 		);
 
 		$args  = wp_parse_args( $args, $defaults );
@@ -445,7 +446,6 @@ class KBS_DB_Customers extends KBS_DB  {
 
 		// Specific customers
 		if ( ! empty( $args['id'] ) ) {
-
 			if ( is_array( $args['id'] ) ) {
 				$ids = implode( ',', array_map('intval', $args['id'] ) );
 			} else {
@@ -453,12 +453,21 @@ class KBS_DB_Customers extends KBS_DB  {
 			}
 
 			$where .= " AND `id` IN( {$ids} ) ";
+		}
 
+		// Include customers
+		if ( ! empty( $args['include_id'] ) ) {
+			if ( is_array( $args['include_id'] ) ) {
+				$include_ids = implode( ',', array_map('intval', $args['include_id'] ) );
+			} else {
+				$include_ids = intval( $args['include_id'] );
+			}
+
+			$where .= " AND `id` NOT IN( {$include_ids} ) ";
 		}
 
         // Exclude customers
 		if ( ! empty( $args['exclude_id'] ) ) {
-
 			if ( is_array( $args['exclude_id'] ) ) {
 				$exclude_ids = implode( ',', array_map('intval', $args['exclude_id'] ) );
 			} else {
@@ -466,12 +475,10 @@ class KBS_DB_Customers extends KBS_DB  {
 			}
 
 			$where .= " AND `id` NOT IN( {$exclude_ids} ) ";
-
 		}
 
 		// Customers for specific user accounts
 		if ( ! empty( $args['user_id'] ) ) {
-
 			if ( is_array( $args['user_id'] ) ) {
 				$user_ids = implode( ',', array_map('intval', $args['user_id'] ) );
 			} else {
@@ -479,14 +486,11 @@ class KBS_DB_Customers extends KBS_DB  {
 			}
 
 			$where .= " AND `user_id` IN( {$user_ids} ) ";
-
 		}
 
 		// Specific customers by email
 		if ( ! empty( $args['email'] ) ) {
-
 			if ( is_array( $args['email'] ) ) {
-
 				$emails_count       = count( $args['email'] );
 				$emails_placeholder = array_fill( 0, $emails_count, '%s' );
 				$emails             = implode( ', ', $emails_placeholder );

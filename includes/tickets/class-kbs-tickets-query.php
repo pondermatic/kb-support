@@ -60,12 +60,14 @@ class KBS_Tickets_Query extends KBS_Stats {
 			'end_date'         => false,
 			'number'           => 20,
 			'page'             => null,
+			'ticket_ids'       => null,
 			'orderby'          => 'ID',
 			'order'            => 'DESC',
 			'user'             => null,
 			'customer'         => null,
 			'company'          => null,
             'agent'            => null,
+			'agents'           => null,
 			'key'              => null,
 			'status'           => kbs_get_ticket_status_keys( false ),
 			'meta_key'         => null,
@@ -121,6 +123,7 @@ class KBS_Tickets_Query extends KBS_Stats {
 		add_action( 'kbs_pre_get_tickets',  array( $this, 'month'      ) );
 		add_action( 'kbs_pre_get_tickets',  array( $this, 'per_page'   ) );
 		add_action( 'kbs_pre_get_tickets',  array( $this, 'page'       ) );
+		add_action( 'kbs_pre_get_tickets',  array( $this, 'ticket_ids' ) );
 		add_action( 'kbs_pre_get_tickets',  array( $this, 'agent'      ) );
 		add_action( 'kbs_pre_get_tickets',  array( $this, 'user'       ) );
 		add_action( 'kbs_pre_get_tickets',  array( $this, 'customer'   ) );
@@ -463,6 +466,28 @@ class KBS_Tickets_Query extends KBS_Stats {
 		}
 
 	} // search
+
+	/**
+	 * Ticket IDs
+	 *
+	 * @access	public
+	 * @since	1.5
+	 * @return	void
+	 */
+	public function ticket_ids() {
+		if ( empty( $this->args['ticket_ids'] ) ) {
+			return;
+		}
+
+		if ( ! is_array( $this->args['ticket_ids'] ) )	{
+			$this->args['ticket_ids'] = array( $this->args['ticket_ids'] );
+		}
+
+		$query = array_map( 'absint', $this->args['ticket_ids'] );
+
+		$this->__set( 'post__in', $query );
+		unset( $this->args['ticket_ids'] );
+	} // agent
 
 	/**
 	 * Agent

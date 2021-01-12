@@ -20,7 +20,12 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	void
 */
 function kbs_admin_addons_notices() {
-	add_settings_error( 'kbs-notices', 'kbs-addons-feed-error', __( 'There seems to be an issue with the server. Please try again in a few minutes.', 'kb-support' ), 'error' );
+	add_settings_error(
+		'kbs-notices',
+		'kbs-addons-feed-error',
+		__( 'There seems to be an issue with the server. Please try again in a few minutes.', 'kb-support' ), 'error'
+	);
+
 	settings_errors( 'kbs-notices' );
 } // kbs_admin_addons_notices
 
@@ -272,7 +277,7 @@ class KBS_Admin_Notices	{
             }
 
             // Customer notices
-            if ( current_user_can( apply_filters( 'kbs_view_customers_role', 'view_ticket_reports' ) ) )    {
+            if ( kbs_can_view_customers() )    {
                 switch( $_GET['kbs-message'] )  {
                     case 'customer_created':
                         $notices['updated']['kbs-customer-added'] = __( 'Customer added successfully.', 'kb-support' );
@@ -352,6 +357,26 @@ class KBS_Admin_Notices	{
                     case 'ticket-sources-updated':
                         $notices['updated']['kbs-ticket-sources-updated'] = sprintf( __( '%s sources have been successfully updated.', 'kb-support' ), $ticket_singular );
                         break;
+
+					case 'api-key-generated' :	
+						$notices['updated']['kbs-api-key-generated'] = sprintf( __( 'API keys successfully generated.', 'kb-support' ) );
+					break;
+
+					case 'api-key-exists' :	
+						$notices['error']['kbs-api-key-exists'] = sprintf( __( 'The specified user already has API keys.', 'kb-support' ) );
+					break;
+
+					case 'api-key-regenerated' :	
+						$notices['updated']['kbs-api-key-regenerated'] = sprintf( __( 'API keys successfully regenerated.', 'kb-support' ) );
+					break;
+
+					case 'api-key-revoked' :	
+						$notices['updated']['kbs-api-key-revoked'] = sprintf( __( 'API keys successfully revoked.', 'kb-support' ) );
+					break;
+
+					case 'api-key-failed' :	
+						$notices['error']['kbs-api-key-failed'] = sprintf( __( 'API key generation failed.', 'kb-support' ) );
+					break;
                 }
             }
         }
@@ -384,7 +409,7 @@ class KBS_Admin_Notices	{
         <div class="updated notice notice-kbs-dismiss is-dismissible" data-notice="first_extension_discount_advisory">
             <p>
                 <?php printf(
-                    __( 'Loving KB Support? Great! Did you know you can receive a <strong>%1$s discount</strong> on the purchase of extensions from our <a target="_blank" href="%2$s">plugin store</a> to further enhance the features and functionality? <a href="%2$s">Show Now!</a>', 'kb-support' ),
+                    __( 'Loving KB Support? Great! Did you know you can receive a <strong>%1$s discount</strong> on the purchase of extensions from our <a target="_blank" href="%2$s">plugin store</a> to further enhance the features and functionality? <a href="%2$s">Shop Now!</a>', 'kb-support' ),
                     '15%',
                     'https://kb-support.com/extensions/'
                 ); ?>

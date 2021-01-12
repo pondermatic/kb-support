@@ -14,6 +14,46 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Log an agents online status.
+ *
+ * Sets a transient that tells us the agent is actively logged on.
+ *
+ * @since	1.0
+ * @return	void
+ */
+function kbs_set_agent_status()	{
+	if ( is_admin() && is_user_logged_in() )	{
+		$agent_id = get_current_user_id();
+		$expire   = MINUTE_IN_SECONDS * 30;
+		$expire   = apply_filters( 'kbs_agent_status_expire_time', $expire );
+		$screen   = get_current_screen();
+
+		if ( ! empty( $agent_id ) && kbs_is_agent( $agent_id ) )	{
+			$transient_key = 'kbs_active_agent_' . $agent_id;
+			set_transient( $transient_key, $screen->id, $expire );
+		}
+	}
+} // kbs_set_agent_status
+add_action( 'current_screen', 'kbs_set_agent_status' );
+
+/**
+ * Sets an agents status to offline during logoff.
+ *
+ * @since	1.0
+ * @return	void
+ */
+function kbs_set_agent_offline( $agent_id = 0 )	{
+	if ( empty( $agent_id ) )	{
+		$agent_id = get_current_user_id();
+	}
+
+	if ( kbs_is_agent( $agent_id ) )	{
+		delete_transient( 'kbs_active_agent_' . $agent_id );
+	}
+} // kbs_set_agent_offline
+add_action( 'login_form_logout', 'kbs_set_agent_offline' );
+
+/**
  * Adds default values to the user meta when a new agent is added.
  *
  * @since   1.2.5
