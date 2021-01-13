@@ -327,12 +327,8 @@ class KBS_Forms_API extends KBS_API {
         $data['modified_gmt'] = $this->prepare_date_response( $post_modified_gmt );
 
         $data['status'] = $post->post_status;
-
-        $data['title'] = array();
-
-        $data['title'] = $post->post_title;
-
-        $data['meta'] = $this->meta->get_value( $post->ID, $request );
+        $data['title']  = $post->post_title;
+        $data['meta']   = $this->meta->get_value( $post->ID, $request );
 
         $data['fields'] = array();
 

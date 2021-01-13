@@ -219,7 +219,7 @@ class KBS_Form_Fields_API extends KBS_API {
         if ( ! empty( $meta_query ) )   {
             $args['meta_query'] = $meta_query;
         }
-error_log( var_export( $args, true ) );
+
 		/**
 		 * Filters the query arguments for a request.
 		 *
