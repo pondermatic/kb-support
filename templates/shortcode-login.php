@@ -23,6 +23,7 @@ if ( ! is_user_logged_in() ) : ?>
                         <input type="password" name="kbs_user_pass" class="password required kbs-input" id="kbs-user-pass" required>
                     </div>
 
+                    <?php do_action( 'kbs_login_form_fields_before_submit' ); ?>
 					<input type="hidden" name="kbs_redirect" value="<?php echo esc_url( $kbs_login_redirect ); ?>"/>
 					<input type="hidden" name="kbs_login_nonce" value="<?php echo wp_create_nonce( 'kbs-login-nonce' ); ?>"/>
 					<input type="hidden" name="kbs_action" value="user_login"/>

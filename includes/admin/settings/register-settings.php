@@ -388,6 +388,7 @@ function kbs_get_registered_settings() {
 						'name'    => sprintf( __( 'Show Count on Menu Bar?', 'kb-support' ), $single ),
 						'desc'    => sprintf( __( 'Choose an option for displaying the open %s count on the WordPress menu bar', 'kb-support' ), strtolower( $single ), $plural ),
 						'type'    => 'select',
+                        'chosen'  => true,
                         'options' => array(
                             'none'        => __( 'Do not display', 'kb-support' ),
                             'admin_front' => __( 'Both Admin and Front End', 'kb-support' ),
@@ -433,12 +434,13 @@ function kbs_get_registered_settings() {
 						'name'    => __( 'Show Register / Login Form?', 'kb-support' ),
 						'desc'    => __( 'Display the registration and login forms on the submission page for non-logged-in users.', 'kb-support' ),
 						'type'    => 'select',
+                        'chosen'  => true,
 						'std'     => 'none',
 						'options' => array(
 							'both'         => __( 'Registration and Login Forms', 'kb-support' ),
 							'registration' => __( 'Registration Form Only', 'kb-support' ),
 							'login'        => __( 'Login Form Only', 'kb-support' ),
-							'none'         => __( 'None', 'kb-support' ),
+							'none'         => __( 'None', 'kb-support' )
 						),
 					),
 					'form_submit_label' => array(
@@ -537,6 +539,7 @@ function kbs_get_registered_settings() {
 						'name'    => sprintf( __( 'Auto Assign new %s?', 'kb-support' ), $plural ),
 						'desc'    => sprintf( __( 'Select an option to automatically assign a %s to an agent when it is received', 'kb-support' ), strtolower( $single ) ),
 						'type'    => 'select',
+                        'chosen'  => true,
 						'options' => array(
 							'0'      => __( 'Do not Auto Assign', 'kb-support' ),
 							'least'  => sprintf( __( 'Least %s', 'kb-support' ), $plural ),
@@ -639,6 +642,7 @@ function kbs_get_registered_settings() {
 						'name'    => __( 'Show Register / Login Form?', 'kb-support' ),
 						'desc'    => sprintf( __( 'Display the registration and/or login forms when a non-logged-in user lands on a restricted %s.', 'kb-support' ), kbs_get_article_label_singular() ),
 						'type'    => 'select',
+                        'chosen'  => true,
 						'std'     => 'login',
 						'options' => array(
 							'both'         => __( 'Registration and Login Forms', 'kb-support' ),
@@ -739,6 +743,7 @@ function kbs_get_registered_settings() {
 						'name'    => __( 'Email Template', 'kb-support' ),
 						'desc'    => sprintf( __( 'Choose a template. Click "Save Changes" then "Preview %s Received" to see the new template.', 'kb-support' ), $single ),
 						'type'    => 'select',
+                        'chosen'  => true,
 						'options' => kbs_get_email_templates()
 					),
 					'email_logo' => array(
@@ -1023,6 +1028,7 @@ function kbs_get_registered_settings() {
                             kbs_get_ticket_label_plural( true )
                         ),
                         'type'    => 'select',
+                        'chosen'  => true,
                         'options' => array(
                             'none'      => __( 'None', 'kb-support' ),
                             'anonymize' => __( 'Anonymize', 'kb-support' ),
@@ -1155,6 +1161,7 @@ function kbs_get_registered_settings() {
 						'name'    => __( 'reCaptcha Theme', 'kb-support' ),
 						'desc'    => __( 'Select your preferred color scheme.', 'kb-support' ),
 						'type'    => 'select',
+                        'chosen'  => true,
 						'options' => array( 'dark' => __( 'Dark', 'kb-support' ), 'light' => __( 'Light', 'kb-support' ) ),
 						'std'     => 'light'
 					),
@@ -1163,6 +1170,7 @@ function kbs_get_registered_settings() {
 						'name'    => __( 'reCaptcha Type', 'kb-support' ),
 						'desc'    => __( 'Choose to render an audio reCaptcha or an image. Default is image.', 'kb-support' ),
 						'type'    => 'select',
+                        'chosen'  => true,
 						'options' => array( 'audio' => __( 'Audio', 'kb-support' ), 'image' => __( 'Image', 'kb-support' ) ),
 						'std'     => 'image'
 					),
@@ -1171,8 +1179,15 @@ function kbs_get_registered_settings() {
 						'name'    => __( 'reCaptcha Size', 'kb-support' ),
 						'desc'    => __( 'Select your preferred size for the reCaptcha.', 'kb-support' ),
 						'type'    => 'select',
+                        'chosen'  => true,
 						'options' => array( 'compact' => __( 'Compact', 'kb-support' ), 'normal' => __( 'Normal', 'kb-support' ) ),
 						'std'     => 'normal'
+					),
+                    'show_recaptcha' => array(
+						'id'      => 'show_recaptcha',
+						'name'    => __( 'reCaptcha Registration', 'kb-support' ),
+						'desc'    => __( 'Choose whether to show a reCaptcha on the <code>[kbs_register]</code> form.', 'kb-support' ),
+						'type'    => 'checkbox'
 					)
 					
 				)
@@ -1904,7 +1919,7 @@ function kbs_support_hours_callback( $args ) {
 				$html .= '</td>';
 
 				$html .= '<td>';
-					$html .= '<select name="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][open][hour]" id="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][open][hour]" />';
+					$html .= '<select name="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][open][hour]" id="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][open][hour]" class="kbs_select_chosen" />';
 						$selected = selected( $kbs_option[ $index ]['open']['hour'], '-1', false );
 						$html .= '<option value="-1"' . $selected . '>&mdash;</option>';
 						foreach( $hours as $hour )	{
@@ -1914,7 +1929,7 @@ function kbs_support_hours_callback( $args ) {
 						}
 					$html .= '</select>';
 
-					$html .= '<select name="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][open][min]" id="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][open][min]" />';
+					$html .= '<select name="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][open][min]" id="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][open][min]" class="kbs_select_chosen" />';
 						$selected = selected( $kbs_option[ $index ]['open']['min'], '-1', false );
 						$html .= '<option value="-1"' . $selected . '>&mdash;</option>';
 						foreach( $mins as $min )	{
@@ -1926,7 +1941,7 @@ function kbs_support_hours_callback( $args ) {
 				$html .= '</td>';
 
 				$html .= '<td>';
-					$html .= '<select name="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][close][hour]" id="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][close][hour]" />';
+					$html .= '<select name="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][close][hour]" id="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][close][hour]" class="kbs_select_chosen" />';
 						$selected = selected( $kbs_option[ $index ]['close']['hour'], '-1', false );
 						$html .= '<option value="-1"' . $selected . '>&mdash;</option>';
 						foreach( $hours as $hour )	{
@@ -1936,7 +1951,7 @@ function kbs_support_hours_callback( $args ) {
 						}
 					$html .= '</select>';
 
-					$html .= '<select name="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][close][min]" id="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][close][min]" />';
+					$html .= '<select name="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][close][min]" id="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][close][min]" class="kbs_select_chosen" />';
 						$selected = selected( $kbs_option[ $index ]['close']['min'], '-1', false );
 						$html .= '<option value="-1"' . $selected . '>&mdash;</option>';
 						foreach( $mins as $min )	{

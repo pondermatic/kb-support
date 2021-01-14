@@ -100,6 +100,8 @@ function kbs_process_ticket_submission()	{
 		$message = 'ticket_failed';
 	}
 
+    do_action( 'kbs_ticket_form_submitted', $ticket_id, $form_id, $posted );
+
 	wp_redirect( add_query_arg(
 		array( 'kbs_notice' => $message ),
 		$redirect

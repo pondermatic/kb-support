@@ -467,7 +467,11 @@ function kbs_get_notices( $notice = '', $notice_only = false )	{
 		'profile_updated' => array(
 			'class'  => 'success',
 			'notice' => __( 'Profile updated successfully.', 'kb-support' )
-		)
+		),
+        'recaptcha_failed' => array(
+			'class'  => 'error',
+			'notice' => __( 'reCaptcha validation failed.', 'kb-support' )
+		),
 	);
 
 	$notices = apply_filters( 'kbs_get_notices', $notices );
@@ -485,7 +489,6 @@ function kbs_get_notices( $notice = '', $notice_only = false )	{
 	}
 
 	return $notices;
-
 } // kbs_get_notices
 
 /**
@@ -1135,6 +1138,12 @@ function kbs_get_premium_extension_data()	{
 			'plugin_url'   => 'kbs-woocommerce/kbs-woocommerce.php',
 			'demo_url'     => 'https://kb-support.com/register-your-demo/?demo_ref=11c28e3c2627aabf93a2b1a6c1836fe2',
 			'purchase_url' => 'https://kb-support.com/downloads/woocommerce/'
+		),
+        'zapier' => array(
+			'name'         => 'Zapier',
+			'desc'         => __( 'Connect KB Support to thousands of 3rd party applications via zapier.com.', 'kb-support' ),
+			'plugin_url'   => 'kbs-zapier/kbs-zapier.php',
+			'purchase_url' => 'https://kb-support.com/downloads/zapier/'
 		)
 	);
 
@@ -1184,7 +1193,7 @@ function kbs_get_current_promotions( $active_only = true )   {
             'start'       => strtotime( '2021-01-11 00:00:00' ),
             'finish'      => strtotime( '2021-01-31 23:59:59' ),
             'timezone'    => 'GMT',
-            'discount'    => '30%',
+            'discount'    => '33%',
             'cta'         => __( 'Shop Now!', 'kb-support' ),
             'cta_url'     => 'https://kb-support.com/extensions/',
             'description' => __( 'We are supporting small businesses during the pandemic.<br>Save <strong>%7$s</strong> on all KB Support purchases <strong>now</strong>. Including renewals and upgrades!', 'kb-support' )

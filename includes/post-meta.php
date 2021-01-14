@@ -88,6 +88,149 @@ function kbs_get_ticket_reply_meta_fields()	{
 } // kbs_get_ticket_reply_meta_fields
 
 /**
+ * Retrieve the meta keys for forms.
+ *
+ * Array format: key = meta_name, value = $args (see register_meta)
+ *
+ * @since	1.5
+ * @return	array	Array of meta key parameters
+ */
+function kbs_get_form_meta_fields()	{
+    $object = get_post_type_object( 'kbs_form' );
+
+    $meta_fields = array(
+        '_redirect_page' => array(
+            'type'         => 'integer',
+            'description'  => __( 'Redirect page ID.', 'kb-support' ),
+            'single'       => true,
+            'default'      => 0,
+            'show_in_rest' => array(
+                'schema' => array(
+                    'type'    => 'integer',
+                    'default' => 0
+                )
+            )
+        ),
+        '_submission_count' => array(
+            'type'         => 'integer',
+            'description'  => __( 'Submission count.', 'kb-support' ),
+            'single'       => true,
+            'default'      => 0,
+            'show_in_rest' => array(
+                'schema' => array(
+                    'items' => array(
+                        'type'    => 'integer',
+                        'default' => 0
+                    )
+                )
+            )
+        )
+    );
+
+    $meta_fields = apply_filters( "kbs_kbs_form_meta_fields", $meta_fields );
+
+    return $meta_fields;
+} // kbs_get_form_meta_fields
+
+/**
+ * Retrieve the meta keys for forms fields
+ *
+ * Array format: key = meta_name, value = $args (see register_meta)
+ *
+ * @since	1.5
+ * @return	array	Array of meta key parameters
+ */
+function kbs_get_form_fields_meta_fields()	{
+    $object = get_post_type_object( 'kbs_form_field' );
+
+    $meta_fields = array(
+        '_default_field' => array(
+            'type'         => 'string',
+            'description'  => __( 'Form field settings.', 'kb-support' ),
+            'single'       => true,
+            'default'      => '',
+            'show_in_rest' => array(
+                'schema' => array(
+                    'type'    => 'string',
+                    'default' => ''
+                )
+            )
+        ),
+        '_kbs_field_settings' => array(
+            'type'         => 'object',
+            'description'  => __( 'Form field settings.', 'kb-support' ),
+            'single'       => true,
+            'default'      => array(),
+            'show_in_rest' => array(
+                'schema' => array(
+                    'type'       => 'object',
+                    'properties' => array(
+                        'blank' => array(
+                            'type' => 'boolean'
+                        ),
+                        'chosen' => array(
+                            'type' => 'boolean'
+                        ),
+                        'chosen_search' => array(
+                            'type' => 'string'
+                        ),
+                        'description' => array(
+                            'type' => 'string'
+                        ),
+                        'description_pos' => array(
+                            'type' => 'string'
+                        ),
+                        'hide_label' => array(
+                            'type' => 'boolean'
+                        ),
+                        'input_class' => array(
+                            'type' => 'string'
+                        ),
+                        'label_class' => array(
+                            'type' => 'string'
+                        ),
+                        'mapping' => array(
+                            'type' => 'string'
+                        ),
+                        'kb_search' => array(
+                            'type' => 'boolean'
+                        ),
+                        'placeholder' => array(
+                            'type' => 'string'
+                        ),
+                        'required' => array(
+                            'type' => 'boolean'
+                        ),
+                        'selected' => array(
+                            'type' => 'boolean'
+                        ),
+                        'select_multiple' => array(
+                            'type' => 'boolean'
+                        ),
+                        'select_options' => array(
+                            'type' => 'array'
+                        ),
+                        'show_logged_in' => array(
+                            'type' => 'boolean'
+                        ),
+                        'type' => array(
+                            'type' => 'string'
+                        ),
+                        'value' => array(
+                            'type' => 'string'
+                        )
+                    )
+                )
+            )
+        )
+    );
+
+    $meta_fields = apply_filters( "kbs_kbs_form_field_meta_fields", $meta_fields );
+
+    return $meta_fields;
+} // kbs_get_form_fields_meta_fields
+
+/**
  * Retrieve the meta keys for this post type.
  *
  * Array format: key = meta_name, value = $args (see register_meta)
@@ -180,13 +323,43 @@ function kbs_get_company_meta_fields()	{
  * @return	void
  */
 function kbs_register_ticket_reply_meta()    {
-    $fields = kbs_get_company_meta_fields();
+    $fields = kbs_get_ticket_reply_meta_fields();
 
     foreach( $fields as $key => $args )	{
         register_post_meta( 'kbs_ticket_reply', $key, $args );
     }
 } // kbs_register_ticket_reply_meta
 add_action( 'init', 'kbs_register_ticket_reply_meta', 11 );
+
+/**
+ * Register form meta fields.
+ *
+ * @since	1.5.1
+ * @return	void
+ */
+function kbs_register_form_meta()    {
+    $fields = kbs_get_form_meta_fields();
+
+    foreach( $fields as $key => $args )	{
+        register_post_meta( 'kbs_form', $key, $args );
+    }
+} // kbs_register_form_meta
+add_action( 'init', 'kbs_register_form_meta', 11 );
+
+/**
+ * Register form field meta fields.
+ *
+ * @since	1.5
+ * @return	void
+ */
+function kbs_register_form_field_meta()    {
+    $fields = kbs_get_form_fields_meta_fields();
+
+    foreach( $fields as $key => $args )	{
+        register_post_meta( 'kbs_form_field', $key, $args );
+    }
+} // kbs_register_form_field_meta
+add_action( 'init', 'kbs_register_form_field_meta', 11 );
 
 /**
  * Register company meta fields.

@@ -125,18 +125,21 @@ function kbs_setup_post_types() {
 	);
 
 	$form_args = array(
-		'labels'             => $form_labels,
-		'public'             => false,
-		'show_ui'            => true,
-		'show_in_menu'       => 'edit.php?post_type=kbs_ticket',
-		'menu_icon'          => 'dashicons-book-alt',
-		'rewrite'            => false,
-		'capability_type'    => 'submission_form',
-		'map_meta_cap'       => true,
-		'has_archive'        => false,
-		'hierarchical'       => false,
-		'supports'           => apply_filters( 'kbs_form_supports', array( 'title' ) ),
-		'can_export'         => true
+		'labels'                => $form_labels,
+		'public'                => false,
+		'show_ui'               => true,
+		'show_in_menu'          => 'edit.php?post_type=kbs_ticket',
+		'menu_icon'             => 'dashicons-book-alt',
+		'rewrite'               => false,
+		'capability_type'       => 'submission_form',
+		'map_meta_cap'          => true,
+		'has_archive'           => false,
+		'hierarchical'          => false,
+		'supports'              => apply_filters( 'kbs_form_supports', array( 'title', 'custom-fields' ) ),
+		'can_export'            => true,
+        'show_in_rest'          => true,
+		'rest_base'             => 'forms',
+		'rest_controller_class' => 'KBS_Forms_API'
 	);
 	
 	register_post_type( 'kbs_form', $form_args );
@@ -159,14 +162,17 @@ function kbs_setup_post_types() {
 	);
 
 	$field_args = array(
-		'labels'             => $field_labels,
-		'public'             => false,
-		'rewrite'            => false,
-		'capability_type'    => 'submission_form',
-		'has_archive'        => false,
-		'hierarchical'       => false,
-		'supports'           => array(),
-		'can_export'         => true
+		'labels'                => $field_labels,
+		'public'                => false,
+		'rewrite'               => false,
+		'capability_type'       => 'submission_form',
+		'has_archive'           => false,
+		'hierarchical'          => false,
+		'supports'              => array( 'custom-fields' ),
+		'can_export'            => true,
+        'show_in_rest'          => true,
+		'rest_base'             => 'fields',
+		'rest_controller_class' => 'KBS_Form_Fields_API'
 	);
 
 	register_post_type( 'kbs_form_field', $field_args );
