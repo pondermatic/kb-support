@@ -467,7 +467,11 @@ function kbs_get_notices( $notice = '', $notice_only = false )	{
 		'profile_updated' => array(
 			'class'  => 'success',
 			'notice' => __( 'Profile updated successfully.', 'kb-support' )
-		)
+		),
+        'recaptcha_failed' => array(
+			'class'  => 'error',
+			'notice' => __( 'reCaptcha validation failed.', 'kb-support' )
+		),
 	);
 
 	$notices = apply_filters( 'kbs_get_notices', $notices );
@@ -485,7 +489,6 @@ function kbs_get_notices( $notice = '', $notice_only = false )	{
 	}
 
 	return $notices;
-
 } // kbs_get_notices
 
 /**

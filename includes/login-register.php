@@ -78,33 +78,28 @@ function kbs_register_form( $redirect = '' ) {
  * @return void
  */
 function kbs_process_login_form()	{
-
 	if ( ! isset( $_POST['kbs_action'] ) || 'user_login' != $_POST['kbs_action'] )	{
 		return;
 	}
 
 	if ( wp_verify_nonce( $_POST['kbs_login_nonce'], 'kbs-login-nonce' ) ) {
-		$user_data = get_user_by( 'login', $_POST['kbs_user_login'] );
+        $user_data = get_user_by( 'login', $_POST['kbs_user_login'] );
 
-		if ( ! $user_data ) {
-			$user_data = get_user_by( 'email', $_POST['kbs_user_login'] );
-		}
+        if ( ! $user_data ) {
+            $user_data = get_user_by( 'email', $_POST['kbs_user_login'] );
+        }
 
-		if ( $user_data ) {
-
-			$user_ID = $user_data->ID;
-			$user_email = $user_data->user_email;
-			if ( wp_check_password( $_POST['kbs_user_pass'], $user_data->user_pass, $user_data->ID ) ) {
-				kbs_log_user_in( $user_data->ID, $_POST['kbs_user_login'], $_POST['kbs_user_pass'] );
-			} else {
-				$error = 'password_incorrect';
-			}
-
-		} else {
-
-			$error = 'username_incorrect';
-
-		}
+        if ( $user_data ) {
+            $user_ID = $user_data->ID;
+            $user_email = $user_data->user_email;
+            if ( wp_check_password( $_POST['kbs_user_pass'], $user_data->user_pass, $user_data->ID ) ) {
+                kbs_log_user_in( $user_data->ID, $_POST['kbs_user_login'], $_POST['kbs_user_pass'] );
+            } else {
+                $error = 'password_incorrect';
+            }
+        } else {
+            $error = 'username_incorrect';
+        }
 
 		if ( ! empty( $error ) )	{
 			$url = remove_query_arg( array( 'kbs_notice', 'kbs_redirect' ) );
@@ -118,7 +113,6 @@ function kbs_process_login_form()	{
 		$redirect = apply_filters( 'kbs_login_redirect', $_POST['kbs_redirect'], $user_ID );
 		wp_redirect( $redirect );
 		die();
-
 	}
 } // kbs_process_login_form
 add_action( 'init', 'kbs_process_login_form' );
@@ -133,7 +127,6 @@ add_action( 'init', 'kbs_process_login_form' );
  * @return	void
  */
 function kbs_log_user_in( $user_id, $user_login, $user_pass ) {
-
 	if ( $user_id < 1 )	{
 		return;
 	}
@@ -142,7 +135,6 @@ function kbs_log_user_in( $user_id, $user_login, $user_pass ) {
 	wp_set_current_user( $user_id, $user_login );
 	do_action( 'wp_login', $user_login, get_userdata( $user_id ) );
 	do_action( 'kbs_log_user_in', $user_id, $user_login, $user_pass );
-
 } // kbs_log_user_in
 
 
@@ -153,7 +145,6 @@ function kbs_log_user_in( $user_id, $user_login, $user_pass ) {
  * @return	void
 */
 function kbs_process_register_form() {
-
 	if ( ! isset( $_POST['kbs_action'] ) || 'user_register' != $_POST['kbs_action'] )	{
 		return;
 	}
@@ -182,7 +173,9 @@ function kbs_process_register_form() {
 		$error = 'empty_password';
 	} elseif ( ( ! empty( $_POST['kbs_user_pass'] ) && empty( $_POST['kbs_user_pass2'] ) ) || ( $_POST['kbs_user_pass'] !== $_POST['kbs_user_pass2'] ) ) {
 		$error = 'password_mismatch';
-	}
+	} elseif ( kbs_use_recaptcha_on_registration_form() && ! kbs_validate_recaptcha( $_POST['g-recaptcha-response'] ) )    {
+        $error = 'recaptcha_failed';
+    }
 
 	do_action( 'kbs_process_register_form' );
 
@@ -212,9 +205,38 @@ function kbs_process_register_form() {
 
 	wp_safe_redirect( $redirect );
 	die();
-
 } // kbs_process_register_form
 add_action( 'init', 'kbs_process_register_form' );
+
+/**
+ * Whether or not to show a recaptcha field on the registration form.
+ *
+ * @since   1.5.1
+ * @return  bool    True if the field should be displayed
+ */
+function kbs_use_recaptcha_on_registration_form()   {
+    $show_recaptcha = kbs_get_option( 'show_recaptcha', false );
+
+    return $show_recaptcha;
+} // kbs_use_recaptcha_on_registration_form
+
+/**
+ * Displays the recaptcha field on the registration form.
+ *
+ * @since   1.5.1
+ * @return  void
+ */
+function kbs_login_register_recaptcha_display()   {
+    if ( ! kbs_use_recaptcha_on_registration_form() )    {
+        return;
+    }
+
+    $field = new stdClass();
+    $field->post_name = 'kbs_recaptcha';
+
+    kbs_display_form_recaptcha_field( $field, array() );
+} // kbs_login_register_recaptcha_display
+add_action( 'kbs_register_form_fields_before_submit', 'kbs_login_register_recaptcha_display', PHP_INT_MAX );
 
 /**
  * Register And Login New User.
