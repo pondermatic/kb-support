@@ -422,7 +422,7 @@ class KBS_Form_Fields_API extends KBS_API {
         $post_type = get_post_type_object( $this->post_type );
 
         $query_params['parent'] = array(
-            'description' => __( 'Limit result set to items with particular parent IDs.' ),
+            'description' => __( 'Limit result set to items with particular parent IDs.', 'kb-support' ),
             'type'        => 'array',
             'items'       => array(
                 'type' => 'integer',
@@ -430,7 +430,7 @@ class KBS_Form_Fields_API extends KBS_API {
             'default'     => array(),
         );
         $query_params['parent_exclude'] = array(
-            'description' => __( 'Limit result set to all items except those of a particular parent ID.' ),
+            'description' => __( 'Limit result set to all items except those of a particular parent ID.', 'kb-support' ),
             'type'        => 'array',
             'items'       => array(
                 'type' => 'integer',
@@ -439,7 +439,7 @@ class KBS_Form_Fields_API extends KBS_API {
         );
 
         $query_params['slug'] = array(
-			'description'       => __( 'Limit result set to fields with one or more specific slugs.' ),
+			'description'       => __( 'Limit result set to fields with one or more specific slugs.', 'kb-support' ),
 			'type'              => 'array',
 			'items'             => array(
 				'type' => 'string',
@@ -449,7 +449,7 @@ class KBS_Form_Fields_API extends KBS_API {
 
 		$query_params['status'] = array(
 			'default'           => 'publish',
-			'description'       => __( 'Limit result set to fields assigned one or more statuses.' ),
+			'description'       => __( 'Limit result set to fields assigned one or more statuses.', 'kb-support' ),
 			'type'              => 'array',
 			'items'             => array(
 				'enum' => array_merge( array_keys( get_post_stati() ), array( 'any' ) ),
@@ -586,7 +586,7 @@ class KBS_Form_Fields_API extends KBS_API {
 			} else {
 				return new WP_Error(
 					'rest_forbidden_status',
-					__( 'Status is forbidden.' ),
+					__( 'Status is forbidden.', 'kb-support' ),
 					array( 'status' => rest_authorization_required_code() )
 				);
 			}

@@ -4,7 +4,7 @@ Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
 Tested up to: 5.6
 Requires PHP: 5.4
-Stable tag: 1.5
+Stable tag: 1.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -123,6 +123,16 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.5.1 =
+
+**15th January 2021**
+
+* **New**: Enable reCaptcha field for `[kbs_register]` registration form. Enable within Misc settings
+* **New**: Added the `/kbs/v1/forms/` REST route. [More info.](https://kb-support.com/articles/forms-rest-api-route/)
+* **New**: Added the `/kbs/v1/forms/fields` REST route. [More info.](https://kb-support.com/articles/form-fields-rest-api-route/)
+* **Tweak**: Added the `kbs_ticket_form_submitted` action
+* **Tweak**: Corrected discount amount within promo sidebar on settings pages
 
 = 1.5 =
 
