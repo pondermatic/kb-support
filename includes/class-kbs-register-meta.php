@@ -137,7 +137,7 @@ class KBS_Register_Meta {
      * @since	1.5
      * @return	array	Array of meta key parameters
      */
-    function get_kbs_ticket_reply_meta_fields()	{
+    public function get_kbs_ticket_reply_meta_fields()	{
         $object = get_post_type_object( 'kbs_ticket_reply' );
 
         $meta_fields = array(
