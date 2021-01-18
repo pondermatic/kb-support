@@ -228,7 +228,7 @@ function kb_tickets_post_column_id( $ticket_id, $kbs_ticket )	{
 	$output = sprintf( '<span class="kbs-label kbs-label-status" style="background-color: %s;"><a href="%s" title="%s">%s</a></span>',
 		kbs_get_ticket_status_colour( get_post_status_object( $kbs_ticket->post_status )->name ),
 		get_edit_post_link( $ticket_id ),
-		get_post_status_object( $kbs_ticket->post_status )->label,
+		kbs_get_post_status_label( $kbs_ticket->post_status ),
 		kbs_format_ticket_number( kbs_get_ticket_number( $ticket_id ) )
 	);
 
