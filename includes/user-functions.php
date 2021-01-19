@@ -16,6 +16,67 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /**
+ * Auto create WP User when a KBS customer is created.
+ *
+ * @since   1.5.2
+ * @param   int     $customer_id    KBS Customer ID
+ * @param   array   $args           Array of args passed to the create customer function
+ * @return  void
+ */
+function kbs_auto_create_user_from_customer( $customer_id )  {
+    if ( ! kbs_get_option( 'auto_add_user' ) || empty( $customer_id ) )    {
+        return;
+    }
+
+    $customer = new KBS_Customer( $customer_id );
+
+    if ( ! $customer || ! empty( $customer->user_id ) )    {
+        return;
+    }
+
+    $user_id     = false;
+    $update_data = array();
+
+    // Check if a user exists and link to customer if it does
+    foreach( $customer->emails as $email )  {
+        $user = get_user_by( 'email', $email );
+
+        if ( $user )    {
+            $user_id = $user->ID;
+            break;
+        }
+    }
+
+    // No user exists, create one
+    if ( ! $user_id )   {
+        $name       = explode( ' ', $customer->name );
+        $first_name = ! empty( $name[0] ) ? $name[0] : '';
+        $last_name  = ! empty( $name[1] ) ? $name[1] : '';
+
+        $user_data  = array(
+            'user_login'   => $customer->email,
+            'user_email'   => $customer->email,
+            'user_pass'    => wp_generate_password(),
+            'first_name'   => $first_name,
+            'last_name'    => $last_name,
+            'role'         => kbs_get_option( 'default_role' )
+        );
+
+        $user_id = wp_insert_user( $user_data );
+    }
+
+    // Add User ID to customer
+    if ( $user_id && ! is_wp_error( $user_id ) )    {
+        $update_data['user_id'] = (int) $user_id;
+
+        if ( $customer->update( $update_data ) )    {
+            wp_new_user_notification( $user_id, null, 'user' );
+        }
+    }
+} // kbs_auto_create_user_from_customer
+add_filter( 'kbs_customer_post_create', 'kbs_auto_create_user_from_customer' );
+
+/**
  * Registers user profile fields.
  *
  * Fields should be registered as field_name => bool (true for agent only, otherwise false for all users)

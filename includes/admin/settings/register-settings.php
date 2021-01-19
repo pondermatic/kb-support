@@ -427,7 +427,15 @@ function kbs_get_registered_settings() {
 						'name'    => __( 'Disable Guest Submissions?', 'kb-support' ),
 						'desc'    => sprintf( __( 'Require that users be logged in to submit %s.', 'kb-support' ), strtolower( $plural ) ),
 						'type'    => 'checkbox',
-						'std'     => '1'
+						'std'     => '1',
+                        'field_class' => 'logged_in_only'
+					),
+                    'auto_add_user' => array(
+						'id'      => 'auto_add_user',
+						'name'    => __( 'Auto Create User?', 'kb-support' ),
+						'desc'    => __( 'If enabled, a WP User account will automatically be created when a new support customer is created.', 'kb-support' ),
+						'type'    => 'checkbox',
+						'std'     => false
 					),
 					'show_register_form' => array(
 						'id'      => 'show_register_form',

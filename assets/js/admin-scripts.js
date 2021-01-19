@@ -66,6 +66,20 @@ jQuery(document).ready(function ($) {
 				kbs_color_picker.wpColorPicker();
 			}
 
+            if ( $( '.logged_in_only' ).length ) {
+                if ( $( '.logged_in_only' ).is( ':checked' ) )  {
+                    $( '.logged_in_only' ).closest( 'tr' ).next().hide();
+                }
+            }
+
+            $( document.body ).on( 'change', '.logged_in_only', function() {
+                if ( $(this).is( ':checked' ) ) {
+                    $(this).closest( 'tr' ).next().fadeOut( 'fast' );
+                } else {
+                    $(this).closest( 'tr' ).next().fadeIn( 'fast' );
+                }
+            });
+
 			// Settings Upload field JS
 			if ( typeof wp === 'undefined' || '1' !== kbs_vars.new_media_ui ) {
 				// Old Thickbox uploader
