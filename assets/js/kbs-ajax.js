@@ -56,7 +56,13 @@ jQuery(document).ready(function ($) {
 		}, 500 );
 	});
 
-	/* = Ticket submission form validation and submission
+	/* = reCaptcha V3
+	====================================================================================== */
+    if ( $( '#kbs_recaptcha' ).length && $( '#recaptcha-action' ).length ) {
+        kbs_recaptcha_V3();
+    }
+
+    /* = Ticket submission form validation and submission
 	====================================================================================== */
 	$(document).on('click', '#kbs_ticket_form #kbs_ticket_submit', function(e) {
 		var kbsTicketForm = document.getElementById('kbs_ticket_form');
@@ -77,8 +83,8 @@ jQuery(document).ready(function ($) {
 			tinyMCE.triggerSave();
 		}
 
-		var $form      = $('#kbs_ticket_form');
-		var ticketData = $('#kbs_ticket_form').serialize();
+        var $form      = $('#kbs_ticket_form'),
+            ticketData = $('#kbs_ticket_form').serialize();
 
 		$.ajax({
 			type       : 'POST',
@@ -213,4 +219,33 @@ function kbs_cust_read_reply(reply_id)  {
             reply_id:    reply_id
         }
     );
+}
+
+/* = reCaptcha V3
+====================================================================================== */
+function kbs_recaptcha_V3()  {
+    var recaptcha_version  = kbs_scripts.recaptcha_version,
+        recaptcha_site_key = kbs_scripts.recaptcha_site_key;
+
+    if ( 'v3' === recaptcha_version && false !== recaptcha_site_key )  {
+        grecaptcha.ready(function() {
+            grecaptcha.execute(recaptcha_site_key, {
+                action: 'submit_kbs_form'
+            }).then(function(token) {
+                jQuery('#g-recaptcha-response').val( token );
+                jQuery('#recaptcha-action').val( 'submit_kbs_form' );
+            });
+        });
+
+        setInterval(function () {
+            grecaptcha.ready(function() {
+                grecaptcha.execute(recaptcha_site_key, {
+                    action: 'submit_kbs_form'
+                }).then(function(token) {
+                    jQuery('#g-recaptcha-response').val( token );
+                    jQuery('#recaptcha-action').val( 'submit_kbs_form' );
+                });
+            });
+        }, 90 * 1000);
+    }
 }

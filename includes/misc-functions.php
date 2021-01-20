@@ -315,6 +315,16 @@ function kbs_do_honeypot_check( $data )	{
 } // kbs_do_honeypot_check
 
 /**
+ * Retrieve reCaptcha version.
+ *
+ * @since   1.5.2
+ * @return  string  reCaptcha version
+ */
+function kbs_get_recaptcha_version()    {
+    return kbs_get_option( 'recaptcha_version', 'v2' );
+} // kbs_get_recaptcha_version
+
+/**
  * Display a Notice.
  *
  * @since	1.0

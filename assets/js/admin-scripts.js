@@ -55,12 +55,12 @@ jQuery(document).ready(function ($) {
 	var KBS_Settings = {
 
 		init : function() {
-			this.general();
+            this.general();
+			this.uploads();
 		},
 
-		general : function() {
-
-			var kbs_color_picker = $('.kbs-color-picker');
+        general : function() {
+            var kbs_color_picker = $('.kbs-color-picker');
 
 			if( kbs_color_picker.length ) {
 				kbs_color_picker.wpColorPicker();
@@ -72,6 +72,14 @@ jQuery(document).ready(function ($) {
                 }
             }
 
+            if ( $( '.recaptcha_version' ).length ) {
+                if ( 'v2' !== $( '.recaptcha_version' ).val() )  {
+                    $( '.kbs_recaptcha_theme' ).closest( 'tr' ).hide();
+                    $( '.kbs_recaptcha_type' ).closest( 'tr' ).hide();
+                    $( '.kbs_recaptcha_size' ).closest( 'tr' ).hide();
+                }
+            }
+
             $( document.body ).on( 'change', '.logged_in_only', function() {
                 if ( $(this).is( ':checked' ) ) {
                     $(this).closest( 'tr' ).next().fadeOut( 'fast' );
@@ -80,6 +88,19 @@ jQuery(document).ready(function ($) {
                 }
             });
 
+            $( document.body ).on( 'change', '.recaptcha_version', function() {
+                if ( 'v2' !== $( '.recaptcha_version' ).val() )  {
+                    $( '.kbs_recaptcha_theme' ).closest( 'tr' ).fadeOut( 'fast' );
+                    $( '.kbs_recaptcha_type' ).closest( 'tr' ).fadeOut( 'fast' );
+                    $( '.kbs_recaptcha_size' ).closest( 'tr' ).fadeOut( 'fast' );
+                } else {
+                    $( '.kbs_recaptcha_theme' ).closest( 'tr' ).fadeIn( 'fast' );
+                    $( '.kbs_recaptcha_type' ).closest( 'tr' ).fadeIn( 'fast' );
+                    $( '.kbs_recaptcha_size' ).closest( 'tr' ).fadeIn( 'fast' );
+                }
+            });
+        },
+		uploads : function() {
 			// Settings Upload field JS
 			if ( typeof wp === 'undefined' || '1' !== kbs_vars.new_media_ui ) {
 				// Old Thickbox uploader
@@ -169,11 +190,8 @@ jQuery(document).ready(function ($) {
 					// Finally, open the modal
 					file_frame.open();
 				});
-
 			}
-
 		}
-
 	};
 	KBS_Settings.init();
 	

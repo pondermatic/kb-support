@@ -1228,34 +1228,49 @@ add_action( 'kbs_form_display_radio_field', 'kbs_display_form_radio_field', 10, 
  * Display a form recaptcha field
  *
  * @since	1.0
- * @param	obj			$field		Field post object
- * @param	arr			$settings	Field settings
- * @return	str			Field
+ * @param	object		$field		Field post object
+ * @param	array		$settings	Field settings
+ * @return	string		Field
  */
 function kbs_display_form_recaptcha_field( $field, $settings )	{
-
 	$site_key = kbs_get_option( 'recaptcha_site_key' );
 	$secret   = kbs_get_option( 'recaptcha_secret' );
+    $version  = kbs_get_recaptcha_version();
 
 	if ( ! $site_key || ! $secret )	{
 		return;
 	}
 
-	wp_register_script( 'google-recaptcha', '//www.google.com/recaptcha/api.js"', '', KBS_VERSION, true );
-	wp_enqueue_script( 'google-recaptcha' );
+    $script = 'https://www.google.com/recaptcha/api.js';
 
-	$output  = sprintf( '<div class="g-recaptcha" data-sitekey="%1$s" data-theme="%2$s" data-type="%3$s" data-size="%4$s"></div>',
-		$site_key,
-		kbs_get_option( 'recaptcha_theme' ),
-		kbs_get_option( 'recaptcha_type' ),
-		kbs_get_option( 'recaptcha_size' )
-	);
-	$output .= sprintf( '<input type="hidden" name="%1$s" id="%1$s" value="" />', esc_attr( $field->post_name ) );
+    if ( 'v3' === $version )    {
+        $script = add_query_arg( 'render', $site_key, $script );
 
-	$output = apply_filters( 'kbs_display_form_recaptcha_field', $output, $field, $settings );
+        $output = '<input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response" value="" />' .  "\n";
+        $output .= '<input type="hidden" name="recaptcha_action" id="recaptcha-action" value="" />' .  "\n";
+    }
 
-	echo $output;
+    wp_register_script( 'google-recaptcha', $script, '', KBS_VERSION, true );
+    wp_enqueue_script( 'google-recaptcha' );
 
+    if ( 'v2' === $version )    {
+        $output = sprintf(
+            '<div class="g-recaptcha" data-sitekey="%1$s" data-theme="%2$s" data-type="%3$s" data-size="%4$s"></div>',
+            $site_key,
+            kbs_get_option( 'recaptcha_theme' ),
+            kbs_get_option( 'recaptcha_type' ),
+            kbs_get_option( 'recaptcha_size' )
+        ) . "\n";
+    }
+
+    $output .= sprintf(
+        '<input type="hidden" name="%1$s" id="%1$s" value="" />',
+        esc_attr( $field->post_name )
+    ) . "\n";
+
+    $output = apply_filters( 'kbs_display_form_recaptcha_field', $output, $field, $settings );
+
+    echo $output;
 } // kbs_display_form_recaptcha_field
 add_action( 'kbs_form_display_recaptcha_field', 'kbs_display_form_recaptcha_field', 10, 2 );
 
@@ -1298,10 +1313,11 @@ add_action( 'kbs_form_display_file_upload_field', 'kbs_display_form_file_upload_
  * Validate reCaptcha.
  *
  * @since	1.1.12
- * @param	str		$response	reCaptcha response.
+ * @param	string		$response	reCaptcha response.
  * @return	bool    True if verified, otherwise false
  */
 function kbs_validate_recaptcha( $response )	{
+    $version   = kbs_get_recaptcha_version();
 	$post_data = http_build_query( array(
         'secret'   => kbs_get_option( 'recaptcha_secret' ),
         'response' => $response,
@@ -1319,7 +1335,13 @@ function kbs_validate_recaptcha( $response )	{
     $result   = json_decode( $response );
 
     if ( ! empty( $result ) && true == $result->success )	{
-		return $result->success;
+        $return = $result->success;
+
+        if ( 'v3' === $version )    {
+            $return = $result->action == 'submit_kbs_form' && $result->score >= 0.5;
+        }
+
+		return $return;
     }
 
     return false;
