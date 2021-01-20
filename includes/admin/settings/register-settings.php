@@ -433,7 +433,7 @@ function kbs_get_registered_settings() {
                     'auto_add_user' => array(
 						'id'      => 'auto_add_user',
 						'name'    => __( 'Auto Create User?', 'kb-support' ),
-						'desc'    => __( 'If enabled, a WP User account will automatically be created when a new support customer is created.', 'kb-support' ),
+						'desc'    => __( 'If enabled, a WP User account will automatically be created when a new support customer is added.', 'kb-support' ),
 						'type'    => 'checkbox',
 						'std'     => false
 					),
