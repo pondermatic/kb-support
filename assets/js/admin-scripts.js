@@ -68,35 +68,35 @@ jQuery(document).ready(function ($) {
 
             if ( $( '.logged_in_only' ).length ) {
                 if ( $( '.logged_in_only' ).is( ':checked' ) )  {
-                    $( '.logged_in_only' ).closest( 'tr' ).next().hide();
+                    $( '.kbs_option_auto_add_user' ).hide();
                 }
             }
 
             if ( $( '.recaptcha_version' ).length ) {
                 if ( 'v2' !== $( '.recaptcha_version' ).val() )  {
-                    $( '.kbs_recaptcha_theme' ).closest( 'tr' ).hide();
-                    $( '.kbs_recaptcha_type' ).closest( 'tr' ).hide();
-                    $( '.kbs_recaptcha_size' ).closest( 'tr' ).hide();
+                    $( '.kbs_option_recaptcha_theme' ).hide();
+                    $( '.kbs_option_recaptcha_type' ).hide();
+                    $( '.kbs_option_recaptcha_size' ).hide();
                 }
             }
 
             $( document.body ).on( 'change', '.logged_in_only', function() {
                 if ( $(this).is( ':checked' ) ) {
-                    $(this).closest( 'tr' ).next().fadeOut( 'fast' );
+                    $( '.kbs_option_auto_add_user' ).fadeOut( 'fast' );
                 } else {
-                    $(this).closest( 'tr' ).next().fadeIn( 'fast' );
+                    $( '.kbs_option_auto_add_user' ).fadeIn( 'fast' );
                 }
             });
 
             $( document.body ).on( 'change', '.recaptcha_version', function() {
                 if ( 'v2' !== $( '.recaptcha_version' ).val() )  {
-                    $( '.kbs_recaptcha_theme' ).closest( 'tr' ).fadeOut( 'fast' );
-                    $( '.kbs_recaptcha_type' ).closest( 'tr' ).fadeOut( 'fast' );
-                    $( '.kbs_recaptcha_size' ).closest( 'tr' ).fadeOut( 'fast' );
+                    $( '.kbs_option_recaptcha_theme' ).fadeOut( 'fast' );
+                    $( '.kbs_option_recaptcha_type' ).fadeOut( 'fast' );
+                    $( '.kbs_option_recaptcha_size' ).fadeOut( 'fast' );
                 } else {
-                    $( '.kbs_recaptcha_theme' ).closest( 'tr' ).fadeIn( 'fast' );
-                    $( '.kbs_recaptcha_type' ).closest( 'tr' ).fadeIn( 'fast' );
-                    $( '.kbs_recaptcha_size' ).closest( 'tr' ).fadeIn( 'fast' );
+                    $( '.kbs_option_recaptcha_theme' ).fadeIn( 'fast' );
+                    $( '.kbs_option_recaptcha_type' ).fadeIn( 'fast' );
+                    $( '.kbs_option_recaptcha_size' ).fadeIn( 'fast' );
                 }
             });
         },

@@ -186,7 +186,8 @@ function kbs_register_settings() {
 				    'faux'          => false,
 				    'tooltip_title' => false,
 				    'tooltip_desc'  => false,
-				    'field_class'   => ''
+				    'field_class'   => '',
+                    'class'         => 'kbs_option_' . str_replace( '-', '_', $option['id'] )
 				) );
 
 				add_settings_field(
@@ -423,11 +424,11 @@ function kbs_get_registered_settings() {
 						'type' => 'checkbox',
 					),
 					'logged_in_only' => array(
-						'id'      => 'logged_in_only',
-						'name'    => __( 'Disable Guest Submissions?', 'kb-support' ),
-						'desc'    => sprintf( __( 'Require that users be logged in to submit %s.', 'kb-support' ), strtolower( $plural ) ),
-						'type'    => 'checkbox',
-						'std'     => '1',
+						'id'          => 'logged_in_only',
+						'name'        => __( 'Disable Guest Submissions?', 'kb-support' ),
+						'desc'        => sprintf( __( 'Require that users be logged in to submit %s.', 'kb-support' ), strtolower( $plural ) ),
+						'type'        => 'checkbox',
+						'std'         => '1',
                         'field_class' => 'logged_in_only'
 					),
                     'auto_add_user' => array(
