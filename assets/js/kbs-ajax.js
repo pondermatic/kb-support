@@ -58,7 +58,7 @@ jQuery(document).ready(function ($) {
 
 	/* = reCaptcha V3
 	====================================================================================== */
-    if ( $( '#kbs_recaptcha' ).length && $( '#recaptcha-action' ).length ) {
+    if ( $( '#recaptcha-action' ).length ) {
         kbs_recaptcha_V3();
     }
 
