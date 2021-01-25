@@ -490,7 +490,7 @@ function kbs_get_field_types()	{
 		'hidden'                    => __( 'Hidden Field', 'kb-support' ),
 		'number'                    => __( 'Number Field', 'kb-support' ),
 		'radio'                     => __( 'Radio Buttons', 'kb-support' ),
-		'recaptcha'                 => __( 'Google reCaptcha', 'kb-support' ),
+		'recaptcha'                 => __( 'Google reCAPTCHA', 'kb-support' ),
 		'rich_editor'               => __( 'Rich Text Editor', 'kb-support' ),
 		'select'                    => __( 'Select List', 'kb-support' ),
 		'text'                      => __( 'Text Field', 'kb-support' ),
@@ -1310,10 +1310,10 @@ function kbs_display_form_file_upload_field( $field, $settings )	{
 add_action( 'kbs_form_display_file_upload_field', 'kbs_display_form_file_upload_field', 10, 2 );
 
 /**
- * Validate reCaptcha.
+ * Validate reCAPTCHA.
  *
  * @since	1.1.12
- * @param	string		$response	reCaptcha response.
+ * @param	string		$response	reCAPTCHA response.
  * @return	bool    True if verified, otherwise false
  */
 function kbs_validate_recaptcha( $response )	{

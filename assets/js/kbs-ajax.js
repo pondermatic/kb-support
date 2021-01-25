@@ -56,7 +56,7 @@ jQuery(document).ready(function ($) {
 		}, 500 );
 	});
 
-	/* = reCaptcha V3
+	/* = reCAPTCHA V3
 	====================================================================================== */
     if ( $( '#recaptcha-action' ).length ) {
         kbs_recaptcha_V3();
@@ -221,7 +221,7 @@ function kbs_cust_read_reply(reply_id)  {
     );
 }
 
-/* = reCaptcha V3
+/* = reCAPTCHA V3
 ====================================================================================== */
 function kbs_recaptcha_V3()  {
     var recaptcha_version  = kbs_scripts.recaptcha_version,
