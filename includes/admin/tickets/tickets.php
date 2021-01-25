@@ -710,9 +710,30 @@ function kbs_filter_agent_tickets( $query )	{
 		return;
 	}
 
-	$query->set( 'meta_key', '_kbs_ticket_agent_id' );
-	$query->set( 'meta_value', $_GET['agent'] );
-	$query->set( 'meta_type', 'NUMERIC' );
+    $agent_id   = absint( $_GET['agent'] );
+    $meta_query = array();
+
+    if ( ! empty( $agent_id ) ) {
+        $meta_query = array(
+            'relation' => 'OR',
+            array(
+                'key'     => '_kbs_ticket_agent_id',
+                'value'   => $agent_id,
+                'type'    => 'NUMERIC'
+            )
+        );
+
+        if ( kbs_multiple_agents() )    {
+            $meta_query['relation'] = 'OR';
+            $meta_query[] = array(
+                'key'     => '_kbs_ticket_agents',
+                'value'   => sprintf( ':%d;', $agent_id ),
+                'compare' => 'LIKE'
+            );
+        }
+
+        $query->set( 'meta_query', $meta_query );
+    }
 } // kbs_filter_agent_tickets
 add_action( 'pre_get_posts', 'kbs_filter_agent_tickets' );
 
