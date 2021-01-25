@@ -579,6 +579,27 @@ function kbs_add_ticket_filters() {
 			echo "</select>";
 		}
 
+        if ( ! kbs_get_option( 'restrict_agent_view' ) || current_user_can( 'manage_ticket_settings' ) )	{
+            $agents = kbs_get_agents();
+
+            if ( is_array( $agents ) && count( $agents ) > 0 )	{
+                echo "<select name='agent' id='agent' class='postform'>";
+                    echo "<option value='0'>" . __( 'All agents', 'kb-support' ) . "</option>";
+
+                    foreach ( $agents as $agent ) {
+                        $selected = isset( $_GET['agent'] ) && $_GET['agent'] == $agent->ID ? ' selected="selected"' : '';
+                        printf(
+                            '<option value="%d"' . $selected . '>%s (%d)</option>',
+                            esc_attr( $agent->ID ),
+                            esc_html( $agent->display_name ),
+                            kbs_agent_ticket_count( $agent->ID )
+                        );
+                    }
+
+                echo "</select>";
+            }
+        }
+
         if ( kbs_departments_enabled() )    {
             $terms = get_terms( 'department' );
             if ( is_array( $terms ) && count( $terms ) > 0 )	{
@@ -677,6 +698,23 @@ function kbs_filter_company_tickets( $query )	{
 	$query->set( 'meta_type', 'NUMERIC' );
 } // kbs_filter_customer_tickets
 add_action( 'pre_get_posts', 'kbs_filter_company_tickets' );
+
+/**
+ * Filter tickets by company.
+ *
+ * @since	1.0
+ * @return	void
+ */
+function kbs_filter_agent_tickets( $query )	{
+	if ( ! is_admin() || 'kbs_ticket' != $query->get( 'post_type' ) || ! isset( $_GET['agent'] ) )	{
+		return;
+	}
+
+	$query->set( 'meta_key', '_kbs_ticket_agent_id' );
+	$query->set( 'meta_value', $_GET['agent'] );
+	$query->set( 'meta_type', 'NUMERIC' );
+} // kbs_filter_agent_tickets
+add_action( 'pre_get_posts', 'kbs_filter_agent_tickets' );
 
 /**
  * Filter tickets by reply status.
@@ -805,6 +843,8 @@ function kbs_ticket_filter_views( $views )	{
         $args = array();
         if ( kbs_get_option( 'restrict_agent_view' ) && ! current_user_can( 'manage_ticket_settings' ) )	{
             $args['agent'] = get_current_user_id();
+        } elseif( ! empty( $_GET['agent'] ) )   {
+            $args['agent'] = absint( $_GET['agent'] );
         }
 
         $all_statuses      = array_keys( kbs_get_ticket_statuses() );
