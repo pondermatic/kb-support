@@ -4,7 +4,7 @@ Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
 Tested up to: 5.6
 Requires PHP: 5.4
-Stable tag: 1.5.1
+Stable tag: 1.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -127,7 +127,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 **26th January 2021**
 
-* **New**: Added Auto Create User? option to automatically create WP user accounts for new customers
+* **New**: Added an option within *Tickets -> Settings -> Tickets -> Submission Settings* to automatically create WP user accounts for new customers
 * **New**: Added support for Google reCAPTCHA version 3
 * **New**: Added agent filter to ticket list
 * **Fix**: Saving a page with the `[kbs_submit]` shortcode returned a JSON error within the block editor
