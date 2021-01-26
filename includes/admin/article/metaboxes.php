@@ -28,13 +28,31 @@ function kbs_article_metabox_fields() {
 } // kbs_article_metabox_fields
 
 /**
+ * Remove unwanted metaboxes.
+ *
+ * @since   1.5.1
+ * return   void
+ */
+function kbs_article_remove_metaboxes()    {
+    $remove_metaboxes = array(
+        'postcustom' => 'normal'
+    );
+
+    $remove_metaboxes = apply_filters( 'kbs_article_remove_metaboxes', $remove_metaboxes );
+
+    foreach( $remove_metaboxes as $metabox => $priority )   {
+        remove_meta_box( $metabox, 'article', $priority );
+    }
+} // kbs_form_remove_metaboxes
+add_action( 'admin_head', 'kbs_article_remove_metaboxes', PHP_INT_MAX );
+
+/**
  * Define and add the metaboxes for the article post type.
  *
  * @since	1.0
  * @return	void
  */
 function kbs_article_add_meta_boxes( $post )	{
-
 	global $kbs_article_update;
 
 	$kbs_article_update = false;
@@ -62,7 +80,6 @@ function kbs_article_add_meta_boxes( $post )	{
 		'',
 		array()
 	);
-	
 } // kbs_article_add_meta_boxes
 add_action( 'add_meta_boxes_article', 'kbs_article_add_meta_boxes' );
 

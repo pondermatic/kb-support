@@ -459,14 +459,14 @@ function kbs_settings_contextual_help() {
                     $article_plural
                 ) . '</li>' .
 			'</ul>' .
-			'<p>' . __( '<strong>Google reCaptcha</strong>', 'kb-support' ) . '<br />' .
-				sprintf( __( '<em>If you want to use a Google reCaptcha within your %1$s submission form, you\'ll need to enter the settings here.</em>', 'kb-support' ), $ticket_singular ) . '</p>' .
+			'<p>' . __( '<strong>Google reCAPTCHA</strong>', 'kb-support' ) . '<br />' .
+				sprintf( __( '<em>If you want to use a Google reCAPTCHA within your %1$s submission form, you\'ll need to enter the settings here.</em>', 'kb-support' ), $ticket_singular ) . '</p>' .
 			'<ul>' .
-				'<li>' . __( '<strong>Site Key</strong> - Enter your Google reCaptcha site key here otherwise your reCaptcha field will not work.', 'kb-support' ) . '</li>' .
-				'<li>' . __( '<strong>Secret</strong> - Enter your Google reCaptcha secret here otherwise your reCaptcha field will not work.', 'kb-support' ) . '</li>' .
-				'<li>' . __( '<strong>reCaptcha Theme</strong> - Select a theme for your reCaptcha that fits in best with your website.', 'kb-support' ) . '</li>' .
-				'<li>' . __( '<strong>reCaptcha Type</strong> - Choose between a reCaptcha image or audio.', 'kb-support' ) . '</li>' .
-				'<li>' . __( '<strong>reCaptcha Size</strong> - Select a compact or normal sized reCaptcha.', 'kb-support' ) . '</li>' .
+				'<li>' . __( '<strong>Site Key</strong> - Enter your Google reCAPTCHA site key here otherwise your reCAPTCHA field will not work.', 'kb-support' ) . '</li>' .
+				'<li>' . __( '<strong>Secret</strong> - Enter your Google reCAPTCHA secret here otherwise your reCAPTCHA field will not work.', 'kb-support' ) . '</li>' .
+				'<li>' . __( '<strong>reCAPTCHA Theme</strong> - Select a theme for your reCAPTCHA that fits in best with your website.', 'kb-support' ) . '</li>' .
+				'<li>' . __( '<strong>reCAPTCHA Type</strong> - Choose between a reCAPTCHA image or audio.', 'kb-support' ) . '</li>' .
+				'<li>' . __( '<strong>reCAPTCHA Size</strong> - Select a compact or normal sized reCAPTCHA.', 'kb-support' ) . '</li>' .
 			'</ul>'
         )
 	) );

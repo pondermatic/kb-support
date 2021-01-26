@@ -3,8 +3,8 @@
  * Plugin Name: KB Support
  * Plugin URI: https://kb-support.com/
  * Description: The ultimate ticket system, help desk and knowledge base support tool plugin for WordPress.
- * Version: 1.5.1
- * Date: 15 January 2020
+ * Version: 1.5.2
+ * Date: 26 January 2020
  * Author: KB Support Team
  * Author URI: https://kb-support.com/
  * Text Domain: kb-support
@@ -30,7 +30,7 @@
  * @package		KBS
  * @category	Core
  * @author		Mike Howard
- * @version		1.5.1
+ * @version		1.5.2
  */
 
 // Exit if accessed directly.
@@ -194,7 +194,7 @@ final class KB_Support {
 	private function setup_constants()	{
 
 		if ( ! defined( 'KBS_VERSION' ) )	{
-			define( 'KBS_VERSION', '1.5.1' );
+			define( 'KBS_VERSION', '1.5.2' );
 		}
 
 		if ( ! defined( 'KBS_PLUGIN_DIR' ) )	{
@@ -234,7 +234,6 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-cache-helper.php';
 		require_once KBS_PLUGIN_DIR . 'includes/post-types.php';
 		require_once KBS_PLUGIN_DIR . 'includes/post-taxonomies.php';
-        require_once KBS_PLUGIN_DIR . 'includes/post-meta.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-db.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-stats.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-roles.php';
@@ -242,7 +241,7 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-logging.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-license-handler.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-knowledgebase.php';
-		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-register-meta.php';
+        require_once KBS_PLUGIN_DIR . 'includes/class-kbs-register-meta.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/article-actions.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/class-kbs-article-stats.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/class-kbs-articles-query.php';

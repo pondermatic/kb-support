@@ -55,17 +55,52 @@ jQuery(document).ready(function ($) {
 	var KBS_Settings = {
 
 		init : function() {
-			this.general();
+            this.general();
+			this.uploads();
 		},
 
-		general : function() {
-
-			var kbs_color_picker = $('.kbs-color-picker');
+        general : function() {
+            var kbs_color_picker = $('.kbs-color-picker');
 
 			if( kbs_color_picker.length ) {
 				kbs_color_picker.wpColorPicker();
 			}
 
+            if ( $( '.logged_in_only' ).length ) {
+                if ( $( '.logged_in_only' ).is( ':checked' ) )  {
+                    $( '.kbs_option_auto_add_user' ).hide();
+                }
+            }
+
+            if ( $( '.recaptcha_version' ).length ) {
+                if ( 'v2' !== $( '.recaptcha_version' ).val() )  {
+                    $( '.kbs_option_recaptcha_theme' ).hide();
+                    $( '.kbs_option_recaptcha_type' ).hide();
+                    $( '.kbs_option_recaptcha_size' ).hide();
+                }
+            }
+
+            $( document.body ).on( 'change', '.logged_in_only', function() {
+                if ( $(this).is( ':checked' ) ) {
+                    $( '.kbs_option_auto_add_user' ).fadeOut( 'fast' );
+                } else {
+                    $( '.kbs_option_auto_add_user' ).fadeIn( 'fast' );
+                }
+            });
+
+            $( document.body ).on( 'change', '.recaptcha_version', function() {
+                if ( 'v2' !== $( '.recaptcha_version' ).val() )  {
+                    $( '.kbs_option_recaptcha_theme' ).fadeOut( 'fast' );
+                    $( '.kbs_option_recaptcha_type' ).fadeOut( 'fast' );
+                    $( '.kbs_option_recaptcha_size' ).fadeOut( 'fast' );
+                } else {
+                    $( '.kbs_option_recaptcha_theme' ).fadeIn( 'fast' );
+                    $( '.kbs_option_recaptcha_type' ).fadeIn( 'fast' );
+                    $( '.kbs_option_recaptcha_size' ).fadeIn( 'fast' );
+                }
+            });
+        },
+		uploads : function() {
 			// Settings Upload field JS
 			if ( typeof wp === 'undefined' || '1' !== kbs_vars.new_media_ui ) {
 				// Old Thickbox uploader
@@ -155,11 +190,8 @@ jQuery(document).ready(function ($) {
 					// Finally, open the modal
 					file_frame.open();
 				});
-
 			}
-
 		}
-
 	};
 	KBS_Settings.init();
 	

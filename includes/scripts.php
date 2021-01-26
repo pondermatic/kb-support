@@ -65,6 +65,8 @@ function kbs_load_scripts() {
         'one_option'            => __( 'Choose an option', 'kb-support' ),
 		'one_or_more_option'    => __( 'Choose one or more options', 'kb-support' ),
         'permalinks'            => get_option( 'permalink_structure' ) ? '1' : '0',
+        'recaptcha_site_key'    => kbs_get_option( 'recaptcha_site_key' ),
+        'recaptcha_version'     => kbs_get_recaptcha_version(),
         'replies_to_load'       => kbs_get_customer_replies_to_load(), 
         'reply_label'           => kbs_get_ticket_reply_label(),
         'search_placeholder'    => __( 'Search options', 'kb-support' ),
@@ -87,7 +89,6 @@ function kbs_load_scripts() {
 			'ajaxurl'               => kbs_get_ajax_url(),
 			'min_search_trigger'    => apply_filters( 'kbs_article_search_trigger_length', 3 ),
 		) ) );
-
 	}
 
 	if ( $needs_bs4 )	{

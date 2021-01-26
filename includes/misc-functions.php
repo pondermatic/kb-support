@@ -315,6 +315,16 @@ function kbs_do_honeypot_check( $data )	{
 } // kbs_do_honeypot_check
 
 /**
+ * Retrieve reCAPTCHA version.
+ *
+ * @since   1.5.2
+ * @return  string  reCAPTCHA version
+ */
+function kbs_get_recaptcha_version()    {
+    return kbs_get_option( 'recaptcha_version', 'v2' );
+} // kbs_get_recaptcha_version
+
+/**
  * Display a Notice.
  *
  * @since	1.0
@@ -470,7 +480,7 @@ function kbs_get_notices( $notice = '', $notice_only = false )	{
 		),
         'recaptcha_failed' => array(
 			'class'  => 'error',
-			'notice' => __( 'reCaptcha validation failed.', 'kb-support' )
+			'notice' => __( 'reCAPTCHA validation failed.', 'kb-support' )
 		),
 	);
 

@@ -223,10 +223,10 @@ function kbs_agent_can_submit( $can_submit )	{
 	if ( kbs_is_agent() )	{
 		$can_submit = apply_filters( 'kbs_agent_can_submit', false );
 
-		add_action( 'kbs_user_cannot_submit', function() {
+		add_filter( 'kbs_user_cannot_submit', function( $output ) {
 			ob_start();
 			echo kbs_display_notice( 'agents_cannot_submit' );
-			echo ob_get_clean();
+			return ob_get_clean();
 		} );
 	}
 

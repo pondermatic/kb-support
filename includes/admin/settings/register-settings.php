@@ -186,7 +186,8 @@ function kbs_register_settings() {
 				    'faux'          => false,
 				    'tooltip_title' => false,
 				    'tooltip_desc'  => false,
-				    'field_class'   => ''
+				    'field_class'   => '',
+                    'class'         => 'kbs_option_' . str_replace( '-', '_', $option['id'] )
 				) );
 
 				add_settings_field(
@@ -423,11 +424,19 @@ function kbs_get_registered_settings() {
 						'type' => 'checkbox',
 					),
 					'logged_in_only' => array(
-						'id'      => 'logged_in_only',
-						'name'    => __( 'Disable Guest Submissions?', 'kb-support' ),
-						'desc'    => sprintf( __( 'Require that users be logged in to submit %s.', 'kb-support' ), strtolower( $plural ) ),
+						'id'          => 'logged_in_only',
+						'name'        => __( 'Disable Guest Submissions?', 'kb-support' ),
+						'desc'        => sprintf( __( 'Require that users be logged in to submit %s.', 'kb-support' ), strtolower( $plural ) ),
+						'type'        => 'checkbox',
+						'std'         => '1',
+                        'field_class' => 'logged_in_only'
+					),
+                    'auto_add_user' => array(
+						'id'      => 'auto_add_user',
+						'name'    => __( 'Auto Create User?', 'kb-support' ),
+						'desc'    => __( 'If enabled, a WP User account will automatically be created when a new support customer is added.', 'kb-support' ),
 						'type'    => 'checkbox',
-						'std'     => '1'
+						'std'     => false
 					),
 					'show_register_form' => array(
 						'id'      => 'show_register_form',
@@ -1141,52 +1150,68 @@ function kbs_get_registered_settings() {
 				'recaptcha'     => array(
 					'recaptcha_settings' => array(
 						'id'   => 'recaptcha_settings',
-						'name' => '<h3>' . __( 'Google reCaptcha Settings', 'kb-support' ) . '</h3>',
+						'name' => '<h3>' . __( 'Google reCAPTCHA Settings', 'kb-support' ) . '</h3>',
 						'type' => 'header'
 					),
+                    'recaptcha_version' => array(
+                        'id'      => 'recaptcha_version',
+                        'name'    => __( 'reCAPTCHA Version', 'kb-support' ),
+						'desc'    => __( 'Select reCAPTCHA version. Be sure to use the correct keys for the version you select.', 'kb-support' ),
+						'type'    => 'select',
+                        'chosen'  => true,
+						'options' => array(
+                            'v2' => __( 'Version 2 Checkbox', 'kb-support' ),
+                            'v3' => __( 'Version 3', 'kb-support' )
+                        ),
+                        'field_class' => 'recaptcha_version',
+						'std'     => 'v2'
+                    ),
 					'recaptcha_site_key' => array(
 						'id'   => 'recaptcha_site_key',
 						'name' => __( 'Site Key', 'kb-support' ),
-						'desc' => sprintf( __( 'Visit <a href="%s" target="_blank">Google reCaptcha</a> to register your site and obtain your site key.', 'kb-support' ), 'https://www.google.com/recaptcha/' ),
+						'desc' => sprintf( __( 'Visit <a href="%s" target="_blank">Google reCAPTCHA</a> to register your site and obtain your site key.', 'kb-support' ), 'https://www.google.com/recaptcha/' ),
 						'type' => 'text'
 					),
 					'recaptcha_secret' => array(
 						'id'      => 'recaptcha_secret',
 						'name'    => __( 'Secret', 'kb-support' ),
-						'desc'    => sprintf( __( 'Visit <a href="%s" target="_blank">Google reCaptcha</a> to register your site and obtain your secret key.', 'kb-support' ), 'https://www.google.com/recaptcha/' ),
+						'desc'    => sprintf( __( 'Visit <a href="%s" target="_blank">Google reCAPTCHA</a> to register your site and obtain your secret key.', 'kb-support' ), 'https://www.google.com/recaptcha/' ),
 						'type'    => 'text'
 					),
 					'recaptcha_theme' => array(
-						'id'      => 'recaptcha_theme',
-						'name'    => __( 'reCaptcha Theme', 'kb-support' ),
-						'desc'    => __( 'Select your preferred color scheme.', 'kb-support' ),
-						'type'    => 'select',
-                        'chosen'  => true,
-						'options' => array( 'dark' => __( 'Dark', 'kb-support' ), 'light' => __( 'Light', 'kb-support' ) ),
-						'std'     => 'light'
+						'id'          => 'recaptcha_theme',
+						'name'        => __( 'reCAPTCHA Theme', 'kb-support' ),
+						'desc'        => __( 'Select your preferred color scheme.', 'kb-support' ),
+						'type'        => 'select',
+                        'chosen'      => true,
+						'options'     => array( 'dark' => __( 'Dark', 'kb-support' ), 'light' => __( 'Light', 'kb-support' ) ),
+                        'field_class' => 'kbs_recaptcha_theme',
+						'std'         => 'light'
 					),
 					'recaptcha_type' => array(
-						'id'      => 'recaptcha_type',
-						'name'    => __( 'reCaptcha Type', 'kb-support' ),
-						'desc'    => __( 'Choose to render an audio reCaptcha or an image. Default is image.', 'kb-support' ),
-						'type'    => 'select',
-                        'chosen'  => true,
-						'options' => array( 'audio' => __( 'Audio', 'kb-support' ), 'image' => __( 'Image', 'kb-support' ) ),
-						'std'     => 'image'
+						'id'          => 'recaptcha_type',
+						'name'        => __( 'reCAPTCHA Type', 'kb-support' ),
+						'desc'        => __( 'Choose to render an audio reCAPTCHA or an image. Default is image.', 'kb-support' ),
+						'type'        => 'select',
+                        'chosen'      => true,
+						'options'     => array( 'audio' => __( 'Audio', 'kb-support' ), 'image' => __( 'Image', 'kb-support' ) ),
+                        'field_class' => 'kbs_recaptcha_type',
+						'std'         => 'image'
 					),
 					'recaptcha_size' => array(
-						'id'      => 'recaptcha_size',
-						'name'    => __( 'reCaptcha Size', 'kb-support' ),
-						'desc'    => __( 'Select your preferred size for the reCaptcha.', 'kb-support' ),
-						'type'    => 'select',
-                        'chosen'  => true,
-						'options' => array( 'compact' => __( 'Compact', 'kb-support' ), 'normal' => __( 'Normal', 'kb-support' ) ),
-						'std'     => 'normal'
+						'id'          => 'recaptcha_size',
+						'name'        => __( 'reCAPTCHA Size', 'kb-support' ),
+						'desc'        => __( 'Select your preferred size for the reCAPTCHA.', 'kb-support' ),
+						'type'        => 'select',
+                        'chosen'      => true,
+						'options'     => array( 'compact' => __( 'Compact', 'kb-support' ), 'normal' => __( 'Normal', 'kb-support' ) ),
+                        'field_class' => 'kbs_recaptcha_size',
+						'std'         => 'normal'
 					),
                     'show_recaptcha' => array(
 						'id'      => 'show_recaptcha',
-						'name'    => __( 'reCaptcha Registration', 'kb-support' ),
-						'desc'    => __( 'Choose whether to show a reCaptcha on the <code>[kbs_register]</code> form.', 'kb-support' ),
+						'name'    => __( 'reCAPTCHA Registration', 'kb-support' ),
+						'desc'    => __( 'Choose whether to show a reCAPTCHA on the <code>[kbs_register]</code> form.', 'kb-support' ),
 						'type'    => 'checkbox'
 					)
 					
@@ -1480,7 +1505,7 @@ function kbs_get_registered_settings_sections() {
 		'licenses'   => apply_filters( 'kbs_settings_sections_licenses', array() ),
 		'misc'       => apply_filters( 'kbs_settings_sections_misc', array(
 			'main'                 => __( 'Misc Settings', 'kb-support' ),
-			'recaptcha'            => __( 'Google reCaptcha', 'kb-support' )
+			'recaptcha'            => __( 'Google reCAPTCHA', 'kb-support' )
 		) )
 	);
 

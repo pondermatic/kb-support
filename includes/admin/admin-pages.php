@@ -295,9 +295,11 @@ function kbs_is_admin_page( $passed_page = '', $passed_view = '' ) {
 			break;
 		default:
 			global $kbs_settings_page;
-			
+
 			$admin_pages = apply_filters( 'kbs_admin_pages', array( $kbs_settings_page ) );
-			if ( 'kbs_ticket' == $typenow || 'index.php' == $pagenow || 'post-new.php' == $pagenow || 'post.php' == $pagenow ) {
+            $post_types  = array( 'kbs_ticket', 'article', 'kbs_form', 'kbs_form_field', 'kbs_company' );
+
+			if ( in_array( $typenow, $post_types ) || 'index.php' == $pagenow || 'post-new.php' == $pagenow || 'post.php' == $pagenow ) {
 				$found = true;
 				if ( 'kbs-upgrades' === $page ) {
 					$found = false;

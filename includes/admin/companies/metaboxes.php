@@ -18,7 +18,6 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	arr		$fields		Array of fields.
  */
 function kbs_company_metabox_fields() {
-
 	$fields = array(
 		'_kbs_company_customer',
 		'_kbs_company_contact',
@@ -28,8 +27,26 @@ function kbs_company_metabox_fields() {
 	);
 
 	return apply_filters( 'kbs_company_metabox_fields_save', $fields );
-
 } // kbs_company_metabox_fields
+
+/**
+ * Remove unwanted metaboxes.
+ *
+ * @since   1.5.2
+ * return   void
+ */
+function kbs_company_remove_metaboxes()    {
+    $remove_metaboxes = array(
+        'postcustom' => 'normal'
+    );
+
+    $remove_metaboxes = apply_filters( 'kbs_company_remove_metaboxes', $remove_metaboxes );
+
+    foreach( $remove_metaboxes as $metabox => $priority )   {
+        remove_meta_box( $metabox, 'kbs_company', $priority );
+    }
+} // kbs_company_remove_metaboxes
+add_action( 'admin_head', 'kbs_company_remove_metaboxes', PHP_INT_MAX );
 
 /**
  * Define and add the metaboxes for the company post type.
@@ -38,7 +55,6 @@ function kbs_company_metabox_fields() {
  * @return	void
  */
 function kbs_company_add_meta_boxes( $post )	{
-
 	global $kbs_company, $kbs_company_update;
 
 	$kbs_company_update = false;
@@ -71,7 +87,6 @@ function kbs_company_add_meta_boxes( $post )	{
 			array()
 		);
 	}
-	
 } // kbs_company_add_meta_boxes
 add_action( 'add_meta_boxes_kbs_company', 'kbs_company_add_meta_boxes' );
 
