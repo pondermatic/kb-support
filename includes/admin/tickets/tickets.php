@@ -38,7 +38,6 @@ add_filter( 'use_block_editor_for_post_type', 'kbs_ticket_remove_block_editor', 
  * @return	void
  */
 function kbs_disable_ticket_post_lock()	{
-
 	/**
 	 * Allow developers to override the default setting
 	 * which is NOT to disable the post lock
@@ -55,7 +54,6 @@ function kbs_disable_ticket_post_lock()	{
 	add_filter( 'show_post_locked_dialog', '__return_false' );
 	add_filter( 'wp_check_post_lock_window', '__return_false' );
 	wp_deregister_script('heartbeat');
-
 } // kbs_disable_ticket_post_lock
 add_action( 'load-edit.php', 'kbs_disable_ticket_post_lock' );
 add_action( 'load-post.php', 'kbs_disable_ticket_post_lock' );
@@ -68,7 +66,6 @@ add_action( 'load-post.php', 'kbs_disable_ticket_post_lock' );
  * @return	arr		$columns	Filtered array of column name => label to be shown as the column header.
  */
 function kbs_set_kbs_ticket_post_columns( $columns ) {
-
 	$category_labels = kbs_get_taxonomy_labels( 'ticket_category' );
 	$tag_labels      = kbs_get_taxonomy_labels( 'ticket_tag' );
 
@@ -82,13 +79,12 @@ function kbs_set_kbs_ticket_post_columns( $columns ) {
 		'ticket_tag'       => $tag_labels['menu_name'],
         'agent'            => __( 'Agent', 'kb-support' )
     );
-	
+
 	if ( kbs_track_sla() )	{
 		$columns['sla'] = __( 'SLA Status', 'kb-support' );
 	}
-	
+
 	return apply_filters( 'kbs_ticket_post_columns', $columns );
-	
 } // kbs_set_kbs_ticket_post_columns
 add_filter( 'manage_kbs_ticket_posts_columns' , 'kbs_set_kbs_ticket_post_columns' );
 
@@ -119,7 +115,7 @@ add_filter( 'list_table_primary_column', 'kbs_filter_ticket_primary_column', 10,
 function kbs_ticket_post_sortable_columns( $sortable_columns )	{
 	$sortable_columns['id']    = 'id';
     $sortable_columns['dates'] = 'date';
-	
+
 	return $sortable_columns;
 } // kbs_ticket_post_sortable_columns
 add_filter( 'manage_edit-kbs_ticket_sortable_columns', 'kbs_ticket_post_sortable_columns' );
@@ -133,7 +129,6 @@ add_filter( 'manage_edit-kbs_ticket_sortable_columns', 'kbs_ticket_post_sortable
  * @return	str
  */
 function kbs_set_kbs_ticket_column_data( $column_name, $post_id ) {
-
 	$kbs_ticket = new KBS_Ticket( $post_id );
 
 	switch ( $column_name ) {
@@ -210,7 +205,6 @@ function kbs_set_kbs_ticket_column_data( $column_name, $post_id ) {
 			echo __( 'No callback found for post column', 'kb-support' );
 			break;
 	}
-
 } // kbs_set_kbs_ticket_column_data
 add_action( 'manage_kbs_ticket_posts_custom_column' , 'kbs_set_kbs_ticket_column_data', 10, 2 );
 
@@ -231,6 +225,14 @@ function kb_tickets_post_column_id( $ticket_id, $kbs_ticket )	{
 		kbs_get_post_status_label( $kbs_ticket->post_status ),
 		kbs_format_ticket_number( kbs_get_ticket_number( $ticket_id ) )
 	);
+
+    if ( $kbs_ticket->flagged ) {
+        $title = sprintf( __( 'This %s has been flagged.', 'kb-support' ), kbs_get_ticket_label_singular( true ) );
+        $output .= sprintf(
+            ' <span title="%s" class="dashicons dashicons-flag kbs-notice-alert"></span>',
+            $title
+        );
+    }
 
 	if ( $kbs_ticket->last_replier )	{
 		$output .= '<p>';
@@ -373,11 +375,10 @@ function kb_tickets_post_column_sla( $ticket_id, $kbs_ticket )	{
  * Order tickets.
  *
  * @since	1.0.9
- * @param	obj		$query		The WP_Query object
+ * @param	object	$query	The WP_Query object
  * @return	void
  */
 function kbs_order_admin_tickets( $query )	{
-	
 	if ( ! is_admin() || 'kbs_ticket' != $query->get( 'post_type' ) )	{
 		return;
 	}
@@ -412,7 +413,6 @@ function kbs_order_admin_tickets( $query )	{
 			$query->set( 'order',  $order );
 			break;			
 	}
-	
 } // kbs_order_admin_tickets
 add_action( 'pre_get_posts', 'kbs_order_admin_tickets' );
 
@@ -423,7 +423,6 @@ add_action( 'pre_get_posts', 'kbs_order_admin_tickets' );
  * @return	void
  */
 function kbs_restrict_agent_ticket_view( $query )	{
-
 	if ( ! is_admin() || 'kbs_ticket' != $query->get( 'post_type' ) )	{
 		return;
 	}
@@ -483,7 +482,6 @@ function kbs_restrict_agent_ticket_view( $query )	{
 
         $query->set( 'meta_query', $meta_query );
   }
-
 } // kbs_restrict_agent_ticket_view
 add_action( 'pre_get_posts', 'kbs_restrict_agent_ticket_view' );
 
@@ -498,7 +496,6 @@ add_action( 'pre_get_posts', 'kbs_restrict_agent_ticket_view' );
  * @return  object  The WP Query object
  */
 function kbs_search_ticket_list_by_id( $query ) {
-
     global $pagenow, $typenow;
 
     if ( 'edit.php' != $pagenow && 'kbs_ticket' != $typenow )   {
@@ -532,7 +529,6 @@ function kbs_search_ticket_list_by_id( $query ) {
 
     unset( $query->query_vars['s'] );
     add_filter( 'get_search_query', function() { return $_GET['s']; } );
-
 } // kbs_search_ticket_list_by_id
 add_action( 'parse_request', 'kbs_search_ticket_list_by_id' );
 
@@ -632,7 +628,7 @@ function kbs_add_ticket_filters() {
 				printf(
 					'<option value=""%s>%s</option>',
 					'' == $selected ? ' selected="selected"' : '',
-					__( 'All Reply Statuses', 'kb-support' )
+					__( 'All reply statuses', 'kb-support' )
 				);
 
 			if ( ! empty( $awaiting_agent ) )	{
@@ -664,6 +660,74 @@ function kbs_add_ticket_filters() {
 
 } // kbs_add_ticket_filters
 add_action( 'restrict_manage_posts', 'kbs_add_ticket_filters', 100 );
+
+/**
+ * Display additional actions/filters.
+ *
+ * @since   1.5.3
+ * @param   string  $which  The location of the bulk actions: 'top' or 'bottom'
+ * @return  string
+ */
+function kbs_add_additional_ticket_filters_actions( $which )    {
+    if ( 'top' !== $which ) {
+        return;
+    }
+
+    global $wpdb;
+
+    $actions = array();
+
+    if ( empty( $_GET['flagged'] ) )    {
+        $flagged = $wpdb->get_results(
+            "
+            SELECT *
+            FROM $wpdb->postmeta
+            WHERE meta_key = '_kbs_ticket_flagged'
+            LIMIT 1
+            "
+        );
+
+        if ( $flagged ) {
+            $actions[] = sprintf(
+                '<a class="button button-secondary" href="%s">%s</a>',
+                add_query_arg( 'flagged', 1 ),
+                sprintf( __( 'Filter Flagged %s', 'kb-support' ), kbs_get_ticket_label_plural() )
+            );
+        }
+    }
+
+    if ( ! empty( $actions ) )  {
+        ob_start(); ?>
+        <br class="clear">
+        <div class="alignleft kbs-ticket-list-actions">
+            <?php echo implode( '&nbsp;&#124;&nbsp;', $actions ); ?>
+        </div>
+
+        <?php echo ob_get_clean();
+    }
+} // kbs_add_additional_ticket_filters_actions
+add_action( 'manage_posts_extra_tablenav', 'kbs_add_additional_ticket_filters_actions', PHP_INT_MAX );
+
+/**
+ * Filter tickets by flag.
+ *
+ * @since	1.5.3
+ * @return	void
+ */
+function kbs_filter_flagged_tickets( $query )	{
+	if ( ! is_admin() || 'kbs_ticket' != $query->get( 'post_type' ) || ! isset( $_GET['flagged'] ) )	{
+		return;
+	}
+
+    if ( empty( $_GET['flagged'] ) )    {
+        return;
+    }
+
+	$query->set( 'meta_key', '_kbs_ticket_flagged' );
+	$query->set( 'meta_value', 1 );
+	$query->set( 'meta_type', 'NUMERIC' );
+} // kbs_filter_flagged_tickets
+add_action( 'pre_get_posts', 'kbs_filter_flagged_tickets' );
 
 /**
  * Filter tickets by customer.
@@ -710,30 +774,9 @@ function kbs_filter_agent_tickets( $query )	{
 		return;
 	}
 
-    $agent_id   = absint( $_GET['agent'] );
-    $meta_query = array();
-
-    if ( ! empty( $agent_id ) ) {
-        $meta_query = array(
-            'relation' => 'OR',
-            array(
-                'key'     => '_kbs_ticket_agent_id',
-                'value'   => $agent_id,
-                'type'    => 'NUMERIC'
-            )
-        );
-
-        if ( kbs_multiple_agents() )    {
-            $meta_query['relation'] = 'OR';
-            $meta_query[] = array(
-                'key'     => '_kbs_ticket_agents',
-                'value'   => sprintf( ':%d;', $agent_id ),
-                'compare' => 'LIKE'
-            );
-        }
-
-        $query->set( 'meta_query', $meta_query );
-    }
+	$query->set( 'meta_key', '_kbs_ticket_agent_id' );
+	$query->set( 'meta_value', $_GET['agent'] );
+	$query->set( 'meta_type', 'NUMERIC' );
 } // kbs_filter_agent_tickets
 add_action( 'pre_get_posts', 'kbs_filter_agent_tickets' );
 
@@ -828,7 +871,6 @@ add_action( 'pre_get_posts', 'kbs_remove_inactive_tickets' );
  * @return	arr		$views		Filtered Array of views
  */
 function kbs_ticket_filter_views( $views )	{
-
 	$active_only = kbs_get_option( 'hide_closed' );
     $span_string = '<span class="kbs-label kbs-label-status" style="background-color: %s;">';
     $all_colour  = kbs_get_ticket_status_colour( 'all', true );
@@ -860,7 +902,6 @@ function kbs_ticket_filter_views( $views )	{
             $views[ $status ] = $span . $views[ $status ] . '</span>';
         }
     } else  {
-
         $args = array();
         if ( kbs_get_option( 'restrict_agent_view' ) && ! current_user_can( 'manage_ticket_settings' ) )	{
             $args['agent'] = get_current_user_id();
@@ -912,7 +953,6 @@ function kbs_ticket_filter_views( $views )	{
 
         // Return the All view to the front
         $views = array( 'all' => $views['all'] ) + $views;
-
     }
 
 	if ( isset( $views['closed'] ) )	{

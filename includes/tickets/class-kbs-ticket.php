@@ -187,6 +187,14 @@ class KBS_Ticket {
 	 */
 	protected $closed_date = false;
 
+    /**
+	 * Whether or not a ticket is flagged
+	 *
+	 * @since	1.5.3
+	 * @var		bool
+	 */
+	protected $flagged = false;
+
 	/**
 	 * The customer ID associated with the ticket
 	 *
@@ -440,7 +448,6 @@ class KBS_Ticket {
 	 * @return	bool	True if the setup was successful
 	 */
 	private function setup_ticket( $ticket_id ) {
-
 		$this->pending = array();
 
 		if ( empty( $ticket_id ) ) {
@@ -476,6 +483,7 @@ class KBS_Ticket {
 		$this->status          = $ticket->post_status;
 		$this->post_status     = $this->status;
         $this->source          = $this->get_source();
+        $this->flagged         = $this->setup_flagged_status();
 
 		$this->status_nicename = kbs_get_post_status_label( $this->status );
 
@@ -561,6 +569,7 @@ class KBS_Ticket {
 			'sla_resolve'       => $this->sla_resolve,
 			'status'            => $this->status,
 			'source'            => $this->source,
+            'flagged'           => $this->flagged,
             'submission_origin' => $this->submission_origin,
 			'privacy_accepted'  => $this->privacy_accepted,
 			'terms_agree'       => $this->terms_agreed,
@@ -581,7 +590,6 @@ class KBS_Ticket {
 		$ticket_id = wp_insert_post( $args );
 
 		if ( ! empty( $ticket_id ) ) {
-
 			$this->ID  = $ticket_id;
 			$this->_ID = $ticket_id;
 
@@ -625,7 +633,6 @@ class KBS_Ticket {
 				}
 
 				$customer->create( $customer_data );
-
 			}
 
 			$this->customer_id            = $customer->id;
@@ -661,6 +668,10 @@ class KBS_Ticket {
 
 			if ( ! empty( $this->source ) )	{
 				$this->pending['source'] = $this->source;
+			}
+
+            if ( ! empty( $this->flagged ) )	{
+				$this->pending['flagged'] = $this->flagged;
 			}
 
 			if ( ! empty( $this->ticket_category ) )	{
@@ -829,6 +840,10 @@ class KBS_Ticket {
 					case 'first_name':
 						$this->user_info['first_name'] = $this->first_name;
 						break;
+
+                    case 'flagged':
+                        $this->update_meta( '_kbs_ticket_flagged', $value );
+                        break;
 
 					case 'form_data':
 						foreach( $this->form_data as $form_key => $form_value )	{
@@ -1105,9 +1120,7 @@ class KBS_Ticket {
 	 * @return mixed	The value from the post meta
 	 */
 	public function get_meta( $meta_key = '_ticket_data', $single = true ) {
-
 		$meta = get_post_meta( $this->ID, $meta_key, $single );
-
 		$meta = apply_filters( 'kbs_get_ticket_meta_' . $meta_key, $meta, $this->ID );
 
 		return apply_filters( 'kbs_get_ticket_meta', $meta, $this->ID, $meta_key );
@@ -1128,7 +1141,6 @@ class KBS_Ticket {
 		}
 
 		if ( 'key' == $meta_key || 'date' == $meta_key ) {
-
 			$current_meta = $this->get_meta();
 
 			if ( empty( $current_meta ) )	{
@@ -1141,7 +1153,6 @@ class KBS_Ticket {
 			$meta_value   = $current_meta;
 
 		} elseif ( $meta_key == 'email' || $meta_key == '_kbs_ticket_user_email' ) {
-
 			$meta_value = apply_filters( 'kbs_update_ticket_meta_' . $meta_key, $meta_value, $this->ID );
 			update_post_meta( $this->ID, '_kbs_ticket_user_email', $meta_value );
 
@@ -1545,6 +1556,30 @@ class KBS_Ticket {
 		return $this->participants;
 	} // add_participants
 
+    /**
+     * Updates the flagged status for a ticket.
+     *
+     * @since   1.5.3
+     * @param   bool    $flagged    Whether or not the ticket should be flagged
+     * @param   int     $user_id    ID of user setting flag status
+     * @return  bool    Whether or not the ticket is flagged
+     */
+    public function set_flagged_status( $flagged = false, $user_id = 0 ) {
+        $flagged = (bool) $flagged;
+        $user_id = ! empty( $user_id ) ? $user_id : get_current_user_id();
+        $updated = $this->update_meta( '_kbs_ticket_flagged', $flagged );
+
+        if ( $flagged && $updated ) {
+            $this->update_meta( '_kbs_ticket_flagged_by', $user_id );
+        } else  {
+            $this->update_meta( '_kbs_ticket_flagged_by', '' );
+        }
+
+        $this->flagged = (bool) $this->setup_flagged_status();
+
+        return $this->flagged;
+    } // set_flagged_status
+
 	/**
 	 * Removes participants from the ticket.
 	 *
@@ -1661,6 +1696,20 @@ class KBS_Ticket {
 
 		return $number;
 	} // setup_ticket_number
+
+    /**
+     * Setup flagged status.
+     *
+     * @since   1.5.3
+     * @param   int|object  $ticket Ticket ID or a KBS_Ticket object
+     * @return  bool        True if flagged, or false
+     */
+    private function setup_flagged_status()    {
+        $status = $this->get_meta( '_kbs_ticket_flagged' );
+        $status = ! empty( $status ) ? true : false;
+
+        return $status;
+    } // setup_flagged_status
 
 	/**
 	 * Setup the SLA target data for the ticket
@@ -1919,7 +1968,6 @@ class KBS_Ticket {
 	 * @return	int|false	The reply ID on success, or false on failure
 	 */
 	public function add_reply( $reply_data = array() ) {
-
 		// Return if no reply data
 		if ( empty( $reply_data ) || empty( $reply_data['response'] ) || empty( $reply_data['ticket_id'] ) )	{
 			return false;
@@ -2024,7 +2072,6 @@ class KBS_Ticket {
 		do_action( 'kbs_reply_to_ticket', $this->ID, $reply_id, $reply_data, $this );
 
 		return $reply_id;
-
 	} // add_reply
 
 	/**

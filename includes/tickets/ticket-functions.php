@@ -72,7 +72,6 @@ function kbs_get_ticket( $id_or_object )	{
  * @return	obj|false	The post object if found, otherwise false 
  */
 function kbs_get_ticket_by( $field, $value )	{
-
 	if ( 'id' == $field )	{
 		$field = 'ID';
 	}
@@ -142,6 +141,29 @@ function kbs_get_ticket_category_options()	{
 
 	return $options;
 } // kbs_get_ticket_category_options
+
+/**
+ * Whether or not a ticket is flagged.
+ *
+ * @since   1.5.3
+ * @param   int|object  $ticket Ticket ID or a KBS_Ticket object
+ * @return  bool        True if flagged, or false
+ */
+function kbs_is_ticket_flagged( $ticket )   {
+    if ( is_numeric( $ticket ) ) {
+		$ticket = new KBS_Ticket( $ticket );
+
+		if ( ! $ticket->ID > 0 ) {
+			return false;
+		}
+	}
+
+	if ( ! is_object( $ticket ) ) {
+		return false;
+	}
+
+    return $ticket->flagged;
+} // kbs_is_ticket_flagged
 
 /*
  * Retrieve ticket orderby options.
