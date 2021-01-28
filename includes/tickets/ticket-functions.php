@@ -35,7 +35,6 @@ function kbs_use_sequential_ticket_numbers()	{
  * @return	obj		$tickets	Tickets retrieved from the database
  */
 function kbs_get_tickets( $args = array() ) {
-
 	// Fallback to post objects to ensure backwards compatibility
 	if( ! isset( $args['output'] ) ) {
 		$args['output'] = 'posts';
@@ -43,6 +42,7 @@ function kbs_get_tickets( $args = array() ) {
 
 	$args    = apply_filters( 'kbs_get_tickets_args', $args );
 	$tickets = new KBS_Tickets_Query( $args );
+
 	return $tickets->get_tickets();
 } // kbs_get_tickets
 
@@ -627,10 +627,15 @@ function kbs_get_ticket_log_sources()	{
  * @return	mixed	Ticket ID on success, false on failure.
  */
 function kbs_add_ticket( $ticket_data )	{
-
 	if ( ! empty( $ticket_data['attachments'] ) && ! is_array( $ticket_data['attachments'] ) )	{
 		$ticket_data['attachments'] = array( $ticket_data['attachments'] );
 	}
+
+    /**
+     * Remove action that triggers agent assignment email for existing tickets.
+     *
+     */
+    remove_action( 'kbs_update_ticket_meta_key', 'kbs_trigger_agent_assigned_email', 999, 4 );
 
 	$ticket_data = apply_filters( 'kbs_add_ticket_data', $ticket_data );
 	$attachments = apply_filters( 'kbs_add_ticket_attachments', $ticket_data['attachments'] );
@@ -700,7 +705,6 @@ function kbs_add_ticket( $ticket_data )	{
 
 	// Return false if no ticket was inserted
 	return false;
-
 } // kbs_add_ticket
 
 /**
@@ -747,7 +751,6 @@ function kbs_add_ticket_from_form( $form_id, $form_data )	{
 	);
 
 	foreach( $fields as $field )	{
-
 		$settings = $kbs_form->get_field_settings( $field->ID );
 
 		if ( 'file_upload' == $settings['type'] && ! empty( $_FILES[ $field->post_name ] ) )	{
@@ -760,7 +763,6 @@ function kbs_add_ticket_from_form( $form_id, $form_data )	{
 		}
 
 		if ( ! empty( $settings['mapping'] ) )	{
-
 			switch( $settings['mapping'] )	{
 				case 'customer_email':
 					$ticket_data['user_info']['email']            = strtolower( $form_data[ $field->post_name ] );
@@ -791,19 +793,15 @@ function kbs_add_ticket_from_form( $form_id, $form_data )	{
 					$ticket_data[ $settings['mapping'] ]          = $form_data[ $field->post_name ];
 					break;
 			}
-
 		} else	{
-
 			$ticket_data[ $field->post_name ] = array( $field->post_title, strip_tags( addslashes( $form_data[ $field->post_name ] ) ) );
 		
 			$data[] = '<strong>' . $field->post_title . '</strong><br />' . $form_data[ $field->post_name ];
-
 		}
 	}
 
 	$ticket_data = apply_filters( 'kbs_add_ticket_from_form_data', $ticket_data, $form_id, $form_data );
-
-	$ticket_id = kbs_add_ticket( $ticket_data );
+	$ticket_id   = kbs_add_ticket( $ticket_data );
 
 	if ( $ticket_id )	{
 		$kbs_form->increment_submissions();
@@ -811,7 +809,6 @@ function kbs_add_ticket_from_form( $form_id, $form_data )	{
 	}
 
 	return false;
-
 } // kbs_add_ticket_from_form
 
 /**

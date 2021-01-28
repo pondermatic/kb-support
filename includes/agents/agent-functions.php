@@ -402,7 +402,6 @@ function kbs_auto_assign_agent( $ticket_data )	{
 	}
 
 	return $ticket_data;
-
 } // kbs_auto_assign_agent
 add_filter( 'kbs_add_ticket_data', 'kbs_auto_assign_agent' );
 

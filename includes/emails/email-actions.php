@@ -49,7 +49,30 @@ add_action( 'kbs_add_ticket',  'kbs_trigger_ticket_received', 999, 1 );
 add_action( 'kbs_save_ticket', 'kbs_trigger_ticket_received', 999, 1 );
 
 /**
- * Trigger the agent assigned email
+ * Trigger the agent assigned email for new tickets.
+ *
+ * @since   1.5.3
+ * @param   int     $ticket_id  The ticket ID
+ * @param   object  $ticket     KBS_Ticket object
+ * @return  void
+ */
+function kbs_trigger_new_ticket_agent_assigned_email( $ticket_id )    {
+    $ticket = new KBS_Ticket( $ticket_id );
+
+    if ( ! empty( $ticket->agent_id ) ) {
+        kbs_email_agent_assigned_to_ticket( $ticket_id, $ticket->agent_id, 0 );
+    }
+
+    if ( ! empty( $ticket->agents ) )   {
+        foreach( $ticket->agents as $agent_id ) {
+            kbs_email_agent_assigned_to_ticket( $ticket_id, $agent_id, 0 );
+        }
+    }
+} // kbs_trigger_new_ticket_agent_assigned_email
+add_action( 'kbs_add_ticket', 'kbs_trigger_new_ticket_agent_assigned_email', PHP_INT_MAX );
+
+/**
+ * Trigger the agent assigned email for existing tickets.
  *
  * @since   1.1
  * @param   str     $meta_key   The meta key being updated

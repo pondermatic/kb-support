@@ -115,6 +115,14 @@ class KBS_Ticket {
 	 */
 	protected $agents = array();
 
+    /**
+     * Whether or not an agent was assigned during save
+     *
+     * @since   1.5.3
+     * @var     bool
+     */
+    public $new_agent = false;
+
 	/**
 	 * The ID of the department to which the ticket is assigned
 	 *
@@ -520,7 +528,6 @@ class KBS_Ticket {
 		do_action( 'kbs_setup_ticket', $this, $ticket_id );
 								
 		return true;
-
 	} // setup_ticket
 
 	/**
@@ -775,6 +782,7 @@ class KBS_Ticket {
 						$result = $this->update_meta( '_kbs_ticket_agent_id', $this->agent_id );
 
                         if ( $result )  {
+                            $this->new_agent = true;
                             /**
                              * Fires immediately after assigning an agent
                              *
@@ -802,6 +810,7 @@ class KBS_Ticket {
                         if ( kbs_multiple_agents() )    {
                             $current_agents = $this->get_meta( '_kbs_ticket_agents' );
                             $this->update_meta( '_kbs_ticket_agents', $this->agents );
+                            $this->new_agent = true;
                             kbs_record_additional_agents_change_in_log( $ticket_id = 0, $this->agents, $current_agents );
                         }
                         break;

@@ -432,7 +432,6 @@ add_action( 'kbs_ticket_customer_reply', 'kbs_admin_email_reply_notice', 10, 2 )
  * @return	void
  */
 function kbs_email_agent_assigned_to_ticket( $ticket_id = 0, $agent_id = 0, $previous = 0 ) {
-
 	if ( ! kbs_agent_assignment_notices_enabled( $ticket_id ) )	{
 		return;
 	}
@@ -487,7 +486,6 @@ function kbs_email_agent_assigned_to_ticket( $ticket_id = 0, $agent_id = 0, $pre
 	$emails->__set( 'headers', $headers );
 
 	$emails->send( $to_email, $subject, $message, $attachments );
-
 } // kbs_email_agent_assigned_to_ticket
 
 /**
