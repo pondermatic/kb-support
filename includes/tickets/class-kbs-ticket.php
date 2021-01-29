@@ -677,7 +677,7 @@ class KBS_Ticket {
 				$this->pending['source'] = $this->source;
 			}
 
-            if ( ! empty( $this->flagged ) )	{
+            if ( isset( $this->flagged ) )	{
 				$this->pending['flagged'] = $this->flagged;
 			}
 
@@ -1576,7 +1576,9 @@ class KBS_Ticket {
     public function set_flagged_status( $flagged = false, $user_id = 0 ) {
         $flagged = (bool) $flagged;
         $user_id = ! empty( $user_id ) ? $user_id : get_current_user_id();
-        $updated = $this->update_meta( '_kbs_ticket_flagged', $flagged );
+
+        $this->__set( 'flagged', $flagged );
+        $updated = $this->save();
 
         if ( $flagged && $updated ) {
             $this->update_meta( '_kbs_ticket_flagged_by', $user_id );

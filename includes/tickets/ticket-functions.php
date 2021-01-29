@@ -165,6 +165,35 @@ function kbs_is_ticket_flagged( $ticket )   {
     return $ticket->flagged;
 } // kbs_is_ticket_flagged
 
+/**
+ * Flag/unflag a ticket.
+ *
+ * @since   1.5.3
+ * @param   int|object  $ticket     Ticket ID or a KBS_Ticket object
+ * @param   int         $user_id    ID of user setting flag status
+ * @param   bool        $flag       True to flag a ticket, or false to unflag
+ * @return  bool        Ticket flag status
+ */
+function kbs_set_ticket_flag_status( $ticket, $user_id = 0, $flag = true )    {
+    if ( is_numeric( $ticket ) ) {
+		$ticket = new KBS_Ticket( $ticket );
+
+		if ( ! $ticket->ID > 0 ) {
+			return false;
+		}
+	}
+
+	if ( ! is_object( $ticket ) ) {
+		return false;
+	}
+
+    if ( $ticket->flagged !== $flag )   {
+        $ticket->set_flagged_status( $flag, $user_id );
+    }
+
+    return $ticket->flagged;
+} // kbs_set_ticket_flag_status
+
 /*
  * Retrieve ticket orderby options.
  *
@@ -888,7 +917,6 @@ add_action( 'kbs_insert_ticket_note', 'kbs_record_note_in_log', 10, 2 );
  * @return	mixed.
  */
 function kbs_set_ticket_status( $ticket_id, $status = 'open' )	{
-
 	if ( 'kbs_ticket' != get_post_type( $ticket_id ) )	{
 		return false;
 	}
@@ -900,7 +928,6 @@ function kbs_set_ticket_status( $ticket_id, $status = 'open' )	{
 	}
 
 	return $ticket->update_status( $status );
-
 } // kbs_set_ticket_status
 
 /**
