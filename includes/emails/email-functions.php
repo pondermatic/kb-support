@@ -286,8 +286,12 @@ add_action( 'kbs_close_ticket', 'kbs_email_ticket_closed', 999 );
  * @return	void
  */
 function kbs_email_test_ticket_received() {
+	$single       = kbs_get_ticket_label_singular();
+    $admin_emails = kbs_get_admin_notice_emails();
 
-	$single = kbs_get_ticket_label_singular();
+    if ( empty( $admin_emails ) )   {
+        return;
+    }
 
 	$from_name   = kbs_get_option( 'from_name', wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) );
 	$from_name   = apply_filters( 'kbs_test_ticket_from_name', $from_name, 0, array() );
@@ -314,8 +318,7 @@ function kbs_email_test_ticket_received() {
 	$headers = apply_filters( 'kbs_test_ticket_headers', $emails->get_headers(), 0, array() );
 	$emails->__set( 'headers', $headers );
 
-	$emails->send( kbs_get_admin_notice_emails(), $subject, $message, $attachments );
-
+	$emails->send( $admin_emails, $subject, $message, $attachments );
 } // kbs_email_test_ticket_received
 
 /**
@@ -327,12 +330,17 @@ function kbs_email_test_ticket_received() {
  * @return	void
  */
 function kbs_admin_email_ticket_notice( $ticket_id = 0, $ticket_data = array() ) {
-
 	$single    = kbs_get_ticket_label_singular();
 	$ticket_id = absint( $ticket_id );
     $headers   = array();
 
 	if ( empty( $ticket_id ) ) {
+		return;
+	}
+
+    $admin_emails = kbs_get_admin_notice_emails( $ticket_id );
+
+    if ( empty( $admin_emails ) ) {
 		return;
 	}
 
@@ -360,8 +368,7 @@ function kbs_admin_email_ticket_notice( $ticket_id = 0, $ticket_data = array() )
 	$emails->__set( 'headers', $headers );
 	$emails->__set( 'heading', sprintf( __( 'New %s Received', 'kb-support' ), $single ) );
 
-	$emails->send( kbs_get_admin_notice_emails( $ticket_id ), $subject, $message, $attachments );
-
+	$emails->send( $admin_emails, $subject, $message, $attachments );
 } // kbs_admin_email_ticket_notice
 add_action( 'kbs_admin_ticket_notice', 'kbs_admin_email_ticket_notice', 10, 2 );
 
@@ -374,7 +381,6 @@ add_action( 'kbs_admin_ticket_notice', 'kbs_admin_email_ticket_notice', 10, 2 );
  * @return	void
  */
 function kbs_admin_email_reply_notice( $reply_id = 0, $data = array() ) {
-
 	if ( ( is_admin() && ! wp_doing_cron() ) || kbs_admin_notices_disabled( $reply_id ) )	{
 		return;
 	}
@@ -387,9 +393,15 @@ function kbs_admin_email_reply_notice( $reply_id = 0, $data = array() ) {
 		return;
 	}
 
-	$ticket_id   = get_post_field( 'post_parent', $reply_id );
+	$ticket_id = get_post_field( 'post_parent', $reply_id );
 
 	if ( empty( $ticket_id ) ) {
+		return;
+	}
+
+    $admin_emails = kbs_get_admin_notice_emails( $ticket_id );
+
+    if ( empty( $admin_emails ) ) {
 		return;
 	}
 
@@ -417,8 +429,7 @@ function kbs_admin_email_reply_notice( $reply_id = 0, $data = array() ) {
 	$emails->__set( 'headers', $headers );
 	$emails->__set( 'heading', sprintf( __( 'New %s Reply Received', 'kb-support' ), $single ) );
 
-	$emails->send( kbs_get_admin_notice_emails( $ticket_id ), $subject, $message, $attachments );
-
+	$emails->send( $admin_emails, $subject, $message, $attachments );
 } // kbs_admin_email_reply_notice
 add_action( 'kbs_ticket_customer_reply', 'kbs_admin_email_reply_notice', 10, 2 );
 
