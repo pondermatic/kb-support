@@ -269,11 +269,11 @@ function kbs_ajax_display_ticket_replies()	{
 	if ( ! empty( $_POST['kbs_reply_id'] ) )	{
 		$output .= kbs_get_reply_html( $_POST['kbs_reply_id'], $_POST['kbs_ticket_id'] );
 	} else	{
-
-		$number        = get_user_meta( get_current_user_id(), '_kbs_load_replies', true );
+        $user_id       = get_current_user_id();
+		$number        = get_user_meta( $user_id, '_kbs_load_replies', true );
 		$number        = ! empty( $number ) ? (int)$number : 0;
         $count_expand  = 1;
-        $expand        = get_user_meta( get_current_user_id(), '_kbs_expand_replies', true );
+        $expand        = get_user_meta( $user_id, '_kbs_expand_replies', true );
         $expand        = ! empty( $expand ) && $expand > 0 ? (int)$expand : 0;
 
 		$args = array(

@@ -863,6 +863,26 @@ function kbs_ticket_metabox_form_data_row( $ticket_id )	{
 add_action( 'kbs_ticket_metabox_custom_sections', 'kbs_ticket_metabox_form_data_row', 20 );
 
 /**
+ * Determines where to display the existing replies row.
+ *
+ * @since   1.5.3
+ * @param   
+ * @global	object	$kbs_ticket			KBS_Ticket class object
+ * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
+ * @param	int		$ticket_id			The ticket post ID.
+ */
+function kbs_ticket_determine_existing_replies_location( $ticket_id )   {
+    global $kbs_ticket, $kbs_ticket_update;
+
+    $user_id  = get_current_user_id();
+    $priority = get_user_meta( $user_id, '_kbs_replies_location', true );
+    $priority = '' == $priority ? 10 : absint( $priority );
+
+    add_action( 'kbs_ticket_reply_fields', 'kbs_ticket_metabox_existing_replies_row', $priority );
+} // kbs_ticket_determine_existing_replies_location
+add_action( 'kbs_ticket_reply_fields', 'kbs_ticket_determine_existing_replies_location', 1 );
+
+/**
  * Display the ticket replies row.
  *
  * @since	1.0
@@ -871,7 +891,6 @@ add_action( 'kbs_ticket_metabox_custom_sections', 'kbs_ticket_metabox_form_data_
  * @param	int		$ticket_id			The ticket post ID.
  */
 function kbs_ticket_metabox_existing_replies_row( $ticket_id )	{
-
 	global $kbs_ticket, $kbs_ticket_update;
 
 	?>
@@ -883,9 +902,7 @@ function kbs_ticket_metabox_existing_replies_row( $ticket_id )	{
         </div>
     </div>
 	<?php
-
 } // kbs_ticket_metabox_replies_row
-add_action( 'kbs_ticket_reply_fields', 'kbs_ticket_metabox_existing_replies_row', 10 );
 
 /**
  * Display the ticket reply row.
@@ -896,7 +913,6 @@ add_action( 'kbs_ticket_reply_fields', 'kbs_ticket_metabox_existing_replies_row'
  * @param	int		$ticket_id			The ticket post ID.
  */
 function kbs_ticket_metabox_reply_row( $ticket_id )	{
-
 	global $kbs_ticket, $kbs_ticket_update;
 
 	if ( 'closed' == $kbs_ticket->post_status ) : ?>
@@ -950,7 +966,6 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
         <div id="kbs-new-reply-loader"></div>
 
 	<?php endif;
-		
 } // kbs_ticket_metabox_details_row
 add_action( 'kbs_ticket_reply_fields', 'kbs_ticket_metabox_reply_row', 20 );
 
@@ -963,9 +978,6 @@ add_action( 'kbs_ticket_reply_fields', 'kbs_ticket_metabox_reply_row', 20 );
  * @param	int		$ticket_id			The ticket post ID.
  */
 function kbs_ticket_metabox_notes_row( $ticket_id )	{
-
-	global $kbs_ticket, $kbs_ticket_update;
-
 	global $kbs_ticket, $kbs_ticket_update;
 
 	?>
@@ -977,7 +989,6 @@ function kbs_ticket_metabox_notes_row( $ticket_id )	{
         </div>
     </div>
 	<?php
-
 } // kbs_ticket_metabox_notes_row
 add_action( 'kbs_ticket_notes_fields', 'kbs_ticket_metabox_notes_row', 10 );
 

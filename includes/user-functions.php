@@ -89,11 +89,12 @@ function kbs_register_user_profile_fields( $user )	{
 	if ( kbs_is_agent( $user->ID ) )	{
 		$type   = 'agent';
 		$fields = array(
-			0 => 'replies_to_load',
-			//1 => 'replies_to_expand',
-			2 => 'redirect_reply',
-			3 => 'redirect_closed',
-            4 => 'reply_alerts'
+            0 => 'replies_location',
+			1 => 'replies_to_load',
+			2 => 'replies_to_expand',
+			3 => 'redirect_reply',
+			4 => 'redirect_closed',
+            5 => 'reply_alerts'
 		);
 
 		if ( kbs_departments_enabled() )    {
@@ -124,7 +125,6 @@ function kbs_register_user_profile_fields( $user )	{
  * @return	array	Array of user profile fields
  */
 function kbs_output_user_profile_fields( $user )	{
-
     if ( get_current_user_id() != $user->ID && ! current_user_can( 'manage_ticket_settings' ) )  {
         return;
     }
@@ -147,7 +147,6 @@ function kbs_output_user_profile_fields( $user )	{
 
 		<?php echo ob_get_clean();
 	}
-
 } // kbs_output_user_profile_fields
 add_action( 'show_user_profile', 'kbs_output_user_profile_fields', 11 );
 add_action( 'edit_user_profile', 'kbs_output_user_profile_fields', 11 );
@@ -159,7 +158,6 @@ add_action( 'edit_user_profile', 'kbs_output_user_profile_fields', 11 );
  * @param   object	$user	The WP_User object
  */
 function kbs_render_user_profile_hide_closed_tickets_field( $user )  {
-
 	$hide_closed = kbs_customer_maybe_hide_closed_tickets( $user->ID );
 	ob_start(); ?>
 
@@ -172,7 +170,6 @@ function kbs_render_user_profile_hide_closed_tickets_field( $user )  {
     </tr>
 
 	<?php echo ob_get_clean();
-
 } // kbs_render_user_profile_hide_closed_tickets_field
 add_action( 'kbs_display_customer_user_profile_fields', 'kbs_render_user_profile_hide_closed_tickets_field', 5 );
 
@@ -183,7 +180,6 @@ add_action( 'kbs_display_customer_user_profile_fields', 'kbs_render_user_profile
  * @param   object	$user	The WP_User object
  */
 function kbs_render_user_profile_tickets_per_page_field( $user )  {
-
 	$tickets_per_page = kbs_get_customer_tickets_per_page( $user->ID );
 	ob_start(); ?>
 
@@ -200,7 +196,6 @@ function kbs_render_user_profile_tickets_per_page_field( $user )  {
     </tr>
 
 	<?php echo ob_get_clean();
-
 } // kbs_render_user_profile_tickets_per_page_field
 add_action( 'kbs_display_customer_user_profile_fields', 'kbs_render_user_profile_tickets_per_page_field', 5 );
 
@@ -211,9 +206,8 @@ add_action( 'kbs_display_customer_user_profile_fields', 'kbs_render_user_profile
  * @param   object	$user	The WP_User object
  */
 function kbs_render_user_profile_tickets_orderby_field( $user )  {
-
 	$orderby = get_user_meta( $user->ID, '_kbs_tickets_orderby', true );
-	$orderby = '' != $orderby ? $orderby : 'date';
+	$orderby = '' != $orderby ? esc_attr( $orderby ) : 'date';
 	$options = kbs_get_ticket_orderby_options();
 
 	ob_start(); ?>
@@ -253,9 +247,8 @@ add_action( 'kbs_display_customer_user_profile_fields', 'kbs_render_user_profile
  * @param   object	$user	The WP_User object
  */
 function kbs_render_user_profile_tickets_order_field( $user )  {
-
 	$order = get_user_meta( $user->ID, '_kbs_tickets_order', true );
-	$order = '' != $order ? $order : 'DESC';
+	$order = '' != $order ? esc_attr( $order ) : 'DESC';
 	$options = array(
 		'DESC' => __( 'Descending Order', 'kb-support' ),
 		'ASC'  => __( 'Ascending Order', 'kb-support' )
@@ -286,10 +279,42 @@ function kbs_render_user_profile_tickets_order_field( $user )  {
     </tr>
 
 	<?php echo ob_get_clean();
-
 } // kbs_render_user_profile_tickets_order_field
 add_action( 'kbs_display_agent_user_profile_fields', 'kbs_render_user_profile_tickets_order_field', 5 );
 add_action( 'kbs_display_customer_user_profile_fields', 'kbs_render_user_profile_tickets_order_field', 5 );
+
+/**
+ * Adds the replies position option field to the user profile for agents.
+ *
+ * @since	1.5.3
+ * @param   object	$user	The WP_User object
+ */
+function kbs_render_user_profile_replies_location_field( $user )  {
+	$location = get_user_meta( $user->ID, '_kbs_replies_location', true );
+    $location = '' == $location ? 10 : esc_attr( $location );
+
+	ob_start(); ?>
+
+    <tr>
+        <th scope="row">
+            <label for="kbs-agent-replies-location"><?php _e( 'Display Replies', 'kb-support' ); ?></label>
+        </th>
+        <td>
+            <select name="kbs_replies_location" id="kbs-agent-replies-location">
+                <option value="10"<?php selected( 10, $location ); ?>>
+                    <?php _e( 'Above Reply Field', 'kb-support' ); ?>
+                </option>
+                <option value="25"<?php selected( 25, $location ); ?>>
+                    <?php _e( 'Below Reply Field', 'kb-support' ); ?>
+                </option>
+            </select>
+            <p class="description"><?php printf( __( 'Choose where you would like %s replies displayed.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ); ?></p>
+        </td>
+    </tr>
+
+	<?php echo ob_get_clean();
+} // kbs_render_user_profile_replies_to_load_field
+add_action( 'kbs_display_agent_user_profile_fields', 'kbs_render_user_profile_replies_location_field', 5 );
 
 /**
  * Adds the Replies to Load option field to the user profile for agents.
@@ -298,7 +323,6 @@ add_action( 'kbs_display_customer_user_profile_fields', 'kbs_render_user_profile
  * @param   obj		$user	The WP_User object
  */
 function kbs_render_user_profile_replies_to_load_field( $user )  {
-
 	$replies_to_load = get_user_meta( $user->ID, '_kbs_load_replies', true );
 
 	if ( '' == $replies_to_load )	{
@@ -318,7 +342,6 @@ function kbs_render_user_profile_replies_to_load_field( $user )  {
     </tr>
 
 	<?php echo ob_get_clean();
-
 } // kbs_render_user_profile_replies_to_load_field
 add_action( 'kbs_display_agent_user_profile_fields', 'kbs_render_user_profile_replies_to_load_field', 5 );
 add_action( 'kbs_display_customer_user_profile_fields', 'kbs_render_user_profile_replies_to_load_field', 5 );
@@ -330,7 +353,6 @@ add_action( 'kbs_display_customer_user_profile_fields', 'kbs_render_user_profile
  * @param   obj		$user	The WP_User object
  */
 function kbs_render_user_profile_replies_to_expand_field( $user )  {
-
 	$replies_to_expand = get_user_meta( $user->ID, '_kbs_expand_replies', true );
 
 	if ( '' == $replies_to_expand )	{
@@ -350,7 +372,6 @@ function kbs_render_user_profile_replies_to_expand_field( $user )  {
     </tr>
 
 	<?php echo ob_get_clean();
-
 } // kbs_render_user_profile_replies_to_expand_field
 add_action( 'kbs_display_agent_user_profile_fields', 'kbs_render_user_profile_replies_to_expand_field', 5 );
 add_action( 'kbs_display_customer_user_profile_fields', 'kbs_render_user_profile_replies_to_expand_field', 5 );
@@ -598,13 +619,30 @@ add_action( 'personal_options_update', 'kbs_save_user_tickets_order' );
 add_action( 'edit_user_profile_update', 'kbs_save_user_tickets_order' );
 
 /**
+ * Saves the replies location field.
+ *
+ * @since	1.5.3
+ * @param	int		$user_id	WP User ID
+ */
+function kbs_save_user_replies_location( $user_id ) {
+	if ( ! kbs_is_agent( $user_id ) || ! current_user_can( 'edit_user', $user_id ) )	{
+		return;
+	}
+
+	$location = absint( $_POST['kbs_replies_location'] );
+
+	update_user_meta( $user_id, '_kbs_replies_location', $location );
+} // kbs_save_user_replies_location
+add_action( 'personal_options_update', 'kbs_save_user_replies_location' );
+add_action( 'edit_user_profile_update', 'kbs_save_user_replies_location' );
+
+/**
  * Saves the load replies field.
  *
  * @since	1.2
  * @param	int		$user_id	WP User ID
  */
 function kbs_save_user_load_replies( $user_id ) {
-
 	if ( ! current_user_can( 'edit_user', $user_id ) )	{
 		return;
 	}
@@ -612,7 +650,6 @@ function kbs_save_user_load_replies( $user_id ) {
 	$number = absint( $_POST['kbs_load_replies'] );
 
 	update_user_meta( $user_id, '_kbs_load_replies', $number );
-
 } // kbs_save_user_load_replies
 add_action( 'personal_options_update', 'kbs_save_user_load_replies' );
 add_action( 'edit_user_profile_update', 'kbs_save_user_load_replies' );
@@ -624,7 +661,6 @@ add_action( 'edit_user_profile_update', 'kbs_save_user_load_replies' );
  * @param	int		$user_id	WP User ID
  */
 function kbs_save_user_expand_replies( $user_id ) {
-
 	if ( ! current_user_can( 'edit_user', $user_id ) )	{
 		return;
 	}
@@ -632,7 +668,6 @@ function kbs_save_user_expand_replies( $user_id ) {
 	$number = absint( $_POST['kbs_expand_replies'] );
 
 	update_user_meta( $user_id, '_kbs_expand_replies', $number );
-
 } // kbs_save_user_expand_replies
 add_action( 'personal_options_update', 'kbs_save_user_expand_replies' );
 add_action( 'edit_user_profile_update', 'kbs_save_user_expand_replies' );
@@ -644,7 +679,6 @@ add_action( 'edit_user_profile_update', 'kbs_save_user_expand_replies' );
  * @param	int		$user_id	WP User ID
  */
 function kbs_save_user_redirect_reply( $user_id ) {
-
 	if ( ! kbs_is_agent( $user_id ) || ! current_user_can( 'edit_user', $user_id ) )	{
 		return;
 	}
@@ -652,7 +686,6 @@ function kbs_save_user_redirect_reply( $user_id ) {
 	$number = ! empty( $_POST['kbs_agent_redirect_reply'] ) ? sanitize_text_field( $_POST['kbs_agent_redirect_reply'] ) : 'stay';
 
 	update_user_meta( $user_id, '_kbs_redirect_reply', $number );
-
 } // kbs_save_user_redirect_reply
 add_action( 'personal_options_update', 'kbs_save_user_redirect_reply' );
 add_action( 'edit_user_profile_update', 'kbs_save_user_redirect_reply' );
@@ -664,7 +697,6 @@ add_action( 'edit_user_profile_update', 'kbs_save_user_redirect_reply' );
  * @param	int		$user_id	WP User ID
  */
 function kbs_save_user_redirect_close( $user_id ) {
-
 	if ( ! kbs_is_agent( $user_id ) || ! current_user_can( 'edit_user', $user_id ) )	{
 		return;
 	}
@@ -672,7 +704,6 @@ function kbs_save_user_redirect_close( $user_id ) {
 	$number = ! empty( $_POST['kbs_agent_redirect_close'] ) ? sanitize_text_field( $_POST['kbs_agent_redirect_close'] ) : 'stay';
 
 	update_user_meta( $user_id, '_kbs_redirect_close', $number );
-
 } // kbs_save_user_redirect_close
 add_action( 'personal_options_update', 'kbs_save_user_redirect_close' );
 add_action( 'edit_user_profile_update', 'kbs_save_user_redirect_close' );
@@ -684,7 +715,6 @@ add_action( 'edit_user_profile_update', 'kbs_save_user_redirect_close' );
  * @param	int		$user_id	WP User ID
  */
 function kbs_save_user_reply_alerts( $user_id ) {
-
 	if ( ! kbs_is_agent( $user_id ) || ! current_user_can( 'edit_user', $user_id ) )	{
 		return;
 	}
@@ -692,7 +722,6 @@ function kbs_save_user_reply_alerts( $user_id ) {
 	$alert = ! empty( $_POST['kbs_agent_reply_alerts'] ) ? absint( $_POST['kbs_agent_reply_alerts'] ) : 0;
 
 	update_user_meta( $user_id, '_kbs_reply_alerts', $alert );
-
 } // kbs_save_user_reply_alerts
 add_action( 'personal_options_update', 'kbs_save_user_reply_alerts' );
 add_action( 'edit_user_profile_update', 'kbs_save_user_reply_alerts' );
@@ -704,7 +733,6 @@ add_action( 'edit_user_profile_update', 'kbs_save_user_reply_alerts' );
  * @param	int		$user_id	WP User ID
  */
 function kbs_save_user_departments( $user_id ) {
-
 	if ( ! kbs_departments_enabled() || ! kbs_is_agent( $user_id ) || ! current_user_can( 'manage_ticket_settings' ) )	{
 		return;
 	}
@@ -721,7 +749,6 @@ function kbs_save_user_departments( $user_id ) {
             }
         }
     }
-
 } // kbs_save_user_departments
 add_action( 'personal_options_update', 'kbs_save_user_departments' );
 add_action( 'edit_user_profile_update', 'kbs_save_user_departments' );
@@ -786,7 +813,7 @@ function kbs_connect_existing_customer_to_new_user( $user_id ) {
 	if( $customer->id > 0 ) {
 		$customer->update( array( 'user_id' => $user_id ) );
 	}
-}
+} // kbs_connect_existing_customer_to_new_user
 add_action( 'user_register', 'kbs_connect_existing_customer_to_new_user', 10, 1 );
 
 /**
@@ -797,7 +824,6 @@ add_action( 'user_register', 'kbs_connect_existing_customer_to_new_user', 10, 1 
  * @return void
  */
 function kbs_process_profile_editor_updates( $data ) {
-
 	if ( ! isset( $_POST['kbs_action'] ) || 'edit_user_profile' != $_POST['kbs_action'] )	{
 		return;
 	}
@@ -945,7 +971,6 @@ function kbs_process_profile_editor_updates( $data ) {
 		wp_safe_redirect( add_query_arg( 'kbs_notice', 'profile_updated', $url ) );
 		die();
 	}
-
 } // kbs_process_profile_editor_updates
 add_action( 'init', 'kbs_process_profile_editor_updates' );
 
@@ -1013,7 +1038,6 @@ function kbs_get_user_tickets_order_setting( $user_id = 0 )	{
  * @return	void
  */
 function kbs_process_profile_editor_remove_email() {
-
 	if ( ! isset( $_GET['kbs_action'] ) || 'profile-remove-email' != $_GET['kbs_action'] )	{
 		return;
 	}
@@ -1099,7 +1123,6 @@ function kbs_create_user_name( $user_data ) {
  * @return  string  username    Validated username
  */
 function kbs_check_duplicate_user_name( $user_name ) {
-	
 	$user_check = get_user_by( 'login', $user_name );
 
 	if ( is_a( $user_check, 'WP_User' ) ) {
@@ -1113,5 +1136,4 @@ function kbs_check_duplicate_user_name( $user_name ) {
 	}
 
 	return $user_name ;
-	
 } // kbs_check_duplicate_user_name
