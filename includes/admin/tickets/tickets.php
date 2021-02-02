@@ -669,11 +669,11 @@ add_action( 'restrict_manage_posts', 'kbs_add_ticket_filters', 100 );
  * @return  string
  */
 function kbs_add_additional_ticket_filters_actions( $which )    {
-    if ( 'top' !== $which ) {
+    global $wpdb, $post;
+
+    if ( 'top' !== $which || 'kbs_ticket' != get_post_type() ) {
         return;
     }
-
-    global $wpdb;
 
     $actions = array();
 
