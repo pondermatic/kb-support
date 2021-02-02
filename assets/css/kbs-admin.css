@@ -19,7 +19,8 @@
 .kbs-expired { color: #dc3232; }
 .kbs-active { color: #46b450; }
 
-.kbs-delete {
+.kbs-delete,
+.kbs-notice-alert {
 	color: #a00;
 }
 .kbs-delete:hover { color: #dc3232; }
@@ -475,6 +476,14 @@ span.price_restricted:before {
 .kbs_sla_status_warn { color: #ffba00; }
 .kbs_sla_status_over { color: #dc3232; }
 
+/* Ticket List Styles
+-------------------------------------------------------------- */
+.kbs-ticket-list-actions    {
+    display: inline-block;
+    margin: 4px 4px 4px 0;
+    padding: 4px 4px 4px 0;
+}
+
 /* Metabox Styles
 -------------------------------------------------------------- */
 #postbox-container-1 .kbs_fields_name_label { width: 80px; }
@@ -537,6 +546,7 @@ a.kbs_ticket_form_data	{
 .kbs-ticket-content-row-actions .toggle-add-reply-option-section,
 .kbs-ticket-content-row-actions .toggle-view-participants-option-section,
 .kbs-ticket-content-row-actions .toggle-view-submission-option-section,
+.kbs-ticket-content-row-actions .toggle-flagged-status-option-section,
 .kbs-replies-row-actions .toggle-view-reply-option-section,
 .kbs-replies-row-actions .toggle-reply-option-create-article,
 .kbs-notes-row-actions .toggle-view-note-option-section {
@@ -545,6 +555,7 @@ a.kbs_ticket_form_data	{
 .kbs-ticket-content-row-actions .toggle-add-reply-option-section:hover,
 .kbs-ticket-content-row-actions .toggle-view-participants-option-section:hover,
 .kbs-ticket-content-row-actions .toggle-view-submission-option-section:hover,
+.kbs-ticket-content-row-actions .toggle-flagged-status-option-section:hover,
 .kbs-replies-row-actions .toggle-view-reply-option-section:hover,
 .kbs-notes-row-actions .toggle-view-note-option-section:hover,
 .kbs-replies-row-actions .toggle-reply-option-create-article:hover {

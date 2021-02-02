@@ -236,6 +236,49 @@ jQuery(document).ready(function ($) {
         },
 
         options : function()    {
+            // Flagging a ticket
+            $( document.body ).on( 'click', '.toggle-flagged-status-option-section', function(e) {
+                e.preventDefault();
+
+                var postData = {
+					ticket_id : kbs_vars.post_id,
+					flagged   : $(this).data( 'flag' ),
+					action    : 'kbs_set_ticket_flagged_status'
+				};
+
+				$.ajax({
+					type: 'POST',
+					dataType: 'json',
+					data: postData,
+					url: ajaxurl,
+					beforeSend: function()	{
+						$('#kbs-ticket-metabox-fields').addClass('kbs-mute');
+						$('.toggle-flagged-status-option-section').html(kbs_vars.please_wait);
+					},
+					success: function (response) {
+						if ( true === response.success )	{
+							if ( 'flagged' === response.data.flagged )	{
+                                $('#kbs-ticket-flag-notice').show();
+								$('.toggle-flagged-status-option-section').html(kbs_vars.ticket_unflag);
+                                $('.toggle-flagged-status-option-section').data('flag', '0');
+							} else   {
+                                $('#kbs-ticket-flag-notice').hide();
+                                $('.toggle-flagged-status-option-section').html(kbs_vars.ticket_flag);
+                                $('.toggle-flagged-status-option-section').data('flag', '1');
+                            }
+
+                            kbs_load_ticket_notes(kbs_vars.post_id, response.data.note_id);
+						}
+
+						$('#kbs-ticket-metabox-fields').removeClass('kbs-mute');
+					}
+				}).fail(function (data) {
+					if ( window.console && window.console.log ) {
+						console.log( data );
+					}
+				});
+            });
+
             // When Add Reply is clicked
             $( document.body ).on( 'click', '.toggle-add-reply-option-section', function(e) {
                 e.preventDefault();
@@ -284,7 +327,6 @@ jQuery(document).ready(function ($) {
 					}, 500 );
 				}
             });
-            
         },
 
 		participants : function()	{

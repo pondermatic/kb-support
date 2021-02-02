@@ -22,20 +22,15 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	bool	True if AJAX works, false otherwise
  */
 function kbs_test_ajax_works() {
-
 	// Check if the Airplane Mode plugin is installed
 	if ( class_exists( 'Airplane_Mode_Core' ) ) {
-
 		$airplane = Airplane_Mode_Core::getInstance();
 
 		if ( method_exists( $airplane, 'enabled' ) ) {
-
 			if ( $airplane->enabled() ) {
 				return true;
 			}
-
 		} else {
-
 			if ( $airplane->check_status() == 'on' ) {
 				return true;
 			}
@@ -60,27 +55,23 @@ function kbs_test_ajax_works() {
 	$works = true;
 
 	if ( is_wp_error( $ajax ) ) {
-
 		$works = false;
-
 	} else {
-
-		if( empty( $ajax['response'] ) ) {
+		if ( empty( $ajax['response'] ) ) {
 			$works = false;
 		}
 
-		if( empty( $ajax['response']['code'] ) || 200 !== (int) $ajax['response']['code'] ) {
+		if ( empty( $ajax['response']['code'] ) || 200 !== (int) $ajax['response']['code'] ) {
 			$works = false;
 		}
 
-		if( empty( $ajax['response']['message'] ) || 'OK' !== $ajax['response']['message'] ) {
+		if ( empty( $ajax['response']['message'] ) || 'OK' !== $ajax['response']['message'] ) {
 			$works = false;
 		}
 
-		if( ! isset( $ajax['body'] ) || 0 !== (int) $ajax['body'] ) {
+		if ( ! isset( $ajax['body'] ) || 0 !== (int) $ajax['body'] ) {
 			$works = false;
 		}
-
 	}
 
 	if ( $works ) {
@@ -109,8 +100,7 @@ function kbs_is_ajax_disabled() {
  * @return	str		URL to the AJAX file to call during AJAX requests.
 */
 function kbs_get_ajax_url() {
-	$scheme = defined( 'FORCE_SSL_ADMIN' ) && FORCE_SSL_ADMIN ? 'https' : 'admin';
-
+	$scheme      = defined( 'FORCE_SSL_ADMIN' ) && FORCE_SSL_ADMIN ? 'https' : 'admin';
 	$current_url = kbs_get_current_page_url();
 	$ajax_url    = admin_url( 'admin-ajax.php', $scheme );
 
@@ -128,14 +118,46 @@ function kbs_get_ajax_url() {
  * @return	void
  */
 function kbs_ajax_dismiss_admin_notice()	{
-
 	$notice = sanitize_text_field( $_POST['notice'] );
     kbs_dismiss_notice( $notice );
 
 	wp_send_json_success();
-
 } // kbs_ajax_dismiss_admin_notice
 add_action( 'wp_ajax_kbs_dismiss_notice', 'kbs_ajax_dismiss_admin_notice' );
+
+/**
+ * Sets a tickets flagged status.
+ *
+ * @since   1.5.3
+ * @return  void
+ */
+function kbs_set_ticket_flagged_status_ajax()   {
+    $ticket_id   = absint( $_POST['ticket_id'] );
+    $flag_status = (bool) $_POST['flagged'];
+    $user_id     = isset( $_POST['flagged_by'] ) ? absint( $_POST['flagged_by'] ) : get_current_user_id();
+    $ticket      = new KBS_Ticket( $ticket_id );
+
+    $ticket->set_flagged_status( $flag_status, $user_id );
+
+    $flagged = $ticket->flagged ? 'flagged' : 'unflagged';
+    $note_id = kbs_insert_note(
+        $ticket_id,
+        sprintf(
+            __( '%s %s', 'kb-support' ),
+            kbs_get_ticket_label_singular(),
+            $flagged
+        ),
+        array( 'user_id' => $user_id )
+    );
+
+    $data = array(
+        'flagged' => $ticket->flagged ? 'flagged' : 'unflagged',
+        'note_id' => $note_id
+    );
+
+    wp_send_json_success( $data );
+} // kbs_set_ticket_flagged_status_ajax
+add_action( 'wp_ajax_kbs_set_ticket_flagged_status', 'kbs_set_ticket_flagged_status_ajax' );
 
 /**
  * Add a participant to a ticket.
@@ -247,11 +269,11 @@ function kbs_ajax_display_ticket_replies()	{
 	if ( ! empty( $_POST['kbs_reply_id'] ) )	{
 		$output .= kbs_get_reply_html( $_POST['kbs_reply_id'], $_POST['kbs_ticket_id'] );
 	} else	{
-
-		$number        = get_user_meta( get_current_user_id(), '_kbs_load_replies', true );
+        $user_id       = get_current_user_id();
+		$number        = get_user_meta( $user_id, '_kbs_load_replies', true );
 		$number        = ! empty( $number ) ? (int)$number : 0;
         $count_expand  = 1;
-        $expand        = get_user_meta( get_current_user_id(), '_kbs_expand_replies', true );
+        $expand        = get_user_meta( $user_id, '_kbs_expand_replies', true );
         $expand        = ! empty( $expand ) && $expand > 0 ? (int)$expand : 0;
 
 		$args = array(

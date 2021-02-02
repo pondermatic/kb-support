@@ -35,7 +35,6 @@ function kbs_use_sequential_ticket_numbers()	{
  * @return	obj		$tickets	Tickets retrieved from the database
  */
 function kbs_get_tickets( $args = array() ) {
-
 	// Fallback to post objects to ensure backwards compatibility
 	if( ! isset( $args['output'] ) ) {
 		$args['output'] = 'posts';
@@ -43,6 +42,7 @@ function kbs_get_tickets( $args = array() ) {
 
 	$args    = apply_filters( 'kbs_get_tickets_args', $args );
 	$tickets = new KBS_Tickets_Query( $args );
+
 	return $tickets->get_tickets();
 } // kbs_get_tickets
 
@@ -72,7 +72,6 @@ function kbs_get_ticket( $id_or_object )	{
  * @return	obj|false	The post object if found, otherwise false 
  */
 function kbs_get_ticket_by( $field, $value )	{
-
 	if ( 'id' == $field )	{
 		$field = 'ID';
 	}
@@ -142,6 +141,58 @@ function kbs_get_ticket_category_options()	{
 
 	return $options;
 } // kbs_get_ticket_category_options
+
+/**
+ * Whether or not a ticket is flagged.
+ *
+ * @since   1.5.3
+ * @param   int|object  $ticket Ticket ID or a KBS_Ticket object
+ * @return  bool        True if flagged, or false
+ */
+function kbs_is_ticket_flagged( $ticket )   {
+    if ( is_numeric( $ticket ) ) {
+		$ticket = new KBS_Ticket( $ticket );
+
+		if ( ! $ticket->ID > 0 ) {
+			return false;
+		}
+	}
+
+	if ( ! is_object( $ticket ) ) {
+		return false;
+	}
+
+    return $ticket->flagged;
+} // kbs_is_ticket_flagged
+
+/**
+ * Flag/unflag a ticket.
+ *
+ * @since   1.5.3
+ * @param   int|object  $ticket     Ticket ID or a KBS_Ticket object
+ * @param   int         $user_id    ID of user setting flag status
+ * @param   bool        $flag       True to flag a ticket, or false to unflag
+ * @return  bool        Ticket flag status
+ */
+function kbs_set_ticket_flag_status( $ticket, $user_id = 0, $flag = true )    {
+    if ( is_numeric( $ticket ) ) {
+		$ticket = new KBS_Ticket( $ticket );
+
+		if ( ! $ticket->ID > 0 ) {
+			return false;
+		}
+	}
+
+	if ( ! is_object( $ticket ) ) {
+		return false;
+	}
+
+    if ( $ticket->flagged !== $flag )   {
+        $ticket->set_flagged_status( $flag, $user_id );
+    }
+
+    return $ticket->flagged;
+} // kbs_set_ticket_flag_status
 
 /*
  * Retrieve ticket orderby options.
@@ -605,10 +656,15 @@ function kbs_get_ticket_log_sources()	{
  * @return	mixed	Ticket ID on success, false on failure.
  */
 function kbs_add_ticket( $ticket_data )	{
-
 	if ( ! empty( $ticket_data['attachments'] ) && ! is_array( $ticket_data['attachments'] ) )	{
 		$ticket_data['attachments'] = array( $ticket_data['attachments'] );
 	}
+
+    /**
+     * Remove action that triggers agent assignment email for existing tickets.
+     *
+     */
+    remove_action( 'kbs_update_ticket_meta_key', 'kbs_trigger_agent_assigned_email', 999, 4 );
 
 	$ticket_data = apply_filters( 'kbs_add_ticket_data', $ticket_data );
 	$attachments = apply_filters( 'kbs_add_ticket_attachments', $ticket_data['attachments'] );
@@ -678,7 +734,6 @@ function kbs_add_ticket( $ticket_data )	{
 
 	// Return false if no ticket was inserted
 	return false;
-
 } // kbs_add_ticket
 
 /**
@@ -725,7 +780,6 @@ function kbs_add_ticket_from_form( $form_id, $form_data )	{
 	);
 
 	foreach( $fields as $field )	{
-
 		$settings = $kbs_form->get_field_settings( $field->ID );
 
 		if ( 'file_upload' == $settings['type'] && ! empty( $_FILES[ $field->post_name ] ) )	{
@@ -738,7 +792,6 @@ function kbs_add_ticket_from_form( $form_id, $form_data )	{
 		}
 
 		if ( ! empty( $settings['mapping'] ) )	{
-
 			switch( $settings['mapping'] )	{
 				case 'customer_email':
 					$ticket_data['user_info']['email']            = strtolower( $form_data[ $field->post_name ] );
@@ -769,19 +822,15 @@ function kbs_add_ticket_from_form( $form_id, $form_data )	{
 					$ticket_data[ $settings['mapping'] ]          = $form_data[ $field->post_name ];
 					break;
 			}
-
 		} else	{
-
 			$ticket_data[ $field->post_name ] = array( $field->post_title, strip_tags( addslashes( $form_data[ $field->post_name ] ) ) );
 		
 			$data[] = '<strong>' . $field->post_title . '</strong><br />' . $form_data[ $field->post_name ];
-
 		}
 	}
 
 	$ticket_data = apply_filters( 'kbs_add_ticket_from_form_data', $ticket_data, $form_id, $form_data );
-
-	$ticket_id = kbs_add_ticket( $ticket_data );
+	$ticket_id   = kbs_add_ticket( $ticket_data );
 
 	if ( $ticket_id )	{
 		$kbs_form->increment_submissions();
@@ -789,7 +838,6 @@ function kbs_add_ticket_from_form( $form_id, $form_data )	{
 	}
 
 	return false;
-
 } // kbs_add_ticket_from_form
 
 /**
@@ -869,7 +917,6 @@ add_action( 'kbs_insert_ticket_note', 'kbs_record_note_in_log', 10, 2 );
  * @return	mixed.
  */
 function kbs_set_ticket_status( $ticket_id, $status = 'open' )	{
-
 	if ( 'kbs_ticket' != get_post_type( $ticket_id ) )	{
 		return false;
 	}
@@ -881,7 +928,6 @@ function kbs_set_ticket_status( $ticket_id, $status = 'open' )	{
 	}
 
 	return $ticket->update_status( $status );
-
 } // kbs_set_ticket_status
 
 /**

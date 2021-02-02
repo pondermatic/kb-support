@@ -71,10 +71,7 @@ function kbs_form_contextual_help() {
 		'id'      => 'kbs-ticket-general',
 		'title'   => __( 'General', 'kb-support' ),
 		'content' => apply_filters( 'kbs_form_general_contextual_help',
-			'<p>' . sprintf(
-				__( 'Manage your submission field here by adding the fields you require. Once you\'re ready, add the shortcode %1$s to your submission page.', 'kb-support' ),
-				'<code>' . kbs_get_form_shortcode( $_GET['post'] ) . '</code>'
-			) . '</p>' .
+			'<p>' . __( 'Manage your submission field here by adding the fields you require. Once you\'re ready, add the shortcode to your submission page.', 'kb-support' ) . '</p>' .
 			'<p>' .
 				__( 'Re-arrange your fields using the drag and drop functionality. Changes are automatically saved.', 'kb-support' ) .
 			'</p>' .

@@ -297,19 +297,28 @@ class KBS_DB_Customers extends KBS_DB  {
 	 * @since	1.0
 	*/
 	public function update_customer_email_on_user_update( $user_id = 0, $old_user_data ) {
+        /**
+         * Fixes a bug whereby when get_password_reset_key() is called
+         * it results in the `profile_updated` hook being used.
+         * If we leave these actions in place during bulk calls to get_password_reset_key()
+         * timeouts are experienced.
+         *
+         * @since   1.5.3
+         */
+        if ( did_action( 'retrieve_password' ) )    {
+            return;
+        }
 
 		$customer = new KBS_Customer( $user_id, true );
 
-		if( ! $customer ) {
+		if ( ! $customer ) {
 			return false;
 		}
 
 		$user = get_userdata( $user_id );
 
 		if ( ! empty( $user ) && $user->user_email !== $customer->email ) {
-
 			if ( ! $this->get_customer_by( 'email', $user->user_email ) ) {
-
 				$success = $this->update( $customer->id, array( 'email' => $user->user_email ) );
 
 				if ( $success ) {
@@ -317,23 +326,15 @@ class KBS_DB_Customers extends KBS_DB  {
 					$tickets_array = explode( ',', $customer->ticket_ids );
 
 					if ( ! empty( $tickets_array ) ) {
-
 						foreach ( $tickets_array as $ticket_id ) {
-
 							kbs_update_ticket_meta( $ticket_id, 'email', $user->user_email );
-
 						}
-
 					}
 
 					do_action( 'kbs_update_customer_email_on_user_update', $user, $customer );
-
 				}
-
 			}
-
 		}
-
 	} // update_customer_email_on_user_update
 
 	/**

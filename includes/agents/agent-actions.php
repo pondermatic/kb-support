@@ -61,11 +61,21 @@ add_action( 'login_form_logout', 'kbs_set_agent_offline' );
  * @return  void
  */
 function kbs_add_default_agent_data_to_user( $user_id ) {
+    /**
+     * Fixes a bug whereby when get_password_reset_key() is called
+     * it results in the `profile_updated` hook being used.
+     * If we leave these actions in place during bulk calls to get_password_reset_key()
+     * timeouts are experienced.
+     *
+     * @since   1.5.3
+     */
+    if ( did_action( 'retrieve_password' ) )    {
+        return;
+    }
 
     if ( is_admin() && kbs_is_agent( $user_id ) ) {
         $agent = new KBS_Agent( $user_id );
     }
-
 } // kbs_add_default_agent_data_to_user
 add_action( 'user_register', 'kbs_add_default_agent_data_to_user' );
 add_action( 'profile_update', 'kbs_add_default_agent_data_to_user' );
