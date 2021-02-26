@@ -198,8 +198,7 @@ function kbs_remove_agent_from_department( $department_id, $agent_id = '' )	{
  */
 function kbs_get_department_for_ticket( $ticket_id )    {
     $terms = wp_get_post_terms( $ticket_id, 'department' );
-
-    if ( ! empty( $terms ) )    {
+    if ( ! empty( $terms ) && !is_wp_error($terms) )    {
         return $terms[0];
     }
 
