@@ -1,5 +1,5 @@
 === KB Support - WordPress Help Desk ===
-Contributors: kbsupport, mikeyhoward1977
+Contributors: wpchill, silkalns
 Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
 Tested up to: 5.6
