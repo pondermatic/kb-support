@@ -5,8 +5,8 @@
  * Description: The best help desk tool for WordPress. Simple yet effective. Feature rich.
  * Version: 1.5.4
  * Date: 2 February 2021
- * Author: KB Support Team
- * Author URI: https://kb-support.com/
+ * Author: WPChill
+ * Author URI: https://wpchill.com
  * Text Domain: kb-support
  * Domain Path: /languages
  * License: GPL2
@@ -29,7 +29,7 @@
  *
  * @package		KBS
  * @category	Core
- * @author		Mike Howard
+ * @author		WPChill
  * @version		1.5.4
  */
 
