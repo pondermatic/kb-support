@@ -3,7 +3,7 @@
  * Plugin Name: KB Support
  * Plugin URI: https://kb-support.com/
  * Description: The best help desk tool for WordPress. Simple yet effective. Feature rich.
- * Version: 1.5.3
+ * Version: 1.5.4
  * Date: 2 February 2021
  * Author: KB Support Team
  * Author URI: https://kb-support.com/
@@ -16,9 +16,9 @@
  *
  *
  * KB Support is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License, version 2, as 
+ * it under the terms of the GNU General Public License, version 2, as
  * published by the Free Software Foundation.
- * 
+ *
  * KB Support is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -30,7 +30,7 @@
  * @package		KBS
  * @category	Core
  * @author		Mike Howard
- * @version		1.5.3
+ * @version		1.5.4
  */
 
 // Exit if accessed directly.
@@ -156,7 +156,7 @@ final class KB_Support {
 
 		return self::$instance;
 	}
-	
+
 	/**
 	 * Throw error on object clone.
 	 *
@@ -183,7 +183,7 @@ final class KB_Support {
 		// Unserializing instances of the class is forbidden.
 		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'kb-support' ), '1.0' );
 	} // __wakeup
-	
+
 	/**
 	 * Setup plugin constants.
 	 *
@@ -194,7 +194,7 @@ final class KB_Support {
 	private function setup_constants()	{
 
 		if ( ! defined( 'KBS_VERSION' ) )	{
-			define( 'KBS_VERSION', '1.5.3' );
+			define( 'KBS_VERSION', '1.5.4' );
 		}
 
 		if ( ! defined( 'KBS_PLUGIN_DIR' ) )	{
@@ -204,13 +204,13 @@ final class KB_Support {
 		if ( ! defined( 'KBS_PLUGIN_URL' ) )	{
 			define( 'KBS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 		}
-		
+
 		if ( ! defined( 'KBS_PLUGIN_FILE' ) )	{
 			define( 'KBS_PLUGIN_FILE', __FILE__ );
 		}
 
 	} // setup_constants
-			
+
 	/**
 	 * Include required files.
 	 *
@@ -335,9 +335,9 @@ final class KB_Support {
 		}
 
 		require_once KBS_PLUGIN_DIR . 'includes/install.php';
-		
+
 	} // includes
-	
+
 	/**
 	 * Load the text domain for translations.
 	 *
@@ -359,7 +359,7 @@ final class KB_Support {
         load_plugin_textdomain( 'kb-support', false, $kbs_lang_dir );
 
 	} // load_textdomain
-	
+
 } // class KB_Support
 endif;
 
