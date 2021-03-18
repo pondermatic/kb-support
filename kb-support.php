@@ -3,7 +3,7 @@
  * Plugin Name: KB Support
  * Plugin URI: https://kb-support.com/
  * Description: The best help desk tool for WordPress. Simple yet effective. Feature rich.
- * Version: 1.5.4
+ * Version: 1.5.5
  * Date: 2 February 2021
  * Author: WPChill
  * Author URI: https://wpchill.com
@@ -194,7 +194,7 @@ final class KB_Support {
 	private function setup_constants()	{
 
 		if ( ! defined( 'KBS_VERSION' ) )	{
-			define( 'KBS_VERSION', '1.5.4' );
+			define( 'KBS_VERSION', '1.5.5' );
 		}
 
 		if ( ! defined( 'KBS_PLUGIN_DIR' ) )	{
@@ -239,7 +239,6 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-roles.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-cron.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-logging.php';
-		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-license-handler.php';
 		require_once KBS_PLUGIN_DIR . 'includes/class-kbs-knowledgebase.php';
         require_once KBS_PLUGIN_DIR . 'includes/class-kbs-register-meta.php';
 		require_once KBS_PLUGIN_DIR . 'includes/article/article-actions.php';
