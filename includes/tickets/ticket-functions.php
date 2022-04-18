@@ -667,6 +667,7 @@ function kbs_add_ticket( $ticket_data )	{
     remove_action( 'kbs_update_ticket_meta_key', 'kbs_trigger_agent_assigned_email', 999, 4 );
 
 	$ticket_data = apply_filters( 'kbs_add_ticket_data', $ticket_data );
+
 	$attachments = apply_filters( 'kbs_add_ticket_attachments', $ticket_data['attachments'] );
 	$category    = array();
 	$department  = '';
@@ -753,20 +754,21 @@ function kbs_add_ticket_from_form( $form_id, $form_data )	{
 	$terms_agreed     = false;
 
     if ( ! empty( $form_data['submission_origin'] ) )  {
-        $submission_origin = $form_data['submission_origin'];
+        $submission_origin = sanitize_text_field( wp_unslash( $form_data['submission_origin'] ) );
         unset( $form_data['submission_origin'] );
     }
 
 	if ( isset( $form_data['privacy_accepted'] ) )	{
-		$privacy_accepted = $form_data['privacy_accepted'];
+		$privacy_accepted = sanitize_text_field( wp_unslash( $form_data['privacy_accepted'] ) );
 		unset( $form_data['privacy_accepted'] );
 	}
 
 	if ( isset( $form_data['terms_agreed'] ) )	{
-		$terms_agreed = $form_data['terms_agreed'];
+		$terms_agreed = sanitize_text_field( wp_unslash( $form_data['terms_agreed'] ) );
 		unset( $form_data['terms_agreed'] );
 	}
 
+	// $form_data will be sanitized later on after the filter is applied
 	$ticket_data = array(
 		'user_info'         => array(),
 		'attachments'       => array(),
@@ -782,7 +784,7 @@ function kbs_add_ticket_from_form( $form_id, $form_data )	{
 	foreach( $fields as $field )	{
 		$settings = $kbs_form->get_field_settings( $field->ID );
 
-		if ( 'file_upload' == $settings['type'] && ! empty( $_FILES[ $field->post_name ] ) )	{
+		if ( 'file_upload' == $settings['type'] && ! empty( $_FILES[ $field->post_name ] ) ) {
 			$ticket_data['attachments'] = $_FILES[ $field->post_name ];
 			continue;
 		}
@@ -794,43 +796,51 @@ function kbs_add_ticket_from_form( $form_id, $form_data )	{
 		if ( ! empty( $settings['mapping'] ) )	{
 			switch( $settings['mapping'] )	{
 				case 'customer_email':
-					$ticket_data['user_info']['email']            = strtolower( $form_data[ $field->post_name ] );
-					$ticket_data['user_email']                    = $ticket_data['user_info']['email'];
+					$ticket_data['user_info']['email']            = sanitize_email( wp_unslash( strtolower( $form_data[ $field->post_name ] ) ) );
+					$ticket_data['user_email']                    = sanitize_email( wp_unslash( $ticket_data['user_info']['email'] ) );
 					break;
 
 				case 'customer_first':
-					$ticket_data['user_info']['first_name']       = ucfirst( $form_data[ $field->post_name ] );
+					$ticket_data['user_info']['first_name']       = sanitize_text_field( htmlspecialchars( ucfirst( $form_data[ $field->post_name ] ) ) );
 					break;
 
 				case 'customer_last':
-					$ticket_data['user_info']['last_name']        = ucfirst( $form_data[ $field->post_name ] );
+					$ticket_data['user_info']['last_name']        = sanitize_text_field( htmlspecialchars( ucfirst( $form_data[ $field->post_name ] ) ) );
 					break;
 
 				case 'customer_phone1':
-					$ticket_data['user_info']['primary_phone']    = $form_data[ $field->post_name ];
+					$ticket_data['user_info']['primary_phone']    = intval( $form_data[ $field->post_name ] );
 					break;
 
 				case 'customer_phone2':
-					$ticket_data['user_info']['additional_phone'] = $form_data[ $field->post_name ];
+					$ticket_data['user_info']['additional_phone'] = intval( $form_data[ $field->post_name ] );
 					break;
 
 				case 'customer_website':
-					$ticket_data['user_info']['website']          = $form_data[ $field->post_name ];
+					$ticket_data['user_info']['website']          = esc_url_raw( $form_data[ $field->post_name ] );
+					break;
+
+				case 'post_title':
+					$ticket_data['post_title']                    = sanitize_text_field( strip_tags( $form_data[ $field->post_name ] ) );
 					break;
 
 				default:
-					$ticket_data[ $settings['mapping'] ]          = $form_data[ $field->post_name ];
+					$ticket_data[ $settings['mapping'] ]          = sanitize_text_field( htmlspecialchars( $form_data[ $field->post_name ] ) );
 					break;
 			}
-		} else	{
+		} else {
 			$ticket_data[ $field->post_name ] = array( $field->post_title, strip_tags( addslashes( $form_data[ $field->post_name ] ) ) );
-		
+
 			$data[] = '<strong>' . $field->post_title . '</strong><br />' . $form_data[ $field->post_name ];
 		}
 	}
 
 	$ticket_data = apply_filters( 'kbs_add_ticket_from_form_data', $ticket_data, $form_id, $form_data );
-	$ticket_id   = kbs_add_ticket( $ticket_data );
+
+	// Now let's secure the form data a little so we don't end upt with XSS stored.
+	$ticket_data['form_data']['data'] = array_map( 'sanitize_text_field', array_map( 'htmlspecialchars', array_map( 'trim', $ticket_data['form_data']['data'] ) ) );
+
+	$ticket_id = kbs_add_ticket( $ticket_data );
 
 	if ( $ticket_id )	{
 		$kbs_form->increment_submissions();

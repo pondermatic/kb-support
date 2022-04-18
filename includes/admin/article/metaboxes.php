@@ -145,7 +145,7 @@ function kbs_article_metabox_linked_tickets_fields( $post_id )	{
 
 			<div id="kbs-ticket-content-<?php echo $linked_ticket; ?>" class="kbs-hidden">
 				<?php do_action( 'kbs_article_before_thickbox_ticket_content', $linked_ticket, $post_id ); ?>
-                <?php echo wpautop( get_post_field( 'post_content', $linked_ticket ) ); ?>
+                <?php echo wp_kses_post( get_post_field( 'post_content', $linked_ticket ) ); ?>
                 <?php do_action( 'kbs_article_after_thickbox_ticket_content', $linked_ticket, $post_id ); ?>
             </div>
 

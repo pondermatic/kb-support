@@ -716,7 +716,7 @@ function kbs_ticket_metabox_content_section( $ticket_id )	{
 		<h3>
 			<?php printf( __( '%s Content', 'kb-support' ), kbs_get_ticket_label_singular() ); ?>
 		</h3>
-        <?php echo $kbs_ticket->get_content(); ?>
+        <?php echo wp_kses_post( htmlspecialchars_decode( $kbs_ticket->get_content() ) ); ?>
     </div>
     <?php
 		
