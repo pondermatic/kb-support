@@ -142,13 +142,13 @@ function kbs_is_admin_page( $passed_page = '', $passed_view = '' ) {
 	global $pagenow, $typenow;
 
 	$found      = false;
-	$post_type  = isset( $_GET['post_type'] )  ? strtolower( $_GET['post_type'] )  : false;
-	$action     = isset( $_GET['action'] )     ? strtolower( $_GET['action'] )     : false;
-	$taxonomy   = isset( $_GET['taxonomy'] )   ? strtolower( $_GET['taxonomy'] )   : false;
-	$page       = isset( $_GET['page'] )       ? strtolower( $_GET['page'] )       : false;
-	$view       = isset( $_GET['view'] )       ? strtolower( $_GET['view'] )       : false;
-	$kbs_action = isset( $_GET['kbs-action'] ) ? strtolower( $_GET['kbs-action'] ) : false;
-	$tab        = isset( $_GET['tab'] )        ? strtolower( $_GET['tab'] )        : false;
+	$post_type  = isset( $_GET['post_type'] )  ? sanitize_text_field( wp_unslash( strtolower( $_GET['post_type'] ) ) )  : false;
+	$action     = isset( $_GET['action'] )     ? sanitize_text_field( wp_unslash( strtolower( $_GET['action'] ) ) )     : false;
+	$taxonomy   = isset( $_GET['taxonomy'] )   ? sanitize_text_field( wp_unslash(  strtolower( $_GET['taxonomy'] ) ) )   : false;
+	$page       = isset( $_GET['page'] )       ? sanitize_text_field( wp_unslash( strtolower( $_GET['page'] ) ) )       : false;
+	$view       = isset( $_GET['view'] )       ? sanitize_text_field( wp_unslash( strtolower( $_GET['view'] ) ) )       : false;
+	$kbs_action = isset( $_GET['kbs-action'] ) ? sanitize_text_field( wp_unslash( strtolower( $_GET['kbs-action'] ) ) ) : false;
+	$tab        = isset( $_GET['tab'] )        ? sanitize_text_field( wp_unslash( strtolower( $_GET['tab'] ) ) )       : false;
 
 	switch ( $passed_page ) {
 		case 'kbs_ticket':

@@ -41,11 +41,11 @@ class KBS_HTML_Elements {
 			'chosen'           => false,
 			'show_option_all'  => false,
 			'show_option_none' => false,
-			'placeholder'      => sprintf( __( 'Select a %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
+			'placeholder'      => sprintf( esc_html__( 'Select a %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
 			'selected'         => 0,
 			'data'        => array(
 				'search-type'        => 'ticket_status',
-				'search-placeholder' => sprintf( __( 'Type to search all %s statuses', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
+				'search-placeholder' => sprintf( esc_html__( 'Type to search all %s statuses', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
 			)
 		);
 
@@ -120,13 +120,13 @@ class KBS_HTML_Elements {
 			'name'             => $name,
 			'selected'         => $selected,
 			'options'          => kbs_get_ticket_log_sources(),
-            'placeholder'      => sprintf( __( 'Select a %s', 'kb-support' ), $category_labels['name'] ),
+            'placeholder'      => sprintf( esc_html__( 'Select a %s', 'kb-support' ), $category_labels['name'] ),
 			'show_option_all'  => false,
 			'show_option_none' => sprintf( _x( 'Select a %1$s', 'plural: Example: "Select a %1$s"', 'kb-support' ), $category_labels['name'] ),
             'chosen'           => true,
             'data'             => array(
 				'search-type'        => 'ticket_source',
-				'search-placeholder' => sprintf( __( 'Type to search all %s', 'kb-support' ), strtolower( $category_labels['name'] ) )
+				'search-placeholder' => sprintf( esc_html__( 'Type to search all %s', 'kb-support' ), strtolower( $category_labels['name'] ) )
 			)
 		) );
 
@@ -151,11 +151,11 @@ class KBS_HTML_Elements {
 			'chosen'           => false,
 			'show_option_all'  => false,
 			'show_option_none' => '',
-			'placeholder'      => sprintf( __( 'Select a %s', 'kb-support' ), kbs_get_article_label_singular() ),
+			'placeholder'      => sprintf( esc_html__( 'Select a %s', 'kb-support' ), kbs_get_article_label_singular() ),
 			'selected'         => 0,
 			'data'        => array(
 				'search-type'        => 'article',
-				'search-placeholder' => sprintf( __( 'Type to search all %s', 'kb-support' ), kbs_get_article_label_plural() )
+				'search-placeholder' => sprintf( esc_html__( 'Type to search all %s', 'kb-support' ), kbs_get_article_label_plural() )
 			),
 			'key'              => 'id',
 			'articles'         => null,
@@ -348,18 +348,18 @@ class KBS_HTML_Elements {
 
 		if ( $customers ) {
 			if ( $args['show_no_attached'] )	{
-				$options[0] = __( 'No customer attached', 'kb-support' );
+				$options[0] = esc_html__( 'No customer attached', 'kb-support' );
 			}
 
 			foreach ( $customers as $customer ) {
 				$company = '';
 				if ( $args['show_company'] && ! empty( $customer->company_id ) )	{
-					$company =  ' (' . kbs_get_company_name( $customer->company_id ) . ')';
+					$company = ' (' . esc_html( kbs_get_company_name( $customer->company_id ) ) . ')';
 				}
 				$options[ absint( $customer->id ) ] = esc_html( $customer->name ) . $company;
 			}
 		} else {
-			$options[0] = __( 'No customers found', 'kb-support' );
+			$options[0] = esc_html__( 'No customers found', 'kb-support' );
 		}
 
 		if ( ! empty( $args['selected'] ) ) {
@@ -413,13 +413,13 @@ class KBS_HTML_Elements {
 			'multiple'         => false,
 			'selected'         => 0,
 			'chosen'           => true,
-			'placeholder'      => __( 'Select a User', 'kb-support' ),
+			'placeholder'      => esc_html__( 'Select a User', 'kb-support' ),
 			'number'           => -1,
 			'show_option_all'  => false,
 			'show_option_none' => false,
 			'data'             => array(
 				'search-type'        => 'user',
-				'search-placeholder' => __( 'Type to search all users', 'kb-support' ),
+				'search-placeholder' => esc_html__( 'Type to search all users', 'kb-support' ),
 			),
 		);
 
@@ -438,7 +438,7 @@ class KBS_HTML_Elements {
 				$options[ $user->ID ] = esc_html( $user->display_name );
 			}
 		} else {
-			$options[0] = __( 'No users found', 'kb-support' );
+			$options[0] = esc_html__( 'No users found', 'kb-support' );
 		}
 
 		// If a selected user has been specified, we need to ensure it's in the initial list of user displayed
@@ -492,12 +492,12 @@ class KBS_HTML_Elements {
 			'multiple'         => false,
 			'selected'         => 0,
 			'chosen'           => true,
-			'placeholder'      => __( 'Choose a Field Type', 'kb-support' ),
+			'placeholder'      => esc_html__( 'Choose a Field Type', 'kb-support' ),
 			'show_option_all'  => false,
-			'show_option_none' => __( 'Choose a Field Type', 'kb-support' ),
+			'show_option_none' => esc_html__( 'Choose a Field Type', 'kb-support' ),
 			'data'             => array(
 				'search-type'        => 'fields',
-				'search-placeholder' => __( 'Type to search all fields', 'kb-support' ),
+				'search-placeholder' => esc_html__( 'Type to search all fields', 'kb-support' ),
 			)
 		);
 
@@ -539,12 +539,12 @@ class KBS_HTML_Elements {
 			'multiple'         => false,
 			'selected'         => 0,
 			'chosen'           => true,
-			'placeholder'      => __( 'Select a Company', 'kb-support' ),
-			'show_option_none' => __( 'No Company', 'kb-support' ),
+			'placeholder'      => esc_html__( 'Select a Company', 'kb-support' ),
+			'show_option_none' => esc_html__( 'No Company', 'kb-support' ),
 			'number'           => 30,
 			'data'        => array(
 				'search-type'        => 'company',
-				'search-placeholder' => __( 'Type to search all companies', 'kb-support' )
+				'search-placeholder' => esc_html__( 'Type to search all companies', 'kb-support' )
 			)
 		);
 
@@ -565,7 +565,7 @@ class KBS_HTML_Elements {
 				$options[ absint( $company->ID ) ] = get_the_title( $company );
 			}
 		} else {
-			$options[0] = __( 'No companies found', 'kb-support' );
+			$options[0] = esc_html__( 'No companies found', 'kb-support' );
 		}
 
 		if ( ! empty( $args['selected'] ) ) {
@@ -616,15 +616,15 @@ class KBS_HTML_Elements {
 			'options'          => array(),
 			'name'             => 'kbs_agent',
 			'show_option_all'  => false,
-			'show_option_none' => __( 'Select an Agent', 'kb-support' ),
+			'show_option_none' => esc_html__( 'Select an Agent', 'kb-support' ),
             'exclude'          => array(),
             'selected'         => 0,
             'chosen'           => false,
             'multiple'         => false,
-            'placeholder'      => __( 'Select an Agent', 'kb-support' ),
+            'placeholder'      => esc_html__( 'Select an Agent', 'kb-support' ),
 			'data'             => array(
 				'search-type'        => 'agent',
-				'search-placeholder' => __( 'Type to search all agents', 'kb-support' )
+				'search-placeholder' => esc_html__( 'Type to search all agents', 'kb-support' )
 			)
 		);
 
@@ -672,10 +672,10 @@ class KBS_HTML_Elements {
             'selected'         => 0,
             'chosen'           => true,
             'multiple'         => false,
-            'placeholder'      => __( 'Select a Department', 'kb-support' ),
+            'placeholder'      => esc_html__( 'Select a Department', 'kb-support' ),
 			'data'             => array(
 				'search-type'        => 'department',
-				'search-placeholder' => __( 'Type to search all departments', 'kb-support' )
+				'search-placeholder' => esc_html__( 'Type to search all departments', 'kb-support' )
 			)
 		);
 
@@ -728,7 +728,7 @@ class KBS_HTML_Elements {
 		);
 
 		$args = wp_parse_args( $args, $defaults );
-		
+
 		$args['id'] = ! empty( $args['id'] ) ? $args['id'] : $args['name'];
 
 		$data_elements = '';
@@ -755,7 +755,7 @@ class KBS_HTML_Elements {
 		}
 
 		$class  = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $args['class'] ) ) );
-		$output = '<select name="' . esc_attr( $args['name'] ) . $name_array . '" id="' . esc_attr( kbs_sanitize_key( str_replace( '-', '_', $args['id'] ) ) ) . '" class="kbs-select ' . $class . '"' . $multiple . ' data-placeholder="' . $placeholder . '"'. $data_elements . '>' . "\r\n";
+		$output = '<select name="' . esc_attr( $args['name'] ) . $name_array . '" id="' . esc_attr( kbs_sanitize_key( str_replace( '-', '_', $args['id'] ) ) ) . '" class="kbs-select ' . esc_attr( $class ) . '"' . esc_attr( $multiple ) . ' data-placeholder="' . $placeholder . '"'. $data_elements . '>' . "\r\n";
 
 		if ( $args['show_option_all'] ) {
 			if ( $args['multiple'] ) {
@@ -822,7 +822,7 @@ class KBS_HTML_Elements {
 			$options .= ' readonly';
 		}
 
-		$output = '<input type="checkbox"' . $options . ' name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['name'] ) . '" class="' . $class . ' ' . esc_attr( $args['name'] ) . '" value="1"' . checked( 1, $args['current'], false ) . ' />';
+		$output = '<input type="checkbox"' . $options . ' name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['name'] ) . '" class="' . esc_attr( $class ) . ' ' . esc_attr( $args['name'] ) . '" value="1"' . checked( 1, $args['current'], false ) . ' />';
 
 		return $output;
 	} // checkbox
@@ -862,10 +862,10 @@ class KBS_HTML_Elements {
 					$output .= $value . '&nbsp';
 				}
 
-				$output .= '<input type="checkbox" name="' . esc_attr( $args['name'] ) . '[]" id="' . esc_attr( $args['name'] ) . '-' . $key . '" class="' . $class . ' ' . esc_attr( $args['name'] ) . '" value="' . $key . '" />';
+				$output .= '<input type="checkbox" name="' . esc_attr( $args['name'] ) . '[]" id="' . esc_attr( $args['name'] ) . '-' . esc_attr( $key ) . '" class="' . esc_attr( $class ) . ' ' . esc_attr( $args['name'] ) . '" value="' . esc_attr( $key ) . '" />';
 
 				if ( $label_pos == 'after' )	{
-					$output .= '&nbsp' . $value;
+					$output .= '&nbsp' . esc_html( $value );
 				}
 
 				if ( $i < count( $args['options'] ) )	{
@@ -917,10 +917,10 @@ class KBS_HTML_Elements {
 
                 $checked = checked( $args['current'], $key, false );
 
-				$output .= '<input type="radio" name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['name'] ) . '-' . $key . '" class="' . $class . ' ' . esc_attr( $args['name'] ) . '" value="' . $key . '"' . $checked . ' />';
+				$output .= '<input type="radio" name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['name'] ) . '-' . esc_attr( $key ) . '" class="' . esc_attr( $class ) . ' ' . esc_attr( $args['name'] ) . '" value="' . esc_attr( $key ) . '"' . $checked . ' />';
 
 				if ( $args['label_pos'] == 'after' )	{
-					$output .= '&nbsp' . $value;
+					$output .= '&nbsp' . esc_html( $value );
 				}
 
 				if ( $i < count( $args['options'] ) )	{
@@ -984,7 +984,7 @@ class KBS_HTML_Elements {
 				$output .= '<span class="kbs-description">' . esc_html( $args['desc'] ) . '</span>';
 			}
 
-			$output .= '<input type="text" name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['id'] )  . '" autocomplete="' . esc_attr( $args['autocomplete'] )  . '" value="' . esc_attr( $args['value'] ) . '" placeholder="' . esc_attr( $args['placeholder'] ) . '" class="' . $class . '" ' . $data . '' . $disabled . '/>';
+			$output .= '<input type="text" name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['id'] )  . '" autocomplete="' . esc_attr( $args['autocomplete'] )  . '" value="' . esc_attr( $args['value'] ) . '" placeholder="' . esc_attr( $args['placeholder'] ) . '" class="' . esc_attr( $class ) . '" ' . $data . '' . $disabled . '/>';
 
 		$output .= '</span>';
 
@@ -1047,19 +1047,19 @@ class KBS_HTML_Elements {
 
 		$rows = '';
 		if ( ! empty( $args['rows'] ) )	{
-			$rows = ' rows="' . $args['rows'] . '"';
+			$rows = ' rows="' . esc_attr( $args['rows'] ) . '"';
 		}
 
 		$cols = '';
 		if ( ! empty( $args['cols'] ) )	{
-			$rows = ' cols="' . $args['cols'] . '"';
+			$rows = ' cols="' . esc_attr( $args['cols'] ) . '"';
 		}
 
 		$output = '<span id="kbs-' . kbs_sanitize_key( $args['name'] ) . '-wrap">';
 
 			$output .= '<label class="kbs-input-label" for="' . kbs_sanitize_key( $args['name'] ) . '">' . esc_html( $args['label'] ) . '</label>';
 
-			$output .= '<textarea name="' . esc_attr( $args['name'] ) . '" id="' . kbs_sanitize_key( $args['name'] ) . '" class="' . $class . '"' . $rows . $cols . $disabled . $placeholder . '>' . esc_attr( $args['value'] ) . '</textarea>';
+			$output .= '<textarea name="' . esc_attr( $args['name'] ) . '" id="' . kbs_sanitize_key( $args['name'] ) . '" class="' . esc_attr( $class ) . '"' . $rows . $cols . $disabled . $placeholder . '>' . esc_attr( $args['value'] ) . '</textarea>';
 
 			if ( ! empty( $args['desc'] ) ) {
 				$output .= '<span class="description">' . esc_html( $args['desc'] ) . '</span>';
@@ -1112,8 +1112,8 @@ class KBS_HTML_Elements {
 			}
 		}
 		
-		$min = ! empty( $args['min'] ) ? ' min="' . $args['min'] . '"' : '';
-		$max = ! empty( $args['max'] ) ? ' max="' . $args['max'] . '"' : '';
+		$min = ! empty( $args['min'] ) ? ' min="' . esc_attr( $args['min'] ) . '"' : '';
+		$max = ! empty( $args['max'] ) ? ' max="' . esc_attr( $args['max'] ) . '"' : '';
 		
 		if ( $max > 5 )	{
 			$max = 5;
@@ -1127,7 +1127,7 @@ class KBS_HTML_Elements {
 				$output .= '<span class="kbs-description">' . esc_html( $args['desc'] ) . '</span>';
 			}
 
-			$output .= '<input type="number" name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['id'] )  . '" autocomplete="' . esc_attr( $args['autocomplete'] )  . '" value="' . esc_attr( $args['value'] ) . '" placeholder="' . esc_attr( $args['placeholder'] ) . '" class="' . $class . '" ' . $data . '' . $min . '' . $max . '' . $disabled . '/>';
+			$output .= '<input type="number" name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['id'] )  . '" autocomplete="' . esc_attr( $args['autocomplete'] )  . '" value="' . esc_attr( $args['value'] ) . '" placeholder="' . esc_attr( $args['placeholder'] ) . '" class="' . esc_attr( $class ) . '" ' . $data . '' . $min . '' . $max . '' . $disabled . '/>';
 
 		$output .= '</span>';
 
@@ -1187,7 +1187,7 @@ class KBS_HTML_Elements {
 
 		$output  = '<span class="kbs_user_search_wrap">';
 			$output .= $this->text( $args );
-			$output .= '<span class="kbs_user_search_results hidden"><a class="kbs-ajax-user-cancel" title="' . __( 'Cancel', 'kb-support' ) . '" aria-label="' . __( 'Cancel', 'kb-support' ) . '" href="#">x</a><span></span></span>';
+			$output .= '<span class="kbs_user_search_results hidden"><a class="kbs-ajax-user-cancel" title="' . esc_attr__( 'Cancel', 'kb-support' ) . '" aria-label="' . esc_attr__( 'Cancel', 'kb-support' ) . '" href="#">x</a><span></span></span>';
 		$output .= '</span>';
 
 		return $output;

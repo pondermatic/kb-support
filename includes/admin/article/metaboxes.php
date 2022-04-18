@@ -139,8 +139,8 @@ function kbs_article_metabox_linked_tickets_fields( $post_id )	{
 	if ( ! empty( $linked_tickets ) ) : ?>
 
     	<?php foreach( $linked_tickets as $linked_ticket ) : ?>
-			<p><a href="#TB_inline?width=600&height=550&inlineId=kbs-ticket-content-<?php echo $linked_ticket; ?>" class="thickbox" title="<?php echo get_the_title( $linked_ticket ); ?>">
-            	# <?php echo kbs_get_ticket_number( $linked_ticket ) . '</a> - ' . get_the_title( $linked_ticket ); ?>
+			<p><a href="#TB_inline?width=600&height=550&inlineId=kbs-ticket-content-<?php echo esc_attr( $linked_ticket ); ?>" class="thickbox" title="<?php echo esc_attr( get_the_title( $linked_ticket ) ); ?>">
+            	# <?php echo (int)kbs_get_ticket_number( $linked_ticket ) . '</a> - ' . esc_html( get_the_title( $linked_ticket ) ); ?>
             </p>
 
 			<div id="kbs-ticket-content-<?php echo $linked_ticket; ?>" class="kbs-hidden">
@@ -152,7 +152,7 @@ function kbs_article_metabox_linked_tickets_fields( $post_id )	{
         <?php endforeach; ?>
 
     <?php else : ?>
-    		<p><?php printf( __( 'There are no %s linked to this article.', 'kb-support' ), kbs_get_ticket_label_plural( true ) ); ?></p>
+    		<p><?php printf( esc_html__( 'There are no %s linked to this article.', 'kb-support' ), kbs_get_ticket_label_plural( true ) ); ?></p>
     <?php endif;
 
 } // kbs_article_metabox_linked_tickets_fields
@@ -176,10 +176,14 @@ function kbs_article_metabox_restrict_article_field( $post_id )	{
 	}
 
 	?>
-    <p><?php echo KBS()->html->checkbox( array(
+    <p>
+		<?php 
+		// Escaped in function.
+		echo KBS()->html->checkbox( array(
         'name'    => '_kbs_article_restricted',
         'current' => $logged_in_only
-    ) ); ?> <label for="_kbs_article_restricted"></label><?php _e( 'Restrict access?', 'kb-support' ); ?></p>
+    ) ); // phpcs:ignore ?>
+	<label for="_kbs_article_restricted"></label><?php esc_html_e( 'Restrict access?', 'kb-support' ); ?></p>
 
     <?php
 } // kbs_article_metabox_restrict_article_field

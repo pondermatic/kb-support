@@ -143,7 +143,7 @@ function kbs_company_metabox_data( $post_id )	{
 
 	<div id="kbs-company-data">
 
-		<p><label for="_kbs_company_customer"><?php _e( 'Customer', 'kb-support' ); ?>:</label><br />
+		<p><label for="_kbs_company_customer"><?php esc_html_e( 'Customer', 'kb-support' ); ?>:</label><br />
         <?php echo KBS()->html->customer_dropdown( array(
 			'name'             => '_kbs_company_customer',
 			'selected'         => $kbs_company->customer,
@@ -151,27 +151,27 @@ function kbs_company_metabox_data( $post_id )	{
 			'show_company'     => ! $kbs_company_update ? true     : false,
 			'show_option_none' => false
 		) ); ?></p>
-        <p class="description"><?php _e( '', 'kb-support' ); ?></p>
+        <p class="description"><?php esc_html_e( '', 'kb-support' ); ?></p>
 
-    	<p><label for="_kbs_company_contact"><?php _e( 'Contact Name', 'kb-support' ); ?>:</label><br />
+    	<p><label for="_kbs_company_contact"><?php esc_html_e( 'Contact Name', 'kb-support' ); ?>:</label><br />
         <?php echo KBS()->html->text( array(
 			'name'  => '_kbs_company_contact',
 			'value' => ! empty( $kbs_company->contact ) ? $kbs_company->contact : ''
 		) ); ?></p>
 
-		<p><label for="_kbs_company_email"><?php _e( 'Email Address', 'kb-support' ); ?>:</label><br />
+		<p><label for="_kbs_company_email"><?php esc_html_e( 'Email Address', 'kb-support' ); ?>:</label><br />
         <?php echo KBS()->html->text( array(
 			'name'  => '_kbs_company_email',
 			'value' => ! empty( $kbs_company->email ) ? $kbs_company->email : ''
 		) ); ?></p>
 
-		<p><label for="_kbs_company_phone"><?php _e( 'Phone Number', 'kb-support' ); ?>:</label><br />
+		<p><label for="_kbs_company_phone"><?php esc_html_e( 'Phone Number', 'kb-support' ); ?>:</label><br />
         <?php echo KBS()->html->text( array(
 			'name'  => '_kbs_company_phone',
 			'value' => ! empty( $kbs_company->phone ) ? $kbs_company->phone : ''
 		) ); ?></p>
 
-		<p><label for="_kbs_company_website"><?php _e( 'Website', 'kb-support' ); ?>:</label><br />
+		<p><label for="_kbs_company_website"><?php esc_html_e( 'Website', 'kb-support' ); ?>:</label><br />
         <?php echo KBS()->html->text( array(
 			'name'  => '_kbs_company_website',
 			'value' => ! empty( $kbs_company->website ) ? $kbs_company->website : ''
@@ -200,10 +200,10 @@ function kbs_company_metabox_tickets_table( $post_id )	{
     <table class="wp-list-table widefat striped tickets">
         <thead>
             <tr>
-                <th><?php _e( '#', 'kb-support' ); ?></th>
-                <th><?php _e( 'Opened', 'kb-support' ); ?></th>
-                <th><?php _e( 'Title', 'kb-support' ); ?></th>
-                <th><?php _e( 'Status', 'kb-support' ); ?></th>
+                <th><?php esc_html_e( '#', 'kb-support' ); ?></th>
+                <th><?php esc_html_e( 'Opened', 'kb-support' ); ?></th>
+                <th><?php esc_html_e( 'Title', 'kb-support' ); ?></th>
+                <th><?php esc_html_e( 'Status', 'kb-support' ); ?></th>
                 <?php do_action( 'kbs_company_tickets_table_headers', $kbs_company, $post_id ); ?>
             </tr>
         </thead>
@@ -212,25 +212,25 @@ function kbs_company_metabox_tickets_table( $post_id )	{
                 <?php foreach ( $tickets as $ticket ) : ?>
                     <tr>
                         <td><a href="<?php echo admin_url( 'post.php?post=' . $ticket->ID . '&action=edit' ); ?>">
-                                <?php echo kbs_format_ticket_number( kbs_get_ticket_number( $ticket->ID ) ); ?>
+                                <?php echo esc_html( kbs_format_ticket_number( kbs_get_ticket_number( $ticket->ID ) ) ); ?>
                             </a>
                         </td>
-                        <td class="date"><?php echo date_i18n( get_option( 'date_format' ), strtotime( $ticket->post_date ) ); ?></td>
-                        <td class="title"><?php echo get_the_title( $ticket->ID ); ?></td>
-                        <td><?php echo kbs_get_ticket_status( $ticket, true ); ?></td>
+                        <td class="date"><?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $ticket->post_date ) ) ); ?></td>
+                        <td class="title"><?php echo esc_html( get_the_title( $ticket->ID ) ); ?></td>
+                        <td><?php echo esc_html( kbs_get_ticket_status( $ticket, true ) ); ?></td>
                         <?php do_action( 'kbs_after_company_tickets_table_status', $kbs_company, $post_id ); ?>
                     </tr>
                 <?php endforeach; ?>
             <?php else: ?>
-                <tr><td colspan="5"><?php printf( __( 'No %s Found', 'kb-support' ), kbs_get_ticket_label_plural() ); ?></td></tr>
+                <tr><td colspan="5"><?php printf( esc_html__( 'No %s Found', 'kb-support' ), kbs_get_ticket_label_plural() ); ?></td></tr>
             <?php endif; ?>
         </tbody>
         <tfoot>
             <tr>
-                <th><?php _e( '#', 'kb-support' ); ?></th>
-                <th><?php _e( 'Opened', 'kb-support' ); ?></th>
-                <th><?php _e( 'Title', 'kb-support' ); ?></th>
-                <th><?php _e( 'Status', 'kb-support' ); ?></th>
+                <th><?php esc_html_e( '#', 'kb-support' ); ?></th>
+                <th><?php esc_html_e( 'Opened', 'kb-support' ); ?></th>
+                <th><?php esc_html_e( 'Title', 'kb-support' ); ?></th>
+                <th><?php esc_html_e( 'Status', 'kb-support' ); ?></th>
                 <?php do_action( 'kbs_company_tickets_table_headers', $kbs_company, $post_id ); ?>
             </tr>
         </tfoot>

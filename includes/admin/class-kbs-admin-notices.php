@@ -144,8 +144,8 @@ class KBS_Admin_Notices	{
             ob_start(); ?>
             <div class="notice notice-info">
                 <p><strong><?php printf(
-                    __( 'Editing: %s.', 'kb-support' ),
-                    get_the_title( $_GET['field_id'] )
+                    esc_html__( 'Editing: %s.', 'kb-support' ),
+                    esc_html( get_the_title( $_GET['field_id'] ) )
                 ); ?></strong></p>
             </div>
             <?php echo ob_get_clean();
@@ -155,7 +155,7 @@ class KBS_Admin_Notices	{
             // Security
             switch( $_GET['kbs-message'] ) {
                 case 'nonce_fail' :
-                    $notices['updated']['kbs-nonce-fail'] = __( 'Security verification failed.', 'kb-support' );
+                    $notices['updated']['kbs-nonce-fail'] = esc_html__( 'Security verification failed.', 'kb-support' );
                     break;
             }
 
@@ -163,15 +163,15 @@ class KBS_Admin_Notices	{
             if ( current_user_can( 'edit_tickets' ) )    {
                 switch( $_GET['kbs-message'] ) {
                     case 'ticket_reopened':
-                        $notices['updated']['kbs-ticket-reopened'] = sprintf( __( '%s reopened.', 'kb-support' ), $ticket_singular );
+                        $notices['updated']['kbs-ticket-reopened'] = sprintf( esc_html__( '%s reopened.', 'kb-support' ), $ticket_singular );
                         break;
 
                     case 'ticket_not_closed':
-                        $notices['error']['kbs-ticket-not-closed'] = sprintf( __( 'The %s cannot be re-opened. It is not closed.', 'kb-support' ), strtolower( $ticket_singular ) );
+                        $notices['error']['kbs-ticket-not-closed'] = sprintf( esc_html__( 'The %s cannot be re-opened. It is not closed.', 'kb-support' ), strtolower( $ticket_singular ) );
                         break;
 
                     case 'ticket_reply_added':
-                        $notices['updated']['kbs-ticket-reply-added'] = __( 'The reply was successfully added.', 'kb-support' );
+                        $notices['updated']['kbs-ticket-reply-added'] = esc_html__( 'The reply was successfully added.', 'kb-support' );
                         break;
 
                     case 'ticket_reply_added_closed':
@@ -180,36 +180,36 @@ class KBS_Admin_Notices	{
 
                         $create_article_link = add_query_arg( array(
                             'kbs-action' => 'create_article',
-                            'ticket_id'  => $_GET['kbs_ticket_id']
+                            'ticket_id'  => absint( $_GET['kbs_ticket_id'] )
                         ), admin_url() );
 
                         $create_article_link = apply_filters( 'kbs_create_article_link', $create_article_link, $_GET['kbs_ticket_id'] );
 
-                        $closed = sprintf( __( ' and the %1$s was closed.', 'kb-support' ), strtolower( $ticket_singular ) );
+                        $closed = sprintf( esc_html__( ' and the %1$s was closed.', 'kb-support' ), strtolower( $ticket_singular ) );
                         $closed .= ' ';
-                        $closed .= sprintf( __( 'Create <a href="%s">%s</a>', 'kb-support' ), $create_article_link, $article_singular );
+                        $closed .= wp_kses_post( sprintf(__( 'Create <a href="%s">%s</a>', 'kb-support' ), esc_url( $create_article_link ), $article_singular ) );
 
-                        $notices['updated']['kbs-ticket-reply-added'] = sprintf( __( 'The reply was successfully added%s.', 'kb-support' ), $closed );
+                        $notices['updated']['kbs-ticket-reply-added'] = sprintf( esc_html__( 'The reply was successfully added%s.', 'kb-support' ), $closed );
                         break;
 
                     case 'ticket_reply_failed':
-                        $notices['error']['kbs-ticket-reply-failed'] = __( 'The reply could not be added.', 'kb-support' );
+                        $notices['error']['kbs-ticket-reply-failed'] = esc_html__( 'The reply could not be added.', 'kb-support' );
                         break;
 
                     case 'ticket_reply_deleted':
-                        $notices['updated']['kbs-ticket-reply-deleted'] = __( 'The reply was successfully deleted.', 'kb-support' );
+                        $notices['updated']['kbs-ticket-reply-deleted'] = esc_html__( 'The reply was successfully deleted.', 'kb-support' );
                         break;
 
                     case 'ticket_reply_delete_failed':
-                        $notices['error']['kbs-ticket-reply-deleted'] = __( 'The reply could not be deleted.', 'kb-support' );
+                        $notices['error']['kbs-ticket-reply-deleted'] = esc_html__( 'The reply could not be deleted.', 'kb-support' );
                         break;
 
                     case 'note_deleted':
-                        $notices['updated']['kbs-ticket-note-deleted'] = __( 'The note was deleted.', 'kb-support' );
+                        $notices['updated']['kbs-ticket-note-deleted'] = esc_html__( 'The note was deleted.', 'kb-support' );
                         break;
 
                     case 'note_not_deleted':
-                        $notices['error']['kbs-ticket-note-not-deleted'] = __( 'The note could not be deleted.', 'kb-support' );
+                        $notices['error']['kbs-ticket-note-not-deleted'] = esc_html__( 'The note could not be deleted.', 'kb-support' );
                         break;
                 }
             }
@@ -219,7 +219,7 @@ class KBS_Admin_Notices	{
                 switch( $_GET['kbs-message'] )  {
                     case 'article_created':
                         $notices['updated']['kbs-create-article-success'] = sprintf(
-                            __( 'Draft %1$s created from %2$s. Review, edit and publish the new %1$s below.', 'kb-support' ),
+                            esc_html__( 'Draft %1$s created from %2$s. Review, edit and publish the new %1$s below.', 'kb-support' ),
                             strtolower( $article_singular ),
                             strtolower( $ticket_singular )
                         );
@@ -227,18 +227,18 @@ class KBS_Admin_Notices	{
 
                     case 'create_article_failed':
                         $notices['error']['kbs-create-article-failed'] = sprintf(
-                            __( 'Could not create new %1$s from %2$s.', 'kb-support' ),
+                            esc_html__( 'Could not create new %1$s from %2$s.', 'kb-support' ),
                             strtolower( $article_singular ),
                             strtolower( $ticket_singular )
                         );
                         break;
 
                     case 'reset_article_views':
-                        $notices['updated']['kbs-reset-article-views'] = sprintf( __( 'View count reset for %s.', 'kb-support' ), $article_singular );
+                        $notices['updated']['kbs-reset-article-views'] = sprintf( esc_html__( 'View count reset for %s.', 'kb-support' ), $article_singular );
                         break;
 
                     case 'reset_article_views_failed':
-                        $notices['error']['kbs-reset-article-views-failed'] = sprintf( __( 'Failed to reset %s view count.', 'kb-support' ), $article_singular );
+                        $notices['error']['kbs-reset-article-views-failed'] = sprintf( esc_html__( 'Failed to reset %s view count.', 'kb-support' ), $article_singular );
                         break;
                 }
             }
@@ -247,31 +247,31 @@ class KBS_Admin_Notices	{
             if ( current_user_can( 'edit_submission_forms' ) )    {
                 switch( $_GET['kbs-message'] )  {
                     case 'field_added':
-                        $notices['updated']['kbs-field-added'] = __( 'Field was added.', 'kb-support' );
+                        $notices['updated']['kbs-field-added'] = esc_html__( 'Field was added.', 'kb-support' );
                         break;
 
                     case 'field_add_fail':
-                        $notices['error']['kbs-field-notadded'] = __( 'Unable to add field.', 'kb-support' );
+                        $notices['error']['kbs-field-notadded'] = esc_html__( 'Unable to add field.', 'kb-support' );
                         break;
 
                     case 'field_saved':
-                        $notices['updated']['kbs-field-updated'] = __( 'Field updated.', 'kb-support' );
+                        $notices['updated']['kbs-field-updated'] = esc_html__( 'Field updated.', 'kb-support' );
                         break;
 
                     case 'field_save_fail':
-                        $notices['error']['kbs-field-notsaved'] = __( 'Unable to save field.', 'kb-support' );
+                        $notices['error']['kbs-field-notsaved'] = esc_html__( 'Unable to save field.', 'kb-support' );
                         break;
 
                     case 'field_deleted':
-                        $notices['updated']['kbs-field-deleted'] = __( 'Field deleted.', 'kb-support' );
+                        $notices['updated']['kbs-field-deleted'] = esc_html__( 'Field deleted.', 'kb-support' );
                         break;
 
                      case 'field_delete_fail':
-                        $notices['error']['kbs-field-notdeleted'] = __( 'Unable to delete field.', 'kb-support' );
+                        $notices['error']['kbs-field-notdeleted'] = esc_html__( 'Unable to delete field.', 'kb-support' );
                         break;
 
                     case 'field_deleted':
-                        $notices['updated']['kbs-field-deleted'] = __( 'Field deleted.', 'kb-support' );
+                        $notices['updated']['kbs-field-deleted'] = esc_html__( 'Field deleted.', 'kb-support' );
                         break;
                 }
             }
@@ -280,55 +280,55 @@ class KBS_Admin_Notices	{
             if ( kbs_can_view_customers() )    {
                 switch( $_GET['kbs-message'] )  {
                     case 'customer_created':
-                        $notices['updated']['kbs-customer-added'] = __( 'Customer added successfully.', 'kb-support' );
+                        $notices['updated']['kbs-customer-added'] = esc_html__( 'Customer added successfully.', 'kb-support' );
                         break;
 
                     case 'customer_list_permission':
-                        $notices['error']['kbs-customer-list-permission'] = __( 'You do not have permission to view the customer list.', 'kb-support' );
+                        $notices['error']['kbs-customer-list-permission'] = esc_html__( 'You do not have permission to view the customer list.', 'kb-support' );
                         break;
 
                     case 'invalid_customer_id':
-                        $notices['error']['kbs-invalid-customer-id'] = __( 'An invalid customer ID was provided.', 'kb-support' );
+                        $notices['error']['kbs-invalid-customer-id'] = esc_html__( 'An invalid customer ID was provided.', 'kb-support' );
                         break;
 
                     case 'email_added':
-                        $notices['updated']['kbs-customer-email-added'] = __( 'Email address added.', 'kb-support' );
+                        $notices['updated']['kbs-customer-email-added'] = esc_html__( 'Email address added.', 'kb-support' );
                         break;
 
                     case 'email_removed':
-                        $notices['updated']['kbs-customer-email-removed'] = __( 'Email address removed.', 'kb-support' );
+                        $notices['updated']['kbs-customer-email-removed'] = esc_html__( 'Email address removed.', 'kb-support' );
                         break;
 
                     case 'email_remove_failed':
-                        $notices['error']['kbs-customer-email-remove-failed'] = __( 'Email address could not be removed.', 'kb-support' );
+                        $notices['error']['kbs-customer-email-remove-failed'] = esc_html__( 'Email address could not be removed.', 'kb-support' );
                         break;
 
                     case 'primary_email_updated':
-                        $notices['updated']['kbs-customer-email-primary-updated'] = __( 'Primary email address updated.', 'kb-support' );
+                        $notices['updated']['kbs-customer-email-primary-updated'] = esc_html__( 'Primary email address updated.', 'kb-support' );
                         break;
 
                     case 'primary_email_failed':
-                        $notices['error']['kbs-customer-email-primary-remove-failed'] = __( 'Primary email address could not be updated.', 'kb-support' );
+                        $notices['error']['kbs-customer-email-primary-remove-failed'] = esc_html__( 'Primary email address could not be updated.', 'kb-support' );
                         break;
 
                     case 'customer_delete_no_confirm':
-                        $notices['error']['kbs-customer-delete-no-confirm'] = __( 'Please confirm you wish to delete this customer.', 'kb-support' );
+                        $notices['error']['kbs-customer-delete-no-confirm'] = esc_html__( 'Please confirm you wish to delete this customer.', 'kb-support' );
                         break;
 
                      case 'customer_deleted':
-                        $notices['updated']['kbs-customer-deleted'] = __( 'Customer deleted.', 'kb-support' );
+                        $notices['updated']['kbs-customer-deleted'] = esc_html__( 'Customer deleted.', 'kb-support' );
                         break;
 
                     case 'customer_delete_failed':
-                        $notices['error']['kbs-customer-delete-failed'] = __( 'Customer could not be deleted.', 'kb-support' );
+                        $notices['error']['kbs-customer-delete-failed'] = esc_html__( 'Customer could not be deleted.', 'kb-support' );
                         break;
 
                     case 'disconnect_user':
-                        $notices['updated']['kbs-customer-disconnect-user'] = __( 'Customer disconnected from user ID.', 'kb-support' );
+                        $notices['updated']['kbs-customer-disconnect-user'] = esc_html__( 'Customer disconnected from user ID.', 'kb-support' );
                         break;
 
                     case 'disconnect_user_fail':
-                        $notices['error']['kbs-customer-disconnect-user-failed'] = __( 'Could not disconnect customer from user ID.', 'kb-support' );
+                        $notices['error']['kbs-customer-disconnect-user-failed'] = esc_html__( 'Could not disconnect customer from user ID.', 'kb-support' );
                         break;
 
                 }
@@ -338,11 +338,11 @@ class KBS_Admin_Notices	{
             if ( current_user_can( 'export_ticket_reports' ) )    {
                 switch( $_GET['kbs-message'] )  {
                     case 'settings-imported':
-                        $notices['updated']['kbs-settings-imported'] = __( 'Customer added successfully.', 'kb-support' );
+                        $notices['updated']['kbs-settings-imported'] = esc_html__( 'Customer added successfully.', 'kb-support' );
                         break;
 
                      case 'settings-import-missing-file':
-                        $notices['error']['kbs-settings-import-file-missing'] = __( 'Please upload a valid .json file.', 'kb-support' );
+                        $notices['error']['kbs-settings-import-file-missing'] = esc_html__( 'Please upload a valid .json file.', 'kb-support' );
                         break;
                 }
             }
@@ -351,31 +351,31 @@ class KBS_Admin_Notices	{
             if ( current_user_can( 'manage_ticket_settings' ) )    {
                 switch( $_GET['kbs-message'] )  {
                     case 'sequential-numbers-updated':
-                        $notices['updated']['kbs-sequential-numbers-updated'] = sprintf( __( '%s numbers have been successfully upgraded.', 'kb-support' ), $ticket_singular );
+                        $notices['updated']['kbs-sequential-numbers-updated'] = sprintf( esc_html__( '%s numbers have been successfully upgraded.', 'kb-support' ), $ticket_singular );
                         break;
 
                     case 'ticket-sources-updated':
-                        $notices['updated']['kbs-ticket-sources-updated'] = sprintf( __( '%s sources have been successfully updated.', 'kb-support' ), $ticket_singular );
+                        $notices['updated']['kbs-ticket-sources-updated'] = sprintf( esc_html__( '%s sources have been successfully updated.', 'kb-support' ), $ticket_singular );
                         break;
 
 					case 'api-key-generated' :	
-						$notices['updated']['kbs-api-key-generated'] = sprintf( __( 'API keys successfully generated.', 'kb-support' ) );
+						$notices['updated']['kbs-api-key-generated'] = sprintf( esc_html__( 'API keys successfully generated.', 'kb-support' ) );
 					break;
 
 					case 'api-key-exists' :	
-						$notices['error']['kbs-api-key-exists'] = sprintf( __( 'The specified user already has API keys.', 'kb-support' ) );
+						$notices['error']['kbs-api-key-exists'] = sprintf( esc_html__( 'The specified user already has API keys.', 'kb-support' ) );
 					break;
 
 					case 'api-key-regenerated' :	
-						$notices['updated']['kbs-api-key-regenerated'] = sprintf( __( 'API keys successfully regenerated.', 'kb-support' ) );
+						$notices['updated']['kbs-api-key-regenerated'] = sprintf( esc_html__( 'API keys successfully regenerated.', 'kb-support' ) );
 					break;
 
 					case 'api-key-revoked' :	
-						$notices['updated']['kbs-api-key-revoked'] = sprintf( __( 'API keys successfully revoked.', 'kb-support' ) );
+						$notices['updated']['kbs-api-key-revoked'] = sprintf( esc_html__( 'API keys successfully revoked.', 'kb-support' ) );
 					break;
 
 					case 'api-key-failed' :	
-						$notices['error']['kbs-api-key-failed'] = sprintf( __( 'API key generation failed.', 'kb-support' ) );
+						$notices['error']['kbs-api-key-failed'] = sprintf( esc_html__( 'API key generation failed.', 'kb-support' ) );
 					break;
                 }
             }
@@ -409,10 +409,10 @@ class KBS_Admin_Notices	{
         <div class="updated notice notice-kbs-dismiss is-dismissible" data-notice="first_extension_discount_advisory">
             <p>
                 <?php printf(
-                    __( 'Loving KB Support? Great! Did you know you can receive a <strong>%1$s discount</strong> on the purchase of extensions from our <a target="_blank" href="%2$s">plugin store</a> to further enhance the features and functionality? <a href="%2$s">Shop Now!</a>', 'kb-support' ),
+                    wp_kses_post( __( 'Loving KB Support? Great! Did you know you can receive a <strong>%1$s discount</strong> on the purchase of extensions from our <a target="_blank" href="%2$s">plugin store</a> to further enhance the features and functionality? <a href="%2$s">Shop Now!</a>', 'kb-support' ),
                     '15%',
                     'https://kb-support.com/extensions/'
-                ); ?>
+                ) ); ?>
             </p>
         </div>
 
@@ -472,9 +472,9 @@ class KBS_Admin_Notices	{
         <div class="updated notice notice-kbs-dismiss is-dismissible" data-notice="kbs_request_wp_5star_rating">
             <p>
                 <?php printf(
-                    __( '<strong>Awesome!</strong> It looks like you have closed over 25 %1$s since you activated KB Support which is really fantastic!', 'kb-support' ),
+                    wp_kses_post( __( '<strong>Awesome!</strong> It looks like you have closed over 25 %1$s since you activated KB Support which is really fantastic!', 'kb-support' ),
                     kbs_get_ticket_label_plural( true )
-                ); ?>
+                ) ); ?>
             </p>
             <p>
                 <?php printf(

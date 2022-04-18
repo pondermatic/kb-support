@@ -72,22 +72,22 @@ function kbs_set_company_column_data( $column_name, $post_id ) {
 			break;
 
 		case 'contact':
-			echo $company->contact;
+			echo esc_html( $company->contact );
 			break;
 
 		case 'email':
-			echo $company->email;
+			echo esc_html( $company->email );
 			break;
 
 		case 'phone':
-			echo $company->phone;
+			echo esc_html( $company->phone );
 			break;
 
 		case 'website':
 			printf(
                 '<a href="%1$s" title="%2$s" target="_blank">%1$s</a>',
-                $company->website,
-                sprintf( __( 'Open %s in a new tab', 'kb-support' ), $company->website )
+                esc_url( $company->website ),
+                sprintf( __( 'Open %s in a new tab', 'kb-support' ), esc_url( $company->website ) )
             );
 			break;
 
@@ -96,9 +96,9 @@ function kbs_set_company_column_data( $column_name, $post_id ) {
 			if ( $company_tickets > 0 )	{
 				$tickets_page = add_query_arg( array(
 					'post_type'  => 'kbs_ticket',
-					'company_id' => $post_id
+					'company_id' => absint( $post_id )
 				), admin_url( 'edit.php' ) );
-				echo '<a href="' . $tickets_page . '">';
+				echo '<a href="' . esc_url( $tickets_page ) . '">';
 			}
 
 			echo kbs_count_company_tickets( $post_id );
@@ -113,11 +113,11 @@ function kbs_set_company_column_data( $column_name, $post_id ) {
 			$customer_page  = add_query_arg( array(
 				'post_type'  => 'kbs_ticket',
 				'page'       => 'kbs-customers',
-				'company_id' => $post_id
+				'company_id' => absint( $post_id )
 			), admin_url( 'edit.php' ) );
 
 			if ( $customer_count > 0 )	{
-				echo '<a href="' . $customer_page . '">';
+				echo '<a href="' . esc_url( $customer_page ) . '">';
 			}
 
 			echo kbs_count_customers_in_company( $post_id );
@@ -128,7 +128,7 @@ function kbs_set_company_column_data( $column_name, $post_id ) {
 			break;
 
 		default:
-			echo __( 'No callback found for post column', 'kb-support' );
+			echo ec_html__( 'No callback found for post column', 'kb-support' );
 			break;
 	}
 
@@ -145,7 +145,7 @@ add_action( 'manage_kbs_company_posts_custom_column' , 'kbs_set_company_column_d
  *
  * @return	void
  */
-function kbs_company_post_save( $post_id, $post, $update )	{	
+function kbs_company_post_save( $post_id, $post, $update )	{
 
 	// Remove the save post action to avoid loops
 	remove_action( 'save_post_kbs_company', 'kbs_company_post_save', 10, 3 );

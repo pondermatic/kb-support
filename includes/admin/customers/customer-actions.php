@@ -51,7 +51,7 @@ function kbs_edit_customer()	{
 	$customer_info = wp_parse_args( $customer_info, $defaults );
 
 	if ( ! is_email( $customer_info['email'] ) ) {
-		$error = __( 'Please enter a valid email address.', 'kb-support' );
+		$error = esc_html__( 'Please enter a valid email address.', 'kb-support' );
 	}
 
 	if ( '-1' == $customer_info['company_id'] )	{
@@ -62,13 +62,13 @@ function kbs_edit_customer()	{
 
 		// Make sure we don't already have this user attached to a customer
 		if ( ! empty( $customer_info['user_id'] ) && false !== KBS()->customers->get_customer_by( 'user_id', $customer_info['user_id'] ) ) {
-			$error = sprintf( __( 'The User ID %d is already associated with a different customer.', 'kb-support' ), $customer_info['user_id'] );
+			$error = sprintf( esc_html__( 'The User ID %d is already associated with a different customer.', 'kb-support' ), $customer_info['user_id'] );
 		}
 
 		// Make sure it's actually a user
 		$user = get_user_by( 'id', $customer_info['user_id'] );
 		if ( ! empty( $customer_info['user_id'] ) && false === $user ) {
-			$error = sprintf( __( 'The User ID %d does not exist. Please assign an existing user.', 'kb-support' ), $customer_info['user_id'] );
+			$error = sprintf( esc_html__( 'The User ID %d does not exist. Please assign an existing user.', 'kb-support' ), $customer_info['user_id'] );
 		}
 
 	}
@@ -77,7 +77,7 @@ function kbs_edit_customer()	{
 		$website = esc_url( $customer_info['website'] );
 
 		if ( empty( $website ) ) {
-			$error = __( 'Please enter a valid website address.', 'kb-support' );
+			$error = esc_html__( 'Please enter a valid website address.', 'kb-support' );
 		}
 
 	} else	{
