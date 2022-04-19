@@ -350,7 +350,7 @@ function kbs_admin_email_ticket_notice( $ticket_id = 0, $ticket_data = array() )
 	$from_email  = kbs_get_option( 'from_email', get_bloginfo( 'admin_email' ) );
 	$from_email  = apply_filters( 'kbs_notification_ticket_from_address', $from_email, $ticket_id, $ticket_data );
 
-	$subject     = kbs_get_option( 'ticket_notification_subject', sprintf( __( 'New %1Ss logged - Case #%1$s', 'kb-support' ), $single, $ticket_id ) );
+	$subject     = kbs_get_option( 'ticket_notification_subject', sprintf( __( 'New %1$s logged - Case #%1$s', 'kb-support' ), $single, $ticket_id ) );
 	$subject     = apply_filters( 'kbs_admin_ticket_notification_subject', wp_strip_all_tags( $subject ), $ticket_id );
 	$subject     = kbs_do_email_tags( $subject, $ticket_id );
 
