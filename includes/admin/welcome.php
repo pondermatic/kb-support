@@ -116,7 +116,7 @@ class KBS_Welcome {
 	 * @return	void
 	 */
 	public function tabs()	{
-		$selected        = isset( $_GET['page'] ) ? $_GET['page'] : 'kbs-getting-started';
+		$selected        = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : 'kbs-getting-started';
 		$about_url       = esc_url( admin_url( add_query_arg( array( 'page' => 'kbs-about' ), 'index.php' ) ) );
 		$get_started_url = esc_url( admin_url( add_query_arg( array( 'page' => 'kbs-getting-started' ), 'index.php' ) ) );
 		?>

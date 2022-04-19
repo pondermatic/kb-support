@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) )
 */
 function kbs_customers_page() {
 	$default_views  = kbs_customer_views();
-	$requested_view = isset( $_GET['view'] ) ? sanitize_text_field( $_GET['view'] ) : 'customers';
+	$requested_view = isset( $_GET['view'] ) ? sanitize_text_field( wp_unslash( $_GET['view'] ) ) : 'customers';
 
 	if ( array_key_exists( $requested_view, $default_views ) && function_exists( $default_views[ $requested_view ] ) ) {
 		if ( 'add' == $requested_view )	{
@@ -104,10 +104,10 @@ function kbs_customers_list() {
  */
 function kbs_render_customer_view( $view, $callbacks ) {
 
-	$render             = isset( $_GET['render'] ) ? $_GET['render'] : true;
+	$render             = isset( $_GET['render'] ) ? sanitize_text_field( wp_unslash( $_GET['render'] ) ) : true;
 	$url                = remove_query_arg( array( 'kbs-message', 'render' ) );
 	$customer_tabs      = kbs_customer_tabs();
-	$active_tab         = isset( $_GET['tab'] ) && array_key_exists( $_GET['tab'], $customer_tabs ) ? $_GET['tab'] : 'general';
+	$active_tab         = isset( $_GET['tab'] ) && array_key_exists( sanitize_text_field( wp_unslash( $_GET['tab'] ) ), $customer_tabs ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'general';
 
 	if ( ! kbs_can_view_customers() ) {
 		wp_safe_redirect( add_query_arg( array(
@@ -502,8 +502,7 @@ function kbs_customers_view( $customer ) {
  */
 function kbs_customer_notes_view( $customer ) {
 
-	$paged       = isset( $_GET['paged'] ) && is_numeric( $_GET['paged'] ) ? $_GET['paged'] : 1;
-	$paged       = absint( $paged );
+	$paged       = isset( $_GET['paged'] ) && is_numeric( $_GET['paged'] ) ? absint( $_GET['paged'] ) : 1;
 	$note_count  = $customer->get_notes_count();
 	$per_page    = apply_filters( 'kbs_customer_notes_per_page', 20 );
 	$total_pages = ceil( $note_count / $per_page );

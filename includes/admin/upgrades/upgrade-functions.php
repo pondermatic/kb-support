@@ -24,11 +24,11 @@ if ( ! defined( 'ABSPATH' ) )
  */
 function kbs_process_upgrade_actions() {
 	if ( isset( $_POST['kbs-upgrade-action'] ) ) {
-		do_action( 'kbs-upgrade-' . $_POST['kbs-upgrade-action'], $_POST );
+		do_action( 'kbs-upgrade-' . sanitize_text_field( wp_unslash( $_POST['kbs-upgrade-action'] ) ), $_POST );
 	}
 
 	if ( isset( $_GET['kbs-upgrade-action'] ) ) {
-		do_action( 'kbs-upgrade-' . $_GET['kbs-upgrade-action'], $_GET );
+		do_action( 'kbs-upgrade-' . sanitize_text_field( wp_unslash( $_GET['kbs-upgrade-action'] ) ), $_GET );
 	}
 
 } // kbs_process_upgrade_actions

@@ -145,7 +145,7 @@ class KBS_Admin_Notices	{
             <div class="notice notice-info">
                 <p><strong><?php printf(
                     esc_html__( 'Editing: %s.', 'kb-support' ),
-                    esc_html( get_the_title( $_GET['field_id'] ) )
+                    esc_html( get_the_title( absint( wp_unslash( $_GET['field_id'] ) ) ) )
                 ); ?></strong></p>
             </div>
             <?php echo ob_get_clean();
@@ -180,10 +180,10 @@ class KBS_Admin_Notices	{
 
                         $create_article_link = add_query_arg( array(
                             'kbs-action' => 'create_article',
-                            'ticket_id'  => absint( $_GET['kbs_ticket_id'] )
+                            'ticket_id'  => isset( $_GET['kbs_ticket_id'] ) ? absint( $_GET['kbs_ticket_id'] ) : 0
                         ), admin_url() );
 
-                        $create_article_link = apply_filters( 'kbs_create_article_link', $create_article_link, $_GET['kbs_ticket_id'] );
+                        $create_article_link = apply_filters( 'kbs_create_article_link', $create_article_link, isset( $_GET['kbs_ticket_id'] ) ? absint( $_GET['kbs_ticket_id'] ) : 0 );
 
                         $closed = sprintf( esc_html__( ' and the %1$s was closed.', 'kb-support' ), strtolower( $ticket_singular ) );
                         $closed .= ' ';
@@ -555,7 +555,7 @@ class KBS_Admin_Notices	{
     */
     function dismiss_notices() {
 
-        $notice = isset( $_GET['kbs_notice'] ) ? $_GET['kbs_notice'] : false;
+        $notice = isset( $_GET['kbs_notice'] ) ? sanitize_text_field( wp_unslash( $_GET['kbs_notice'] ) ) : false;
 
         if ( ! $notice )	{
             return;

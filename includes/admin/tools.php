@@ -46,7 +46,7 @@ add_action( 'admin_menu', 'kbs_add_tools_menu_link', 99 );
  */
 function kbs_tools_page()	{
 
-	$active_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'general';
+	$active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'general';
 
 	?>
     <div class="wrap">
@@ -174,7 +174,7 @@ function kbs_tools_banned_emails_save() {
 		return;
 	}
 
-	if ( ! wp_verify_nonce( $_POST['kbs_banned_emails_nonce'], 'kbs_banned_emails_nonce' ) )	{
+	if ( ! isset( $_POST['kbs_banned_emails_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['kbs_banned_emails_nonce'] ) ), 'kbs_banned_emails_nonce' ) )	{
 		return;
 	}
 
@@ -185,9 +185,10 @@ function kbs_tools_banned_emails_save() {
 	if ( ! empty( $_POST['banned_emails'] ) )	{
 
 		// Sanitize the input
-		$emails = array_map( 'trim', explode( "\n", $_POST['banned_emails'] ) );
+		$emails = array_map( 'sanitize_email', explode( "\n", wp_unslash( $_POST['banned_emails'] ) ) );
+		$emails = array_map( 'trim', $emails );
 		$emails = array_unique( $emails );
-		$emails = array_map( 'sanitize_text_field', $emails );
+		
 
 		foreach( $emails as $id => $email )	{
 			if ( ! is_email( $email ) )	{
@@ -383,7 +384,7 @@ function kbs_tools_sysinfo_get()	{
 	$return .= "\n" . '-- Webserver Configuration' . "\n\n";
 	$return .= 'PHP Version:              ' . PHP_VERSION . "\n";
 	$return .= 'MySQL Version:            ' . $wpdb->db_version() . "\n";
-	$return .= 'Webserver Info:           ' . $_SERVER['SERVER_SOFTWARE'] . "\n";
+	$return .= 'Webserver Info:           ' . isset( $_SERVER['SERVER_SOFTWARE'] ) ? sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ) : 'unknown' . "\n";
 
 	$return  = apply_filters( 'kbs_sysinfo_after_webserver_config', $return );
 
@@ -434,8 +435,8 @@ function kbs_tools_sysinfo_download() {
 
 	header( 'Content-Type: text/plain' );
 	header( 'Content-Disposition: attachment; filename="kbs-system-info.txt"' );
-
-	echo wp_strip_all_tags( $_POST['kbs-sysinfo'] );
+	
+	echo wp_strip_all_tags( isset( $_POST['kbs-sysinfo'] ) ? sanitize_text_field( wp_unslash( $_POST['kbs-sysinfo'] ) )  : 'unknown' );
 	die();
 } // kbs_tools_sysinfo_download
 add_action( 'init', 'kbs_tools_sysinfo_download' );

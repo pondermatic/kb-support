@@ -30,15 +30,25 @@ function kbs_do_ajax_export() {
 
 	parse_str( $_POST['form'], $form );
 
+	if( !empty( $form ) ){
+		foreach( $form as $key => $value ){
+			if( '_wp_http_referer' == $key ){
+				$form[ $key ]  = sanitize_url( wp_unslash( $form[ $key ] ) );
+			}else{
+				$form[ $key ]  = sanitize_text_field( wp_unslash( $form[ $key ] ) );
+			}
+		}
+	}
+
 	$_REQUEST = $form = (array) $form;
 
-	if ( ! wp_verify_nonce( $_REQUEST['kbs_ajax_export'], 'kbs_ajax_export' ) ) {
+	if ( ! isset( $_REQUEST['kbs_ajax_export'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['kbs_ajax_export'] ) ), 'kbs_ajax_export' ) ) {
 		die( '-2' );
 	}
 
 	do_action( 'kbs_batch_export_class_include', $form['kbs-export-class'] );
 
-	$step     = absint( $_POST['step'] );
+	$step     = isset( $_POST['step'] ) ? absint( $_POST['step'] ) : 1;
 	$class    = sanitize_text_field( $form['kbs-export-class'] );
 	$export   = new $class( $step );
 

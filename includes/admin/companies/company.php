@@ -162,7 +162,7 @@ function kbs_company_post_save( $post_id, $post, $update )	{
 
 	if (
 		! isset( $_POST['kbs_company_meta_box_nonce'] )
-		|| ! wp_verify_nonce( $_POST['kbs_company_meta_box_nonce'], 'kbs_company_meta_save' )
+		|| ! wp_verify_nonce( esc_html( wp_unslash( $_POST['kbs_company_meta_box_nonce'] ) ), 'kbs_company_meta_save' )
 	)	{
 		return;
 	}
@@ -180,13 +180,13 @@ function kbs_company_post_save( $post_id, $post, $update )	{
 		if ( ! empty( $_POST[ $field ] ) ) {
 
 			if ( '_kbs_company_email' == $field )	{
-				$posted_value = sanitize_email( trim( $_POST[ $field ] ) );
+				$posted_value =  trim( sanitize_email( wp_unslash( $_POST[ $field ] ) ) );
 			} elseif ( 'kbs_company_website' == $field )	{
-				$posted_value = esc_url( $_POST[ $field ] );
+				$posted_value = esc_url( wp_unslash( $_POST[ $field ] ) );
 			} elseif ( is_string( $_POST[ $field ] ) )	{
-				$posted_value = sanitize_text_field( $_POST[ $field ] );
+				$posted_value = sanitize_text_field( wp_unslash( $_POST[ $field ] ) );
 			} elseif ( is_int( $_POST[ $field ] ) )	{
-				$posted_value = $_POST[ $field ];
+				$posted_value = absint( wp_unslash( $_POST[ $field ] ) );
 			} elseif( is_array( $_POST[ $field ] ) )	{
 				$posted_value = array_map( 'absint', $_POST[ $field ] );
 			}

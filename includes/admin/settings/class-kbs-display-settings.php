@@ -100,10 +100,10 @@ class KBS_Display_Settings	{
 		$this->all_settings  = kbs_get_registered_settings();
 		$this->all_tabs      = kbs_get_settings_tabs();
 		$this->all_tabs      = empty( $this->all_tabs ) ? array() : $this->all_tabs;
-		$this->active_tab    = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : 'general';
+		$this->active_tab    = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'general';
 		$this->active_tab    = array_key_exists( $this->active_tab, $this->all_tabs ) ? $this->active_tab : 'general';
 		$this->all_sections  = kbs_get_settings_tab_sections( $this->active_tab );
-		$this->section       = isset( $_GET['section'] ) ? sanitize_text_field( $_GET['section'] ) : 'main';
+		$this->section       = isset( $_GET['section'] ) ? sanitize_text_field( wp_unslash( $_GET['section'] ) ) : 'main';
 		$this->section       = array_key_exists( $this->section, $this->all_sections ) ? $this->section : 'main';
 
 		// Verify we have a 'main' section to show

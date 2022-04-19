@@ -25,14 +25,14 @@ function kbs_delete_field_action()	{
 		return;
 	}
 
-	if ( ! isset( $_GET['kbs-action-nonce'] ) || ! wp_verify_nonce( $_GET['kbs-action-nonce'], 'delete_form_field' ) )	{
+	if ( ! isset( $_GET['kbs-action-nonce'] ) || ! wp_verify_nonce( wp_sanitize_text( wp_unslash( $_GET['kbs-action-nonce'] ) ), 'delete_form_field' ) )	{
 		return;
 	}
 
 	$url     = remove_query_arg( array( 'kbs-message', 'kbs-action', 'kbs_action_nonce', 'field_id' ) );
 	$message = 'field_deleted';
 	
-	if ( ! kbs_delete_field( $_GET['field_id'] ) )	{
+	if ( !isset( $_GET['field_id'] ) || ! kbs_delete_field( absint( $_GET['field_id'] ) ) )	{
 		$message = 'field_delete_fail';
 	}
 

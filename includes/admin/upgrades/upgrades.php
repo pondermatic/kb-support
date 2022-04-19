@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	void
 */
 function kbs_upgrades_screen() {
-	$action = isset( $_GET['kbs-upgrade-action'] ) ? sanitize_text_field( $_GET['kbs-upgrade-action'] ) : '';
+	$action = isset( $_GET['kbs-upgrade-action'] ) ? sanitize_text_field( wp_unslash( $_GET['kbs-upgrade-action'] ) ) : '';
 	?>
 
 	<div class="wrap">

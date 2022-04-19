@@ -229,7 +229,7 @@ class KBS_Customer_Table extends WP_List_Table {
 	 * @return	mixed	String if search is present, false otherwise
 	 */
 	public function get_search() {
-		return ! empty( $_GET['s'] ) ? urldecode( sanitize_text_field( wp_unslash( trim( $_GET['s'] ) ) ) ) : false;
+		return ! empty( $_GET['s'] ) ? urldecode( trim( sanitize_text_field( wp_unslash( $_GET['s'] ) ) ) ) : false;
 	} // get_search
 
 	/**

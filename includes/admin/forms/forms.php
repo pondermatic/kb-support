@@ -80,7 +80,7 @@ function kbs_form_post_save( $post_id, $post, $update )	{
 		do_action( 'kbs_form_before_save', $post_id, $post, $update );
 	}
 
-    $redirect = isset( $_POST['kbs_form_redirect'] ) ? $_POST['kbs_form_redirect'] : kbs_get_option( 'tickets_page' );
+    $redirect = isset( $_POST['kbs_form_redirect'] ) ? sanitize_url( wp_unslash( $_POST['kbs_form_redirect'] ) ) : kbs_get_option( 'tickets_page' );
 
     update_post_meta( $post_id, '_redirect_page', $redirect );
 

@@ -304,7 +304,7 @@ function kbs_article_post_save( $post_id, $post, $update )	{
 
 	if (
 		! isset( $_POST['kbs_article_meta_box_nonce'] )
-		|| ! wp_verify_nonce( $_POST['kbs_article_meta_box_nonce'], 'kbs_article_meta_save' )
+		|| ! wp_verify_nonce( esc_html( wp_unslash( $_POST['kbs_article_meta_box_nonce'] ) ), 'kbs_article_meta_save' )
 	)	{
 		return;
 	}
@@ -322,9 +322,9 @@ function kbs_article_post_save( $post_id, $post, $update )	{
 		if ( ! empty( $_POST[ $field ] ) ) {
 
 			if ( is_string( $_POST[ $field ] ) )	{
-				$posted_value = sanitize_text_field( $_POST[ $field ] );
+				$posted_value = sanitize_text_field( wp_unslash( $_POST[ $field ] ) );
 			} elseif ( is_int( $_POST[ $field ] ) )	{
-				$posted_value = $_POST[ $field ];
+				$posted_value = sanitize_text_field( wp_unslash( $_POST[ $field ] ) );
 			} elseif( is_array( $_POST[ $field ] ) )	{
 				$posted_value = array_map( 'absint', $_POST[ $field ] );
 			}

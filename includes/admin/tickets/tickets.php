@@ -528,7 +528,13 @@ function kbs_search_ticket_list_by_id( $query ) {
     }
 
     unset( $query->query_vars['s'] );
-    add_filter( 'get_search_query', function() { return $_GET['s']; } );
+
+	if( isset( $_GET['s'] ) ){
+		$search_str = sanitize_text_field( wp_unslash( $_GET['s'] ) );
+	}
+	$search_str = '';
+
+    add_filter( 'get_search_query', function() { return $search_str; } );
 } // kbs_search_ticket_list_by_id
 add_action( 'parse_request', 'kbs_search_ticket_list_by_id' );
 
@@ -623,7 +629,7 @@ function kbs_add_ticket_filters() {
 			echo '<select name="reply_status" id="reply_status" class="postform">';
 				$selected = '';
 				if ( isset( $_GET ) && isset( $_GET['reply_status'] ) && '' != $_GET['reply_status'] )	{
-					$selected = $_GET['reply_status'];
+					$selected = sanitize_text_field( wp_unslash( $_GET['reply_status'] ) );
 				}
 				printf(
 					'<option value=""%s>%s</option>',
@@ -739,9 +745,8 @@ function kbs_filter_customer_tickets( $query )	{
 	if ( ! is_admin() || 'kbs_ticket' != $query->get( 'post_type' ) || ! isset( $_GET['customer'] ) )	{
 		return;
 	}
-
 	$query->set( 'meta_key', '_kbs_ticket_customer_id' );
-	$query->set( 'meta_value', $_GET['customer'] );
+	$query->set( 'meta_value', absint( $_GET['customer'] ) );
 	$query->set( 'meta_type', 'NUMERIC' );
 } // kbs_filter_customer_tickets
 add_action( 'pre_get_posts', 'kbs_filter_customer_tickets' );
@@ -758,7 +763,7 @@ function kbs_filter_company_tickets( $query )	{
 	}
 
 	$query->set( 'meta_key', '_kbs_ticket_company_id' );
-	$query->set( 'meta_value', $_GET['company_id'] );
+	$query->set( 'meta_value', absint( $_GET['company_id'] ) );
 	$query->set( 'meta_type', 'NUMERIC' );
 } // kbs_filter_customer_tickets
 add_action( 'pre_get_posts', 'kbs_filter_company_tickets' );
@@ -775,7 +780,7 @@ function kbs_filter_agent_tickets( $query )	{
 	}
 
 	$query->set( 'meta_key', '_kbs_ticket_agent_id' );
-	$query->set( 'meta_value', $_GET['agent'] );
+	$query->set( 'meta_value', absint( $_GET['agent'] ) );
 	$query->set( 'meta_type', 'NUMERIC' );
 } // kbs_filter_agent_tickets
 add_action( 'pre_get_posts', 'kbs_filter_agent_tickets' );
@@ -791,7 +796,7 @@ function kbs_filter_tickets_by_reply_status( $query )	{
 		return;
 	}
 
-	$selected = $_GET['reply_status'];
+	$selected = sanitize_text_field( wp_unslash( $_GET['reply_status'] ) );
 
 	if ( 'awaiting_support' == $selected )	{
 
@@ -1018,7 +1023,7 @@ add_filter( 'post_row_actions', 'kbs_tickets_remove_ticket_post_actions' );
  */
 function kbs_ticket_post_save( $post_id, $post, $update )	{	
 
-	if ( ! isset( $_POST['kbs_ticket_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['kbs_ticket_meta_box_nonce'], 'kbs_ticket_meta_save' ) ) {
+	if ( ! isset( $_POST['kbs_ticket_meta_box_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['kbs_ticket_meta_box_nonce'] ) ), 'kbs_ticket_meta_save' ) ) {
 		return;
 	}
 
@@ -1049,7 +1054,7 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
 		if ( ! empty( $_POST[ $field ] ) ) {
 
 			if ( is_string( $_POST[ $field ] ) )	{
-				$posted_value = sanitize_text_field( $_POST[ $field ] );
+				$posted_value = sanitize_text_field( wp_unslash( $_POST[ $field ] ) );
 			} elseif ( is_int( $_POST[ $field ] ) )	{
 				$posted_value = absint( $_POST[ $field ] );
 			} elseif( is_array( $_POST[ $field ] ) )	{

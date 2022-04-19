@@ -1276,7 +1276,7 @@ function kbs_settings_sanitize( $input = array() ) {
 		return $input;
 	}
 
-	parse_str( $_POST['_wp_http_referer'], $referrer );
+	parse_str( sanitize_url( wp_unslash( $_POST['_wp_http_referer'] ) ), $referrer );
 
 	$settings = kbs_get_registered_settings();
 	$tab      = isset( $referrer['tab'] ) ? $referrer['tab'] : 'general';
@@ -1291,7 +1291,7 @@ function kbs_settings_sanitize( $input = array() ) {
 
 		// Check for an override on the section for when main is empty
 		if ( ! empty( $_POST['kbs_section_override'] ) ) {
-			$section = sanitize_text_field( $_POST['kbs_section_override'] );
+			$section = sanitize_text_field( wp_unslash( $_POST['kbs_section_override'] ) );
 		}
 	}
 
