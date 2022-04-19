@@ -90,11 +90,11 @@ class KBS_Customer_Table extends WP_List_Table {
 		$input_id = $input_id . '-search-input';
 
 		if ( ! empty( $_REQUEST['orderby'] ) ) : ?>
-			<input type="hidden" name="orderby" value="<?php echo esc_attr( wp_unslash( $_REQUEST['orderby'] ) ); ?>" />
+			<input type="hidden" name="orderby" value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['orderby'] ) ) ); ?>" />
         <?php endif;
 
 		if ( ! empty( $_REQUEST['order'] ) ) : ?>
-			<input type="hidden" name="order" value="<?php echo esc_attr( wp_unslash( $_REQUEST['order'] ) ); ?>" />
+			<input type="hidden" name="order" value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['order'] ) ) ); ?>" />
 		<?php endif; ?>
 
 		<p class="search-box">
@@ -229,7 +229,7 @@ class KBS_Customer_Table extends WP_List_Table {
 	 * @return	mixed	String if search is present, false otherwise
 	 */
 	public function get_search() {
-		return ! empty( $_GET['s'] ) ? urldecode( trim( $_GET['s'] ) ) : false;
+		return ! empty( $_GET['s'] ) ? urldecode( sanitize_text_field( wp_unslash( trim( $_GET['s'] ) ) ) ) : false;
 	} // get_search
 
 	/**
