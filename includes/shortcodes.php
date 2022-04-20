@@ -125,7 +125,7 @@ function kbs_tickets_shortcode( $atts )	{
 
 	if ( isset( $_GET['ticket'] ) )	{
 		if ( kbs_get_option( 'logged_in_only' ) && ! is_user_logged_in() )	{
-			$redirect = add_query_arg( array( 'ticket' => $_GET['ticket'] ), get_permalink( kbs_get_option( 'tickets_page' ) ) );
+			$redirect = add_query_arg( array( 'ticket' => absint( $_GET['ticket'] ) ), get_permalink( kbs_get_option( 'tickets_page' ) ) );
 			echo kbs_display_notice( 'ticket_login' );
 	
 			$register_login = kbs_get_option( 'show_register_form', 'none' );

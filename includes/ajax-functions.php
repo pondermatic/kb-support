@@ -171,8 +171,8 @@ add_action( 'wp_ajax_kbs_set_ticket_flagged_status', 'kbs_set_ticket_flagged_sta
  */
 function kbs_ajax_add_participant()	{
 	$email     = false;
-	$ticket_id = absint( $_POST['ticket_id'] );
-	wp_die();
+	$ticket_id = isset( $_POST['ticket_id'] ) ? absint( $_POST['ticket_id'] ) : 0;
+
 	if ( isset( $_POST['participant']) && '-1' != $_POST['participant'] )	{
 		$customer = new KBS_Customer( absint( $_POST['participant'] ) );
 
@@ -239,7 +239,7 @@ add_action( 'wp_ajax_kbs_remove_participant', 'kbs_ajax_remove_participant' );
  */
 function kbs_ajax_insert_ticket_reply()	{
 
-	$ticket = new KBS_Ticket( absint( $_POST['ticket_id'] ) );
+	$ticket = new KBS_Ticket( isset( $_POST['ticket_id'] ) ? absint( $_POST['ticket_id'] ) : 0 );
 
 	$reply_data = array(
 		'ticket_id'   => isset( $_POST['ticket_id'] ) ? absint( $_POST['ticket_id'] ) : 0,
@@ -341,8 +341,8 @@ function kbs_ajax_load_front_end_replies()	{
     $date_format = get_option( 'date_format' );
     $user_id     = get_current_user_id();
 	$number      = get_user_meta( $user_id, '_kbs_load_replies', true );
-    $number      = ! empty( $number ) ? (int)$number : 0;
-    $ticket_id   = (int)$_POST['kbs_ticket_id'];
+    $number      = ! empty( $number ) ? absint( $number ) : 0;
+    $ticket_id   = ! empty( $_POST['kbs_ticket_id'] ) ? absint( $_POST['kbs_ticket_id'] ) : 0;
 
     $args = array(
         'ticket_id' => $ticket_id,
@@ -597,7 +597,7 @@ add_action( 'wp_ajax_kbs_add_form_field', 'kbs_ajax_add_form_field' );
  */
 function kbs_ajax_save_form_field()	{
 
-	if ( ! empty( $_POST['field_id'] ) )	{
+	if ( ! empty( $_POST['field_id'] && ! empty( $_POST['form_id'] ) ) )	{
 		$form     = new KBS_Form( absint( $_POST['form_id'] ) );
 		$field_id = $form->save_field( $_POST );
 	}
@@ -681,7 +681,7 @@ function kbs_ajax_validate_form_submission()	{
 			if ( ! is_email( wp_unslash( $_POST[ $field->post_name ] ) ) )	{
 				$error = kbs_form_submission_errors( $field->ID, 'invalid_email' );
 				$field = $field->post_name;
-			} elseif ( kbs_check_email_from_submission( wp_unslash( $_POST[ $field->post_name ] ) ) )	{
+			} elseif ( kbs_check_email_from_submission( sanitize_email( wp_unslash( $_POST[ $field->post_name ] ) ) ) )	{
 				$error = kbs_form_submission_errors( $field->ID, 'process_error' );
 				$field = $field->post_name;
 			}
@@ -791,7 +791,7 @@ function kbs_ajax_add_customer()	{
 		) );
 	}
 
-	if ( ! is_email( isset( $_POST['customer_email'] ) ? $_POST['customer_email'] : '' ) )	{
+	if ( ! is_email( isset( $_POST['customer_email'] ) ? wp_unslash( $_POST['customer_email'] ) : '' ) )	{
 		wp_send_json( array(
 			'error'   => true,
 			'message' => __( 'Invalid email address.', 'kb-support' )

@@ -99,7 +99,11 @@ function kbs_enforced_form_ssl_redirect_handler() {
 		return;
 	}
 
-	$uri = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+	if( !isset( $_SERVER['HTTP_HOST'] ) || !isset(  $_SERVER['REQUEST_URI'] ) ){
+		return;
+	}
+	
+	$uri = 'https://' . sanitize_url( wp_unslash( $_SERVER['HTTP_HOST'] ) ) . sanitize_url( wp_unslash( $_SERVER['REQUEST_URI'] ) );
 
 	wp_safe_redirect( $uri );
 	exit;
@@ -1003,7 +1007,7 @@ function kbs_display_form_department_field( $field, $settings )	{
 
 	add_filter( 'kbs_form_select_field_options', 'kbs_get_department_options' );
 	if ( ! empty( $_GET['department'] ) )	{
-		$settings['selected'] = $_GET['department'];
+		$settings['selected'] = sanitize_text_field( wp_unslash( $_GET['department'] ) );
 	}
 	kbs_display_form_select_field( $field, $settings );
 	remove_filter('kbs_form_select_field_options', 'kbs_get_department_options' );
@@ -1321,7 +1325,7 @@ function kbs_validate_recaptcha( $response )	{
 	$post_data = http_build_query( array(
         'secret'   => kbs_get_option( 'recaptcha_secret' ),
         'response' => $response,
-        'remoteip' => $_SERVER['REMOTE_ADDR']
+        'remoteip' => isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_url( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : ''
     ) );
 
     $options = array( 'http' => array(

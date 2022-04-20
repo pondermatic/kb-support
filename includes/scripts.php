@@ -231,7 +231,7 @@ function kbs_load_admin_styles( $hook ) {
 
 	if ( 'post.php' == $hook || 'post-new.php' == $hook )	{
 
-		if ( isset( $_GET['post'] ) && 'kbs_ticket' == get_post_type( $_GET['post'] ) )	{
+		if ( isset( $_GET['post'] ) && 'kbs_ticket' == get_post_type( sanitize_text_field( wp_unslash( $_GET['post'] ) ) ) )	{
 			$ui_style = 'humanity';
 		}
 
@@ -289,7 +289,7 @@ function kbs_load_admin_scripts( $hook ) {
 	$editing_field_type = false;
 
 	if ( isset( $_GET['kbs-action'] ) && 'edit_form_field' == $_GET['kbs-action'] )	{
-		$field_settings = kbs_get_field_settings( $_GET['field_id'] );
+		$field_settings = kbs_get_field_settings( isset( $_GET['field_id'] ) ? absint( $_GET['field_id'] ) : 0 );
 
 		if ( $field_settings )	{
 			$editing_field_type = $field_settings['type'];
@@ -312,7 +312,7 @@ function kbs_load_admin_scripts( $hook ) {
         ),
         'disable_closure_email'   => kbs_get_option( 'ticket_closed_disable_email', false ),
 		'editing_field_type'      => $editing_field_type,
-		'editing_ticket'          => isset( $_GET['action'] ) && 'edit' == $_GET['action'] && 'kbs_ticket' == get_post_type( $_GET['post'] ) ? true : false,
+		'editing_ticket'          => isset( $_GET['action'] ) && 'edit' == $_GET['action'] && 'kbs_ticket' == get_post_type( isset( $_GET['post'] ) ? sanitize_text_field( wp_unslash( $_GET['post'] ) ) : '' ) ? true : false,
 		'field_label_missing'     => __( 'Enter a Label for your field.', 'kb-support' ),
 		'field_type_missing'      => __( 'Select the field Type', 'kb-support' ),
 		'hide_note'               => __( 'Hide Note', 'kb-support' ),
@@ -329,7 +329,7 @@ function kbs_load_admin_scripts( $hook ) {
 		'one_or_more_option'      => sprintf( __( 'Choose one or more %s', 'kb-support' ), kbs_get_ticket_label_plural() ),
         'please_wait'             => __( 'Please Wait...', 'kb-support' ),
 		'post_id'                 => isset( $post->ID ) ? $post->ID : null,
-		'post_type'               => isset( $_GET['post'] ) ? get_post_type( $_GET['post'] ) : false,
+		'post_type'               => isset( $_GET['post'] ) ? get_post_type( sanitize_text_field( wp_unslash( $_GET['post'] ) ) ) : false,
         'regenerate_api_key'      => __( 'Are you sure you wish to regenerate this API key?', 'kb-support' ),
         'reply_alerts'            => kbs_alert_agent_ticket_reply(),
 		'reply_has_data'          => sprintf( __( 'You have not submitted the reply. If you continue, the reply will not be added to the %s', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
@@ -354,7 +354,7 @@ function kbs_load_admin_scripts( $hook ) {
 	}
 
 	if ( 'post.php' == $hook || 'post-new.php' == $hook )	{
-		if ( isset( $_GET['post'] ) && 'kbs_ticket' == get_post_type( $_GET['post'] ) )	{
+		if ( isset( $_GET['post'] ) && 'kbs_ticket' == get_post_type( sanitize_text_field( wp_unslash( $_GET['post'] ) ) ) )	{
 			$ui_style = 'humanity';
 		}
 	}

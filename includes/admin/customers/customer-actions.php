@@ -33,7 +33,7 @@ function kbs_edit_customer()	{
 		wp_die( __( 'You do not have permission to edit this customer.', 'kb-support' ) );
 	}
 
-	$customer_info = isset( $_POST['customerinfo'] ) ? array_map( 'sanitize_text_field', $_POST['customerinfo'] ) : array();
+	$customer_info = isset( $_POST['customerinfo'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['customerinfo'] ) ) : array();
 	$customer_id   = isset( $_POST['customerinfo']['id'] ) ? absint( wp_unslash( $_POST['customerinfo']['id'] ) ) : array();
 
 	$customer = new KBS_Customer( $customer_id );

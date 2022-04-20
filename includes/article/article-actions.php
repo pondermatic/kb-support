@@ -26,7 +26,7 @@ function kbs_search_articles_action()	{
 	}
 
 	$args = array(
-		's'                   => urlencode( $_GET['s_article'] ),
+		's'                   => isset( $_GET['s_article'] ) ? urlencode( sanitize_url( wp_unslash( $_GET['s_article'] ) ) ) : '',
 		'post_type'           => KBS()->KB->post_type,
 		'ignore_sticky_posts' => true,
 		'cache_results'       => false,
@@ -55,10 +55,10 @@ function kbs_create_article_action()	{
 		return;
 	}
 
-	$ticket = new KBS_Ticket( $_GET['ticket_id'] );
+	$ticket = new KBS_Ticket( isset( $_GET['ticket_id'] ) ? absint( $_GET['ticket_id'] ) : 0 );
 
 	if ( ! empty( $_GET['reply_id'] ) )	{
-		$reply = get_post( $_GET['reply_id'] );
+		$reply = get_post( absint( $_GET['reply_id'] ) );
 	} else	{
 		$reply = kbs_get_last_reply( $ticket->ID );
 	}
@@ -86,7 +86,7 @@ function kbs_create_article_action()	{
 	} else	{
 
 		$redirect_args = array(
-			'post'        => $_GET['ticket_id'],
+			'post'        => isset( $_GET['ticket_id'] ) ? absint( $_GET['ticket_id'] ) : 0,
 			'kbs-message' => 'create_article_failed',
 			'action'      => 'edit'
 		);
@@ -112,11 +112,11 @@ function kbs_reset_article_view_count()	{
 		return;
 	}
 
-	if ( ! isset( $_GET['kbs-nonce'] ) || ! wp_verify_nonce( $_GET['kbs-nonce'], 'reset_views' ) )	{
+	if ( ! isset( $_GET['kbs-nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['kbs-nonce'] ) ), 'reset_views' ) )	{
 		wp_die( 'Cheatin&#8217; huh?' );
 	}
 
-	if ( ! isset( $_GET['article_id'] ) || KBS()->KB->post_type != get_post_type( $_GET['article_id'] ) )	{
+	if ( ! isset( $_GET['article_id'] ) || KBS()->KB->post_type != get_post_type( absint( $_GET['article_id'] ) ) )	{
 		return;
 	}
 

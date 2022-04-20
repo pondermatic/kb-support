@@ -1089,7 +1089,7 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
             add_filter( 'kbs_ticket_close_disable_email', '__return_true' );
         }
 
-		$ticket->__set( 'status', $_POST['ticket_status'] );
+		$ticket->__set( 'status', sanitize_text_field( wp_unslash( $_POST['ticket_status'] ) ) );
 	}
 
     if ( isset( $_POST['kbs_ticket_source'] ) )  {

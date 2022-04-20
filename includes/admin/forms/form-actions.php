@@ -25,7 +25,7 @@ function kbs_delete_field_action()	{
 		return;
 	}
 
-	if ( ! isset( $_GET['kbs-action-nonce'] ) || ! wp_verify_nonce( wp_sanitize_text( wp_unslash( $_GET['kbs-action-nonce'] ) ), 'delete_form_field' ) )	{
+	if ( ! isset( $_GET['kbs-action-nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['kbs-action-nonce'] ) ), 'delete_form_field' ) )	{
 		return;
 	}
 

@@ -40,7 +40,7 @@ function kbs_notices()	{
 		return;
 	}
 
-	echo kbs_display_notice( $_GET['kbs_notice'] );
+	echo kbs_display_notice( sanitize_text_field( wp_unslash( $_GET['kbs_notice'] ) ) );
 
 } // kbs_display_notice
 add_action( 'kbs_notices', 'kbs_notices' );
@@ -117,7 +117,7 @@ function kbs_render_hidden_reply_fields( $ticket_id )	{
 	$hidden_fields = array(
 		'kbs_ticket_id'  => $ticket_id,
 		'kbs_honeypot'   => '',
-		'redirect'       => add_query_arg( 'ticket', $_GET['ticket'], $current_page ),
+		'redirect'       => add_query_arg( 'ticket', isset( $_GET['ticket'] ) ? sanitize_text_field( wp_unslash( $_GET['ticket'] ) ) : 0, $current_page ),
 		'action'         => 'kbs_validate_ticket_reply_form'
 	);
 

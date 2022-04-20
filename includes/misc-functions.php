@@ -138,12 +138,12 @@ function kbs_get_ip() {
 
 	if ( ! empty( $_SERVER['HTTP_CLIENT_IP'] ) ) {
 		//check ip from share internet
-		$ip = $_SERVER['HTTP_CLIENT_IP'];
+		$ip = sanitize_text_field( wp_unslash( $_SERVER['HTTP_CLIENT_IP'] ) );
 	} elseif ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
 		//to check ip is pass from proxy
-		$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		$ip = sanitize_url( wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] ) );
 	} elseif( ! empty( $_SERVER['REMOTE_ADDR'] ) ) {
-		$ip = $_SERVER['REMOTE_ADDR'];
+		$ip = sanitize_url( wp_unslash( $_SERVER['REMOTE_ADDR'] ) );
 	}
 	return apply_filters( 'kbs_get_ip', $ip );
 } // kbs_get_ip

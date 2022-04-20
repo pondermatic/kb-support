@@ -550,7 +550,7 @@ function kbs_save_user_tickets_per_page( $user_id ) {
 	}
 
 	$default  = get_option( 'posts_per_page', 10 );
-	$per_page = isset( $_POST['kbs_tickets_per_page'] ) ? $_POST['kbs_tickets_per_page'] : $default;
+	$per_page = isset( $_POST['kbs_tickets_per_page'] ) ? absint( $_POST['kbs_tickets_per_page'] ) : $default;
 
 	update_user_meta( $user_id, '_kbs_tickets_per_page', $per_page );
 
@@ -590,7 +590,7 @@ function kbs_save_user_tickets_orderby( $user_id ) {
 		return;
 	}
 
-	$orderby = sanitize_text_field( $_POST['kbs_tickets_orderby'] );
+	$orderby = isset( $_POST['kbs_tickets_orderby'] ) ? sanitize_text_field( wp_unslash( $_POST['kbs_tickets_orderby'] ) ) : 'date';
 
 	update_user_meta( $user_id, '_kbs_tickets_orderby', $orderby );
 
@@ -610,7 +610,7 @@ function kbs_save_user_tickets_order( $user_id ) {
 		return;
 	}
 
-	$order = sanitize_text_field( $_POST['kbs_tickets_order'] );
+	$order =  isset( $_POST['kbs_tickets_order'] ) ? sanitize_text_field( wp_unslash( $_POST['kbs_tickets_order'] ) ) : 'DESC';
 
 	update_user_meta( $user_id, '_kbs_tickets_order', $order );
 
@@ -629,7 +629,7 @@ function kbs_save_user_replies_location( $user_id ) {
 		return;
 	}
 
-	$location = absint( $_POST['kbs_replies_location'] );
+	$location = isset( $_POST['kbs_replies_location'] ) ? absint( $_POST['kbs_replies_location'] ) : 0;
 
 	update_user_meta( $user_id, '_kbs_replies_location', $location );
 } // kbs_save_user_replies_location
@@ -647,7 +647,7 @@ function kbs_save_user_load_replies( $user_id ) {
 		return;
 	}
 
-	$number = absint( $_POST['kbs_load_replies'] );
+	$number = isset( $_POST['kbs_load_replies'] ) ? absint( $_POST['kbs_load_replies'] ) : 0;
 
 	update_user_meta( $user_id, '_kbs_load_replies', $number );
 } // kbs_save_user_load_replies
@@ -665,7 +665,7 @@ function kbs_save_user_expand_replies( $user_id ) {
 		return;
 	}
 
-	$number = absint( $_POST['kbs_expand_replies'] );
+	$number = isset( $_POST['kbs_expand_replies'] ) ? absint( $_POST['kbs_expand_replies'] ) : 5;
 
 	update_user_meta( $user_id, '_kbs_expand_replies', $number );
 } // kbs_save_user_expand_replies
@@ -683,7 +683,7 @@ function kbs_save_user_redirect_reply( $user_id ) {
 		return;
 	}
 
-	$number = ! empty( $_POST['kbs_agent_redirect_reply'] ) ? sanitize_text_field( $_POST['kbs_agent_redirect_reply'] ) : 'stay';
+	$number = ! empty( $_POST['kbs_agent_redirect_reply'] ) ? sanitize_text_field( wp_unslash( $_POST['kbs_agent_redirect_reply'] ) ) : 'stay';
 
 	update_user_meta( $user_id, '_kbs_redirect_reply', $number );
 } // kbs_save_user_redirect_reply
@@ -701,7 +701,7 @@ function kbs_save_user_redirect_close( $user_id ) {
 		return;
 	}
 
-	$number = ! empty( $_POST['kbs_agent_redirect_close'] ) ? sanitize_text_field( $_POST['kbs_agent_redirect_close'] ) : 'stay';
+	$number = ! empty( $_POST['kbs_agent_redirect_close'] ) ? sanitize_text_field( wp_unslash( $_POST['kbs_agent_redirect_close'] ) ) : 'stay';
 
 	update_user_meta( $user_id, '_kbs_redirect_close', $number );
 } // kbs_save_user_redirect_close
@@ -738,7 +738,7 @@ function kbs_save_user_departments( $user_id ) {
 	}
 
 	$departments = kbs_get_departments();
-	$add_departments  = ! empty( $_POST['kbs_departments'] ) ? $_POST['kbs_departments'] : array();
+	$add_departments  = ! empty( $_POST['kbs_departments'] ) ? array_map( 'absint', $_POST['kbs_departments'] ) : array();
 
     if ( $departments ) {
         foreach( $departments as $department )	{
@@ -833,23 +833,23 @@ function kbs_process_profile_editor_updates( $data ) {
 	}
 
 	// Nonce security
-	if ( ! wp_verify_nonce( $_POST['kbs_profile_editor_nonce'], 'kbs-profile-editor-nonce' ) ) {
+	if ( ! isset( $_POST['kbs_profile_editor_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['kbs_profile_editor_nonce'] ) ), 'kbs-profile-editor-nonce' ) ) {
 		return false;
 	}
 
 	$user_id       = get_current_user_id();
 	$old_user_data = get_userdata( $user_id );
 
-	$display_name = isset( $_POST['kbs_display_name'] )    ? sanitize_text_field( $_POST['kbs_display_name'] )    : $old_user_data->display_name;
-	$first_name   = isset( $_POST['kbs_first_name'] )      ? sanitize_text_field( $_POST['kbs_first_name'] )      : $old_user_data->first_name;
-	$last_name    = isset( $_POST['kbs_last_name'] )       ? sanitize_text_field( $_POST['kbs_last_name'] )       : $old_user_data->last_name;
-	$email        = isset( $_POST['kbs_email'] )           ? sanitize_email( $_POST['kbs_email'] )                : $old_user_data->user_email;
-	$line1        = isset( $_POST['kbs_address_line1'] )   ? sanitize_text_field( $_POST['kbs_address_line1'] )   : '';
-	$line2        = isset( $_POST['kbs_address_line2'] )   ? sanitize_text_field( $_POST['kbs_address_line2'] )   : '';
-	$city         = isset( $_POST['kbs_address_city'] )    ? sanitize_text_field( $_POST['kbs_address_city'] )    : '';
-	$state        = isset( $_POST['kbs_address_state'] )   ? sanitize_text_field( $_POST['kbs_address_state'] )   : '';
-	$zip          = isset( $_POST['kbs_address_zip'] )     ? sanitize_text_field( $_POST['kbs_address_zip'] )     : '';
-	$country      = isset( $_POST['kbs_address_country'] ) ? sanitize_text_field( $_POST['kbs_address_country'] ) : '';
+	$display_name = isset( $_POST['kbs_display_name'] )    ? sanitize_text_field( wp_unslash( $_POST['kbs_display_name'] ) )    : $old_user_data->display_name;
+	$first_name   = isset( $_POST['kbs_first_name'] )      ? sanitize_text_field( wp_unslash( $_POST['kbs_first_name'] ) )      : $old_user_data->first_name;
+	$last_name    = isset( $_POST['kbs_last_name'] )       ? sanitize_text_field( wp_unslash( $_POST['kbs_last_name'] ) )       : $old_user_data->last_name;
+	$email        = isset( $_POST['kbs_email'] )           ? sanitize_email( wp_unslash( $_POST['kbs_email'] ) )                : $old_user_data->user_email;
+	$line1        = isset( $_POST['kbs_address_line1'] )   ? sanitize_text_field( wp_unslash( $_POST['kbs_address_line1'] ) )   : '';
+	$line2        = isset( $_POST['kbs_address_line2'] )   ? sanitize_text_field( wp_unslash( $_POST['kbs_address_line2'] ) )   : '';
+	$city         = isset( $_POST['kbs_address_city'] )    ? sanitize_text_field( wp_unslash( $_POST['kbs_address_city'] ) )    : '';
+	$state        = isset( $_POST['kbs_address_state'] )   ? sanitize_text_field( wp_unslash( $_POST['kbs_address_state'] ) )   : '';
+	$zip          = isset( $_POST['kbs_address_zip'] )     ? sanitize_text_field( wp_unslash( $_POST['kbs_address_zip'] ) )     : '';
+	$country      = isset( $_POST['kbs_address_country'] ) ? sanitize_text_field( wp_unslash( $_POST['kbs_address_country'] ) ) : '';
 
 	$error    = false;
 	$userdata = array(
@@ -871,11 +871,11 @@ function kbs_process_profile_editor_updates( $data ) {
 
 	do_action( 'kbs_pre_update_user_profile', $user_id, $userdata );
 
-	if ( ! empty( $_POST['kbs_new_user_pass1'] ) ) {
+	if ( ! empty( $_POST['kbs_new_user_pass1'] ) && ! empty( $_POST['kbs_new_user_pass2'] ) ) {
 		if ( $_POST['kbs_new_user_pass1'] !== $_POST['kbs_new_user_pass2'] ) {
 			$error = 'password_mismatch';
 		} else {
-			$userdata['user_pass'] = $_POST['kbs_new_user_pass1'];
+			$userdata['user_pass'] = sanitize_text_field( $_POST['kbs_new_user_pass1'] );
 		}
 	}
 
@@ -892,7 +892,7 @@ function kbs_process_profile_editor_updates( $data ) {
 
 	}
 
-	$url = remove_query_arg( 'kbs_notice', $_POST['kbs_redirect'] );
+	$url = remove_query_arg( 'kbs_notice', isset( $_POST['kbs_redirect'] ) ? sanitize_url( wp_unslash( $_POST['kbs_redirect'] ) ) : '' );
 
 	if ( $error ) {
 		$url = add_query_arg( 'kbs_notice', $error, $url );
@@ -920,21 +920,21 @@ function kbs_process_profile_editor_updates( $data ) {
 	}
 
 	$old_orderby      = get_user_meta( $user_id, '_kbs_tickets_orderby', true );
-	$new_orderby      = ! empty( $_POST['kbs_tickets_orderby'] ) ? $_POST['kbs_tickets_orderby'] : false;
+	$new_orderby      = ! empty( $_POST['kbs_tickets_orderby'] ) ? sanitize_text_field( wp_unslash( $_POST['kbs_tickets_orderby'] ) ) : 'date';
 
 	if ( $new_orderby != $old_orderby )	{
 		update_user_meta( $user_id, '_kbs_tickets_orderby', $new_orderby );
 	}
 
 	$old_order        = get_user_meta( $user_id, '_kbs_tickets_order', true );
-	$new_order        = ! empty( $_POST['kbs_tickets_order'] ) ? $_POST['kbs_tickets_order'] : false;
+	$new_order        = ! empty( $_POST['kbs_tickets_order'] ) ? sanitize_text_field( wp_unslash( $_POST['kbs_tickets_order'] ) ) : 'DESC';
 
 	if ( $new_order != $old_order )	{
 		update_user_meta( $user_id, '_kbs_tickets_order', $new_order );
 	}
 
 	$old_hide_closed = get_user_meta( $user_id, '_kbs_hide_closed', true );
-    $new_hide_closed = ! empty( $_POST['kbs_hide_closed'] ) ? $_POST['kbs_hide_closed'] : false;
+    $new_hide_closed = ! empty( $_POST['kbs_hide_closed'] ) ? (bool)$_POST['kbs_hide_closed'] : false;
 
     if ( $new_hide_closed != $old_hide_closed  )    {
 	   update_user_meta( $user_id, '_kbs_hide_closed', $new_hide_closed );
@@ -1047,24 +1047,24 @@ function kbs_process_profile_editor_remove_email() {
 	}
 
 	// Nonce security
-	if ( ! wp_verify_nonce( $_GET['_wpnonce'], 'kbs-remove-customer-email' ) ) {
+	if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'kbs-remove-customer-email' ) ) {
 		return false;
 	}
 
-	if ( empty( $_GET['email'] ) || ! is_email( $_GET['email'] ) ) {
+	if ( empty( $_GET['email'] ) || ! is_email( sanitize_email( wp_unslash( $_GET['email'] ) ) ) ) {
 		return false;
 	}
 
 	$customer = new KBS_Customer( get_current_user_id(), true );
-	$url      = remove_query_arg( 'kbs_notice', $_GET['redirect'] );
+	$url      = remove_query_arg( 'kbs_notice', isset( $_GET['redirect'] ) ? sanitize_url( wp_unslash( $_GET['redirect'] ) ) : '' );
 
-	if ( $customer->remove_email( $_GET['email'] ) ) {
+	if ( $customer->remove_email( sanitize_email( wp_unslash( $_GET['email'] ) ) ) ) {
 
-		$url = add_query_arg( 'kbs_notice', 'profile_updated', $_GET['redirect'] );
+		$url = add_query_arg( 'kbs_notice', 'profile_updated',  isset( $_GET['redirect'] ) ? sanitize_url( wp_unslash( $_GET['redirect'] ) ) : '' );
 
 		$user          = wp_get_current_user();
 		$user_login    = ! empty( $user->user_login ) ? $user->user_login : 'KBSBot';
-		$customer_note = __( sprintf( 'Email address %s removed by %s', $_GET['email'], $user_login ), 'kb-support' );
+		$customer_note = __( sprintf( 'Email address %s removed by %s', sanitize_email( wp_unslash( $_GET['email'] ) ), $user_login ), 'kb-support' );
 		$customer->add_note( $customer_note );
 
 		$url = add_query_arg( 'kbs_notice', 'email_removed', $url );

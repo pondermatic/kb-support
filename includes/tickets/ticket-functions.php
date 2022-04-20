@@ -785,7 +785,12 @@ function kbs_add_ticket_from_form( $form_id, $form_data )	{
 		$settings = $kbs_form->get_field_settings( $field->ID );
 
 		if ( 'file_upload' == $settings['type'] && ! empty( $_FILES[ $field->post_name ] ) ) {
-			$ticket_data['attachments'] = $_FILES[ $field->post_name ];
+			$fileInfo = wp_check_filetype( basename( $_FILES[ $field->post_name ]['name'][0] ) );
+
+			if (!empty($fileInfo['ext'])) {
+				$ticket_data['attachments'] = $_FILES[ $field->post_name ];
+			}
+
 			continue;
 		}
 
@@ -953,7 +958,7 @@ function kbs_set_ticket_status( $ticket_id, $status = 'open' )	{
  * @param	str|null	$initiated_by	The email address of the user changing status
  * @return	void
 */
-function kbs_record_status_change_in_log( $ticket_id = 0, $new_status, $old_status = 'new', $initiated_by = null ) {
+function kbs_record_status_change_in_log( $new_status, $ticket_id = 0, $old_status = 'new', $initiated_by = null ) {
 	global $kbs_logs;
 
 	$log_data = array(

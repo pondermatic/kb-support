@@ -10,7 +10,7 @@ $singular = kbs_get_ticket_label_singular();
 $plural   = kbs_get_ticket_label_plural();
 $visible  = false;
 
-if ( is_numeric( $_GET['ticket'] ) )	{
+if ( isset( $_GET['ticket'] ) && is_numeric( $_GET['ticket'] ) )	{
 	$field   = 'id';
 	if ( is_user_logged_in() )	{
 		$visible = true;
@@ -20,7 +20,7 @@ if ( is_numeric( $_GET['ticket'] ) )	{
 	$field   = 'key';
 }
 
-$ticket = kbs_get_ticket_by( $field, $_GET['ticket'] );
+$ticket = kbs_get_ticket_by( $field, sanitize_text_field( wp_unslash( $_GET['ticket'] ) ) );
 
 if ( $visible && ! empty( $ticket->ID ) ) :
 
@@ -346,7 +346,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 	<?php
 	$args = array();
 	if ( isset( $_GET['ticket'] ) )	{
-		$args = array( 'ticket' => $_GET['ticket'] );
+		$args = array( 'ticket' => sanitize_text_field( wp_unslash( $_GET['ticket'] ) ) );
 	}
     $redirect  = add_query_arg( $args, get_permalink( kbs_get_option( 'tickets_page' ) ) );
 	
