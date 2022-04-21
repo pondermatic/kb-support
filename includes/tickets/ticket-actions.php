@@ -49,7 +49,7 @@ function kbs_process_ticket_submission()	{
 	}
 
 	if ( ! isset( $_POST['kbs_log_ticket'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['kbs_log_ticket'] ) ), 'kbs-form-validate' ) )	{
-		wp_die( __( 'Security failed.', 'kb-support' ) );
+		wp_die( esc_html__( 'Security failed.', 'kb-support' ) );
 	}
 
 	kbs_do_honeypot_check( $_POST );
@@ -149,7 +149,7 @@ function kbs_customer_close_ticket_from_url()	{
 	}
 
 	if ( empty( $_GET['key'] ) )	{
-		wp_die( __( 'Invalid action', 'kb-support' ) );
+		wp_die( esc_html__( 'Invalid action', 'kb-support' ) );
 	}
 
 	$ticket_post = kbs_get_ticket_by( 'key', sanitize_text_field( wp_unslash( $_GET['key'] ) ) );
@@ -267,7 +267,7 @@ function kbs_ticket_customer_reply_action()	{
 	}
 
 	if ( ! isset( $_POST['kbs_ticket_reply'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['kbs_ticket_reply'] ) ), 'kbs-reply-validate' ) )	{
-		wp_die( __( 'Security failed.', 'kb-support' ) );
+		wp_die( esc_html__( 'Security failed.', 'kb-support' ) );
 	}
 
 	$ticket   = new KBS_Ticket( absint( $_POST['kbs_ticket_id'] ) );

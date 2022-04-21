@@ -381,6 +381,6 @@ function kbs_get_theme_template_dir_name() {
  * @return	void
 */
 function kbs_version_in_header(){
-	echo '<meta name="generator" content="KB Support v' . KBS_VERSION . '" />' . "\n";
+	echo '<meta name="generator" content="KB Support v' . esc_attr( KBS_VERSION ) . '" />' . "\n";
 }
 add_action( 'wp_head', 'kbs_version_in_header' );

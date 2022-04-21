@@ -393,10 +393,10 @@ function kbs_admin_icons() {
 	?>
 	<style type="text/css" media="screen">
 		#dashboard_right_now .ticket-count:before {
-			content: '<?php echo $tickets_icon; ?>';
+			content: '<?php echo esc_html( $tickets_icon ); ?>';
 		}
 		#dashboard_right_now .article-count:before {
-			content: '<?php echo $articles_icon; ?>';
+			content: '<?php echo esc_html( $articles_icon ); ?>';
 		}
 	</style>
 	<?php

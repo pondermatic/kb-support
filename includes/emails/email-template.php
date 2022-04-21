@@ -91,7 +91,7 @@ function kbs_email_preview_template_tags( $message )     {
 	$message = str_replace( '{ticket_id}', $ticket_id, $message );
 	$message = str_replace( '{ticket_details}', $ticket_id, $message );
 
-	return $message;
+	return wp_kses_post( $message );
 } // kbs_email_preview_template_tags
 
 /**
@@ -107,8 +107,8 @@ function kbs_email_template_preview() {
 
 	ob_start();
 	?>
-	<a href="<?php echo esc_url( add_query_arg( array( 'kbs_action' => 'preview_email' ), home_url() ) ); ?>" class="button-secondary" target="_blank" title="<?php printf( __( '%s Logged Preview', 'kb-support' ), kbs_get_ticket_label_singular() ); ?> "><?php printf( __( 'Preview %s Logged', 'kb-support' ), kbs_get_ticket_label_singular() ); ?></a>
-	<a href="<?php echo wp_nonce_url( add_query_arg( array( 'kbs_action' => 'send_test_email' ) ), 'kbs-test-email' ); ?>" class="button-secondary"><?php _e( 'Send Test Email', 'kb-support' ); ?></a>
+	<a href="<?php echo esc_url( add_query_arg( array( 'kbs_action' => 'preview_email' ), home_url() ) ); ?>" class="button-secondary" target="_blank" title="<?php printf( esc_attr__( '%s Logged Preview', 'kb-support' ), kbs_get_ticket_label_singular() ); ?> "><?php printf( esc_html__( 'Preview %s Logged', 'kb-support' ), kbs_get_ticket_label_singular() ); ?></a>
+	<a href="<?php echo wp_nonce_url( add_query_arg( array( 'kbs_action' => 'send_test_email' ) ), 'kbs-test-email' ); ?>" class="button-secondary"><?php esc_html_e( 'Send Test Email', 'kb-support' ); ?></a>
 	<?php
 	echo ob_get_clean();
 } // kbs_email_template_preview
@@ -155,17 +155,17 @@ add_action( 'template_redirect', 'kbs_display_email_template_preview' );
  */
 function kbs_get_ticket_logged_email_body_content( $ticket_id = 0, $ticket_data = array() ) 	{
 
-	$logged_email_body = __( 'Dear', 'kb-support' ) . " {name},\n\n";
-	$logged_email_body .= sprintf( __( 'Thank you for logging your support %s.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ) . "\n\n";
-	$logged_email_body .= __( "We've received the details and will be in touch as necessary shortly.", 'kb-support' ) . "\n\n";
-	$logged_email_body .= __( 'Regards', 'kb-support' ) . "\n\n";
+	$logged_email_body = esc_html__( 'Dear', 'kb-support' ) . " {name},\n\n";
+	$logged_email_body .= sprintf(  esc_html__( 'Thank you for logging your support %s.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ) . "\n\n";
+	$logged_email_body .=  esc_html__( "We've received the details and will be in touch as necessary shortly.", 'kb-support' ) . "\n\n";
+	$logged_email_body .=  esc_html__( 'Regards', 'kb-support' ) . "\n\n";
 	$logged_email_body .= '{sitename}' . "\n\n";
 	$logged_email_body .= '<hr />';
 	
-	$logged_email_body .= '<h3>' . sprintf( __( 'Your Ticket Details', 'kb-support' ), kbs_get_ticket_label_singular() ) . ' - #{ticket_id}</h3>' . "\n";
+	$logged_email_body .= '<h3>' . sprintf(  esc_html__( 'Your Ticket Details', 'kb-support' ), kbs_get_ticket_label_singular() ) . ' - #{ticket_id}</h3>' . "\n";
 	$logged_email_body .= '<strong>{ticket_title}</strong>' . "\n\n";
 	$logged_email_body .= '{ticket_content}' . "\n\n";
-	$logged_email_body .= '<a href="{ticket_url_path}">' . sprintf( __( 'View %s', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</a>' . "\n\n";
+	$logged_email_body .= '<a href="{ticket_url_path}">' . sprintf(  esc_html__( 'View %s', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</a>' . "\n\n";
 
 	$email = kbs_get_option( 'ticket_content', false );
 	$email = $email ? stripslashes( $email ) : $logged_email_body;

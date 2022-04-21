@@ -1567,10 +1567,10 @@ class KBS_Articles_API extends KBS_API {
 					'register_taxonomy',
 					sprintf(
 						/* translators: 1. The taxonomy name, 2. The property name, either 'rest_base' or 'name', 3. The conflicting value. */
-						__( 'The "%1$s" taxonomy "%2$s" property (%3$s) conflicts with an existing property on the REST API Posts Controller. Specify a custom "rest_base" when registering the taxonomy to avoid this error.', 'kb-support' ),
-						$taxonomy->name,
-						$taxonomy_field_name_with_conflict,
-						$base
+						esc_html__( 'The "%1$s" taxonomy "%2$s" property (%3$s) conflicts with an existing property on the REST API Posts Controller. Specify a custom "rest_base" when registering the taxonomy to avoid this error.', 'kb-support' ),
+						esc_html( $taxonomy->name ),
+						esc_html( $taxonomy_field_name_with_conflict ),
+						esc_html( $base )
 					),
 					'5.4.0'
 				);
@@ -1611,7 +1611,7 @@ class KBS_Articles_API extends KBS_API {
 		// Emit a _doing_it_wrong warning if user tries to add new properties using this filter.
 		$new_fields = array_diff( array_keys( $schema['properties'] ), $schema_fields );
 		if ( count( $new_fields ) > 0 ) {
-			_doing_it_wrong( __METHOD__, __( 'Please use register_rest_field to add new schema properties.', 'kb-support' ), '5.4.0' );
+			_doing_it_wrong( __METHOD__, esc_html__( 'Please use register_rest_field to add new schema properties.', 'kb-support' ), '5.4.0' );
 		}
 
 		$this->schema = $schema;

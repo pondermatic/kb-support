@@ -106,8 +106,8 @@ class KBS_Article_Monthly_Count_Migration extends KBS_Batch_Export {
 
 		if ( ! $this->can_export() ) {
 			wp_die(
-				__( 'You do not have permission to run this upgrade.', 'kb-support' ),
-				__( 'Error', 'kb-support' ),
+				esc_html__( 'You do not have permission to run this upgrade.', 'kb-support' ),
+				esc_html__( 'Error', 'kb-support' ),
 				array( 'response' => 403 )
             );
 		}

@@ -303,7 +303,7 @@ function kbs_ajax_display_ticket_replies()	{
                 $auto_expand = ( $expand > 0 && $expand >= $count_expand ) ? true : false;
                 $output .= '<div class="kbs_historic_replies_wrapper">';
                     $output .= kbs_get_reply_html( $reply, absint( $_POST['kbs_ticket_id'] ), $auto_expand );
-                $output .= '</div>';
+                $output .= '</div>'; 
 
                 $count_expand++;
 			}
@@ -311,9 +311,9 @@ function kbs_ajax_display_ticket_replies()	{
 			if ( isset( $args['page'] ) && $args['page'] < $replies_query->pages )	{
 				$output .= sprintf(
 					'<p class="kbs-replies-load-more"><a class="button button-secondary button-small" id="kbs-replies-next-page" data-ticket-id="%d" data-load-page="%d">%s</a></p>',
-					(int)$_POST['kbs_ticket_id'],
-					( $args['page'] + 1 ),
-					__( 'Load More', 'kb-support' )
+					esc_html( (int)$_POST['kbs_ticket_id'] ),
+					esc_html( ( $args['page'] + 1 ) ),
+					esc_html__( 'Load More', 'kb-support' )
 				);
 			}
 
@@ -370,30 +370,30 @@ function kbs_ajax_load_front_end_replies()	{
             <div id="kbs-reply-card" class="card kbs_replies_wrapper">
                 <div class="card-header kbs-replies-row-header">
                     <span class="kbs-replies-row-title">
-                        <?php echo $heading; ?>
+                        <?php echo wp_kses_post( $heading ); ?>
                     </span>
 
                     <span class="kbs-replies-row-actions">
-                        <a href="#" class="toggle-view-reply-option-section" data-toggle="collapse" data-target="#kbs_ticket_reply-<?php echo $reply->ID; ?>" aria-expanded="false" aria-controls="kbs_ticket_reply-<?php echo $reply->ID; ?>" data-key="<?php echo $reply->ID; ?>">
-                            <?php _e( 'View Reply', 'kb-support' ); ?>
+                        <a href="#" class="toggle-view-reply-option-section" data-toggle="collapse" data-target="#kbs_ticket_reply-<?php echo esc_attr( $reply->ID ); ?>" aria-expanded="false" aria-controls="kbs_ticket_reply-<?php echo esc_attr( $reply->ID ); ?>" data-key="<?php echo esc_attr( $reply->ID ); ?>">
+                            <?php esc_html_e( 'View Reply', 'kb-support' ); ?>
                         </a>
                     </span>
                 </div>
 
-                <div id="kbs_ticket_reply-<?php echo $reply->ID; ?>" class="collapse" aria-labelledby="kbs_ticket_reply-<?php echo $reply->ID; ?>-heading" data-parent="#kbs-ticket-replies">
+                <div id="kbs_ticket_reply-<?php echo esc_attr( $reply->ID ); ?>" class="collapse" aria-labelledby="kbs_ticket_reply-<?php echo esc_attr( $reply->ID ); ?>-heading" data-parent="#kbs-ticket-replies">
                     <div class="card-body">
-                        <?php echo $reply_content; ?>
+                        <?php echo wp_kses_post( $reply_content ); ?>
                         <?php if ( $files ) : ?>
                         <div class="kbs_ticket_reply_files">
                             <strong><?php printf(
-                                __( 'Attached Files (%d)', 'kb-support' ),
-                                $file_count
+                                esc_html__( 'Attached Files (%d)', 'kb-support' ),
+                                esc_html( $file_count )
                             ); ?></strong>
                             <ol>
                                 <?php foreach( $files as $file ) : ?>
                                     <li>
-                                        <a href="<?php echo wp_get_attachment_url( $file->ID ); ?>" target="_blank">
-                                            <?php echo basename( get_attached_file( $file->ID ) ); ?>
+                                        <a href="<?php echo esc_url( wp_get_attachment_url( $file->ID ) ); ?>" target="_blank">
+                                            <?php echo esc_url( basename( get_attached_file( $file->ID ) ) ); ?>
                                         </a>
                                     </li>
                                 <?php endforeach; ?>

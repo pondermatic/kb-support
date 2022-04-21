@@ -168,7 +168,7 @@ class KBS_Display_Settings	{
                 printf(
                     '<a href="%s" class="nav-tab%s">%s</a>',
                     esc_url( $tab_url ),
-                    $tab_class,
+                    esc_attr( $tab_class ),
                     esc_html( $tab_name )
                 );
             }
@@ -234,7 +234,7 @@ class KBS_Display_Settings	{
 
         <div class="wp-clearfix">
             <ul class="subsubsub kbs-settings-sub-nav">
-                <?php echo implode( '&#124;', $links ); ?>
+                <?php echo wp_kses_post( implode( '&#124;', $links ) ); ?>
             </ul>
         </div>
 
@@ -303,7 +303,7 @@ class KBS_Display_Settings	{
         $this->maybe_display_notice(); ?>
 
         <div class="wrap <?php echo 'wrap-' . esc_attr( $this->active_tab ); ?>">
-            <h1><?php _e( 'Settings', 'kb-support' ); ?></h1><?php
+            <h1><?php esc_html_e( 'Settings', 'kb-support' ); ?></h1><?php
             // Primary nav
             $this->output_primary_nav();
 
@@ -350,35 +350,35 @@ class KBS_Display_Settings	{
                                 esc_url( KBS_PLUGIN_URL . "assets/images/promo/{$image}" )
                             );
                         } else  {
-                            echo $name;
+                            echo esc_html( $name );
                         } ?>
                     </div>
                     <div class="kbs-sidebar-description-section">
                         <p class="kbs-sidebar-description">
                             <?php if ( ! empty( $description ) )    {
-                                echo $description;
+                                echo wp_kses_post( $description );
                             } else  {
                                 printf(
-                                    __( 'Save %s when purchasing the %s <strong>this week</strong>. Including renewals and upgrades!', 'kb-support' ),
-                                    $discount,
-                                    $product
+                                    wp_kses_post__( 'Save %s when purchasing the %s <strong>this week</strong>. Including renewals and upgrades!', 'kb-support' ),
+                                    wp_kses_post( $discount ),
+                                    wp_kses_post( $product )
                                 );
                             } ?>
                         </p>
                     </div>
                     <div class="kbs-sidebar-coupon-section">
-                        <label for="kbs-coupon-code"><?php _e( 'Use code at checkout:', 'kb-support' ); ?></label>
-                        <input id="kbs-coupon-code" type="text" value="<?php echo $code; ?>" readonly>
+                        <label for="kbs-coupon-code"><?php esc_html_e( 'Use code at checkout:', 'kb-support' ); ?></label>
+                        <input id="kbs-coupon-code" type="text" value="<?php echo esc_attr( $code ); ?>" readonly>
                         <p class="kbs-coupon-note">
                             <?php printf(
-                                __( 'Sale ends %s %s.', 'kb-support' ),
-                                date_i18n( $date_format, $finish ),
-                                $timezone
+                                esc_html__( 'Sale ends %s %s.', 'kb-support' ),
+                                esc_html( date_i18n( $date_format, $finish ) ),
+                                esc_html( $timezone )
                             ); ?>
                         </p>
                     </div>
                     <div class="kbs-sidebar-footer-section">
-                        <a class="button button-primary kbs-cta-button" href="<?php echo esc_url( $cta_url ); ?>" target="_blank"><?php echo $cta; ?></a>
+                        <a class="button button-primary kbs-cta-button" href="<?php echo esc_url( $cta_url ); ?>" target="_blank"><?php echo wp_kses_post( $cta ); ?></a>
                     </div>
                 </div>
             </div>
@@ -393,7 +393,7 @@ class KBS_Display_Settings	{
     public function maybe_display_notice()    {
         if ( isset( $_GET['updated'] ) ) : ?>
             <div id="message" class="updated notice is-dismissible">
-                <p><?php _e( 'Settings saved.', 'kb-support' ); ?></p>
+                <p><?php esc_html_e( 'Settings saved.', 'kb-support' ); ?></p>
             </div>
         <?php endif;
     } // maybe_display_notice

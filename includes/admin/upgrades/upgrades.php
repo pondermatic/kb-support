@@ -26,7 +26,7 @@ function kbs_upgrades_screen() {
 	?>
 
 	<div class="wrap">
-		<h2><?php _e( 'KB Support - Upgrades', 'kb-support' ); ?></h2>
+		<h2><?php esc_html_e( 'KB Support - Upgrades', 'kb-support' ); ?></h2>
 	<?php
 	if ( is_callable( 'kbs_upgrade_render_' . $action ) ) {
 
@@ -66,24 +66,24 @@ function kbs_upgrades_screen() {
 		if ( ! empty( $action ) ) : ?>
 
 			<div id="kbs-upgrade-status">
-				<p><?php _e( 'The upgrade process has started, please be patient. This could take several minutes. You will be automatically redirected when the upgrade is finished.', 'kb-support' ); ?></p>
+				<p><?php esc_html_e( 'The upgrade process has started, please be patient. This could take several minutes. You will be automatically redirected when the upgrade is finished.', 'kb-support' ); ?></p>
 
 				<?php if( ! empty( $total ) ) : ?>
 					<p><strong>
-						<?php printf( __( 'Step %d of approximately %d running', 'kb-support' ), $step, $steps ); ?>
-                    </strong><img src="<?php echo KBS_PLUGIN_URL . 'assets/images/loading.gif'; ?>" id="kbs-upgrade-loader"/></p>
+						<?php printf( esc_html__( 'Step %d of approximately %d running', 'kb-support' ), $step, $steps ); ?>
+                    </strong><img src="<?php echo esc_url( KBS_PLUGIN_URL . 'assets/images/loading.gif' ); ?>" id="kbs-upgrade-loader"/></p>
 				<?php endif; ?>
 			</div>
 			<script type="text/javascript">
-				setTimeout(function() { document.location.href = "index.php?kbs-upgrade-action=<?php echo $action; ?>&step=<?php echo $step; ?>&total=<?php echo $total; ?>&custom=<?php echo $custom; ?>"; }, 250);
+				setTimeout(function() { document.location.href = "index.php?kbs-upgrade-action=<?php echo esc_html( $action ); ?>&step=<?php echo esc_html( $step ); ?>&total=<?php echo esc_html( $total ); ?>&custom=<?php echo esc_html( $custom ); ?>"; }, 250);
 			</script>
 
 		<?php else : ?>
 
 			<div id="kbs-upgrade-status">
 				<p>
-					<?php _e( 'The upgrade process has started, please be patient. This could take several minutes. You will be automatically redirected when the upgrade is finished.', 'kb-support' ); ?>
-					<img src="<?php echo KBS_PLUGIN_URL . 'assets/images/loading.gif'; ?>" id="kbs-upgrade-loader"/>
+					<?php esc_html_e( 'The upgrade process has started, please be patient. This could take several minutes. You will be automatically redirected when the upgrade is finished.', 'kb-support' ); ?>
+					<img src="<?php echo esc_url( KBS_PLUGIN_URL . 'assets/images/loading.gif' ); ?>" id="kbs-upgrade-loader"/>
 				</p>
 			</div>
 			<script type="text/javascript">

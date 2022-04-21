@@ -122,11 +122,11 @@ class KBS_Welcome {
 		?>
 
 		<h2 class="nav-tab-wrapper wp-clearfix">			
-			<a href="<?php echo $about_url; ?>" class="nav-tab <?php echo $selected == 'kbs-about' ? 'nav-tab-active' : ''; ?>">
-				<?php _e( "What's New", 'kb-support' ); ?>
+			<a href="<?php echo esc_url( $about_url ); ?>" class="nav-tab <?php echo $selected == 'kbs-about' ? 'nav-tab-active' : ''; ?>">
+				<?php esc_html_e( "What's New", 'kb-support' ); ?>
 			</a>
-			<a href="<?php echo $get_started_url; ?>" class="nav-tab <?php echo $selected == 'kbs-getting-started' ? 'nav-tab-active' : ''; ?>">
-				<?php _e( 'Getting Started', 'kb-support' ); ?>
+			<a href="<?php echo esc_url( $get_started_url ); ?>" class="nav-tab <?php echo $selected == 'kbs-getting-started' ? 'nav-tab-active' : ''; ?>">
+				<?php esc_html_e( 'Getting Started', 'kb-support' ); ?>
 			</a>
 		</h2>
 
@@ -149,7 +149,7 @@ class KBS_Welcome {
 			<p class="about-text"><?php
 				printf(
 				/* translators: %s: https://kb-support.com/kb-support-1-1-released/ */
-					__( 'Thanks for updating to the latest version of KB Support! Take a moment to review the improvements and bug fixes included within this release below. You can also review the full <a href="%s" target="_blank">release notes here</a>.', 'kb-support' ),
+					wp_kses_post( __( 'Thanks for updating to the latest version of KB Support! Take a moment to review the improvements and bug fixes included within this release below. You can also review the full <a href="%s" target="_blank">release notes here</a>.', 'kb-support' ) ),
 					esc_url( 'https://kb-support.com/kb-support-1-1-released/' )
 				);
 			?></p>
@@ -163,28 +163,28 @@ class KBS_Welcome {
             <div class="feature-section clearfix introduction">
 
                 <div class="video feature-section-item">
-                    <img src="<?php echo KBS_PLUGIN_URL . '/assets/images/screenshots/11-sequential-ticket-settings.png' ?>" alt="<?php printf( __( 'Sequential %s', 'kb-support' ), $this->ticket_plural ); ?>">
+                    <img src="<?php echo esc_url( KBS_PLUGIN_URL . '/assets/images/screenshots/11-sequential-ticket-settings.png' ) ?>" alt="<?php printf( esc_attr__( 'Sequential %s', 'kb-support' ), $this->ticket_plural ); ?>">
                 </div>
 
                 <div class="content feature-section-item last-feature">
 
-                    <h3><?php printf( __( 'Sequential %s Numbers', 'kb-support' ), $this->ticket_singular ); ?></h3>
+                    <h3><?php printf( esc_html__( 'Sequential %s Numbers', 'kb-support' ), $this->ticket_singular ); ?></h3>
 
                     <p><?php printf(
-						__( 'No longer do you have to put up with ID\'s being out of sequence for your %1$s. From version %2$s, you can enable sequential %3$s numbers from within settings. Once activated, all %1$s will be updated and all ID\'s will remain in sequence.', 'kb-support' ),
+						esc_html__( 'No longer do you have to put up with ID\'s being out of sequence for your %1$s. From version %2$s, you can enable sequential %3$s numbers from within settings. Once activated, all %1$s will be updated and all ID\'s will remain in sequence.', 'kb-support' ),
 						strtolower( $this->ticket_plural ),
 						$display_version,
 						strtolower( $this->ticket_singular )
 					); ?></p>
 
                     <p><?php printf(
-						__( 'Enable sequential %1$s from <span class="return-to-dashboard"><a href="%2$s">%3$s &rarr; Settings &rarr; %3$s</a></span>', 'kb-support' ),
+						esc_html__( 'Enable sequential %1$s from <span class="return-to-dashboard"><a href="%2$s">%3$s &rarr; Settings &rarr; %3$s</a></span>', 'kb-support' ),
 						strtolower( $this->ticket_plural ),
 						add_query_arg( array(
 							'post_type' => 'kbs_ticket',
 							'page'      => 'kbs-settings',
 							'tab'       => 'tickets'
-						), admin_url( 'edit.php' ) ),
+						), esc_url( admin_url( 'edit.php' ) ) ),
 						$this->ticket_plural
 					); ?></p>
 
@@ -203,28 +203,28 @@ class KBS_Welcome {
                 <div class="content feature-section-item">
 
                     <h3><?php printf(
-						__( 'Assign Multiple Agents to a %s', 'kb-support' ),
+						esc_html__( 'Assign Multiple Agents to a %s', 'kb-support' ),
 						$this->ticket_singular
 					); ?></h3>
 
                     <p><?php printf(
-						__( 'You can now assign multiple support workers to a single %1$s. In addition to assigning the primary agent, it is possible to assign additional agents.', 'kb-support' ),
+						esc_html__( 'You can now assign multiple support workers to a single %1$s. In addition to assigning the primary agent, it is possible to assign additional agents.', 'kb-support' ),
 						strtolower( $this->ticket_singular )
 					); ?></p>
 
                     <p><?php printf(
-						__( 'Support workers that are assigned as additional agents can receive email notification of their assignment and are able to view, update, add replies, and perform all the same actions as the primary agent.', 'kb-support' ),
+						esc_html__( 'Support workers that are assigned as additional agents can receive email notification of their assignment and are able to view, update, add replies, and perform all the same actions as the primary agent.', 'kb-support' ),
 						strtolower( $this->ticket_singular )
 					); ?></p>
 
 					<p><?php printf(
-						__( 'Enable multiple agents from <span class="return-to-dashboard"><a href="%1$s">%2$s &rarr; Settings &rarr; %2$s &rarr; Agent Settings</a></span>', 'kb-support' ),
+						wp_kses_post( __( 'Enable multiple agents from <span class="return-to-dashboard"><a href="%1$s">%2$s &rarr; Settings &rarr; %2$s &rarr; Agent Settings</a></span>' ), 'kb-support' ),
 						add_query_arg( array(
 							'post_type' => 'kbs_ticket',
 							'page'      => 'kbs-settings',
 							'tab'       => 'tickets',
 							'section'   => 'agents'
-						), admin_url( 'edit.php' ) ),
+						), esc_url( admin_url( 'edit.php' ) ) ),
 						$this->ticket_plural
 					); ?></p>
 
@@ -236,7 +236,7 @@ class KBS_Welcome {
                 </div>
 
                 <div class="content feature-section-item last-feature">
-                    <img src="<?php echo KBS_PLUGIN_URL . '/assets/images/screenshots/11-additional-agents-metabox.png' ?>"
+                    <img src="<?php echo esc_url( KBS_PLUGIN_URL . '/assets/images/screenshots/11-additional-agents-metabox.png' ) ?>"
                          alt="<?php esc_attr_e( 'Assign multiple agents', 'kb-support' ); ?>">
                 </div>
 
@@ -246,31 +246,31 @@ class KBS_Welcome {
 			<div class="feature-section clearfix agent-notifications">
 
                 <div class="video feature-section-item">
-                    <img src="<?php echo KBS_PLUGIN_URL . '/assets/images/screenshots/11-agent-notifications.png' ?>" alt="<?php __( 'Agent notifications', 'kb-support' ); ?>">
+                    <img src="<?php echo esc_url( KBS_PLUGIN_URL . '/assets/images/screenshots/11-agent-notifications.png' ) ?>" alt="<?php esc_html__( 'Agent notifications', 'kb-support' ); ?>">
                 </div>
 
                 <div class="content feature-section-item last-feature">
 
-                    <h3><?php _e( 'Agent Assignment Notifications', 'kb-support' ); ?></h3>
+                    <h3><?php esc_html_e( 'Agent Assignment Notifications', 'kb-support' ); ?></h3>
 
                     <p><?php printf(
-						__( 'It has always been possible to notify an agent when a %1$s is created and auto assigned to them, or when a customer adds a reply to a %1$s that they are assigned to. The missing piece was notifications as and when a %1$s is reassigned to an agent.', 'kb-support' ),
+						esc_html__( 'It has always been possible to notify an agent when a %1$s is created and auto assigned to them, or when a customer adds a reply to a %1$s that they are assigned to. The missing piece was notifications as and when a %1$s is reassigned to an agent.', 'kb-support' ),
 						strtolower( $this->ticket_singular )
 					); ?></p>
 
 					<p><?php printf(
-						__( 'You can now configure and fully customize agent notifications to ensure that any time a support worker is assigned to a %1$s as either the primary agent, or an additional agent, they receive an email notification.', 'kb-support' ),
+						esc_html__( 'You can now configure and fully customize agent notifications to ensure that any time a support worker is assigned to a %1$s as either the primary agent, or an additional agent, they receive an email notification.', 'kb-support' ),
 						strtolower( $this->ticket_singular )
 					); ?></p>
 
 					<p><?php printf(
-						__( 'Head to <span class="return-to-dashboard"><a href="%1$s">%2$s &rarr; Settings &rarr; Emails &rarr; Notifications</a></span> to setup agent notifications.', 'kb-support' ),
+						wp_kses_post( __( 'Head to <span class="return-to-dashboard"><a href="%1$s">%2$s &rarr; Settings &rarr; Emails &rarr; Notifications</a></span> to setup agent notifications.' ), 'kb-support' ),
 						add_query_arg( array(
 							'post_type' => 'kbs_ticket',
 							'page'      => 'kbs-settings',
 							'tab'       => 'emails',
 							'section'   => 'ticket_notifications'
-						), admin_url( 'edit.php' ) ),
+						), esc_url( admin_url( 'edit.php' ) ) ),
 						$this->ticket_plural
 					); ?></p>
 
@@ -283,17 +283,17 @@ class KBS_Welcome {
 
                 <div class="content feature-section-item">
 
-                    <h3><?php _e( 'Export Data to CSV', 'kb-support' ); ?></h3>
+                    <h3><?php esc_html_e( 'Export Data to CSV', 'kb-support' ); ?></h3>
 
-                    <p><?php _e( 'Export data from KB Support into a downloadable CSV file.', 'kb-support' ); ?></p>
+                    <p><?php esc_html_e( 'Export data from KB Support into a downloadable CSV file.', 'kb-support' ); ?></p>
 
 					<p><?php printf(
-						__( 'Select the Tools tab from the <span class="return-to-dashboard"><a href="%1$s">%2$s &rarr; Tools</a></span> menu. From here you can export %3$s and customer data into a CSV file which will automatically be downloaded to your PC.', 'kb-support' ),
+						wp_kses_post( __( 'Select the Tools tab from the <span class="return-to-dashboard"><a href="%1$s">%2$s &rarr; Tools</a></span> menu. From here you can export %3$s and customer data into a CSV file which will automatically be downloaded to your PC.', 'kb-support' ) ),
 						add_query_arg( array(
 							'post_type' => 'kbs_ticket',
 							'page'      => 'kbs-tools',
 							'tab'       => 'export'
-						), admin_url( 'edit.php' ) ),
+						), esc_url( admin_url( 'edit.php' ) ) ),
 						$this->ticket_plural,
 						strtolower( $this->ticket_singular )
 					); ?></p>
@@ -301,23 +301,23 @@ class KBS_Welcome {
                 </div>
 
                 <div class="content feature-section-item last-feature">
-                    <img src="<?php echo KBS_PLUGIN_URL . '/assets/images/screenshots/11-data-export.png' ?>"
+                    <img src="<?php echo esc_url( KBS_PLUGIN_URL . '/assets/images/screenshots/11-data-export.png' ) ?>"
                          alt="<?php esc_attr_e( 'Data export', 'kb-support' ); ?>">
                 </div>
 
             </div>
             <!-- /.feature-section -->
 
-			<h4><?php printf( __( 'Additional Updates with Version %s', 'kb-support' ), $display_version ); ?></h4>
+			<h4><?php printf( esc_html__( 'Additional Updates with Version %s', 'kb-support' ), $display_version ); ?></h4>
             <ul class="ul-disc">
-                <li><?php _e( 'Corrected variable name being passed to <code>kbs_register_redirect</code> filter', 'kb-support' ); ?></li>
-                <li><?php _e( 'Added a notice for when settings are imported', 'kb-support' ); ?></li>
-                <li><?php _e( 'Corrected CSS syntax which was causing alignment issue within the KB Article restrictions metabox', 'kb-support' ); ?></li>
-                <li><?php _e( 'Updated contextual help for settings screen', 'kb-support' ); ?></li>
-                <li><?php _e( 'Corrected variable name being passed via <code>kbs_auto_assign_agent</code> hook', 'kb-support' ); ?></li>
-                <li><?php _e( 'Added hook <code>kbs_update_ticket_meta_key</code> hook', 'kb-support' ); ?></li>
-                <li><?php _e( 'Set <code>$prev_value</code> when updating ticket meta if it is not passed to the function', 'kb-support' ); ?></li>
-                <li><?php _e( 'Added filter <code>kbs_disable_ticket_post_lock</code> to enable removal of post lock for tickets', 'kb-support' ); ?></li>
+                <li><?php wp_kses_post( _e( 'Corrected variable name being passed to <code>kbs_register_redirect</code> filter', 'kb-support' ) ); ?></li>
+                <li><?php wp_kses_post( _e( 'Added a notice for when settings are imported', 'kb-support' ) ); ?></li>
+                <li><?php wp_kses_post( _e( 'Corrected CSS syntax which was causing alignment issue within the KB Article restrictions metabox', 'kb-support' ) ); ?></li>
+                <li><?php wp_kses_post( _e( 'Updated contextual help for settings screen', 'kb-support' ) ); ?></li>
+                <li><?php wp_kses_post( _e( 'Corrected variable name being passed via <code>kbs_auto_assign_agent</code> hook', 'kb-support' ) ); ?></li>
+                <li><?php wp_kses_post( _e( 'Added hook <code>kbs_update_ticket_meta_key</code> hook', 'kb-support' ) ); ?></li>
+                <li><?php wp_kses_post( _e( 'Set <code>$prev_value</code> when updating ticket meta if it is not passed to the function', 'kb-support' ) ); ?></li>
+                <li><?php wp_kses_post( _e( 'Added filter <code>kbs_disable_ticket_post_lock</code> to enable removal of post lock for tickets', 'kb-support' ) ); ?></li>
             </ul>
 
         </div>
@@ -350,7 +350,7 @@ class KBS_Welcome {
             <p class="about-text"><?php
 				printf(
 				/* translators: %s: https://kb-support.com/support/ */
-					__( 'Welcome to the KB Support getting started guide! If you\'re a first time user, you\'re now well on your way to making your support business even more efficient. We encourage you to check out the <a href="%s" target="_blank">plugin documentation</a> and getting started guide below.', 'kb-support' ),
+					wp_kses_post( __( 'Welcome to the KB Support getting started guide! If you\'re a first time user, you\'re now well on your way to making your support business even more efficient. We encourage you to check out the <a href="%s" target="_blank">plugin documentation</a> and getting started guide below.', 'kb-support' ) ),
 					esc_url( add_query_arg( array(
 						'utm_source'   => 'welcome',
 						'utm_medium'   => 'wp-admin',
@@ -365,31 +365,31 @@ class KBS_Welcome {
 
 			<?php $this->tabs(); ?>
 
-            <p class="about-text"><?php _e( 'Getting started with KB Support is easy! It works right from installation but we\'ve put together this quick start guide to help first time users customize the plugin to meet the individual needs of their business. We\'ll have you up and running in no time. Let\'s begin!', 'kb-support' ); ?></p>
+            <p class="about-text"><?php esc_html_e( 'Getting started with KB Support is easy! It works right from installation but we\'ve put together this quick start guide to help first time users customize the plugin to meet the individual needs of their business. We\'ll have you up and running in no time. Let\'s begin!', 'kb-support' ); ?></p>
 
             <div class="feature-section clearfix">
 
                 <div class="content feature-section-item">
-                    <h3><?php _e( 'STEP 1: Customize Settings', 'kb-support' ); ?></h3>
+                    <h3><?php esc_html_e( 'STEP 1: Customize Settings', 'kb-support' ); ?></h3>
 
                     <p><?php printf(
-                        __('KB Support settings enable you to define the communication flow and content between your support business and your customers, as well as determine who can submit a %1$s, how %2$s are assigned to support workers, which tasks support workers can undertake, plus much more...', 'kb-support' ),
+                        esc_html__('KB Support settings enable you to define the communication flow and content between your support business and your customers, as well as determine who can submit a %1$s, how %2$s are assigned to support workers, which tasks support workers can undertake, plus much more...', 'kb-support' ),
                         strtolower( $this->ticket_singular ),
                         strtolower( $this->ticket_plural )
                     ); ?></p>
 
                     <p><?php printf(
-						__( 'All of these settings can be managed by going to the menu and selecting <span class="return-to-dashboard"><a href="%s">%s &rarr; Settings</a></span>', 'kb-support' ),
+						esc_html( __( 'All of these settings can be managed by going to the menu and selecting <span class="return-to-dashboard"><a href="%s">%s &rarr; Settings</a></span>', 'kb-support' ) ),
 						add_query_arg( array(
 							'post_type' => 'kbs_ticket',
 							'page'      => 'kbs-settings'
-						), admin_url( 'edit.php' ) ),
+						), esc_url( admin_url( 'edit.php' ) ) ),
 						$this->ticket_plural
 					); ?></p>
                 </div>
 
                 <div class="content feature-section-item update-settings">
-                    <img src="<?php echo KBS_PLUGIN_URL; ?>assets/images/screenshots/getting-started-options.jpg">
+                    <img src="<?php echo esc_url( KBS_PLUGIN_URL .'assets/images/screenshots/getting-started-options.jpg'); ?>">
                 </div>
 
             </div>
@@ -398,16 +398,16 @@ class KBS_Welcome {
             <div class="feature-section clearfix">
 
                 <div class="content feature-section-item edit-form">
-                    <img src="<?php echo KBS_PLUGIN_URL; ?>assets/images/screenshots/getting-started-edit-form.png">
+                    <img src="<?php echo esc_url( KBS_PLUGIN_URL . 'assets/images/screenshots/getting-started-edit-form.png' ); ?>">
                 </div>
 
                 <div class="content feature-section-item last-feature">
-                    <h3><?php _e( 'STEP 2: Configure Your Submission Forms', 'kb-support' ); ?></h3>
+                    <h3><?php esc_html_e( 'STEP 2: Configure Your Submission Forms', 'kb-support' ); ?></h3>
 
                     <p><?php printf(
-						__( 'Customers will use submission forms to create %s from the front end of your website. Edit the default form we created for you during installation to make sure you have all the fields defined you need to capture all relevant information from your customers. Select from a vast number of field types and re-order them via the easy to use drag and drop interface. Forms are managed via <span class="return-to-dashboard"><a href="%s">%s &rarr; Submission Forms</a></span>', 'kb-support' ),
+						esc_html( __( 'Customers will use submission forms to create %s from the front end of your website. Edit the default form we created for you during installation to make sure you have all the fields defined you need to capture all relevant information from your customers. Select from a vast number of field types and re-order them via the easy to use drag and drop interface. Forms are managed via <span class="return-to-dashboard"><a href="%s">%s &rarr; Submission Forms</a></span>', 'kb-support' ) ),
 							strtolower( $this->ticket_plural ),
-							add_query_arg( 'post_type', 'kbs_form', admin_url( 'edit.php' ) ),
+							add_query_arg( 'post_type', 'kbs_form', esc_url( admin_url( 'edit.php' ) ) ),
 							$this->ticket_plural
 					); ?></p>
                 </div>
@@ -421,20 +421,20 @@ class KBS_Welcome {
                     <h3><?php esc_html_e( 'STEP 3: Create your Knowledge Base', 'kb-support' ); ?></h3>
 
                     <p><?php printf(
-						__( 'Your knowledge base is key towards preventing the need for customers to open support %1$s. Well crafted %2$s can assist in your company receiving less support %1$s. Customers are happy as they can resolve their problems or queries quicker than if they have to open a support %3$s.', 'kb-support' ),
+						esc_html__( 'Your knowledge base is key towards preventing the need for customers to open support %1$s. Well crafted %2$s can assist in your company receiving less support %1$s. Customers are happy as they can resolve their problems or queries quicker than if they have to open a support %3$s.', 'kb-support' ),
 						strtolower( $this->ticket_plural ),
 						$this->article_plural,
 						strtolower( $this->ticket_singular )
 					); ?></p>
 
-                    <p><?php printf( __(
-						'Check out our post on <a href="%1$s" target="_blank">Writing Effective Knowledge Base Articles</a> and once you\'re ready, use the <code>[kbs_articles]</code> on a page to display your knowledge base to your customers.', 'kb-support' ),
+                    <p><?php printf( wp_kses_post( __(
+						'Check out our post on <a href="%1$s" target="_blank">Writing Effective Knowledge Base Articles</a> and once you\'re ready, use the <code>[kbs_articles]</code> on a page to display your knowledge base to your customers.', 'kb-support' ) ),
 						'https://kb-support.com/writing-effective-knowledge-base-articles/',
 						$this->article_plural
 					); ?></p>
 
 					<p><?php printf(
-						__( 'Select <span class="return-to-dashboard"><a href="%s">%s</a></span>from the menu to start writing.', 'kb-support' ),
+						wp_kses_post( __( 'Select <span class="return-to-dashboard"><a href="%s">%s</a></span>from the menu to start writing.', 'kb-support' ) ),
 							add_query_arg( 'post_type', 'article', admin_url( 'edit.php' ) ),
 							$this->article_plural
 					); ?></p>
@@ -442,7 +442,7 @@ class KBS_Welcome {
                 </div>
 
                 <div class="content feature-section-item last-feature">
-                    <img src="<?php echo KBS_PLUGIN_URL; ?>assets/images/screenshots/getting-started-ticket-article-search.png">
+                    <img src="<?php echo esc_url( KBS_PLUGIN_URL . 'assets/images/screenshots/getting-started-ticket-article-search.png' ); ?>">
                 </div>
 
             </div>
@@ -452,7 +452,7 @@ class KBS_Welcome {
 
                 <div class="content feature-section-item display-options">
                 	<a href="https://kb-support.com/extensions/" target="_blank" title="Extend KB Support with extensions">
-                        <img src="<?php echo KBS_PLUGIN_URL; ?>assets/images/screenshots/getting-started-extensions.jpg">
+                        <img src="<?php echo esc_url( KBS_PLUGIN_URL . '>assets/images/screenshots/getting-started-extensions.jpg' ); ?>">
                     </a>
                 </div>
 
@@ -460,13 +460,13 @@ class KBS_Welcome {
                     <h3><?php esc_html_e( 'STEP 4: Optionally Add More Functionality', 'kb-support' ); ?></h3>
 
                     <p><?php printf(
-						__( 'There are many more ways in which you can customize your instance of KB Support. Take a look at our range of <a href="%s" target="_blank">extensions</a> to add even more functionality and review our extensive <a href="%s" target="_blank">support documentation</a> for additional help and tips.', 'kb-support' ),
+						wp_kses_post( __( 'There are many more ways in which you can customize your instance of KB Support. Take a look at our range of <a href="%s" target="_blank">extensions</a> to add even more functionality and review our extensive <a href="%s" target="_blank">support documentation</a> for additional help and tips.', 'kb-support' ) ),
 						'https://kb-support.com/extensions/',
 						'https://kb-support.com/support/'
 					); ?></p>
 
 					<p><?php printf(
-						__( 'And of course, if you need any assistance, <a href="%s" target="_blank">log a support ticket</a> via our website and we\'ll be happy to help.', 'kb-support' ),
+						wp_kses_post( __( 'And of course, if you need any assistance, <a href="%s" target="_blank">log a support ticket</a> via our website and we\'ll be happy to help.', 'kb-support' ) ),
 						'https://kb-support.com/log-a-support-ticket/'
 					); ?></p>
 
@@ -479,23 +479,23 @@ class KBS_Welcome {
 			<hr />
 
 			<div class="return-to-dashboard">
-            	<a href="<?php echo admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-settings' ); ?>">
+            	<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-settings' ) ); ?>">
 					<?php _e( 'Configure Settings', 'kb-support' ); ?>
                 </a> |
                 <a href="<?php echo esc_url( self_admin_url( 'edit.php?post_type=kbs_ticket' ) ); ?>">
-                    <?php printf( __( 'Go to %s', 'kb-support' ), $this->ticket_plural ); ?>
+                    <?php printf( esc_html__( 'Go to %s', 'kb-support' ), $this->ticket_plural ); ?>
                 </a> |
                  <a href="<?php echo esc_url( self_admin_url( 'edit.php?post_type=kbs_form' ) ); ?>">
-                    <?php _e( 'Manage Submission Forms', 'kb-support' ); ?>
+                    <?php esc_html_e( 'Manage Submission Forms', 'kb-support' ); ?>
                 </a> |
                 <a href="<?php echo esc_url( self_admin_url( 'edit.php?post_type=' . KBS()->KB->post_type ) ); ?>">
-                    <?php printf( __( 'Go to %s', 'kb-support' ), $this->article_plural ); ?>
+                    <?php printf( esc_html__( 'Go to %s', 'kb-support' ), $this->article_plural ); ?>
                 </a> |
                 <a href="https://kb-support.com/extensions/" target="_blank">
-                    <?php _e( 'View Extensions', 'kb-support' ); ?>
+                    <?php esc_html_e( 'View Extensions', 'kb-support' ); ?>
                 </a> |
-                <a href="<?php echo admin_url(); ?>">
-                    <?php _e( 'WordPress Dashboard', 'kb-support' ); ?>
+                <a href="<?php echo esc_url( admin_url() ); ?>">
+                    <?php esc_html_e( 'WordPress Dashboard', 'kb-support' ); ?>
                 </a>
             </div>
 
@@ -539,13 +539,13 @@ class KBS_Welcome {
 		// Badge for welcome page
 		$badge_url = KBS_PLUGIN_URL . 'assets/images/kbs-icon-transparent.png';
 		?>
-        <h1 class="welcome-h1"><?php echo get_admin_page_title(); ?></h1>
+        <h1 class="welcome-h1"><?php echo esc_html( get_admin_page_title() ); ?></h1>
 		<?php $this->social_media_elements(); ?>
 
 		<style type="text/css" media="screen">
             /*<![CDATA[*/
             .kbs-badge {
-                background: url('<?php echo $badge_url; ?>') no-repeat;
+                background: url('<?php echo esc_url( $badge_url ); ?>') no-repeat;
             }
 
             /*]]>*/

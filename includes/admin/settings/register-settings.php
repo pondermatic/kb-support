@@ -1770,8 +1770,8 @@ function kbs_password_callback( $args ) {
  */
 function kbs_missing_callback($args) {
 	printf(
-		__( 'The callback function used for the %s setting is missing.', 'kb-support' ),
-		'<strong>' . $args['id'] . '</strong>'
+		esc_html__( 'The callback function used for the %s setting is missing.', 'kb-support' ),
+		'<strong>' . esc_html( $args['id'] ) . '</strong>'
 	);
 } // kbs_missing_callback
 

@@ -308,7 +308,7 @@ function kbs_object_to_array( $object = array() ) {
  */
 function kbs_do_honeypot_check( $data )	{
 	if ( ! empty( $data['kbs_honeypot'] ) )	{
-		wp_die( __( "Ha! I don't think so little honey bee. No bots allowed in this Honey Pot!", 'kb-support' ) );
+		wp_die( esc_html__( "Ha! I don't think so little honey bee. No bots allowed in this Honey Pot!", 'kb-support' ) );
 	}
 	
 	return;
@@ -335,7 +335,7 @@ function kbs_display_notice( $m )	{
 	$notices = kbs_get_notices( $m );
 
 	if ( $notices )	{
-		return '<div class="kbs_alert kbs_alert_' . $notices['class'] . '">' . $notices['notice'] . '</div>';
+		return '<div class="kbs_alert kbs_alert_' . esc_attr( $notices['class'] ) . '">' . esc_html( $notices['notice'] ) . '</div>';
 	}
 } // kbs_display_notice
 
@@ -540,7 +540,7 @@ function kbs_add_credit_text()	{
 	if ( kbs_get_option( 'show_credits', false ) )	{
 		ob_start(); ?>
 
-		<span class="kbs-description"><?php printf( __( 'Powered by <a href="%s" title="KB Support" target="_blank">KB Support</a>. The ultimate help desk and knowledge base support tool plugin for WordPress. <a href="%s" target="_blank">Download for free</a>.', 'kb-support' ), 'https://kb-support.com/', 'https://wordpress.org/plugins/kb-support' ); ?></span>
+		<span class="kbs-description"><?php printf( wp_kses_post( __( 'Powered by <a href="%s" title="KB Support" target="_blank">KB Support</a>. The ultimate help desk and knowledge base support tool plugin for WordPress. <a href="%s" target="_blank">Download for free</a>.', 'kb-support' ) ), 'https://kb-support.com/', 'https://wordpress.org/plugins/kb-support' ); ?></span>
 
 		<?php echo ob_get_clean();
 	}
@@ -579,20 +579,20 @@ function _kbs_deprecated_function( $function, $version, $replacement = null, $ba
 	if ( WP_DEBUG && apply_filters( 'kbs_deprecated_function_trigger_error', $show_errors ) ) {
 		if ( ! is_null( $replacement ) ) {
 			trigger_error( sprintf(
-				__( '%1$s is <strong>deprecated</strong> since KB Support version %2$s! Use %3$s instead.', 'kb-support' ),
-				$function,
-				$version,
-				$replacement
+				wp_kses_post( __( '%1$s is <strong>deprecated</strong> since KB Support version %2$s! Use %3$s instead.', 'kb-support' ) ),
+				esc_html( $function ),
+				esc_html( $version ),
+				esc_html( $replacement )
 			) );
-			trigger_error(  print_r( $backtrace, 1 ) ); // Limited to previous 1028 characters, but since we only need to move back 1 in stack that should be fine.
+			trigger_error(  print_r( array_map( 'esc_html', $backtrace ), 1 ) ); // Limited to previous 1028 characters, but since we only need to move back 1 in stack that should be fine.
 			// Alternatively we could dump this to a file.
 		} else {
 			trigger_error( sprintf(
-				__( '%1$s is <strong>deprecated</strong> since KB Support version %2$s with no alternative available.', 'kb-support' ),
+				wp_kses_post( __( '%1$s is <strong>deprecated</strong> since KB Support version %2$s with no alternative available.', 'kb-support' ) ),
 				$function,
 				$version
 			) );
-			trigger_error( print_r( $backtrace, 1 ) );// Limited to previous 1028 characters, but since we only need to move back 1 in stack that should be fine.
+			trigger_error( print_r( array_map( 'esc_html', $backtrace ), 1 ) );// Limited to previous 1028 characters, but since we only need to move back 1 in stack that should be fine.
 			// Alternatively we could dump this to a file.
 		}
 	}
@@ -629,19 +629,19 @@ function _kbs_deprected_argument( $argument, $function, $version, $replacement =
 	if ( WP_DEBUG && apply_filters( 'kbs_deprecated_argument_trigger_error', $show_errors ) )	{
 		if ( ! is_null( $replacement ) )	{
 			trigger_error( sprintf(
-				__( 'The %1$s argument of %2$s is <strong>deprecated</strong> since KB Support version %3$s! Please use %4$s instead.', 'kb-support' ),
-				$argument, $function, $version, $replacement
+				wp_kses_post( __( 'The %1$s argument of %2$s is <strong>deprecated</strong> since KB Support version %3$s! Please use %4$s instead.', 'kb-support' ) ),
+				esc_html( $argument ), esc_html( $function ), esc_html( $version ), esc_html( $replacement )
 			) );
-			trigger_error( print_r( $backtrace, 1 ) ); // Limited to previous 1028 characters, but since we only need to move back 1 in stack that should be fine.
+			trigger_error( print_r( array_map( 'esc_html', $backtrace ), 1 ) ); // Limited to previous 1028 characters, but since we only need to move back 1 in stack that should be fine.
 			// Alternatively we could dump this to a file.
 		} else	{
 			trigger_error( sprintf(
-				__( 'The %1$s argument of %2$s is <strong>deprecated</strong> since KB Support version %3$s with no alternative available.', 'kb-support' ),
-				$argument,
-				$function,
-				$version
+				wp_kses_post( __( 'The %1$s argument of %2$s is <strong>deprecated</strong> since KB Support version %3$s with no alternative available.', 'kb-support' ) ),
+				esc_html( $argument ),
+				esc_html( $function ),
+				esc_html( $version )
 			) );
-			trigger_error( print_r( $backtrace, 1 ) );// Limited to previous 1028 characters, but since we only need to move back 1 in stack that should be fine.
+			trigger_error( print_r( array_map( 'esc_html', $backtrace ), 1 ) );// Limited to previous 1028 characters, but since we only need to move back 1 in stack that should be fine.
 			// Alternatively we could dump this to a file.
 		}
 	}
@@ -671,8 +671,8 @@ function kbs_get_newsletter()    {
 
     ?>
 	<p class="newsletter-intro">
-	    <?php printf( __( 
-            'Sign up for the KB Support newsletter below to receive a <strong>15%s discount</strong> off our <a href="%s" target="_blank">extensions</a> and to stay informed of important updates and news.', 'kb-support' ),
+	    <?php printf( wp_kses_post( __( 
+            'Sign up for the KB Support newsletter below to receive a <strong>15%s discount</strong> off our <a href="%s" target="_blank">extensions</a> and to stay informed of important updates and news.', 'kb-support' ) ),
             '%',
             add_query_arg( array(
 				'utm_source'   => 'admin',

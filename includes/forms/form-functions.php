@@ -686,7 +686,7 @@ function kbs_display_form( $form_id = 0 ) {
 	global $kbs_form;
 
 	if ( empty( $form_id ) ) {
-		return __( 'Submission form not found', 'kb-support' );
+		return esc_html__( 'Submission form not found', 'kb-support' );
 	}
 
 	if ( has_action( 'kbs_display_form' ) )	{
@@ -696,7 +696,7 @@ function kbs_display_form( $form_id = 0 ) {
 		$kbs_form = new KBS_Form( $form_id );
 	
 		if ( ! $kbs_form ) {
-			return __( 'Submission form not found', 'kb-support' );
+			return esc_html__( 'Submission form not found', 'kb-support' );
 		}
 	
 		ob_start();
@@ -719,12 +719,12 @@ function kbs_display_form( $form_id = 0 ) {
 function kbs_form_submission_errors( $field_id, $error )	{
 
 	$errors = array(
-		'process_error'    => __( 'An internal error has occurred, please try again or contact support.', 'kb-support' ),
-		'required'         => get_the_title( $field_id ) . __( ' is a required field.', 'kb-support' ),
-		'invalid_email'    => get_the_title( $field_id ) . __( ' requires a valid email address.', 'kb-support' ),
-		'agree_to_policy'  => __( 'You must acknowledge and accept our privacy policy', 'kb-support' ),
-		'agree_to_terms'   => __( 'You must agree to the terms and conditions', 'kb-support' ),
-		'google_recaptcha' => get_the_title( $field_id ) . __( ' validation failed', 'kb-support' )
+		'process_error'    => esc_html__( 'An internal error has occurred, please try again or contact support.', 'kb-support' ),
+		'required'         => get_the_title( $field_id ) . esc_html__( ' is a required field.', 'kb-support' ),
+		'invalid_email'    => get_the_title( $field_id ) . esc_html__( ' requires a valid email address.', 'kb-support' ),
+		'agree_to_policy'  => esc_html__( 'You must acknowledge and accept our privacy policy', 'kb-support' ),
+		'agree_to_terms'   => esc_html__( 'You must agree to the terms and conditions', 'kb-support' ),
+		'google_recaptcha' => get_the_title( $field_id ) . esc_html__( ' validation failed', 'kb-support' )
 	);
 
 	$errors = apply_filters( 'kbs_form_submission_errors', $errors, $field_id );
@@ -1081,13 +1081,13 @@ function kbs_render_agree_to_privacy_policy_field()	{
 
 	ob_start(); ?>
 
-	<p><input type="checkbox" name="kbs_agree_privacy_policy" id="kbs-agree-privacy-policy"<?php echo $input_class; ?> value="1" /> <a href="#TB_inline?width=600&height=550&inlineId=kbs-ticket-privacy-policy" title="<?php echo esc_html( get_the_title( $privacy_page ) ); ?>" class="thickbox"<?php echo $label_class; ?>><?php esc_attr_e( $label, 'kb-support' ); ?></a></p>
+	<p><input type="checkbox" name="kbs_agree_privacy_policy" id="kbs-agree-privacy-policy"<?php echo esc_attr( $input_class ); ?> value="1" /> <a href="#TB_inline?width=600&height=550&inlineId=kbs-ticket-privacy-policy" title="<?php echo esc_html( get_the_title( $privacy_page ) ); ?>" class="thickbox"<?php echo $label_class; ?>><?php esc_attr_e( $label, 'kb-support' ); ?></a></p>
 
 	<div id="kbs-ticket-privacy-policy" class="kbs_hidden">
 		<?php do_action( 'kbs_before_privacy_policy' ); ?>
 
         <?php if ( function_exists( 'apply_shortcodes' ) ) : ?>
-            <?php echo wpautop( apply_shortcodes( stripslashes( $privacy_text ) ) ); ?>
+            <?php echo wpautop( apply_shortcodes( stripslashes( wp_kses_post( $privacy_text ) ) ) ); ?>
         <?php else : ?>
             <?php echo wpautop( do_shortcode( stripslashes( $privacy_text ) ) ); ?>
         <?php endif; ?>
@@ -1145,7 +1145,7 @@ function kbs_render_agree_to_terms_field()	{
 
 	<div id="kbs-ticket-terms-conditions" class="kbs_hidden">
 		<?php do_action( 'kbs_before_terms' ); ?>
-		<?php echo wpautop( stripslashes( $agree_text ) ); ?>
+		<?php echo wp_kses_post( wpautop( stripslashes( $agree_text ) ) ); ?>
 		<?php do_action( 'kbs_after_terms' ); ?>
     </div>
 

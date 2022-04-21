@@ -110,13 +110,13 @@ function kbs_tools_banned_emails_display() {
 	do_action( 'kbs_tools_banned_emails_before' );
 ?>
 	<div class="postbox">
-		<h3><span><?php _e( 'Banned Emails', 'kb-support' ); ?></span></h3>
+		<h3><span><?php esc_html_e( 'Banned Emails', 'kb-support' ); ?></span></h3>
 		<div class="inside">
-			<p><?php printf( __( 'Emails addresses and domains entered into the box below will not be able log %s. To ban an entire domain, enter the domain starting with "@".', 'kb-support' ), kbs_get_ticket_label_plural( true ) ); ?></p>
-			<form method="post" action="<?php echo admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-tools&tab=general' ); ?>">
+			<p><?php printf( esc_html__( 'Emails addresses and domains entered into the box below will not be able log %s. To ban an entire domain, enter the domain starting with "@".', 'kb-support' ), esc_html( kbs_get_ticket_label_plural( true ) ) ); ?></p>
+			<form method="post" action="<?php echo esc_attr( admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-tools&tab=general' ) ); ?>">
 				<p>
-					<textarea name="banned_emails" rows="10" class="large-text"><?php echo implode( "\n", kbs_get_banned_emails() ); ?></textarea>
-					<span class="description"><?php _e( 'Enter email addresses and/or domains to disallow, one per line.', 'kb-support' ); ?></span>
+					<textarea name="banned_emails" rows="10" class="large-text"><?php echo implode( "\n", wp_kses_post( kbs_get_banned_emails() ) ); ?></textarea>
+					<span class="description"><?php esc_html_e( 'Enter email addresses and/or domains to disallow, one per line.', 'kb-support' ); ?></span>
 				</p>
 				<p>
 					<input type="hidden" name="kbs-action" value="save_banned_emails" />
@@ -457,10 +457,10 @@ function kbs_tools_import_display() {
 ?>
 
 	<div class="postbox">
-		<h3><span><?php _e( 'Import Settings', 'kb-support' ); ?></span></h3>
+		<h3><span><?php esc_html_e( 'Import Settings', 'kb-support' ); ?></span></h3>
 		<div class="inside">
-			<p><?php _e( 'Import the KB Support settings from a .json file. This file can be obtained by exporting the settings on another site using the form within the Export tab.', 'kb-support' ); ?></p>
-			<form method="post" enctype="multipart/form-data" action="<?php echo admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-tools&tab=import' ); ?>">
+			<p><?php esc_html_e( 'Import the KB Support settings from a .json file. This file can be obtained by exporting the settings on another site using the form within the Export tab.', 'kb-support' ); ?></p>
+			<form method="post" enctype="multipart/form-data" action="<?php echo esc_attr( admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-tools&tab=import' ) ); ?>">
 				<p>
 					<input type="file" name="import_file"/>
 				</p>
@@ -493,10 +493,10 @@ function kbs_tools_export_display() {
 ?>
 
 	<div class="postbox kbs-export-settings">
-		<h3><span><?php _e( 'Export Settings', 'kb-support' ); ?></span></h3>
+		<h3><span><?php esc_html_e( 'Export Settings', 'kb-support' ); ?></span></h3>
 		<div class="inside">
-			<p><?php _e( 'Export the KB Support settings for this site as a .json file. This allows you to easily import the configuration into another site.', 'kb-support' ); ?></p>
-			<form method="post" action="<?php echo admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-tools&tab=export' ); ?>">
+			<p><?php esc_html_e( 'Export the KB Support settings for this site as a .json file. This allows you to easily import the configuration into another site.', 'kb-support' ); ?></p>
+			<form method="post" action="<?php echo esc_attr( admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-tools&tab=export' ) ); ?>">
 				<input type="hidden" name="kbs-action" value="export_settings" />
 				<?php wp_nonce_field( 'kbs_export_nonce', 'kbs_export_nonce' ); ?>
                 <span>

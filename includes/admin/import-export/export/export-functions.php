@@ -108,9 +108,9 @@ add_action( 'wp_ajax_kbs_do_ajax_export', 'kbs_do_ajax_export' );
 function kbs_export_customers_display()	{
 	?>
 	<div class="postbox kbs-export-customers">
-		<h3><span><?php _e( 'Export Customers','kb-support' ); ?></span></h3>
+		<h3><span><?php esc_html_e( 'Export Customers','kb-support' ); ?></span></h3>
 		<div class="inside">
-			<p><?php _e( 'Download a CSV of customers.', 'kb-support' ); ?></p>
+			<p><?php esc_html_e( 'Download a CSV of customers.', 'kb-support' ); ?></p>
 			<form id="kbs-export-customers" class="kbs-export-form kbs-import-export-form" method="post">
 				<?php wp_nonce_field( 'kbs_ajax_export', 'kbs_ajax_export' ); ?>
 				<input type="hidden" name="kbs-export-class" value="KBS_Batch_Export_Customers"/>
@@ -133,9 +133,9 @@ function kbs_export_tickets_display() {
 
     ?>
     <div class="postbox kbs-export-tickets">
-		<h3><span><?php printf( __( 'Export %s', 'kb-support' ), $label_plural ); ?></span></h3>
+		<h3><span><?php printf( esc_html__( 'Export %s', 'kb-support' ), $label_plural ); ?></span></h3>
 		<div class="inside">
-			<p><?php printf( __( 'Download a CSV formatted file of %s.', 'kb-support' ), strtolower( $label_plural ) ); ?></p>
+			<p><?php printf( esc_html__( 'Download a CSV formatted file of %s.', 'kb-support' ), strtolower( $label_plural ) ); ?></p>
 
             <form id="kbs-export-tickets" class="kbs-export-form kbs-import-export-form" method="post">
                 <?php wp_nonce_field( 'kbs_ajax_export', 'kbs_ajax_export' ); ?>
@@ -143,21 +143,21 @@ function kbs_export_tickets_display() {
                 <?php echo KBS()->html->date_field( array(
 					'id'          => 'kbs-ticket-export-start',
 					'name'        => 'ticket_start',
-					'placeholder' => __( 'Select Start Date', 'kb-support' )
+					'placeholder' => esc_html__( 'Select Start Date', 'kb-support' )
 				) ); ?>
                 <?php echo KBS()->html->date_field( array(
 					'id'          => 'kbs-ticket-export-end',
 					'name'        => 'ticket_end',
-					'placeholder' => __( 'Select End Date', 'kb-support' )
+					'placeholder' => esc_html__( 'Select End Date', 'kb-support' )
 				) ); ?>
                 <select name="ticket_status">
-                    <option value="any"><?php _e( 'All Statuses', 'kb-support' ); ?></option>
+                    <option value="any"><?php esc_html_e( 'All Statuses', 'kb-support' ); ?></option>
                     <?php foreach( kbs_get_post_statuses( 'labels', true ) as $ticket_status ) : ?>
-                        <option value="<?php echo $ticket_status->name; ?>"><?php echo esc_html( $ticket_status->label ); ?></option>
+                        <option value="<?php echo esc_attr( $ticket_status->name ); ?>"><?php echo esc_html( $ticket_status->label ); ?></option>
                     <?php endforeach; ?>
                 </select>
                 <span>
-                	<?php submit_button( __( 'Generate CSV', 'kb-support' ), 'secondary', 'submit', false ); ?>
+                	<?php submit_button( esc_html__( 'Generate CSV', 'kb-support' ), 'secondary', 'submit', false ); ?>
                     <span class="spinner"></span>
                 </span>
             </form>

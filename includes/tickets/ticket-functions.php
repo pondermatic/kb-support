@@ -1582,7 +1582,7 @@ function kbs_get_note_html( $note, $ticket_id = 0 ) {
 		$user = get_userdata( $note->user_id );
 		$user = $user->display_name;
 	} else {
-		$user = __( 'KBS Bot', 'kb-support' );
+		$user = esc_html__( 'KBS Bot', 'kb-support' );
 	}
 
 	$delete_note_cap = apply_filters( 'kbs_delete_note_cap', 'manage_ticket_settings', $note, $user );
@@ -1590,13 +1590,13 @@ function kbs_get_note_html( $note, $ticket_id = 0 ) {
 
 	$delete_note_url = wp_nonce_url( add_query_arg( array(
 		'kbs-action' => 'delete_ticket_note',
-		'note_id'    => $note->comment_ID,
-		'ticket_id'  => $ticket_id
-	), admin_url() ), 'kbs_delete_ticket_note_' . $note->comment_ID, 'kbs_note_nonce' );
+		'note_id'    => esc_html( $note->comment_ID ),
+		'ticket_id'  => esc_html( $ticket_id )
+	), esc_url( admin_url() ) ), 'kbs_delete_ticket_note_' . esc_html( $note->comment_ID ), 'kbs_note_nonce' );
 
 	$actions = array(
-        'read_note'   => '<a href="#" class="toggle-view-note-option-section">' . __( 'View Note', 'kb-support' ) . '</a>',
-        'delete_note' => '<a href="' . $delete_note_url . '" class="kbs-remove-row kbs-delete">' . __( 'Delete Note', 'kb-support' ) . '</a>'
+        'read_note'   => '<a href="#" class="toggle-view-note-option-section">' . esc_html__( 'View Note', 'kb-support' ) . '</a>',
+        'delete_note' => '<a href="' . $delete_note_url . '" class="kbs-remove-row kbs-delete">' . esc_html__( 'Delete Note', 'kb-support' ) . '</a>'
     );
 
 	if ( $note->user_id != get_current_user_id() && ! current_user_can( $delete_note_cap ) )	{
@@ -1609,11 +1609,11 @@ function kbs_get_note_html( $note, $ticket_id = 0 ) {
 
     <div class="kbs-notes-row-header">
         <span class="kbs-notes-row-title">
-            <?php echo apply_filters( 'kbs_notes_title', sprintf( __( '%s by %s', 'kb-support' ), date_i18n( $date_format, strtotime( $note->comment_date ) ), $user ), $note ); ?>
+            <?php echo apply_filters( 'kbs_notes_title', sprintf( esc_html__( '%s by %s', 'kb-support' ), date_i18n( $date_format, strtotime( $note->comment_date ) ), $user ), $note ); ?>
         </span>
 
         <span class="kbs-notes-row-actions">
-			<?php echo implode( '&nbsp;&#124;&nbsp;', $actions ); ?>
+			<?php echo implode( '&nbsp;&#124;&nbsp;', array_map( 'wp_kses_post', $actions ) ); ?>
         </span>
     </div>
 
@@ -1621,7 +1621,7 @@ function kbs_get_note_html( $note, $ticket_id = 0 ) {
         <div class="kbs-notes-content-sections">
             <div class="kbs-notes-content-section">
                 <?php do_action( 'kbs_ticket_notes_before_content', $note ); ?>
-                <?php echo wpautop( $note->comment_content ); ?>
+                <?php echo wp_kses_post( wpautop( $note->comment_content ) ); ?>
                 <?php do_action( 'kbs_ticket_notes_content', $note ); ?>
             </div>
             <?php do_action( 'kbs_ticket_notes_note', $note ); ?>

@@ -135,7 +135,7 @@ function kbs_output_user_profile_fields( $user )	{
 		$type = kbs_is_agent( $user->ID ) ? 'agent' : 'customer';
 		ob_start(); ?>
 
-		<h2><?php _e( 'KB Support Settings', 'kb-support' ); ?></h2>
+		<h2><?php esc_html_e( 'KB Support Settings', 'kb-support' ); ?></h2>
 		<table class="form-table">
 			<?php do_action( "kbs_display_{$type}_user_profile_fields", $user, $fields ); ?>
 
@@ -162,10 +162,10 @@ function kbs_render_user_profile_hide_closed_tickets_field( $user )  {
 	ob_start(); ?>
 
     <tr>
-        <th><label for="kbs-agent-hide-closed"><?php printf( __( 'Hide Closed %s', 'kb-support' ), kbs_get_ticket_label_plural() ); ?></label></th>
+        <th><label for="kbs-agent-hide-closed"><?php printf( esc_html__( 'Hide Closed %s', 'kb-support' ), kbs_get_ticket_label_plural() ); ?></label></th>
         <td>
             <input type="checkbox" name="kbs_hide_closed" id="kbs-hide-closed" value="1"<?php checked( 1, $hide_closed ); ?> />
-            <p class="description"><?php printf( __( 'Enable to hide closed %s from the %s Manager screen.', 'kb-support' ), kbs_get_ticket_label_plural( true ), kbs_get_ticket_label_singular() ); ?></p>
+            <p class="description"><?php printf( esc_html__( 'Enable to hide closed %s from the %s Manager screen.', 'kb-support' ), kbs_get_ticket_label_plural( true ), kbs_get_ticket_label_singular() ); ?></p>
         </td>
     </tr>
 
@@ -186,12 +186,12 @@ function kbs_render_user_profile_tickets_per_page_field( $user )  {
     <tr>
         <th scope="row">
             <label for="kbs-customer-tickets-per-page">
-				<?php printf( __( '%s per Page', 'kb-support' ), kbs_get_ticket_label_plural() ); ?>
+				<?php printf( esc_html__( '%s per Page', 'kb-support' ), kbs_get_ticket_label_plural() ); ?>
 			</label>
         </th>
         <td>
             <input class="small-text" type="number" name="kbs_tickets_per_page" id="kbs-customer-tickets-per-page" value="<?php echo (int)$tickets_per_page; ?>" step="1" min="1" />
-            <p class="description"><?php printf( __( 'Choose the number of %s to display per page.', 'kb-support' ), kbs_get_ticket_label_plural( true ) ); ?></p>
+            <p class="description"><?php printf( esc_html__( 'Choose the number of %s to display per page.', 'kb-support' ), kbs_get_ticket_label_plural( true ) ); ?></p>
         </td>
     </tr>
 
@@ -215,7 +215,7 @@ function kbs_render_user_profile_tickets_orderby_field( $user )  {
     <tr>
         <th scope="row">
             <label for="kbs-customer-tickets-orderby">
-				<?php printf( __( 'Default %s Orderby', 'kb-support' ), kbs_get_ticket_label_plural() ); ?>
+				<?php printf( esc_html__( 'Default %s Orderby', 'kb-support' ), kbs_get_ticket_label_plural() ); ?>
 			</label>
         </th>
         <td>
@@ -224,13 +224,13 @@ function kbs_render_user_profile_tickets_orderby_field( $user )  {
 					<?php $selected = selected( $orderby, $value, false ); ?>
 					<?php printf(
 						'<option value="%s"%s>%s</option>',
-						$value,
-						$selected,
-						$label
+						esc_attr( $value ),
+						esc_html( $selected ),
+						esc_html( $label )
 					); ?>
 				<?php endforeach; ?>
 			</select>
-            <p class="description"><?php printf( __( 'Select how you would like %s to be ordered by default.', 'kb-support' ), kbs_get_ticket_label_plural( true ) ); ?></p>
+            <p class="description"><?php printf( esc_html__( 'Select how you would like %s to be ordered by default.', 'kb-support' ), kbs_get_ticket_label_plural( true ) ); ?></p>
         </td>
     </tr>
 
@@ -259,7 +259,7 @@ function kbs_render_user_profile_tickets_order_field( $user )  {
     <tr>
         <th scope="row">
             <label for="kbs-customer-tickets-order">
-				<?php printf( __( 'Default %s Order', 'kb-support' ), kbs_get_ticket_label_plural() ); ?>
+				<?php printf( esc_html__( 'Default %s Order', 'kb-support' ), kbs_get_ticket_label_plural() ); ?>
 			</label>
         </th>
         <td>
@@ -268,13 +268,13 @@ function kbs_render_user_profile_tickets_order_field( $user )  {
 					<?php $selected = selected( $order, $value, false ); ?>
 					<?php printf(
 						'<option value="%s"%s>%s</option>',
-						$value,
-						$selected,
-						$label
+						esc_attr( $value ),
+						esc_html( $selected ),
+						esc_html( $label )
 					); ?>
 				<?php endforeach; ?>
 			</select>
-            <p class="description"><?php printf( __( 'Select whether to order %s in ascending or descending order.', 'kb-support' ), kbs_get_ticket_label_plural( true ) ); ?></p>
+            <p class="description"><?php printf( esc_html__( 'Select whether to order %s in ascending or descending order.', 'kb-support' ), kbs_get_ticket_label_plural( true ) ); ?></p>
         </td>
     </tr>
 
@@ -297,18 +297,18 @@ function kbs_render_user_profile_replies_location_field( $user )  {
 
     <tr>
         <th scope="row">
-            <label for="kbs-agent-replies-location"><?php _e( 'Display Replies', 'kb-support' ); ?></label>
+            <label for="kbs-agent-replies-location"><?php esc_html_e( 'Display Replies', 'kb-support' ); ?></label>
         </th>
         <td>
             <select name="kbs_replies_location" id="kbs-agent-replies-location">
                 <option value="10"<?php selected( 10, $location ); ?>>
-                    <?php _e( 'Above Reply Field', 'kb-support' ); ?>
+                    <?php esc_html_e( 'Above Reply Field', 'kb-support' ); ?>
                 </option>
                 <option value="25"<?php selected( 25, $location ); ?>>
-                    <?php _e( 'Below Reply Field', 'kb-support' ); ?>
+                    <?php esc_html_e( 'Below Reply Field', 'kb-support' ); ?>
                 </option>
             </select>
-            <p class="description"><?php printf( __( 'Choose where you would like %s replies displayed.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ); ?></p>
+            <p class="description"><?php printf( esc_html__( 'Choose where you would like %s replies displayed.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ); ?></p>
         </td>
     </tr>
 
@@ -333,11 +333,11 @@ function kbs_render_user_profile_replies_to_load_field( $user )  {
 
     <tr>
         <th scope="row">
-            <label for="kbs-agent-load-replies"><?php _e( 'Replies to Load', 'kb-support' ); ?></label>
+            <label for="kbs-agent-load-replies"><?php esc_html_e( 'Replies to Load', 'kb-support' ); ?></label>
         </th>
         <td>
             <input class="small-text" type="number" name="kbs_load_replies" id="kbs-load-replies" value="<?php echo (int)$replies_to_load; ?>" step="1" min="0" />
-            <p class="description"><?php printf( __( 'Choose the number of replies to initially load when accessing the %s page. <code>0</code> loads all.', 'kb-support' ), kbs_get_ticket_label_plural( true ) ); ?></p>
+            <p class="description"><?php printf( wp_kses_post( __( 'Choose the number of replies to initially load when accessing the %s page. <code>0</code> loads all.', 'kb-support' ) ), kbs_get_ticket_label_plural( true ) ); ?></p>
         </td>
     </tr>
 
@@ -363,11 +363,11 @@ function kbs_render_user_profile_replies_to_expand_field( $user )  {
 
     <tr>
         <th scope="row">
-            <label for="kbs-agent-expand-replies"><?php _e( 'Replies to Expand', 'kb-support' ); ?></label>
+            <label for="kbs-agent-expand-replies"><?php esc_html_e( 'Replies to Expand', 'kb-support' ); ?></label>
         </th>
         <td>
             <input class="small-text" type="number" name="kbs_expand_replies" id="kbs-expand-replies" value="<?php echo (int)$replies_to_expand; ?>" step="1" min="0" />
-            <p class="description"><?php printf( __( 'Choose the number of replies to auto expand when the %s page loads. <code>0</code> expands none.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ); ?></p>
+            <p class="description"><?php printf( esc_html__( 'Choose the number of replies to auto expand when the %s page loads. <code>0</code> expands none.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ); ?></p>
         </td>
     </tr>
 
@@ -394,7 +394,7 @@ function kbs_render_agent_user_profile_redirect_reply_field( $user )  {
 
     <tr>
         <th scope="row">
-            <label for="kbs-agent-redirect-reply"><?php _e( 'Redirect After Reply', 'kb-support' ); ?></label>
+            <label for="kbs-agent-redirect-reply"><?php esc_html_e( 'Redirect After Reply', 'kb-support' ); ?></label>
         </th>
         <td>
         	<?php echo KBS()->html->select( array(
@@ -404,11 +404,11 @@ function kbs_render_agent_user_profile_redirect_reply_field( $user )  {
 				'show_option_all'  => false,
 				'show_option_none' => false,
 				'options'          => apply_filters( 'kbs_agent_reply_redirect_options', array(
-					'stay' => sprintf( __( 'Current %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
-					'list' => sprintf( __( '%s List', 'kb-support' ), kbs_get_ticket_label_plural() )
+					'stay' => sprintf( esc_html__( 'Current %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
+					'list' => sprintf( esc_html__( '%s List', 'kb-support' ), kbs_get_ticket_label_plural() )
 				) )
 			) ); ?>
-            <p class="description"><?php printf( __( 'Choose where to be redirected after submitting a reply to a %s.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ); ?></p>
+            <p class="description"><?php printf( esc_html__( 'Choose where to be redirected after submitting a reply to a %s.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ); ?></p>
         </td>
     </tr>
 
@@ -435,7 +435,7 @@ function kbs_render_agent_user_profile_redirect_close_field( $user )  {
 
     <tr>
         <th scope="row">
-            <label for="kbs-agent-redirect-close"><?php _e( 'Redirect After Close', 'kb-support' ); ?></label>
+            <label for="kbs-agent-redirect-close"><?php esc_html_e( 'Redirect After Close', 'kb-support' ); ?></label>
         </th>
         <td>
         	<?php echo KBS()->html->select( array(
@@ -445,11 +445,11 @@ function kbs_render_agent_user_profile_redirect_close_field( $user )  {
 				'show_option_all'  => false,
 				'show_option_none' => false,
 				'options'          => apply_filters( 'kbs_agent_close_redirect_options', array(
-					'stay' => sprintf( __( 'Current %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
-					'list' => sprintf( __( '%s List', 'kb-support' ), kbs_get_ticket_label_plural() )
+					'stay' => sprintf( esc_html__( 'Current %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
+					'list' => sprintf( esc_html__( '%s List', 'kb-support' ), kbs_get_ticket_label_plural() )
 				) )
 			) ); ?>
-            <p class="description"><?php printf( __( 'Choose where to be redirected after submitting a reply to close a %s.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ); ?></p>
+            <p class="description"><?php printf( esc_html__( 'Choose where to be redirected after submitting a reply to close a %s.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ); ?></p>
         </td>
     </tr>
 
@@ -472,7 +472,7 @@ function kbs_render_agent_user_profile_reply_alerts_field( $user )  {
     $alert   = kbs_alert_agent_ticket_reply( $user->ID );
     $checked = checked( $alert, true, false );
     $label   = sprintf(
-        __( 'When enabled, agents will be alerted if a new reply is added whilst they are editing a %s', 'kb-support' ),
+        esc_html__( 'When enabled, agents will be alerted if a new reply is added whilst they are editing a %s', 'kb-support' ),
         kbs_get_ticket_label_singular( true )
     );
 
@@ -480,7 +480,7 @@ function kbs_render_agent_user_profile_reply_alerts_field( $user )  {
 
     <tr>
         <th scope="row">
-            <?php printf( __( '%s Reply Alerts', 'kb-support' ), kbs_get_ticket_label_singular() ); ?>
+            <?php printf( esc_html__( '%s Reply Alerts', 'kb-support' ), kbs_get_ticket_label_singular() ); ?>
         </th>
         <td>
             <?php printf(
@@ -515,16 +515,16 @@ function kbs_render_agent_user_profile_department_field( $user )  {
         ob_start(); ?>
 
         <tr>
-            <th scope="row"><?php _e( 'Departments', 'kb-support' ); ?></th>
+            <th scope="row"><?php esc_html_e( 'Departments', 'kb-support' ); ?></th>
             <td>
                 <?php foreach( $departments as $department ) : ?>
                     <?php $output[] = sprintf(
 						'<input type="checkbox" name="kbs_departments[]" id="%1$s" value="%2$s"%3$s%4$s /> <label for="%1$s">%5$s</label>',
-						$department->slug,
-						$department->term_id,
+						esc_attr( $department->slug ),
+						esc_attr( $department->term_id ),
 						kbs_agent_is_in_department( $department->term_id, $user->ID ) ? ' checked="checked"' : '',
                         $read_only,
-						$department->name
+						esc_html( $department->name )
 					); ?>
                 <?php endforeach; ?>
                 <?php echo implode( '<br />', $output ); ?>

@@ -152,7 +152,7 @@ function kbs_maybe_set_enctype() {
 	if ( kbs_file_uploads_are_enabled() )	{
 		$output = ' enctype="multipart/form-data"';
 		
-		echo apply_filters( 'kbs_maybe_set_enctype', $output );
+		echo wp_kses_post( apply_filters( 'kbs_maybe_set_enctype', $output ) );
 	}
 } // kbs_maybe_set_enctype
 

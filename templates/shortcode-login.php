@@ -8,13 +8,13 @@ if ( ! is_user_logged_in() ) : ?>
 		<?php do_action( 'kbs_notices' ); ?>
 		<form id="kbs_login_form" class="kbs_form" action="" method="post">
 			<fieldset id="kbs_login_form_fields">
-				<legend><?php _e( 'Log into Your Account', 'kb-support' ); ?></legend>
+				<legend><?php esc_html_e( 'Log into Your Account', 'kb-support' ); ?></legend>
 
 				<?php do_action( 'kbs_login_fields_before' ); ?>
 
 				<div class="container kbs_login_wrapper">
 					<div class="mb-3">
-                        <label for="kbs-user-login"><?php _e( 'Username or Email', 'kb-support' ); ?></label>
+                        <label for="kbs-user-login"><?php esc_html_e( 'Username or Email', 'kb-support' ); ?></label>
                         <input type="text" name="kbs_user_login" class="required kbs-input" id="kbs-user-login" required>
                     </div>
 
@@ -30,11 +30,11 @@ if ( ! is_user_logged_in() ) : ?>
 
 					<div class="row">
                         <div class="col-md-6 mb-3">
-							<input id="kbs_login_submit" type="submit" class="kbs_submit" value="<?php _e( 'Log In', 'kb-support' ); ?>"/>
+							<input id="kbs_login_submit" type="submit" class="kbs_submit" value="<?php esc_attr_e( 'Log In', 'kb-support' ); ?>"/>
 						</div>
 						<div class="col-md-6 mb-3">
-							<a href="<?php echo wp_lostpassword_url(); ?>" title="<?php _e( 'Lost Password', 'kb-support' ); ?>">
-								<?php _e( 'Lost Password?', 'kb-support' ); ?>
+							<a href="<?php echo esc_url( wp_lostpassword_url() ); ?>" title="<?php esc_attr_e( 'Lost Password', 'kb-support' ); ?>">
+								<?php esc_html_e( 'Lost Password?', 'kb-support' ); ?>
 							</a>
 						</div>
 					</div><!-- .row -->
@@ -45,5 +45,5 @@ if ( ! is_user_logged_in() ) : ?>
 		</form>
 	</div>
 <?php else : ?>
-	<p class="kbs-logged-in"><?php _e( 'You are already logged in', 'kb-support' ); ?></p>
+	<p class="kbs-logged-in"><?php esc_html_e( 'You are already logged in', 'kb-support' ); ?></p>
 <?php endif; ?>

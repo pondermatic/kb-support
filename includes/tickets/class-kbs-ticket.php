@@ -2175,7 +2175,7 @@ class KBS_Ticket {
 
 		if ( ! $thirdparty )	{
 			$form_title = sprintf(
-				__( 'Form: %s', 'kb-support' ),
+				esc_html__( 'Form: %s', 'kb-support' ),
 				get_the_title( $this->form_data['id'] )
 			);
 		} else	{
@@ -2216,7 +2216,7 @@ class KBS_Ticket {
 					if ( isset( $department ) && ! is_wp_error( $department ) )	{
 						$department = $department->name;
 					} else	{
-						$department = sprintf( __( 'Department %s not found', 'kb-support' ), $value );
+						$department = sprintf( esc_html__( 'Department %s not found', 'kb-support' ), $value );
 					}
 
 					$value = $department;
@@ -2230,7 +2230,7 @@ class KBS_Ticket {
 						if ( $term )	{
 							$cats[] = $term->name;
 						} else	{
-							$cats[] = sprintf( __( 'Term %s no longer exists', 'kb-support' ), $category );
+							$cats[] = sprintf( esc_html__( 'Term %s no longer exists', 'kb-support' ), $category );
 						}
 					}
 					$value = $cats;
@@ -2265,8 +2265,8 @@ class KBS_Ticket {
 			$date_format = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
 
 			$output .= sprintf( '<p class="description">%s: %s</p>',
-				__( 'The privacy policy was acknowledged', 'kb-support' ),
-				date_i18n( $date_format, $privacy_accepted )
+				esc_html__( 'The privacy policy was acknowledged', 'kb-support' ),
+				wp_kses_post( date_i18n( $date_format, $privacy_accepted ) )
 			);
 		}
 
@@ -2275,22 +2275,22 @@ class KBS_Ticket {
 			$date_format = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
 
 			$output .= sprintf( '<p class="description">%s: %s</p>',
-				__( 'The terms and conditions were accepted', 'kb-support' ),
-				date_i18n( $date_format, $terms_agreed )
+				esc_html__( 'The terms and conditions were accepted', 'kb-support' ),
+				wp_kses_post( date_i18n( $date_format, $terms_agreed ) )
 			);
 		}
 
         $submission_origin = $this->get_meta( '_kbs_ticket_submission_origin', true );
         if ( ! empty( $submission_origin ) )    {
             $output .= sprintf( '<p class="description">%s: %s</p>',
-				__( 'Submitted from', 'kb-support' ),
-				$submission_origin
+				esc_html__( 'Submitted from', 'kb-support' ),
+				esc_html( $submission_origin )
 			);
         }
 
 		if ( ! empty( $this->ip ) )	{
 			$output .= sprintf( '<p class="description">%s: %s</p>',
-				sprintf( __( 'This %s was logged from the IP Address', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+				sprintf( esc_html__( 'This %s was logged from the IP Address', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
 				esc_html( $this->ip )
 			);
 		}

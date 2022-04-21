@@ -38,9 +38,9 @@ class kbs_article_categories_tags_widget extends WP_Widget {
 		parent::__construct(
 			'kbs_article_categories_tags_widget',
 			sprintf(
-				__( 'KBS %s Categories / Tags', 'kb-support' ), kbs_get_article_label_plural()
+				esc_html__( 'KBS %s Categories / Tags', 'kb-support' ), kbs_get_article_label_plural()
 			),
-			array( 'description' => sprintf( __( 'Display the %s categories or tags', 'kb-support' ), kbs_get_article_label_plural() ) )
+			array( 'description' => sprintf( esc_html__( 'Display the %s categories or tags', 'kb-support' ), kbs_get_article_label_plural() ) )
 		);
 
 	} // __construct
@@ -106,12 +106,12 @@ class kbs_article_categories_tags_widget extends WP_Widget {
 		$instance = wp_parse_args( (array) $instance, $defaults ); ?>
 
 		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php _e( 'Title:', 'kb-support' ); ?></label>
-			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo $instance['title']; ?>"/>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title:', 'kb-support' ); ?></label>
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>"/>
 		</p>
 
 		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'taxonomy' ) ); ?>"><?php _e( 'Taxonomy:', 'kb-support' ); ?></label>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'taxonomy' ) ); ?>"><?php esc_html_e( 'Taxonomy:', 'kb-support' ); ?></label>
 			<select name="<?php echo esc_attr( $this->get_field_name( 'taxonomy' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'taxonomy' ) ); ?>">
 
 				<?php
@@ -119,23 +119,23 @@ class kbs_article_categories_tags_widget extends WP_Widget {
 				$tag_labels      = kbs_get_taxonomy_labels( 'article_tag' );
 				?>
 
-				<option value="article_category" <?php selected( 'article_category', $instance['taxonomy'] ); ?>><?php echo $category_labels['name']; ?></option>
-				<option value="article_tag" <?php selected( 'article_tag', $instance['taxonomy'] ); ?>><?php echo $tag_labels['name']; ?></option>
+				<option value="article_category" <?php selected( 'article_category', $instance['taxonomy'] ); ?>><?php echo esc_html( $category_labels['name'] ); ?></option>
+				<option value="article_tag" <?php selected( 'article_tag', $instance['taxonomy'] ); ?>><?php echo esc_html( $tag_labels['name'] ); ?></option>
 			</select>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'count' ); ?>"><?php _e( 'Show Count:', 'kb-support' ); ?></label>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'count' ) ); ?>"><?php esc_html_e( 'Show Count:', 'kb-support' ); ?></label>
 			<input <?php checked( $instance['count'], 'on' ); ?> id="<?php echo $this->get_field_id( 'count' ); ?>" name="<?php echo $this->get_field_name( 'count' ); ?>" type="checkbox" />
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'hide_empty' ); ?>"><?php _e( 'Hide Empty Categories:', 'kb-support' ); ?></label>
-			<input <?php checked( $instance['hide_empty'], 'on' ); ?> id="<?php echo $this->get_field_id( 'hide_empty' ); ?>" name="<?php echo $this->get_field_name( 'hide_empty' ); ?>" type="checkbox" />
+			<label for="<?php echo esc_attr( $this->get_field_id( 'hide_empty' ) ); ?>"><?php esc_html_e( 'Hide Empty Categories:', 'kb-support' ); ?></label>
+			<input <?php checked( $instance['hide_empty'], 'on' ); ?> id="<?php echo esc_attr( $this->get_field_id( 'hide_empty' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'hide_empty' ) ); ?>" type="checkbox" />
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'children' ); ?>"><?php _e( 'Show Child Categories:', 'kb-support' ); ?></label>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'children' ) ); ?>"><?php esc_html_e( 'Show Child Categories:', 'kb-support' ); ?></label>
 			<input <?php checked( $instance['children'], 'on' ); ?> id="<?php echo $this->get_field_id( 'children' ); ?>" name="<?php echo $this->get_field_name( 'children' ); ?>" type="checkbox" />
 		</p>
 
@@ -158,9 +158,9 @@ class kbs_popular_articles_widget extends WP_Widget {
 		parent::__construct(
 			'kbs_popular_articles_widget',
 			sprintf(
-				__( 'KBS Popular %s', 'kb-support' ), kbs_get_article_label_plural()
+				esc_html__( 'KBS Popular %s', 'kb-support' ), kbs_get_article_label_plural()
 			),
-			array( 'description' => sprintf( __( 'Display the most popular %s', 'kb-support' ), kbs_get_article_label_plural() ) )
+			array( 'description' => sprintf( esc_html__( 'Display the most popular %s', 'kb-support' ), kbs_get_article_label_plural() ) )
 		);
 
 	} // __construct
@@ -200,12 +200,12 @@ class kbs_popular_articles_widget extends WP_Widget {
 					$article_views = kbs_get_article_view_count( $article->ID );
 					if ( ! empty( $article_views ) )	{
 						$output_views .= ' ';
-						$output_views .= sprintf( _n( '(%s view)', '(%s views)', $article_views, 'kb-support' ), number_format_i18n( $article_views ) );
+						$output_views .= sprintf( esc_html_n( '(%s view)', '(%s views)', $article_views, 'kb-support' ), esc_html( number_format_i18n( $article_views ) ) );
 					}
 				}
 
 				echo '<li>';
-				echo '<a href="' . $url . '">' . get_the_title( $article->ID ) . '</a>';
+				echo '<a href="' . esc_url( $url ) . '">' . esc_html( get_the_title( $article->ID ) ). '</a>';
 				echo $output_views;
 				echo '</li>';
 			}
@@ -242,18 +242,18 @@ class kbs_popular_articles_widget extends WP_Widget {
 		$instance = wp_parse_args( (array) $instance, $defaults ); ?>
 
 		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php _e( 'Title:', 'kb-support' ); ?></label>
-			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo $instance['title']; ?>"/>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title:', 'kb-support' ); ?></label>
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>"/>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'number' ); ?>"><?php printf( __( 'Number of %s:', 'kb-support' ), kbs_get_article_label_plural() ); ?></label>
-			<input id="<?php echo $this->get_field_id( 'number' ); ?>" name="<?php echo $this->get_field_name( 'number' ); ?>" type="number" class="small-text" value="<?php echo $instance['number']; ?>" />
+			<label for="<?php echo $this->get_field_id( 'number' ); ?>"><?php printf( esc_html__( 'Number of %s:', 'kb-support' ), kbs_get_article_label_plural() ); ?></label>
+			<input id="<?php echo esc_attr( $this->get_field_id( 'number' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'number' ) ); ?>" type="number" class="small-text" value="<?php echo esc_attr( $instance['number'] ); ?>" />
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'views' ); ?>"><?php _e( 'Display View Count:', 'kb-support' ); ?></label>
-			<input<?php checked( $instance['views'], 'on' ); ?> id="<?php echo $this->get_field_id( 'views' ); ?>" name="<?php echo $this->get_field_name( 'views' ); ?>" type="checkbox" />
+			<label for="<?php echo $this->get_field_id( 'views' ); ?>"><?php esc_html_e( 'Display View Count:', 'kb-support' ); ?></label>
+			<input<?php checked( $instance['views'], 'on' ); ?> id="<?php echo esc_attr( $this->get_field_id( 'views' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'views' ) ); ?>" type="checkbox" />
 		</p>
 
 	<?php

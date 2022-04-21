@@ -26,7 +26,7 @@ function kbs_process_batch_export_download() {
     }
 
 	if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ), 'kbs-batch-export' ) ) {
-		wp_die( __( 'Nonce verification failed', 'kb-support' ), __( 'Error', 'kb-support' ), array( 'response' => 403 ) );
+		wp_die( esc_html__( 'Nonce verification failed', 'kb-support' ), esc_html__( 'Error', 'kb-support' ), array( 'response' => 403 ) );
 	}
 
 	require_once( KBS_PLUGIN_DIR . '/includes/admin/import-export/export/class-batch-export.php' );

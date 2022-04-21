@@ -190,26 +190,26 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
 	$create_article_link = apply_filters( 'kbs_create_article_link', $create_article_link, $ticket_id, $reply );
 
     $actions = array(
-        'read_reply'     => '<a href="#" class="toggle-view-reply-option-section">' . sprintf( __( '%s Reply', 'kb-support' ), $show_hide ) . '</a>',
-        'create_article' => '<a href="' . $create_article_link . '" class="toggle-reply-option-create-article">' . sprintf( __( 'Create %s', 'kb-support' ), kbs_get_article_label_singular() ) . '</a>'
+        'read_reply'     => '<a href="#" class="toggle-view-reply-option-section">' . sprintf( esc_html__( '%s Reply', 'kb-support' ), $show_hide ) . '</a>',
+        'create_article' => '<a href="' . esc_url( $create_article_link ) . '" class="toggle-reply-option-create-article">' . sprintf( esc_html__( 'Create %s', 'kb-support' ), kbs_get_article_label_singular() ) . '</a>'
     );
 
     $actions = apply_filters( 'kbs_ticket_replies_actions', $actions, $reply );
 
     $icons   = array();
 
-    if ( false === strpos( $author, __( 'Customer', 'kb-support' ) ) && false === strpos( $author, __( 'Participant', 'kb-support' ) ) )  {
+    if ( false === strpos( $author, esc_html__( 'Customer', 'kb-support' ) ) && false === strpos( $author, esc_html__( 'Participant', 'kb-support' ) ) )  {
         $is_read = kbs_reply_is_read( $reply->ID );
         if ( $is_read )  {
             $icons['is_read'] = sprintf(
                 '<span class="dashicons dashicons-visibility" title="%s %s"></span>',
-                __( 'Read by customer on', 'kb-support' ),
-                date_i18n( $date_format, strtotime( $is_read ) )
+                esc_attr__( 'Read by customer on', 'kb-support' ),
+                esc_attr( date_i18n( $date_format, strtotime( $is_read ) ) )
             );
         } else  {
             $icons['not_read'] = sprintf(
                 '<span class="dashicons dashicons-hidden" title="%s"></span>',
-                __( 'Customer has not read', 'kb-support' )
+                esc_attr__( 'Customer has not read', 'kb-support' )
             );
         }
 
@@ -217,14 +217,14 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
 
             $delete_url  = wp_nonce_url( add_query_arg( array(
                 'kbs-action' => 'delete_ticket_reply',
-                'reply_id'   => $reply->ID,
-                'ticket_id'  => $ticket_id
-            ), admin_url() ), 'delete_ticket_reply', 'kbs_nonce' );
+                'reply_id'   => esc_html( $reply->ID ),
+                'ticket_id'  => esc_html( $ticket_id )
+            ), esc_url( admin_url() ) ), 'delete_ticket_reply', 'kbs_nonce' );
 
             $actions['trash'] = sprintf(
                 '<a href="%s" class="kbs-delete delete-reply">%s</a>',
-                $delete_url,
-                __( 'Delete Reply', 'kb-support' )
+                esc_url( $delete_url ),
+                esc_html__( 'Delete Reply', 'kb-support' )
             );
 
         }
@@ -234,7 +234,7 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
     if ( $file_count )  {
         $icons['files'] = sprintf(
             '<span class="dashicons dashicons-media-document" title="%s"></span>',
-            $file_count . ' ' . _n( 'attached file', 'attached files', $file_count, 'kb-support' )
+            esc_attr( $file_count . ' ' . _n( 'attached file', 'attached files', $file_count, 'kb-support' ) )
         );
     }
 
@@ -244,21 +244,21 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
 
     <div class="kbs-replies-row-header">
         <span class="kbs-replies-row-title">
-            <?php echo apply_filters( 'kbs_replies_title', sprintf( __( '%s by %s', 'kb-support' ), date_i18n( $date_format, strtotime( $reply->post_date ) ), $author ), $reply ); ?>
+            <?php echo apply_filters( 'kbs_replies_title', sprintf( esc_html__( '%s by %s', 'kb-support' ), esc_html( date_i18n( $date_format, strtotime( $reply->post_date ) ) ),  $author ), $reply ); ?>
         </span>
 
         <span class="kbs-replies-row-actions">
-            <?php echo implode( ' ', $icons ); ?>
-			<?php echo implode( '&nbsp;&#124;&nbsp;', $actions ); ?>
+            <?php echo implode( ' ', array_map( 'wp_kses_post', $icons ) ); ?>
+			<?php echo implode( '&nbsp;&#124;&nbsp;', array_map( 'wp_kses_post', $actions ) ); ?>
         </span>
     </div>
 
-    <div class="kbs-replies-content-wrap"<?php echo $show; ?></div>
+    <div class="kbs-replies-content-wrap"<?php echo $show; ?>>
         <div class="kbs-replies-content-sections">
         	<?php do_action( 'kbs_before_reply_content_section', $reply ); ?>
-            <div id="kbs-reply-option-section-<?php echo $reply->ID; ?>" class="kbs-replies-content-section">
+            <div id="kbs-reply-option-section-<?php echo esc_attr( $reply->ID ); ?>" class="kbs-replies-content-section">
                 <?php do_action( 'kbs_replies_before_content', $reply ); ?>
-                <?php echo wpautop( $reply->post_content ); ?>
+                <?php echo wp_kses_post( wpautop( $reply->post_content ) ); ?>
                 <?php do_action( 'kbs_replies_content', $reply ); ?>
             </div>
             <?php do_action( 'kbs_after_reply_content_section', $reply ); ?>
@@ -268,8 +268,8 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
                     <ol>
                         <?php foreach( $files as $file ) : ?>
                             <li>
-                            	<a href="<?php echo wp_get_attachment_url( $file->ID ); ?>" target="_blank">
-									<?php echo basename( get_attached_file( $file->ID ) ); ?>
+                            	<a href="<?php echo esc_url( wp_get_attachment_url( $file->ID ) ); ?>" target="_blank">
+									<?php echo esc_url( basename( get_attached_file( $file->ID ) ) ); ?>
                                 </a>
                             </li>
                         <?php endforeach; ?>
