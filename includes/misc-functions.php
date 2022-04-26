@@ -335,7 +335,7 @@ function kbs_display_notice( $m )	{
 	$notices = kbs_get_notices( $m );
 
 	if ( $notices )	{
-		return '<div class="kbs_alert kbs_alert_' . esc_attr( $notices['class'] ) . '">' . esc_html( $notices['notice'] ) . '</div>';
+		return '<div class="kbs_alert kbs_alert_' . esc_attr( $notices['class'] ) . '">' . wp_kses_post( $notices['notice'] ) . '</div>';
 	}
 } // kbs_display_notice
 
