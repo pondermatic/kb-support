@@ -101,16 +101,16 @@ function kbs_admin_footer_for_thickbox() {
 				<p>
                     <label for="kbs-text"><strong><?php esc_html_e( 'Enter Link Text', 'kb-support' ); ?></strong>:</label><br>
                 	<input type="text" class="regular-text" size="30" id="kbs-text" value="" /><br>
-					<span class="description"><?php printf( esc_html__( 'Leave empty to use %s title', 'kb-support' ), $single_article ); ?></span>
+					<span class="description"><?php printf( esc_html__( 'Leave empty to use %s title', 'kb-support' ), esc_html( $single_article ) ); ?></span>
 				</p>
 
 				<p>
-				    <label for="articles"><strong><?php printf( esc_html__( 'Select %s', 'kb-support' ), $single_article ); ?></strong>:</label><br>
+				    <label for="articles"><strong><?php printf( esc_html__( 'Select %s', 'kb-support' ), esc_html( $single_article ) ); ?></strong>:</label><br>
 					<?php echo KBS()->html->article_dropdown( array( 'name' => 'articles', 'key' => 'url', 'chosen' => true ) ); ?>
 				</p>
 
 				<p class="submit">
-					<input type="button" id="kbs-insert-link" class="button-primary" value="<?php echo sprintf( esc_html__( 'Link %s', 'kb-support' ), $single_article ); ?>" onclick="linkArticle();" />
+					<input type="button" id="kbs-insert-link" class="button-primary" value="<?php echo sprintf( esc_html__( 'Link %s', 'kb-support' ), esc_html( $single_article ) ); ?>" onclick="linkArticle();" />
 					<a id="kbs-cancel-link-article" class="button-secondary" onclick="tb_remove();"><?php esc_html_e( 'Cancel', 'kb-support' ); ?></a>
 				</p>
 			</div>

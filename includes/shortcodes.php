@@ -88,7 +88,7 @@ function kbs_submit_form_shortcode( $atts ) {
         $register_login = kbs_get_option( 'show_register_form', 'none' );
 
         if ( 'both' == $register_login || 'login' == $register_login )	{
-            echo kbs_login_form( kbs_get_current_page_url() );
+            echo kbs_login_form( kbs_get_current_page_url() ); 
         }
 
         if ( 'both' == $register_login || 'registration' == $register_login )	{
@@ -282,7 +282,7 @@ function kbs_articles_shortcode( $atts )	{
 
         <?php wp_reset_postdata(); ?>
     <?php else : ?>
-        <p><?php printf( __( 'No %s found', 'kb-support' ), kbs_get_article_label_plural( true ) ); ?></p>
+        <p><?php printf( esc_html__( 'No %s found', 'kb-support' ), kbs_get_article_label_plural( true ) ); ?></p>
     <?php endif;
 
 	return ob_get_clean();

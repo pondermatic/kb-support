@@ -18,17 +18,17 @@ $heading    = KBS()->emails->get_heading();
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title><?php echo get_bloginfo( 'name' ); ?></title>
+		<title><?php echo esc_html( get_bloginfo( 'name' ) ); ?></title>
 	</head>
     <body>
     	<div>
 			<?php if( ! empty( $header_img ) ) : ?>
                 <div id="template_header_image">
-                    <?php echo '<p style="margin-top:0;"><img src="' . esc_url( $header_img ) . '" alt="' . get_bloginfo( 'name' ) . '" /></p>'; ?>
+                    <?php echo '<p style="margin-top:0;"><img src="' . esc_url( $header_img ) . '" alt="' . esc_attr( get_bloginfo( 'name' ) ) . '" /></p>'; ?>
                 </div>
 			<?php endif; ?>
 			<?php if ( ! empty ( $heading ) ) : ?>
                 <!-- Header -->
-                <h1><?php echo $heading; ?></h1>
+                <h1><?php echo esc_html( $heading ); ?></h1>
                 <!-- End Header -->
             <?php endif; ?>

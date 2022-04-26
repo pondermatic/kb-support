@@ -502,7 +502,7 @@ function kbs_ticket_metabox_additional_agents_row( $ticket_id )	{
 			'multiple'        => true,
 			'show_option_all' => false,
 			'placeholder'     => esc_html__( 'Select Additional Agents', 'kb-support' ),
-			'exclude'         => array( $kbs_ticket->agent_id )
+			'exclude'         => array( esc_html( $kbs_ticket->agent_id ) )
 		) ); ?>
 
         <?php do_action( 'kbs_ticket_metabox_after_agent', $ticket_id ); ?>

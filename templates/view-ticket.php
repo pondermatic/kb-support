@@ -56,20 +56,20 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 
 					<div class="kbs_item_info ticket_info">
                         <fieldset id="kbs_ticket_info_details">
-							<legend><?php printf( __( 'Support %s Details # %s', 'kb-support' ), $singular, kbs_format_ticket_number( kbs_get_ticket_number( $ticket->ID ) ) ); ?></legend>
+							<legend><?php printf( esc_html__( 'Support %s Details # %s', 'kb-support' ), $singular, kbs_format_ticket_number( kbs_get_ticket_number( $ticket->ID ) ) ); ?></legend>
 
 							<div class="container-fluid ticket_manager_data text-left">
 
 								<div id="kbs-ticket-customer-date" class="row kbs_ticket_data">
 									<div class="col-sm">
 										<span class="ticket_customer_name">
-											<label><?php _e( 'Logged by', 'kb-support' ); ?>:</label> <?php echo kbs_email_tag_fullname( $ticket->ID ); ?>
+											<label><?php esc_html_e( 'Logged by', 'kb-support' ); ?>:</label> <?php echo kbs_email_tag_fullname( $ticket->ID ); ?>
 										</span>
 									</div>
 
 									<div class="col-sm">
 										<span class="ticket_date">
-											<label><?php _e( 'Date', 'kb-support' ); ?>:</label> <?php echo date_i18n( $date_format, strtotime( $ticket->date ) ); ?>
+											<label><?php esc_html_e( 'Date', 'kb-support' ); ?>:</label> <?php echo esc_html( date_i18n( $date_format, strtotime( $ticket->date ) ) ); ?>
 										</span>
 									</div>
 								</div><!-- #kbs-ticket-customer-date -->
@@ -79,7 +79,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 								<div id="kbs-ticket-status-agent" class="row kbs_ticket_data">
 									<div class="col-sm">
 										<span class="ticket_status">
-											<label><?php _e( 'Status', 'kb-support' ); ?>:</label> <span class="kbs-label kbs-label-status" style="background-color: <?php echo kbs_get_ticket_status_colour( $ticket->post_status ); ?>;"><?php echo $ticket->status_nicename; ?></span>
+											<label><?php esc_html_e( 'Status', 'kb-support' ); ?>:</label> <span class="kbs-label kbs-label-status" style="background-color: <?php echo kbs_get_ticket_status_colour( $ticket->post_status ); ?>;"><?php echo esc_html( $ticket->status_nicename ); ?></span>
 										</span>
 									</div>
 
@@ -92,17 +92,17 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 													$status       = kbs_get_agent_online_status( $ticket->agent_id );
 													$status_class = 'kbs_agent_status_' . $status;
 													$alt_status   = sprintf(
-														__( '%s is %s', 'kb-support' ),
-														$agent,
-														$status
+														esc_html__( '%s is %s', 'kb-support' ),
+														esc_html( $agent ),
+														esc_html( $status )
 													);
 													
 												endif;
 											else :
-												$agent = __( 'No Agent Assigned', 'kb-support' );
+												$agent = esc_html__( 'No Agent Assigned', 'kb-support' );
 											endif; ?>
 
-											<label><?php _e( 'Agent', 'kb-support' ); ?>:</label> <span class="<?php echo $status_class; ?>" title="<?php echo $alt_status; ?>"><?php echo $agent; ?></span>
+											<label><?php esc_html_e( 'Agent', 'kb-support' ); ?>:</label> <span class="<?php echo esc_attr( $status_class ); ?>" title="<?php echo $alt_status; ?>"><?php echo esc_html( $agent ); ?></span>
 										</span>
 									</div>
 								</div><!-- #kbs-ticket-status-agent -->
@@ -110,7 +110,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
                                 <div id="kbs-ticket-last-update" class="row kbs_ticket_data">
 									<div class="col-md">
                                         <span class="ticket_updated">
-                                            <label><?php _e( 'Last Updated', 'kb-support' ); ?>:</label> <?php echo date_i18n( $time_format . ' \o\n ' . $date_format, strtotime( $ticket->modified_date ) ); ?> <?php printf( __( '(%s ago)', 'kb-support' ), human_time_diff( strtotime( $ticket->modified_date ), current_time( 'timestamp' ) ) ); ?>
+                                            <label><?php esc_html_e( 'Last Updated', 'kb-support' ); ?>:</label> <?php echo esc_html( date_i18n( $time_format . ' \o\n ' . $date_format, strtotime( $ticket->modified_date ) ) ); ?> <?php printf( esc_html__( '(%s ago)', 'kb-support' ), esc_html( human_time_diff( strtotime( $ticket->modified_date ), current_time( 'timestamp' ) ) ) ); ?>
                                         </span>
                                     </div>
                                 </div><!-- #kbs-ticket-last-update -->
@@ -121,7 +121,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 									<div class="row kbs_ticket_subject">
 										<div class="col-md">
 											<span class="ticket_subject">
-												<label><?php _e( 'Subject', 'kb-support' ); ?>:</label> <?php echo esc_attr( $ticket->ticket_title ); ?>
+												<label><?php esc_html_e( 'Subject', 'kb-support' ); ?>:</label> <?php echo esc_attr( $ticket->ticket_title ); ?>
 											</span>
 										</div>
 									</div>
@@ -131,7 +131,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 									<div class="row kbs_ticket_subject">
 										<div class="col-md">
 											<span class="ticket_content">
-												<label><?php _e( 'Content', 'kb-support' ); ?>:</label> <?php echo wp_kses_post( htmlspecialchars_decode( $ticket->get_content() ) ); ?>
+												<label><?php esc_html_e( 'Content', 'kb-support' ); ?>:</label> <?php echo wp_kses_post( htmlspecialchars_decode( $ticket->get_content() ) ); ?>
 											</span>
 										</div>
 									</div>
@@ -143,7 +143,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
                                     <p>
                                         <a class="button kbs_action_button" data-toggle="collapse" href="#kbs-ticket-files" role="button" aria-expanded="false" aria-controls="kbs-ticket-files">
                                             <?php printf(
-                                                _n( 'View %s Attachment', 'View %s Attachments', count( $ticket->files ), 'kb-support' ),
+                                                esc_html( _n( 'View %s Attachment', 'View %s Attachments', count( $ticket->files ), 'kb-support' ) ),
                                                 count( $ticket->files )
                                             ); ?>
                                         </a>
@@ -163,7 +163,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 						<?php do_action( 'kbs_before_single_ticket_form_replies', $ticket ); ?>
 
 						<fieldset id="kbs_ticket_replies">
-							<legend><?php _e( 'Replies', 'kb-support' ); ?></legend>
+							<legend><?php esc_html_e( 'Replies', 'kb-support' ); ?></legend>
 
 							<?php
 							$load = kbs_get_customer_replies_to_load( $current_user->ID );
@@ -191,7 +191,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
                                         $file_count    = ( $files ? count( $files ) : false );
                                         $heading       = apply_filters( 'kbs_front_replies_title', sprintf(
                                             '%s by %s',
-                                            date_i18n( $time_format . ' \o\n ' . $date_format, strtotime(  $reply->post_date ) ),
+                                            esc_html( date_i18n( $time_format . ' \o\n ' . $date_format, strtotime(  $reply->post_date ) ) ),
                                             kbs_get_reply_author_name( $reply->ID, true )
                                         ) );
                                         ?>
@@ -203,26 +203,26 @@ if ( $visible && ! empty( $ticket->ID ) ) :
                                                 </span>
 
                                                 <span class="kbs-replies-row-actions">
-                                                    <a href="#" class="toggle-view-reply-option-section" data-toggle="collapse" data-target="#kbs_ticket_reply-<?php echo $reply->ID; ?>" aria-expanded="false" aria-controls="kbs_ticket_reply-<?php echo $reply->ID; ?>" data-key="<?php echo $reply->ID; ?>">
-                                                        <?php _e( 'View Reply', 'kb-support' ); ?>
+                                                    <a href="#" class="toggle-view-reply-option-section" data-toggle="collapse" data-target="#kbs_ticket_reply-<?php echo esc_attr( $reply->ID ); ?>" aria-expanded="false" aria-controls="kbs_ticket_reply-<?php echo esc_attr( $reply->ID ); ?>" data-key="<?php echo esc_attr( $reply->ID ); ?>">
+                                                        <?php esc_html_e( 'View Reply', 'kb-support' ); ?>
                                                     </a>
                                                 </span>
                                             </div>
 
-                                            <div id="kbs_ticket_reply-<?php echo $reply->ID; ?>" class="collapse<?php echo $show; ?>" aria-labelledby="kbs_ticket_reply-<?php echo $reply->ID; ?>-heading" data-parent="#kbs-ticket-replies">
+                                            <div id="kbs_ticket_reply-<?php echo esc_attr( $reply->ID ); ?>" class="collapse<?php echo esc_attr( $show ); ?>" aria-labelledby="kbs_ticket_reply-<?php echo esc_attr( $reply->ID ); ?>-heading" data-parent="#kbs-ticket-replies">
                                                 <div class="card-body">
-                                                    <?php echo $reply_content; ?>
+                                                    <?php echo wp_kses_post( $reply_content ); ?>
                                                     <?php if ( $files ) : ?>
                                                     <div class="kbs_ticket_reply_files">
                                                         <strong><?php printf(
-                                                            __( 'Attached Files (%d)', 'kb-support' ),
-                                                            $file_count
+                                                            esc_html__( 'Attached Files (%d)', 'kb-support' ),
+                                                            esc_html( $file_count )
                                                         ); ?></strong>
                                                         <ol>
                                                             <?php foreach( $files as $file ) : ?>
                                                                 <li>
-                                                                    <a href="<?php echo wp_get_attachment_url( $file->ID ); ?>" target="_blank">
-                                                                        <?php echo basename( get_attached_file( $file->ID ) ); ?>
+                                                                    <a href="<?php echo esc_url( wp_get_attachment_url( $file->ID ) ); ?>" target="_blank">
+                                                                        <?php echo esc_html( basename( get_attached_file( $file->ID ) ) ); ?>
                                                                     </a>
                                                                 </li>
                                                             <?php endforeach; ?>
@@ -242,15 +242,15 @@ if ( $visible && ! empty( $ticket->ID ) ) :
                                 <?php if ( isset( $args['page'] ) && $args['page'] < $replies_query->pages ) : ?>
                                     <?php printf(
                                         '<p class="kbs_replies_load_more"><a href="#" class="button kbs_action_button" id="kbs-replies-next-page" data-ticket-id="%d" data-load-page="%d" role="button">%s</a></p>',
-                                        $ticket->ID,
+                                        esc_html( $ticket->ID ),
                                         ( (int)$args['page'] + 1 ),
-                                        __( 'Load More', 'kb-support' )
+                                        esc_html__( 'Load More', 'kb-support' )
                                     ); ?>
                                 <?php endif; ?>
 
 							<?php else : ?>
 								<span class="kbs-description ticket-no-replies">
-									<?php _e( 'Replies will be displayed here when created.', 'kb-support' ); ?>
+									<?php esc_html_e( 'Replies will be displayed here when created.', 'kb-support' ); ?>
 								</span>
 							<?php endif; ?>
 
@@ -259,7 +259,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
                         <?php do_action( 'kbs_before_single_ticket_reply', $ticket ); ?>
 
                         <fieldset id="kbs_ticket_new_reply">
-                            <legend><?php _e( 'Add a Reply', 'kb-support' ); ?></legend>
+                            <legend><?php esc_html_e( 'Add a Reply', 'kb-support' ); ?></legend>
 
                             <?php if ( 'closed' != $ticket->status || kbs_customer_can_repoen_ticket( $customer->id, $ticket->ID ) ) : ?>
 
@@ -267,7 +267,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 
                                 <?php if ( 'closed' == $ticket->status ) : ?>
                                     <div class="kbs_alert kbs_alert_info">
-                                        <?php printf( __( 'This %s has been closed. If you enter a new reply, it will be reopened.', 'kb-support' ), strtolower( $singular ) ); ?>
+                                        <?php printf( esc_html__( 'This %s has been closed. If you enter a new reply, it will be reopened.', 'kb-support' ), esc_html( strtolower( $singular ) ) ); ?>
                                     </div>
                                 <?php endif; ?>
 
@@ -285,7 +285,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
                                         <?php do_action( 'kbs_before_single_ticket_files', $ticket ); ?>
                                         <div class="reply_files">
                                             <p>
-                                                <label for="kbs_files"><?php _e( 'Attach Files', 'kb-support' ); ?></label><br />
+                                                <label for="kbs_files"><?php esc_html_e( 'Attach Files', 'kb-support' ); ?></label><br />
                                                 <?php for ( $i = 1; $i <= kbs_get_max_file_uploads(); $i++ ) : ?>
                                                     <input type="file" class="kbs-input" name="kbs_files[]" />
                                                 <?php endfor; ?>
@@ -298,8 +298,8 @@ if ( $visible && ! empty( $ticket->ID ) ) :
                                     <?php if ( ! is_user_logged_in() ) : ?>
 
                                         <div class="reply_confirm_email">
-                                            <p><label for="kbs_confirm_email"><?php _e( 'Confirm your Email Address', 'kb-support' ); ?></label>
-                                                <span class="kbs-description"><?php _e( 'So we can verify your identity', 'kb-support' ); ?></span>
+                                            <p><label for="kbs_confirm_email"><?php esc_html_e( 'Confirm your Email Address', 'kb-support' ); ?></label>
+                                                <span class="kbs-description"><?php esc_html_e( 'So we can verify your identity', 'kb-support' ); ?></span>
                                                 <input type="email" class="kbs-input" name="kbs_confirm_email" id="kbs-confirm-email" />
                                             </p>
                                         </div>
@@ -310,7 +310,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 
                                     <div class="reply_close">
                                         <p><input type="checkbox" name="kbs_close_ticket" id="kbs-close-ticket" /> 
-                                            <?php printf( __( 'This %s can be closed', 'kb-support' ), strtolower( $singular ) ); ?>
+                                            <?php printf( esc_html__( 'This %s can be closed', 'kb-support' ), strtolower( $singular ) ); ?>
                                         </p>
                                     </div>
 
@@ -323,8 +323,8 @@ if ( $visible && ! empty( $ticket->ID ) ) :
                             <?php else : ?>
                                 <div class="kbs_alert kbs_alert_info">
                                     <?php printf(
-                                        __( 'This %s is closed.', 'kb-support' ),
-                                        strtolower( $singular ) );
+                                        esc_html__( 'This %s is closed.', 'kb-support' ),
+                                        esc_html( strtolower( $singular ) ) );
                                     ?>
                                 </div>
                             <?php endif; ?>

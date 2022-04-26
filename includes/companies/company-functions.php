@@ -108,7 +108,7 @@ function kbs_count_company_tickets( $company )	{
 		}
 	}
 
-	return $count;
+	return esc_html( $count );
 } // kbs_count_company_tickets
 
 /**

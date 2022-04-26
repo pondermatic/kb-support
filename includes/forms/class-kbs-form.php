@@ -516,7 +516,7 @@ class KBS_Form {
 			$submissions = 0;
 		}
 
-		return $submissions;
+		return absint( $submissions );
 	} // get_submission_count
 
 	/**

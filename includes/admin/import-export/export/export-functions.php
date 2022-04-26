@@ -27,9 +27,9 @@ require_once( KBS_PLUGIN_DIR . '/includes/admin/import-export/export/export-acti
 function kbs_do_ajax_export() {
 
 	require_once( KBS_PLUGIN_DIR . '/includes/admin/import-export/export/class-batch-export.php' );
-
-	parse_str( $_POST['form'], $form );
-
+	if( isset( $_POST['form'] ) ){
+		parse_str( $_POST['form'], $form );
+	}
 	if( !empty( $form ) ){
 		foreach( $form as $key => $value ){
 			if( '_wp_http_referer' == $key ){

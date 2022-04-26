@@ -200,7 +200,7 @@ class kbs_popular_articles_widget extends WP_Widget {
 					$article_views = kbs_get_article_view_count( $article->ID );
 					if ( ! empty( $article_views ) )	{
 						$output_views .= ' ';
-						$output_views .= sprintf( esc_html_n( '(%s view)', '(%s views)', $article_views, 'kb-support' ), esc_html( number_format_i18n( $article_views ) ) );
+						$output_views .= sprintf( esc_html( _n( '(%s view)', '(%s views)', $article_views, 'kb-support' ) ), esc_html( number_format_i18n( $article_views ) ) );
 					}
 				}
 

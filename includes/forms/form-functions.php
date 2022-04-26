@@ -485,22 +485,22 @@ function kbs_get_field_settings( $field_id )	{
 function kbs_get_field_types()	{
 	
 	$field_types = array(
-		'checkbox'                  => __( 'Checkbox', 'kb-support' ),
-		'checkbox_list'             => __( 'Checkbox List', 'kb-support' ),
-		'date_field'                => __( 'Date Field', 'kb-support' ),
-		'department'                => __( 'Departments List', 'kb-support' ),
-		'email'                     => __( 'Email Field', 'kb-support' ),
-		'file_upload'               => __( 'File Upload', 'kb-support' ),
-		'hidden'                    => __( 'Hidden Field', 'kb-support' ),
-		'number'                    => __( 'Number Field', 'kb-support' ),
-		'radio'                     => __( 'Radio Buttons', 'kb-support' ),
-		'recaptcha'                 => __( 'Google reCAPTCHA', 'kb-support' ),
-		'rich_editor'               => __( 'Rich Text Editor', 'kb-support' ),
-		'select'                    => __( 'Select List', 'kb-support' ),
-		'text'                      => __( 'Text Field', 'kb-support' ),
-		'textarea'                  => __( 'Textarea', 'kb-support' ),
-		'ticket_category_dropdown'  => sprintf( __( '%s Categories', 'kb-support' ), kbs_get_ticket_label_singular() ),
-		'url'                       => __( 'URL Field', 'kb-support' ),		
+		'checkbox'                  => esc_html__( 'Checkbox', 'kb-support' ),
+		'checkbox_list'             => esc_html__( 'Checkbox List', 'kb-support' ),
+		'date_field'                => esc_html__( 'Date Field', 'kb-support' ),
+		'department'                => esc_html__( 'Departments List', 'kb-support' ),
+		'email'                     => esc_html__( 'Email Field', 'kb-support' ),
+		'file_upload'               => esc_html__( 'File Upload', 'kb-support' ),
+		'hidden'                    => esc_html__( 'Hidden Field', 'kb-support' ),
+		'number'                    => esc_html__( 'Number Field', 'kb-support' ),
+		'radio'                     => esc_html__( 'Radio Buttons', 'kb-support' ),
+		'recaptcha'                 => esc_html__( 'Google reCAPTCHA', 'kb-support' ),
+		'rich_editor'               => esc_html__( 'Rich Text Editor', 'kb-support' ),
+		'select'                    => esc_html__( 'Select List', 'kb-support' ),
+		'text'                      => esc_html__( 'Text Field', 'kb-support' ),
+		'textarea'                  => esc_html__( 'Textarea', 'kb-support' ),
+		'ticket_category_dropdown'  => sprintf( esc_html__( '%s Categories', 'kb-support' ), kbs_get_ticket_label_singular() ),
+		'url'                       => esc_html__( 'URL Field', 'kb-support' ),		
 	);
 
 	if ( ! kbs_departments_enabled() )	{
@@ -631,37 +631,37 @@ function kbs_display_field_setting_icons( $field_id )	{
 	
 	if ( $settings )	{
 		if ( ! empty( $settings['hide_label'] ) )	{
-			$output[] = '<i title="' . __( 'Label Hidden', 'kb-support' ) . '" class="fas fa-tag" aria-hidden="true"></i>';
+			$output[] = '<i title="' . esc_attr__( 'Label Hidden', 'kb-support' ) . '" class="fas fa-tag" aria-hidden="true"></i>';
 		} else	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
 
 		if ( ! empty( $settings['required'] ) )	{
-			$output[] = '<i title="' . __( 'Required Field', 'kb-support' ) . '" class="fas fa-asterisk" aria-hidden="true"></i>';
+			$output[] = '<i title="' . esc_attr__( 'Required Field', 'kb-support' ) . '" class="fas fa-asterisk" aria-hidden="true"></i>';
 		} else	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
 		
 		if ( ! empty( $settings['placeholder'] ) )	{
-			$output[] = '<i title="' . sprintf( __( 'Placeholder: %s', 'kb-support' ), stripslashes( $settings['placeholder'] ) ) . '" class="fas fa-info-circle" aria-hidden="true"></i>';
+			$output[] = '<i title="' . sprintf( esc_attr__( 'Placeholder: %s', 'kb-support' ), esc_attr( stripslashes( $settings['placeholder'] ) ) ) . '" class="fas fa-info-circle" aria-hidden="true"></i>';
 		} else	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
 		
 		if ( ! empty( $settings['mapping'] ) && 'post_category' != $settings['mapping'] )	{
-			$output[] = '<i title="' . sprintf( __( 'Maps to %s', 'kb-support' ), stripslashes( $mappings[ $settings['mapping'] ] ) ) . '" class="fas fa-map-marker-alt" aria-hidden="true"></i>';
+			$output[] = '<i title="' . sprintf( esc_attr__( 'Maps to %s', 'kb-support' ), esc_attr( stripslashes( $mappings[ $settings['mapping'] ] ) ) ) . '" class="fas fa-map-marker-alt" aria-hidden="true"></i>';
 		} else	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
 
         if ( ! empty( $settings['chosen'] ) )	{
-			$output[] = '<i title="' . __( 'Searchable', 'kb-support' ) . '" class="fas fa-search" aria-hidden="true"></i>';
+			$output[] = '<i title="' . esc_attr__( 'Searchable', 'kb-support' ) . '" class="fas fa-search" aria-hidden="true"></i>';
 		} else	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
 
 		if ( 'hidden' == $settings['type'] )	{
-			$output[] = '<i title="' . __( 'Hidden', 'kb-support' ) . '" class="far fa-eye-slash" aria-hidden="true"></i>';
+			$output[] = '<i title="' . esc_attr__( 'Hidden', 'kb-support' ) . '" class="far fa-eye-slash" aria-hidden="true"></i>';
 		} else	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}

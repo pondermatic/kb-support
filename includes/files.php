@@ -490,8 +490,8 @@ function kbs_get_ticket_files_list( $files = array() )	{
 
 		$output[] = sprintf(
 			'<a href="%s" target="_blank">%s</a>',
-			$file_url,
-			$file_name
+			esc_url( $file_url ),
+			esc_html( $file_name )
 		);
     }
 

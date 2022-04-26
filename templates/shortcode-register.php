@@ -11,7 +11,7 @@ global $kbs_register_redirect; ?>
             <?php do_action( 'kbs_register_form_fields_top' ); ?>
     
             <fieldset id="kbs_register_form_fields">
-                <legend><?php _e( 'Register New Account', 'kb-support' ); ?></legend>
+                <legend><?php esc_html_e( 'Register New Account', 'kb-support' ); ?></legend>
     
                 <?php do_action( 'kbs_register_form_fields_before' ); ?>
     
@@ -32,13 +32,13 @@ global $kbs_register_redirect; ?>
 							<?php if ( $show_first ) : ?>
 								<div class="col-md-6 mb-3">
 									<label for="kbs-first-name"><?php esc_html_e( 'First Name', 'kb-support' ); ?></label>
-									<input type="text" name="kbs_user_first_name" class="required kbs-input" id="kbs-user-first-name"<?php echo $first_class; ?>>
+									<input type="text" name="kbs_user_first_name" class="required kbs-input" id="kbs-user-first-name"<?php echo esc_attr( $first_class ); ?>>
 								</div>
 							<?php endif; ?>
 							<?php if ( $show_last ) : ?>
 								<div class="col-md-6 mb-3">
 									<label for="kbs-last-name"><?php esc_html_e( 'Last Name', 'kb-support' ); ?></label>
-									<input type="text" name="kbs_user_last_name" class="required kbs-input" id="kbs-user-last-name"<?php echo $last_class; ?>>
+									<input type="text" name="kbs_user_last_name" class="required kbs-input" id="kbs-user-last-name"<?php echo esc_attr( $last_class ); ?>>
 								</div>
 							<?php endif; ?>
 						</div><!-- .row -->

@@ -1945,7 +1945,11 @@ function kbs_support_hours_callback( $args ) {
 
 				$html .= '<td>';
 					$html .= '<select name="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][open][hour]" id="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][open][hour]" class="kbs_select_chosen" />';
-						$selected = selected( $kbs_option[ $index ]['open']['hour'], '-1', false );
+						if( isset( $kbs_option[ $index ]['open']['hour'] ) ){	
+							$selected = selected( $kbs_option[ $index ]['open']['hour'], '-1', false );
+						}else{
+							$selected = '';
+						}
 						$html .= '<option value="-1"' . $selected . '>&mdash;</option>';
 						foreach( $hours as $hour )	{
 							$current  = ! empty( $kbs_option[ $index ]['open']['hour'] ) ? $kbs_option[ $index ]['open']['hour'] : '';
@@ -1955,7 +1959,12 @@ function kbs_support_hours_callback( $args ) {
 					$html .= '</select>';
 
 					$html .= '<select name="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][open][min]" id="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][open][min]" class="kbs_select_chosen" />';
-						$selected = selected( $kbs_option[ $index ]['open']['min'], '-1', false );
+						if( isset( $kbs_option[ $index ]['open']['min'] ) ){
+							$selected = selected( $kbs_option[ $index ]['open']['min'], '-1', false );
+						}else{
+							$selected ='';
+						}
+					
 						$html .= '<option value="-1"' . $selected . '>&mdash;</option>';
 						foreach( $mins as $min )	{
 							$current  = ! empty( $kbs_option[ $index ]['open']['min'] ) ? $kbs_option[ $index ]['open']['min'] : '';
@@ -1967,7 +1976,11 @@ function kbs_support_hours_callback( $args ) {
 
 				$html .= '<td>';
 					$html .= '<select name="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][close][hour]" id="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][close][hour]" class="kbs_select_chosen" />';
-						$selected = selected( $kbs_option[ $index ]['close']['hour'], '-1', false );
+						if( isset( $kbs_option[ $index ]['close']['hour'] ) ){
+							$selected = selected( $kbs_option[ $index ]['close']['hour'], '-1', false );
+						}else{
+							$selected ='';
+						}
 						$html .= '<option value="-1"' . $selected . '>&mdash;</option>';
 						foreach( $hours as $hour )	{
 							$current  = ! empty( $kbs_option[ $index ]['close']['hour'] ) ? $kbs_option[ $index ]['close']['hour'] : '';
@@ -1977,7 +1990,12 @@ function kbs_support_hours_callback( $args ) {
 					$html .= '</select>';
 
 					$html .= '<select name="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][close][min]" id="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][close][min]" class="kbs_select_chosen" />';
-						$selected = selected( $kbs_option[ $index ]['close']['min'], '-1', false );
+						
+						if( isset( $kbs_option[ $index ]['close']['min'] ) ){
+							$selected = selected( $kbs_option[ $index ]['close']['min'], '-1', false );
+						}else{
+							$selected ='';
+						}
 						$html .= '<option value="-1"' . $selected . '>&mdash;</option>';
 						foreach( $mins as $min )	{
 							$current  = ! empty( $kbs_option[ $index ]['close']['min'] ) ? $kbs_option[ $index ]['close']['min'] : '';

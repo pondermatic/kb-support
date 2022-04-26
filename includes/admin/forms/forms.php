@@ -50,7 +50,7 @@ function kbs_set_kbs_form_column_data( $column_name, $post_id ) {
 			break;
 
 		case 'shortcode':
-			echo '<code>' . $kbs_form->get_shortcode() . '</code>';
+			echo '<code>' . esc_html( $kbs_form->get_shortcode() ) . '</code>';
 			break;
 
 		case 'submissions':
@@ -145,7 +145,7 @@ function kbs_form_edit_form_after_title()	{
 
 	if ( 'kbs_form' == get_post_type() ) : ?>
     	<?php $kbs_form = new KBS_Form( $post->ID ); ?>
-		<input type="text" readonly size="25" onclick="this.focus(); this.select()" id="kbs-form-shortcode" name="kbs_form_shortcode" value='<?php echo $kbs_form->get_shortcode(); ?>' title="<?php _e( 'To copy the shortcode, click here then press Ctrl + C (PC) or Cmd + C (Mac).', 'kb-support' ); ?>" />
+		<input type="text" readonly size="25" onclick="this.focus(); this.select()" id="kbs-form-shortcode" name="kbs_form_shortcode" value='<?php echo esc_attr( $kbs_form->get_shortcode() ); ?>' title="<?php esc_html_e( 'To copy the shortcode, click here then press Ctrl + C (PC) or Cmd + C (Mac).', 'kb-support' ); ?>" />
 	<?php endif;
 
 } // kbs_form_edit_form_after_title

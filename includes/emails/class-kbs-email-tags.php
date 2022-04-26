@@ -477,7 +477,7 @@ function kbs_email_tag_fullname( $ticket_id ) {
 	}
 
 	$email_name   = kbs_get_email_names( $user_info );
-	return $email_name['fullname'];
+	return esc_html( $email_name['fullname'] );
 } // kbs_email_tag_fullname
 
 /**

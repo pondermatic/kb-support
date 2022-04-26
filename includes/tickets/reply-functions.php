@@ -300,25 +300,25 @@ function kbs_get_reply_author_name( $reply, $role = false )	{
 		$reply = get_post( $reply );
 	}
 
-	$author       = __( 'Unknown', 'kb-support' );
-	$author_role  = __( 'Customer', 'kb-support' );
-    $author_email = kbs_participants_enabled() ? get_post_meta( $reply->ID, '_kbs_reply_participant', true ) : false;
+	$author       = esc_html__( 'Unknown', 'kb-support' );
+	$author_role  = esc_html__( 'Customer', 'kb-support' );
+    $author_email = kbs_participants_enabled() ? esc_html( get_post_meta( $reply->ID, '_kbs_reply_participant', true ) ) : false;
     $author_email = is_email( $author_email );
     $ticket_email = kbs_get_ticket_user_email( $reply->post_parent );
-    $customer_id  = get_post_meta( $reply->post_parent, '_kbs_ticket_customer_id', true );
+    $customer_id  = esc_html( get_post_meta( $reply->post_parent, '_kbs_ticket_customer_id', true ) );
 
 	if ( ! empty( $reply->post_author ) ) {
 		$author = get_userdata( $reply->post_author );
 		$author = $author->display_name;
 
         if ( kbs_is_agent( $reply->post_author ) )   {
-            $author_role = __( 'Agent', 'kb-support' );
+            $author_role = esc_html__( 'Agent', 'kb-support' );
         } elseif ( $author_email )   {
             $author_customer = new KBS_Customer( $author_email );
 
             if ( $author_customer && $author_customer->id > 0 )   {
                 if ( in_array( $ticket_email, $author_customer->emails ) )   {
-                    $author_role = __( 'Participant', 'kb-support' );
+                    $author_role = esc_html__( 'Participant', 'kb-support' );
                 }
             }
         }
@@ -327,19 +327,19 @@ function kbs_get_reply_author_name( $reply, $role = false )	{
             $author_customer = new KBS_Customer( $author_email );
             if ( $author_customer && $author_customer->id > 0 && $author_customer->id == $customer_id )   {
 				$author      = $author_customer->name;
-				$author_role = __( 'Customer', 'kb-support' );
+				$author_role = esc_html__( 'Customer', 'kb-support' );
             } elseif ( $author_customer && $author_customer->id > 0 && $author_customer->id != $customer_id )   {
 				$author      = $author_customer->name;
-				$author_role = __( 'Participant', 'kb-support' );
+				$author_role = esc_html__( 'Participant', 'kb-support' );
             } else  {
                 $author      = $author_email;
-                $author_role = __( 'Participant', 'kb-support' );
+                $author_role = esc_html__( 'Participant', 'kb-support' );
             }
         } elseif ( $customer_id )	{
 			$customer = new KBS_Customer( $customer_id );
 			if ( $customer )	{
 				$author      = $customer->name;
-				$author_role = __( 'Customer', 'kb-support' );
+				$author_role = esc_html__( 'Customer', 'kb-support' );
 			}
 		}
 	}
@@ -348,7 +348,7 @@ function kbs_get_reply_author_name( $reply, $role = false )	{
 		$author .= ' (' . $author_role . ')';
 	}
 
-	return apply_filters( 'kbs_reply_author_name', $author, $reply, $role, $author_role );
+	return apply_filters( 'kbs_reply_author_name', esc_html( $author ), $reply, $role, $author_role );
 
 } // kbs_get_reply_author_name
 

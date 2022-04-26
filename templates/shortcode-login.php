@@ -19,7 +19,7 @@ if ( ! is_user_logged_in() ) : ?>
                     </div>
 
 					<div class="mb-3">
-                        <label for="kbs-user-pass"><?php _e( 'Password', 'kb-support' ); ?></label>
+                        <label for="kbs-user-pass"><?php esc_html_e( 'Password', 'kb-support' ); ?></label>
                         <input type="password" name="kbs_user_pass" class="password required kbs-input" id="kbs-user-pass" required>
                     </div>
 

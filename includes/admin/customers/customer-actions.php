@@ -26,11 +26,11 @@ function kbs_edit_customer()	{
 	}
 
 	if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'edit-customer' ) ) {
-		wp_die( __( "Cheatin' eh?!", 'kb-support' ) );
+		wp_die( esc_html__( "Cheatin' eh?!", 'kb-support' ) );
 	}
 
 	if ( ! is_admin() || ! kbs_can_edit_customers() ) {
-		wp_die( __( 'You do not have permission to edit this customer.', 'kb-support' ) );
+		wp_die( esc_html__( 'You do not have permission to edit this customer.', 'kb-support' ) );
 	}
 
 	$customer_info = isset( $_POST['customerinfo'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['customerinfo'] ) ) : array();
@@ -196,11 +196,11 @@ function kbs_disconnect_customer_user_id() {
 	}
 
 	if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'edit-customer' ) ) {
-		wp_die( __( "Cheatin' eh?!", 'kb-support' ) );
+		wp_die( esc_html__( "Cheatin' eh?!", 'kb-support' ) );
 	}
 
 	if ( ! is_admin() || ! kbs_can_edit_customers() ) {
-		wp_die( __( 'You do not have permission to edit this customer.', 'kb-support' ) );
+		wp_die( esc_html__( 'You do not have permission to edit this customer.', 'kb-support' ) );
 	}
 
 	$customer_id = isset( $_POST['customer_id'] ) ? (int) $_POST['customer_id'] : 0;
@@ -254,7 +254,7 @@ function kbs_add_customer_email()	{
 	}
 
 	if ( ! is_admin() || ! kbs_can_edit_customers() ) {
-		wp_die( __( 'You do not have permission to edit this customer.', 'kb-support' ) );
+		wp_die( esc_html__( 'You do not have permission to edit this customer.', 'kb-support' ) );
 	}
 
 	$output = array();
@@ -368,7 +368,7 @@ function kbs_remove_customer_email()	{
 	}
 
 	if ( empty( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'kbs-remove-customer-email' ) ) {
-		wp_die( __( 'Nonce verification failed', 'kb-support' ), __( 'Error', 'kb-support' ), array( 'response' => 403 ) );
+		wp_die( esc_html__( 'Nonce verification failed', 'kb-support' ), __( 'Error', 'kb-support' ), array( 'response' => 403 ) );
 	}
 
 	$customer = new KBS_Customer( absint( $_GET['id'] ) );
@@ -378,7 +378,7 @@ function kbs_remove_customer_email()	{
 
 		$user          = wp_get_current_user();
 		$user_login    = ! empty( $user->user_login ) ? $user->user_login : 'KBSBot';
-		$customer_note = __( sprintf( 'Email address %s removed by %s', sanitize_email( wp_unslash( $_GET['email'] ) ), $user_login ), 'kb-support' );
+		$customer_note = esc_html__( sprintf( 'Email address %s removed by %s', sanitize_email( wp_unslash( $_GET['email'] ) ), $user_login ), 'kb-support' );
 		$customer->add_note( $customer_note );
 
 	} else {
@@ -412,7 +412,7 @@ function kbs_set_customer_primary_email()	{
 	}
 
 	if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'kbs-set-customer-primary-email' ) ) {
-		wp_die( __( 'Nonce verification failed', 'kb-support' ), __( 'Error', 'kb-support' ), array( 'response' => 403 ) );
+		wp_die( esc_html__( 'Nonce verification failed', 'kb-support' ), esc_html__( 'Error', 'kb-support' ), array( 'response' => 403 ) );
 	}
 
 	$customer = new KBS_Customer( absint( $_GET['id'] ) );
@@ -447,11 +447,11 @@ function kbs_customer_save_note() {
 	}
 
 	if ( !isset( $_POST['add_customer_note_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['add_customer_note_nonce'] ) ), 'add-customer-note' ) ) {
-		wp_die( __( "Cheatin' eh?!", 'kb-support' ) );
+		wp_die( esc_html__( "Cheatin' eh?!", 'kb-support' ) );
 	}
 
 	if ( ! is_admin() || ! kbs_can_edit_customers() ) {
-		wp_die( __( 'You do not have permission to edit this customer.', 'kb-support' ) );
+		wp_die( esc_html__( 'You do not have permission to edit this customer.', 'kb-support' ) );
 	}
 
 	$customer_note = isset( $_POST['customer_note'] ) ? trim( sanitize_text_field( wp_unslash( $_POST['customer_note'] ) ) ) : '';
@@ -476,7 +476,7 @@ function kbs_customer_save_note() {
 		?>
 		<div class="customer-note-wrapper dashboard-comment-wrap comment-item">
 			<span class="note-content-wrap">
-				<?php echo stripslashes( $new_note ); ?>
+				<?php echo wp_kses_post( stripslashes( $new_note ) ); ?>
 			</span>
 		</div>
 		<?php
@@ -510,11 +510,11 @@ function kbs_customer_delete() {
 	}
 
 	if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'delete-customer' ) ) {
-		wp_die( __( "Cheatin' eh?!", 'kb-support' ) );
+		wp_die( esc_html__( "Cheatin' eh?!", 'kb-support' ) );
 	}
 
 	if ( ! is_admin() || ! kbs_can_edit_customers() ) {
-		wp_die( __( 'You do not have permission to delete this customer.', 'kb-support' ) );
+		wp_die( esc_html__( 'You do not have permission to delete this customer.', 'kb-support' ) );
 	}
 
 	$customer_id   = isset( $_POST['customer_id'] ) ? (int) $_POST['customer_id'] : 0;

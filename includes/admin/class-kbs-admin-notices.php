@@ -472,13 +472,13 @@ class KBS_Admin_Notices	{
         <div class="updated notice notice-kbs-dismiss is-dismissible" data-notice="kbs_request_wp_5star_rating">
             <p>
                 <?php printf(
-                    wp_kses_post( __( '<strong>Awesome!</strong> It looks like you have closed over 25 %1$s since you activated KB Support which is really fantastic!', 'kb-support' ),
+                    wp_kses_post( __( '<strong>Awesome!</strong> It looks like you have closed over 25 %1$s since you activated KB Support which is really fantastic!', 'kb-support' ) ),
                     kbs_get_ticket_label_plural( true )
-                ) ); ?>
+                ); ?>
             </p>
             <p>
                 <?php printf(
-                    __( 'Would you <strong>please</strong> do us a favour and leave a 5 star rating on WordPress.org? It only takes a minute and it <strong>really helps</strong> to motivate our developers and volunteers to continue to work on great new features and functionality. <a href="%1$s" target="_blank">Sure thing, you deserve it!</a>', 'kb-support' ),
+                    wp_kses_post( __( 'Would you <strong>please</strong> do us a favour and leave a 5 star rating on WordPress.org? It only takes a minute and it <strong>really helps</strong> to motivate our developers and volunteers to continue to work on great new features and functionality. <a href="%1$s" target="_blank">Sure thing, you deserve it!</a>', 'kb-support' ) ),
                     'https://wordpress.org/support/plugin/kb-support/reviews/'
                 ); ?>
             </p>

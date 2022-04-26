@@ -504,7 +504,7 @@ function kbs_get_ticket_status_colour( $status, $default = false )	{
 			$status = 'open';
 		}
 
-		return $defaults[ $status ];
+		return esc_attr( $defaults[ $status ] );
 	}
 
 	$default_colour = '';
@@ -516,7 +516,7 @@ function kbs_get_ticket_status_colour( $status, $default = false )	{
 	$colour = kbs_get_option( 'colour_' . $status, $default_colour );
 	$colour = apply_filters( 'kbs_ticket_status_colour_' . $status, $colour );
 
-	return $colour;
+	return esc_attr( $colour );
 } // kbs_get_ticket_status_colour
 
 /**

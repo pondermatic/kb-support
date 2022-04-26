@@ -2251,8 +2251,8 @@ class KBS_Ticket {
 				$value = apply_filters( 'kbs_show_form_data', $value, $form_field->ID, $settings );
 
 				$output .= sprintf( '<p><strong>%s</strong>: %s</p>',
-					get_the_title( $form_field->ID ),
-					$value
+					esc_html( get_the_title( $form_field->ID ) ),
+					esc_html( $value )
 				);
 			}
 		} else	{

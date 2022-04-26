@@ -310,14 +310,14 @@ class KBS_Welcome {
 
 			<h4><?php printf( esc_html__( 'Additional Updates with Version %s', 'kb-support' ), $display_version ); ?></h4>
             <ul class="ul-disc">
-                <li><?php wp_kses_post( _e( 'Corrected variable name being passed to <code>kbs_register_redirect</code> filter', 'kb-support' ) ); ?></li>
-                <li><?php wp_kses_post( _e( 'Added a notice for when settings are imported', 'kb-support' ) ); ?></li>
-                <li><?php wp_kses_post( _e( 'Corrected CSS syntax which was causing alignment issue within the KB Article restrictions metabox', 'kb-support' ) ); ?></li>
-                <li><?php wp_kses_post( _e( 'Updated contextual help for settings screen', 'kb-support' ) ); ?></li>
-                <li><?php wp_kses_post( _e( 'Corrected variable name being passed via <code>kbs_auto_assign_agent</code> hook', 'kb-support' ) ); ?></li>
-                <li><?php wp_kses_post( _e( 'Added hook <code>kbs_update_ticket_meta_key</code> hook', 'kb-support' ) ); ?></li>
-                <li><?php wp_kses_post( _e( 'Set <code>$prev_value</code> when updating ticket meta if it is not passed to the function', 'kb-support' ) ); ?></li>
-                <li><?php wp_kses_post( _e( 'Added filter <code>kbs_disable_ticket_post_lock</code> to enable removal of post lock for tickets', 'kb-support' ) ); ?></li>
+                <li><?php echo wp_kses_post( __( 'Corrected variable name being passed to <code>kbs_register_redirect</code> filter', 'kb-support' ) ); ?></li>
+                <li><?php echo wp_kses_post( __( 'Added a notice for when settings are imported', 'kb-support' ) ); ?></li>
+                <li><?php echo wp_kses_post( __( 'Corrected CSS syntax which was causing alignment issue within the KB Article restrictions metabox', 'kb-support' ) ); ?></li>
+                <li><?php echo wp_kses_post( __( 'Updated contextual help for settings screen', 'kb-support' ) ); ?></li>
+                <li><?php echo wp_kses_post( __( 'Corrected variable name being passed via <code>kbs_auto_assign_agent</code> hook', 'kb-support' ) ); ?></li>
+                <li><?php echo wp_kses_post( __( 'Added hook <code>kbs_update_ticket_meta_key</code> hook', 'kb-support' ) ); ?></li>
+                <li><?php echo wp_kses_post( __( 'Set <code>$prev_value</code> when updating ticket meta if it is not passed to the function', 'kb-support' ) ); ?></li>
+                <li><?php echo wp_kses_post( __( 'Added filter <code>kbs_disable_ticket_post_lock</code> to enable removal of post lock for tickets', 'kb-support' ) ); ?></li>
             </ul>
 
         </div>

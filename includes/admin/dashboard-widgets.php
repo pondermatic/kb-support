@@ -65,42 +65,42 @@ function kbs_load_dashboard_tickets_widget() {
 			<table>
 				<thead>
 					<tr>
-						<td colspan="2"><?php _e( 'Current Month', 'kb-support' ) ?></td>
+						<td colspan="2"><?php esc_html_e( 'Current Month', 'kb-support' ) ?></td>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td class="first t monthly_opened"><?php _e( 'Opened', 'kb-support' ); ?></td>
-						<td class="b b-opened"><?php echo $stats->get_tickets( 'this_month', '', $statuses ); ?></td>
+						<td class="first t monthly_opened"><?php esc_html_e( 'Opened', 'kb-support' ); ?></td>
+						<td class="b b-opened"><?php echo esc_html( $stats->get_tickets( 'this_month', '', $statuses ) ); ?></td>
 					</tr>
 					<tr>
 						<td class="first t monthly_closed"><?php echo _e( 'Closed', 'kb-support' ); ?></td>
-						<td class="b b-closed"><?php echo $stats->get_tickets( 'this_month', '', 'closed' ); ?></td>
+						<td class="b b-closed"><?php echo esc_html( $stats->get_tickets( 'this_month', '', 'closed' ) ); ?></td>
 					</tr>
                     <tr>
 						<td class="first t monthly_replies"><?php echo _e( 'Replies', 'kb-support' ); ?></td>
-						<td class="b b-replies"><?php echo $stats->get_replies( 'this_month', '' ); ?></td>
+						<td class="b b-replies"><?php echo esc_html( $stats->get_replies( 'this_month', '' ) ); ?></td>
 					</tr>
 				</tbody>
 			</table>
 			<table>
 				<thead>
 					<tr>
-						<td colspan="2"><?php _e( 'Last Month', 'kb-support' ) ?></td>
+						<td colspan="2"><?php esc_html_e( 'Last Month', 'kb-support' ) ?></td>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td class="first t opened"><?php echo __( 'Opened', 'kb-support' ); ?></td>
-						<td class="b b-last-month-opened"><?php echo $stats->get_tickets( 'last_month', '', $statuses ); ?></td>
+						<td class="first t opened"><?php echo esc_html__( 'Opened', 'kb-support' ); ?></td>
+						<td class="b b-last-month-opened"><?php echo esc_html( $stats->get_tickets( 'last_month', '', $statuses ) ); ?></td>
 					</tr>
 					<tr>
-						<td class="first t closed"><?php echo _e( 'Closed', 'kb-support' ); ?></td>
-						<td class="b b-last-month-closed"><?php echo $stats->get_tickets( 'last_month', '', 'closed' ); ?></td>
+						<td class="first t closed"><?php echo esc_html_e( 'Closed', 'kb-support' ); ?></td>
+						<td class="b b-last-month-closed"><?php echo esc_html( $stats->get_tickets( 'last_month', '', 'closed' ) ); ?></td>
 					</tr>
                     <tr>
-						<td class="first t replies"><?php echo _e( 'Replies', 'kb-support' ); ?></td>
-						<td class="b b-last-month-replies"><?php echo $stats->get_replies( 'last_month', '' ); ?></td>
+						<td class="first t replies"><?php echo esc_html_e( 'Replies', 'kb-support' ); ?></td>
+						<td class="b b-last-month-replies"><?php echo esc_html( $stats->get_replies( 'last_month', '' ) ); ?></td>
 					</tr>
 				</tbody>
 			</table>
@@ -110,22 +110,22 @@ function kbs_load_dashboard_tickets_widget() {
 				<thead>
 					<tr>
 						<td colspan="2">
-							<?php _e( 'Today', 'kb-support' ); ?>
+							<?php esc_html_e( 'Today', 'kb-support' ); ?>
 						</td>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td class="t opened"><?php _e( 'Opened', 'kb-support' ); ?></td>
-						<td class="last b b-opened"><?php echo $stats->get_tickets( 'today', '', $statuses ); ?></td>
+						<td class="t opened"><?php esc_html_e( 'Opened', 'kb-support' ); ?></td>
+						<td class="last b b-opened"><?php echo esc_html( $stats->get_tickets( 'today', '', $statuses ) ); ?></td>
 					</tr>
 					<tr>
-						<td class="t closed"><?php _e( 'Closed', 'kb-support' ); ?></td>
-						<td class="last b b-closed"><?php echo $stats->get_tickets( 'today', '', 'closed' ); ?></td>                        
+						<td class="t closed"><?php esc_html_e( 'Closed', 'kb-support' ); ?></td>
+						<td class="last b b-closed"><?php echo esc_html( $stats->get_tickets( 'today', '', 'closed' ) ); ?></td>                        
 					</tr>
                     <tr>
-						<td class="t replies"><?php echo _e( 'Replies', 'kb-support' ); ?></td>
-						<td class="last b b-replies"><?php echo $stats->get_replies( 'today', '' ); ?></td>
+						<td class="t replies"><?php echo esc_html_e( 'Replies', 'kb-support' ); ?></td>
+						<td class="last b b-replies"><?php echo esc_html( $stats->get_replies( 'today', '' ) ); ?></td>
 					</tr>
 				</tbody>
 			</table>
@@ -139,16 +139,16 @@ function kbs_load_dashboard_tickets_widget() {
 				</thead>
 				<tbody>
                     <tr>
-						<td class="t opened"><?php _e( 'Open', 'kb-support' ); ?></td>
-						<td class="last b b-opened"><?php echo kbs_get_open_ticket_count( 'open' ); ?></td>
+						<td class="t opened"><?php esc_html_e( 'Open', 'kb-support' ); ?></td>
+						<td class="last b b-opened"><?php echo esc_html( kbs_get_open_ticket_count( 'open' ) ); ?></td>
 					</tr>
 					<tr>
-						<td class="t opened"><?php _e( 'Active', 'kb-support' ); ?></td>
-						<td class="last b b-opened"><?php echo kbs_get_open_ticket_count(); ?></td>
+						<td class="t opened"><?php esc_html_e( 'Active', 'kb-support' ); ?></td>
+						<td class="last b b-opened"><?php echo esc_html( kbs_get_open_ticket_count() ); ?></td>
 					</tr>
 					<tr>
-						<td class="t closed"><?php _e( 'Agents Online', 'kb-support' ); ?></td>
-						<td class="last b b-closed"><?php echo kbs_get_online_agent_count(); ?></td>
+						<td class="t closed"><?php esc_html_e( 'Agents Online', 'kb-support' ); ?></td>
+						<td class="last b b-closed"><?php echo esc_html( kbs_get_online_agent_count() ); ?></td>
 					</tr>
 				</tbody>
 			</table>
@@ -166,15 +166,15 @@ function kbs_load_dashboard_tickets_widget() {
 
 			<?php if ( $total_articles ) : ?>
 				<h3 class="kbs_popular_articles_label">
-					<?php printf( __( 'Most Popular %s', 'kb-support' ), kbs_get_article_label_plural() ); ?>
-					&nbsp;<span style="font-size: smaller; font-weight: normal;"><a href="<?php echo admin_url( 'edit.php?post_type=' . KBS()->KB->post_type ); ?>"><?php _e( 'View All', 'kb-support' ); ?></a></span>
+					<?php printf( esc_html__( 'Most Popular %s', 'kb-support' ), kbs_get_article_label_plural() ); ?>
+					&nbsp;<span style="font-size: smaller; font-weight: normal;"><a href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . KBS()->KB->post_type ) ); ?>"><?php esc_html_e( 'View All', 'kb-support' ); ?></a></span>
 				</h3>
 
 				<div class="table table_left table_current_month">
 					<table>
 						<thead>
 							<tr>
-								<td colspan="2"><?php _e( 'All Time', 'kb-support' ) ?></td>
+								<td colspan="2"><?php esc_html_e( 'All Time', 'kb-support' ) ?></td>
 							</tr>
 						</thead>
 						<tbody>
@@ -186,10 +186,10 @@ function kbs_load_dashboard_tickets_widget() {
 								?>
 								<tr>
 									<td class="t popular">
-										<a href="<?php echo $url; ?>"><?php echo get_the_title( $total_article->ID ); ?></a>
+										<a href="<?php echo esc_url( $url ); ?>"><?php echo esc_html( get_the_title( $total_article->ID ) ); ?></a>
 										<?php printf(
-											_n( '(%s view)', '(%s views)', $views, 'kb-support' ),
-											number_format_i18n( $views )
+											esc_html( _n( '(%s view)', '(%s views)', $views, 'kb-support' ) ),
+											esc_html( number_format_i18n( $views ) )
 										); ?>
 									</td>
 								</tr>
@@ -210,7 +210,7 @@ function kbs_load_dashboard_tickets_widget() {
 					<table>
 						<thead>
 							<tr>
-								<td colspan="2"><?php _e( 'This Month', 'kb-support' ) ?></td>
+								<td colspan="2"><?php esc_html_e( 'This Month', 'kb-support' ) ?></td>
 							</tr>
 						</thead>
 						<tbody>
@@ -222,10 +222,10 @@ function kbs_load_dashboard_tickets_widget() {
 									?>
 									<tr>
 										<td class="t popular">
-											<a href="<?php echo $url; ?>"><?php echo get_the_title( $month_article->ID ); ?></a>
+											<a href="<?php echo esc_url( $url ); ?>"><?php echo esc_html( get_the_title( $month_article->ID ) ); ?></a>
 											<?php printf(
-												_n( '(%s view)', '(%s views)', $views, 'kb-support' ),
-												number_format_i18n( $views )
+												esc_html( _n( '(%s view)', '(%s views)', $views, 'kb-support' ) ),
+												esc_html( number_format_i18n( $views ) )
 											); ?>
 										</td>
 									</tr>
@@ -234,7 +234,7 @@ function kbs_load_dashboard_tickets_widget() {
 							else : ?>
 								<tr>
 									<td class="t popular">
-										<?php _e( 'No data yet', 'kb-support' ); ?>
+										<?php esc_html_e( 'No data yet', 'kb-support' ); ?>
 									</td>
 								</tr>
 							<?php endif; ?>

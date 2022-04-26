@@ -87,7 +87,7 @@ function kbs_set_company_column_data( $column_name, $post_id ) {
 			printf(
                 '<a href="%1$s" title="%2$s" target="_blank">%1$s</a>',
                 esc_url( $company->website ),
-                sprintf( __( 'Open %s in a new tab', 'kb-support' ), esc_url( $company->website ) )
+                sprintf( esc_html__( 'Open %s in a new tab', 'kb-support' ), esc_url( $company->website ) )
             );
 			break;
 
@@ -128,7 +128,7 @@ function kbs_set_company_column_data( $column_name, $post_id ) {
 			break;
 
 		default:
-			echo ec_html__( 'No callback found for post column', 'kb-support' );
+			echo esc_html__( 'No callback found for post column', 'kb-support' );
 			break;
 	}
 

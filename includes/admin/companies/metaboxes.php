@@ -156,25 +156,25 @@ function kbs_company_metabox_data( $post_id )	{
     	<p><label for="_kbs_company_contact"><?php esc_html_e( 'Contact Name', 'kb-support' ); ?>:</label><br />
         <?php echo KBS()->html->text( array(
 			'name'  => '_kbs_company_contact',
-			'value' => ! empty( $kbs_company->contact ) ? $kbs_company->contact : ''
+			'value' => ! empty( $kbs_company->contact ) ? esc_html( $kbs_company->contact ): ''
 		) ); ?></p>
 
 		<p><label for="_kbs_company_email"><?php esc_html_e( 'Email Address', 'kb-support' ); ?>:</label><br />
         <?php echo KBS()->html->text( array(
 			'name'  => '_kbs_company_email',
-			'value' => ! empty( $kbs_company->email ) ? $kbs_company->email : ''
+			'value' => ! empty( $kbs_company->email ) ? esc_html( $kbs_company->email ): ''
 		) ); ?></p>
 
 		<p><label for="_kbs_company_phone"><?php esc_html_e( 'Phone Number', 'kb-support' ); ?>:</label><br />
         <?php echo KBS()->html->text( array(
 			'name'  => '_kbs_company_phone',
-			'value' => ! empty( $kbs_company->phone ) ? $kbs_company->phone : ''
+			'value' => ! empty( $kbs_company->phone ) ? esc_html( $kbs_company->phone ) : ''
 		) ); ?></p>
 
 		<p><label for="_kbs_company_website"><?php esc_html_e( 'Website', 'kb-support' ); ?>:</label><br />
         <?php echo KBS()->html->text( array(
 			'name'  => '_kbs_company_website',
-			'value' => ! empty( $kbs_company->website ) ? $kbs_company->website : ''
+			'value' => ! empty( $kbs_company->website ) ? esc_url( $kbs_company->website ) : ''
 		) ); ?></p>
 
     </div>
@@ -211,7 +211,7 @@ function kbs_company_metabox_tickets_table( $post_id )	{
             <?php if ( ! empty( $tickets ) ) : ?>
                 <?php foreach ( $tickets as $ticket ) : ?>
                     <tr>
-                        <td><a href="<?php echo admin_url( 'post.php?post=' . $ticket->ID . '&action=edit' ); ?>">
+                        <td><a href="<?php echo esc_url( admin_url( 'post.php?post=' . $ticket->ID . '&action=edit' ) ); ?>">
                                 <?php echo esc_html( kbs_format_ticket_number( kbs_get_ticket_number( $ticket->ID ) ) ); ?>
                             </a>
                         </td>

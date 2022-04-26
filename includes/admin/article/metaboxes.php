@@ -143,7 +143,7 @@ function kbs_article_metabox_linked_tickets_fields( $post_id )	{
             	# <?php echo (int)kbs_get_ticket_number( $linked_ticket ) . '</a> - ' . esc_html( get_the_title( $linked_ticket ) ); ?>
             </p>
 
-			<div id="kbs-ticket-content-<?php echo $linked_ticket; ?>" class="kbs-hidden">
+			<div id="kbs-ticket-content-<?php echo esc_attr( $linked_ticket ); ?>" class="kbs-hidden">
 				<?php do_action( 'kbs_article_before_thickbox_ticket_content', $linked_ticket, $post_id ); ?>
                 <?php echo wp_kses_post( get_post_field( 'post_content', $linked_ticket ) ); ?>
                 <?php do_action( 'kbs_article_after_thickbox_ticket_content', $linked_ticket, $post_id ); ?>
@@ -181,7 +181,7 @@ function kbs_article_metabox_restrict_article_field( $post_id )	{
 		// Escaped in function.
 		echo KBS()->html->checkbox( array(
         'name'    => '_kbs_article_restricted',
-        'current' => $logged_in_only
+        'current' => esc_attr( $logged_in_only )
     ) ); // phpcs:ignore ?>
 	<label for="_kbs_article_restricted"></label><?php esc_html_e( 'Restrict access?', 'kb-support' ); ?></p>
 
