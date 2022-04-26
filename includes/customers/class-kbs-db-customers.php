@@ -569,9 +569,6 @@ class KBS_DB_Customers extends KBS_DB  {
 
 		$customers = wp_cache_get( $cache_key, 'customers' );
 
-		$args['orderby'] = esc_sql( $args['orderby'] );
-		$args['order']   = esc_sql( $args['order'] );
-
 		$customers = false;
 
 		if( $customers === false ) {
@@ -582,9 +579,11 @@ class KBS_DB_Customers extends KBS_DB  {
                 $join
                 $where
                 GROUP BY $this->primary_key
-                ORDER BY {$args['orderby']} {$args['order']}
+                ORDER BY {%s} {%s}
                 LIMIT %d,%d;
                 ",
+				esc_sql( $args['orderby'] ),
+				esc_sql( $args['order'] ),
                 absint( $args['offset'] ),
                 absint( $args['number'] )
             );
