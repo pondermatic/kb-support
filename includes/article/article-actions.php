@@ -112,7 +112,7 @@ function kbs_reset_article_view_count()	{
 		return;
 	}
 
-	if ( ! isset( $_GET['kbs-nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['kbs-nonce'] ) ), 'reset_views' ) )	{
+	if ( ! isset( $_GET['kbs-nonce'] ) || ! wp_verify_nonce( $_GET['kbs-nonce'], 'reset_views' ) )	{
 		wp_die( 'Cheatin&#8217; huh?' );
 	}
 

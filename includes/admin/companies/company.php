@@ -162,7 +162,7 @@ function kbs_company_post_save( $post_id, $post, $update )	{
 
 	if (
 		! isset( $_POST['kbs_company_meta_box_nonce'] )
-		|| ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['kbs_company_meta_box_nonce'] ) ), 'kbs_company_meta_save' )
+		|| ! wp_verify_nonce( $_POST['kbs_company_meta_box_nonce'], 'kbs_company_meta_save' )
 	)	{
 		return;
 	}

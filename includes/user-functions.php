@@ -833,7 +833,7 @@ function kbs_process_profile_editor_updates( $data ) {
 	}
 
 	// Nonce security
-	if ( ! isset( $_POST['kbs_profile_editor_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['kbs_profile_editor_nonce'] ) ), 'kbs-profile-editor-nonce' ) ) {
+	if ( ! isset( $_POST['kbs_profile_editor_nonce'] ) || ! wp_verify_nonce( $_POST['kbs_profile_editor_nonce'], 'kbs-profile-editor-nonce' ) ) {
 		return false;
 	}
 
@@ -1047,7 +1047,7 @@ function kbs_process_profile_editor_remove_email() {
 	}
 
 	// Nonce security
-	if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'kbs-remove-customer-email' ) ) {
+	if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], 'kbs-remove-customer-email' ) ) {
 		return false;
 	}
 

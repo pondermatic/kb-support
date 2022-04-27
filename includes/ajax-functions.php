@@ -173,13 +173,13 @@ function kbs_ajax_add_participant()	{
 	$email     = false;
 	$ticket_id = isset( $_POST['ticket_id'] ) ? absint( $_POST['ticket_id'] ) : 0;
 
-	if ( isset( $_POST['participant']) && '-1' != $_POST['participant'] )	{
+	if ( isset( $_POST['participant']) && '-1' != $_POST['participant'] ) {
 		$customer = new KBS_Customer( absint( $_POST['participant'] ) );
 
 		if ( $customer )	{
 			$email = $customer->email;
 		}
-	} else	{
+	} else {
 		$posted_email = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
 		$email        = is_email( $posted_email );
 	}

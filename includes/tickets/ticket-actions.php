@@ -48,7 +48,7 @@ function kbs_process_ticket_submission()	{
 		return;
 	}
 
-	if ( ! isset( $_POST['kbs_log_ticket'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['kbs_log_ticket'] ) ), 'kbs-form-validate' ) )	{
+	if ( ! isset( $_POST['kbs_log_ticket'] ) || ! wp_verify_nonce( $_POST['kbs_log_ticket'], 'kbs-form-validate' ) )	{
 		wp_die( esc_html__( 'Security failed.', 'kb-support' ) );
 	}
 
@@ -222,7 +222,7 @@ function kbs_reopen_ticket()	{
 		return;
 	}
 
-	if ( ! isset( $_GET['kbs-ticket-nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET[ 'kbs-ticket-nonce' ] ) ), 'kbs-reopen-ticket' ) )	{
+	if ( ! isset( $_GET['kbs-ticket-nonce'] ) || ! wp_verify_nonce( $_GET[ 'kbs-ticket-nonce' ], 'kbs-reopen-ticket' ) )	{
 		$message = 'nonce_fail';
 	} else	{
 		remove_action( 'save_post_kbs_ticket', 'kbs_ticket_post_save', 10, 3 );
@@ -266,7 +266,7 @@ function kbs_ticket_customer_reply_action()	{
 		return;
 	}
 
-	if ( ! isset( $_POST['kbs_ticket_reply'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['kbs_ticket_reply'] ) ), 'kbs-reply-validate' ) )	{
+	if ( ! isset( $_POST['kbs_ticket_reply'] ) || ! wp_verify_nonce( $_POST['kbs_ticket_reply'], 'kbs-reply-validate' ) )	{
 		wp_die( esc_html__( 'Security failed.', 'kb-support' ) );
 	}
 
@@ -336,7 +336,7 @@ function kbs_delete_ticket_reply_action()   {
 		return;
 	}
 
-    if ( ! isset ( $_GET['kbs_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['kbs_nonce'] ) ), 'delete_ticket_reply' ) )  {
+    if ( ! isset ( $_GET['kbs_nonce'] ) || ! wp_verify_nonce( $_GET['kbs_nonce'], 'delete_ticket_reply' ) )  {
         return;
     }
 
@@ -448,7 +448,7 @@ function kbs_delete_ticket_note_action()	{
 	$ticket_id = absint( $_GET['ticket_id'] );
 	$note_id   = absint( $_GET['note_id'] );
 
-	if ( ! isset( $_GET['kbs_note_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['kbs_note_nonce'] ) ), 'kbs_delete_ticket_note_' . $note_id ) )	{
+	if ( ! isset( $_GET['kbs_note_nonce'] ) || ! wp_verify_nonce( $_GET['kbs_note_nonce'], 'kbs_delete_ticket_note_' . $note_id ) )	{
 		die();
 	}
 

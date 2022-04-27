@@ -82,7 +82,7 @@ function kbs_process_login_form()	{
 		return;
 	}
 
-	if ( isset( $_POST['kbs_login_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['kbs_login_nonce'] ) ), 'kbs-login-nonce' ) ) {
+	if ( isset( $_POST['kbs_login_nonce'] ) && wp_verify_nonce( $_POST['kbs_login_nonce'], 'kbs-login-nonce' ) ) {
         $user_data = get_user_by( 'login', sanitize_text_field( wp_unslash( $_POST['kbs_user_login'] ) ) );
 
         if ( ! $user_data && isset( $_POST['kbs_user_login'] ) ) {
@@ -105,12 +105,12 @@ function kbs_process_login_form()	{
 			$url = remove_query_arg( array( 'kbs_notice', 'kbs_redirect' ) );
 			wp_redirect( add_query_arg( array(
 				'kbs_notice'   => $error,
-				'kbs_redirect' => isset( $_POST['kbs_redirect'] ) ? sanitize_url( wp_unslash( $_GET['kbs_redirect'] ) ) : ''
+				'kbs_redirect' => isset( $_POST['kbs_redirect'] ) ? sanitize_url( wp_unslash( $_POST['kbs_redirect'] ) ) : ''
 			), $url ) );
 			die();
 		}
 
-		$redirect = apply_filters( 'kbs_login_redirect', isset( $_POST['kbs_redirect'] ) ? sanitize_url( wp_unslash( $_GET['kbs_redirect'] ) ) : '', $user_ID );
+		$redirect = apply_filters( 'kbs_login_redirect', isset( $_POST['kbs_redirect'] ) ? sanitize_url( wp_unslash( $_POST['kbs_redirect'] ) ) : '', $user_ID );
 		wp_redirect( $redirect );
 		die();
 	}
@@ -183,7 +183,7 @@ function kbs_process_register_form() {
 		$url = remove_query_arg( array( 'kbs_notice', 'kbs_redirect' ) );
 		wp_redirect( add_query_arg( array(
 			'kbs_notice'   => $error,
-			'kbs_redirect' => isset( $_POST['kbs_redirect'] ) ? sanitize_url( wp_unslash( $_GET['kbs_redirect'] ) ) : ''
+			'kbs_redirect' => isset( $_POST['kbs_redirect'] ) ? sanitize_url( wp_unslash( $_POST['kbs_redirect'] ) ) : ''
 		), $url ) );
 		die();
 	}
@@ -199,7 +199,7 @@ function kbs_process_register_form() {
 
     $user_data['user_login'] = kbs_create_user_name( $user_data );
 
-	$redirect = apply_filters( 'kbs_register_redirect', isset( $_POST['kbs_redirect'] ) ? sanitize_url( wp_unslash( $_GET['kbs_redirect'] ) ) : '' );
+	$redirect = apply_filters( 'kbs_register_redirect', isset( $_POST['kbs_redirect'] ) ? sanitize_url( wp_unslash( $_POST['kbs_redirect'] ) ) : '' );
 
 	kbs_register_and_login_new_user( $user_data );
 
