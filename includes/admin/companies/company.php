@@ -186,7 +186,7 @@ function kbs_company_post_save( $post_id, $post, $update )	{
 			} elseif ( is_string( $_POST[ $field ] ) )	{
 				$posted_value = sanitize_text_field( wp_unslash( $_POST[ $field ] ) );
 			} elseif ( is_int( $_POST[ $field ] ) )	{
-				$posted_value = absint( wp_unslash( $_POST[ $field ] ) );
+				$posted_value = absint( $_POST[ $field ] );
 			} elseif( is_array( $_POST[ $field ] ) )	{
 				$posted_value = array_map( 'absint', $_POST[ $field ] );
 			}

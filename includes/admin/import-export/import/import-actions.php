@@ -29,7 +29,7 @@ function kbs_tools_settings_process_import() {
 		return;
     }
 
-	if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['kbs_import_nonce'] ) ), 'kbs_import_nonce' ) )   {
+	if ( ! wp_verify_nonce( $_POST['kbs_import_nonce'], 'kbs_import_nonce' ) )   {
 		return;
     }
 

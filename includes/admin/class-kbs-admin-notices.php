@@ -145,7 +145,7 @@ class KBS_Admin_Notices	{
             <div class="notice notice-info">
                 <p><strong><?php printf(
                     esc_html__( 'Editing: %s.', 'kb-support' ),
-                    esc_html( get_the_title( absint( wp_unslash( $_GET['field_id'] ) ) ) )
+                    esc_html( get_the_title( absint( $_GET['field_id'] ) ) )
                 ); ?></strong></p>
             </div>
             <?php echo ob_get_clean();

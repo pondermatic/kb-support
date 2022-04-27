@@ -42,7 +42,7 @@ function kbs_do_ajax_export() {
 
 	$_REQUEST = $form = (array) $form;
 
-	if ( ! isset( $_REQUEST['kbs_ajax_export'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['kbs_ajax_export'] ) ), 'kbs_ajax_export' ) ) {
+	if ( ! isset( $_REQUEST['kbs_ajax_export'] ) || ! wp_verify_nonce( $_REQUEST['kbs_ajax_export'], 'kbs_ajax_export' ) ) {
 		die( '-2' );
 	}
 

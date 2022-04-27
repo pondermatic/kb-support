@@ -25,7 +25,7 @@ function kbs_process_batch_export_download() {
         return;
     }
 
-	if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ), 'kbs-batch-export' ) ) {
+	if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], 'kbs-batch-export' ) ) {
 		wp_die( esc_html__( 'Nonce verification failed', 'kb-support' ), esc_html__( 'Error', 'kb-support' ), array( 'response' => 403 ) );
 	}
 
@@ -64,7 +64,7 @@ function kbs_tools_settings_process_export() {
 		return;
     }
 
-	if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['kbs_export_nonce'] ) ), 'kbs_export_nonce' ) )    {
+	if ( ! wp_verify_nonce( $_POST['kbs_export_nonce'], 'kbs_export_nonce' ) ) {
 		return;
     }
 

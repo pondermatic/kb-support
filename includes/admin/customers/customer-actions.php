@@ -34,7 +34,7 @@ function kbs_edit_customer()	{
 	}
 
 	$customer_info = isset( $_POST['customerinfo'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['customerinfo'] ) ) : array();
-	$customer_id   = isset( $_POST['customerinfo']['id'] ) ? absint( wp_unslash( $_POST['customerinfo']['id'] ) ) : array();
+	$customer_id   = isset( $_POST['customerinfo']['id'] ) ? absint( $_POST['customerinfo']['id'] ) : array();
 
 	$customer = new KBS_Customer( $customer_id );
 	if ( empty( $customer->id ) ) {
@@ -195,7 +195,7 @@ function kbs_disconnect_customer_user_id() {
 		return;
 	}
 
-	if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'edit-customer' ) ) {
+	if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce($_POST['_wpnonce'], 'edit-customer' ) ) {
 		wp_die( esc_html__( "Cheatin' eh?!", 'kb-support' ) );
 	}
 
@@ -271,7 +271,7 @@ function kbs_add_customer_email()	{
 			$output['message'] = __( 'An error has occured. Please try again.', 'kb-support' );
 		}
 
-	} else if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'kbs-add-customer-email' ) ) {
+	} else if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( $_POST['_wpnonce'], 'kbs-add-customer-email' ) ) {
 
 		$output = array(
 			'success' => false,
@@ -367,7 +367,7 @@ function kbs_remove_customer_email()	{
 		return false;
 	}
 
-	if ( empty( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'kbs-remove-customer-email' ) ) {
+	if ( empty( $_GET['_wpnonce'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], 'kbs-remove-customer-email' ) ) {
 		wp_die( esc_html__( 'Nonce verification failed', 'kb-support' ), __( 'Error', 'kb-support' ), array( 'response' => 403 ) );
 	}
 
@@ -411,7 +411,7 @@ function kbs_set_customer_primary_email()	{
 		return;
 	}
 
-	if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'kbs-set-customer-primary-email' ) ) {
+	if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], 'kbs-set-customer-primary-email' ) ) {
 		wp_die( esc_html__( 'Nonce verification failed', 'kb-support' ), esc_html__( 'Error', 'kb-support' ), array( 'response' => 403 ) );
 	}
 
@@ -446,7 +446,7 @@ function kbs_customer_save_note() {
 		return;
 	}
 
-	if ( !isset( $_POST['add_customer_note_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['add_customer_note_nonce'] ) ), 'add-customer-note' ) ) {
+	if ( !isset( $_POST['add_customer_note_nonce'] ) || ! wp_verify_nonce( $_POST['add_customer_note_nonce'], 'add-customer-note' ) ) {
 		wp_die( esc_html__( "Cheatin' eh?!", 'kb-support' ) );
 	}
 
@@ -509,7 +509,7 @@ function kbs_customer_delete() {
 		return;
 	}
 
-	if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'delete-customer' ) ) {
+	if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( $_POST['_wpnonce'], 'delete-customer' ) ) {
 		wp_die( esc_html__( "Cheatin' eh?!", 'kb-support' ) );
 	}
 
