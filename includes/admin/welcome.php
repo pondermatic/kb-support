@@ -480,7 +480,7 @@ class KBS_Welcome {
 
 			<div class="return-to-dashboard">
             	<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-settings' ) ); ?>">
-					<?php _e( 'Configure Settings', 'kb-support' ); ?>
+					<?php esc_html_e( 'Configure Settings', 'kb-support' ); ?>
                 </a> |
                 <a href="<?php echo esc_url( self_admin_url( 'edit.php?post_type=kbs_ticket' ) ); ?>">
                     <?php printf( esc_html__( 'Go to %s', 'kb-support' ), $this->ticket_plural ); ?>
