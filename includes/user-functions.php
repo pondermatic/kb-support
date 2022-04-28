@@ -225,7 +225,7 @@ function kbs_render_user_profile_tickets_orderby_field( $user )  {
 					<?php printf(
 						'<option value="%s"%s>%s</option>',
 						esc_attr( $value ),
-						esc_html( $selected ),
+						$selected,
 						esc_html( $label )
 					); ?>
 				<?php endforeach; ?>
@@ -269,7 +269,7 @@ function kbs_render_user_profile_tickets_order_field( $user )  {
 					<?php printf(
 						'<option value="%s"%s>%s</option>',
 						esc_attr( $value ),
-						esc_html( $selected ),
+						$selected,
 						esc_html( $label )
 					); ?>
 				<?php endforeach; ?>
@@ -337,7 +337,7 @@ function kbs_render_user_profile_replies_to_load_field( $user )  {
         </th>
         <td>
             <input class="small-text" type="number" name="kbs_load_replies" id="kbs-load-replies" value="<?php echo (int)$replies_to_load; ?>" step="1" min="0" />
-            <p class="description"><?php printf( wp_kses_post( __( 'Choose the number of replies to initially load when accessing the %s page. <code>0</code> loads all.', 'kb-support' ) ), kbs_get_ticket_label_plural( true ) ); ?></p>
+            <p class="description"><?php echo wp_kses_post( sprintf( __( 'Choose the number of replies to initially load when accessing the %s page. <code>0</code> loads all.', 'kb-support' ), kbs_get_ticket_label_plural( true ) ) ); ?></p>
         </td>
     </tr>
 

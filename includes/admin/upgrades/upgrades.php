@@ -75,7 +75,7 @@ function kbs_upgrades_screen() {
 				<?php endif; ?>
 			</div>
 			<script type="text/javascript">
-				setTimeout(function() { document.location.href = "index.php?kbs-upgrade-action=<?php echo esc_html( $action ); ?>&step=<?php echo esc_html( $step ); ?>&total=<?php echo esc_html( $total ); ?>&custom=<?php echo esc_html( $custom ); ?>"; }, 250);
+				setTimeout(function() { document.location.href = "index.php?kbs-upgrade-action=<?php echo esc_attr( $action ); ?>&step=<?php echo esc_attr( $step ); ?>&total=<?php echo esc_attr( $total ); ?>&custom=<?php echo esc_attr( $custom ); ?>"; }, 250);
 			</script>
 
 		<?php else : ?>

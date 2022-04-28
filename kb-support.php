@@ -133,7 +133,7 @@ final class KB_Support {
 	 */
 	public static function instance() {
 
-		if ( ! isset( self::$instance ) && ! ( self::$instance instanceof KB_Support ) )	{
+		if ( ! isset( self::$instance ) && ! ( self::$instance instanceof KB_Support ) ) {
 			do_action( 'before_kbsupport_init' );
 
 			self::$instance = new KB_Support;
