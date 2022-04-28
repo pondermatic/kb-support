@@ -115,7 +115,7 @@ function kbs_tools_banned_emails_display() {
 			<p><?php printf( esc_html__( 'Emails addresses and domains entered into the box below will not be able log %s. To ban an entire domain, enter the domain starting with "@".', 'kb-support' ), esc_html( kbs_get_ticket_label_plural( true ) ) ); ?></p>
 			<form method="post" action="<?php echo esc_attr( admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-tools&tab=general' ) ); ?>">
 				<p>
-					<textarea name="banned_emails" rows="10" class="large-text"><?php echo implode( "\n", kbs_get_banned_emails() ); ?></textarea>
+					<textarea name="banned_emails" rows="10" class="large-text"><?php echo implode( "\n",  kbs_get_banned_emails()  ); ?></textarea>
 					<span class="description"><?php esc_html_e( 'Enter email addresses and/or domains to disallow, one per line.', 'kb-support' ); ?></span>
 				</p>
 				<p>
@@ -174,7 +174,7 @@ function kbs_tools_banned_emails_save() {
 		return;
 	}
 
-	if ( ! isset( $_POST['kbs_banned_emails_nonce'] ) || ! wp_verify_nonce( $_POST['kbs_banned_emails_nonce'], 'kbs_banned_emails_nonce' ) ) {
+	if ( ! isset( $_POST['kbs_banned_emails_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['kbs_banned_emails_nonce'] ) ), 'kbs_banned_emails_nonce' ) )	{
 		return;
 	}
 

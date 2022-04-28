@@ -579,7 +579,7 @@ class KBS_DB_Customers extends KBS_DB  {
                 $join
                 $where
                 GROUP BY $this->primary_key
-                ORDER BY %s %s
+                ORDER BY %1s %2s
                 LIMIT %d,%d;
                 ",
 				esc_sql( $args['orderby'] ),

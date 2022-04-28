@@ -243,7 +243,7 @@ function kbs_ajax_insert_ticket_reply()	{
 
 	$reply_data = array(
 		'ticket_id'   => isset( $_POST['ticket_id'] ) ? absint( $_POST['ticket_id'] ) : 0,
-		'response'    => isset( $_POST['response'] ) ? sanitize_text_field( wp_unslash( $_POST['response'] ) ) : '',
+		'response'    => isset( $_POST['response'] ) ? wp_kses_post( wp_unslash( $_POST['response'] ) ) : '',
 		'status'      => ! empty( $_POST['status'] ) ? sanitize_text_field( wp_unslash( $_POST['status'] ) ) : $ticket->post_status,
 		'close'       => isset( $_POST['close_ticket'] ) ? sanitize_text_field( wp_unslash( $_POST['close_ticket'] ) ) : '',
 		'customer_id' => $ticket->customer_id,
