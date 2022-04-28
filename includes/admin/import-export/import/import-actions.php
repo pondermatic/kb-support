@@ -37,7 +37,7 @@ function kbs_tools_settings_process_import() {
 		return;
     }
 
-	if ( kbs_get_file_extension( isset( $_FILES['import_file']['name'] ) ? sanitize_file_name( wp_unslash( $_FILES['import_file']['name'] ) ) : ' ' ) != 'json' ) {
+	if ( kbs_get_file_extension( isset( $_FILES['import_file']['name'] ) ?  $_FILES['import_file']['name']  : ' ' ) != 'json' ) {
 		wp_safe_redirect( add_query_arg( array(
             'post_type'    => 'kbs_ticket',
             'page'         => 'kbs-tools',
@@ -47,8 +47,7 @@ function kbs_tools_settings_process_import() {
         exit;
 	}
 
-	$import_file = isset( $_FILES['import_file']['tmp_name'] ) ? sanitize_file_name( wp_unslash( $_FILES['import_file']['tmp_name'] ) ) : '';
-
+	$import_file = isset( $_FILES['import_file']['tmp_name'] ) ? $_FILES['import_file']['tmp_name'] : '';
 	if ( empty( $import_file ) ) {
 		wp_safe_redirect( add_query_arg( array(
             'post_type'    => 'kbs_ticket',
