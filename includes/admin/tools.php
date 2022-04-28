@@ -174,7 +174,7 @@ function kbs_tools_banned_emails_save() {
 		return;
 	}
 
-	if ( ! isset( $_POST['kbs_banned_emails_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['kbs_banned_emails_nonce'] ) ), 'kbs_banned_emails_nonce' ) )	{
+	if ( ! isset( $_POST['kbs_banned_emails_nonce'] ) || ! wp_verify_nonce( $_POST['kbs_banned_emails_nonce'], 'kbs_banned_emails_nonce' ) )	{
 		return;
 	}
 
