@@ -269,7 +269,7 @@ function kbs_get_reply_html( $reply, $ticket_id = 0, $expand = false ) {
                         <?php foreach( $files as $file ) : ?>
                             <li>
                             	<a href="<?php echo esc_url( wp_get_attachment_url( $file->ID ) ); ?>" target="_blank">
-									<?php echo esc_url( basename( get_attached_file( $file->ID ) ) ); ?>
+									<?php echo esc_html( basename( get_attached_file( $file->ID ) ) ); ?>
                                 </a>
                             </li>
                         <?php endforeach; ?>

@@ -110,7 +110,7 @@ function kbs_admin_footer_for_thickbox() {
 				</p>
 
 				<p class="submit">
-					<input type="button" id="kbs-insert-link" class="button-primary" value="<?php echo sprintf( esc_html__( 'Link %s', 'kb-support' ), esc_html( $single_article ) ); ?>" onclick="linkArticle();" />
+					<input type="button" id="kbs-insert-link" class="button-primary" value="<?php echo sprintf( esc_attr__( 'Link %s', 'kb-support' ), esc_html( $single_article ) ); ?>" onclick="linkArticle();" />
 					<a id="kbs-cancel-link-article" class="button-secondary" onclick="tb_remove();"><?php esc_html_e( 'Cancel', 'kb-support' ); ?></a>
 				</p>
 			</div>

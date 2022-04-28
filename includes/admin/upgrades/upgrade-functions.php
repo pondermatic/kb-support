@@ -243,12 +243,12 @@ function kbs_show_upgrade_notice()	{
                 <div class="notice notice-error">
                     <p><strong><?php echo esc_html( $upgrade_needed['name'] ); ?></strong></p>
                     <p class="description"><?php echo $upgrade_needed['description']; ?></p>
-                    <p><?php printf(
-                        esc_html__( '<a href="%s" class="button-primary">Start Upgrade</a>', 'kb-support' ),
+                    <p><?php echo wp_kses_post( sprintf(
+                        __( '<a href="%s" class="button-primary">Start Upgrade</a>', 'kb-support' ),
                         add_query_arg( array(
                             'page'               => 'kbs-upgrades',
                             'kbs-upgrade-action' => esc_html( $upgrade_needed['action'] )
-                        ), admin_url( 'index.php' ) )
+                        ), admin_url( 'index.php' ) ) )
                     ); ?></p>
                 </div>
             <?php endforeach;
@@ -837,7 +837,7 @@ function kbs_upgrade_render_upgrade_sequential_ticket_numbers() {
     if ( ! $needs_migration ) : ?>
         <div id="kbs-migration-complete" class="notice notice-success">
 			<p>
-				<?php printf( esc_html__( '<strong>Update complete:</strong> You have already completed the update to %s numbers.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ); ?>
+				<?php echo wp_kses_post( sprintf( __( '<strong>Update complete:</strong> You have already completed the update to %s numbers.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ) ); ?>
 			</p>
             <p class="return-to-dashboard">
                 <a href="<?php echo esc_url( admin_url() ); ?>">
@@ -961,7 +961,7 @@ function kbs_upgrade_render_upgrade_ticket_sources()	{
 	if ( $migration_complete ) : ?>
 		<div id="kbs-migration-complete" class="notice notice-success">
 			<p>
-				<?php printf( wp_kses_post( __( '<strong>Migration complete:</strong> You have already completed the update to %s sources.', 'kb-support' ) ), kbs_get_ticket_label_singular( true ) ); ?>
+				<?php echo wp_kses_post( sprintf( __( '<strong>Migration complete:</strong> You have already completed the update to %s sources.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ) ); ?>
 			</p>
             <p class="return-to-dashboard">
                 <a href="<?php echo esc_url( admin_url() ); ?>">
@@ -977,7 +977,7 @@ function kbs_upgrade_render_upgrade_ticket_sources()	{
 
 	<div id="kbs-migration-ready" class="notice notice-success" style="display: none;">
 		<p>
-			<?php printf( wp_kses_post( __( '<strong>%s Upgrade Complete:</strong> All database upgrades have been completed.', 'kb-support' ) ), kbs_get_ticket_label_singular() ); ?>
+			<?php echo wp_kses_post( sprintf( __( '<strong>%s Upgrade Complete:</strong> All database upgrades have been completed.', 'kb-support' ), kbs_get_ticket_label_singular() ) ); ?>
 			<br /><br />
 			<?php esc_html_e( 'You may now leave this page.', 'kb-support' ); ?>
 		</p>
@@ -1082,7 +1082,7 @@ function kbs_upgrade_render_upgrade_ticket_departments()	{
 	if ( $migration_complete ) : ?>
 		<div id="kbs-migration-complete" class="notice notice-success">
 			<p>
-				<?php printf( wp_kses_post( __( '<strong>Migration complete:</strong> You have already completed the update to %s departments.', 'kb-support' ) ), kbs_get_ticket_label_singular( true ) ); ?>
+				<?php echo wp_kses_post( sprintf(  __( '<strong>Migration complete:</strong> You have already completed the update to %s departments.', 'kb-support' ) , kbs_get_ticket_label_singular( true ) ) ); ?>
 			</p>
             <p class="return-to-dashboard">
                 <a href="<?php echo esc_url( admin_url() ); ?>">
@@ -1098,7 +1098,7 @@ function kbs_upgrade_render_upgrade_ticket_departments()	{
 
 	<div id="kbs-migration-ready" class="notice notice-success" style="display: none;">
 		<p>
-			<?php printf( wp_kses_post( __( '<strong>%s Upgrade Complete:</strong> All database upgrades have been completed.', 'kb-support' ) ), kbs_get_ticket_label_singular() ); ?>
+			<?php echo wp_kses_post( sprintf( __( '<strong>%s Upgrade Complete:</strong> All database upgrades have been completed.', 'kb-support' ), kbs_get_ticket_label_singular() ) ); ?>
 			<br /><br />
 			<?php esc_html_e( 'You may now leave this page.', 'kb-support' ); ?>
 		</p>
@@ -1172,10 +1172,10 @@ function kbs_upgrade_render_upgrade_ticket_departments()	{
 
 				<?php if ( ! $migration_complete ) : ?>
 					<span class="kbs-migration allowed">
-						<input type="submit" id="update-ticket-departments-submit" value="<?php printf( esc_html__( 'Update %s Departments', 'kb-support' ), kbs_get_ticket_label_singular() ); ?>" class="button-primary"/>
+						<input type="submit" id="update-ticket-departments-submit" value="<?php printf( esc_attr__( 'Update %s Departments', 'kb-support' ), kbs_get_ticket_label_singular() ); ?>" class="button-primary"/>
 					</span>
 				<?php else: ?>
-					<input type="submit" disabled="disabled" id="update-ticket-departments-submit" value="<?php printf( esc_html__( 'Update %s Departments', 'kb-support' ), kbs_get_ticket_label_singular() ); ?>" class="button-secondary"/>
+					<input type="submit" disabled="disabled" id="update-ticket-departments-submit" value="<?php printf( esc_attr__( 'Update %s Departments', 'kb-support' ), kbs_get_ticket_label_singular() ); ?>" class="button-secondary"/>
 					&mdash; <?php printf( esc_html__( '%s Departments have already been updated.', 'kb-support' ), kbs_get_ticket_label_singular() ); ?>
 				<?php endif; ?>
 
@@ -1203,7 +1203,7 @@ function kbs_upgrade_render_upgrade_article_monthly_count()	{
 	if ( $migration_complete ) : ?>
 		<div id="kbs-migration-complete" class="notice notice-success">
 			<p>
-				<?php printf( wp_kses_post( __( '<strong>Migration complete:</strong> You have already completed the update to %s monthly view counts.', 'kb-support' ) ), kbs_get_article_label_plural() ); ?>
+				<?php echo wp_kses_post( sprintf( __( '<strong>Migration complete:</strong> You have already completed the update to %s monthly view counts.', 'kb-support' ), kbs_get_article_label_plural() ) ); ?>
 			</p>
             <p class="return-to-dashboard">
                 <a href="<?php echo esc_url( admin_url() ); ?>">
@@ -1219,7 +1219,7 @@ function kbs_upgrade_render_upgrade_article_monthly_count()	{
 
 	<div id="kbs-migration-ready" class="notice notice-success" style="display: none;">
 		<p>
-			<?php printf( wp_kses_post( __( '<strong>%s Upgrade Complete:</strong> All database upgrades have been completed.', 'kb-support' ) ), kbs_get_article_label_plural() ); ?>
+			<?php echo wp_kses_post( sprintf(  __( '<strong>%s Upgrade Complete:</strong> All database upgrades have been completed.', 'kb-support' ), kbs_get_article_label_plural() ) ); ?>
 			<br /><br />
 			<?php esc_html_e( 'You may now leave this page.', 'kb-support' ); ?>
 		</p>

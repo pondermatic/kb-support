@@ -265,10 +265,10 @@ function kbs_render_form_field_row( $field, $form )	{
     <td><?php echo kbs_display_field_setting_icons( $field->ID ); ?></td>
     
     <td>
-    	<a href="<?php echo esc_attr( $edit ); ?>" class="button button-primary button-small"><?php esc_html_e( 'Edit', 'kb-support' ); ?></a>
+    	<a href="<?php echo esc_url( $edit ); ?>" class="button button-primary button-small"><?php esc_html_e( 'Edit', 'kb-support' ); ?></a>
 
         <?php if ( kbs_can_delete_field( $field->ID ) ) : ?>
-	        <a href="<?php echo esc_attr( $delete ); ?>" class="button button-secondary button-small"><?php esc_html_e( 'Delete', 'kb-support' ); ?></a>
+	        <a href="<?php echo esc_url( $delete ); ?>" class="button button-secondary button-small"><?php esc_html_e( 'Delete', 'kb-support' ); ?></a>
         <?php endif; ?>
     </td>
     

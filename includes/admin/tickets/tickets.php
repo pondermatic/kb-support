@@ -291,7 +291,7 @@ function kb_tickets_post_column_customer( $ticket_id, $kbs_ticket )	{
 			'id'        => esc_attr( $kbs_ticket->customer_id )
 		), admin_url( 'edit.php' ) );
 
-		$output = '<a href="' . $customer_page . '">' . esc_html( $customer->name ). '</a>';
+		$output = '<a href="' . esc_url( $customer_page ) . '">' . esc_html( $customer->name ) . '</a>';
 
 	} else	{
 		$output = esc_html__( 'No Customer Assigned', 'kb-support' );

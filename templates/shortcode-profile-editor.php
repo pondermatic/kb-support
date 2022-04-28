@@ -229,7 +229,7 @@ if ( ! is_user_logged_in() ) : ?>
 						<div class="kbs_profile_editor_replies_to_load">
                             <p>
                             	<label for="kbs_number_replies"><?php esc_html_e( 'Replies to Load', 'kb-support' ); ?></label>
-                                <input type="number" class="kbs-input" name="kbs_number_replies" id="kbs-number-replies" value="<?php echo esc_attr( $customer->get_replies_to_load() ); ?>" min="0" max="50" step="1" /><span class="kbs-description"><?php printf( wp_kses_post( __( 'How many replies do you want to initially load on the %s Manager page? <code>0</code> loads all.', 'kb-support' ) ), kbs_get_ticket_label_singular() ); ?></span>
+                                <input type="number" class="kbs-input" name="kbs_number_replies" id="kbs-number-replies" value="<?php echo esc_attr( $customer->get_replies_to_load() ); ?>" min="0" max="50" step="1" /><span class="kbs-description"><?php echo wp_kses_post( sprintf( __( 'How many replies do you want to initially load on the %s Manager page? <code>0</code> loads all.', 'kb-support' ), kbs_get_ticket_label_singular() ) ); ?></span>
                             </p>
                         </div>
 
@@ -238,7 +238,7 @@ if ( ! is_user_logged_in() ) : ?>
 						<div class="kbs_profile_editor_replies_to_expand">
                             <p>
                             	<label for="kbs_expand_replies"><?php esc_html_e( 'Replies to Expand', 'kb-support' ); ?></label>
-                                <input type="number" class="kbs-input" name="kbs_expand_replies" id="kbs-expand-replies" value="<?php echo esc_attr( $customer->get_replies_to_expand() ); ?>" min="0" max="50" step="1" /><span class="kbs-description"><?php printf( wp_kses_post( __( 'How many replies do you want to initially expand on the %s Manager page? <code>0</code> expands none.', 'kb-support' ) ), kbs_get_ticket_label_singular() ); ?></span>
+                                <input type="number" class="kbs-input" name="kbs_expand_replies" id="kbs-expand-replies" value="<?php echo esc_attr( $customer->get_replies_to_expand() ); ?>" min="0" max="50" step="1" /><span class="kbs-description"><?php echo wp_kses_post( sprintf( __( 'How many replies do you want to initially expand on the %s Manager page? <code>0</code> expands none.', 'kb-support' ) , kbs_get_ticket_label_singular() ) ); ?></span>
                             </p>
                         </div>
 
@@ -267,7 +267,7 @@ if ( ! is_user_logged_in() ) : ?>
                                 <input type="hidden" name="kbs_profile_editor_nonce" value="<?php echo esc_html( wp_create_nonce( 'kbs-profile-editor-nonce' ) ); ?>" />
                                 <input type="hidden" name="kbs_action" value="edit_user_profile" />
                                 <input type="hidden" name="kbs_redirect" value="<?php echo esc_url( kbs_get_current_page_url() ); ?>" />
-                                <input name="kbs_profile_editor_submit" id="kbs_profile_editor_submit" type="submit" class="kbs_submit" value="<?php esc_html_e( 'Save Changes', 'kb-support' ); ?>" />
+                                <input name="kbs_profile_editor_submit" id="kbs_profile_editor_submit" type="submit" class="kbs_submit" value="<?php esc_attr_e( 'Save Changes', 'kb-support' ); ?>" />
                             </p>
                         </div>
 

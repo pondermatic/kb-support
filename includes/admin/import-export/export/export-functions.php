@@ -30,7 +30,7 @@ function kbs_do_ajax_export() {
 	if( isset( $_POST['form'] ) ){
 		parse_str( $_POST['form'], $form );
 	}
-	if( !empty( $form ) ){
+	if( $form && !empty( $form ) ){
 		foreach( $form as $key => $value ){
 			if( '_wp_http_referer' == $key ){
 				$form[ $key ]  = sanitize_url( wp_unslash( $form[ $key ] ) );

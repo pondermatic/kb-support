@@ -1769,10 +1769,10 @@ function kbs_password_callback( $args ) {
  * @return	void
  */
 function kbs_missing_callback($args) {
-	printf(
-		esc_html__( 'The callback function used for the %s setting is missing.', 'kb-support' ),
+	echo wp_kses_post( sprintf(
+		 __( 'The callback function used for the %s setting is missing.', 'kb-support' ),
 		'<strong>' . esc_html( $args['id'] ) . '</strong>'
-	);
+	) );
 } // kbs_missing_callback
 
 /**

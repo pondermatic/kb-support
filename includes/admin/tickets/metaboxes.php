@@ -368,7 +368,7 @@ function kbs_ticket_metabox_save_row( $ticket_id )	{
                     <?php if ( ! $kbs_ticket_update && kbs_can_edit_customers() ) : ?>
                         <br>
                         <span class="add-ticket-customer description">
-                            <a href="#TB_inline?width=400&height=350&inlineId=add-customer" title="<?php esc_html_e( 'Add a New Customer', 'kb-support' ); ?>" class="thickbox kbs-thickbox" style="padding-left: .4em;"><?php esc_html_e( 'Add New', 'kb-support' ); ?></a>
+                            <a href="#TB_inline?width=400&height=350&inlineId=add-customer" title="<?php esc_attr_e( 'Add a New Customer', 'kb-support' ); ?>" class="thickbox kbs-thickbox" style="padding-left: .4em;"><?php esc_html_e( 'Add New', 'kb-support' ); ?></a>
                         </span>
                     <?php endif; ?>
                 </div>
@@ -589,7 +589,7 @@ function kbs_ticket_metabox_flagged_notice_section( $ticket_id )    {
     $class = $kbs_ticket->flagged ? '' : ' kbs-hidden';
 
     ob_start(); ?>
-	<div id="kbs-ticket-flag-notice" class="notice-wrap<?php echo esc_html( $class ); ?>">
+	<div id="kbs-ticket-flag-notice" class="notice-wrap<?php echo esc_attr( $class ); ?>">
 		<div class="notice notice-warning notice-alt inline">
 			<p><span class="dashicons dashicons-flag kbs-notice-alert"></span> <?php printf(
 				esc_html__( 'This %s has been flagged.', 'kb-support' ),
@@ -917,10 +917,10 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 
 	if ( 'closed' == $kbs_ticket->post_status ) : ?>
 		<p>
-			<?php printf( wp_kses_post( __( 'This %1$s is currently closed. <a href="%2$s">Re-open %3$s.</a>', 'kb-support' ) ),
+			<?php echo wp_kses_post( sprintf( __( 'This %1$s is currently closed. <a href="%2$s">Re-open %3$s.</a>', 'kb-support' ),
 				esc_html( kbs_get_ticket_label_singular( true ) ),
 				esc_url( wp_nonce_url( add_query_arg( 'kbs-action', 're-open-ticket', get_edit_post_link( $ticket_id ) ), 'kbs-reopen-ticket', 'kbs-ticket-nonce' ) ),
-				esc_html( kbs_get_ticket_label_singular() )
+				esc_html( kbs_get_ticket_label_singular() ) )
 			); ?>
 		</p>
 	<?php else :
@@ -947,13 +947,13 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 
 		if ( kbs_agent_can_set_status_on_reply() ) : ?>
 			<p><label>
-				<?php printf(
-					wp_kses_post( __( '<strong>Set status to</strong> %s <strong>and</strong>&nbsp;', 'kb-support' ) ),
+				<?php echo wp_kses_post( sprintf(
+					 __( '<strong>Set status to</strong> %s <strong>and</strong>&nbsp;', 'kb-support' ),
 					KBS()->html->ticket_status_dropdown( array(
 						'name'     => 'ticket_reply_status',
 						'selected' => esc_html( kbs_agent_get_default_reply_status( $kbs_ticket->ID ) ),
 						'chosen'   => true
-					) )
+					) ) )
 				); ?> <a id="kbs-reply-update" class="button button-primary"><?php esc_html_e( 'Reply', 'kb-support' ); ?></a></label>
 			</p>
 			<p><a id="kbs-reply-close" class="button button-secondary"><?php esc_html_e( 'Reply and Close', 'kb-support' ); ?></a></p>

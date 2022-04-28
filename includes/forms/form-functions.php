@@ -1087,9 +1087,9 @@ function kbs_render_agree_to_privacy_policy_field()	{
 		<?php do_action( 'kbs_before_privacy_policy' ); ?>
 
         <?php if ( function_exists( 'apply_shortcodes' ) ) : ?>
-            <?php echo wpautop( apply_shortcodes( stripslashes( wp_kses_post( $privacy_text ) ) ) ); ?>
+            <?php echo wp_kses_post( wpautop( apply_shortcodes( stripslashes( $privacy_text ) ) ) ); ?>
         <?php else : ?>
-            <?php echo wpautop( do_shortcode( stripslashes( $privacy_text ) ) ); ?>
+            <?php echo wp_kses_post( wpautop( do_shortcode( stripslashes( $privacy_text ) ) ) ); ?>
         <?php endif; ?>
 
 		<?php do_action( 'kbs_after_privacy_policy' ); ?>

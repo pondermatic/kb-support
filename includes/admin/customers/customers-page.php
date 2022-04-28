@@ -290,7 +290,7 @@ function kbs_customers_view( $customer ) {
 
 					<span class="customer-name info-item edit-item"><input size="20" data-key="email" name="customerinfo[email]" type="text" value="<?php echo esc_attr( $customer->email ); ?>" placeholder="<?php esc_attr_e( 'Customer Email', 'kb-support' ); ?>" /></span>
 
-					<span class="customer-email info-item editable" data-key="email"><?php echo $customer->email; ?></span>
+					<span class="customer-email info-item editable" data-key="email"><?php echo esc_html( $customer->email ); ?></span>
 
 					<span class="customer-primary-phone info-item edit-item"><input size="20" data-key="primary-phone" name="customerinfo[primary_phone]" type="text" value="<?php echo esc_attr( $customer->primary_phone ); ?>" placeholder="<?php esc_attr_e( 'Customer Primary Phone', 'kb-support' ); ?>" /></span>
 
@@ -302,7 +302,7 @@ function kbs_customers_view( $customer ) {
 
 					<span class="customer-website info-item edit-item"><input size="20" data-key="web-address" name="customerinfo[website]" type="text" value="<?php echo esc_url( $customer->website ); ?>" placeholder="<?php esc_attr_e( 'http://', 'kb-support' ); ?>" /></span>
 
-					<span class="customer-website info-item editable" data-key="website"><?php echo  $customer->website; ?></span>
+					<span class="customer-website info-item editable" data-key="website"><?php echo  esc_url( $customer->website ); ?></span>
 
 					<span class="customer-since info-item">
 						<?php esc_html_e( 'Customer since', 'kb-support' ); ?>
@@ -359,7 +359,7 @@ function kbs_customers_view( $customer ) {
 			</div>
 
 			<span id="customer-edit-actions" class="edit-item">
-				<input type="hidden" data-key="id" name="customerinfo[id]" value="<?php echo esc_html( $customer->id ); ?>" />
+				<input type="hidden" data-key="id" name="customerinfo[id]" value="<?php echo esc_attr( $customer->id ); ?>" />
 				<?php wp_nonce_field( 'edit-customer', '_wpnonce', false, true ); ?>
 				<input type="hidden" name="kbs-action" value="edit-customer" />
 				<input type="submit" id="kbs-edit-customer-save" class="button-secondary" value="<?php esc_attr_e( 'Update Customer', 'kb-support' ); ?>" />
@@ -417,9 +417,9 @@ function kbs_customers_view( $customer ) {
 										$promote_url = wp_nonce_url( add_query_arg( array( 'email' => rawurlencode( $email ), 'kbs-action' => 'customer-primary-email'), $base_url ), 'kbs-set-customer-primary-email' );
 										$remove_url  = wp_nonce_url( add_query_arg( array( 'email' => rawurlencode( $email ), 'kbs-action' => 'customer-remove-email'), $base_url ), 'kbs-remove-customer-email' );
 									?>
-									<a href="<?php echo esc_attr( $promote_url ); ?>"><?php esc_html_e( 'Make Primary', 'kb-support' ); ?></a>
+									<a href="<?php echo esc_url( $promote_url ); ?>"><?php esc_html_e( 'Make Primary', 'kb-support' ); ?></a>
 									&nbsp;|&nbsp;
-									<a href="<?php echo esc_attr( $remove_url ); ?>" class="delete"><?php esc_html_e( 'Remove', 'kb-support' ); ?></a>
+									<a href="<?php echo esc_url( $remove_url ); ?>" class="delete"><?php esc_html_e( 'Remove', 'kb-support' ); ?></a>
 								<?php endif; ?>
 							</td>
 						</tr>
@@ -461,7 +461,7 @@ function kbs_customers_view( $customer ) {
 				<?php if ( ! empty( $tickets ) ) : ?>
 					<?php foreach ( $tickets as $ticket ) : ?>
 						<tr>
-							<td><a href="<?php echo esc_html( admin_url( 'post.php?post=' . $ticket->ID . '&action=edit' ) ); ?>">
+							<td><a href="<?php echo esc_url( admin_url( 'post.php?post=' . $ticket->ID . '&action=edit' ) ); ?>">
 									<?php echo kbs_format_ticket_number( kbs_get_ticket_number( $ticket->ID ) ); ?>
 								</a>
                             </td>
@@ -634,7 +634,7 @@ function kbs_customers_delete_view( $customer ) {
 					<input type="hidden" name="customer_id" value="<?php echo esc_attr( $customer->id ); ?>" />
 					<?php wp_nonce_field( 'delete-customer', '_wpnonce', false, true ); ?>
 					<input type="hidden" name="kbs-action" value="delete-customer" />
-					<input type="submit" disabled="disabled" id="kbs-delete-customer" class="button-primary" value="<?php esc_html_e( 'Delete Customer', 'kb-support' ); ?>" />
+					<input type="submit" disabled="disabled" id="kbs-delete-customer" class="button-primary" value="<?php esc_attr_e( 'Delete Customer', 'kb-support' ); ?>" />
 					<a id="kbs-delete-customer-cancel" href="<?php echo esc_url( admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-customers&view=userdata&id=' . $customer->id ) ); ?>" class="delete"><?php esc_html_e( 'Cancel', 'kb-support' ); ?></a>
 				</span>
 

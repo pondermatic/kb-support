@@ -147,10 +147,10 @@ class KBS_Welcome {
 
 			<?php $this->get_welcome_header() ?>
 			<p class="about-text"><?php
-				printf(
+				echo wp_kses_post( sprintf(
 				/* translators: %s: https://kb-support.com/kb-support-1-1-released/ */
-					wp_kses_post( __( 'Thanks for updating to the latest version of KB Support! Take a moment to review the improvements and bug fixes included within this release below. You can also review the full <a href="%s" target="_blank">release notes here</a>.', 'kb-support' ) ),
-					esc_url( 'https://kb-support.com/kb-support-1-1-released/' )
+					__( 'Thanks for updating to the latest version of KB Support! Take a moment to review the improvements and bug fixes included within this release below. You can also review the full <a href="%s" target="_blank">release notes here</a>.', 'kb-support' ) ,
+					esc_url( 'https://kb-support.com/kb-support-1-1-released/' ) )
 				);
 			?></p>
 
@@ -177,8 +177,8 @@ class KBS_Welcome {
 						strtolower( $this->ticket_singular )
 					); ?></p>
 
-                    <p><?php printf(
-						esc_html__( 'Enable sequential %1$s from <span class="return-to-dashboard"><a href="%2$s">%3$s &rarr; Settings &rarr; %3$s</a></span>', 'kb-support' ),
+                    <p><?php echo wp_kses_post( sprintf(
+						__( 'Enable sequential %1$s from <span class="return-to-dashboard"><a href="%2$s">%3$s &rarr; Settings &rarr; %3$s</a></span>', 'kb-support' ),
 						strtolower( $this->ticket_plural ),
 						add_query_arg( array(
 							'post_type' => 'kbs_ticket',
@@ -186,7 +186,7 @@ class KBS_Welcome {
 							'tab'       => 'tickets'
 						), esc_url( admin_url( 'edit.php' ) ) ),
 						$this->ticket_plural
-					); ?></p>
+					) ); ?></p>
 
                     <a href="https://kb-support.com/articles/enabling-sequential-ticket-numbers/" target="_blank" class="button-secondary">
 						<?php esc_html_e( 'Learn More', 'kb-support' ); ?>
@@ -217,16 +217,16 @@ class KBS_Welcome {
 						strtolower( $this->ticket_singular )
 					); ?></p>
 
-					<p><?php printf(
-						wp_kses_post( __( 'Enable multiple agents from <span class="return-to-dashboard"><a href="%1$s">%2$s &rarr; Settings &rarr; %2$s &rarr; Agent Settings</a></span>' ), 'kb-support' ),
+					<p><?php echo wp_kses_post( sprintf(
+						 __( 'Enable multiple agents from <span class="return-to-dashboard"><a href="%1$s">%2$s &rarr; Settings &rarr; %2$s &rarr; Agent Settings</a></span>' ), 'kb-support' ),
 						add_query_arg( array(
 							'post_type' => 'kbs_ticket',
 							'page'      => 'kbs-settings',
 							'tab'       => 'tickets',
 							'section'   => 'agents'
-						), esc_url( admin_url( 'edit.php' ) ) ),
+						), esc_url( admin_url( 'edit.php' ) ),
 						$this->ticket_plural
-					); ?></p>
+					) ); ?></p>
 
                     <a href="https://kb-support.com/articles/assigning-multiple-agents-ticket/" target="_blank" class="button-secondary">
 						<?php esc_html_e( 'Learn More', 'kb-support' ); ?>
@@ -263,8 +263,8 @@ class KBS_Welcome {
 						strtolower( $this->ticket_singular )
 					); ?></p>
 
-					<p><?php printf(
-						wp_kses_post( __( 'Head to <span class="return-to-dashboard"><a href="%1$s">%2$s &rarr; Settings &rarr; Emails &rarr; Notifications</a></span> to setup agent notifications.' ), 'kb-support' ),
+					<p><?php echo wp_kses_post( sprintf(
+						 __( 'Head to <span class="return-to-dashboard"><a href="%1$s">%2$s &rarr; Settings &rarr; Emails &rarr; Notifications</a></span> to setup agent notifications.' , 'kb-support' ),
 						add_query_arg( array(
 							'post_type' => 'kbs_ticket',
 							'page'      => 'kbs-settings',
@@ -272,7 +272,7 @@ class KBS_Welcome {
 							'section'   => 'ticket_notifications'
 						), esc_url( admin_url( 'edit.php' ) ) ),
 						$this->ticket_plural
-					); ?></p>
+					) ); ?></p>
 
                 </div>
 
@@ -287,8 +287,8 @@ class KBS_Welcome {
 
                     <p><?php esc_html_e( 'Export data from KB Support into a downloadable CSV file.', 'kb-support' ); ?></p>
 
-					<p><?php printf(
-						wp_kses_post( __( 'Select the Tools tab from the <span class="return-to-dashboard"><a href="%1$s">%2$s &rarr; Tools</a></span> menu. From here you can export %3$s and customer data into a CSV file which will automatically be downloaded to your PC.', 'kb-support' ) ),
+					<p><?php echo wp_kses_post( sprintf(
+						 __( 'Select the Tools tab from the <span class="return-to-dashboard"><a href="%1$s">%2$s &rarr; Tools</a></span> menu. From here you can export %3$s and customer data into a CSV file which will automatically be downloaded to your PC.', 'kb-support' ),
 						add_query_arg( array(
 							'post_type' => 'kbs_ticket',
 							'page'      => 'kbs-tools',
@@ -296,7 +296,7 @@ class KBS_Welcome {
 						), esc_url( admin_url( 'edit.php' ) ) ),
 						$this->ticket_plural,
 						strtolower( $this->ticket_singular )
-					); ?></p>
+					) ); ?></p>
 
                 </div>
 
@@ -348,15 +348,15 @@ class KBS_Welcome {
 			<?php $this->get_welcome_header() ?>
 
             <p class="about-text"><?php
-				printf(
+				echo wp_kses_post( sprintf(
 				/* translators: %s: https://kb-support.com/support/ */
-					wp_kses_post( __( 'Welcome to the KB Support getting started guide! If you\'re a first time user, you\'re now well on your way to making your support business even more efficient. We encourage you to check out the <a href="%s" target="_blank">plugin documentation</a> and getting started guide below.', 'kb-support' ) ),
+					 __( 'Welcome to the KB Support getting started guide! If you\'re a first time user, you\'re now well on your way to making your support business even more efficient. We encourage you to check out the <a href="%s" target="_blank">plugin documentation</a> and getting started guide below.', 'kb-support' ),
 					esc_url( add_query_arg( array(
 						'utm_source'   => 'welcome',
 						'utm_medium'   => 'wp-admin',
 						'utm_campaign' => 'getting-started'
 					), 'https://kb-support.com/support/' ) )
-				);
+				) );
 			?></p>
 
 			<?php kbs_get_newsletter(); ?>
@@ -378,14 +378,14 @@ class KBS_Welcome {
                         strtolower( $this->ticket_plural )
                     ); ?></p>
 
-                    <p><?php printf(
-						esc_html( __( 'All of these settings can be managed by going to the menu and selecting <span class="return-to-dashboard"><a href="%s">%s &rarr; Settings</a></span>', 'kb-support' ) ),
+                    <p><?php echo wp_kses_post( sprintf(
+						__( 'All of these settings can be managed by going to the menu and selecting <span class="return-to-dashboard"><a href="%s">%s &rarr; Settings</a></span>', 'kb-support' ) ,
 						add_query_arg( array(
 							'post_type' => 'kbs_ticket',
 							'page'      => 'kbs-settings'
 						), esc_url( admin_url( 'edit.php' ) ) ),
 						$this->ticket_plural
-					); ?></p>
+					) ); ?></p>
                 </div>
 
                 <div class="content feature-section-item update-settings">
@@ -404,12 +404,12 @@ class KBS_Welcome {
                 <div class="content feature-section-item last-feature">
                     <h3><?php esc_html_e( 'STEP 2: Configure Your Submission Forms', 'kb-support' ); ?></h3>
 
-                    <p><?php printf(
-						esc_html( __( 'Customers will use submission forms to create %s from the front end of your website. Edit the default form we created for you during installation to make sure you have all the fields defined you need to capture all relevant information from your customers. Select from a vast number of field types and re-order them via the easy to use drag and drop interface. Forms are managed via <span class="return-to-dashboard"><a href="%s">%s &rarr; Submission Forms</a></span>', 'kb-support' ) ),
+                    <p><?php echo wp_kses_post( sprintf(
+						__( 'Customers will use submission forms to create %s from the front end of your website. Edit the default form we created for you during installation to make sure you have all the fields defined you need to capture all relevant information from your customers. Select from a vast number of field types and re-order them via the easy to use drag and drop interface. Forms are managed via <span class="return-to-dashboard"><a href="%s">%s &rarr; Submission Forms</a></span>', 'kb-support' ),
 							strtolower( $this->ticket_plural ),
 							add_query_arg( 'post_type', 'kbs_form', esc_url( admin_url( 'edit.php' ) ) ),
 							$this->ticket_plural
-					); ?></p>
+					) ); ?></p>
                 </div>
 
             </div>
@@ -427,17 +427,17 @@ class KBS_Welcome {
 						strtolower( $this->ticket_singular )
 					); ?></p>
 
-                    <p><?php printf( wp_kses_post( __(
-						'Check out our post on <a href="%1$s" target="_blank">Writing Effective Knowledge Base Articles</a> and once you\'re ready, use the <code>[kbs_articles]</code> on a page to display your knowledge base to your customers.', 'kb-support' ) ),
+                    <p><?php echo wp_kses_post( sprintf( __(
+						'Check out our post on <a href="%1$s" target="_blank">Writing Effective Knowledge Base Articles</a> and once you\'re ready, use the <code>[kbs_articles]</code> on a page to display your knowledge base to your customers.', 'kb-support' ),
 						'https://kb-support.com/writing-effective-knowledge-base-articles/',
 						$this->article_plural
-					); ?></p>
+					) ); ?></p>
 
-					<p><?php printf(
-						wp_kses_post( __( 'Select <span class="return-to-dashboard"><a href="%s">%s</a></span>from the menu to start writing.', 'kb-support' ) ),
+					<p><?php echo wp_kses_post( sprintf(
+						 __( 'Select <span class="return-to-dashboard"><a href="%s">%s</a></span>from the menu to start writing.', 'kb-support' ),
 							add_query_arg( 'post_type', 'article', admin_url( 'edit.php' ) ),
 							$this->article_plural
-					); ?></p>
+					) ); ?></p>
 
                 </div>
 
@@ -459,16 +459,16 @@ class KBS_Welcome {
                 <div class="content feature-section-item last-feature">
                     <h3><?php esc_html_e( 'STEP 4: Optionally Add More Functionality', 'kb-support' ); ?></h3>
 
-                    <p><?php printf(
-						wp_kses_post( __( 'There are many more ways in which you can customize your instance of KB Support. Take a look at our range of <a href="%s" target="_blank">extensions</a> to add even more functionality and review our extensive <a href="%s" target="_blank">support documentation</a> for additional help and tips.', 'kb-support' ) ),
+                    <p><?php echo wp_kses_post( sprintf(
+						__( 'There are many more ways in which you can customize your instance of KB Support. Take a look at our range of <a href="%s" target="_blank">extensions</a> to add even more functionality and review our extensive <a href="%s" target="_blank">support documentation</a> for additional help and tips.', 'kb-support' ),
 						'https://kb-support.com/extensions/',
 						'https://kb-support.com/support/'
-					); ?></p>
+					) ); ?></p>
 
-					<p><?php printf(
-						wp_kses_post( __( 'And of course, if you need any assistance, <a href="%s" target="_blank">log a support ticket</a> via our website and we\'ll be happy to help.', 'kb-support' ) ),
+					<p><?php echo wp_kses_post( printf(
+						__( 'And of course, if you need any assistance, <a href="%s" target="_blank">log a support ticket</a> via our website and we\'ll be happy to help.', 'kb-support' ),
 						'https://kb-support.com/log-a-support-ticket/'
-					); ?></p>
+					) ); ?></p>
 
                 </div>
 
