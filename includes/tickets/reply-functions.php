@@ -299,7 +299,10 @@ function kbs_get_reply_author_name( $reply, $role = false )	{
 	if ( is_numeric( $reply ) ) {
 		$reply = get_post( $reply );
 	}
-
+	if ( ! $reply || empty( $reply ) ) {
+		return;
+	}
+	
 	$author       = esc_html__( 'Unknown', 'kb-support' );
 	$author_role  = esc_html__( 'Customer', 'kb-support' );
     $author_email = kbs_participants_enabled() ? esc_html( get_post_meta( $reply->ID, '_kbs_reply_participant', true ) ) : false;

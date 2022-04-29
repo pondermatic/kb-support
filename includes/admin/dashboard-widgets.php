@@ -74,11 +74,11 @@ function kbs_load_dashboard_tickets_widget() {
 						<td class="b b-opened"><?php echo esc_html( $stats->get_tickets( 'this_month', '', $statuses ) ); ?></td>
 					</tr>
 					<tr>
-						<td class="first t monthly_closed"><?php echo _e( 'Closed', 'kb-support' ); ?></td>
+						<td class="first t monthly_closed"><?php echo esc_html__( 'Closed', 'kb-support' ); ?></td>
 						<td class="b b-closed"><?php echo esc_html( $stats->get_tickets( 'this_month', '', 'closed' ) ); ?></td>
 					</tr>
                     <tr>
-						<td class="first t monthly_replies"><?php echo _e( 'Replies', 'kb-support' ); ?></td>
+						<td class="first t monthly_replies"><?php echo esc_html__( 'Replies', 'kb-support' ); ?></td>
 						<td class="b b-replies"><?php echo esc_html( $stats->get_replies( 'this_month', '' ) ); ?></td>
 					</tr>
 				</tbody>
@@ -134,7 +134,7 @@ function kbs_load_dashboard_tickets_widget() {
 			<table>
 				<thead>
 					<tr>
-						<td colspan="2"><?php _e( 'Current Status', 'kb-support' ) ?></td>
+						<td colspan="2"><?php esc_html_e( 'Current Status', 'kb-support' ) ?></td>
 					</tr>
 				</thead>
 				<tbody>

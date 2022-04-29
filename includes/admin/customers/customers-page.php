@@ -149,7 +149,7 @@ function kbs_render_customer_view( $view, $callbacks ) {
     
                 $active = $view == $key ? ' nav-tab-active' : '';
     
-                echo '<a href="' . esc_url( $tab_url ) . '" title="' . esc_attr( $tab['title'] ) . '" class="nav-tab' . $active . '">';
+                echo '<a href="' . esc_url( $tab_url ) . '" title="' . esc_attr( $tab['title'] ) . '" class="nav-tab' . esc_attr( $active ) . '">';
                     echo '<span class="dashicons ' . sanitize_html_class( $tab['dashicon'] ) . '" aria-hidden="true"></span>' . esc_html( $tab['title'] );
                 echo '</a>';
             }

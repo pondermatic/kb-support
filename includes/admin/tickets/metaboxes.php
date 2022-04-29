@@ -947,13 +947,13 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 
 		if ( kbs_agent_can_set_status_on_reply() ) : ?>
 			<p><label>
-				<?php echo wp_kses_post( sprintf(
+				<?php echo sprintf(
 					 __( '<strong>Set status to</strong> %s <strong>and</strong>&nbsp;', 'kb-support' ),
 					KBS()->html->ticket_status_dropdown( array(
 						'name'     => 'ticket_reply_status',
 						'selected' => esc_html( kbs_agent_get_default_reply_status( $kbs_ticket->ID ) ),
 						'chosen'   => true
-					) ) )
+					) )
 				); ?> <a id="kbs-reply-update" class="button button-primary"><?php esc_html_e( 'Reply', 'kb-support' ); ?></a></label>
 			</p>
 			<p><a id="kbs-reply-close" class="button button-secondary"><?php esc_html_e( 'Reply and Close', 'kb-support' ); ?></a></p>

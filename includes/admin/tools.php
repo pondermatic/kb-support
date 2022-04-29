@@ -185,16 +185,22 @@ function kbs_tools_banned_emails_save() {
 	if ( ! empty( $_POST['banned_emails'] ) )	{
 
 		// Sanitize the input
-		$emails = array_map( 'sanitize_email', explode( "\n", wp_unslash( $_POST['banned_emails'] ) ) );
+		$emails = explode( "\n", wp_unslash( $_POST['banned_emails'] ) );
 		$emails = array_map( 'trim', $emails );
 		$emails = array_unique( $emails );
-		
 
-		foreach( $emails as $id => $email )	{
+		foreach ( $emails as $id => $email ) {
+
 			if ( ! is_email( $email ) )	{
+
 				if ( $email[0] != '@' )	{
-					unset( $emails[$id] );
+					unset( $emails[ $id ] );
+					continue;
 				}
+
+				$emails[ $id ] = sanitize_text_field( $email );
+			} else {
+				$emails[ $id ] = sanitize_email( $email );
 			}
 		}
 	} else	{
