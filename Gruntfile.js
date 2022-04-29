@@ -259,6 +259,7 @@ module.exports = function( grunt ) {
 						'**',
 						'!_notes/**',
 						'!node_modules/**',
+						'!tests/**',
 						'!.git/**',
 						'!.editorconfig',
 						'!.jshintrc',
