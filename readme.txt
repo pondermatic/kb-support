@@ -123,6 +123,11 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 == Changelog ==
 
+= 1.5.7 - TBA =
+Fixed: Security, sanitizations and escaping
+Changed: Removed bootstrap file calling from cdn and included the files in the plugin.
+Changed: Replaced file_get_contents call on remote files with WordPress's http-api.
+
 = 1.5.6 - 29.04.2021 =
 Fixed: Security, sanitizations and escaping
 
