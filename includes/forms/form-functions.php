@@ -844,8 +844,15 @@ function kbs_display_form_text_field( $field, $settings )	{
 	);
 
 	$output = apply_filters( 'kbs_display_form_' . $settings['type'] . '_field', $output, $field, $settings );
-
-	echo $output;
+	$allowed = array(
+		'input' => array(
+			'type'  => array(),
+			'name'  => array(),
+			'id'    => array(),
+			'class' => array()
+		),
+	);
+	echo wp_kses( $output, $allowed );
 
 } // kbs_display_form_text_field
 add_action( 'kbs_form_display_text_field', 'kbs_display_form_text_field', 10, 2 );
@@ -897,7 +904,15 @@ function kbs_display_form_textarea_field( $field, $settings )	{
 
 	$output = apply_filters( 'kbs_display_form_textarea_field', $output, $field, $settings );
 
-	echo $output;
+	$allowed = array(
+		'textarea' => array(
+			'placeholder'  => array(),
+			'name'  => array(),
+			'id'    => array(),
+			'class' => array()
+		),
+	);
+	echo wp_kses( $output, $allowed );
 
 } // kbs_display_form_textarea_field
 add_action( 'kbs_form_display_textarea_field', 'kbs_display_form_textarea_field', 10, 2 );
@@ -972,8 +987,17 @@ function kbs_display_form_select_field( $field, $settings )	{
 	$output .= '</select>';
 
 	$output = apply_filters( 'kbs_display_form_select_field', $output, $field, $settings );
-
-	echo $output;
+	$allowed = array(
+		'select' => array(
+			'name'  => array(),
+			'id'    => array(),
+			'class' => array()
+		),
+		'option' => array(
+			'value'  => array()
+		),
+	);
+	echo wp_kses( $output, $allowed );
 
 } // kbs_display_form_select_field
 add_action( 'kbs_form_display_select_field', 'kbs_display_form_select_field', 10, 2 );
@@ -1036,7 +1060,15 @@ function kbs_display_form_checkbox_field( $field, $settings )	{
 
 	$output = apply_filters( 'kbs_display_form_checkbox_field', $output, $field, $settings );
 
-	echo $output;
+	$allowed = array(
+		'input' => array(
+			'type'  => array(),
+			'name'  => array(),
+			'id'    => array(),
+			'class' => array()
+		),
+	);
+	echo wp_kses( $output, $allowed );
 
 } // kbs_display_form_textarea_field
 add_action( 'kbs_form_display_checkbox_field', 'kbs_display_form_checkbox_field', 10, 2 );
@@ -1187,8 +1219,18 @@ function kbs_display_form_checkbox_list_field( $field, $settings )	{
 	}
 
 	$output = apply_filters( 'kbs_display_form_checkbox_field', $output, $field, $settings );
+	$allowed = array(
+		'input' => array(
+			'type'  => array(),
+			'name'  => array(),
+			'id'    => array(),
+			'class' => array(),
+			'value' => array()
+		),
+		'br' => array(),
+	);
 
-	echo implode( '<br />', $output );
+	echo wp_kses( implode( '<br />', $output ), $allowed );
 
 } // kbs_display_form_checkbox_list_field
 add_action( 'kbs_form_display_checkbox_list_field', 'kbs_display_form_checkbox_list_field', 10, 2 );
@@ -1322,27 +1364,16 @@ add_action( 'kbs_form_display_file_upload_field', 'kbs_display_form_file_upload_
  */
 function kbs_validate_recaptcha( $response )	{
     $version   = kbs_get_recaptcha_version();
-	$post_data = http_build_query( array(
-        'secret'   => kbs_get_option( 'recaptcha_secret' ),
-        'response' => $response,
-        'remoteip' => isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_url( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : ''
-    ) );
 
-    $options = array( 'http' => array(
-        'method'  => 'POST',
-        'header'  => 'Content-type: application/x-www-form-urlencoded',
-        'content' => $post_data
-    ) );
+	$response = wp_remote_get("https://www.google.com/recaptcha/api/siteverify?secret=". kbs_get_option( 'recaptcha_secret' ) ."&response=". $response );
+	$result = json_decode( $response["body"], true );
 
-    $context  = stream_context_create( $options );
-    $response = file_get_contents( 'https://www.google.com/recaptcha/api/siteverify', false, $context );
-    $result   = json_decode( $response );
 
-    if ( ! empty( $result ) && true == $result->success )	{
-        $return = $result->success;
+    if ( ! empty( $result ) && true == $result['success'] )	{
+        $return = $result['success'] ;
 
         if ( 'v3' === $version )    {
-            $return = $result->action == 'submit_kbs_form' && $result->score >= 0.5;
+            $return = $result['action']  == 'submit_kbs_form' && $result['score']  >= 0.5;
         }
 
 		return $return;

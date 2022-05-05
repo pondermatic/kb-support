@@ -487,7 +487,7 @@ function kbs_render_agent_user_profile_reply_alerts_field( $user )  {
                 '<input type="checkbox" name="kbs_agent_reply_alerts" id="kbs-agent-reply-alerts" value="1"%s />',
                 $checked
             ); ?>
-            <label for="kbs-agent-reply-alerts"><?php echo $label; ?></label>
+            <label for="kbs-agent-reply-alerts"><?php echo esc_html( $label ); ?></label>
         </td>
     </tr>
 

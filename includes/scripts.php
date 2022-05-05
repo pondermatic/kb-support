@@ -94,7 +94,7 @@ function kbs_load_scripts() {
 	if ( $needs_bs4 )	{
 		wp_register_script(
 			'kbs-bootstrap-4-js',
-			'https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js',
+			KBS_PLUGIN_URL . 'assets/bootstrap/js/bootstrap.min.js',
 			array( 'jquery' ),
 			'4.2.1'
 		);
@@ -183,7 +183,7 @@ function kbs_register_styles() {
 
 		wp_register_style(
 			'kbs-bootstrap-4-css',
-			'https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css',
+			KBS_PLUGIN_URL . 'assets/bootstrap/css/bootstrap.min.css',
 			array(),
 			'4.2.1'
 		);

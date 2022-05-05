@@ -62,7 +62,7 @@ class kbs_article_categories_tags_widget extends WP_Widget {
 		echo $args['before_widget'];
 
 		if ( $title )	{
-			echo $args['before_title'] . $title . $args['after_title'];
+			echo $args['before_title'] . esc_html( $title ) . $args['after_title'];
 		}
 
 		do_action( 'kbs_before_article_taxonomy_widget' );
@@ -126,7 +126,7 @@ class kbs_article_categories_tags_widget extends WP_Widget {
 
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'count' ) ); ?>"><?php esc_html_e( 'Show Count:', 'kb-support' ); ?></label>
-			<input <?php checked( $instance['count'], 'on' ); ?> id="<?php echo $this->get_field_id( 'count' ); ?>" name="<?php echo $this->get_field_name( 'count' ); ?>" type="checkbox" />
+			<input <?php checked( $instance['count'], 'on' ); ?> id="<?php echo esc_attr( $this->get_field_id( 'count' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'count' ) ); ?>" type="checkbox" />
 		</p>
 
 		<p>
@@ -136,7 +136,7 @@ class kbs_article_categories_tags_widget extends WP_Widget {
 
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'children' ) ); ?>"><?php esc_html_e( 'Show Child Categories:', 'kb-support' ); ?></label>
-			<input <?php checked( $instance['children'], 'on' ); ?> id="<?php echo $this->get_field_id( 'children' ); ?>" name="<?php echo $this->get_field_name( 'children' ); ?>" type="checkbox" />
+			<input <?php checked( $instance['children'], 'on' ); ?> id="<?php echo esc_attr( $this->get_field_id( 'children' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'children' ) ); ?>" type="checkbox" />
 		</p>
 
 	<?php
@@ -180,7 +180,7 @@ class kbs_popular_articles_widget extends WP_Widget {
 		echo $args['before_widget'];
 
 		if ( $title )	{
-			echo $args['before_title'] . $title . $args['after_title'];
+			echo $args['before_title'] . esc_html( $title ) . $args['after_title'];
 		}
 
 		do_action( 'kbs_before_popular_articles_widget' );
@@ -206,7 +206,7 @@ class kbs_popular_articles_widget extends WP_Widget {
 
 				echo '<li>';
 				echo '<a href="' . esc_url( $url ) . '">' . esc_html( get_the_title( $article->ID ) ). '</a>';
-				echo $output_views;
+				echo esc_html( $output_views );
 				echo '</li>';
 			}
 		echo '</ul>' . "\n";

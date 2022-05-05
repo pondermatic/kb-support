@@ -244,12 +244,12 @@ function kbs_display_sla_status_icons( $ticket, $sep = '<br />', $echo = true )	
 	}
 
 	$output = array(
-		'response' => kbs_display_sla_response_status_icon( $ticket ),
+		'response' => kbs_display_sla_response_status_icon( $ticket ), 
 		'resolve'  => kbs_display_sla_resolve_status_icon( $ticket )
 	);
 
 	if ( $echo )	{
-		echo implode( $sep, $output );
+		echo wp_kses_post( implode( $sep, $output ) );
 	} else	{
 		return $output;
 	}
