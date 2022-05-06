@@ -359,7 +359,7 @@ class KBS_Display_Settings	{
                                 echo wp_kses_post( $description );
                             } else  {
                                 printf(
-                                    __( 'Save %s when purchasing the %s <strong>this week</strong>. Including renewals and upgrades!', 'kb-support' ),
+                                    esc_html__( 'Save %s when purchasing the %s <strong>this week</strong>. Including renewals and upgrades!', 'kb-support' ),
                                     wp_kses_post( $discount ),
                                     wp_kses_post( $product )
                                 );

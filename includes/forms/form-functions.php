@@ -539,15 +539,15 @@ function kbs_get_field_types()	{
 function kbs_get_mappings( $mapping = null )	{
 
 	$mappings = array(
-		'customer_first'   => __( 'Customer First Name', 'kb-support' ),
-		'customer_last'    => __( 'Customer Last Name', 'kb-support' ),
-		'customer_email'   => __( 'Customer Email', 'kb-support' ),
-		'customer_phone1'  => __( 'Customer Primary Phone', 'kb-support' ),
-		'customer_phone2'  => __( 'Customer Additional Phone', 'kb-support' ),
-		'customer_website' => __( 'Customer Website', 'kb-support' ),
-		'department'       => __( 'Department', 'kb-support' ),
-		'post_content'     => __( 'Ticket Content', 'kb-support' ),
-		'post_title'       => __( 'Ticket Title', 'kb-support' )
+		'customer_first'   => esc_html__( 'Customer First Name', 'kb-support' ),
+		'customer_last'    => esc_html__( 'Customer Last Name', 'kb-support' ),
+		'customer_email'   => esc_html__( 'Customer Email', 'kb-support' ),
+		'customer_phone1'  => esc_html__( 'Customer Primary Phone', 'kb-support' ),
+		'customer_phone2'  => esc_html__( 'Customer Additional Phone', 'kb-support' ),
+		'customer_website' => esc_html__( 'Customer Website', 'kb-support' ),
+		'department'       => esc_html__( 'Department', 'kb-support' ),
+		'post_content'     => esc_html__( 'Ticket Content', 'kb-support' ),
+		'post_title'       => esc_html__( 'Ticket Title', 'kb-support' )
 	);
 
 	if ( ! kbs_departments_enabled() )	{

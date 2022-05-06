@@ -146,8 +146,8 @@ function kbs_company_metabox_data( $post_id )	{
 		<p><label for="_kbs_company_customer"><?php esc_html_e( 'Customer', 'kb-support' ); ?>:</label><br />
         <?php echo KBS()->html->customer_dropdown( array(
 			'name'             => '_kbs_company_customer',
-			'selected'         => $kbs_company->customer,
-			'company_id'       => $kbs_company_update   ? $post_id : null,
+			'selected'         => esc_html( $kbs_company->customer ),
+			'company_id'       => $kbs_company_update   ? esc_attr( $post_id ) : null,
 			'show_company'     => ! $kbs_company_update ? true     : false,
 			'show_option_none' => false
 		) ); ?></p>

@@ -536,13 +536,13 @@ function kbs_customer_notes_view( $customer ) {
 
         <?php if ( $show_agree_to_terms ) : ?>
             <span class="customer-terms-agreement-date info-item">
-                <?php printf( esc_html__( 'Last Agreed to Terms%s', 'kb-support' ), ': ' . $terms_accepted ); ?>
+                <?php printf( esc_html__( 'Last Agreed to Terms%s', 'kb-support' ), ': ' . esc_html( $terms_accepted ) ); ?>
             </span>
         <?php endif; ?>
 
         <?php if ( $show_agree_to_privacy ) : ?>
             <span class="customer-privacy-policy-date info-item">
-                <?php printf( esc_html__( 'Last Agreed to Privacy Policy%s', 'kb-support' ),': ' . $privacy_accepted ); ?>
+                <?php printf( esc_html__( 'Last Agreed to Privacy Policy%s', 'kb-support' ),': ' . esc_html( $privacy_accepted ) ); ?>
             </span>
         <?php endif; ?>
 

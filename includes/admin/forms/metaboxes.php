@@ -663,7 +663,7 @@ function kbs_render_field_options_rows( $post_id )	{
     </div>
 
     <div id="kbs_meta_field_select_search_text_wrap">
-    	<p><strong><?php _e( 'Search Text', 'kb-support' ); ?></strong><br>
+    	<p><strong><?php esc_html_e( 'Search Text', 'kb-support' ); ?></strong><br>
         <label for="kbs_field_select_chosen_search">
 			<?php echo KBS()->html->text( array(
 				'name'  => 'kbs_field_select_chosen_search',
@@ -675,7 +675,7 @@ function kbs_render_field_options_rows( $post_id )	{
     </div>
 
     <div id="kbs_meta_field_placeholder_wrap">
-    	<p><strong><?php _e( 'Placeholder', 'kb-support' ); ?></strong><br />
+    	<p><strong><?php esc_html_e( 'Placeholder', 'kb-support' ); ?></strong><br />
 		<label for="kbs_field_placeholder">
 			<?php echo KBS()->html->text( array(
 				'name'  => 'kbs_field_placeholder',

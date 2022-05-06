@@ -116,7 +116,7 @@ class KBS_Export {
 		$cols = $this->get_csv_cols();
 		$i = 1;
 		foreach( $cols as $col_id => $column ) {
-			echo '"' . addslashes( esc_html( $column ) ) . '"';
+			echo '"' . esc_html( addslashes( $column ) ) . '"';
 			echo $i == count( $cols ) ? '' : ',';
 			$i++;
 		}
@@ -167,7 +167,7 @@ class KBS_Export {
 			foreach ( $row as $col_id => $column ) {
 				// Make sure the column is valid
 				if ( array_key_exists( $col_id, $cols ) ) {
-					echo '"' . addslashes( esc_htm( $column ) ) . '"';
+					echo '"' . esc_htm( addslashes( $column ) ) . '"';
 					echo $i == count( $cols ) ? '' : ',';
 					$i++;
 				}

@@ -368,7 +368,7 @@ function kbs_remove_customer_email()	{
 	}
 
 	if ( empty( $_GET['_wpnonce'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], 'kbs-remove-customer-email' ) ) {
-		wp_die( esc_html__( 'Nonce verification failed', 'kb-support' ), __( 'Error', 'kb-support' ), array( 'response' => 403 ) );
+		wp_die( esc_html__( 'Nonce verification failed', 'kb-support' ), esc_html__( 'Error', 'kb-support' ), array( 'response' => 403 ) );
 	}
 
 	$customer = new KBS_Customer( absint( $_GET['id'] ) );
@@ -484,7 +484,7 @@ function kbs_customer_save_note() {
 		ob_end_clean();
 
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			echo $output;
+			echo wp_kses_post( $output );
 			exit;
 		}
 
