@@ -1108,12 +1108,12 @@ function kbs_render_agree_to_privacy_policy_field()	{
 	}
 
 	if ( ! empty( $args['input_class'] ) )	{
-		$input_class = ' class="' . sanitize_html_class( $args['input_class'] ) . '"';
+		$input_class = sanitize_html_class( $args['input_class'] );
 	}
 
 	ob_start(); ?>
 
-	<p><input type="checkbox" name="kbs_agree_privacy_policy" id="kbs-agree-privacy-policy"<?php echo esc_attr( $input_class ); ?> value="1" /> <a href="#TB_inline?width=600&height=550&inlineId=kbs-ticket-privacy-policy" title="<?php echo esc_html( get_the_title( $privacy_page ) ); ?>" class="thickbox"<?php echo $label_class; ?>><?php esc_attr_e( $label, 'kb-support' ); ?></a></p>
+	<p><input type="checkbox" name="kbs_agree_privacy_policy" id="kbs-agree-privacy-policy" class="<?php echo esc_attr( $input_class ); ?>" value="1" /> <a href="#TB_inline?width=600&height=550&inlineId=kbs-ticket-privacy-policy" title="<?php echo esc_attr( get_the_title( $privacy_page ) ); ?>" class="thickbox<?php echo esc_attr( $label_class ); ?>"><?php esc_html_e( $label, 'kb-support' ); ?></a></p>
 
 	<div id="kbs-ticket-privacy-policy" class="kbs_hidden">
 		<?php do_action( 'kbs_before_privacy_policy' ); ?>
@@ -1148,7 +1148,7 @@ function kbs_render_agree_to_terms_field()	{
 	$label          = kbs_get_option( 'agree_terms_label', false );
     $description    = kbs_get_option( 'agree_terms_description', false );
 	$terms_heading  = kbs_get_option( 'agree_terms_heading', sprintf(
-		__( 'Terms and Conditions for Support %s', 'kb-support' ), kbs_get_ticket_label_plural()
+		esc_html__( 'Terms and Conditions for Support %s', 'kb-support' ), kbs_get_ticket_label_plural()
 	) );
 
 	if ( ! $agree_to_terms || ! $agree_text || ! $label )	{
@@ -1168,12 +1168,12 @@ function kbs_render_agree_to_terms_field()	{
 	}
 
 	if ( ! empty( $args['input_class'] ) )	{
-		$input_class = ' class="' . sanitize_html_class( $args['input_class'] ) . '"';
+		$input_class = sanitize_html_class( $args['input_class'] );
 	}
 
 	ob_start(); ?>
 
-	<p><input type="checkbox" name="kbs_agree_terms" id="kbs-agree-terms"<?php echo $input_class; ?> value="1" /> <a href="#TB_inline?width=600&height=550&inlineId=kbs-ticket-terms-conditions" title="<?php esc_attr_e( $terms_heading, 'kb-support' ); ?>" class="thickbox"<?php echo $label_class; ?>><?php esc_attr_e( $label, 'kb-support' ); ?></a></p>
+	<p><input type="checkbox" name="kbs_agree_terms" id="kbs-agree-terms" class="<?php echo esc_attr( $input_class ); ?>" value="1" /> <a href="#TB_inline?width=600&height=550&inlineId=kbs-ticket-terms-conditions" title="<?php esc_attr_e( $terms_heading, 'kb-support' ); ?>" class="thickbox<?php echo esc_attr($label_class); ?>"><?php esc_html_e( $label, 'kb-support' ); ?></a></p>
 
 	<div id="kbs-ticket-terms-conditions" class="kbs_hidden">
 		<?php do_action( 'kbs_before_terms' ); ?>
