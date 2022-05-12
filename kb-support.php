@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: KB Support
+ * Plugin Name: KB Support - Helpdesk & Knowledgebase
  * Plugin URI: https://kb-support.com/
  * Description: The best help desk tool for WordPress. Simple yet effective. Feature rich.
  * Version: 1.5.4
