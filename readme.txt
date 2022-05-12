@@ -1,4 +1,4 @@
-=== KB Support - WordPress Help Desk ===
+=== KB Support - Help Desk & Knowledgebase plugin ===
 Contributors: wpchill, silkalns
 Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
