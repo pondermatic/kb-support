@@ -64,7 +64,7 @@ class KBS_Replies_API extends KBS_API {
 					'id' => array(
 						'type'        => 'integer',
 						'description' => sprintf(
-                            __( 'Unique identifier for the %s.', 'kb-support' ),
+                            esc_html__( 'Unique identifier for the %s.', 'kb-support' ),
                             kbs_get_ticket_label_singular( true )
                         )
 					)
@@ -91,7 +91,7 @@ class KBS_Replies_API extends KBS_API {
 				'args'   => array(
 					'id' => array(
 						'type'        => 'integer',
-						'description' => __( 'Unique identifier for the reply.', 'kb-support' )
+						'description' => esc_html__( 'Unique identifier for the reply.', 'kb-support' )
 					)
 				),
 				array(
@@ -129,7 +129,7 @@ class KBS_Replies_API extends KBS_API {
         if ( 'edit' === $request['context'] || ! $this->check_read_permission( $post ) ) {
 			return new WP_Error(
 				'rest_forbidden_context',
-				__( 'Sorry, you are not allowed to view this object.', 'kb-support' ),
+				esc_html__( 'Sorry, you are not allowed to view this object.', 'kb-support' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
@@ -155,7 +155,7 @@ class KBS_Replies_API extends KBS_API {
 
         $error = new WP_Error(
 			'rest_post_invalid_id',
-			__( 'Invalid post ID.', 'kb-support' ),
+			esc_html__( 'Invalid post ID.', 'kb-support' ),
 			array( 'status' => 404 )
 		);
 
@@ -169,7 +169,7 @@ class KBS_Replies_API extends KBS_API {
 		if ( 'edit' === $request['context'] || ! $this->check_read_permission( $post ) ) {
 			return new WP_Error(
 				'rest_forbidden_context',
-				__( 'Sorry, you are not allowed to view this object.', 'kb-support' ),
+				esc_html__( 'Sorry, you are not allowed to view this object.', 'kb-support' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
@@ -233,7 +233,7 @@ class KBS_Replies_API extends KBS_API {
 		if ( ! empty( $request['orderby'] ) && 'relevance' === $request['orderby'] && empty( $request['search'] ) ) {
 			return new WP_Error(
 				'rest_no_search_term_defined',
-				__( 'You need to define a search term to order by relevance.', 'kb-support' ),
+				esc_html__( 'You need to define a search term to order by relevance.', 'kb-support' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -242,7 +242,7 @@ class KBS_Replies_API extends KBS_API {
 		if ( ! empty( $request['orderby'] ) && 'include' === $request['orderby'] && empty( $request['include'] ) ) {
 			return new WP_Error(
 				'rest_orderby_include_missing_include',
-				__( 'You need to define an include parameter to order by include.', 'kb-support' ),
+				esc_html__( 'You need to define an include parameter to order by include.', 'kb-support' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -369,7 +369,7 @@ class KBS_Replies_API extends KBS_API {
 		if ( $page > $max_pages && $total_posts > 0 ) {
 			return new WP_Error(
 				'rest_post_invalid_page_number',
-				__( 'The page number requested is larger than the number of pages available.', 'kb-support' ),
+				esc_html__( 'The page number requested is larger than the number of pages available.', 'kb-support' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -423,7 +423,7 @@ class KBS_Replies_API extends KBS_API {
 
         $error = new WP_Error(
 			'rest_post_invalid_id',
-			__( 'Invalid post ID.', 'kb-support' ),
+			esc_html__( 'Invalid post ID.', 'kb-support' ),
 			array( 'status' => 404 )
 		);
 
@@ -592,7 +592,7 @@ class KBS_Replies_API extends KBS_API {
 		$query_params['context']['default'] = 'view';
 
 		$query_params['orderby'] = array(
-			'description' => __( 'Sort collection by object attribute.', 'kb-support' ),
+			'description' => esc_html__( 'Sort collection by object attribute.', 'kb-support' ),
 			'type'        => 'string',
 			'default'     => 'id',
 			'enum'        => array(
@@ -646,7 +646,7 @@ class KBS_Replies_API extends KBS_API {
                 default:
                     return new WP_Error(
                         'rest_post_invalid_type',
-                        __( 'Invalid post type.', 'kb-support' ),
+                        esc_html__( 'Invalid post type.', 'kb-support' ),
                         array( 'status' => 404 )
                     );
             }

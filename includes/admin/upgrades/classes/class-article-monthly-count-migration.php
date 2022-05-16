@@ -120,7 +120,7 @@ class KBS_Article_Monthly_Count_Migration extends KBS_Batch_Export {
 		} else {
 			$this->done = true;
 			delete_option( 'kbs_update_article_monthly_count_total' );
-			$this->message = sprintf( __( '%s updated successfully.', 'kb-support' ), kbs_get_article_label_plural() );
+			$this->message = sprintf( esc_html__( '%s updated successfully.', 'kb-support' ), kbs_get_article_label_plural() );
 			kbs_set_upgrade_complete( 'upgrade_article_monthly_count' );
 			return false;
 		}

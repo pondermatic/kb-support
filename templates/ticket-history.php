@@ -27,7 +27,7 @@ if ( is_user_logged_in() )	: ?>
             $hide_closed = kbs_customer_maybe_hide_closed_tickets( $customer->user_id ) && kbs_customer_has_closed_tickets( $customer->id );
             $hide_closed = ( $hide_closed && ( ! isset( $_REQUEST['show_closed'] ) || '1' != $_REQUEST['show_closed'] ) );
             $hide_notice = wp_kses_post( sprintf(
-                __( 'Your closed %1$s are not being displayed below. <a href="%2$s">Show closed %1$s</a>.', 'kb-support' ),
+                esc_html__( 'Your closed %1$s are not being displayed below. <a href="%2$s">Show closed %1$s</a>.', 'kb-support' ),
                 kbs_get_ticket_label_plural( true ),
                 add_query_arg( 'show_closed', '1' ) )
             );

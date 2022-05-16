@@ -77,8 +77,8 @@ class KBS_Welcome {
 		// About Page
 		add_dashboard_page(
 			/* translators: %s: KB Support version */
-			sprintf( __( 'Welcome to KB Support %s', 'kb-support' ), $display_version ),
-			__( 'Welcome to KB Support', 'kb-support' ),
+			sprintf( esc_html__( 'Welcome to KB Support %s', 'kb-support' ), $display_version ),
+			esc_html__( 'Welcome to KB Support', 'kb-support' ),
 			$this->minimum_capability,
 			'kbs-about',
 			array( $this, 'about_screen' )
@@ -86,8 +86,8 @@ class KBS_Welcome {
 
 		// Getting Started Page
 		add_dashboard_page(
-			__( 'Getting Started with KB Support', 'kb-support' ),
-			__( 'Getting Started with KB Support', 'kb-support' ),
+			esc_html__( 'Getting Started with KB Support', 'kb-support' ),
+			esc_html__( 'Getting Started with KB Support', 'kb-support' ),
 			$this->minimum_capability,
 			'kbs-getting-started',
 			array( $this, 'getting_started_screen' )
@@ -513,7 +513,7 @@ class KBS_Welcome {
 		$file = file_exists( KBS_PLUGIN_DIR . 'readme.txt' ) ? KBS_PLUGIN_DIR . 'readme.txt' : null;
 
 		if ( ! $file ) {
-			$readme = '<p>' . __( 'No valid changelog was found.', 'kb-support' ) . '</p>';
+			$readme = '<p>' . esc_html__( 'No valid changelog was found.', 'kb-support' ) . '</p>';
 		} else {
 			$readme = file_get_contents( $file );
 			$readme = nl2br( esc_html( $readme ) );

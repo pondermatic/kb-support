@@ -63,7 +63,7 @@ function kbs_article_add_meta_boxes( $post )	{
 
 	add_meta_box(
 		'kbs-article-metabox-linked-tickets',
-		sprintf( __( 'Linked %s', 'kb-support' ), kbs_get_ticket_label_plural() ),
+		sprintf( esc_html__( 'Linked %s', 'kb-support' ), kbs_get_ticket_label_plural() ),
 		'kbs_article_metabox_linked_tickets_callback',
 		KBS()->KB->post_type,
 		'normal',
@@ -73,7 +73,7 @@ function kbs_article_add_meta_boxes( $post )	{
 
 	add_meta_box(
 		'kbs-article-metabox-restrictions',
-		__( 'Restrictions', 'kb-support' ),
+		esc_html__( 'Restrictions', 'kb-support' ),
 		'kbs_article_metabox_restrictions_callback',
 		KBS()->KB->post_type,
 		'side',
@@ -179,11 +179,9 @@ function kbs_article_metabox_restrict_article_field( $post_id )	{
     <p>
 		<?php 
 		// Escaped in function.
-		echo KBS()->html->checkbox( array(
-        'name'    => '_kbs_article_restricted',
-        'current' => esc_attr( $logged_in_only )
-    ) ); // phpcs:ignore ?>
-	<label for="_kbs_article_restricted"></label><?php esc_html_e( 'Restrict access?', 'kb-support' ); ?></p>
+		echo KBS()->html->checkbox( array( 'name'    => '_kbs_article_restricted', 'current' => esc_attr( $logged_in_only ) ) ); // phpcs:ignore ?>
+		<label for="_kbs_article_restricted"></label><?php esc_html_e( 'Restrict access?', 'kb-support' ); ?>
+	</p>
 
     <?php
 } // kbs_article_metabox_restrict_article_field

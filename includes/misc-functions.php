@@ -20,30 +20,30 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  */
 function kbs_get_contextual_help_sidebar_text() {
     $sidebar_text = '
-        <p><strong>' . __( 'More Information:', 'kb-support' ) . '</strong></p>' .
+        <p><strong>' . esc_html__( 'More Information:', 'kb-support' ) . '</strong></p>' .
 		'<p>' . sprintf( 
-			__( '<a href="%s" target="_blank">Documentation</a>', 'kb-support' ), 
+			wp_kses_post( __( '<a href="%s" target="_blank">Documentation</a>', 'kb-support' ) ), 
 			esc_url( 'https://kb-support.com/support/' )
 		) . '</p>' .
 		'<p>' . sprintf( 
-			__( '<a href="%s" target="_blank">Twitter</a>', 'kb-support' ), 
+			wp_kses_post( __( '<a href="%s" target="_blank">Twitter</a>', 'kb-support' ) ), 
 			esc_url( 'https://twitter.com/kbsupport_wp/' )
 		) . '</p>' .
 		'<p>' . sprintf( 
-			__( '<a href="%s" target="_blank">Facebook</a>', 'kb-support' ), 
+			wp_kses_post( __( '<a href="%s" target="_blank">Facebook</a>', 'kb-support' ) ), 
 			esc_url( 'https://www.facebook.com/kbsupport/' )
 		) . '</p>' .
 		'<p>' . sprintf(
-			__( '<a href="%s" target="_blank">Post an issue</a> on <a href="%s" target="_blank">GitHub</a>', 'kb-support' ),
+			wp_kses_post( __( '<a href="%s" target="_blank">Post an issue</a> on <a href="%s" target="_blank">GitHub</a>', 'kb-support' ) ),
 			esc_url( 'https://github.com/KB-Support/kb-support/issues' ),
 			esc_url( 'https://github.com/KB-Support/kb-support' )
 		) . '</p>' .
 		'<p>' . sprintf(
-			__( '<a href="%s" target="_blank">Extensions</a>', 'kb-support' ),
+			wp_kses_post( __( '<a href="%s" target="_blank">Extensions</a>', 'kb-support' ) ),
 			esc_url( 'https://kb-support.com/extensions/' )
 		) . '</p>' .
         '<p>' . sprintf(
-			__( '<a href="%s" target="_blank">Leave a Review</a>', 'kb-support' ),
+			wp_kses_post( __( '<a href="%s" target="_blank">Leave a Review</a>', 'kb-support' ) ),
 			esc_url( 'https://wordpress.org/support/plugin/kb-support/reviews/' )
 		) . '</p>';
 
@@ -96,7 +96,7 @@ function kbs_admin_bar_menu_items( $admin_bar ) {
         'title'  => $icon . $title,
         'href'   => admin_url( 'edit.php?post_type=kbs_ticket' ),
         'meta'   => array(
-            'title' => sprintf( __( 'Open %s', 'kb-support' ), kbs_get_ticket_label_plural() )
+            'title' => sprintf( esc_html__( 'Open %s', 'kb-support' ), kbs_get_ticket_label_plural() )
         )
     ) );
 } // kbs_admin_bar_menu_items
@@ -352,7 +352,7 @@ function kbs_get_notices( $notice = '', $notice_only = false )	{
 		'agents_cannot_submit' => array(
 			'class'  => 'info',
 			'notice' => sprintf(
-				__( 'Support Workers cannot submit %s here. Please go to your <a href="%s">admin panel</a> to open a new %s.', 'kb-support' ),
+				esc_html__( 'Support Workers cannot submit %s here. Please go to your <a href="%s">admin panel</a> to open a new %s.', 'kb-support' ),
 				kbs_get_ticket_label_plural( true ),
 				admin_url( 'post-new.php?post_type=kbs_ticket' ),
 				kbs_get_ticket_label_singular( true )
@@ -360,127 +360,127 @@ function kbs_get_notices( $notice = '', $notice_only = false )	{
 		),
 		'need_login' => array(
 			'class'  => 'info',
-			'notice' => sprintf( __( 'You must be logged in to create a support %s.', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
+			'notice' => sprintf( esc_html__( 'You must be logged in to create a support %s.', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
 		),
 		'profile_login' => array(
 			'class'  => 'info',
-			'notice' => __( 'You must log in to manage your profile.', 'kb-support' )
+			'notice' => esc_html__( 'You must log in to manage your profile.', 'kb-support' )
 		),
 		'username_incorrect' => array(
 			'class'  => 'error',
-			'notice' => __( 'The username was not recognised.', 'kb-support' )
+			'notice' => esc_html__( 'The username was not recognised.', 'kb-support' )
 		),
 		'password_incorrect' => array(
 			'class'  => 'error',
-			'notice' => __( 'An incorrect password was entered.', 'kb-support' )
+			'notice' => esc_html__( 'An incorrect password was entered.', 'kb-support' )
 		),
 		'missing_registration_data' => array(
 			'class'  => 'error',
-			'notice' => __( 'All registration fields are mandatory.', 'kb-support' )
+			'notice' => esc_html__( 'All registration fields are mandatory.', 'kb-support' )
 		),
 		'could_not_register' => array(
 			'class'  => 'error',
-			'notice' => __( 'Unable to register your user account.', 'kb-support' )
+			'notice' => esc_html__( 'Unable to register your user account.', 'kb-support' )
 		),
 		'empty_first_name' => array(
 			'class'  => 'error',
-			'notice' => __( 'Please enter your first name.', 'kb-support' )
+			'notice' => esc_html__( 'Please enter your first name.', 'kb-support' )
 		),
 		'empty_last_name' => array(
 			'class'  => 'error',
-			'notice' => __( 'Please enter your last name.', 'kb-support' )
+			'notice' => esc_html__( 'Please enter your last name.', 'kb-support' )
 		),
 		'email_unavailable' => array(
 			'class'  => 'error',
-			'notice' => __( 'The email address you entered is already registered.', 'kb-support' )
+			'notice' => esc_html__( 'The email address you entered is already registered.', 'kb-support' )
 		),
 		'email_invalid' => array(
 			'class'  => 'error',
-			'notice' => __( 'You entered an invalid email address.', 'kb-support' )
+			'notice' => esc_html__( 'You entered an invalid email address.', 'kb-support' )
 		),
 		'email_removed' => array(
 			'class'  => 'success',
-			'notice' => __( 'Email address removed.', 'kb-support' )
+			'notice' => esc_html__( 'Email address removed.', 'kb-support' )
 		),
 		'email_remove_failed' => array(
 			'class'  => 'error',
-			'notice' => __( 'Unable to remove email address.', 'kb-support' )
+			'notice' => esc_html__( 'Unable to remove email address.', 'kb-support' )
 		),
 		'empty_password' => array(
 			'class'  => 'error',
-			'notice' => __( 'Please enter a password.', 'kb-support' )
+			'notice' => esc_html__( 'Please enter a password.', 'kb-support' )
 		),
 		'password_mismatch' => array(
 			'class'  => 'error',
-			'notice' => __( 'Passwords do not match.', 'kb-support' )
+			'notice' => esc_html__( 'Passwords do not match.', 'kb-support' )
 		),
 		'ticket_submitted' => array(
 			'class'  => 'success',
-			'notice' => __( "Your support request has been successfully received. We'll be in touch as soon as possible.", 'kb-support' )
+			'notice' => esc_html__( "Your support request has been successfully received. We'll be in touch as soon as possible.", 'kb-support' )
 		),
 		'ticket_closed' => array(
 			'class'  => 'success',
-			'notice' => sprintf( __( 'The %s was successfully closed', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
+			'notice' => sprintf( esc_html__( 'The %s was successfully closed', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
 		),
 		'ticket_close_failed' => array(
 			'class'  => 'error',
-			'notice' => sprintf( __( 'Could not close %s', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
+			'notice' => sprintf( esc_html__( 'Could not close %s', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
 		),
 		'ticket_failed' => array(
 			'class'  => 'error',
-			'notice' => __( 'There was an error submitting your support request. Please try again', 'kb-support' )
+			'notice' => esc_html__( 'There was an error submitting your support request. Please try again', 'kb-support' )
 		),
 		'no_ticket' => array(
 			'class'  => 'error',
-			'notice' => sprintf( __( 'No %s found.', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
+			'notice' => sprintf( esc_html__( 'No %s found.', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
 		),
 		'ticket_login' => array(
 			'class'  => 'info',
-			'notice' => sprintf( __( 'You must log in to view your %s.', 'kb-support' ), kbs_get_ticket_label_plural( true ) )
+			'notice' => sprintf( esc_html__( 'You must log in to view your %s.', 'kb-support' ), kbs_get_ticket_label_plural( true ) )
 		),
 		'category_restricted' => array(
 			'class'  => 'info',
-			'notice' => sprintf( __( 'Access to %s in this category is restricted.', 'kb-support' ), kbs_get_article_label_plural() )
+			'notice' => sprintf( esc_html__( 'Access to %s in this category is restricted.', 'kb-support' ), kbs_get_article_label_plural() )
 		),
 		'category_restricted_login' => array(
 			'class'  => 'info',
-			'notice' => sprintf( __( 'Access to %s in this category is restricted. Log in to continue.', 'kb-support' ), kbs_get_article_label_plural() )
+			'notice' => sprintf( esc_html__( 'Access to %s in this category is restricted. Log in to continue.', 'kb-support' ), kbs_get_article_label_plural() )
 		),
 		'tag_restricted' => array(
 			'class'  => 'info',
-			'notice' => sprintf( __( 'Access to %s with this tag is restricted.', 'kb-support' ), kbs_get_article_label_plural() )
+			'notice' => sprintf( esc_html__( 'Access to %s with this tag is restricted.', 'kb-support' ), kbs_get_article_label_plural() )
 		),
 		'tag_restricted_login' => array(
 			'class'  => 'info',
-			'notice' => sprintf( __( 'Access to %s with this tag is restricted. Log in to continue.', 'kb-support' ), kbs_get_article_label_plural() )
+			'notice' => sprintf( esc_html__( 'Access to %s with this tag is restricted. Log in to continue.', 'kb-support' ), kbs_get_article_label_plural() )
 		),
 		'missing_reply' => array(
 			'class'  => 'error',
-			'notice' => __( 'Please enter your reply.', 'kb-support' )
+			'notice' => esc_html__( 'Please enter your reply.', 'kb-support' )
 		),
 		'reply_success' => array(
 			'class'  => 'success',
-			'notice' => __( 'Your reply has been received. If necessary, one of our agents will be in touch shortly.', 'kb-support' )
+			'notice' => esc_html__( 'Your reply has been received. If necessary, one of our agents will be in touch shortly.', 'kb-support' )
 		),
 		'reply_fail' => array(
 			'class'  => 'error',
-			'notice' => __( 'Your reply could not be processed.', 'kb-support' )
+			'notice' => esc_html__( 'Your reply could not be processed.', 'kb-support' )
 		),
 		'max_files' => array(
 			'class'  => 'error',
-			'notice' => sprintf( __( 'The maximum number of files you are allowed to upload is %s.', 'kb-support' ), kbs_get_max_file_uploads() )
+			'notice' => sprintf( esc_html__( 'The maximum number of files you are allowed to upload is %s.', 'kb-support' ), kbs_get_max_file_uploads() )
 		),
 		'invalid_customer' => array(
 			'class'  => 'error',
-			'notice' => sprintf( __( 'You are not allowed to manage this %s.', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
+			'notice' => sprintf( esc_html__( 'You are not allowed to manage this %s.', 'kb-support' ), kbs_get_ticket_label_singular( true ) )
 		),
 		'profile_updated' => array(
 			'class'  => 'success',
-			'notice' => __( 'Profile updated successfully.', 'kb-support' )
+			'notice' => esc_html__( 'Profile updated successfully.', 'kb-support' )
 		),
         'recaptcha_failed' => array(
 			'class'  => 'error',
-			'notice' => __( 'reCAPTCHA validation failed.', 'kb-support' )
+			'notice' => esc_html__( 'reCAPTCHA validation failed.', 'kb-support' )
 		),
 	);
 
@@ -540,7 +540,7 @@ function kbs_add_credit_text()	{
 	if ( kbs_get_option( 'show_credits', false ) )	{
 		ob_start(); ?>
 
-		<span class="kbs-description"><?php echo wp_kses_post( sprintf( __( 'Powered by <a href="%s" title="KB Support" target="_blank">KB Support</a>. The ultimate help desk and knowledge base support tool plugin for WordPress. <a href="%s" target="_blank">Download for free</a>.', 'kb-support' ), 'https://kb-support.com/', 'https://wordpress.org/plugins/kb-support' ) ); ?></span>
+		<span class="kbs-description"><?php echo wp_kses_post( sprintf( esc_html__( 'Powered by <a href="%s" title="KB Support" target="_blank">KB Support</a>. The ultimate help desk and knowledge base support tool plugin for WordPress. <a href="%s" target="_blank">Download for free</a>.', 'kb-support' ), 'https://kb-support.com/', 'https://wordpress.org/plugins/kb-support' ) ); ?></span>
 
 		<?php echo ob_get_clean();
 	}
@@ -579,7 +579,7 @@ function _kbs_deprecated_function( $function, $version, $replacement = null, $ba
 	if ( WP_DEBUG && apply_filters( 'kbs_deprecated_function_trigger_error', $show_errors ) ) {
 		if ( ! is_null( $replacement ) ) {
 			trigger_error( wp_kses_post( sprintf(
-				__( '%1$s is <strong>deprecated</strong> since KB Support version %2$s! Use %3$s instead.', 'kb-support' ),
+				esc_html__( '%1$s is <strong>deprecated</strong> since KB Support version %2$s! Use %3$s instead.', 'kb-support' ),
 				esc_html( $function ),
 				esc_html( $version ),
 				esc_html( $replacement )
@@ -588,7 +588,7 @@ function _kbs_deprecated_function( $function, $version, $replacement = null, $ba
 			// Alternatively we could dump this to a file.
 		} else {
 			trigger_error( wp_kses_post( sprintf(
-				 __( '%1$s is <strong>deprecated</strong> since KB Support version %2$s with no alternative available.', 'kb-support' ),
+				esc_html__( '%1$s is <strong>deprecated</strong> since KB Support version %2$s with no alternative available.', 'kb-support' ),
 				$function,
 				$version
 			) ) );
@@ -629,14 +629,14 @@ function _kbs_deprected_argument( $argument, $function, $version, $replacement =
 	if ( WP_DEBUG && apply_filters( 'kbs_deprecated_argument_trigger_error', $show_errors ) )	{
 		if ( ! is_null( $replacement ) )	{
 			trigger_error(wp_kses_post(  sprintf(
-				__( 'The %1$s argument of %2$s is <strong>deprecated</strong> since KB Support version %3$s! Please use %4$s instead.', 'kb-support' ),
+				esc_html__( 'The %1$s argument of %2$s is <strong>deprecated</strong> since KB Support version %3$s! Please use %4$s instead.', 'kb-support' ),
 				esc_html( $argument ), esc_html( $function ), esc_html( $version ), esc_html( $replacement )
 			) ) );
 			trigger_error( print_r( array_map( 'esc_html', $backtrace ), 1 ) ); // Limited to previous 1028 characters, but since we only need to move back 1 in stack that should be fine.
 			// Alternatively we could dump this to a file.
 		} else	{
 			trigger_error( wp_kses_post( sprintf(
-				__( 'The %1$s argument of %2$s is <strong>deprecated</strong> since KB Support version %3$s with no alternative available.', 'kb-support' ),
+				esc_html__( 'The %1$s argument of %2$s is <strong>deprecated</strong> since KB Support version %3$s with no alternative available.', 'kb-support' ),
 				esc_html( $argument ),
 				esc_html( $function ),
 				esc_html( $version )
@@ -671,7 +671,7 @@ function kbs_get_newsletter()    {
 
     ?>
 	<p class="newsletter-intro">
-	    <?php echo wp_kses_post( sprintf( __( 
+	    <?php echo wp_kses_post( sprintf( esc_html__( 
             'Sign up for the KB Support newsletter below to receive a <strong>15%s discount</strong> off our <a href="%s" target="_blank">extensions</a> and to stay informed of important updates and news.', 'kb-support' ),
             '%',
             add_query_arg( array(
@@ -707,7 +707,7 @@ function kbs_get_newsletter()    {
 					</td>
 					<td>
 					    <?php submit_button(
-                            __( 'Subscribe', 'kb-support' ),
+                            esc_html__( 'Subscribe', 'kb-support' ),
                             'secondary',
                             'subscribe',
                             false,
@@ -1079,79 +1079,79 @@ function kbs_get_premium_extension_data()	{
 	$extensions = array(
 		'advanced_ticket_assignment' => array(
 			'name'         => 'Advanced Ticket Assignment',
-			'desc'         => __( 'Define custom rules to automate ticket assignment and enhance your workflow.', 'kb-support' ),
+			'desc'         => esc_html__( 'Define custom rules to automate ticket assignment and enhance your workflow.', 'kb-support' ),
 			'plugin_url'   => 'kbs-advanced-ticket-assignment/kbs-advanced-ticket-assignment.php',
 			'demo_url'     => 'https://kb-support.com/register-your-demo/?demo_ref=1892bfbbcd6410b5b34a2a6ee35e50fb',
 			'purchase_url' => 'https://kb-support.com/downloads/advanced-ticket-assignment/'
 		),
 		'canned_replies' => array(
 			'name'         => 'Canned Replies',
-			'desc'         => __( 'Easily create a use Canned Replies to instantly add ticket replies.', 'kb-support' ),
+			'desc'         => esc_html__( 'Easily create a use Canned Replies to instantly add ticket replies.', 'kb-support' ),
 			'plugin_url'   => 'kbs-canned-replies/kbs-canned-replies.php',
 			'demo_url'     => 'https://kb-support.com/register-your-demo/?demo_ref=eefa9cce664b79abb6407ebd07e4e3a5',
 			'purchase_url' => 'https://kb-support.com/downloads/canned-replies/'
 		),
 		'custom_ticket_status' => array(
 			'name'         => 'Custom Ticket Status',
-			'desc'         => __( 'Create additional ticket statuses to meet your business needs.', 'kb-support' ),
+			'desc'         => esc_html__( 'Create additional ticket statuses to meet your business needs.', 'kb-support' ),
 			'plugin_url'   => 'kbs-custom-status/kbs-custom-status.php',
 			'demo_url'     => 'https://kb-support.com/register-your-demo/?demo_ref=60cfff6b93cc42216c03bc3886a5cb11',
 			'purchase_url' => 'https://kb-support.com/downloads/custom-ticket-status/'
 		),
 		'easy_digital_downloads' => array(
 			'name'         => 'Easy Digital Downloads',
-			'desc'         => __( 'Integrate with EDD and its Software Licensing extension for the ultimate customer experience.', 'kb-support' ),
+			'desc'         => esc_html__( 'Integrate with EDD and its Software Licensing extension for the ultimate customer experience.', 'kb-support' ),
 			'plugin_url'   => 'kbs-edd/kbs-edd.php',
 			'demo_url'     => 'https://kb-support.com/register-your-demo/?demo_ref=cb0277e636b56fe9ef4d1fcbd8603ae6',
 			'purchase_url' => 'https://kb-support.com/downloads/easy-digital-downloads/'
 		),
 		'email_signatures' => array(
 			'name'         => 'Email Signatures',
-			'desc'         => __( 'Enable agents to register custom signatures which can be inserted into customer emails.', 'kb-support' ),
+			'desc'         => esc_html__( 'Enable agents to register custom signatures which can be inserted into customer emails.', 'kb-support' ),
 			'plugin_url'   => 'kbs-email-signatures/kbs-email-signatures.php',
 			'purchase_url' => 'https://kb-support.com/downloads/email-signatures/'
 		),
 		'email_support' => array(
 			'name'         => 'Email Support',
-			'desc'         => __( 'Enable customers and agents to respond to tickets via email.', 'kb-support' ),
+			'desc'         => esc_html__( 'Enable customers and agents to respond to tickets via email.', 'kb-support' ),
 			'plugin_url'   => 'kbs-email-support/kbs-email-support.php',
 			'demo_url'     => 'https://kb-support.com/register-your-demo/?demo_ref=6c847b75c663cf62807249618cc80a40',
 			'purchase_url' => 'https://kb-support.com/downloads/email-support/'
 		),
 		'knowledge_base_integrations' => array(
 			'name'         => 'Knowledge Base Integrations',
-			'desc'         => __( 'Integrate your favourite knowledge base with KB Support.', 'kb-support' ),
+			'desc'         => esc_html__( 'Integrate your favourite knowledge base with KB Support.', 'kb-support' ),
 			'plugin_url'   => 'kbs-kb-integrations/kbs-kb-integrations.php',
 			'purchase_url' => 'https://kb-support.com/downloads/knowledge-base-integrations/'
 		),
 		'mailchimp_integration' => array(
 			'name'         => 'MailChimp Integration',
-			'desc'         => __( 'Enable customers to subscribe to your MailChimp lists during ticket submission.', 'kb-support' ),
+			'desc'         => esc_html__( 'Enable customers to subscribe to your MailChimp lists during ticket submission.', 'kb-support' ),
 			'plugin_url'   => 'kbs-mailchimp-integration/kbs-mailchimp-integration.php',
 			'purchase_url' => 'https://kb-support.com/downloads/mailchimp-integration/'
 		),
 		'ratings_and_satisfaction' => array(
 			'name'         => 'Ratings and Satisfaction',
-			'desc'         => __( 'Get feedback on your performance for support tickets and quality of documentation.', 'kb-support' ),
+			'desc'         => esc_html__( 'Get feedback on your performance for support tickets and quality of documentation.', 'kb-support' ),
 			'plugin_url'   => 'kbs-ratings-satisfaction/kbs-ratings-satisfaction.php',
 			'purchase_url' => 'https://kb-support.com/downloads/ratings-and-satisfaction/'
 		),
 		'reply_approvals' => array(
 			'name'         => 'Reply Approvals',
-			'desc'         => __( 'Add an approval process to selected agent ticket replies.', 'kb-support' ),
+			'desc'         => esc_html__( 'Add an approval process to selected agent ticket replies.', 'kb-support' ),
 			'plugin_url'   => 'kbs-reply-approvals/kbs-reply-approvals.php',
 			'purchase_url' => 'https://kb-support.com/downloads/reply-approvals/'
 		),
 		'woocommerce' => array(
 			'name'         => 'WooCommerce',
-			'desc'         => __( 'Integrate with your WooCommerce store for the ultimate customer experience.', 'kb-support' ),
+			'desc'         => esc_html__( 'Integrate with your WooCommerce store for the ultimate customer experience.', 'kb-support' ),
 			'plugin_url'   => 'kbs-woocommerce/kbs-woocommerce.php',
 			'demo_url'     => 'https://kb-support.com/register-your-demo/?demo_ref=11c28e3c2627aabf93a2b1a6c1836fe2',
 			'purchase_url' => 'https://kb-support.com/downloads/woocommerce/'
 		),
         'zapier' => array(
 			'name'         => 'Zapier',
-			'desc'         => __( 'Connect KB Support to thousands of 3rd party applications via zapier.com.', 'kb-support' ),
+			'desc'         => esc_html__( 'Connect KB Support to thousands of 3rd party applications via zapier.com.', 'kb-support' ),
 			'plugin_url'   => 'kbs-zapier/kbs-zapier.php',
 			'purchase_url' => 'https://kb-support.com/downloads/zapier/'
 		)
@@ -1170,7 +1170,7 @@ function kbs_get_premium_extension_data()	{
 function kbs_get_current_promotions( $active_only = true )   {
     $promotions = array(
         'BF2021' => array(
-            'name'        => __( 'Black Friday & Cyber Monday', 'kb-support' ),
+            'name'        => esc_html__( 'Black Friday & Cyber Monday', 'kb-support' ),
             'campaign'    => 'bfcm2021',
             'image'       => 'bfcm-header.svg',
             'product'     => '',
@@ -1178,12 +1178,12 @@ function kbs_get_current_promotions( $active_only = true )   {
             'finish'      => strtotime( '2021-12-05 23:59:59' ),
             'timezone'    => 'GMT',
             'discount'    => '40%',
-            'cta'         => __( 'Shop Now!', 'kb-support' ),
+            'cta'         => esc_html__( 'Shop Now!', 'kb-support' ),
             'cta_url'     => 'https://kb-support.com/extensions/',
-            'description' => __( 'Save <strong>%7$s</strong> on all KB Support purchases <strong>this week</strong>.<br>Including renewals and upgrades!', 'kb-support' )
+            'description' => esc_html__( 'Save <strong>%7$s</strong> on all KB Support purchases <strong>this week</strong>.<br>Including renewals and upgrades!', 'kb-support' )
         ),
         'FLASH2020' => array(
-            'name'        => __( 'Flash Sale', 'kb-support' ),
+            'name'        => esc_html__( 'Flash Sale', 'kb-support' ),
             'campaign'    => 'flash-sale',
             'image'       => 'flash-sale-header.svg',
             'product'     => '',
@@ -1191,12 +1191,12 @@ function kbs_get_current_promotions( $active_only = true )   {
             'finish'      => strtotime( '2021-01-03 23:59:59' ),
             'timezone'    => 'GMT',
             'discount'    => '33%',
-            'cta'         => __( 'Shop Now!', 'kb-support' ),
+            'cta'         => esc_html__( 'Shop Now!', 'kb-support' ),
             'cta_url'     => 'https://kb-support.com/extensions/',
-            'description' => __( 'Save <strong>%7$s</strong> on all KB Support purchases <strong>now</strong>. Including renewals and upgrades!', 'kb-support' )
+            'description' => esc_html__( 'Save <strong>%7$s</strong> on all KB Support purchases <strong>now</strong>. Including renewals and upgrades!', 'kb-support' )
         ),
         'STAYSAFE' => array(
-            'name'        => __( 'Flash Sale', 'kb-support' ),
+            'name'        => esc_html__( 'Flash Sale', 'kb-support' ),
             'campaign'    => 'covid-19-sale',
             'image'       => 'flash-sale-header.svg',
             'product'     => '',
@@ -1204,9 +1204,9 @@ function kbs_get_current_promotions( $active_only = true )   {
             'finish'      => strtotime( '2021-01-31 23:59:59' ),
             'timezone'    => 'GMT',
             'discount'    => '33%',
-            'cta'         => __( 'Shop Now!', 'kb-support' ),
+            'cta'         => esc_html__( 'Shop Now!', 'kb-support' ),
             'cta_url'     => 'https://kb-support.com/extensions/',
-            'description' => __( 'We are supporting small businesses during the pandemic.<br>Save <strong>%7$s</strong> on all KB Support purchases <strong>now</strong>. Including renewals and upgrades!', 'kb-support' )
+            'description' => esc_html__( 'We are supporting small businesses during the pandemic.<br>Save <strong>%7$s</strong> on all KB Support purchases <strong>now</strong>. Including renewals and upgrades!', 'kb-support' )
         )
     );
 

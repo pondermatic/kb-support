@@ -200,8 +200,8 @@ if ( ! is_user_logged_in() ) : ?>
 						<?php
 							$order = $orderby = $customer->get_tickets_order();
 							$order_options = array(
-								'DESC' => __( 'Descending Order', 'kb-support' ),
-								'ASC'  => __( 'Ascending Order', 'kb-support' )
+								'DESC' => esc_html__( 'Descending Order', 'kb-support' ),
+								'ASC'  => esc_html__( 'Ascending Order', 'kb-support' )
 							);
 						?>
 						<div class="kbs_profile_editor_tickets_order">

@@ -105,7 +105,7 @@ class KBS_Form {
 		if( method_exists( $this, 'get_' . $key ) ) {
 			return call_user_func( array( $this, 'get_' . $key ) );
 		} else {
-			return new WP_Error( 'kbs-form-invalid-property', sprintf( __( "Can't get property %s", 'kb-support' ), $key ) );
+			return new WP_Error( 'kbs-form-invalid-property', sprintf( esc_html__( "Can't get property %s", 'kb-support' ), $key ) );
 		}
 	} // __get
 

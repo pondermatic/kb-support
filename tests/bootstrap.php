@@ -44,7 +44,7 @@ wp_update_user( array( 'ID' => 1, 'first_name' => 'Admin', 'last_name' => 'User'
 add_filter( 'kbs_log_email_errors', '__return_false' );
 
 function _disable_reqs( $status = false, $args = array(), $url = '') {
-	return new WP_Error( 'no_reqs_in_unit_tests', __( 'HTTP Requests disbaled for unit tests', 'kbs' ) );
+	return new WP_Error( 'no_reqs_in_unit_tests', esc_html__( 'HTTP Requests disbaled for unit tests', 'kbs' ) );
 }
 add_filter( 'pre_http_request', '_disable_reqs' );
 

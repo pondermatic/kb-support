@@ -36,18 +36,18 @@ function kbs_ticket_contextual_help() {
     do_action( 'kbs_ticket_before_general_contextual_help', $screen );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-ticket-general',
-		'title'   => __( 'General', 'kb-support' ),
+		'title'   => esc_html__( 'General', 'kb-support' ),
 		'content' => apply_filters( 'kbs_ticket_general_contextual_help',
 			'<p>' . sprintf( 
-				__( '<strong>Title</strong> - The %1$s title will be seen on the admin screen as well as by customers on your website and via email when the <code>{ticket_title}</code> content tag is used.', 'kb-support' ),
+				wp_kses_post( __( '<strong>Title</strong> - The %1$s title will be seen on the admin screen as well as by customers on your website and via email when the <code>{ticket_title}</code> content tag is used.', 'kb-support' ) ),
 				strtolower( $ticket_singular )
 			) . '</p>' .
 			'<p>' . sprintf( 
-				__( '<strong>Content</strong> - This should be a full description of the issue that is being reported. If you are viewing an existing %1$s the data cannot be edited.', 'kb-support' ),
+				wp_kses_post( __( '<strong>Content</strong> - This should be a full description of the issue that is being reported. If you are viewing an existing %1$s the data cannot be edited.', 'kb-support' ) ),
 				strtolower( $ticket_singular )
 			) . '</p>' .
 			'<p>' . sprintf( 
-				__( '<strong>Catgories & Tags</strong> - Help you to group %1$s for reference and reporting.', 'kb-support' ), strtolower( $ticket_plural ) ) .
+				wp_kses_post( __( '<strong>Catgories & Tags</strong> - Help you to group %1$s for reference and reporting.', 'kb-support' ) ), strtolower( $ticket_plural ) ) .
 			'</p>'
         )
 	) );
@@ -55,18 +55,18 @@ function kbs_ticket_contextual_help() {
     do_action( 'kbs_ticket_before_create_contextual_help', $screen );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-ticket-create',
-		'title'   => sprintf( __( 'Create %s', 'kb-support' ), $ticket_singular ),
+		'title'   => sprintf( esc_html__( 'Create %s', 'kb-support' ), $ticket_singular ),
 		'content' => apply_filters( 'kbs_ticket_create_contextual_help',
 			'<p>' . sprintf( 
-				__( '<strong>Status</strong> - Set or change the status of the %1$s.', 'kb-support' ),
+				wp_kses_post( __( '<strong>Status</strong> - Set or change the status of the %1$s.', 'kb-support' ) ),
 				strtolower( $ticket_singular )
 			) . '</p>' .
 			'<p>' . sprintf( 
-				__( '<strong>Customer</strong> - Select the customer to whom the %1$s belongs.', 'kb-support' ),
+				wp_kses_post( __( '<strong>Customer</strong> - Select the customer to whom the %1$s belongs.', 'kb-support' ) ),
 				strtolower( $ticket_singular )
 			) . '</p>' .
 			'<p>' . sprintf( 
-				__( '<strong>Agent</strong> - Select the agent who is assigned to work on the %1$s.', 'kb-support' ),
+				wp_kses_post( __( '<strong>Agent</strong> - Select the agent who is assigned to work on the %1$s.', 'kb-support' ) ),
 				strtolower( $ticket_singular )
 			) . '</p>'
         )
@@ -75,15 +75,15 @@ function kbs_ticket_contextual_help() {
     do_action( 'kbs_ticket_before_reply_contextual_help', $screen );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-ticket-reply',
-		'title'   => sprintf( __( 'Reply to %s', 'kb-support' ), $ticket_singular ),
+		'title'   => sprintf( esc_html__( 'Reply to %s', 'kb-support' ), $ticket_singular ),
 		'content' => apply_filters( 'kbs_ticket_reply_contextual_help',
 			'<p>' . sprintf( 
-				__( 'Agents can reply to a %1$s by using the texarea provided. Previous replies are shown above the Add a New Reply textarea and can be expanded by clicking on them. Each reply contains a link which enables you to create a %2$s.', 'kb-support' ),
+				esc_html__( 'Agents can reply to a %1$s by using the texarea provided. Previous replies are shown above the Add a New Reply textarea and can be expanded by clicking on them. Each reply contains a link which enables you to create a %2$s.', 'kb-support' ),
 				strtolower( $ticket_singular ),
 				$article_singular
 			) . '</p>' .
 			'<p>' . sprintf( 
-				__( 'When the reply is ready, click <strong>Reply</strong> to submit and send to the customer, or <strong>Reply and Close</strong> to submit and close the %1$s.', 'kb-support' ),
+				wp_kses_post( __( 'When the reply is ready, click <strong>Reply</strong> to submit and send to the customer, or <strong>Reply and Close</strong> to submit and close the %1$s.', 'kb-support' ) ),
 				$ticket_singular
 			) . '</p>'
         )
@@ -92,9 +92,9 @@ function kbs_ticket_contextual_help() {
     do_action( 'kbs_ticket_before_notes_contextual_help', $screen );
 	$screen->add_help_tab( array(
 		'id'      => 'kbs-ticket-notes',
-		'title'   => __( 'Private Notes', 'kb-support' ),
+		'title'   => esc_html__( 'Private Notes', 'kb-support' ),
 		'content' => apply_filters( 'kbs_ticket_notes_contextual_help',
-			'<p>' . __( 'Agents can add private notes to exchange information with other Support Workers. Customers will never see this information.', 'kb-support' ) . '</p>'
+			'<p>' . esc_html__( 'Agents can add private notes to exchange information with other Support Workers. Customers will never see this information.', 'kb-support' ) . '</p>'
         )
 	) );
 

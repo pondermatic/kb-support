@@ -411,13 +411,13 @@ function kbs_v11_upgrades()	{
     $new_options = array(
         'sequential_start'          => '1',
         'agent_notices'             => '1',
-        'agent_assigned_subject'    => sprintf( __( 'A %s Has Been Assigned to You - ##{ticket_id}##', 'kb-support' ), $single ),
-        'agent_assign_notification' => __( 'Hey there!', 'kb-support' ) . "\n\n" .
-                                      sprintf( __( 'A %s has been assigned to you at {sitename}.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
+        'agent_assigned_subject'    => sprintf( esc_html__( 'A %s Has Been Assigned to You - ##{ticket_id}##', 'kb-support' ), $single ),
+        'agent_assign_notification' => esc_html__( 'Hey there!', 'kb-support' ) . "\n\n" .
+                                      sprintf( esc_html__( 'A %s has been assigned to you at {sitename}.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
                                       "<strong>{ticket_title} - #{ticket_id}</strong>\n\n" .
-                                      sprintf( __( 'Please login to view and update the %s.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
+                                      sprintf( esc_html__( 'Please login to view and update the %s.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
                                       "{ticket_admin_url}\n\n" .
-                                      __( 'Regards', 'kb-support' ) . "\n\n" .
+                                      esc_html__( 'Regards', 'kb-support' ) . "\n\n" .
                                       '{sitename}'
     );
 
@@ -505,9 +505,9 @@ function kbs_v12_upgrades()	{
  */
 function kbs_v122_upgrades()	{
     $kbs_options   = get_option( 'kbs_settings' );
-    $terms_label   = ! empty( $kbs_options['agree_label'] ) ? $kbs_options['agree_label'] : __( 'I have read and agree to the terms and conditions', 'kb-support' );
+    $terms_label   = ! empty( $kbs_options['agree_label'] ) ? $kbs_options['agree_label'] : esc_html__( 'I have read and agree to the terms and conditions', 'kb-support' );
     $terms_text    = ! empty( $kbs_options['agree_text'] ) ? $kbs_options['agree_text'] : '';
-    $terms_heading = ! empty( $kbs_options['agree_heading'] ) ? $kbs_options['agree_heading'] : sprintf( __( 'Terms and Conditions for Support %s', 'kb-support' ), kbs_get_ticket_label_plural() );
+    $terms_heading = ! empty( $kbs_options['agree_heading'] ) ? $kbs_options['agree_heading'] : sprintf( esc_html__( 'Terms and Conditions for Support %s', 'kb-support' ), kbs_get_ticket_label_plural() );
 
     $new_options = array(
         'show_agree_to_privacy_policy' => false,
@@ -612,23 +612,23 @@ function kbs_v129_upgrades()	{
         $sources = array(
             1  => array(
                 'slug' => 'kbs-website',
-                'name' => __( 'Website', 'kb-support' ),
-                'desc' => sprintf( __( '%s received via website', 'kb-support' ), kbs_get_ticket_label_plural() )
+                'name' => esc_html__( 'Website', 'kb-support' ),
+                'desc' => sprintf( esc_html__( '%s received via website', 'kb-support' ), kbs_get_ticket_label_plural() )
             ),
             2  => array(
                 'slug' => 'kbs-email',
-                'name' => __( 'Email', 'kb-support' ),
-                'desc' => sprintf( __( '%s received via email', 'kb-support' ), kbs_get_ticket_label_plural() )
+                'name' => esc_html__( 'Email', 'kb-support' ),
+                'desc' => sprintf( esc_html__( '%s received via email', 'kb-support' ), kbs_get_ticket_label_plural() )
             ),
             3  => array(
                 'slug' => 'kbs-telephone',
-                'name' => __( 'Telephone', 'kb-support' ),
-                'desc' => sprintf( __( '%s received via telephone', 'kb-support' ), kbs_get_ticket_label_plural() )
+                'name' => esc_html__( 'Telephone', 'kb-support' ),
+                'desc' => sprintf( esc_html__( '%s received via telephone', 'kb-support' ), kbs_get_ticket_label_plural() )
             ),
             99 => array(
                 'slug' => 'kbs-other',
-                'name' => __( 'Other', 'kb-support' ),
-                'desc' => sprintf( __( '%s received via another means', 'kb-support' ), kbs_get_ticket_label_plural() )
+                'name' => esc_html__( 'Other', 'kb-support' ),
+                'desc' => sprintf( esc_html__( '%s received via another means', 'kb-support' ), kbs_get_ticket_label_plural() )
             )
         );
 
@@ -810,8 +810,8 @@ function kbs_v142_upgrades()	{
  * @return	void
  */
 function kbs_v15_upgrades()	{
-	$name = __( 'REST API', 'kb-support' );
-	$desc = sprintf( __( '%s received via REST API', 'kb-support' ), kbs_get_ticket_label_plural() );
+	$name = esc_html__( 'REST API', 'kb-support' );
+	$desc = sprintf( esc_html__( '%s received via REST API', 'kb-support' ), kbs_get_ticket_label_plural() );
 	$slug = 'kbs-rest';
 
 	$insert = wp_insert_term(
@@ -983,7 +983,7 @@ function kbs_upgrade_render_upgrade_ticket_sources()	{
 		</p>
         <p class="return-to-dashboard">
             <a href="<?php echo esc_url( admin_url() ); ?>">
-                <?php _e( 'WordPress Dashboard', 'kb-support' ); ?>
+                <?php esc_html_e( 'WordPress Dashboard', 'kb-support' ); ?>
             </a>&nbsp;&nbsp;&#124;&nbsp;&nbsp;
             <a href="<?php echo esc_url( self_admin_url( 'edit.php?post_type=kbs_ticket' ) ); ?>">
                 <?php printf( esc_html__( 'KBS %s', 'kb-support' ), kbs_get_ticket_label_plural() ); ?>

@@ -72,16 +72,16 @@ function kbs_set_kbs_ticket_post_columns( $columns ) {
 	$columns = array(
         'cb'               => '<input type="checkbox" />',
         'id'               => '#',
-		'title'            => __( 'Title', 'kb-support' ),
-		'dates'            => __( 'Date', 'kb-support' ),
-        'customer'         => __( 'Customer', 'kb-support' ),
+		'title'            => esc_html__( 'Title', 'kb-support' ),
+		'dates'            => esc_html__( 'Date', 'kb-support' ),
+        'customer'         => esc_html__( 'Customer', 'kb-support' ),
 		'ticket_category'  => $category_labels['menu_name'],
 		'ticket_tag'       => $tag_labels['menu_name'],
-        'agent'            => __( 'Agent', 'kb-support' )
+        'agent'            => esc_html__( 'Agent', 'kb-support' )
     );
 
 	if ( kbs_track_sla() )	{
-		$columns['sla'] = __( 'SLA Status', 'kb-support' );
+		$columns['sla'] = esc_html__( 'SLA Status', 'kb-support' );
 	}
 
 	return apply_filters( 'kbs_ticket_post_columns', $columns );
@@ -699,7 +699,7 @@ function kbs_add_additional_ticket_filters_actions( $which )    {
             $actions[] = sprintf(
                 '<a class="button button-secondary" href="%s">%s</a>',
                 add_query_arg( 'flagged', 1 ),
-                sprintf( __( 'Filter Flagged %s', 'kb-support' ), kbs_get_ticket_label_plural() )
+                sprintf( esc_html__( 'Filter Flagged %s', 'kb-support' ), kbs_get_ticket_label_plural() )
             );
         }
     }
@@ -895,8 +895,8 @@ function kbs_ticket_filter_views( $views )	{
             $colour = kbs_get_ticket_status_colour( $status );
 
             if ( 'all' == $status ) {
-                $search       = __( 'All', 'kb-support' );
-                $replace      = sprintf( __( 'All %s', 'kb-support' ), kbs_get_ticket_label_plural() ); 
+                $search       = esc_html__( 'All', 'kb-support' );
+                $replace      = sprintf( esc_html__( 'All %s', 'kb-support' ), kbs_get_ticket_label_plural() ); 
                 $views['all'] = str_replace( $search, $replace, $views['all'] );
                 $colour       = $all_colour;
             }
@@ -943,8 +943,8 @@ function kbs_ticket_filter_views( $views )	{
         $views['all'] = preg_replace( '/\(.+\)/U', '(' . number_format_i18n( $count ) . ')', $views['all'] );
 
         if ( $active_only )	{
-            $search       = __( 'All', 'kb-support' );
-            $replace      = sprintf( __( 'Active %s', 'kb-support' ), kbs_get_ticket_label_plural() ); 
+            $search       = esc_html__( 'All', 'kb-support' );
+            $replace      = sprintf( esc_html__( 'Active %s', 'kb-support' ), kbs_get_ticket_label_plural() ); 
             $views['all'] = str_replace( $search, $replace, $views['all'] );
             $views['all'] = sprintf(
                 $span_string . $views['all'] . '</span>',

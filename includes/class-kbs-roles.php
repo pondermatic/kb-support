@@ -42,7 +42,7 @@ class KBS_Roles {
 	 * @return	void
 	 */
 	public function add_roles() {
-		add_role( 'support_manager', __( 'Support Manager', 'kb-support' ), array(
+		add_role( 'support_manager', esc_html__( 'Support Manager', 'kb-support' ), array(
 			'read'                   => true,
 			'edit_posts'             => true,
 			'delete_posts'           => true,
@@ -73,14 +73,14 @@ class KBS_Roles {
 			'read_private_posts'     => true
 		) );
 
-		add_role( 'support_agent', __( 'Support Agent', 'kb-support' ), array(
+		add_role( 'support_agent', esc_html__( 'Support Agent', 'kb-support' ), array(
 			'read'                   => true,
 			'edit_posts'             => false,
 			'upload_files'           => true,
 			'delete_posts'           => false
 		) );
 
-		add_role( 'support_customer', __( 'Support Customer', 'kb-support' ), array(
+		add_role( 'support_customer', esc_html__( 'Support Customer', 'kb-support' ), array(
 			'read'                   => true,
 			'edit_posts'             => false,
 			'upload_files'           => false,

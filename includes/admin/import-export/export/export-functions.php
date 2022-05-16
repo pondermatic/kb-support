@@ -57,7 +57,7 @@ function kbs_do_ajax_export() {
 	}
 
 	if ( ! $export->is_writable ) {
-		echo json_encode( array( 'error' => true, 'message' => __( 'Export location or file not writable', 'kb-support' ) ) ); exit;
+		echo json_encode( array( 'error' => true, 'message' => esc_html__( 'Export location or file not writable', 'kb-support' ) ) ); exit;
 	}
 
 	$export->set_properties( $_REQUEST );
@@ -76,11 +76,11 @@ function kbs_do_ajax_export() {
 
 	} elseif ( true === $export->is_empty ) {
 
-		echo json_encode( array( 'error' => true, 'message' => __( 'No data found for export parameters', 'kb-support' ) ) ); exit;
+		echo json_encode( array( 'error' => true, 'message' => esc_html__( 'No data found for export parameters', 'kb-support' ) ) ); exit;
 
 	} elseif ( true === $export->done && true === $export->is_void ) {
 
-		$message = ! empty( $export->message ) ? $export->message : __( 'Batch Processing Complete', 'kb-support' );
+		$message = ! empty( $export->message ) ? $export->message : esc_html__( 'Batch Processing Complete', 'kb-support' );
 		echo json_encode( array( 'success' => true, 'message' => $message ) ); exit;
 
 	} else {
@@ -114,7 +114,7 @@ function kbs_export_customers_display()	{
 			<form id="kbs-export-customers" class="kbs-export-form kbs-import-export-form" method="post">
 				<?php wp_nonce_field( 'kbs_ajax_export', 'kbs_ajax_export' ); ?>
 				<input type="hidden" name="kbs-export-class" value="KBS_Batch_Export_Customers"/>
-				<?php submit_button( __( 'Generate CSV', 'kb-support' ), 'secondary', 'submit', false ); ?>
+				<?php submit_button( esc_html__( 'Generate CSV', 'kb-support' ), 'secondary', 'submit', false ); ?>
 			</form>
 		</div><!-- .inside -->
 	</div><!-- .postbox -->

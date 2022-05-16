@@ -63,11 +63,12 @@ function kbs_process_ticket_submission()	{
 	$posted = array();
 	$ignore = kbs_form_ignore_fields();
 
-	foreach ( $_POST as $key => $value )	{
+	foreach ( $_POST as $key => $value ){
 		if ( ! in_array( $key, $ignore ) )	{
 
 			if ( is_string( $value ) || is_int( $value ) )	{
-				$posted[ $key ] = $value;
+				$posted[ $key ] = wp_kses_post( $value );
+				
 
 			} elseif( is_array( $value ) )	{
 				$posted[ $key ] = array_map( 'absint', $value );
@@ -162,7 +163,7 @@ function kbs_customer_close_ticket_from_url()	{
 
 		$reply_data = array(
 			'ticket_id'   => $ticket->ID,
-			'response'    => sprintf( __( 'Customer closed %s via URL', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+			'response'    => sprintf( esc_html__( 'Customer closed %s via URL', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
 			'close'       => true,
 			'customer_id' => (int) $ticket->customer_id,
 			'author'      => 0
@@ -235,7 +236,7 @@ function kbs_reopen_ticket()	{
 			
 			if ( $update )	{
 				$message = 'ticket_reopened';
-				kbs_insert_note( isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0, sprintf( __( '%s re-opened.', 'kb-support' ), kbs_get_ticket_label_singular() ) ); 
+				kbs_insert_note( isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0, sprintf( esc_html__( '%s re-opened.', 'kb-support' ), kbs_get_ticket_label_singular() ) ); 
 			}
 		}
 		
@@ -566,16 +567,20 @@ function kbs_cleanup_after_deleting_ticket( $ticket_id = 0 )	{
 
 	if ( false !== $items )	{
 		$item_ids = implode( ',', array_map( 'intval', $items ) );
-
 		$wpdb->query(
-			"DELETE FROM $wpdb->posts
-			 WHERE ID IN( {$item_ids} )"
-		);
-
-		$wpdb->query(
-			"DELETE FROM $wpdb->postmeta
-			 WHERE post_id IN( {$item_ids} )"
-		);
+			$wpdb->prepare(
+				"DELETE FROM $wpdb->posts
+				WHERE ID IN( %s )",
+				$item_ids,
+			)
+		 );
+		 $wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM $wpdb->postmeta
+				WHERE post_id IN( %s )",
+				$item_ids,
+			)
+		 );
 
 		delete_transient( $key );
 	}

@@ -218,7 +218,12 @@ function kbs_disconnect_customer_user_id() {
 		global $wpdb;
 
 		if ( ! empty( $customer->ticket_ids ) ) {
-			$wpdb->query( "UPDATE $wpdb->postmeta SET meta_value = 0 WHERE meta_key = '_kbs_ticket_user_id' AND post_id IN ( $customer->ticket_ids )" );
+			$wpdb->query(
+				$wpdb->prepare(
+				"UPDATE $wpdb->postmeta SET meta_value = 0 WHERE meta_key = '_kbs_ticket_user_id' AND post_id IN ( %s )",
+				$customer->ticket_ids
+				)
+			 );
 		}
 
 		$output['success'] = true;
@@ -264,25 +269,25 @@ function kbs_add_customer_email()	{
 		$output['success'] = false;
 
 		if ( empty( $_POST['email'] ) ) {
-			$output['message'] = __( 'Email address is required.', 'kb-support' );
+			$output['message'] = esc_html__( 'Email address is required.', 'kb-support' );
 		} else if ( empty( $_POST['customer_id'] ) ) {
-			$output['message'] = __( 'Customer ID is required.', 'kb-support' );
+			$output['message'] = esc_html__( 'Customer ID is required.', 'kb-support' );
 		} else {
-			$output['message'] = __( 'An error has occured. Please try again.', 'kb-support' );
+			$output['message'] = esc_html__( 'An error has occured. Please try again.', 'kb-support' );
 		}
 
 	} else if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( $_POST['_wpnonce'], 'kbs-add-customer-email' ) ) {
 
 		$output = array(
 			'success' => false,
-			'message' => __( 'Nonce verification failed.', 'kb-support' ),
+			'message' => esc_html__( 'Nonce verification failed.', 'kb-support' ),
 		);
 
 	} else if ( ! is_email( wp_unslash( $_POST['email'] ) ) ) {
 
 		$output = array(
 			'success' => false,
-			'message' => __( 'Invalid email address.', 'kb-support' ),
+			'message' => esc_html__( 'Invalid email address.', 'kb-support' ),
 		);
 
 	} else {
@@ -298,14 +303,14 @@ function kbs_add_customer_email()	{
 
 				$output = array(
 					'success'  => false,
-					'message'  => __( 'Email already assocaited with this customer.', 'kb-support' ),
+					'message'  => esc_html__( 'Email already assocaited with this customer.', 'kb-support' ),
 				);
 
 			} else {
 
 				$output = array(
 					'success' => false,
-					'message' => __( 'Email address is already associated with another customer.', 'kb-support' ),
+					'message' => esc_html__( 'Email address is already associated with another customer.', 'kb-support' ),
 				);
 
 			}
@@ -315,17 +320,17 @@ function kbs_add_customer_email()	{
 			$redirect = admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-customers&view=userdata&id=' . $customer_id . '&kbs-message=email_added' );
 			$output = array(
 				'success'  => true,
-				'message'  => __( 'Email successfully added to customer.', 'kb-support' ),
+				'message'  => esc_html__( 'Email successfully added to customer.', 'kb-support' ),
 				'redirect' => $redirect,
 			);
 
 			$user          = wp_get_current_user();
 			$user_login    = ! empty( $user->user_login ) ? $user->user_login : 'KBSBot';
-			$customer_note = __( sprintf( 'Email address %s added by %s', $email, $user_login ), 'kb-support' );
+			$customer_note = esc_html__( sprintf( 'Email address %s added by %s', $email, $user_login ), 'kb-support' );
 			$customer->add_note( $customer_note );
 
 			if ( $primary ) {
-				$customer_note = __( sprintf( 'Email address %s set as primary by %s', $email, $user_login ), 'kb-support' );
+				$customer_note = esc_html__( sprintf( 'Email address %s set as primary by %s', $email, $user_login ), 'kb-support' );
 				$customer->add_note( $customer_note );
 			}
 
@@ -422,7 +427,7 @@ function kbs_set_customer_primary_email()	{
 
 		$user          = wp_get_current_user();
 		$user_login    = ! empty( $user->user_login ) ? $user->user_login : 'KBSBot';
-		$customer_note = __( sprintf( 'Email address %s set as primary by %s', sanitize_email( wp_unslash( $_GET['email'] ) ), $user_login ), 'kb-support' );
+		$customer_note = esc_html__( sprintf( 'Email address %s set as primary by %s', sanitize_email( wp_unslash( $_GET['email'] ) ), $user_login ), 'kb-support' );
 		$customer->add_note( $customer_note );
 
 	} else {

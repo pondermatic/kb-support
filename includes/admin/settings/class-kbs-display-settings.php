@@ -82,8 +82,8 @@ class KBS_Display_Settings	{
 	public function add_options_link()	{
         add_submenu_page(
             'edit.php?post_type=kbs_ticket',
-            __( 'KB Support Settings', 'kb-support' ),
-            __( 'Settings', 'kb-support' ),
+            esc_html__( 'KB Support Settings', 'kb-support' ),
+            esc_html__( 'Settings', 'kb-support' ),
             'manage_ticket_settings',
             'kbs-settings',
             array( $this, 'options_page' )

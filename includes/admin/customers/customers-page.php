@@ -306,7 +306,7 @@ function kbs_customers_view( $customer ) {
 
 					<span class="customer-since info-item">
 						<?php esc_html_e( 'Customer since', 'kb-support' ); ?>
-						<?php echo date_i18n( get_option( 'date_format' ), strtotime( $customer->date_created ) ) ?>
+						<?php echo esc_html( date_i18n( get_option( 'date_format' ) ), strtotime( $customer->date_created ) ) ?>
 					</span>
 
 					<span class="customer-user-id info-item edit-item">
@@ -324,8 +324,15 @@ function kbs_customers_view( $customer ) {
 							$userdata = get_userdata( $user_id );
 							$user_args['value'] = $userdata->user_login;
 						}
-
-						echo KBS()->html->ajax_user_search( $user_args );
+						$allowed = array(
+							'input' => array(
+								'type'  => array(),
+								'name'  => array(),
+								'id'    => array(),
+								'class' => array()
+							),
+						);
+						echo wp_kses( KBS()->html->ajax_user_search( $user_args ), $allowed );
 						?>
 						<input type="hidden" name="customerinfo[user_id]" data-key="user_id" value="<?php echo esc_attr( $customer->user_id ); ?>" />
 					</span>
@@ -570,7 +577,8 @@ function kbs_customer_notes_view( $customer ) {
 			'show_all' => true
 		);
 
-		echo paginate_links( $pagination_args );
+		// WP native function
+		echo paginate_links( $pagination_args ); // phpcs:ignore
 		?>
 
 		<div id="kbs-customer-notes">
@@ -588,8 +596,8 @@ function kbs_customer_notes_view( $customer ) {
 			</div>
 		<?php endif; ?>
 		</div>
-
-		<?php echo paginate_links( $pagination_args ); ?>
+		<!-- WP native function -->
+		<?php echo paginate_links( $pagination_args ); // phpcs:ignore ?>
 
 	</div>
 

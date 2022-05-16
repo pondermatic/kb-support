@@ -75,7 +75,7 @@ add_action( 'admin_head', 'kbs_form_remove_metaboxes', PHP_INT_MAX );
 function kbs_form_add_meta_boxes( $post )	{
 	add_meta_box(
 		'kbs_form_fields_mb',
-		__( 'Form Fields', 'kb-support' ),
+		esc_html__( 'Form Fields', 'kb-support' ),
 		'kbs_form_fields_mb_callback',
 		'kbs_form',
 		'normal',
@@ -84,7 +84,7 @@ function kbs_form_add_meta_boxes( $post )	{
 			
 	add_meta_box(
 		'kbs_form_add_field_mb',
-		__( 'Add a New Field', 'kb-support' ),
+		esc_html__( 'Add a New Field', 'kb-support' ),
 		$post->post_status != 'auto-draft' ? 'kbs_form_add_field_mb_callback' : 'kbs_form_not_ready_mb_callback',
 		'kbs_form',
 		'side',
@@ -194,7 +194,7 @@ function kbs_display_meta_box_form_fields( $post_id )	{
                     <th style="width: 20px"></th>
                     <th style="width: 30%"><?php esc_html_e( 'Field Label', 'kb-support' ); ?></th>
                     <th style="width: 20%"><?php esc_html_e( 'Type', 'kb-support' ); ?></th>
-                    <th style="width: 30%" class="settings"><?php _e( 'Settings', 'kb-support' ); ?></th>
+                    <th style="width: 30%" class="settings"><?php esc_html_e( 'Settings', 'kb-support' ); ?></th>
                     <th style="width: 20%"><?php esc_html_e( 'Actions', 'kb-support' ); ?></th>
                     <?php do_action( 'kbs_form_field_table_foot', $post_id ); ?>
                 </tr>
@@ -399,7 +399,7 @@ function kbs_render_field_mapping_row( $post_id, $args )	{
 				'show_option_all'  => false,
 				'show_option_none' =>'',
                 'chosen'           => true,
-				'options'          => $options,
+				'options'          => array_map( 'esc_html', $options ),
                 'data'             => array(
                     'search-type'        => 'fields',
                     'search-placeholder' => esc_html__( 'Type to search all mappings', 'kb-support' ),
@@ -558,7 +558,7 @@ function kbs_render_field_add_field_btn_row( $post_id, $args )	{
 	<div id="kbs_meta_field_add_form_btn_wrap">
 		<?php echo KBS()->html->hidden( array(
 			'name'  => 'form_return_url',
-			'value' => remove_query_arg( array( 'kbs-message', 'kbs-action-nonce', 'kbs-action', 'field_id' ) )
+			'value' => esc_url( remove_query_arg( array( 'kbs-message', 'kbs-action-nonce', 'kbs-action', 'field_id' ) ) )
 		) ); ?>
 
         <?php if ( ! $kbs_edit_field ) : ?>

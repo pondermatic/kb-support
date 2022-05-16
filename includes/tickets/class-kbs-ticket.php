@@ -538,7 +538,7 @@ class KBS_Ticket {
 	 */
 	private function insert_ticket() {
 		if ( empty( $this->ticket_title ) )	{
-			$this->ticket_title = sprintf( __( 'New %s', 'kb-support' ), kbs_get_ticket_label_singular() );
+			$this->ticket_title = sprintf( esc_html__( 'New %s', 'kb-support' ), kbs_get_ticket_label_singular() );
 		}
 
 		if ( empty( $this->ip ) ) {
@@ -1112,7 +1112,7 @@ class KBS_Ticket {
 		}
 
 		$more = ' <a class="ticket-toggle-content more">';
-			$more .= __( 'Show more&hellip;', 'kb-support' );
+			$more .= esc_html__( 'Show more&hellip;', 'kb-support' );
 		$more .= '</a>';
 
 		$excerpt = wp_trim_words( $excerpt, 15, $more );
@@ -1909,7 +1909,7 @@ class KBS_Ticket {
 		$diff = human_time_diff( $end, $now );
 
 		if ( $now > $end )	{
-			$diff .= ' ' . __( 'ago', 'kb-support' );
+			$diff .= ' ' . esc_html__( 'ago', 'kb-support' );
 		}
 
 		return apply_filters( 'kbs_get_sla_remain', $diff );
@@ -2071,7 +2071,7 @@ class KBS_Ticket {
 					kbs_insert_note(
 						$reply_data['ticket_id'],
 						sprintf(
-							__( '%s re-opened by %s reply.', 'kb-support' ),
+							esc_html__( '%s re-opened by %s reply.', 'kb-support' ),
 							kbs_get_ticket_label_singular(),
 							$customer_or_agent
 						)
@@ -2093,9 +2093,9 @@ class KBS_Ticket {
 	 */
 	public function get_last_reply_by_values()	{
 		$reply_from = array(
-			1 => __( 'Admin', 'kb-support' ),
-			2 => __( 'Agent', 'kb-support' ),
-			3 => __( 'Customer', 'kb-support' )
+			1 => esc_html__( 'Admin', 'kb-support' ),
+			2 => esc_html__( 'Agent', 'kb-support' ),
+			3 => esc_html__( 'Customer', 'kb-support' )
 		);
 
 		$reply_from = apply_filters( 'last_reply_by_defaults', $reply_from );

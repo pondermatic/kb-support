@@ -22,7 +22,7 @@ function kbs_register_dashboard_widgets()	{
 	if ( current_user_can( apply_filters( 'kbs_dashboard_stats_cap', 'view_ticket_reports' ) ) )	{
 		wp_add_dashboard_widget(
 			'kbs_dashboard_tickets',
-			sprintf( __( 'KB Support %s Summary', 'kb-support' ), kbs_get_ticket_label_singular() ),
+			sprintf( esc_html__( 'KB Support %s Summary', 'kb-support' ), kbs_get_ticket_label_singular() ),
 			'kbs_dashboard_tickets_widget'
 		);
 	}

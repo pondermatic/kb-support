@@ -46,7 +46,7 @@ class KBS_Logging {
 	public function register_post_type() {
 		/* Logs post type */
 		$log_args = array(
-			'labels'              => array( 'name' => __( 'Logs', 'kb-support' ) ),
+			'labels'              => array( 'name' => esc_html__( 'Logs', 'kb-support' ) ),
 			'public'              => false,
 			'exclude_from_search' => true,
 			'publicly_queryable'  => false,

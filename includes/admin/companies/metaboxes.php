@@ -66,7 +66,7 @@ function kbs_company_add_meta_boxes( $post )	{
 
 	add_meta_box(
 		'kbs-company-metabox-data',
-		__( 'Company Contact Details', 'kb-support' ),
+		esc_html__( 'Company Contact Details', 'kb-support' ),
 		'kbs_company_metabox_data_callback',
 		'kbs_company',
 		'normal',
@@ -79,7 +79,7 @@ function kbs_company_add_meta_boxes( $post )	{
 	if ( $kbs_company_update )	{
 		add_meta_box(
 			'kbs-company-metabox-tickets',
-			sprintf( __( 'Recent %s', 'kb-support' ), kbs_get_ticket_label_plural() ),
+			sprintf( esc_html__( 'Recent %s', 'kb-support' ), kbs_get_ticket_label_plural() ),
 			'kbs_company_metabox_tickets_callback',
 			'kbs_company',
 			'normal',

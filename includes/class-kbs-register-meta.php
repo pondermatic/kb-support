@@ -143,7 +143,7 @@ class KBS_Register_Meta {
         $meta_fields = array(
             '_kbs_reply_customer_id' => array(
                 'type'              => 'integer',
-                'description'       => __( 'ID of the ticket customer.', 'kb-support' ),
+                'description'       => esc_html__( 'ID of the ticket customer.', 'kb-support' ),
                 'single'            => true,
                 'sanitize_callback' => 'absint',
                 'auth_callback'     => function() {
@@ -157,7 +157,7 @@ class KBS_Register_Meta {
             ),
             '_kbs_reply_agent_id' => array(
                 'type'              => 'integer',
-                'description'       => __( 'ID of the ticket agent.', 'kb-support' ),
+                'description'       => esc_html__( 'ID of the ticket agent.', 'kb-support' ),
                 'single'            => true,
                 'auth_callback'     => function() {
                     return kbs_can_view_customers();
@@ -170,7 +170,7 @@ class KBS_Register_Meta {
             ),
             '_kbs_reply_participant' => array(
                 'type'              => 'string',
-                'description'       => __( 'Participant email address.', 'kb-support' ),
+                'description'       => esc_html__( 'Participant email address.', 'kb-support' ),
                 'single'            => true,
                 'auth_callback'     => function() {
                     return kbs_can_view_customers();
@@ -184,7 +184,7 @@ class KBS_Register_Meta {
             '_kbs_reply_resolution' => array(
                 'type'              => 'boolean',
                 'description'       => sprintf(
-                    __( 'Whether or not this reply resolved the %s.', 'kb-support' ),
+                    esc_html__( 'Whether or not this reply resolved the %s.', 'kb-support' ),
                     kbs_get_ticket_label_singular( true )
                 ),
                 'single'            => true,
@@ -218,7 +218,7 @@ class KBS_Register_Meta {
         $meta_fields = array(
             '_redirect_page' => array(
                 'type'         => 'integer',
-                'description'  => __( 'Redirect page ID.', 'kb-support' ),
+                'description'  => esc_html__( 'Redirect page ID.', 'kb-support' ),
                 'single'       => true,
                 'default'      => 0,
                 'show_in_rest' => array(
@@ -230,7 +230,7 @@ class KBS_Register_Meta {
             ),
             '_submission_count' => array(
                 'type'         => 'integer',
-                'description'  => __( 'Submission count.', 'kb-support' ),
+                'description'  => esc_html__( 'Submission count.', 'kb-support' ),
                 'single'       => true,
                 'default'      => 0,
                 'show_in_rest' => array(
@@ -263,7 +263,7 @@ class KBS_Register_Meta {
         $meta_fields = array(
             '_default_field' => array(
                 'type'         => 'string',
-                'description'  => __( 'Form field settings.', 'kb-support' ),
+                'description'  => esc_html__( 'Form field settings.', 'kb-support' ),
                 'single'       => true,
                 'default'      => '',
                 'show_in_rest' => array(
@@ -275,7 +275,7 @@ class KBS_Register_Meta {
             ),
             '_kbs_field_settings' => array(
                 'type'         => 'object',
-                'description'  => __( 'Form field settings.', 'kb-support' ),
+                'description'  => esc_html__( 'Form field settings.', 'kb-support' ),
                 'single'       => true,
                 'default'      => array(),
                 'show_in_rest' => array(
@@ -359,7 +359,7 @@ class KBS_Register_Meta {
 		$meta_fields = array(
 			'_kbs_company_customer' => array(
 				'type'              => 'integer',
-				'description'       => __( 'KBS ID of Customer who is the primary company contact.', 'kb-support' ),
+				'description'       => esc_html__( 'KBS ID of Customer who is the primary company contact.', 'kb-support' ),
 				'single'            => true,
 				'sanitize_callback' => 'absint',
 				'auth_callback'     => function() {
@@ -373,7 +373,7 @@ class KBS_Register_Meta {
 			),
             '_kbs_company_contact' => array(
 				'type'              => 'string',
-				'description'       => __( 'Name of customer who is the primary company contact.', 'kb-support' ),
+				'description'       => esc_html__( 'Name of customer who is the primary company contact.', 'kb-support' ),
 				'single'            => true,
 				'sanitize_callback' => 'sanitize_text_field',
 				'auth_callback'     => function() {
@@ -387,7 +387,7 @@ class KBS_Register_Meta {
 			),
             '_kbs_company_email' => array(
 				'type'              => 'string',
-				'description'       => __( 'Email of customer who is the primary company contact.', 'kb-support' ),
+				'description'       => esc_html__( 'Email of customer who is the primary company contact.', 'kb-support' ),
 				'single'            => true,
 				'sanitize_callback' => 'sanitize_email',
 				'auth_callback'     => function() {
@@ -401,7 +401,7 @@ class KBS_Register_Meta {
 			),
             '_kbs_company_phone' => array(
 				'type'              => 'string',
-				'description'       => __( 'Phone number for company.', 'kb-support' ),
+				'description'       => esc_html__( 'Phone number for company.', 'kb-support' ),
 				'single'            => true,
 				'sanitize_callback' => 'sanitize_text_field',
 				'auth_callback'     => function() {
@@ -415,7 +415,7 @@ class KBS_Register_Meta {
 			),
             '_kbs_company_website' => array(
 				'type'              => 'string',
-				'description'       => __( 'Web address for company.', 'kb-support' ),
+				'description'       => esc_html__( 'Web address for company.', 'kb-support' ),
 				'single'            => true,
 				'sanitize_callback' => 'esc_url_raw',
 				'auth_callback'     => function() {

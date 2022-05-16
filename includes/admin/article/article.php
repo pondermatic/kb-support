@@ -42,14 +42,14 @@ function kbs_set_article_post_columns( $columns ) {
 
 	$columns = array(
         'cb'               => '<input type="checkbox" />',
-		'title'            => __( 'Title', 'kb-support' ),
-		'date'             => __( 'Date', 'kb-support' ),
-		'article_category' => $category_labels['menu_name'],
-        'article_tag'      => $tag_labels['menu_name'],
-		'author'           => __( 'Author', 'kb-support' ),
-		'views'            => __( 'Views', 'kb-support' ),
-		'visibility'       => __( 'Visibility', 'kb-support' ),
-		'linked'           => sprintf( __( 'Linked %s', 'kb-support' ), kbs_get_ticket_label_plural() )
+		'title'            => esc_html__( 'Title', 'kb-support' ),
+		'date'             => esc_html__( 'Date', 'kb-support' ),
+		'article_category' => esc_html( $category_labels['menu_name'] ),
+        'article_tag'      => esc_html( $tag_labels['menu_name'] ),
+		'author'           => esc_html__( 'Author', 'kb-support' ),
+		'views'            => esc_html__( 'Views', 'kb-support' ),
+		'visibility'       => esc_html__( 'Visibility', 'kb-support' ),
+		'linked'           => sprintf( esc_html__( 'Linked %s', 'kb-support' ), kbs_get_ticket_label_plural() )
     );
 	
 	return apply_filters( 'kbs_article_post_columns', $columns );
@@ -174,7 +174,7 @@ function kbs_add_article_row_actions( $actions, $post )	{
 		), admin_url( 'edit.php' ) );
 
 		$actions['reset_views'] = sprintf(
-			__( '<a href="%s">Reset Views</a>', 'kb-support' ),
+			wp_kses_post( __( '<a href="%s">Reset Views</a>', 'kb-support' ) ),
 			wp_nonce_url( $reset_url, 'reset_views', 'kbs-nonce' )
 		);
 	}

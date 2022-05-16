@@ -78,7 +78,7 @@ class KBS_Form_Fields_API extends KBS_API {
 				'args'   => array(
 					'id' => array(
 						'type'        => 'integer',
-						'description' => __( 'Unique identifier for the form.', 'kb-support' ),
+						'description' => esc_html__( 'Unique identifier for the form.', 'kb-support' ),
 					)
 				),
 				array(
@@ -158,7 +158,7 @@ class KBS_Form_Fields_API extends KBS_API {
 		if ( ! empty( $request['orderby'] ) && 'relevance' === $request['orderby'] && empty( $request['search'] ) ) {
 			return new WP_Error(
 				'rest_no_search_term_defined',
-				__( 'You need to define a search term to order by relevance.', 'kb-support' ),
+				esc_html__( 'You need to define a search term to order by relevance.', 'kb-support' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -167,7 +167,7 @@ class KBS_Form_Fields_API extends KBS_API {
 		if ( ! empty( $request['orderby'] ) && 'include' === $request['orderby'] && empty( $request['include'] ) ) {
 			return new WP_Error(
 				'rest_orderby_include_missing_include',
-				__( 'You need to define an include parameter to order by include.', 'kb-support' ),
+				esc_html__( 'You need to define an include parameter to order by include.', 'kb-support' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -264,7 +264,7 @@ class KBS_Form_Fields_API extends KBS_API {
 		if ( $page > $max_pages && $total_posts > 0 ) {
 			return new WP_Error(
 				'rest_post_invalid_page_number',
-				__( 'The page number requested is larger than the number of pages available.', 'kb-support' ),
+				esc_html__( 'The page number requested is larger than the number of pages available.', 'kb-support' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -375,7 +375,7 @@ class KBS_Form_Fields_API extends KBS_API {
 		$query_params['context']['default'] = 'view';
 
 		$query_params['exclude'] = array(
-			'description' => __( 'Ensure result set excludes specific IDs.', 'kb-support' ),
+			'description' => esc_html__( 'Ensure result set excludes specific IDs.', 'kb-support' ),
 			'type'        => 'array',
 			'items'       => array(
 				'type' => 'integer',
@@ -384,7 +384,7 @@ class KBS_Form_Fields_API extends KBS_API {
 		);
 
 		$query_params['include'] = array(
-			'description' => __( 'Limit result set to specific IDs.', 'kb-support' ),
+			'description' => esc_html__( 'Limit result set to specific IDs.', 'kb-support' ),
 			'type'        => 'array',
 			'items'       => array(
 				'type' => 'integer',
@@ -393,19 +393,19 @@ class KBS_Form_Fields_API extends KBS_API {
 		);
 
 		$query_params['offset'] = array(
-			'description' => __( 'Offset the result set by a specific number of items.', 'kb-support' ),
+			'description' => esc_html__( 'Offset the result set by a specific number of items.', 'kb-support' ),
 			'type'        => 'integer',
 		);
 
 		$query_params['order'] = array(
-			'description' => __( 'Order sort attribute ascending or descending.', 'kb-support' ),
+			'description' => esc_html__( 'Order sort attribute ascending or descending.', 'kb-support' ),
 			'type'        => 'string',
 			'default'     => 'desc',
 			'enum'        => array( 'asc', 'desc' ),
 		);
 
 		$query_params['orderby'] = array(
-			'description' => __( 'Sort collection by object attribute.', 'kb-support' ),
+			'description' => esc_html__( 'Sort collection by object attribute.', 'kb-support' ),
 			'type'        => 'string',
 			'default'     => 'title',
 			'enum'        => array(
@@ -422,7 +422,7 @@ class KBS_Form_Fields_API extends KBS_API {
         $post_type = get_post_type_object( $this->post_type );
 
         $query_params['parent'] = array(
-            'description' => __( 'Limit result set to items with particular parent IDs.', 'kb-support' ),
+            'description' => esc_html__( 'Limit result set to items with particular parent IDs.', 'kb-support' ),
             'type'        => 'array',
             'items'       => array(
                 'type' => 'integer',
@@ -430,7 +430,7 @@ class KBS_Form_Fields_API extends KBS_API {
             'default'     => array(),
         );
         $query_params['parent_exclude'] = array(
-            'description' => __( 'Limit result set to all items except those of a particular parent ID.', 'kb-support' ),
+            'description' => esc_html__( 'Limit result set to all items except those of a particular parent ID.', 'kb-support' ),
             'type'        => 'array',
             'items'       => array(
                 'type' => 'integer',
@@ -439,7 +439,7 @@ class KBS_Form_Fields_API extends KBS_API {
         );
 
         $query_params['slug'] = array(
-			'description'       => __( 'Limit result set to fields with one or more specific slugs.', 'kb-support' ),
+			'description'       => esc_html__( 'Limit result set to fields with one or more specific slugs.', 'kb-support' ),
 			'type'              => 'array',
 			'items'             => array(
 				'type' => 'string',
@@ -449,7 +449,7 @@ class KBS_Form_Fields_API extends KBS_API {
 
 		$query_params['status'] = array(
 			'default'           => 'publish',
-			'description'       => __( 'Limit result set to fields assigned one or more statuses.', 'kb-support' ),
+			'description'       => esc_html__( 'Limit result set to fields assigned one or more statuses.', 'kb-support' ),
 			'type'              => 'array',
 			'items'             => array(
 				'enum' => array_merge( array_keys( get_post_stati() ), array( 'any' ) ),
@@ -586,7 +586,7 @@ class KBS_Form_Fields_API extends KBS_API {
 			} else {
 				return new WP_Error(
 					'rest_forbidden_status',
-					__( 'Status is forbidden.', 'kb-support' ),
+					esc_html__( 'Status is forbidden.', 'kb-support' ),
 					array( 'status' => rest_authorization_required_code() )
 				);
 			}

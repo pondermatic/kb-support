@@ -26,8 +26,8 @@ function kbs_add_tools_menu_link() {
 
 	$kbs_tools_page = add_submenu_page(
         'edit.php?post_type=kbs_ticket',
-        __( 'Tools', 'kb-support' ),
-        __( 'Tools', 'kb-support' ),
+        esc_html__( 'Tools', 'kb-support' ),
+        esc_html__( 'Tools', 'kb-support' ),
         'manage_ticket_settings',
         'kbs-tools',
         'kbs_tools_page'
@@ -85,10 +85,10 @@ function kbs_tools_page()	{
 function kbs_get_tools_page_tabs()	{
 
 	$tabs = array(
-		'general'     => __( 'General', 'kb-support' ),
-		'system_info' => __( 'System Info', 'kb-support' ),
-        'import'      => __( 'Import', 'kb-support' ),
-        'export'      => __( 'Export', 'kb-support' )
+		'general'     => esc_html__( 'General', 'kb-support' ),
+		'system_info' => esc_html__( 'System Info', 'kb-support' ),
+        'import'      => esc_html__( 'Import', 'kb-support' ),
+        'export'      => esc_html__( 'Export', 'kb-support' )
 	);
 
 	return apply_filters( 'kbs_tools_page_tabs', $tabs );
@@ -121,7 +121,7 @@ function kbs_tools_banned_emails_display() {
 				<p>
 					<input type="hidden" name="kbs-action" value="save_banned_emails" />
 					<?php wp_nonce_field( 'kbs_banned_emails_nonce', 'kbs_banned_emails_nonce' ); ?>
-					<?php submit_button( __( 'Save', 'kb-support' ), 'secondary', 'submit', false ); ?>
+					<?php submit_button( esc_html__( 'Save', 'kb-support' ), 'secondary', 'submit', false ); ?>
 				</p>
 			</form>
 		</div><!-- .inside -->
@@ -147,11 +147,11 @@ function kbs_tools_system_info_display()	{
 	?>
 
 	<form action="<?php echo esc_url( admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-tools&tab=system_info' ) ); ?>" method="post" dir="ltr">
-    		<?php submit_button( __( 'Download System Info File', 'kb-support' ), 'primary', 'kbs-download-sysinfo', true ); ?>
+    		<?php submit_button( esc_html__( 'Download System Info File', 'kb-support' ), 'primary', 'kbs-download-sysinfo', true ); ?>
 		<textarea readonly onclick="this.focus(); this.select()" id="system-info-textarea" name="kbs-sysinfo" title="To copy the system info, click below then press Ctrl + C (PC) or Cmd + C (Mac)."><?php echo kbs_tools_sysinfo_get(); ?></textarea>
 		<p class="submit">
 			<input type="hidden" name="kbs-action" value="download_sysinfo" />
-			<?php submit_button( __( 'Download System Info File', 'kb-support' ), 'primary', 'kbs-download-sysinfo-2', false ); ?>
+			<?php submit_button( esc_html__( 'Download System Info File', 'kb-support' ), 'primary', 'kbs-download-sysinfo-2', false ); ?>
 		</p>
 	</form>
 
@@ -473,7 +473,7 @@ function kbs_tools_import_display() {
 				<p>
 					<input type="hidden" name="kbs-action" value="import_settings" />
 					<?php wp_nonce_field( 'kbs_import_nonce', 'kbs_import_nonce' ); ?>
-					<?php submit_button( __( 'Import', 'kb-support' ), 'secondary', 'submit', false ); ?>
+					<?php submit_button( esc_html__( 'Import', 'kb-support' ), 'secondary', 'submit', false ); ?>
 				</p>
 			</form>
 		</div><!-- .inside -->
@@ -506,7 +506,7 @@ function kbs_tools_export_display() {
 				<input type="hidden" name="kbs-action" value="export_settings" />
 				<?php wp_nonce_field( 'kbs_export_nonce', 'kbs_export_nonce' ); ?>
                 <span>
-					<?php submit_button( __( 'Export', 'kb-support' ), 'secondary', 'submit', false ); ?>
+					<?php submit_button( esc_html__( 'Export', 'kb-support' ), 'secondary', 'submit', false ); ?>
                 </span>
 			</form>
 		</div><!-- .inside -->

@@ -20,11 +20,11 @@ function kbs_set_kbs_form_post_columns( $columns ) {
     
 	$columns = array(
         'cb'          => '<input type="checkbox" />',
-		'title'       => __( 'Name', 'kb-support' ),
-		'shortcode'   => __( 'Shortcode', 'kb-support' ),
-		'author'      => __( 'Author', 'kb-support' ),
-		'fields'      => __( 'Field Count', 'kb-support' ),
-		'submissions' => __( 'Submissions', 'kb-support' ),
+		'title'       => esc_html__( 'Name', 'kb-support' ),
+		'shortcode'   => esc_html__( 'Shortcode', 'kb-support' ),
+		'author'      => esc_html__( 'Author', 'kb-support' ),
+		'fields'      => esc_html__( 'Field Count', 'kb-support' ),
+		'submissions' => esc_html__( 'Submissions', 'kb-support' ),
     );
 	
 	return apply_filters( 'kbs_form_post_columns', $columns );

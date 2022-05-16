@@ -44,8 +44,8 @@ add_filter( 'kbs_customer_views', 'kbs_register_default_customer_views', 1, 1 );
 function kbs_register_default_customer_tabs( $tabs ) {
 
 	$default_tabs = array(
-		'userdata' => array( 'dashicon' => 'dashicons-admin-users', 'title' => __( 'Customer Profile', 'kb-support' ) ),
-		'notes'    => array( 'dashicon' => 'dashicons-admin-comments', 'title' => __( 'Customer Notes', 'kb-support' ) )
+		'userdata' => array( 'dashicon' => 'dashicons-admin-users', 'title' => esc_html__( 'Customer Profile', 'kb-support' ) ),
+		'notes'    => array( 'dashicon' => 'dashicons-admin-comments', 'title' => esc_html__( 'Customer Notes', 'kb-support' ) )
 	);
 
 	return array_merge( $tabs, $default_tabs );
@@ -61,7 +61,7 @@ add_filter( 'kbs_customer_tabs', 'kbs_register_default_customer_tabs', 1, 1 );
  */
 function kbs_register_delete_customer_tab( $tabs ) {
 
-	$tabs['delete'] = array( 'dashicon' => 'dashicons-trash', 'title' => __( 'Delete Customer', 'kb-support' ) );
+	$tabs['delete'] = array( 'dashicon' => 'dashicons-trash', 'title' => esc_html__( 'Delete Customer', 'kb-support' ) );
 
 	return $tabs;
 } // kbs_register_delete_customer_tab

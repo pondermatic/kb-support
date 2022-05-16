@@ -166,7 +166,7 @@ function kbs_get_ticket_actions( $kbs_ticket, $updating = true )   {
 
 		if ( kbs_participants_enabled() )	{
 			$participant_count  = kbs_get_ticket_participant_count( $kbs_ticket );
-			$participant_string = __( 'View participants', 'kb-support' );
+			$participant_string = esc_html__( 'View participants', 'kb-support' );
 			$participant_count  = ' (<span id="participant-count">' . $participant_count . '</span>)';
 
 			$actions['participants'] = '<a href="#" class="toggle-view-participants-option-section">' . $participant_string . '</a>' . $participant_count;
@@ -622,13 +622,13 @@ function kbs_ticket_metabox_customer_section( $ticket_id )	{
     $edit_user       = '';
 
     if ( '-1' == $customer_id || empty( $customer_id ) || ! $customer_exists )    {
-        $customer = __( 'No customer assigned', 'kb-support' );
+        $customer = esc_html__( 'No customer assigned', 'kb-support' );
     } else  {
         if ( ! empty( $user_id ) )  {
             $edit_user = sprintf(
                 '<a href="%s">%s</a>',
                 get_edit_user_link( $user_id ),
-                __( 'User Profile', 'kb-support' )
+                esc_html__( 'User Profile', 'kb-support' )
             );
         }
         $customer = sprintf(
@@ -948,7 +948,7 @@ function kbs_ticket_metabox_reply_row( $ticket_id )	{
 		if ( kbs_agent_can_set_status_on_reply() ) : ?>
 			<p><label>
 				<?php echo sprintf(
-					 __( '<strong>Set status to</strong> %s <strong>and</strong>&nbsp;', 'kb-support' ),
+					 wp_kses_post( __( '<strong>Set status to</strong> %s <strong>and</strong>&nbsp;', 'kb-support' ) ),
 					KBS()->html->ticket_status_dropdown( array(
 						'name'     => 'ticket_reply_status',
 						'selected' => esc_html( kbs_agent_get_default_reply_status( $kbs_ticket->ID ) ),

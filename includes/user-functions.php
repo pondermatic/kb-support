@@ -250,8 +250,8 @@ function kbs_render_user_profile_tickets_order_field( $user )  {
 	$order = get_user_meta( $user->ID, '_kbs_tickets_order', true );
 	$order = '' != $order ? esc_attr( $order ) : 'DESC';
 	$options = array(
-		'DESC' => __( 'Descending Order', 'kb-support' ),
-		'ASC'  => __( 'Ascending Order', 'kb-support' )
+		'DESC' => esc_html__( 'Descending Order', 'kb-support' ),
+		'ASC'  => esc_html__( 'Ascending Order', 'kb-support' )
 	);
 
 	ob_start(); ?>
@@ -367,7 +367,7 @@ function kbs_render_user_profile_replies_to_expand_field( $user )  {
         </th>
         <td>
             <input class="small-text" type="number" name="kbs_expand_replies" id="kbs-expand-replies" value="<?php echo (int)$replies_to_expand; ?>" step="1" min="0" />
-            <p class="description"><?php printf( esc_html__( 'Choose the number of replies to auto expand when the %s page loads. <code>0</code> expands none.', 'kb-support' ), kbs_get_ticket_label_singular( true ) ); ?></p>
+            <p class="description"><?php printf( wp_kses_post( __( 'Choose the number of replies to auto expand when the %s page loads. <code>0</code> expands none.', 'kb-support' ) ), kbs_get_ticket_label_singular( true ) ); ?></p>
         </td>
     </tr>
 
@@ -1064,7 +1064,7 @@ function kbs_process_profile_editor_remove_email() {
 
 		$user          = wp_get_current_user();
 		$user_login    = ! empty( $user->user_login ) ? $user->user_login : 'KBSBot';
-		$customer_note = __( sprintf( 'Email address %s removed by %s', sanitize_email( wp_unslash( $_GET['email'] ) ), $user_login ), 'kb-support' );
+		$customer_note = esc_html__( sprintf( 'Email address %s removed by %s', sanitize_email( wp_unslash( $_GET['email'] ) ), $user_login ), 'kb-support' );
 		$customer->add_note( $customer_note );
 
 		$url = add_query_arg( 'kbs_notice', 'email_removed', $url );

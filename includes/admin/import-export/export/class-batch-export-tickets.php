@@ -40,18 +40,18 @@ class KBS_Batch_Export_Tickets extends KBS_Batch_Export {
 	public function csv_cols() {
 
 		$cols = array(
-			'id'            => __( 'ID', 'kb-support' ),
-			'ticket_number' => sprintf( __( '%s Number',   'kb-support' ), kbs_get_ticket_label_singular() ),
-			'date'          => __( 'Log Date', 'kb-support' ),
-			'status'        => __( 'Status', 'kb-support' ),
-			'categories'    => __( 'Categories', 'kb-support' ),
-			'company'       => __( 'Company', 'kb-support' ),
-			'customer'      => __( 'Customer', 'kb-support' ),
-			'agent'         => __( 'Agent', 'kb-support' ),
-			'agents'        => __( 'Additional Agents', 'kb-support' ),
-			'title'         => __( 'Title', 'kb-support' ),
-			'content'       => __( 'Content', 'kb-support' ),
-			'replies'       => __( 'Replies', 'kb-support' )
+			'id'            => esc_html__( 'ID', 'kb-support' ),
+			'ticket_number' => sprintf( esc_html__( '%s Number',   'kb-support' ), kbs_get_ticket_label_singular() ),
+			'date'          => esc_html__( 'Log Date', 'kb-support' ),
+			'status'        => esc_html__( 'Status', 'kb-support' ),
+			'categories'    => esc_html__( 'Categories', 'kb-support' ),
+			'company'       => esc_html__( 'Company', 'kb-support' ),
+			'customer'      => esc_html__( 'Customer', 'kb-support' ),
+			'agent'         => esc_html__( 'Agent', 'kb-support' ),
+			'agents'        => esc_html__( 'Additional Agents', 'kb-support' ),
+			'title'         => esc_html__( 'Title', 'kb-support' ),
+			'content'       => esc_html__( 'Content', 'kb-support' ),
+			'replies'       => esc_html__( 'Replies', 'kb-support' )
 		);
 
 		return $cols;
@@ -124,7 +124,7 @@ class KBS_Batch_Export_Tickets extends KBS_Batch_Export {
 					'categories'         => strip_tags( get_the_term_list( $ticket->ID, 'ticket_category', '', ', ', '') ),
 					'company'            => kbs_get_company_name( $ticket->company_id ),
 					'customer'           => $ticket->first_name . ' ' . $ticket->last_name,
-					'agent'              => $agent ? $agent->display_name : __( 'Unassigned', 'kb-support' ),
+					'agent'              => $agent ? $agent->display_name : esc_html__( 'Unassigned', 'kb-support' ),
 					'agents'             => implode( ', ', $additional_agents ),
 					'title'              => $ticket->ticket_title,
 					'content'            => $ticket->ticket_content,

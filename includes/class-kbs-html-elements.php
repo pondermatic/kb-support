@@ -325,14 +325,14 @@ class KBS_HTML_Elements {
 			'company_id'       => null,
 			'show_company'     => false,
             'exclude_id'       => null,
-			'placeholder'      => __( 'Select a Customer', 'kb-support' ),
+			'placeholder'      => esc_html__( 'Select a Customer', 'kb-support' ),
 			'number'           => -1,
 			'show_no_attached' => true,
             'show_option_all'  => false,
-            'show_option_none' => __( 'Select a Customer', 'kb-support' ),
+            'show_option_none' => esc_html__( 'Select a Customer', 'kb-support' ),
 			'data'             => array(
 				'search-type'        => 'customer',
-				'search-placeholder' => __( 'Type to search all customers', 'kb-support' )
+				'search-placeholder' => esc_html__( 'Type to search all customers', 'kb-support' )
 			)
 		);
 
@@ -1172,7 +1172,7 @@ class KBS_HTML_Elements {
 		$defaults = array(
 			'name'        => 'user_id',
 			'value'       => null,
-			'placeholder' => __( 'Enter username', 'kb-support' ),
+			'placeholder' => esc_html__( 'Enter username', 'kb-support' ),
 			'label'       => null,
 			'desc'        => null,
 			'class'       => '',

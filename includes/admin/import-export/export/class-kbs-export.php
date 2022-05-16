@@ -86,8 +86,8 @@ class KBS_Export {
 	 */
 	public function csv_cols() {
 		$cols = array(
-			'id'   => __( 'ID',   'kb-support' ),
-			'date' => __( 'Date', 'kb-support' )
+			'id'   => esc_html__( 'ID',   'kb-support' ),
+			'date' => esc_html__( 'Date', 'kb-support' )
 		);
 		return $cols;
 	} // csv_cols
@@ -167,7 +167,7 @@ class KBS_Export {
 			foreach ( $row as $col_id => $column ) {
 				// Make sure the column is valid
 				if ( array_key_exists( $col_id, $cols ) ) {
-					echo '"' . esc_htm( addslashes( $column ) ) . '"';
+					echo '"' . esc_html( addslashes( $column ) ) . '"';
 					echo $i == count( $cols ) ? '' : ',';
 					$i++;
 				}

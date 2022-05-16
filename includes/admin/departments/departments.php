@@ -26,7 +26,7 @@ function kbs_department_taxonomy_columns( $columns )	{
 		unset( $columns['slug'] );
 	}
 
-	$columns['agents'] = __( 'Agents', 'kb-support' );
+	$columns['agents'] = esc_html__( 'Agents', 'kb-support' );
 
 	return $columns;
 } // kbs_department_taxonomy_columns

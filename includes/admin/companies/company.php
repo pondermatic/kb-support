@@ -39,14 +39,14 @@ function kbs_set_company_post_columns( $columns ) {
 
 	$columns = array(
         'cb'        => '<input type="checkbox" />',
-		'logo'      => __( 'Logo', 'kb-support' ),
-		'title'     => __( 'Company', 'kb-support' ),
-		'contact'   => __( 'Contact', 'kb-support' ),
-		'email'     => __( 'Email', 'kb-support' ),
-		'phone'     => __( 'Phone', 'kb-support' ),
-		'website'   => __( 'Web URL', 'kb-support' ),
+		'logo'      => esc_html__( 'Logo', 'kb-support' ),
+		'title'     => esc_html__( 'Company', 'kb-support' ),
+		'contact'   => esc_html__( 'Contact', 'kb-support' ),
+		'email'     => esc_html__( 'Email', 'kb-support' ),
+		'phone'     => esc_html__( 'Phone', 'kb-support' ),
+		'website'   => esc_html__( 'Web URL', 'kb-support' ),
 		'tickets'   => kbs_get_ticket_label_plural(),
-		'customers' => __( 'Customers', 'kb-support' )
+		'customers' => esc_html__( 'Customers', 'kb-support' )
     );
 	
 	return apply_filters( 'kbs_company_post_columns', $columns );

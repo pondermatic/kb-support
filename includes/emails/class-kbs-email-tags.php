@@ -274,155 +274,155 @@ function kbs_setup_email_tags() {
 	$email_tags = array(
 		array(
 			'tag'         => 'name',
-			'description' => __( 'The customers first name', 'kb-support' ),
+			'description' => esc_html__( 'The customers first name', 'kb-support' ),
 			'function'    => 'kbs_email_tag_first_name'
 		),
 		array(
 			'tag'         => 'fullname',
-			'description' => __( 'The customers full name, first and last', 'kb-support' ),
+			'description' => esc_html__( 'The customers full name, first and last', 'kb-support' ),
 			'function'    => 'kbs_email_tag_fullname'
 		),
 		array(
 			'tag'         => 'username',
-			'description' => __( 'The customers user name on the site, if they registered an account', 'kb-support' ),
+			'description' => esc_html__( 'The customers user name on the site, if they registered an account', 'kb-support' ),
 			'function'    => 'kbs_email_tag_username'
 		),
 		array(
 			'tag'         => 'user_email',
-			'description' => __( 'The customers email address', 'kb-support' ),
+			'description' => esc_html__( 'The customers email address', 'kb-support' ),
 			'function'    => 'kbs_email_tag_user_email'
 		),
 		array(
 			'tag'         => 'company',
 			'description' => sprintf(
-				__( 'The name of the company to which the %s is associated', 'kb-support' ),
+				esc_html__( 'The name of the company to which the %s is associated', 'kb-support' ),
 				strtolower( $ticket_singular )
 			),
 			'function'    => 'kbs_email_tag_company'
 		),
 		array(
 			'tag'         => 'company_contact',
-			'description' => __( 'The contact name of the company', 'kb-support' ),
+			'description' => esc_html__( 'The contact name of the company', 'kb-support' ),
 			'function'    => 'kbs_email_tag_company_contact'
 		),
 		array(
 			'tag'         => 'company_email',
-			'description' => __( 'The email address of the company', 'kb-support' ),
+			'description' => esc_html__( 'The email address of the company', 'kb-support' ),
 			'function'    => 'kbs_email_tag_company_email'
 		),
 		array(
 			'tag'         => 'company_phone',
-			'description' => __( 'The phone number of the company', 'kb-support' ),
+			'description' => esc_html__( 'The phone number of the company', 'kb-support' ),
 			'function'    => 'kbs_email_tag_company_phone'
 		),
 		array(
 			'tag'         => 'company_website',
-			'description' => __( 'The website URL of the company', 'kb-support' ),
+			'description' => esc_html__( 'The website URL of the company', 'kb-support' ),
 			'function'    => 'kbs_email_tag_company_website'
 		),
 		array(
 			'tag'         => 'company_logo',
-			'description' => __( 'Inserts the logo of the company', 'kb-support' ),
+			'description' => esc_html__( 'Inserts the logo of the company', 'kb-support' ),
 			'function'    => 'kbs_email_tag_company_logo'
 		),
 		array(
 			'tag'         => 'sitename',
-			'description' => __( 'Your site name', 'kb-support' ),
+			'description' => esc_html__( 'Your site name', 'kb-support' ),
 			'function'    => 'kbs_email_tag_sitename'
 		),
 		array(
 			'tag'         => 'date',
-			'description' => sprintf( __( 'The date of the %s', 'kb-support' ), strtolower( $ticket_singular ) ),
+			'description' => sprintf( esc_html__( 'The date of the %s', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_date'
 		),
 		array(
 			'tag'         => 'time',
-			'description' => sprintf( __( 'The time of the %s', 'kb-support' ), strtolower( $ticket_singular ) ),
+			'description' => sprintf( esc_html__( 'The time of the %s', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_time'
 		),
 		array(
 			'tag'         => 'ticket_id',
-			'description' => sprintf( __( 'The unique ID number for this %s', 'kb-support' ), strtolower( $ticket_singular ) ),
+			'description' => sprintf( esc_html__( 'The unique ID number for this %s', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_ticket_id'
 		),
         array(
 			'tag'         => 'ticket_status',
-			'description' => sprintf( __( 'The current status of the %s', 'kb-support' ), strtolower( $ticket_singular ) ),
+			'description' => sprintf( esc_html__( 'The current status of the %s', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_ticket_status'
 		),
 		array(
 			'tag'         => 'ticket_title',
-			'description' => sprintf( __( 'Title of the %s', 'kb-support' ), strtolower( $ticket_singular ) ),
+			'description' => sprintf( esc_html__( 'Title of the %s', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_ticket_title'
 		),
 		array(
 			'tag'         => 'ticket_content',
-			'description' => sprintf( __( 'Content of the %s', 'kb-support' ), strtolower( $ticket_singular ) ),
+			'description' => sprintf( esc_html__( 'Content of the %s', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_ticket_content'
 		),
 		array(
 			'tag'         => 'ticket_files',
-			'description' => sprintf( __( 'Attach or list files attached to the %s', 'kb-support' ), strtolower( $ticket_singular ) ),
+			'description' => sprintf( esc_html__( 'Attach or list files attached to the %s', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_ticket_files'
 		),
         array(
 			'tag'         => 'department',
-			'description' => sprintf( __( 'Inserts the name of the department who are handling the %s or an empty string if no department is assigned', 'kb-support' ), strtolower( $ticket_singular ) ),
+			'description' => sprintf( esc_html__( 'Inserts the name of the department who are handling the %s or an empty string if no department is assigned', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_department'
 		),
 		array(
 			'tag'         => 'reply_author',
-			'description' => sprintf( __( 'The name or email address (if no name is in the database) of the author of the the most recent %s reply', 'kb-support' ), strtolower( $ticket_singular ) ),
+			'description' => sprintf( esc_html__( 'The name or email address (if no name is in the database) of the author of the the most recent %s reply', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_reply_author'
 		),
 		array(
 			'tag'         => 'reply_date',
-			'description' => sprintf( __( 'The date of the most recent %s reply', 'kb-support' ), strtolower( $ticket_singular ) ),
+			'description' => sprintf( esc_html__( 'The date of the most recent %s reply', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_reply_date'
 		),
 		array(
 			'tag'         => 'reply_time',
-			'description' => sprintf( __( 'The time of the most recent %s reply', 'kb-support' ), strtolower( $ticket_singular ) ),
+			'description' => sprintf( esc_html__( 'The time of the most recent %s reply', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_reply_time'
 		),
 		array(
 			'tag'         => 'reply_content',
-			'description' => __( 'Content of the most recent reply', 'kb-support' ),
+			'description' => esc_html__( 'Content of the most recent reply', 'kb-support' ),
 			'function'    => 'kbs_email_tag_reply_content'
 		),
         array(
 			'tag'         => 'reply_files',
-			'description' => sprintf( __( 'Attach or list files attached to the %s reply', 'kb-support' ), strtolower( $ticket_singular ) ),
+			'description' => sprintf( esc_html__( 'Attach or list files attached to the %s reply', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_reply_files'
 		),
 		array(
 			'tag'         => 'ticket_url',
-			'description' => sprintf( __( 'Adds a URL so customers can view their %s directly on your website.', 'kb-support' ), strtolower( $ticket_singular ) ),
+			'description' => sprintf( esc_html__( 'Adds a URL so customers can view their %s directly on your website.', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_ticket_url'
 		),
 		array(
 			'tag'         => 'ticket_url_path',
-			'description' => sprintf( __( 'Adds a non-linked URL so customers can view their %s directly on your website.', 'kb-support' ), strtolower( $ticket_singular ) ),
+			'description' => sprintf( esc_html__( 'Adds a non-linked URL so customers can view their %s directly on your website.', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_ticket_url_path'
 		),
 		array(
 			'tag'         => 'ticket_admin_url',
-			'description' => sprintf( __( 'Adds a URL so admins can access a %s directly.', 'kb-support' ), strtolower( $ticket_singular ) ),
+			'description' => sprintf( esc_html__( 'Adds a URL so admins can access a %s directly.', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_ticket_admin_url'
 		),
 		array(
 			'tag'         => 'ticket_admin_url_path',
-			'description' => sprintf( __( 'Adds a non-linked URL so admins can access a %s directly.', 'kb-support' ), strtolower( $ticket_singular ) ),
+			'description' => sprintf( esc_html__( 'Adds a non-linked URL so admins can access a %s directly.', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_ticket_admin_url_path'
 		),
 		array(
 			'tag'         => 'close_ticket_url',
-			'description' => sprintf( __( 'Adds a URL link that customers can click to close a ticket.', 'kb-support' ), strtolower( $ticket_singular ) ),
+			'description' => sprintf( esc_html__( 'Adds a URL link that customers can click to close a ticket.', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_ticket_close_ticket_url'
 		),
 		array(
 			'tag'         => 'close_ticket_url_path',
-			'description' => sprintf( __( 'Adds a non-linked URL link that customers can click to close a ticket.', 'kb-support' ), strtolower( $ticket_singular ) ),
+			'description' => sprintf( esc_html__( 'Adds a non-linked URL link that customers can click to close a ticket.', 'kb-support' ), strtolower( $ticket_singular ) ),
 			'function'    => 'kbs_email_tag_ticket_close_ticket_url_path'
 		)
 	);

@@ -37,7 +37,7 @@ function kbs_tools_settings_process_import() {
 		return;
     }
 
-	if ( kbs_get_file_extension( isset( $_FILES['import_file']['name'] ) ?  $_FILES['import_file']['name']  : ' ' ) != 'json' ) {
+	if ( kbs_get_file_extension( isset( $_FILES['import_file']['name'] ) ? $_FILES['import_file']['name'] : ' ' ) != 'json' ) {
 		wp_safe_redirect( add_query_arg( array(
             'post_type'    => 'kbs_ticket',
             'page'         => 'kbs-tools',

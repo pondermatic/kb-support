@@ -217,7 +217,7 @@ function kbs_form_default_fields()	{
 			'type'            => 'text',
 			'mapping'         => 'customer_first',
 			'required'        => true,
-			'label'           => __( 'First Name', 'kb-support' ),
+			'label'           => esc_html__( 'First Name', 'kb-support' ),
 			'show_logged_in'  => false,
 			'kb_search'       => false,
 			'menu_order'      => '0'
@@ -226,7 +226,7 @@ function kbs_form_default_fields()	{
 			'type'            => 'text',
 			'mapping'         => 'customer_last',
 			'required'        => true,
-			'label'           => __( 'Last Name', 'kb-support' ),
+			'label'           => esc_html__( 'Last Name', 'kb-support' ),
 			'show_logged_in'  => false,
 			'kb_search'       => false,
 			'menu_order'      => '1'
@@ -235,7 +235,7 @@ function kbs_form_default_fields()	{
 			'type'            => 'email',
 			'mapping'         => 'customer_email',
 			'required'        => true,
-			'label'           => __( 'Email Address', 'kb-support' ),
+			'label'           => esc_html__( 'Email Address', 'kb-support' ),
 			'show_logged_in'  => false,
 			'kb_search'       => false,
 			'menu_order'      => '2'
@@ -244,7 +244,7 @@ function kbs_form_default_fields()	{
 			'type'            => 'text',
 			'mapping'         => 'post_title',
 			'required'        => true,
-			'label'           => __( 'Subject', 'kb-support' ),
+			'label'           => esc_html__( 'Subject', 'kb-support' ),
 			'show_logged_in'  => true,
 			'kb_search'       => true,
 			'menu_order'      => '3'
@@ -253,7 +253,7 @@ function kbs_form_default_fields()	{
 			'type'            => 'rich_editor',
 			'mapping'         => 'post_content',
 			'required'        => true,
-			'label'           => __( 'Description', 'kb-support' ),
+			'label'           => esc_html__( 'Description', 'kb-support' ),
 			'show_logged_in'  => true,
 			'kb_search'       => false,
 			'menu_order'      => '4'
@@ -564,7 +564,7 @@ function kbs_get_mappings( $mapping = null )	{
 
 	asort( $mappings );
 
-	$mappings = array( '' => __( 'None', 'kb-support' ) ) + $mappings;
+	$mappings = array( '' => esc_html__( 'None', 'kb-support' ) ) + $mappings;
 
 	if ( isset( $mapping ) && array_key_exists( $mapping, $mappings ) )	{
 		return $mappings[ $mapping ];
@@ -730,7 +730,7 @@ function kbs_form_submission_errors( $field_id, $error )	{
 	$errors = apply_filters( 'kbs_form_submission_errors', $errors, $field_id );
 
 	if ( ! array_key_exists( $error, $errors ) )	{
-		return get_the_title( $field_id ) . __( ' contains an error.', 'kb-support' );
+		return get_the_title( $field_id ) . esc_html__( ' contains an error.', 'kb-support' );
 	}
 
 	return $errors[ $error ];
@@ -849,7 +849,8 @@ function kbs_display_form_text_field( $field, $settings )	{
 			'type'  => array(),
 			'name'  => array(),
 			'id'    => array(),
-			'class' => array()
+			'class' => array(),
+			'value' => array()
 		),
 	);
 	echo wp_kses( $output, $allowed );
@@ -1065,7 +1066,8 @@ function kbs_display_form_checkbox_field( $field, $settings )	{
 			'type'  => array(),
 			'name'  => array(),
 			'id'    => array(),
-			'class' => array()
+			'class' => array(),
+			'value' => array()
 		),
 	);
 	echo wp_kses( $output, $allowed );

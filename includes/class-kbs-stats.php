@@ -81,16 +81,16 @@ class KBS_Stats {
 	 */
 	public function get_predefined_dates() {
 		$predefined = array(
-			'today'        => __( 'Today',        'kb-support' ),
-			'yesterday'    => __( 'Yesterday',    'kb-support' ),
-			'this_week'    => __( 'This Week',    'kb-support' ),
-			'last_week'    => __( 'Last Week',    'kb-support' ),
-			'this_month'   => __( 'This Month',   'kb-support' ),
-			'last_month'   => __( 'Last Month',   'kb-support' ),
-			'this_quarter' => __( 'This Quarter', 'kb-support' ),
-			'last_quarter' => __( 'Last Quarter', 'kb-support' ),
-			'this_year'    => __( 'This Year',    'kb-support' ),
-			'last_year'    => __( 'Last Year',    'kb-support' )
+			'today'        => esc_html__( 'Today',        'kb-support' ),
+			'yesterday'    => esc_html__( 'Yesterday',    'kb-support' ),
+			'this_week'    => esc_html__( 'This Week',    'kb-support' ),
+			'last_week'    => esc_html__( 'Last Week',    'kb-support' ),
+			'this_month'   => esc_html__( 'This Month',   'kb-support' ),
+			'last_month'   => esc_html__( 'Last Month',   'kb-support' ),
+			'this_quarter' => esc_html__( 'This Quarter', 'kb-support' ),
+			'last_quarter' => esc_html__( 'Last Quarter', 'kb-support' ),
+			'this_year'    => esc_html__( 'This Year',    'kb-support' ),
+			'last_year'    => esc_html__( 'Last Year',    'kb-support' )
 		);
 		return apply_filters( 'kbs_stats_predefined_dates', $predefined );
 	} // get_predefined_dates
@@ -435,7 +435,7 @@ class KBS_Stats {
 
 		} else {
 
-			return new WP_Error( 'invalid_date', __( 'Improper date provided.', 'kb-support' ) );
+			return new WP_Error( 'invalid_date', esc_html__( 'Improper date provided.', 'kb-support' ) );
 
 		}
 

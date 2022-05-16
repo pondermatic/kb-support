@@ -66,7 +66,7 @@ class KBS_Customers_API extends KBS_API {
 				'args'   => array(
 					'id' => array(
 						'type'        => 'integer',
-						'description' => __( 'Unique identifier for the %s.', 'kb-support' )
+						'description' => esc_html__( 'Unique identifier for the %s.', 'kb-support' )
 					)
 				),
 				array(
@@ -326,7 +326,7 @@ class KBS_Customers_API extends KBS_API {
 		$query_params['context']['default'] = 'view';
 
 		$query_params['id'] = array(
-			'description' => __( 'Only include specific IDs in the result set.', 'kb-support' ),
+			'description' => esc_html__( 'Only include specific IDs in the result set.', 'kb-support' ),
 			'type'        => 'array',
 			'items'       => array(
 				'type' => 'integer'
@@ -334,18 +334,18 @@ class KBS_Customers_API extends KBS_API {
 		);
 
 		$query_params['name'] = array(
-			'description' => __( 'Only include specific customer names in the result set.', 'kb-support' ),
+			'description' => esc_html__( 'Only include specific customer names in the result set.', 'kb-support' ),
 			'type'        => 'string'
 		);
 
 		$query_params['number'] = array(
-			'description' => __( 'Number of results to return.', 'kb-support' ),
+			'description' => esc_html__( 'Number of results to return.', 'kb-support' ),
 			'type'        => 'integer',
 			'default'     => '20'
 		);
 
 		$query_params['exclude_id'] = array(
-			'description' => __( 'Ensure result set excludes specific IDs.', 'kb-support' ),
+			'description' => esc_html__( 'Ensure result set excludes specific IDs.', 'kb-support' ),
 			'type'        => 'array',
 			'items'       => array(
 				'type' => 'integer',
@@ -354,7 +354,7 @@ class KBS_Customers_API extends KBS_API {
 		);
 
 		$query_params['user_id'] = array(
-			'description' => __( 'Only include specific User IDs in the result set.', 'kb-support' ),
+			'description' => esc_html__( 'Only include specific User IDs in the result set.', 'kb-support' ),
 			'type'        => 'array',
 			'items'       => array(
 				'type' => 'integer'
@@ -362,7 +362,7 @@ class KBS_Customers_API extends KBS_API {
 		);
 
 		$query_params['company'] = array(
-			'description' => __( 'Only include users from specific Company IDs in the result set.', 'kb-support' ),
+			'description' => esc_html__( 'Only include users from specific Company IDs in the result set.', 'kb-support' ),
 			'type'        => 'array',
 			'items'       => array(
 				'type' => 'integer'
@@ -370,7 +370,7 @@ class KBS_Customers_API extends KBS_API {
 		);
 
 		$query_params['include'] = array(
-			'description' => __( 'Limit result set to specific IDs.', 'kb-support' ),
+			'description' => esc_html__( 'Limit result set to specific IDs.', 'kb-support' ),
 			'type'        => 'array',
 			'items'       => array(
 				'type' => 'integer',
@@ -379,20 +379,20 @@ class KBS_Customers_API extends KBS_API {
 		);
 
 		$query_params['offset'] = array(
-			'description' => __( 'Offset the result set by a specific number of items.', 'kb-support' ),
+			'description' => esc_html__( 'Offset the result set by a specific number of items.', 'kb-support' ),
 			'type'        => 'integer',
 		);
 
 		$query_params['order'] = array(
 			'default'     => 'desc',
-			'description' => __( 'Order sort attribute ascending or descending.', 'kb-support' ),
+			'description' => esc_html__( 'Order sort attribute ascending or descending.', 'kb-support' ),
 			'enum'        => array( 'asc', 'desc' ),
 			'type'        => 'string',
 		);
 
 		$query_params['orderby'] = array(
 			'default'     => 'id',
-			'description' => __( 'Sort collection by object attribute.', 'kb-support' ),
+			'description' => esc_html__( 'Sort collection by object attribute.', 'kb-support' ),
 			'enum'        => array(
 				'id',
 				'user_id',

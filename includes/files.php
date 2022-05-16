@@ -269,7 +269,7 @@ function kbs_attach_files_to_reply( $reply_id )	{
 		return;
 	}
 
-	$fileInfo = wp_check_filetype( $_FILES['kbs_files']['name'][0] );
+	$fileInfo = wp_check_filetype( isset( $_FILES['kbs_files']['name'][0] ) ? sanitize_file_name( $_FILES['kbs_files']['name'][0] ) : '' );
 
 	if ( empty( $fileInfo['ext'] ) ) {
 		return;

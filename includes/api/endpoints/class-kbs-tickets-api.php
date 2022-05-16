@@ -83,7 +83,7 @@ class KBS_Tickets_API extends KBS_API {
 					'id' => array(
 						'type'        => 'integer',
 						'description' => sprintf(
-							__( 'Unique identifier for the %s.', 'kb-support' ),
+							esc_html__( 'Unique identifier for the %s.', 'kb-support' ),
 							kbs_get_ticket_label_singular( true )
 						)
 					)
@@ -110,7 +110,7 @@ class KBS_Tickets_API extends KBS_API {
 					'number' => array(
 						'type'        => 'string',
 						'description' => sprintf(
-							__( 'Unique identifier for the %s.', 'kb-support' ),
+							esc_html__( 'Unique identifier for the %s.', 'kb-support' ),
 							kbs_get_ticket_label_singular( true )
 						)
 					)
@@ -153,7 +153,7 @@ class KBS_Tickets_API extends KBS_API {
 			return new WP_Error(
 				'rest_forbidden_context',
 				sprintf(
-                    __( 'Sorry, you are not allowed to edit this %s.', 'kb-support' ),
+                    esc_html__( 'Sorry, you are not allowed to edit this %s.', 'kb-support' ),
                     kbs_get_ticket_label_singular( true )
                 ),
 				array( 'status' => rest_authorization_required_code() )
@@ -188,7 +188,7 @@ class KBS_Tickets_API extends KBS_API {
 		if ( 'edit' === $request['context'] && ! current_user_can( $post_type->cap->edit_posts ) ) {
 			return new WP_Error(
 				'rest_forbidden_context',
-				__( 'Sorry, you are not allowed to edit posts in this post type.', 'kb-support' ),
+				esc_html__( 'Sorry, you are not allowed to edit posts in this post type.', 'kb-support' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
@@ -248,7 +248,7 @@ class KBS_Tickets_API extends KBS_API {
 			return new WP_Error(
 				'rest_cannot_edit',
 				sprintf(
-                    __( 'Sorry, you are not allowed to edit this %s.', 'kb-support' ),
+                    esc_html__( 'Sorry, you are not allowed to edit this %s.', 'kb-support' ),
                     kbs_get_ticket_label_singular( true )
                 ),
 				array( 'status' => rest_authorization_required_code() )
@@ -317,7 +317,7 @@ class KBS_Tickets_API extends KBS_API {
 		if ( ! empty( $request['orderby'] ) && 'relevance' === $request['orderby'] && empty( $request['search'] ) ) {
 			return new WP_Error(
 				'rest_no_search_term_defined',
-				__( 'You need to define a search term to order by relevance.', 'kb-support' ),
+				esc_html__( 'You need to define a search term to order by relevance.', 'kb-support' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -326,7 +326,7 @@ class KBS_Tickets_API extends KBS_API {
 		if ( ! empty( $request['orderby'] ) && 'include' === $request['orderby'] && empty( $request['include'] ) ) {
 			return new WP_Error(
 				'rest_orderby_include_missing_include',
-				__( 'You need to define an include parameter to order by include.', 'kb-support' ),
+				esc_html__( 'You need to define an include parameter to order by include.', 'kb-support' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -497,7 +497,7 @@ class KBS_Tickets_API extends KBS_API {
 		if ( $page > $max_pages && $total_posts > 0 ) {
 			return new WP_Error(
 				'rest_post_invalid_page_number',
-				__( 'The page number requested is larger than the number of pages available.', 'kb-support' ),
+				esc_html__( 'The page number requested is larger than the number of pages available.', 'kb-support' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -905,19 +905,19 @@ class KBS_Tickets_API extends KBS_API {
 		$query_params['context']['default'] = 'view';
 
 		$query_params['after'] = array(
-			'description' => __( 'Limit response to posts published after a given ISO8601 compliant date.' , 'kb-support' ),
+			'description' => esc_html__( 'Limit response to posts published after a given ISO8601 compliant date.' , 'kb-support' ),
 			'type'        => 'string',
 			'format'      => 'date-time',
 		);
 
 		$query_params['before'] = array(
-			'description' => __( 'Limit response to posts published before a given ISO8601 compliant date.', 'kb-support' ),
+			'description' => esc_html__( 'Limit response to posts published before a given ISO8601 compliant date.', 'kb-support' ),
 			'type'        => 'string',
 			'format'      => 'date-time',
 		);
 
 		$query_params['exclude'] = array(
-			'description' => __( 'Ensure result set excludes specific IDs.', 'kb-support' ),
+			'description' => esc_html__( 'Ensure result set excludes specific IDs.', 'kb-support' ),
 			'type'        => 'array',
 			'items'       => array(
 				'type' => 'integer',
@@ -926,7 +926,7 @@ class KBS_Tickets_API extends KBS_API {
 		);
 
 		$query_params['include'] = array(
-			'description' => __( 'Limit result set to specific IDs.', 'kb-support' ),
+			'description' => esc_html__( 'Limit result set to specific IDs.', 'kb-support' ),
 			'type'        => 'array',
 			'items'       => array(
 				'type' => 'integer',
@@ -935,19 +935,19 @@ class KBS_Tickets_API extends KBS_API {
 		);
 
 		$query_params['offset'] = array(
-			'description' => __( 'Offset the result set by a specific number of items.', 'kb-support' ),
+			'description' => esc_html__( 'Offset the result set by a specific number of items.', 'kb-support' ),
 			'type'        => 'integer',
 		);
 
 		$query_params['order'] = array(
-			'description' => __( 'Order sort attribute ascending or descending.', 'kb-support' ),
+			'description' => esc_html__( 'Order sort attribute ascending or descending.', 'kb-support' ),
 			'type'        => 'string',
 			'default'     => 'desc',
 			'enum'        => array( 'asc', 'desc' ),
 		);
 
 		$query_params['orderby'] = array(
-			'description' => __( 'Sort collection by object attribute.', 'kb-support' ),
+			'description' => esc_html__( 'Sort collection by object attribute.', 'kb-support' ),
 			'type'        => 'string',
 			'default'     => 'id',
 			'enum'        => array(
@@ -964,7 +964,7 @@ class KBS_Tickets_API extends KBS_API {
 
 		$query_params['user'] = array(
 			'description' => sprintf(
-				__( 'Limit result set to %s from a specific customer WP user account.', 'kb-support' ),
+				esc_html__( 'Limit result set to %s from a specific customer WP user account.', 'kb-support' ),
 				strtolower( $plural )
 			),
 			'type'        => 'integer',
@@ -973,7 +973,7 @@ class KBS_Tickets_API extends KBS_API {
 
 		$query_params['customer'] = array(
 			'description' => sprintf(
-				__( 'Limit result set to %s from a specific customer.', 'kb-support' ),
+				esc_html__( 'Limit result set to %s from a specific customer.', 'kb-support' ),
 				strtolower( $plural )
 			),
 			'type'        => 'integer',
@@ -982,7 +982,7 @@ class KBS_Tickets_API extends KBS_API {
 
 		$query_params['company'] = array(
 			'description' => sprintf(
-				__( 'Limit result set to %s from a specific company.', 'kb-support' ),
+				esc_html__( 'Limit result set to %s from a specific company.', 'kb-support' ),
 				strtolower( $plural )
 			),
 			'type'        => 'integer',
@@ -991,7 +991,7 @@ class KBS_Tickets_API extends KBS_API {
 
 		$query_params['agent'] = array(
 			'description' => sprintf(
-				__( 'Limit result set to %s assigned to a specific agent.', 'kb-support' ),
+				esc_html__( 'Limit result set to %s assigned to a specific agent.', 'kb-support' ),
 				strtolower( $plural )
 			),
 			'type'        => 'integer',
@@ -1001,7 +1001,7 @@ class KBS_Tickets_API extends KBS_API {
 		$query_params['status'] = array(
 			'default'     => kbs_get_ticket_status_keys( false ),
 			'description' => sprintf(
-				__( 'Limit result set to %s assigned one or more statuses.', 'kb-support' ),
+				esc_html__( 'Limit result set to %s assigned one or more statuses.', 'kb-support' ),
 				strtolower( $singular )
 			),
 			'type'        => 'array',
@@ -1017,7 +1017,7 @@ class KBS_Tickets_API extends KBS_API {
 
 		if ( ! empty( $taxonomies ) ) {
 			$query_params['tax_relation'] = array(
-				'description' => __( 'Limit result set based on relationship between multiple taxonomies.' , 'kb-support' ),
+				'description' => esc_html__( 'Limit result set based on relationship between multiple taxonomies.' , 'kb-support' ),
 				'type'        => 'string',
 				'enum'        => array( 'AND', 'OR' ),
 			);
@@ -1028,7 +1028,7 @@ class KBS_Tickets_API extends KBS_API {
 
 			$query_params[ $base ] = array(
 				/* translators: %s: Taxonomy name. */
-				'description' => sprintf( __( 'Limit result set to all items that have the specified term assigned in the %s taxonomy.', 'kb-support' ), $base ),
+				'description' => sprintf( esc_html__( 'Limit result set to all items that have the specified term assigned in the %s taxonomy.', 'kb-support' ), $base ),
 				'type'        => 'array',
 				'items'       => array(
 					'type' => 'integer',
@@ -1038,7 +1038,7 @@ class KBS_Tickets_API extends KBS_API {
 
 			$query_params[ $base . '_exclude' ] = array(
 				/* translators: %s: Taxonomy name. */
-				'description' => sprintf( __( 'Limit result set to all items except those that have the specified term assigned in the %s taxonomy.', 'kb-support' ), $base ),
+				'description' => sprintf( esc_html__( 'Limit result set to all items except those that have the specified term assigned in the %s taxonomy.', 'kb-support' ), $base ),
 				'type'        => 'array',
 				'items'       => array(
 					'type' => 'integer',

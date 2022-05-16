@@ -173,7 +173,7 @@ function kbs_process_register_form() {
 		$error = 'empty_password';
 	} elseif ( ( ! empty( $_POST['kbs_user_pass'] ) && empty( $_POST['kbs_user_pass2'] ) ) || ( $_POST['kbs_user_pass'] !== $_POST['kbs_user_pass2'] ) ) {
 		$error = 'password_mismatch';
-	} elseif ( kbs_use_recaptcha_on_registration_form() && ! kbs_validate_recaptcha( $_POST['g-recaptcha-response'] ) )    {
+	} elseif ( kbs_use_recaptcha_on_registration_form() && ! kbs_validate_recaptcha( isset( $_POST['g-recaptcha-response'] ) ? $_POST['g-recaptcha-response'] : '' ) )    {
         $error = 'recaptcha_failed';
     }
 

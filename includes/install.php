@@ -88,28 +88,28 @@ function kbs_run_install() {
     $sources = array(
         array(
             'slug' => 'kbs-website',
-            'name' => __( 'Website', 'kb-support' ),
-            'desc' => sprintf( __( '%s received via website', 'kb-support' ), kbs_get_ticket_label_plural() )
+            'name' => esc_html__( 'Website', 'kb-support' ),
+            'desc' => sprintf( esc_html__( '%s received via website', 'kb-support' ), kbs_get_ticket_label_plural() )
         ),
         array(
             'slug' => 'kbs-email',
-            'name' => __( 'Email', 'kb-support' ),
-            'desc' => sprintf( __( '%s received via email', 'kb-support' ), kbs_get_ticket_label_plural() )
+            'name' => esc_html__( 'Email', 'kb-support' ),
+            'desc' => sprintf( esc_html__( '%s received via email', 'kb-support' ), kbs_get_ticket_label_plural() )
         ),
 		array(
             'slug' => 'kbs-rest',
-            'name' => __( 'REST API', 'kb-support' ),
-            'desc' => sprintf( __( '%s received via REST API', 'kb-support' ), kbs_get_ticket_label_plural() )
+            'name' => esc_html__( 'REST API', 'kb-support' ),
+            'desc' => sprintf( esc_html__( '%s received via REST API', 'kb-support' ), kbs_get_ticket_label_plural() )
         ),
         array(
             'slug' => 'kbs-telephone',
-            'name' => __( 'Telephone', 'kb-support' ),
-            'desc' => sprintf( __( '%s received via telephone', 'kb-support' ), kbs_get_ticket_label_plural() )
+            'name' => esc_html__( 'Telephone', 'kb-support' ),
+            'desc' => sprintf( esc_html__( '%s received via telephone', 'kb-support' ), kbs_get_ticket_label_plural() )
         ),
         array(
             'slug' => 'kbs-other',
-            'name' => __( 'Other', 'kb-support' ),
-            'desc' => sprintf( __( '%s received via another means', 'kb-support' ), kbs_get_ticket_label_plural() )
+            'name' => esc_html__( 'Other', 'kb-support' ),
+            'desc' => sprintf( esc_html__( '%s received via another means', 'kb-support' ), kbs_get_ticket_label_plural() )
         )
     );
 
@@ -170,7 +170,7 @@ function kbs_run_install() {
 		// Tickets page
 		$tickets_page = wp_insert_post(
 			array(
-				'post_title'     => __( 'Ticket Manager', 'kb-support' ),
+				'post_title'     => esc_html__( 'Ticket Manager', 'kb-support' ),
 				'post_content'   => '[kbs_tickets]',
 				'post_status'    => 'publish',
 				'post_author'    => 1,
@@ -194,7 +194,7 @@ function kbs_run_install() {
 		$submission_form_id = wp_insert_post( array(
 			'post_type'    => 'kbs_form',
 			'post_status'  => 'publish',
-			'post_title'   => __( 'Ticket Submissions', 'kb-support' ),
+			'post_title'   => esc_html__( 'Ticket Submissions', 'kb-support' ),
 			'post_content' => '',
 			'post_author'  => 1
 		) );
@@ -213,7 +213,7 @@ function kbs_run_install() {
 
 		// Add the form submission page
 		$submission_page = wp_insert_post( array(
-			'post_title'     => sprintf( __( 'Log a Support %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
+			'post_title'     => sprintf( esc_html__( 'Log a Support %s', 'kb-support' ), kbs_get_ticket_label_singular() ),
 			'post_content'   => $form->get_shortcode(),
 			'post_status'    => 'publish',
 			'post_author'    => 1,

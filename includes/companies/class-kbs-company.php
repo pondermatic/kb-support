@@ -170,7 +170,7 @@ class KBS_Company {
 
 		} else {
 
-			return new WP_Error( 'kbs-company-invalid-property', sprintf( __( "Can't get property %s", 'kb-support' ), $key ) );
+			return new WP_Error( 'kbs-company-invalid-property', sprintf( esc_html__( "Can't get property %s", 'kb-support' ), $key ) );
 
 		}
 

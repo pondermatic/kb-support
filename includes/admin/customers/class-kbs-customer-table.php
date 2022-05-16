@@ -70,8 +70,8 @@ class KBS_Customer_Table extends WP_List_Table {
 
 		// Set parent defaults
 		parent::__construct( array(
-			'singular' => __( 'Customer', 'kb-support' ),
-			'plural'   => __( 'Customers', 'kb-support' ),
+			'singular' => esc_html__( 'Customer', 'kb-support' ),
+			'plural'   => esc_html__( 'Customers', 'kb-support' ),
 			'ajax'     => false,
 		) );
 	} // __construct

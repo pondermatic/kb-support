@@ -29,8 +29,8 @@ function kbs_add_options_link() {
 
 	add_submenu_page(
         'edit.php?post_type=kbs_ticket',
-        __( 'Companies', 'kb-support' ),
-        __( 'Companies', 'kb-support' ),
+        esc_html__( 'Companies', 'kb-support' ),
+        esc_html__( 'Companies', 'kb-support' ),
         $customer_view_role,
         'edit.php?post_type=kbs_company'
     );
@@ -39,8 +39,8 @@ function kbs_add_options_link() {
 
 	add_submenu_page(
         'edit.php?post_type=kbs_ticket',
-        __( 'Customers', 'kb-support' ),
-        __( 'Customers', 'kb-support' ),
+        esc_html__( 'Customers', 'kb-support' ),
+        esc_html__( 'Customers', 'kb-support' ),
         $customer_view_role,
         'kbs-customers',
         'kbs_customers_page'
@@ -50,8 +50,8 @@ function kbs_add_options_link() {
 
 	add_submenu_page(
         null,
-        __( 'KBS Upgrades', 'kb-support' ),
-        __( 'KBS Upgrades', 'kb-support' ),
+        esc_html__( 'KBS Upgrades', 'kb-support' ),
+        esc_html__( 'KBS Upgrades', 'kb-support' ),
         'manage_ticket_settings',
         'kbs-upgrades',
         'kbs_upgrades_screen'
@@ -71,7 +71,7 @@ function kbs_add_licensing_menu_link()  {
     global $submenu;
 
     $submenu['edit.php?post_type=kbs_ticket'][900] = array(
-        __( 'Manage Extensions', 'kb-support' ),
+        esc_html__( 'Manage Extensions', 'kb-support' ),
         'manage_ticket_settings',
         add_query_arg( array(
             'post_type' => 'kbs_ticket',

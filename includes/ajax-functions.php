@@ -147,7 +147,7 @@ function kbs_set_ticket_flagged_status_ajax()   {
     $note_id = kbs_insert_note(
         $ticket_id,
         sprintf(
-            __( '%s %s', 'kb-support' ),
+            esc_html__( '%s %s', 'kb-support' ),
             kbs_get_ticket_label_singular(),
             $flagged
         ),
@@ -787,14 +787,14 @@ function kbs_ajax_add_customer()	{
 	if ( empty( $_POST['customer_name'] ) )	{
 		wp_send_json( array(
 			'error'   => true,
-			'message' => __( 'Please enter a customer name.', 'kb-support' )
+			'message' => esc_html__( 'Please enter a customer name.', 'kb-support' )
 		) );
 	}
 
 	if ( ! is_email( isset( $_POST['customer_email'] ) ? wp_unslash( $_POST['customer_email'] ) : '' ) )	{
 		wp_send_json( array(
 			'error'   => true,
-			'message' => __( 'Invalid email address.', 'kb-support' )
+			'message' => esc_html__( 'Invalid email address.', 'kb-support' )
 		) );
 	}
 
@@ -823,7 +823,7 @@ function kbs_ajax_add_customer()	{
 		wp_send_json( array(
 			'error'   => true,
 			'message' => sprintf(
-				__( 'Customer email address already exists for customer #%s &ndash; %s.', 'kb-support' ), $customer->id, $customer->name )
+				esc_html__( 'Customer email address already exists for customer #%s &ndash; %s.', 'kb-support' ), $customer->id, $customer->name )
 		) );
 	}
 
@@ -832,7 +832,7 @@ function kbs_ajax_add_customer()	{
 	if ( empty( $customer->id ) )	{
 		wp_send_json( array(
 			'error'    => true,
-			'message'  => __( 'Could not create customer.', 'kb-support' )
+			'message'  => esc_html__( 'Could not create customer.', 'kb-support' )
 		) );
 	}
 
@@ -854,7 +854,7 @@ function kbs_ajax_new_customer_for_ticket()	{
 
 	if ( ! isset( $_POST['customer_email'] ) || ! is_email( sanitize_email( wp_unslash( $_POST['customer_email'] ) ) ) )	{
 		wp_send_json_error( array(
-			'message' => __( 'Invalid email address.', 'kb-support' )
+			'message' => esc_html__( 'Invalid email address.', 'kb-support' )
 		) );
 	}
 
@@ -887,7 +887,7 @@ function kbs_ajax_new_customer_for_ticket()	{
     if ( ! empty( $customer->id ) ) {
 		wp_send_json_error( array(
 			'message' => sprintf(
-				__( 'Customer email address already exists for customer #%s - %s.', 'kb-support' ), $customer->id, $customer->name )
+				esc_html__( 'Customer email address already exists for customer #%s - %s.', 'kb-support' ), $customer->id, $customer->name )
 		) );
 	}
 
@@ -895,7 +895,7 @@ function kbs_ajax_new_customer_for_ticket()	{
 
 	if ( empty( $customer->id ) )	{
 		wp_send_json_error( array(
-			'message' => __( 'Could not create customer.', 'kb-support' )
+			'message' => esc_html__( 'Could not create customer.', 'kb-support' )
 		) );
 	}
 
@@ -930,7 +930,8 @@ function kbs_ajax_search_users()	{
 		);
 
 		if ( ! empty( $_POST['exclude'] ) ) {
-			$exclude_array = explode( ',', trim( wp_unslash( $_POST['exclude'] ) ) );
+			
+			$exclude_array = explode( ',', trim( sanitize_text_field( wp_unslash( $_POST['exclude'] ) ) ) );
 			$get_users_args['exclude'] = $exclude_array;
 		}
 
@@ -944,7 +945,7 @@ function kbs_ajax_search_users()	{
 				$user_list .= '<li><a href="#" data-userid="' . esc_attr( $user->ID ) . '" data-login="' . esc_attr( $user->user_login ) . '">' . esc_html( $user->user_login ) . '</a></li>';
 			}
 		} else {
-			$user_list .= '<li>' . __( 'No users found', 'kb-support' ) . '</li>';
+			$user_list .= '<li>' . esc_html__( 'No users found', 'kb-support' ) . '</li>';
 		}
 
 		$user_list .= '</ul>';
@@ -1009,7 +1010,7 @@ function kbs_ajax_article_search()	{
 			), site_url() );
 
 			$output .= '<a href="' . $search_url . '" target="_blank">';
-				$output .= sprintf( __( 'View all %d possible solutions.', 'kb-support' ), $articles_query->total_articles );
+				$output .= sprintf( esc_html__( 'View all %d possible solutions.', 'kb-support' ), $articles_query->total_articles );
 			$output .= '</a>';
 
 		}
