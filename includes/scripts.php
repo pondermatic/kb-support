@@ -96,7 +96,7 @@ function kbs_load_scripts() {
 			'kbs-bootstrap-4-js',
 			KBS_PLUGIN_URL . 'assets/bootstrap/js/bootstrap.min.js',
 			array( 'jquery' ),
-			'4.2.1'
+			'4.6.1'
 		);
 		wp_enqueue_script( 'kbs-bootstrap-4-js' );
 	}
@@ -185,7 +185,7 @@ function kbs_register_styles() {
 			'kbs-bootstrap-4-css',
 			KBS_PLUGIN_URL . 'assets/bootstrap/css/bootstrap.min.css',
 			array(),
-			'4.2.1'
+			'4.6.1'
 		);
 		wp_enqueue_style( 'kbs-bootstrap-4-css' );
 
