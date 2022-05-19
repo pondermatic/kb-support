@@ -670,7 +670,7 @@ function kbs_display_field_setting_icons( $field_id )	{
 
 	$output = apply_filters( 'kbs_field_setting_icons', $output, $field_id, $settings );
 
-	return implode( "\t", $output );
+	return wp_kses_post( implode( "\t", $output ) );
 
 } // kbs_display_field_setting_icons
 
@@ -1247,7 +1247,7 @@ add_action( 'kbs_form_display_checkbox_list_field', 'kbs_display_form_checkbox_l
  */
 function kbs_display_form_radio_field( $field, $settings )	{
 
-	$class   = ! empty( $settings['input_class'] ) ? ' class="' . esc_attr( $settings['input_class'] ) . '"' : '';
+	$class   = ! empty( $settings['input_class'] ) ? ' class="' . esc_attr( $settings['input_class'] ) . '"' : ''; 
 	$options = $settings['select_options'];
 
 	if ( empty ( $options ) )	{
@@ -1266,8 +1266,19 @@ function kbs_display_form_radio_field( $field, $settings )	{
 	}
 
 	$output = apply_filters( 'kbs_display_form_radio_field', $output, $field, $settings );
+	
+	$allowed = array(
+		'input' => array(
+			'type'  => array(),
+			'name'  => array(),
+			'id'    => array(),
+			'class' => array(),
+			'value' => array()
+		),
+		'br'  => array(),
+	);
 
-	echo implode( '<br />', $output );
+	echo wp_kses( implode( '<br />', $output ), $allowed );
 
 } // kbs_display_form_radio_field
 add_action( 'kbs_form_display_radio_field', 'kbs_display_form_radio_field', 10, 2 );
@@ -1317,8 +1328,28 @@ function kbs_display_form_recaptcha_field( $field, $settings )	{
     ) . "\n";
 
     $output = apply_filters( 'kbs_display_form_recaptcha_field', $output, $field, $settings );
+	$allowed = array(
+		'input' => array(
+			'type'  => array(),
+			'name'  => array(),
+			'id'    => array(),
+			'class' => array(),
+			'value' => array()
+		),
+		'div' => array(
+			'id'    => array(),
+			'class' => array(),
+			'value' => array(),
+			'data-sitekey' => array(),
+			'data-theme'   => array(),
+			'data-type'    => array(),
+			'data-size'    => array(),
+		),
+		'br'  => array(),
+	);
 
-    echo $output;
+	echo wp_kses( $output, $allowed );
+
 } // kbs_display_form_recaptcha_field
 add_action( 'kbs_form_display_recaptcha_field', 'kbs_display_form_recaptcha_field', 10, 2 );
 
@@ -1351,8 +1382,19 @@ function kbs_display_form_file_upload_field( $field, $settings )	{
 	}
 
 	$output = apply_filters( 'kbs_display_form_file_upload_field', $output, $field, $settings );
+	$allowed = array(
+		'input' => array(
+			'type'  => array(),
+			'name'  => array(),
+			'id'    => array(),
+			'class' => array(),
+			'value' => array(),
+			'placeholder' => array(),
+		),
+		'br'  => array(),
+	);
 
-	echo $output;
+	echo wp_kses( $output, $allowed );
 
 } // kbs_display_form_file_upload_field
 add_action( 'kbs_form_display_file_upload_field', 'kbs_display_form_file_upload_field', 10, 2 );

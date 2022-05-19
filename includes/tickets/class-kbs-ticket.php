@@ -2252,7 +2252,7 @@ class KBS_Ticket {
 
 				$output .= sprintf( '<p><strong>%s</strong>: %s</p>',
 					esc_html( get_the_title( $form_field->ID ) ),
-					esc_html( $value )
+					wp_kses_post( $value )
 				);
 			}
 		} else	{

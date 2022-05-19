@@ -352,7 +352,7 @@ function kbs_get_notices( $notice = '', $notice_only = false )	{
 		'agents_cannot_submit' => array(
 			'class'  => 'info',
 			'notice' => sprintf(
-				esc_html__( 'Support Workers cannot submit %s here. Please go to your <a href="%s">admin panel</a> to open a new %s.', 'kb-support' ),
+				wp_kses_post( __( 'Support Workers cannot submit %s here. Please go to your <a href="%s">admin panel</a> to open a new %s.', 'kb-support' ) ),
 				kbs_get_ticket_label_plural( true ),
 				admin_url( 'post-new.php?post_type=kbs_ticket' ),
 				kbs_get_ticket_label_singular( true )
