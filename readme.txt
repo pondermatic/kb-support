@@ -2,7 +2,7 @@
 Contributors: wpchill, silkalns
 Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
-Tested up to: 5.9
+Tested up to: 6.0
 Requires PHP: 5.4
 Stable tag: 1.5.6
 License: GPLv2 or later
