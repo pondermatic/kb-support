@@ -4,7 +4,7 @@ Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
 Tested up to: 6.0
 Requires PHP: 5.4
-Stable tag: 1.5.6
+Stable tag: 1.5.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -127,6 +127,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 Fixed: Security, sanitizations and escaping
 Changed: Removed bootstrap file calling from cdn and included the files in the plugin.
 Changed: Replaced file_get_contents call on remote files with WordPress's http-api.
+Fixed: Placeholders missing from text fields ( https://github.com/WPChill/kb-support/issues/222 )
 
 = 1.5.6 - 29.04.2021 =
 Fixed: Security, sanitizations and escaping
