@@ -846,11 +846,12 @@ function kbs_display_form_text_field( $field, $settings )	{
 	$output = apply_filters( 'kbs_display_form_' . $settings['type'] . '_field', $output, $field, $settings );
 	$allowed = array(
 		'input' => array(
-			'type'  => array(),
-			'name'  => array(),
-			'id'    => array(),
-			'class' => array(),
-			'value' => array()
+			'type' 		  => array(),
+			'name' 		  => array(),
+			'id'    	  => array(),
+			'class' 	  => array(),
+			'value' 	  => array(),
+			'placeholder' => array(), 
 		),
 	);
 	echo wp_kses( $output, $allowed );
