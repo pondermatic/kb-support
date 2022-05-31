@@ -123,14 +123,13 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 == Changelog ==
 
-= 1.5.7 - TBA =
+= 1.5.7 - 31.05.2022 =
+Fixed: Placeholders missing from text fields ( https://github.com/WPChill/kb-support/issues/222 )
+
+= 1.5.6 - 23.05.2022 =
 Fixed: Security, sanitizations and escaping
 Changed: Removed bootstrap file calling from cdn and included the files in the plugin.
 Changed: Replaced file_get_contents call on remote files with WordPress's http-api.
-Fixed: Placeholders missing from text fields ( https://github.com/WPChill/kb-support/issues/222 )
-
-= 1.5.6 - 29.04.2021 =
-Fixed: Security, sanitizations and escaping
 
 = 1.5.5 - 18.03.2021 =
 Changed: Remove license functionality
