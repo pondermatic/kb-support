@@ -128,7 +128,6 @@ function kbs_set_company_column_data( $column_name, $post_id ) {
 			break;
 
 		default:
-			echo __( 'No callback found for post column', 'kb-support' );
 			break;
 	}
 
