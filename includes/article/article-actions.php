@@ -26,7 +26,7 @@ function kbs_search_articles_action()	{
 	}
 
 	$args = array(
-		's'                   => isset( $_GET['s_article'] ) ? urlencode( sanitize_url( wp_unslash( $_GET['s_article'] ) ) ) : '',
+		's'                   => isset( $_GET['s_article'] ) ? urlencode( sanitize_text_field( wp_unslash( $_GET['s_article'] ) ) ) : '',
 		'post_type'           => KBS()->KB->post_type,
 		'ignore_sticky_posts' => true,
 		'cache_results'       => false,
