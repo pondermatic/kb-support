@@ -2227,7 +2227,7 @@ class KBS_Ticket {
 					$cats  = array();
 					foreach( $value as $category )	{
 						$term = get_term( $category );
-						if ( $term )	{
+						if ( is_object( $term ) && 'WP_Term' === get_class( $term ) ) {
 							$cats[] = $term->name;
 						} else	{
 							$cats[] = sprintf( esc_html__( 'Term %s no longer exists', 'kb-support' ), $category );
