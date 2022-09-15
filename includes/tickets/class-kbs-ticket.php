@@ -2223,7 +2223,7 @@ class KBS_Ticket {
 				}
 
 				if ( 'post_category' == $settings['mapping'] )	{
-					$value = is_array( $value ) ? $value : array( $value );
+					$value = is_array( $value ) ? $value : array();
 					$cats  = array();
 					foreach( $value as $category )	{
 						$term = get_term( $category );
