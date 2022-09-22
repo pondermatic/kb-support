@@ -709,7 +709,7 @@ function kbs_email_tag_ticket_title( $ticket_id )	{
  * @return	str		Ticket content
  */
 function kbs_email_tag_ticket_content( $ticket_id )	{
-	return get_post_field( 'post_content', $ticket_id, 'raw' );
+	return htmlspecialchars_decode( get_post_field( 'post_content', $ticket_id, 'raw' ) );
 } // kbs_email_tag_ticket_content
 
 /**
@@ -790,7 +790,7 @@ function kbs_email_tag_reply_time( $ticket_id ) {
 
 	if ( $reply )	{
 		$post_time = get_post_time( 'U', false, $reply->ID );
-	
+
 		return date_i18n( get_option( 'time_format' ), $post_time );
 	}
 } // kbs_email_tag_reply_time
