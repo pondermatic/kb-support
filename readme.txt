@@ -123,7 +123,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 == Changelog ==
 
-= 1.5.82 - 15.09.2022 =
+= 1.5.82 - 22.09.2022 =
 Fixed: Sanitization of submission data and email content were wrongly escaped 
 
 = 1.5.81 - 15.09.2022 =
