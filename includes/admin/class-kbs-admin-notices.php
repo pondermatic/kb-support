@@ -358,23 +358,23 @@ class KBS_Admin_Notices	{
                         $notices['updated']['kbs-ticket-sources-updated'] = sprintf( esc_html__( '%s sources have been successfully updated.', 'kb-support' ), $ticket_singular );
                         break;
 
-					case 'api-key-generated' :	
+					case 'api-key-generated' :
 						$notices['updated']['kbs-api-key-generated'] = sprintf( esc_html__( 'API keys successfully generated.', 'kb-support' ) );
 					break;
 
-					case 'api-key-exists' :	
+					case 'api-key-exists' :
 						$notices['error']['kbs-api-key-exists'] = sprintf( esc_html__( 'The specified user already has API keys.', 'kb-support' ) );
 					break;
 
-					case 'api-key-regenerated' :	
+					case 'api-key-regenerated' :
 						$notices['updated']['kbs-api-key-regenerated'] = sprintf( esc_html__( 'API keys successfully regenerated.', 'kb-support' ) );
 					break;
 
-					case 'api-key-revoked' :	
+					case 'api-key-revoked' :
 						$notices['updated']['kbs-api-key-revoked'] = sprintf( esc_html__( 'API keys successfully revoked.', 'kb-support' ) );
 					break;
 
-					case 'api-key-failed' :	
+					case 'api-key-failed' :
 						$notices['error']['kbs-api-key-failed'] = sprintf( esc_html__( 'API key generation failed.', 'kb-support' ) );
 					break;
                 }
@@ -408,11 +408,11 @@ class KBS_Admin_Notices	{
 
         <div class="updated notice notice-kbs-dismiss is-dismissible" data-notice="first_extension_discount_advisory">
             <p>
-                <?php printf(
-                    wp_kses_post( __( 'Loving KB Support? Great! Did you know you can receive a <strong>%1$s discount</strong> on the purchase of extensions from our <a target="_blank" href="%2$s">plugin store</a> to further enhance the features and functionality? <a href="%2$s">Shop Now!</a>', 'kb-support' ),
+                <?php wp_kses_post( sprintf(
+                     __( 'Loving KB Support? Great! Did you know you can receive a <strong>%1$s discount</strong> on the purchase of extensions from our <a target="_blank" href="%2$s">plugin store</a> to further enhance the features and functionality? <a href="%2$s">Shop Now!</a>', 'kb-support' ),
                     '15%',
-                    'https://kb-support.com/extensions/'
-                ) ); ?>
+                    'https://kb-support.com/extensions/' )
+                ); ?>
             </p>
         </div>
 
@@ -431,7 +431,7 @@ class KBS_Admin_Notices	{
 
         if ( defined( 'KBS_SAAS' ) && true === KBS_SAAS )	{
             return ;
-        }				
+        }
 
         if ( ! current_user_can( 'administrator' ) || ! kbs_is_admin_page() )	{
             return;
@@ -499,7 +499,7 @@ class KBS_Admin_Notices	{
 
         if ( defined( 'KBS_SAAS' ) && true === KBS_SAAS )	{
             return ;
-        }				
+        }
 
         if ( ! current_user_can( 'administrator' ) || ! kbs_is_admin_page() )	{
             return;
