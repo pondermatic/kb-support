@@ -2222,17 +2222,26 @@ class KBS_Ticket {
 					$value = $department;
 				}
 
-				if ( 'post_category' == $settings['mapping'] )	{
-					$value = is_array( $value ) ? $value : array( $value );
+				if ( 'post_category' == $settings['mapping'] ) {
+					// Check if empty field.
+					if ( empty( $value ) ) {
+						$value = array();
+					} else {
+						$value = is_array( $value ) ? $value : array( $value );
+					}
+
 					$cats  = array();
-					foreach( $value as $category )	{
-						$term = get_term( $category );
-						if ( $term )	{
-							$cats[] = $term->name;
-						} else	{
-							$cats[] = sprintf( esc_html__( 'Term %s no longer exists', 'kb-support' ), $category );
+					if ( ! empty( $value ) ) {
+						foreach ( $value as $category ) {
+							$term = get_term( $category );
+							if ( ! is_wp_error( $term ) && $term ) {
+								$cats[] = $term->name;
+							} else {
+								$cats[] = sprintf( esc_html__( 'Term %s no longer exists', 'kb-support' ), $category );
+							}
 						}
 					}
+
 					$value = $cats;
 				}
 
