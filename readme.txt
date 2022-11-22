@@ -2,9 +2,9 @@
 Contributors: wpchill, silkalns
 Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
-Tested up to: 6.0
+Tested up to: 6.1
 Requires PHP: 5.4
-Stable tag: 1.5.82
+Stable tag: 1.5.83
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,6 +122,11 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.5.83 - 23.11.2022 =
+Fixed: PHP 8 warnings
+Fixed: Missing arguments on wp_kses_post
+Fixed: Ticket categories warnings
 
 = 1.5.82 - 22.09.2022 =
 Fixed: Sanitization of submission data and email content were wrongly escaped 
