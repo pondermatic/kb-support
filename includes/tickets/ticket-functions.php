@@ -69,7 +69,7 @@ function kbs_get_ticket( $id_or_object )	{
  * @since	1.0
  * @param	str			$field	The field by which to retrieve.
  * @param	mixed		$value	The value of the field.
- * @return	obj|false	The post object if found, otherwise false 
+ * @return	obj|false	The post object if found, otherwise false
  */
 function kbs_get_ticket_by( $field, $value )	{
 	if ( 'id' == $field )	{
@@ -113,11 +113,11 @@ function kbs_get_ticket_categories( $args = array() )	{
 		'orderby'       => 'name',
 		'order'         => 'ASC'
 	);
-	
+
 	$args = wp_parse_args( $args, $defaults );
-	
+
 	$ticket_categories = get_categories( $args );
-	
+
 	return apply_filters( 'kbs_get_ticket_categories', $ticket_categories, $args );
 } // kbs_get_ticket_categories
 
@@ -530,7 +530,7 @@ function kbs_get_ticket_statuses( $can_select = true )	{
 	$ticket_statuses = kbs_get_post_statuses( 'labels', $can_select );
 	$statuses        = array();
     $defaults        = kbs_get_default_ticket_statuses();
-	
+
 	foreach ( $ticket_statuses as $ticket_status ) {
 		$statuses[ $ticket_status->name ] = esc_html( $ticket_status->label );
 	}
@@ -643,7 +643,7 @@ function kbs_get_ticket_log_sources()	{
     }
 
 	$sources = apply_filters( 'kbs_ticket_log_sources', $sources );
-	
+
 	return $sources;
 
 } // kbs_get_ticket_log_sources
@@ -1112,7 +1112,7 @@ function kbs_get_ticket_user_email( $ticket_id ) {
  */
 function kbs_get_ticket_url( $ticket_id, $admin = false, $key = false )	{
 	$scheme = null;
-	
+
 	if ( $admin )	{
 
 		$scheme = defined( 'FORCE_SSL_ADMIN' ) && FORCE_SSL_ADMIN ? 'https' : 'admin';
@@ -1149,7 +1149,7 @@ function kbs_get_ticket_url( $ticket_id, $admin = false, $key = false )	{
  */
 function kbs_get_agent( $ticket_id )	{
 	$kbs_ticket = new KBS_Ticket( $ticket_id );
-	
+
 	return $kbs_ticket->agent_id;
 } // kbs_get_agent
 
@@ -1455,7 +1455,7 @@ function kbs_remove_agents_from_ticket( $ticket, $agent_ids )   {
  */
 function kbs_get_ticket_source( $ticket_id )	{
 	$kbs_ticket = new KBS_Ticket( $ticket_id );
-	
+
 	return $kbs_ticket->get_source();
 } // kbs_get_ticket_source
 
@@ -1714,6 +1714,7 @@ function kbs_remove_notes_from_comment_counts( $stats, $post_id ) {
 
 	$total = 0;
 	$approved = array( '0' => 'moderated', '1' => 'approved', 'spam' => 'spam', 'trash' => 'trash', 'post-trashed' => 'post-trashed' );
+	$stats = array();
 
 	foreach ( (array) $count as $row ) {
 		// Don't count post-trashed toward totals
