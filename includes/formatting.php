@@ -33,3 +33,26 @@ function kbs_sanitize_key( $key ) {
 	 */
 	return apply_filters( 'kbs_sanitize_key', $key, $raw_key );
 } // kbs_sanitize_key
+
+/**
+ * Returns the time passed based on a difference between time() and saved data.
+ *
+ * @param string $dif
+ *
+ * @return string
+ * @since 1.5.84
+ */
+function kbs_passed_time_format( $dif ) {
+
+	$time_passed = 0;
+
+	if ( ( $dif / ( 60 ) ) < 60 ) {
+		$time_passed = absint( $dif / ( 60 ) ) . ( ( absint( $dif / ( 60 ) ) <= 1 ) ? esc_html__( ' minute', 'kb-support' ) : esc_html__( ' minutes', 'kb-support' ) );
+	} else if ( ( $dif / ( 60 * 60 ) ) <= 24 ) {
+		$time_passed = absint( $dif / ( 60 * 60 ) ) . ( ( absint( $dif / ( 60 * 60 ) ) <= 1 ) ? esc_html__( ' hour', 'kb-support' ) : esc_html__( ' hours', 'kb-support' ) );
+	} else {
+		$time_passed = absint( $dif / ( 60 * 60 * 24 ) ) . ( ( absint( $dif / ( 60 * 60 * 24 ) ) <= 1 ) ? esc_html__( ' day', 'kb-support' ) : esc_html__( ' days', 'kb-support' ) );
+	}
+
+	return $time_passed;
+}
