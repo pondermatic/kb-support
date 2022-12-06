@@ -124,6 +124,9 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 == Changelog ==
 
 = 1.5.83 - 23.11.2022 =
+Added: Admin navigation tabs for kbs_ticket post type. ( [#208](https://github.com/WPChill/modula-lite/issues/208) )
+
+= 1.5.83 - 23.11.2022 =
 Fixed: PHP 8 warnings
 Fixed: Missing arguments on wp_kses_post
 Fixed: Ticket categories warnings
