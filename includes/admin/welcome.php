@@ -154,8 +154,6 @@ class KBS_Welcome {
 				);
 			?></p>
 
-			<?php kbs_get_newsletter(); ?>
-
 			<div class="kbs-badge"></div>
 
 			<?php $this->tabs(); ?>
@@ -358,8 +356,6 @@ class KBS_Welcome {
 					), 'https://kb-support.com/support/' ) )
 				) );
 			?></p>
-
-			<?php kbs_get_newsletter(); ?>
 
 			<div class="kbs-badge"></div>
 
