@@ -1,7 +1,7 @@
-<?php	
+<?php
 /**
  * Manage kbs-ticket posts.
- * 
+ *
  * @since		1.0
  * @package		KBS
  * @subpackage	Posts
@@ -196,7 +196,7 @@ function kbs_set_kbs_ticket_column_data( $column_name, $post_id ) {
 		case 'agent':
 			echo kb_tickets_post_column_agent( $post_id, $kbs_ticket );
 			break;
-			
+
 		case 'sla':
 			echo kb_tickets_post_column_sla( $post_id, $kbs_ticket );
 			break;
@@ -411,7 +411,7 @@ function kbs_order_admin_tickets( $query )	{
 		case 'title':
 			$query->set( 'orderby',  'title' );
 			$query->set( 'order',  $order );
-			break;			
+			break;
 	}
 } // kbs_order_admin_tickets
 add_action( 'pre_get_posts', 'kbs_order_admin_tickets' );
@@ -777,7 +777,8 @@ add_action( 'pre_get_posts', 'kbs_filter_company_tickets' );
  * @return	void
  */
 function kbs_filter_agent_tickets( $query )	{
-	if ( ! is_admin() || 'kbs_ticket' != $query->get( 'post_type' ) || ! isset( $_GET['agent'] ) )	{
+
+	if ( ! is_admin() || 'kbs_ticket' != $query->get( 'post_type' ) || ! isset( $_GET['agent'] ) || '0' === $_GET['agent'] )	{
 		return;
 	}
 
@@ -896,7 +897,7 @@ function kbs_ticket_filter_views( $views )	{
 
             if ( 'all' == $status ) {
                 $search       = esc_html__( 'All', 'kb-support' );
-                $replace      = sprintf( esc_html__( 'All %s', 'kb-support' ), kbs_get_ticket_label_plural() ); 
+                $replace      = sprintf( esc_html__( 'All %s', 'kb-support' ), kbs_get_ticket_label_plural() );
                 $views['all'] = str_replace( $search, $replace, $views['all'] );
                 $colour       = $all_colour;
             }
@@ -944,7 +945,7 @@ function kbs_ticket_filter_views( $views )	{
 
         if ( $active_only )	{
             $search       = esc_html__( 'All', 'kb-support' );
-            $replace      = sprintf( esc_html__( 'Active %s', 'kb-support' ), kbs_get_ticket_label_plural() ); 
+            $replace      = sprintf( esc_html__( 'Active %s', 'kb-support' ), kbs_get_ticket_label_plural() );
             $views['all'] = str_replace( $search, $replace, $views['all'] );
             $views['all'] = sprintf(
                 $span_string . $views['all'] . '</span>',
@@ -1023,7 +1024,7 @@ add_filter( 'post_row_actions', 'kbs_tickets_remove_ticket_post_actions' );
  *
  * @return	void
  */
-function kbs_ticket_post_save( $post_id, $post, $update )	{	
+function kbs_ticket_post_save( $post_id, $post, $update )	{
 
 	if ( ! isset( $_POST['kbs_ticket_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['kbs_ticket_meta_box_nonce'], 'kbs_ticket_meta_save' ) ) {
 		return;
