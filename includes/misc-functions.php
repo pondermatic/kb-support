@@ -21,16 +21,16 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 function kbs_get_contextual_help_sidebar_text() {
     $sidebar_text = '
         <p><strong>' . esc_html__( 'More Information:', 'kb-support' ) . '</strong></p>' .
-		'<p>' . sprintf( 
-			wp_kses_post( __( '<a href="%s" target="_blank">Documentation</a>', 'kb-support' ) ), 
+		'<p>' . sprintf(
+			wp_kses_post( __( '<a href="%s" target="_blank">Documentation</a>', 'kb-support' ) ),
 			esc_url( 'https://kb-support.com/support/' )
 		) . '</p>' .
-		'<p>' . sprintf( 
-			wp_kses_post( __( '<a href="%s" target="_blank">Twitter</a>', 'kb-support' ) ), 
+		'<p>' . sprintf(
+			wp_kses_post( __( '<a href="%s" target="_blank">Twitter</a>', 'kb-support' ) ),
 			esc_url( 'https://twitter.com/kbsupport_wp/' )
 		) . '</p>' .
-		'<p>' . sprintf( 
-			wp_kses_post( __( '<a href="%s" target="_blank">Facebook</a>', 'kb-support' ) ), 
+		'<p>' . sprintf(
+			wp_kses_post( __( '<a href="%s" target="_blank">Facebook</a>', 'kb-support' ) ),
 			esc_url( 'https://www.facebook.com/kbsupport/' )
 		) . '</p>' .
 		'<p>' . sprintf(
@@ -83,7 +83,7 @@ function kbs_admin_bar_menu_items( $admin_bar ) {
     }
 
     $icon  = '<span class="ab-icon dashicons dashicons-sos"></span> ';
-    $title = sprintf( 
+    $title = sprintf(
         '<span class="kbs-ticket-counter count-%d">%d</span>',
         absint( $count ),
         number_format_i18n( $count )
@@ -310,7 +310,7 @@ function kbs_do_honeypot_check( $data )	{
 	if ( ! empty( $data['kbs_honeypot'] ) )	{
 		wp_die( esc_html__( "Ha! I don't think so little honey bee. No bots allowed in this Honey Pot!", 'kb-support' ) );
 	}
-	
+
 	return;
 } // kbs_do_honeypot_check
 
@@ -331,7 +331,7 @@ function kbs_get_recaptcha_version()    {
  * @param	str		$m		The notice message key.
  * @return	str		The HTML string for the notice
  */
-function kbs_display_notice( $m )	{	
+function kbs_display_notice( $m )	{
 	$notices = kbs_get_notices( $m );
 
 	if ( $notices )	{
@@ -671,7 +671,7 @@ function kbs_get_newsletter()    {
 
     ?>
 	<p class="newsletter-intro">
-	    <?php echo wp_kses_post( sprintf( esc_html__( 
+	    <?php echo wp_kses_post( sprintf( __(
             'Sign up for the KB Support newsletter below to receive a <strong>15%s discount</strong> off our <a href="%s" target="_blank">extensions</a> and to stay informed of important updates and news.', 'kb-support' ),
             '%',
             add_query_arg( array(
@@ -684,7 +684,7 @@ function kbs_get_newsletter()    {
 
 	<div class="kbs-newsletter-form-wrap">
 
-		<form action="//kb-support.us14.list-manage.com/subscribe/post?u=71d2a491e4f8a672ad45bea89&amp;id=7b91a81d25" 
+		<form action="//kb-support.us14.list-manage.com/subscribe/post?u=71d2a491e4f8a672ad45bea89&amp;id=7b91a81d25"
 		    method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
 			<div class="kbs-newsletter-confirmation">
 				<p><?php esc_html_e( 'Thanks for Subscribing! Please check your inbox to confirm your subscription and receive your discount code.', 'kb-support' ); ?></p>

@@ -91,7 +91,7 @@ class KBS_Welcome {
 			$this->minimum_capability,
 			'kbs-getting-started',
 			array( $this, 'getting_started_screen' )
-		);		
+		);
 
 	} // admin_menus
 
@@ -121,7 +121,7 @@ class KBS_Welcome {
 		$get_started_url = esc_url( admin_url( add_query_arg( array( 'page' => 'kbs-getting-started' ), 'index.php' ) ) );
 		?>
 
-		<h2 class="nav-tab-wrapper wp-clearfix">			
+		<h2 class="nav-tab-wrapper wp-clearfix">
 			<a href="<?php echo esc_url( $about_url ); ?>" class="nav-tab <?php echo $selected == 'kbs-about' ? 'nav-tab-active' : ''; ?>">
 				<?php esc_html_e( "What's New", 'kb-support' ); ?>
 			</a>
@@ -218,13 +218,13 @@ class KBS_Welcome {
 					); ?></p>
 
 					<p><?php echo wp_kses_post( sprintf(
-						 __( 'Enable multiple agents from <span class="return-to-dashboard"><a href="%1$s">%2$s &rarr; Settings &rarr; %2$s &rarr; Agent Settings</a></span>' ), 'kb-support' ),
+						 __( 'Enable multiple agents from <span class="return-to-dashboard"><a href="%1$s">%2$s &rarr; Settings &rarr; %2$s &rarr; Agent Settings</a></span>', 'kb-support'  ),
 						add_query_arg( array(
 							'post_type' => 'kbs_ticket',
 							'page'      => 'kbs-settings',
 							'tab'       => 'tickets',
 							'section'   => 'agents'
-						), esc_url( admin_url( 'edit.php' ) ),
+						), esc_url( admin_url( 'edit.php' ) ) ),
 						$this->ticket_plural
 					) ); ?></p>
 
@@ -550,7 +550,7 @@ class KBS_Welcome {
 
             /*]]>*/
         </style>
-        
+
         <?php
     } // get_welcome_header
 
