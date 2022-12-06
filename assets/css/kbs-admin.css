@@ -1445,3 +1445,28 @@ p.kbs-extension-desc {
     
 
 }
+
+.kbs-page-header {
+    display: flex;
+    justify-content: space-between;
+    background: #fff;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    margin-left: -20px;
+	padding: 20px;
+}
+
+.kbs-header-links {
+    margin-left: -20px;
+}
+
+.kbs-header-logo img {
+    max-height: 35px;
+}
+
+.kbs-header-links a span {
+    vertical-align: middle;
+    position: relative;
+    top: -2px;
+    padding-right: 10px;
+}
