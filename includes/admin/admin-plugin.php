@@ -91,6 +91,7 @@ add_filter( 'admin_footer_text', 'kbs_admin_footer_rate_us' );
  *
  * @param $tabs
  * @param $active_tab
+ * @since 1.5.84
  */
 function kbs_tab_navigation( $tabs, $active_tab ) {
 
