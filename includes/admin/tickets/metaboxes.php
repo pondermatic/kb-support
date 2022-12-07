@@ -544,7 +544,7 @@ function kbs_ticket_metabox_sections()  {
                             <?php if ( $kbs_ticket->date != $kbs_ticket->modified_date ) : ?>
                                 <br>
                                 <?php printf(
-                                    esc_html__( 'Updated: %s', 'kb-support' ),
+                                    esc_html__( 'Updated: %s ago', 'kb-support' ),
                                     esc_html( $updated_time )
                                 ); ?>
                             <?php endif; ?>
