@@ -1,6 +1,6 @@
 <?php
 /**
- * Weclome Page Class
+ * KB Support Branding
  *
  * @package     KBS
  * @subpackage  Admin/Branding
@@ -47,7 +47,7 @@ class KBS_Branding {
 		<div class="kbs-page-header <?php echo ( $extra_class ) ? esc_attr( $extra_class ) : ''; ?>">
 			<div class="kbs-header-logo">
 
-				<img src="<?php echo esc_attr( KBS_PLUGIN_URL . 'assets/images/kbs-logo.png' ); ?>" class="kbs-logo" />
+				<img src="<?php echo esc_url( KBS_PLUGIN_URL . 'assets/images/kbs-logo.png' ); ?>" class="kbs-logo" />
 			</div>
 			<div class="kbs-header-links">
 				<a href="https://kb-support.com/support/" target="_blank" rel="noreferrer nofollow" id="get-help"
