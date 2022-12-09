@@ -1,7 +1,7 @@
 <?php
 /**
  * Manage article posts.
- * 
+ *
  * @since		1.0
  * @package		KBS
  * @subpackage	Posts
@@ -10,23 +10,6 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) )
 	exit;
-
-/**
- * Remove block editor for article.
- *
- * @since	1.5
- * @param	bool	$block_editor	Whether or not to use block editor
- * @param	string	$post_type		Post type
- * @return	bool	True to use block editor, or false
- */
-function kbs_article_remove_block_editor( $block_editor, $post_type )	{
-	if ( 'article' == $post_type )	{
-		$block_editor = false;
-	}
-
-	return $block_editor;
-} // kbs_article_remove_block_editor
-add_filter( 'use_block_editor_for_post_type', 'kbs_article_remove_block_editor', 10, 2 );
 
 /**
  * Define the columns that should be displayed for the Article post lists screen
@@ -51,9 +34,9 @@ function kbs_set_article_post_columns( $columns ) {
 		'visibility'       => esc_html__( 'Visibility', 'kb-support' ),
 		'linked'           => sprintf( esc_html__( 'Linked %s', 'kb-support' ), kbs_get_ticket_label_plural() )
     );
-	
+
 	return apply_filters( 'kbs_article_post_columns', $columns );
-	
+
 } // kbs_set_article_post_columns
 add_filter( 'manage_article_posts_columns' , 'kbs_set_article_post_columns' );
 
@@ -66,7 +49,7 @@ add_filter( 'manage_article_posts_columns' , 'kbs_set_article_post_columns' );
  */
 function kbs_set_article_sortable_post_columns( $columns ) {
     $columns['views'] = 'views';
- 
+
     return $columns;
 } // kbs_set_article_sortable_post_columns
 add_filter( 'manage_edit-article_sortable_columns', 'kbs_set_article_sortable_post_columns' );
@@ -279,7 +262,7 @@ add_action( 'pre_get_posts', 'kbs_article_posts_orderby_by_custom_column' );
  *
  * @return	void
  */
-function kbs_article_post_save( $post_id, $post, $update )	{	
+function kbs_article_post_save( $post_id, $post, $update )	{
 
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )	{
 		return;

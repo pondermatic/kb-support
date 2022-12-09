@@ -157,7 +157,7 @@ class KBS_Knowledgebase {
 			'can_export'            => true,
             'show_in_rest'          => true,
 			'rest_base'             => 'articles',
-			'rest_controller_class' => 'KBS_Articles_API'
+			'rest_controller_class' => 'WP_REST_Posts_Controller'
 		);
 
 		register_post_type( 'article', $article_args );
@@ -249,7 +249,7 @@ class KBS_Knowledgebase {
 	 */
 	public function get_meta_fields()	{
 		$object = get_post_type_object( $this->post_type );
-		
+
 		$meta_fields = array(
 			'_kbs_article_restricted' => array(
 				'type'              => 'integer',
