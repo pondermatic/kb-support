@@ -520,74 +520,66 @@ add_action( 'kbs_ticket_agent_fields', 'kbs_ticket_metabox_additional_agents_row
  * @global	bool	$kbs_ticket_update	True if this ticket is being updated, false if new.
  * @param	int		$ticket_id			The ticket post ID.
  */
-function kbs_ticket_metabox_sections()  {
-    global $kbs_ticket, $kbs_ticket_update;
+function kbs_ticket_metabox_sections() {
+	global $kbs_ticket, $kbs_ticket_update;
 	$date_format = get_option( 'date_format' ) . ', ' . get_option( 'time_format' );
 
-	$time_passed   = date_i18n( $date_format,  strtotime( $kbs_ticket->date ) );
-
-	if ( $kbs_ticket->date != $kbs_ticket->modified_date ){
-		$updated_time  = date_i18n( $date_format,  strtotime( $kbs_ticket->modified_date ) );
-		$date_tooltip = sprintf( __( 'Received: %s. <br> Updated: %s.' , 'kb-support' ), esc_html( $time_passed ) , esc_html( $updated_time ) );
-		$tooltip_css = 'position: relative; top: 14px;';
-	}else{
-		$date_tooltip = sprintf( __( 'Received: %s.' , 'kb-support' ), esc_html( $time_passed ) );
-		$tooltip_css = 'position: relative; top: 7px;';
+	$time_passed = date_i18n( $date_format, strtotime( $kbs_ticket->date ) );
+	$tooltip_css = '';
+	if ( $kbs_ticket->date != $kbs_ticket->modified_date ) {
+		$updated_time = date_i18n( $date_format, strtotime( $kbs_ticket->modified_date ) );
+		$date_tooltip = sprintf( __( 'Received: %1$s. <br> Updated: %2$s.', 'kb-support' ), esc_html( $time_passed ), esc_html( $updated_time ) );
+	} else {
+		$date_tooltip = sprintf( __( 'Received: %s.', 'kb-support' ), esc_html( $time_passed ) );
 	}
 
 	$formatted_time_passed  = kbs_passed_time_format( absint( strtotime( current_time( 'mysql' ) ) - strtotime( $kbs_ticket->date ) ) );
 	$formatted_updated_time = kbs_passed_time_format( absint( strtotime( current_time( 'mysql' ) ) - strtotime( $kbs_ticket->modified_date ) ) );
-    ?>
-    <div id="kbs-ticket-metabox-fields" class="kbs_meta_table_wrap">
+	?>
+	<div id="kbs-ticket-metabox-fields" class="kbs_meta_table_wrap">
 
-        <div class="widefat kbs_repeatable_table">
+		<div class="widefat kbs_repeatable_table">
 
-            <div class="kbs-ticket-option-fields kbs-repeatables-wrap">
+			<div class="kbs-ticket-option-fields kbs-repeatables-wrap">
 
-                <div class="kbs_ticket_content_wrapper">
+				<div class="kbs_ticket_content_wrapper">
 
-                    <div class="kbs-ticket-content-row-header">
-
+					<div class="kbs-ticket-content-row-header">
+						<span class="kbs-ticket-content-row-title">
+							<?php printf(
+								esc_html__( 'Received: %s ago', 'kb-support' ),
+								esc_html( $formatted_time_passed )
+							); ?>
+							<?php if ( $kbs_ticket->date != $kbs_ticket->modified_date ) : ?>
+								<br>
+								<?php printf(
+									esc_html__( 'Updated: %s ago', 'kb-support' ),
+									esc_html( $formatted_updated_time )
+								); ?>
+							<?php endif; ?>
+						</span>
 						<div class="wpchill-tooltip">
-
-							<div class="wpchill-tooltip-content"><?php echo ( $date_tooltip ); ?></div>
-								<span class="kbs-ticket-content-row-title" >
-									<?php printf(
-										esc_html__( 'Received: %s ago', 'kb-support' ),
-										esc_html( $formatted_time_passed )
-									); ?>
-
-									<?php if ( $kbs_ticket->date != $kbs_ticket->modified_date ) : ?>
-										<br>
-										<?php printf(
-											esc_html__( 'Updated: %s ago', 'kb-support' ),
-											esc_html( $formatted_updated_time )
-										); ?>
-									<?php endif; ?>
-								</span>
-								<span style="<?php echo esc_attr( $tooltip_css );?>">[?]</span>
-							</div>
+							<div class="wpchill-tooltip-content"><?php echo wp_kses_post( $date_tooltip ); ?></div>
+							<span style="<?php echo esc_attr( $tooltip_css ); ?>">[?]</span>
 						</div>
-						<?php
-						$actions = kbs_get_ticket_actions( $kbs_ticket, $kbs_ticket_update );
-						?>
+					</div>
+					<?php
+					$actions = kbs_get_ticket_actions( $kbs_ticket, $kbs_ticket_update );
+					?>
 
-						<span class="kbs-ticket-content-row-actions">
+					<span class="kbs-ticket-content-row-actions">
 							<?php echo wp_kses_post( implode( '&nbsp;&#124;&nbsp;', $actions ) ); ?>
 						</span>
 
-                    <div class="kbs-ticket-content-row-standard-fields">
-                        <?php do_action( 'kbs_ticket_metabox_standard_fields', $kbs_ticket, $kbs_ticket_update ); ?>
-                    </div>
-                    <?php do_action( 'kbs_ticket_metabox_custom_sections', $kbs_ticket, $kbs_ticket_update ); ?>
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-    <?php
+					<div class="kbs-ticket-content-row-standard-fields">
+						<?php do_action( 'kbs_ticket_metabox_standard_fields', $kbs_ticket, $kbs_ticket_update ); ?>
+					</div>
+					<?php do_action( 'kbs_ticket_metabox_custom_sections', $kbs_ticket, $kbs_ticket_update ); ?>
+				</div>
+			</div>
+		</div>
+	</div>
+	<?php
 } // kbs_ticket_metabox_sections
 add_action( 'kbs_ticket_data_fields', 'kbs_ticket_metabox_sections', 10 );
 

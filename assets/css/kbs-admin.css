@@ -594,6 +594,16 @@ a.kbs_ticket_form_data	{
     font-weight: 600;
 }
 
+#kbs-ticket-metabox-ticket-details .kbs-ticket-content-row-header .kbs-ticket-content-row-title {
+	float: none;
+	display:inline-block;
+	vertical-align: middle;
+}
+
+#kbs-ticket-metabox-ticket-details .kbs-ticket-content-row-header .wpchill-tooltip {
+	vertical-align: middle;
+}
+
 .kbs-ticket-content-row-title,
 .kbs-replies-row-title,
 .kbs-notes-row-title,
@@ -723,9 +733,9 @@ a.kbs_ticket_form_data	{
 	background: #f1f1f1;
 }
 
-.space-between { 
-	justify-content: space-between; 
-}  
+.space-between {
+	justify-content: space-between;
+}
 
 .participant-item {
 	width: 33%;
@@ -1442,7 +1452,7 @@ p.kbs-extension-desc {
 		width: 100% !important;
 		margin: 10px 0;
     }
-    
+
 
 }
 
