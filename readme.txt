@@ -123,9 +123,13 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 == Changelog ==
 
-= 1.5.84 - TBA =
+= 1.5.84 - 12.12.2022 =
 Added: Admin navigation tabs for kbs_ticket post type. ( [#208](https://github.com/WPChill/modula-lite/issues/208) )
 Added: Branding bar. ( [#207](https://github.com/WPChill/modula-lite/issues/207) )
+Fixed: Ticket filtering in admin Tickets table list ( [#190](https://github.com/WPChill/kb-support/issues/190) )
+Fixed: Translations ( [#151](https://github.com/WPChill/kb-support/issues/151) )
+Changed: Ticket date received/updated display ( [#163](https://github.com/WPChill/kb-support/issues/163) )
+Changed: KB Articles now working with Gutenberg ( [#240](https://github.com/WPChill/kb-support/issues/240) )
 
 = 1.5.83 - 23.11.2022 =
 Fixed: PHP 8 warnings
