@@ -88,7 +88,7 @@ function kbs_set_articles_column_data( $column_name, $post_id ) {
 			$terms = get_the_term_list( $post_id, 'article_tag', '', '<br />' );
 
 			if ( ! empty( $terms ) )	{
-				echo esc_html( $terms );
+				echo wp_kses_post( $terms );
 			} else	{
 				echo '&mdash;';
 			}
@@ -133,7 +133,7 @@ function kbs_set_articles_column_data( $column_name, $post_id ) {
 		default:
 			$output = esc_html__( 'No callback found for post column', 'kb-support' );
 			$output = apply_filters( 'kbs_articles_column_data_' . $column_name, $output, $post_id );
-			echo esc_html( $output );
+			echo wp_kses_post( $output );
 			break;
 	}
 
