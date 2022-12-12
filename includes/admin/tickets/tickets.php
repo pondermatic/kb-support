@@ -1116,11 +1116,25 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
 } // kbs_ticket_post_save
 add_action( 'save_post_kbs_ticket', 'kbs_ticket_post_save', 10, 3 );
 
+/**
+ * Add navigation tabs to the ticket edit screen.
+ *
+ * @param $views
+ *
+ * @return mixed
+ * @since 1.5.84
+ */
 function add_extensions_tab( $views ) {
 	display_extension_tab();
 	return $views;
 }
 
+/**
+ * Add navigation tabs to the ticket edit screen.
+ *
+ * @return void
+ * @since 1.5.84
+ */
 function display_extension_tab() {
 	?>
 	<h2 class="nav-tab-wrapper">
