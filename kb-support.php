@@ -30,7 +30,7 @@
  * @package		KBS
  * @category	Core
  * @author		WPChill
- * @version		1.5.81
+ * @version		1.5.84
  */
 
 // Exit if accessed directly.
