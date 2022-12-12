@@ -522,9 +522,21 @@ add_action( 'kbs_ticket_agent_fields', 'kbs_ticket_metabox_additional_agents_row
  */
 function kbs_ticket_metabox_sections()  {
     global $kbs_ticket, $kbs_ticket_update;
+	$date_format = get_option( 'date_format' ) . ', ' . get_option( 'time_format' );
 
-	$time_passed  = kbs_passed_time_format( absint( strtotime( current_time( 'mysql' ) ) - strtotime( $kbs_ticket->date ) ) );
-	$updated_time = kbs_passed_time_format( absint( strtotime( current_time( 'mysql' ) ) - strtotime( $kbs_ticket->modified_date ) ) );
+	$time_passed   = date_i18n( $date_format,  strtotime( $kbs_ticket->date ) );
+
+	if ( $kbs_ticket->date != $kbs_ticket->modified_date ){
+		$updated_time  = date_i18n( $date_format,  strtotime( $kbs_ticket->modified_date ) );
+		$date_tooltip = sprintf( __( 'Received: %s. <br> Updated: %s.' , 'kb-support' ), esc_html( $time_passed ) , esc_html( $updated_time ) );
+		$tooltip_css = 'position: relative; top: 14px;';
+	}else{
+		$date_tooltip = sprintf( __( 'Received: %s.' , 'kb-support' ), esc_html( $time_passed ) );
+		$tooltip_css = 'position: relative; top: 7px;';
+	}
+
+	$formatted_time_passed  = kbs_passed_time_format( absint( strtotime( current_time( 'mysql' ) ) - strtotime( $kbs_ticket->date ) ) );
+	$formatted_updated_time = kbs_passed_time_format( absint( strtotime( current_time( 'mysql' ) ) - strtotime( $kbs_ticket->modified_date ) ) );
     ?>
     <div id="kbs-ticket-metabox-fields" class="kbs_meta_table_wrap">
 
@@ -535,29 +547,34 @@ function kbs_ticket_metabox_sections()  {
                 <div class="kbs_ticket_content_wrapper">
 
                     <div class="kbs-ticket-content-row-header">
-                        <span class="kbs-ticket-content-row-title">
-                            <?php printf(
-                                esc_html__( 'Received: %s ago', 'kb-support' ),
-                                esc_html( $time_passed )
-                            ); ?>
 
-                            <?php if ( $kbs_ticket->date != $kbs_ticket->modified_date ) : ?>
-                                <br>
-                                <?php printf(
-                                    esc_html__( 'Updated: %s ago', 'kb-support' ),
-                                    esc_html( $updated_time )
-                                ); ?>
-                            <?php endif; ?>
-                        </span>
+						<div class="wpchill-tooltip">
 
-                        <?php
-                        $actions = kbs_get_ticket_actions( $kbs_ticket, $kbs_ticket_update );
-                        ?>
+							<div class="wpchill-tooltip-content"><?php echo ( $date_tooltip ); ?></div>
+								<span class="kbs-ticket-content-row-title" >
+									<?php printf(
+										esc_html__( 'Received: %s ago', 'kb-support' ),
+										esc_html( $formatted_time_passed )
+									); ?>
 
-                        <span class="kbs-ticket-content-row-actions">
-                            <?php echo wp_kses_post( implode( '&nbsp;&#124;&nbsp;', $actions ) ); ?>
-                        </span>
-                    </div>
+									<?php if ( $kbs_ticket->date != $kbs_ticket->modified_date ) : ?>
+										<br>
+										<?php printf(
+											esc_html__( 'Updated: %s ago', 'kb-support' ),
+											esc_html( $formatted_updated_time )
+										); ?>
+									<?php endif; ?>
+								</span>
+								<span style="<?php echo esc_attr( $tooltip_css );?>">[?]</span>
+							</div>
+						</div>
+						<?php
+						$actions = kbs_get_ticket_actions( $kbs_ticket, $kbs_ticket_update );
+						?>
+
+						<span class="kbs-ticket-content-row-actions">
+							<?php echo wp_kses_post( implode( '&nbsp;&#124;&nbsp;', $actions ) ); ?>
+						</span>
 
                     <div class="kbs-ticket-content-row-standard-fields">
                         <?php do_action( 'kbs_ticket_metabox_standard_fields', $kbs_ticket, $kbs_ticket_update ); ?>
