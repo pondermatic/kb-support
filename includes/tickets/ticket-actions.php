@@ -48,7 +48,7 @@ function kbs_process_ticket_submission()	{
 		return;
 	}
 
-	if ( ! isset( $_POST['kbs_log_ticket'] ) || ! wp_verify_nonce( $_POST['kbs_log_ticket'], 'kbs-form-validate' ) )	{
+	if ( ! isset( $_POST['kbs_log_ticket'] ) || ! wp_verify_nonce( $_POST['kbs_log_ticket'], 'kbs_form_validate' ) )	{
 		wp_die( esc_html__( 'Security failed.', 'kb-support' ) );
 	}
 

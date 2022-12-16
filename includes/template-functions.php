@@ -95,7 +95,7 @@ function kbs_render_hidden_form_fields( $form_id )	{
     	<input type="hidden" name="<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( $value ); ?>" />
     <?php endforeach; ?>
 
-	<?php wp_nonce_field( 'kbs-form-validate', 'kbs_log_ticket' ); ?>
+	<?php wp_nonce_field( 'kbs_form_validate', 'kbs_log_ticket' ); ?>
 
     <?php echo ob_get_clean();
 } // kbs_render_hidden_form_fields
