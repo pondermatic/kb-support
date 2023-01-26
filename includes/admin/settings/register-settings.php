@@ -350,6 +350,12 @@ function kbs_get_registered_settings() {
 						'name' => '<h3>' . sprintf( esc_html__( '%s Settings', 'kb-support' ), $single ) . '</h3>',
 						'type' => 'header'
 					),
+					'disable_tickets' => array(
+						'id'      => 'disable_tickets',
+						'name'    => sprintf( esc_html__( 'Disable Tickets?', 'kb-support' ), $plural ),
+						'desc'    => sprintf( esc_html__( 'Enable this option to remove closed %1$s from the default view on the admin %1$s screen', 'kb-support' ), strtolower( $plural ) ),
+						'type'    => 'checkbox'
+					),
 					'enable_sequential' => array(
 						'id'      => 'enable_sequential',
 						'name'    => sprintf( esc_html__( 'Sequential %s Numbers?', 'kb-support' ), $single ),
@@ -638,6 +644,13 @@ function kbs_get_registered_settings() {
 						'id'   => 'kb_settings_header',
 						'name' => '<h3>' . sprintf( esc_html__( '%s Settings', 'kb-support' ), kbs_get_article_label_singular() ) . '</h3>',
 						'type' => 'header'
+					),
+					'disable_kb_articles' => array(
+						'id'      => 'disable_kb_articles',
+						'name'    => esc_html__( 'Disable KB Articles and Categories', 'kb-support' ),
+						'desc'    => sprintf( esc_html__( 'Enable to display %s view counts within the KB Support dashboard widget.', 'kb-support' ), kbs_get_article_label_singular() ),
+						'type'    => 'checkbox',
+						'std'     => 0
 					),
 					'article_restricted' => array(
 						'id'      => 'article_restricted',

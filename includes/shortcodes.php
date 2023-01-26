@@ -81,6 +81,9 @@ add_shortcode( 'kbs_profile_editor', 'kbs_profile_editor_shortcode' );
  * @return	str
  */
 function kbs_submit_form_shortcode( $atts ) {
+	if( kbs_tickets_disabled() ){
+		return;
+	}
 	if ( ! kbs_user_can_submit() )	{
         ob_start();
         echo kbs_display_notice( 'need_login' );
@@ -121,6 +124,10 @@ add_shortcode( 'kbs_submit', 'kbs_submit_form_shortcode' );
  * @return	str
  */
 function kbs_tickets_shortcode( $atts )	{
+
+	if( kbs_tickets_disabled() ){
+		return;
+	}
 	ob_start();
 
 	if ( isset( $_GET['ticket'] ) )	{
@@ -160,6 +167,9 @@ add_shortcode( 'kbs_tickets', 'kbs_tickets_shortcode' );
  * @return	str
  */
 function kbs_article_search_form_shortcode()	{
+	if( kbs_articles_disabled() ){
+		return;
+	}
 	return kbs_article_search_form();
 } // kbs_article_search_form_shortcode
 add_shortcode( 'kbs_search', 'kbs_article_search_form_shortcode' );
@@ -174,7 +184,9 @@ add_shortcode( 'kbs_search', 'kbs_article_search_form_shortcode' );
  * @return	str
  */
 function kbs_articles_shortcode( $atts )	{
-
+	if( kbs_articles_disabled() ){
+		return;
+	}
 	$args = shortcode_atts( array(
 		'articles'        => null,    // Article IDs to display
 		'number'          => 20,      // Number of posts to display

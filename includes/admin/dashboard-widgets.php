@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) )
  * @since	1.0
  */
 function kbs_register_dashboard_widgets()	{
-	if ( current_user_can( apply_filters( 'kbs_dashboard_stats_cap', 'view_ticket_reports' ) ) )	{
+	if ( current_user_can( apply_filters( 'kbs_dashboard_stats_cap', 'view_ticket_reports' ) ) && ( !kbs_tickets_disabled() || !kbs_articles_disabled() ) )	{
 		wp_add_dashboard_widget(
 			'kbs_dashboard_tickets',
 			sprintf( esc_html__( 'KB Support %s Summary', 'kb-support' ), kbs_get_ticket_label_singular() ),
@@ -61,6 +61,7 @@ function kbs_load_dashboard_tickets_widget() {
 
 	$stats = new KBS_Ticket_Stats; ?>
 	<div class="kbs_dashboard_widget">
+		<?php if( !kbs_tickets_disabled() ):?>
 		<div class="table table_left table_current_month">
 			<table>
 				<thead>
@@ -153,6 +154,7 @@ function kbs_load_dashboard_tickets_widget() {
 				</tbody>
 			</table>
 		</div>
+		<?php endif; ?>
 		<div style="clear: both"></div>
         <?php do_action( 'kbs_ticket_summary_widget_after_stats', $stats ); ?>
 

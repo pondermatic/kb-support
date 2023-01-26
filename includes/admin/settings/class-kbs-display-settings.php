@@ -80,14 +80,27 @@ class KBS_Display_Settings	{
 	 * @return	void
 	 */
 	public function add_options_link()	{
-        add_submenu_page(
-            'edit.php?post_type=kbs_ticket',
-            esc_html__( 'KB Support Settings', 'kb-support' ),
-            esc_html__( 'Settings', 'kb-support' ),
-            'manage_ticket_settings',
-            'kbs-settings',
-            array( $this, 'options_page' )
-        );
+        if( kbs_tickets_disabled() ){
+            add_menu_page(
+                //'options-general.php',
+                esc_html__( 'KB Support Settings', 'kb-support' ),
+                esc_html__( 'KB Support Settings', 'kb-support' ),
+                'manage_ticket_settings',
+                'kbs-settings',
+                array( $this, 'options_page' ),
+                'dashicons-book-alt',
+                25
+            ); 
+        }else{
+            add_submenu_page(
+                'edit.php?post_type=kbs_ticket',
+                esc_html__( 'KB Support Settings', 'kb-support' ),
+                esc_html__( 'Settings', 'kb-support' ),
+                'manage_ticket_settings',
+                'kbs-settings',
+                array( $this, 'options_page' )
+            );
+        }
 	} // add_options_link
 
     /**
@@ -153,12 +166,20 @@ class KBS_Display_Settings	{
             <?php
 
             foreach ( $this->all_tabs as $tab_id => $tab_name ) {
-                $tab_url = add_query_arg( array(
-					'post_type'        => 'kbs_ticket',
-					'page'             => 'kbs-settings',
-					'settings-updated' => false,
-					'tab'              => $tab_id
-				), admin_url( 'edit.php' ) );
+                if( kbs_tickets_disabled() ){
+                    $tab_url = add_query_arg( array(
+                        'page'             => 'kbs-settings',
+                        'settings-updated' => false,
+                        'tab'              => $tab_id
+                    ), admin_url( 'admin.php' ) );
+                }else{
+                    $tab_url = add_query_arg( array(
+                        'post_type'        => 'kbs_ticket',
+                        'page'             => 'kbs-settings',
+                        'settings-updated' => false,
+                        'tab'              => $tab_id
+                    ), admin_url( 'edit.php' ) );
+                }
 
                 // Remove the section from the tabs so we always end up at the main section
                 $tab_url   = remove_query_arg( 'section', $tab_url );
@@ -196,6 +217,14 @@ class KBS_Display_Settings	{
         // Loop through sections
         foreach ( $this->all_sections as $section_id => $section_name ) {
             // Tab & Section
+            if( kbs_tickets_disabled() ){
+            $tab_url = add_query_arg( array(
+                'page'             => 'kbs-settings',
+                'settings-updated' => false,
+                'tab'              => $this->active_tab,
+                'section'          => $section_id
+            ), admin_url( 'admin.php' ) );
+        }else{
             $tab_url = add_query_arg( array(
                 'post_type'        => 'kbs_ticket',
                 'page'             => 'kbs-settings',
@@ -203,7 +232,7 @@ class KBS_Display_Settings	{
                 'tab'              => $this->active_tab,
                 'section'          => $section_id
             ), admin_url( 'edit.php' ) );
-
+        }
             // Settings not updated
             $tab_url = remove_query_arg( 'settings-updated', $tab_url );
 

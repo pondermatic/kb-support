@@ -1752,3 +1752,20 @@ function kbs_ticket_deleted_item_post_types()	{
 	$post_types = array( 'kbs_ticket_reply', 'kbs_log' );
 	return apply_filters( 'kbs_ticket_deleted_item_post_types', $post_types );
 } // kbs_ticket_deleted_item_post_types
+
+/**
+ * Checks if the tickets are disabled
+ *
+ * @since	1.5.85
+ * @return	bool			TRUE if disabled.
+ */
+function kbs_tickets_disabled(){
+	$settings = get_option( 'kbs_settings' );
+	if( $settings && is_array( $settings ) ){
+		if( isset( $settings['disable_tickets'] )  && 1 == $settings['disable_tickets'] ){
+			return true;
+		}
+	}
+
+	return false;
+}

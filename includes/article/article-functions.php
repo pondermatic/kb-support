@@ -293,6 +293,10 @@ function kbs_increment_article_view_count( $article_id )	{
  * @return	bool
  */
 function kbs_show_dashboard_article_view_counts()	{
+	if( kbs_articles_disabled() ){
+		return false;
+	}
+	
 	return kbs_get_option( 'article_views_dashboard' );
 } // kbs_show_dashboard_article_view_counts
 
@@ -365,3 +369,20 @@ function kbs_get_article_url( $article )	{
 
 	return $url;
 } // kbs_get_article_url
+
+/**
+ * Checks if the articles and article categories/tags are disabled.
+ *
+ * @since	1.5.85
+ * @return	bool			TRUE if disabled.
+ */
+function kbs_articles_disabled(){
+	$settings = get_option( 'kbs_settings' );
+	if( $settings && is_array( $settings ) ){
+		if( isset( $settings['disable_kb_articles'] )  && 1 == $settings['disable_kb_articles'] ){
+			return true;
+		}
+	}
+
+	return false;
+}

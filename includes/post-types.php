@@ -20,7 +20,10 @@ if ( ! defined( 'ABSPATH' ) )
  * @return	void
  */
 function kbs_setup_post_types() {
-
+	if( kbs_tickets_disabled() ){
+		return;
+	}
+	
 	$ticket_labels =  apply_filters( 'kbs_ticket_labels', array(
 		'name'                  => _x( '%2$s', 'kbs_ticket post type name', 'kb-support' ),
 		'singular_name'         => _x( '%1$s', 'singular kbs_ticket post type name', 'kb-support' ),

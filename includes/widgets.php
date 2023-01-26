@@ -270,6 +270,11 @@ class kbs_popular_articles_widget extends WP_Widget {
  * @return	void
  */
 function kbs_register_widgets() {
+
+	if( kbs_articles_disabled() ){
+		return;
+	}
+
 	register_widget( 'kbs_article_categories_tags_widget' );
 	register_widget( 'kbs_popular_articles_widget' );
 } // kbs_register_widgets

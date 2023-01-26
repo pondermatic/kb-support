@@ -25,7 +25,7 @@ function kbs_add_tools_menu_link() {
 	global $kbs_tools_page;
 
 	$kbs_tools_page = add_submenu_page(
-        'edit.php?post_type=kbs_ticket',
+        'kbs-settings',
         esc_html__( 'Tools', 'kb-support' ),
         esc_html__( 'Tools', 'kb-support' ),
         'manage_ticket_settings',

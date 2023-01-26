@@ -118,6 +118,10 @@ class KBS_Knowledgebase {
 	 * @return	void
 	 */
 	public function register_post_type()	{
+		if( kbs_articles_disabled() ){
+			return;
+		}
+
 		$article_archives = defined( 'KBS_ARTICLE_DISABLE_ARCHIVE' ) && KBS_ARTICLE_DISABLE_ARCHIVE ? false : true;
 		$articles_slug    = defined( 'KBS_ARTICLE_SLUG' ) ? KBS_ARTICLE_SLUG : 'articles';
 		$articles_rewrite = defined( 'KBS_ARTICLE_DISABLE_REWRITE' ) && KBS_ARTICLE_DISABLE_REWRITE ? false : array( 'slug' => $articles_slug, 'with_front' => false );
@@ -146,6 +150,7 @@ class KBS_Knowledgebase {
 			'labels'                => $article_labels,
 			'public'                => true,
 			'show_in_menu'          => true,
+			'menu_position '		=> 25,
 			'menu_icon'             => 'dashicons-welcome-learn-more',
 			'query_var'             => true,
 			'rewrite'               => $articles_rewrite,
@@ -170,6 +175,11 @@ class KBS_Knowledgebase {
 	 * @return	void
 	 */
 	public function register_taxonomies()	{
+
+		if( kbs_articles_disabled() ){
+			return;
+		}
+
 		$articles_slug = defined( 'KBS_ARTICLE_SLUG' ) ? KBS_ARTICLE_SLUG : 'articles';
 
 		$article_category_labels = array(
