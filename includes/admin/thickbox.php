@@ -25,7 +25,7 @@ function kbs_media_button()	{
 
 	global $pagenow, $typenow;
 
-	if ( 'kbs_ticket' == $typenow && ( 'draft' == get_post_status() || 'auto-draft' == get_post_status() ) )	{
+	if ( ( 'kbs_ticket' == $typenow && ( 'draft' == get_post_status() || 'auto-draft' == get_post_status() ) ) || kbs_articles_disabled() )	{
 		return;
 	}
 

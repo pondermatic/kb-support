@@ -71,6 +71,7 @@ class KBS_Display_Settings	{
 	 */
 	public function __construct()	{
 		add_action( 'kbs_menu_after_customers', array( $this, 'add_options_link' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'add_settings_conditions' ) );
 	} // __construct
 
     /**
@@ -113,8 +114,8 @@ class KBS_Display_Settings	{
 		$this->all_settings  = kbs_get_registered_settings();
 		$this->all_tabs      = kbs_get_settings_tabs();
 		$this->all_tabs      = empty( $this->all_tabs ) ? array() : $this->all_tabs;
-		$this->active_tab    = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'general';
-		$this->active_tab    = array_key_exists( $this->active_tab, $this->all_tabs ) ? $this->active_tab : 'general';
+		$this->active_tab    = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : ( !kbs_tickets_disabled()  ? 'general' : 'tickets' );
+		$this->active_tab    = array_key_exists( $this->active_tab, $this->all_tabs ) ? $this->active_tab : ( !kbs_tickets_disabled() ? 'general' : 'tickets' );
 		$this->all_sections  = kbs_get_settings_tab_sections( $this->active_tab );
 		$this->section       = isset( $_GET['section'] ) ? sanitize_text_field( wp_unslash( $_GET['section'] ) ) : 'main';
 		$this->section       = array_key_exists( $this->section, $this->all_sections ) ? $this->section : 'main';
@@ -426,6 +427,15 @@ class KBS_Display_Settings	{
             </div>
         <?php endif;
     } // maybe_display_notice
+
+    public function add_settings_conditions(){
+        $assets_dir  = trailingslashit( KBS_PLUGIN_URL . 'assets' );
+        $js_dir      = trailingslashit( $assets_dir . 'js' );
+        $suffix      = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+    
+
+        wp_enqueue_script( 'kbs-admin-conditions', $js_dir . 'admin-conditions-scripts' . $suffix . '.js', 'jquery', KBS_VERSION, false );
+    }
 } // KBS_Display_Settings
 
 new KBS_Display_Settings;

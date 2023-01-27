@@ -353,7 +353,7 @@ function kbs_get_registered_settings() {
 					'disable_tickets' => array(
 						'id'      => 'disable_tickets',
 						'name'    => sprintf( esc_html__( 'Disable Tickets?', 'kb-support' ), $plural ),
-						'desc'    => sprintf( esc_html__( 'Enable this option to remove closed %1$s from the default view on the admin %1$s screen', 'kb-support' ), strtolower( $plural ) ),
+						'desc'    => esc_html__( 'Check to disable the KB Ticketing functionality of the plugin.', 'kb-support' ),
 						'type'    => 'checkbox'
 					),
 					'enable_sequential' => array(
@@ -648,7 +648,7 @@ function kbs_get_registered_settings() {
 					'disable_kb_articles' => array(
 						'id'      => 'disable_kb_articles',
 						'name'    => esc_html__( 'Disable KB Articles and Categories', 'kb-support' ),
-						'desc'    => sprintf( esc_html__( 'Enable to display %s view counts within the KB Support dashboard widget.', 'kb-support' ), kbs_get_article_label_singular() ),
+						'desc'    => esc_html__( 'Check to disable all KB Article functionality of the plugin.', 'kb-support' ),
 						'type'    => 'checkbox',
 						'std'     => 0
 					),
@@ -1426,6 +1426,12 @@ function kbs_get_settings_tabs() {
 	$tabs['emails']           = esc_html__( 'Emails', 'kb-support' );
 	$tabs['terms_compliance'] = esc_html__( 'Compliance', 'kb-support' );
 
+	if( kbs_tickets_disabled() ){
+		unset( $tabs['general'] );
+		unset( $tabs['emails'] );
+		unset( $tabs['terms_compliance'] );
+	}
+
 	$tabs = apply_filters( 'kbs_settings_tabs_before_styles', $tabs );
 
 	$tabs['styles'] = esc_html__( 'Styles', 'kb-support' );
@@ -1521,6 +1527,10 @@ function kbs_get_registered_settings_sections() {
 			'recaptcha'            => esc_html__( 'Google reCAPTCHA', 'kb-support' )
 		) )
 	);
+
+	if( kbs_tickets_disabled() ){
+		unset( $sections['styles']['status_colours'] );
+	}
 
 	$sections = apply_filters( 'kbs_settings_sections', $sections );
 
