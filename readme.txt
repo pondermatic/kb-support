@@ -122,6 +122,8 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+= 1.5.85 - TBD =
+Changed: Improved date readability. ( [#245](https://github.com/WPChill/modula-lite/issues/245) )
 
 = 1.5.84 - 12.12.2022 =
 Added: Admin navigation tabs for kbs_ticket post type. ( [#208](https://github.com/WPChill/modula-lite/issues/208) )

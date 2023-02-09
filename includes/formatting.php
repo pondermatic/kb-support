@@ -42,7 +42,7 @@ function kbs_sanitize_key( $key ) {
  * @return string
  * @since 1.5.84
  */
-function kbs_passed_time_format( $dif ) {
+function kbs_passed_time_format( $dif, $date = false ) {
 
 	$time_passed = 0;
 
@@ -51,7 +51,7 @@ function kbs_passed_time_format( $dif ) {
 	} else if ( ( $dif / ( 60 * 60 ) ) <= 24 ) {
 		$time_passed = absint( $dif / ( 60 * 60 ) ) . ( ( absint( $dif / ( 60 * 60 ) ) <= 1 ) ? esc_html__( ' hour', 'kb-support' ) : esc_html__( ' hours', 'kb-support' ) );
 	} else {
-		$time_passed = absint( $dif / ( 60 * 60 * 24 ) ) . ( ( absint( $dif / ( 60 * 60 * 24 ) ) <= 1 ) ? esc_html__( ' day', 'kb-support' ) : esc_html__( ' days', 'kb-support' ) );
+		$time_passed =  ( $date ? ucfirst( date_i18n( 'l, ', $date ) ) : '') . absint( $dif / ( 60 * 60 * 24 ) ) . ( ( absint( $dif / ( 60 * 60 * 24 ) ) <= 1 ) ? esc_html__( ' day', 'kb-support' ) : esc_html__( ' days', 'kb-support' ) );
 	}
 
 	return $time_passed;
