@@ -61,7 +61,7 @@ function kbs_add_article( $args = array(), $ticket = 0 )	{
 	$args = wp_parse_args( $args, $defaults );
 
 	if ( isset( $ticket ) )	{
-		
+
 		if ( is_numeric( $ticket ) )	{
 			$ticket_id = $ticket;
 		} else	{
@@ -253,11 +253,11 @@ function kbs_get_article_view_count_meta_key_name( $total = true )	{
 function kbs_get_article_view_count( $article_id, $total = true )	{
 	$key        = kbs_get_article_view_count_meta_key_name( $total );
 	$view_count = get_post_meta( $article_id, $key, true );
-	
+
 	if ( ! $view_count )	{
 		$view_count = 0;
 	}
-	
+
 	return apply_filters( 'kbs_article_view_count', absint( $view_count ), $article_id, $total );
 } // kbs_get_article_view_count
 
@@ -296,7 +296,7 @@ function kbs_show_dashboard_article_view_counts()	{
 	if( kbs_articles_disabled() ){
 		return false;
 	}
-	
+
 	return kbs_get_option( 'article_views_dashboard' );
 } // kbs_show_dashboard_article_view_counts
 
@@ -376,12 +376,10 @@ function kbs_get_article_url( $article )	{
  * @since	1.5.85
  * @return	bool			TRUE if disabled.
  */
-function kbs_articles_disabled(){
-	$settings = get_option( 'kbs_settings' );
-	if( $settings && is_array( $settings ) ){
-		if( isset( $settings['disable_kb_articles'] )  && 1 == $settings['disable_kb_articles'] ){
-			return true;
-		}
+function kbs_articles_disabled() {
+
+	if ( 1 == kbs_get_option( 'disable_kb_articles' ) ) {
+		return true;
 	}
 
 	return false;

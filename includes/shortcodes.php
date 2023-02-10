@@ -82,7 +82,7 @@ add_shortcode( 'kbs_profile_editor', 'kbs_profile_editor_shortcode' );
  */
 function kbs_submit_form_shortcode( $atts ) {
 	if( kbs_tickets_disabled() ){
-		return;
+		return esc_html__( 'Support Tickets are disabled', 'kb-support' );
 	}
 	if ( ! kbs_user_can_submit() )	{
         ob_start();
@@ -91,7 +91,7 @@ function kbs_submit_form_shortcode( $atts ) {
         $register_login = kbs_get_option( 'show_register_form', 'none' );
 
         if ( 'both' == $register_login || 'login' == $register_login )	{
-            echo kbs_login_form( kbs_get_current_page_url() ); 
+            echo kbs_login_form( kbs_get_current_page_url() );
         }
 
         if ( 'both' == $register_login || 'registration' == $register_login )	{
@@ -107,7 +107,7 @@ function kbs_submit_form_shortcode( $atts ) {
 		$args = shortcode_atts( array(
 			'form' => 0,
 			), $atts, 'kbs_submit' );
-	
+
 		return kbs_display_form( $args['form'] );
 
 	}
@@ -126,7 +126,7 @@ add_shortcode( 'kbs_submit', 'kbs_submit_form_shortcode' );
 function kbs_tickets_shortcode( $atts )	{
 
 	if( kbs_tickets_disabled() ){
-		return;
+		return esc_html__( 'Support Tickets are disabled', 'kb-support' );
 	}
 	ob_start();
 
@@ -134,13 +134,13 @@ function kbs_tickets_shortcode( $atts )	{
 		if ( kbs_get_option( 'logged_in_only' ) && ! is_user_logged_in() )	{
 			$redirect = add_query_arg( array( 'ticket' => absint( $_GET['ticket'] ) ), get_permalink( kbs_get_option( 'tickets_page' ) ) );
 			echo kbs_display_notice( 'ticket_login' );
-	
+
 			$register_login = kbs_get_option( 'show_register_form', 'none' );
-	
+
 			if ( 'both' == $register_login || 'login' == $register_login )	{
 				echo kbs_login_form( $redirect );
 			}
-	
+
 			if ( 'both' == $register_login || 'registration' == $register_login )	{
 				echo kbs_register_form( $redirect );
 			}
@@ -168,7 +168,7 @@ add_shortcode( 'kbs_tickets', 'kbs_tickets_shortcode' );
  */
 function kbs_article_search_form_shortcode()	{
 	if( kbs_articles_disabled() ){
-		return;
+		return esc_html__( 'KB Articles are disabled', 'kb-support' );
 	}
 	return kbs_article_search_form();
 } // kbs_article_search_form_shortcode
@@ -185,7 +185,7 @@ add_shortcode( 'kbs_search', 'kbs_article_search_form_shortcode' );
  */
 function kbs_articles_shortcode( $atts )	{
 	if( kbs_articles_disabled() ){
-		return;
+		return esc_html__( 'KB Articles are disabled', 'kb-support' );
 	}
 	$args = shortcode_atts( array(
 		'articles'        => null,    // Article IDs to display
@@ -268,14 +268,14 @@ function kbs_articles_shortcode( $atts )	{
 	if ( $articles_query->have_posts() ) : ?>
         <div id="kbs_articles_list">
             <ul>
-    
+
             <?php while( $articles_query->have_posts() ) :
-    
+
                 $articles_query->the_post();
 				$article_id     = get_the_ID(); ?>
-    
+
                 <?php if ( ! $args['hide_restricted'] || kbs_article_user_can_access( $article_id ) ) : ?>
-    
+
                     <li>
                     	<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
                         <?php if ( ! empty( $args['excerpt'] ) ) : ?>
@@ -284,11 +284,11 @@ function kbs_articles_shortcode( $atts )	{
                             </span>
                         <?php endif; ?>
                     </li>
-    
+
                 <?php endif; ?>
-    
+
             <?php endwhile; ?>
-    
+
             </ul>
         </div>
 

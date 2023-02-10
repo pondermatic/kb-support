@@ -91,7 +91,7 @@ class KBS_Display_Settings	{
                 array( $this, 'options_page' ),
                 'dashicons-book-alt',
                 25
-            ); 
+            );
         }else{
             add_submenu_page(
                 'edit.php?post_type=kbs_ticket',
@@ -432,9 +432,8 @@ class KBS_Display_Settings	{
         $assets_dir  = trailingslashit( KBS_PLUGIN_URL . 'assets' );
         $js_dir      = trailingslashit( $assets_dir . 'js' );
         $suffix      = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
-    
 
-        wp_enqueue_script( 'kbs-admin-conditions', $js_dir . 'admin-conditions-scripts' . $suffix . '.js', 'jquery', KBS_VERSION, false );
+	    wp_enqueue_script( 'kbs-admin-conditions', $js_dir . 'admin-conditions-scripts' . $suffix . '.js', array( 'jquery' ), KBS_VERSION, false );
     }
 } // KBS_Display_Settings
 

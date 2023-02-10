@@ -121,13 +121,13 @@ function kbs_delete_option( $key = '' ) {
  */
 function kbs_get_settings() {
 	$settings = get_option( 'kbs_settings' );
-	
+
 	if( empty( $settings ) ) {
 
 		$settings = array();
 
 		update_option( 'kbs_settings', $settings );
-		
+
 	}
 
 	return apply_filters( 'kbs_get_settings', $settings );
@@ -871,7 +871,7 @@ function kbs_get_registered_settings() {
 						'name' => esc_html__( 'Content', 'kb-support' ),
 						'desc' => sprintf( esc_html__( 'Enter the content that is sent to customers when their %1$s receives a reply. HTML is accepted. Available template tags:', 'kb-support' ), strtolower( $single ) ) . '<br/>' . kbs_get_emails_tags_list(),
 						'type' => 'rich_editor',
-						'std'  => esc_html__( "Dear", "kb-support" ) . " {name},\n\n" . 
+						'std'  => esc_html__( "Dear", "kb-support" ) . " {name},\n\n" .
 								  sprintf( esc_html__( 'Your support %1$s # {ticket_id} has received a reply. Click the link below to access your %1$s and review the details.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
 								  '<a href="{ticket_url_path}">' . sprintf( esc_html__( 'View %s', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</a>' . "\n\n" .
 								  esc_html__( 'Regards', 'kb-support' ) . "\n\n" .
@@ -909,7 +909,7 @@ function kbs_get_registered_settings() {
 						'name' => esc_html__( 'Content', 'kb-support' ),
 						'desc' => sprintf( esc_html__( 'Enter the content that is sent to customers when their %1$s is closed. HTML is accepted. Available template tags:', 'kb-support' ), strtolower( $single ) ) . '<br/>' . kbs_get_emails_tags_list(),
 						'type' => 'rich_editor',
-						'std'  => esc_html__( "Dear", "kb-support" ) . " {name},\n\n" . 
+						'std'  => esc_html__( "Dear", "kb-support" ) . " {name},\n\n" .
 								  sprintf( esc_html__( 'Your support %1$s # {ticket_id} is now closed. You can review the details of your %1$s by clicking the URL below.', 'kb-support' ), strtolower( $single ) ) . "\n\n" .
 								  '<a href="{ticket_url_path}">' . sprintf( esc_html__( 'View %s', 'kb-support' ), kbs_get_ticket_label_singular() ) . '</a>' . "\n\n" .
 								  esc_html__( 'Regards', 'kb-support' ) . "\n\n" .
@@ -1227,7 +1227,7 @@ function kbs_get_registered_settings() {
 						'desc'    => wp_kses_post( __( 'Choose whether to show a reCAPTCHA on the <code>[kbs_register]</code> form.', 'kb-support' ) ),
 						'type'    => 'checkbox'
 					)
-					
+
 				)
 			)
 		)
@@ -1426,7 +1426,7 @@ function kbs_get_settings_tabs() {
 	$tabs['emails']           = esc_html__( 'Emails', 'kb-support' );
 	$tabs['terms_compliance'] = esc_html__( 'Compliance', 'kb-support' );
 
-	if( kbs_tickets_disabled() ){
+	if ( kbs_tickets_disabled() ) {
 		unset( $tabs['general'] );
 		unset( $tabs['emails'] );
 		unset( $tabs['terms_compliance'] );
@@ -1444,7 +1444,7 @@ function kbs_get_settings_tabs() {
 	if ( ! empty( $settings['licenses'] ) ) {
 		$tabs['licenses'] = esc_html__( 'Licenses', 'kb-support' );
 	}
-	
+
 	$tabs['misc']   = esc_html__( 'Misc', 'kb-support' );
 
 	return apply_filters( 'kbs_settings_tabs', $tabs );
@@ -1968,7 +1968,7 @@ function kbs_support_hours_callback( $args ) {
 
 				$html .= '<td>';
 					$html .= '<select name="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][open][hour]" id="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][open][hour]" class="kbs_select_chosen" />';
-						if( isset( $kbs_option[ $index ]['open']['hour'] ) ){	
+						if( isset( $kbs_option[ $index ]['open']['hour'] ) ){
 							$selected = selected( $kbs_option[ $index ]['open']['hour'], '-1', false );
 						}else{
 							$selected = '';
@@ -1987,7 +1987,7 @@ function kbs_support_hours_callback( $args ) {
 						}else{
 							$selected ='';
 						}
-					
+
 						$html .= '<option value="-1"' . $selected . '>&mdash;</option>';
 						foreach( $mins as $min )	{
 							$current  = ! empty( $kbs_option[ $index ]['open']['min'] ) ? $kbs_option[ $index ]['open']['min'] : '';
@@ -2013,7 +2013,7 @@ function kbs_support_hours_callback( $args ) {
 					$html .= '</select>';
 
 					$html .= '<select name="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][close][min]" id="kbs_settings[' . esc_attr( $args['id'] ) . '][' . $index . '][close][min]" class="kbs_select_chosen" />';
-						
+
 						if( isset( $kbs_option[ $index ]['close']['min'] ) ){
 							$selected = selected( $kbs_option[ $index ]['close']['min'], '-1', false );
 						}else{
@@ -2132,7 +2132,7 @@ function kbs_descriptive_text_callback( $args ) {
  * @return void
  */
 if ( ! function_exists( 'kbs_premium_extension_callback' ) ) {
-	
+
 	function kbs_premium_extension_callback( $args )	{
 
         $data = $args['data'];
@@ -2265,7 +2265,7 @@ function kbs_get_user_role_options()	{
 
         $roles[ $role ] = $name;
     }
-	
+
 	return apply_filters( 'kbs_user_role_options', $roles );
 } // kbs_get_user_role_options
 
@@ -2332,7 +2332,7 @@ function kbs_get_resolve_time_options()	{
 		3 * WEEK_IN_SECONDS  => esc_html__( '3 Weeks', 'kb-support' ),
 		4 * WEEK_IN_SECONDS  => esc_html__( '4 Weeks', 'kb-support' )
 	);
-	
+
 	return apply_filters( 'kbs_target_resolve_time_options', $resolve_times );
 } // kbs_get_resolve_time_options
 

@@ -1746,7 +1746,7 @@ add_filter( 'wp_count_comments', 'kbs_remove_notes_from_comment_counts', 10, 2 )
  * The post types to be deleted when a ticket is deleted.
  *
  * @since	1.0
- * @return	arr		Array of post types to delete when a ticket is being deleted.
+ * @return	array		Array of post types to delete when a ticket is being deleted.
  */
 function kbs_ticket_deleted_item_post_types()	{
 	$post_types = array( 'kbs_ticket_reply', 'kbs_log' );
@@ -1759,12 +1759,10 @@ function kbs_ticket_deleted_item_post_types()	{
  * @since	1.5.85
  * @return	bool			TRUE if disabled.
  */
-function kbs_tickets_disabled(){
-	$settings = get_option( 'kbs_settings' );
-	if( $settings && is_array( $settings ) ){
-		if( isset( $settings['disable_tickets'] )  && 1 == $settings['disable_tickets'] ){
-			return true;
-		}
+function kbs_tickets_disabled() {
+
+	if ( 1 == kbs_get_option( 'disable_tickets' ) ) {
+		return true;
 	}
 
 	return false;

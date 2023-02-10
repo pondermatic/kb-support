@@ -122,7 +122,7 @@ function kbs_load_dashboard_tickets_widget() {
 					</tr>
 					<tr>
 						<td class="t closed"><?php esc_html_e( 'Closed', 'kb-support' ); ?></td>
-						<td class="last b b-closed"><?php echo esc_html( $stats->get_tickets( 'today', '', 'closed' ) ); ?></td>                        
+						<td class="last b b-closed"><?php echo esc_html( $stats->get_tickets( 'today', '', 'closed' ) ); ?></td>
 					</tr>
                     <tr>
 						<td class="t replies"><?php echo esc_html_e( 'Replies', 'kb-support' ); ?></td>
@@ -263,47 +263,51 @@ add_action( 'wp_ajax_kbs_load_dashboard_widget', 'kbs_load_dashboard_tickets_wid
  * @return	arr		Filtered Array of items
  */
 function kbs_dashboard_at_a_glance_widget( $items ) {
+	if ( ! kbs_tickets_disabled() ) {
 
-	$tickets     = kbs_count_tickets();
-	$total_count = 0;
+		$tickets     = kbs_count_tickets();
+		$total_count = 0;
 
-	if ( ! empty( $tickets ) )	{
-		$active_statuses = kbs_get_ticket_status_keys( false );
-		foreach( $tickets as $status => $count )	{
-			if ( ! empty( $tickets->$status ) && in_array( $status, $active_statuses ) )	{
-				$total_count += $count;
+		if ( ! empty( $tickets ) ) {
+			$active_statuses = kbs_get_ticket_status_keys( false );
+			foreach ( $tickets as $status => $count ) {
+				if ( ! empty( $tickets->$status ) && in_array( $status, $active_statuses ) ) {
+					$total_count += $count;
+				}
 			}
 		}
-	}
 
-	if ( $total_count > 0 ) {
-		$ticket_text = _n( '%s ' . kbs_get_ticket_label_singular(), '%s ' . kbs_get_ticket_label_plural(), $total_count, 'kb-support' );
+		if ( $total_count > 0 ) {
+			$ticket_text = _n( '%s ' . kbs_get_ticket_label_singular(), '%s ' . kbs_get_ticket_label_plural(), $total_count, 'kb-support' );
 
-		$ticket_text = sprintf( $ticket_text, number_format_i18n( $total_count ) );
+			$ticket_text = sprintf( $ticket_text, number_format_i18n( $total_count ) );
 
-		if ( current_user_can( 'edit_tickets' ) ) {
-			$ticket_text = sprintf( '<a class="ticket-count" href="edit.php?post_type=kbs_ticket">%1$s</a>', $ticket_text );
-		} else {
-			$ticket_text = sprintf( '<span class="ticket-count">%1$s</span>', $ticket_text );
+			if ( current_user_can( 'edit_tickets' ) ) {
+				$ticket_text = sprintf( '<a class="ticket-count" href="edit.php?post_type=kbs_ticket">%1$s</a>', $ticket_text );
+			} else {
+				$ticket_text = sprintf( '<span class="ticket-count">%1$s</span>', $ticket_text );
+			}
+
+			$items[] = $ticket_text;
 		}
-
-		$items[] = $ticket_text;
 	}
+	if ( ! kbs_articles_disabled() ) {
 
-	$articles = wp_count_posts( KBS()->KB->post_type );
+		$articles = wp_count_posts( KBS()->KB->post_type );
 
-	if ( $articles && $articles->publish ) {
-		$article_text = _n( '%s ' . kbs_get_article_label_singular(), '%s ' . kbs_get_article_label_plural(), $articles->publish, 'kb-support' );
+		if ( $articles && $articles->publish ) {
+			$article_text = _n( '%s ' . kbs_get_article_label_singular(), '%s ' . kbs_get_article_label_plural(), $articles->publish, 'kb-support' );
 
-		$article_text = sprintf( $article_text, number_format_i18n( $articles->publish ) );
+			$article_text = sprintf( $article_text, number_format_i18n( $articles->publish ) );
 
-		if ( current_user_can( 'edit_articles' ) ) {
-			$article_text = sprintf( '<a class="article-count" href="edit.php?post_type=' . KBS()->KB->post_type . '">%1$s</a>', $article_text );
-		} else {
-			$article_text = sprintf( '<span class="article-count">%1$s</span>', $article_text );
+			if ( current_user_can( 'edit_articles' ) ) {
+				$article_text = sprintf( '<a class="article-count" href="edit.php?post_type=' . KBS()->KB->post_type . '">%1$s</a>', $article_text );
+			} else {
+				$article_text = sprintf( '<span class="article-count">%1$s</span>', $article_text );
+			}
+
+			$items[] = $article_text;
 		}
-
-		$items[] = $article_text;
 	}
 
 	return $items;
