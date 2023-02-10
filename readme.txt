@@ -126,8 +126,6 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 Changed: Improved date readability. ( [#245](https://github.com/WPChill/modula-lite/issues/245) )
 Fixed: Fatal error caused by bad ES translation. ( [#250](https://github.com/WPChill/modula-lite/issues/250) )
 Fixed: Wrong escaping in articles list ( [#243](https://github.com/WPChill/kb-support/issues/243) )
-Changed: Improved date readability. ( [#245](https://github.com/WPChill/kb-support/issues/245) )
-Fixed: Fatal error caused by bad ES translation. ( [#250](https://github.com/WPChill/kb-support/issues/250) )
 Added: Option to disable Tickets and KB Articles. ( [#252](https://github.com/WPChill/kb-support/issues/252) )
 
 = 1.5.84 - 12.12.2022 =
