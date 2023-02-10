@@ -128,6 +128,9 @@ add_action( 'kbs_tools_export_after', 'kbs_export_customers_display', 10 );
  * @since	1.1
  */
 function kbs_export_tickets_display() {
+	if ( kbs_tickets_disabled() ) {
+		return;
+	}
 	$label_single = kbs_get_ticket_label_singular();
 	$label_plural = kbs_get_ticket_label_plural();
 
