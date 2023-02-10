@@ -1292,7 +1292,7 @@ function kbs_settings_sanitize( $input = array() ) {
 	parse_str( sanitize_url( wp_unslash( $_POST['_wp_http_referer'] ) ), $referrer );
 
 	$settings = kbs_get_registered_settings();
-	$tab      = isset( $referrer['tab'] ) ? $referrer['tab'] : 'general';
+	$tab      = isset( $referrer['tab'] ) ? $referrer['tab'] : ( kbs_tickets_disabled() ? 'tickets' : 'general');
 	$section  = isset( $referrer['section'] ) ? $referrer['section'] : 'main';
 
 	$input = $input ? $input : array();

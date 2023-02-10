@@ -107,13 +107,22 @@ function kbs_tools_banned_emails_display() {
 		return;
 	}
 
+	if( !kbs_tickets_disabled() ){
+		$form_url = admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-tools&tab=general' );
+	}else{
+		$form_url = add_query_arg( array(
+			'page'             => 'kbs-tools',
+			'tab'              => 'general'
+		), admin_url( 'admin.php' ) );
+	}
+
 	do_action( 'kbs_tools_banned_emails_before' );
 ?>
 	<div class="postbox">
 		<h3><span><?php esc_html_e( 'Banned Emails', 'kb-support' ); ?></span></h3>
 		<div class="inside">
 			<p><?php printf( esc_html__( 'Emails addresses and domains entered into the box below will not be able log %s. To ban an entire domain, enter the domain starting with "@".', 'kb-support' ), esc_html( kbs_get_ticket_label_plural( true ) ) ); ?></p>
-			<form method="post" action="<?php echo esc_url( admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-tools&tab=general' ) ); ?>">
+			<form method="post" action="<?php echo esc_url( $form_url ); ?>">
 				<p>
 					<textarea name="banned_emails" rows="10" class="large-text"><?php echo implode( "\n",  kbs_get_banned_emails()  ); ?></textarea>
 					<span class="description"><?php esc_html_e( 'Enter email addresses and/or domains to disallow, one per line.', 'kb-support' ); ?></span>
@@ -144,9 +153,17 @@ function kbs_tools_system_info_display()	{
 		return;
 	}
 
+	if( !kbs_tickets_disabled() ){
+		$form_url = admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-tools&tab=system_info' );
+	}else{
+		$form_url = add_query_arg( array(
+			'page'             => 'kbs-tools',
+			'tab'              => 'system_info'
+		), admin_url( 'admin.php' ) );
+	}
 	?>
 
-	<form action="<?php echo esc_url( admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-tools&tab=system_info' ) ); ?>" method="post" dir="ltr">
+	<form action="<?php echo esc_url( $form_url ); ?>" method="post" dir="ltr">
     		<?php submit_button( esc_html__( 'Download System Info File', 'kb-support' ), 'primary', 'kbs-download-sysinfo', true ); ?>
 		<textarea readonly onclick="this.focus(); this.select()" id="system-info-textarea" name="kbs-sysinfo" title="To copy the system info, click below then press Ctrl + C (PC) or Cmd + C (Mac)."><?php echo kbs_tools_sysinfo_get(); ?></textarea>
 		<p class="submit">
@@ -459,6 +476,15 @@ function kbs_tools_import_display() {
 		return;
 	}
 
+	if( !kbs_tickets_disabled() ){
+		$form_url = admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-tools&tab=import' );
+	}else{
+		$form_url = add_query_arg( array(
+			'page'             => 'kbs-tools',
+			'tab'              => 'import'
+		), admin_url( 'admin.php' ) );
+	}
+
 	do_action( 'kbs_tools_import_before' );
 ?>
 
@@ -466,7 +492,7 @@ function kbs_tools_import_display() {
 		<h3><span><?php esc_html_e( 'Import Settings', 'kb-support' ); ?></span></h3>
 		<div class="inside">
 			<p><?php esc_html_e( 'Import the KB Support settings from a .json file. This file can be obtained by exporting the settings on another site using the form within the Export tab.', 'kb-support' ); ?></p>
-			<form method="post" enctype="multipart/form-data" action="<?php echo esc_attr( admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-tools&tab=import' ) ); ?>">
+			<form method="post" enctype="multipart/form-data" action="<?php echo esc_url( $form_url ); ?>">
 				<p>
 					<input type="file" name="import_file"/>
 				</p>
@@ -495,6 +521,15 @@ function kbs_tools_export_display() {
 		return;
 	}
 
+	if( !kbs_tickets_disabled() ){
+		$form_url = admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-tools&tab=export' );
+	}else{
+		$form_url = add_query_arg( array(
+			'page'             => 'kbs-tools',
+			'tab'              => 'export'
+		), admin_url( 'admin.php' ) );
+	}
+
 	do_action( 'kbs_tools_export_before' );
 ?>
 
@@ -502,7 +537,7 @@ function kbs_tools_export_display() {
 		<h3><span><?php esc_html_e( 'Export Settings', 'kb-support' ); ?></span></h3>
 		<div class="inside">
 			<p><?php esc_html_e( 'Export the KB Support settings for this site as a .json file. This allows you to easily import the configuration into another site.', 'kb-support' ); ?></p>
-			<form method="post" action="<?php echo esc_url( admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-tools&tab=export' ) ); ?>">
+			<form method="post" action="<?php echo esc_url( $form_url ); ?>">
 				<input type="hidden" name="kbs-action" value="export_settings" />
 				<?php wp_nonce_field( 'kbs_export_nonce', 'kbs_export_nonce' ); ?>
                 <span>
