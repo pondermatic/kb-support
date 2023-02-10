@@ -49,7 +49,7 @@ function kbs_add_options_link() {
     do_action( 'kbs_menu_after_customers' );
 
 	add_submenu_page(
-        null,
+        '',
         esc_html__( 'KBS Upgrades', 'kb-support' ),
         esc_html__( 'KBS Upgrades', 'kb-support' ),
         'manage_ticket_settings',
