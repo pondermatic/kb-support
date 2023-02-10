@@ -525,7 +525,7 @@ function kbs_ticket_metabox_sections() {
 	$date_format = get_option( 'date_format' ) . ', ' . get_option( 'time_format' );
 
 	$old_ticket = false;
-	if( strtotime(' -30 days') > strtotime( $kbs_ticket->date ) ){
+	if ( strtotime( ' -30 days' ) > strtotime( $kbs_ticket->date ) ) {
 		$old_ticket = true;
 	}
 
@@ -541,10 +541,9 @@ function kbs_ticket_metabox_sections() {
 	$formatted_time_passed  = kbs_passed_time_format( absint( strtotime( current_time( 'mysql' ) ) - strtotime( $kbs_ticket->date ) ), $kbs_ticket->date );
 	$formatted_updated_time = kbs_passed_time_format( absint( strtotime( current_time( 'mysql' ) ) - strtotime( $kbs_ticket->modified_date ) ), $kbs_ticket->modified_date );
 
-
 	$formatted_time_passed = sprintf( esc_html__( 'Received: %s ago.', 'kb-support' ), esc_html( $formatted_time_passed ) );
 
-	if ( $kbs_ticket->date != $kbs_ticket->modified_date ){
+	if ( $kbs_ticket->date != $kbs_ticket->modified_date ) {
 		$formatted_updated_time = sprintf( esc_html__( 'Updated: %s ago.', 'kb-support' ), esc_html( $formatted_updated_time ) );
 	}
 
