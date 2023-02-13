@@ -122,11 +122,12 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
-= 1.5.85 - TBD =
+= 1.5.85 - 13.02.2023 =
 Changed: Improved date readability. ( [#245](https://github.com/WPChill/modula-lite/issues/245) )
 Fixed: Fatal error caused by bad ES translation. ( [#250](https://github.com/WPChill/modula-lite/issues/250) )
 Fixed: Wrong escaping in articles list ( [#243](https://github.com/WPChill/kb-support/issues/243) )
 Added: Option to disable Tickets and KB Articles. ( [#252](https://github.com/WPChill/kb-support/issues/252) )
+Fixed: Form submission security failed ( [#246](https://github.com/WPChill/kb-support/issues/246) )
 
 = 1.5.84 - 12.12.2022 =
 Added: Admin navigation tabs for kbs_ticket post type. ( [#208](https://github.com/WPChill/modula-lite/issues/208) )
