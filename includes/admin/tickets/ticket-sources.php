@@ -70,7 +70,7 @@ function kbs_ticket_source_website_term_remove_checkbox()	{
 		foreach( $terms as $term )	{
 
 			if ( ! empty( $term->term_id ) && in_array( $term->term_id, $protected ) )	{
-				?>$('input#cb-select-<?php echo $term->term_id; ?>').prop('disabled', true).hide();<?php
+				?>$('input#cb-select-<?php echo esc_attr( $term->term_id ); ?>').prop('disabled', true).hide();<?php
 			}
 
 		}

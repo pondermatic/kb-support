@@ -26,7 +26,7 @@ function kbs_department_taxonomy_columns( $columns )	{
 		unset( $columns['slug'] );
 	}
 
-	$columns['agents'] = __( 'Agents', 'kb-support' );
+	$columns['agents'] = esc_html__( 'Agents', 'kb-support' );
 
 	return $columns;
 } // kbs_department_taxonomy_columns
@@ -65,19 +65,19 @@ function kbs_edit_department_agent_options( $tag, $taxonomy )	{
 	if ( is_object( $tag ) )	{
 		$agents = kbs_get_department_agents( $tag->term_id );
 	}
-
 	?>
+ 
     <tr class="form-field term-agents-wrap">
-        <th scope="row"><label for="kbs_agents"><?php _e( 'Department Agents', 'kb-support' ); ?></label></th>
+        <th scope="row"><label for="kbs_agents"><?php esc_html_e( 'Department Agents', 'kb-support' ); ?></label></th>
         <td><?php echo KBS()->html->agent_dropdown( array(
 			'options'          => array(),
 			'name'             => 'kbs_agents',
 			'show_option_all'  => false,
 			'show_option_none' => false,
-            'selected'         => $agents,
+            'selected'         => array_map( 'esc_html', $agents ),
             'chosen'           => true,
             'multiple'         => true,
-            'placeholder'      => __( 'Select agents', 'kb-support' ),
+            'placeholder'      => esc_html__( 'Select agents', 'kb-support' ),
 		) ); ?></td>
     </tr>
     <?php
@@ -95,7 +95,7 @@ add_action( 'department_edit_form_fields', 'kbs_edit_department_agent_options', 
 function kbs_add_department_agent_options( $taxonomy )	{
 	?>
     <div class="form-field term-agents-wrap">
-    	<label for="kbs_agents"><?php _e( 'Department Agents', 'kb-support' ); ?></label>
+    	<label for="kbs_agents"><?php esc_html_e( 'Department Agents', 'kb-support' ); ?></label>
         <?php echo KBS()->html->agent_dropdown( array(
 			'options'          => array(),
 			'name'             => 'kbs_agents',
@@ -104,7 +104,7 @@ function kbs_add_department_agent_options( $taxonomy )	{
             'selected'         => array(),
             'chosen'           => true,
             'multiple'         => true,
-            'placeholder'      => __( 'Select agents', 'kb-support' ),
+            'placeholder'      => esc_html__( 'Select agents', 'kb-support' ),
 		) ); ?>
     </div>
     <?php

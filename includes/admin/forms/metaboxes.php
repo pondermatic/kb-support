@@ -24,8 +24,8 @@ function kbs_render_form_field_redirect_setting( $post )    {
 		$selected = get_post_meta( $post->ID, '_redirect_page', true );
 		?>
 		<div class="misc-pub-section curtime misc-pub-redirect">
-			<label for="kbs_form_redirect" class="screen-reader-text"><?php _e( 'Redirect to', 'kb-support' ) ?></label>
-			<?php _e( 'Redirect after submission to:', 'kb-support' ); ?><br>
+			<label for="kbs_form_redirect" class="screen-reader-text"><?php esc_html_e( 'Redirect to', 'kb-support' ) ?></label>
+			<?php esc_html_e( 'Redirect after submission to:', 'kb-support' ); ?><br>
 			<?php echo KBS()->html->select( array(
 				'name'             => 'kbs_form_redirect',
 				'selected'         => 0,
@@ -36,7 +36,7 @@ function kbs_render_form_field_redirect_setting( $post )    {
 				'selected'         => kbs_get_form_redirect_target( $post->ID ),
 				'data'             => array(
 					'search-type'        => 'pages',
-					'search-placeholder' => __( 'Type to search all pages', 'kb-support' ),
+					'search-placeholder' => esc_html__( 'Type to search all pages', 'kb-support' ),
 				)
 			) ); ?>
 		</div>
@@ -75,7 +75,7 @@ add_action( 'admin_head', 'kbs_form_remove_metaboxes', PHP_INT_MAX );
 function kbs_form_add_meta_boxes( $post )	{
 	add_meta_box(
 		'kbs_form_fields_mb',
-		__( 'Form Fields', 'kb-support' ),
+		esc_html__( 'Form Fields', 'kb-support' ),
 		'kbs_form_fields_mb_callback',
 		'kbs_form',
 		'normal',
@@ -84,7 +84,7 @@ function kbs_form_add_meta_boxes( $post )	{
 			
 	add_meta_box(
 		'kbs_form_add_field_mb',
-		__( 'Add a New Field', 'kb-support' ),
+		esc_html__( 'Add a New Field', 'kb-support' ),
 		$post->post_status != 'auto-draft' ? 'kbs_form_add_field_mb_callback' : 'kbs_form_not_ready_mb_callback',
 		'kbs_form',
 		'side',
@@ -147,7 +147,7 @@ function kbs_form_add_field_mb_callback( $post, $args )	{
 function kbs_form_not_ready_mb_callback( $post, $args )	{
 	
 	?>
-   <p><i class="fas fa-exclamation-circle" aria-hidden="true"></i> <?php _e( 'Please save or publish your form before adding fields.', 'kb-support' ); ?></p>
+   <p><i class="fas fa-exclamation-circle" aria-hidden="true"></i> <?php esc_html_e( 'Please save or publish your form before adding fields.', 'kb-support' ); ?></p>
     <?php
 	
 } // kbs_form_not_ready_mb_callback
@@ -169,33 +169,33 @@ function kbs_display_meta_box_form_fields( $post_id )	{
             <thead>
                 <tr>
                     <th style="width: 20px"></th>
-                    <th style="width: 20%"><?php _e( 'Field Label', 'kb-support' ); ?></th>
-                    <th style="width: 20%"><?php _e( 'Type', 'kb-support' ); ?></th>
-                    <th style="width: 30%" class="settings"><?php _e( 'Settings', 'kb-support' ); ?></th>
-                    <th style="width: 25%"><?php _e( 'Actions', 'kb-support' ); ?></th>
+                    <th style="width: 20%"><?php esc_html_e( 'Field Label', 'kb-support' ); ?></th>
+                    <th style="width: 20%"><?php esc_html_e( 'Type', 'kb-support' ); ?></th>
+                    <th style="width: 30%" class="settings"><?php esc_html_e( 'Settings', 'kb-support' ); ?></th>
+                    <th style="width: 25%"><?php esc_html_e( 'Actions', 'kb-support' ); ?></th>
                     <?php do_action( 'kbs_form_field_table_head', $post_id ); ?>
                 </tr>
             </thead>
             <tbody>
             <?php if ( is_array( $form->fields ) ) : ?>
             	<?php foreach( $form->fields as $field ) : ?>
-                    <tr id="<?php echo 'fields_' . $field->ID; ?>" class="kbs_field_wrapper kbs_sortable_row" data-key="<?php echo esc_attr( $field->ID ); ?>">
+                    <tr id="<?php echo 'fields_' . esc_attr( $field->ID ); ?>" class="kbs_field_wrapper kbs_sortable_row" data-key="<?php echo esc_attr( $field->ID ); ?>">
                         <?php do_action( 'kbs_render_field_row', $field, $form ); ?>
                     </tr>
                 <?php endforeach; ?>
             <?php else : ?>
             	<tr>
-            		<td colspan="5"><?php _e( 'No fields exist for this form', 'kb-support' ); ?></td>
+            		<td colspan="5"><?php esc_html_e( 'No fields exist for this form', 'kb-support' ); ?></td>
                 </tr>
             <?php endif; ?>
             </tbody>
             <tfoot>
                 <tr>
                     <th style="width: 20px"></th>
-                    <th style="width: 30%"><?php _e( 'Field Label', 'kb-support' ); ?></th>
-                    <th style="width: 20%"><?php _e( 'Type', 'kb-support' ); ?></th>
-                    <th style="width: 30%" class="settings"><?php _e( 'Settings', 'kb-support' ); ?></th>
-                    <th style="width: 20%"><?php _e( 'Actions', 'kb-support' ); ?></th>
+                    <th style="width: 30%"><?php esc_html_e( 'Field Label', 'kb-support' ); ?></th>
+                    <th style="width: 20%"><?php esc_html_e( 'Type', 'kb-support' ); ?></th>
+                    <th style="width: 30%" class="settings"><?php esc_html_e( 'Settings', 'kb-support' ); ?></th>
+                    <th style="width: 20%"><?php esc_html_e( 'Actions', 'kb-support' ); ?></th>
                     <?php do_action( 'kbs_form_field_table_foot', $post_id ); ?>
                 </tr>
             </tfoot>
@@ -248,12 +248,12 @@ function kbs_render_form_field_row( $field, $form )	{
 	?>
     <td><span class="kbs_draghandle"></span></td>
 	<?php echo KBS()->html->hidden( array(
-        'name'  => 'kbs_form_field[' . $field->ID . '][index]',
-        'value' => $field->menu_order,
+        'name'  => 'kbs_form_field[' . esc_attr( $field->ID ) . '][index]',
+        'value' => esc_attr( $field->menu_order ),
         'class' => 'kbs_sortable_index'
     ) ); ?>
     
-    <td><?php echo $field->post_title; ?>
+    <td><?php echo esc_html( $field->post_title ); ?>
 		<?php if ( ! empty( $settings['description'] ) ) : ?>
         	<br />
             <span class="description"><?php echo esc_html( $settings['description'] ); ?></span>
@@ -265,10 +265,10 @@ function kbs_render_form_field_row( $field, $form )	{
     <td><?php echo kbs_display_field_setting_icons( $field->ID ); ?></td>
     
     <td>
-    	<a href="<?php echo $edit; ?>" class="button button-primary button-small"><?php _e( 'Edit', 'kb-support' ); ?></a>
+    	<a href="<?php echo esc_url( $edit ); ?>" class="button button-primary button-small"><?php esc_html_e( 'Edit', 'kb-support' ); ?></a>
 
         <?php if ( kbs_can_delete_field( $field->ID ) ) : ?>
-	        <a href="<?php echo $delete; ?>" class="button button-secondary button-small"><?php _e( 'Delete', 'kb-support' ); ?></a>
+	        <a href="<?php echo esc_url( $delete ); ?>" class="button button-secondary button-small"><?php esc_html_e( 'Delete', 'kb-support' ); ?></a>
         <?php endif; ?>
     </td>
     
@@ -292,7 +292,7 @@ function kbs_render_field_label_row( $post_id, $args )	{
 	?>
     
 	<div id="kbs_meta_field_label_wrap">
-		<p><strong><?php _e( 'Label', 'kb-support' ); ?></strong><br />
+		<p><strong><?php esc_html_e( 'Label', 'kb-support' ); ?></strong><br />
 		<label for="kbs_field_label">
 			<?php echo KBS()->html->text( array(
 				'name'  => 'kbs_field_label',
@@ -329,7 +329,7 @@ function kbs_render_field_description_row( $post_id, $args )	{
 	?>
     
 	<div id="kbs_meta_field_description_wrap">
-		<p><strong><?php _e( 'Description', 'kb-support' ); ?></strong><br />
+		<p><strong><?php esc_html_e( 'Description', 'kb-support' ); ?></strong><br />
 		<label for="kbs_field_description">
 			<?php echo KBS()->html->text( array(
 				'name'  => 'kbs_field_description',
@@ -337,9 +337,9 @@ function kbs_render_field_description_row( $post_id, $args )	{
 				'class' => 'kbs_input'
 			) ); ?>
 		</label><br />
-		<input type="radio" name="kbs_field_description_pos" value="label"<?php echo $checked_label; ?>><span class="description"><?php _e( 'After Label', 'kb-support' ); ?></span>
+		<input type="radio" name="kbs_field_description_pos" value="label"<?php echo esc_attr( $checked_label ); ?>><span class="description"><?php esc_html_e( 'After Label', 'kb-support' ); ?></span>
         &nbsp;&nbsp;&nbsp;
-        <input type="radio" name="kbs_field_description_pos" value="field"<?php echo $checked_field; ?>><span class="description"><?php _e( 'After Field', 'kb-support' ); ?></span></p>
+        <input type="radio" name="kbs_field_description_pos" value="field"<?php echo esc_attr( $checked_field ); ?>><span class="description"><?php esc_html_e( 'After Field', 'kb-support' ); ?></span></p>
 	</div>
 	<?php
 
@@ -359,7 +359,7 @@ function kbs_render_field_type_row( $post_id, $args )	{
 
 	?>
 	<div id="kbs_meta_field_type_wrap">
-		<p><strong><?php _e( 'Type', 'kb-support' ); ?></strong><br />
+		<p><strong><?php esc_html_e( 'Type', 'kb-support' ); ?></strong><br />
 		<label for="kbs_field_type">
 			<?php echo KBS()->html->field_types_dropdown( array(
 				'selected' => ! empty( $kbs_edit_field ) ? $kbs_edit_field->settings['type'] : 0
@@ -390,7 +390,7 @@ function kbs_render_field_mapping_row( $post_id, $args )	{
 
 	?>
 	<div id="kbs_meta_field_mapping_wrap">
-		<p><strong><?php _e( 'Maps to', 'kb-support' ); ?></strong><br />
+		<p><strong><?php esc_html_e( 'Maps to', 'kb-support' ); ?></strong><br />
 		<label for="kbs_field_type">
 			<?php echo KBS()->html->select( array(
 				'name'             => 'kbs_field_mapping',
@@ -399,10 +399,10 @@ function kbs_render_field_mapping_row( $post_id, $args )	{
 				'show_option_all'  => false,
 				'show_option_none' =>'',
                 'chosen'           => true,
-				'options'          => $options,
+				'options'          => array_map( 'esc_html', $options ),
                 'data'             => array(
                     'search-type'        => 'fields',
-                    'search-placeholder' => __( 'Type to search all mappings', 'kb-support' ),
+                    'search-placeholder' => esc_html__( 'Type to search all mappings', 'kb-support' ),
                 )
 			) ); ?>
 		</label></p>
@@ -431,7 +431,7 @@ function kbs_render_field_value_row( $post_id, $args )	{
 
 	?>
 	<div id="kbs_meta_field_value_wrap">
-		<p><strong><?php _e( 'Initial Value', 'kb-support' ); ?></strong><br />
+		<p><strong><?php esc_html_e( 'Initial Value', 'kb-support' ); ?></strong><br />
 		<label for="kbs_field_value">
 			<?php echo KBS()->html->text( array(
 				'name'  => 'kbs_field_value',
@@ -471,9 +471,9 @@ function kbs_render_field_required_row( $post_id, $args )	{
             <p><label for="kbs_field_required">
                 <?php echo KBS()->html->checkbox( array(
                     'name'    => 'kbs_field_required',
-                    'current' => ! empty( $kbs_edit_field->settings['required'] ) ? $kbs_edit_field->settings['required'] : null
+                    'current' => ! empty( $kbs_edit_field->settings['required'] ) ? esc_html( $kbs_edit_field->settings['required'] ) : null
                 ) ); ?>
-                <strong><?php _e( 'Required?', 'kb-support' ); ?></strong></label></p>
+                <strong><?php esc_html_e( 'Required?', 'kb-support' ); ?></strong></label></p>
         </div>
     <?php else : ?>
     	<?php echo KBS()->html->hidden( array(
@@ -498,11 +498,11 @@ function kbs_render_field_label_class_row( $post_id, $args )	{
 
 	?>
 	<div id="kbs_meta_field_label_class_wrap">
-		<p><strong><?php _e( 'Label Class', 'kb-support' ); ?></strong><br />
+		<p><strong><?php esc_html_e( 'Label Class', 'kb-support' ); ?></strong><br />
 		<label for="kbs_field_label_class">
 			<?php echo KBS()->html->text( array(
 				'name'  => 'kbs_field_label_class',
-				'value' => ! empty( $kbs_edit_field->settings['label_class'] ) ? $kbs_edit_field->settings['label_class'] : null,
+				'value' => ! empty( $kbs_edit_field->settings['label_class'] ) ? esc_html( $kbs_edit_field->settings['label_class'] ) : null,
 				'class' => 'kbs_input'
 			) ); ?>
 		</label></p>
@@ -525,11 +525,11 @@ function kbs_render_field_input_class_row( $post_id, $args )	{
 
 	?>
 	<div id="kbs_meta_field_input_class_wrap">
-		<p><strong><?php _e( 'Input Class', 'kb-support' ); ?></strong><br />
+		<p><strong><?php esc_html_e( 'Input Class', 'kb-support' ); ?></strong><br />
 		<label for="kbs_field_input_class">
 			<?php echo KBS()->html->text( array(
 				'name'  => 'kbs_field_input_class',
-				'value' => ! empty( $kbs_edit_field->settings['input_class'] ) ? $kbs_edit_field->settings['input_class'] : null,
+				'value' => ! empty( $kbs_edit_field->settings['input_class'] ) ? esc_html( $kbs_edit_field->settings['input_class'] ) : null,
 				'class' => 'kbs_input'
 			) ); ?>
 		</label></p>
@@ -558,13 +558,13 @@ function kbs_render_field_add_field_btn_row( $post_id, $args )	{
 	<div id="kbs_meta_field_add_form_btn_wrap">
 		<?php echo KBS()->html->hidden( array(
 			'name'  => 'form_return_url',
-			'value' => remove_query_arg( array( 'kbs-message', 'kbs-action-nonce', 'kbs-action', 'field_id' ) )
+			'value' => esc_url( remove_query_arg( array( 'kbs-message', 'kbs-action-nonce', 'kbs-action', 'field_id' ) ) )
 		) ); ?>
 
         <?php if ( ! $kbs_edit_field ) : ?>
 
             <span id="kbs-field-add">
-                <a id="kbs-add-form-field" class="button-primary kbs_add" style="margin: 6px 0 10px;"><?php _e( 'Add Field', 'kb-support' ); ?></a>
+                <a id="kbs-add-form-field" class="button-primary kbs_add" style="margin: 6px 0 10px;"><?php esc_html_e( 'Add Field', 'kb-support' ); ?></a>
             </span>
 
         <?php else : ?>
@@ -574,13 +574,13 @@ function kbs_render_field_add_field_btn_row( $post_id, $args )	{
 				'class' => 'kbs_sortable_index'
 			) ); ?>
             <span id="kbs-field-save">
-                <a id="kbs-save-form-field" class="button-primary kbs_save" style="margin: 6px 0 10px;"><?php _e( 'Edit', 'kb-support' ); ?></a>
-                <a href="<?php echo $cancel; ?>" id="kbs-cancel" class="button-secondary kbs_cancel" style="margin: 6px 15px 10px;"><?php _e( 'Cancel', 'kb-support' ); ?></a>
+                <a id="kbs-save-form-field" class="button-primary kbs_save" style="margin: 6px 0 10px;"><?php esc_html_e( 'Edit', 'kb-support' ); ?></a>
+                <a href="<?php echo esc_url( $cancel ); ?>" id="kbs-cancel" class="button-secondary kbs_cancel" style="margin: 6px 15px 10px;"><?php esc_html_e( 'Cancel', 'kb-support' ); ?></a>
             </span>
 
         <?php endif; ?>
 
-        <span id="kbs-loading" class="kbs-loader kbs-hidden"><img src="<?php echo KBS_PLUGIN_URL . 'assets/images/loading.gif'; ?>" /></span>
+        <span id="kbs-loading" class="kbs-loader kbs-hidden"><img src="<?php echo esc_url( KBS_PLUGIN_URL . 'assets/images/loading.gif' ); ?>" /></span>
 	</div>
 	<?php
 
@@ -604,19 +604,19 @@ function kbs_render_field_options_rows( $post_id )	{
     	<p><label for="kbs_field_kb_search">
 			<?php echo KBS()->html->checkbox( array(
 				'name'        => 'kbs_field_kb_search',
-				'current' => ! empty( $kbs_edit_field->settings['kb_search'] ) ? $kbs_edit_field->settings['kb_search'] : null
+				'current' => ! empty( $kbs_edit_field->settings['kb_search'] ) ? esc_html( $kbs_edit_field->settings['kb_search'] ) : null
 			) ); ?>
-			<strong><?php printf( __( 'Enable %s Ajax Search?', 'kb-support' ), kbs_get_article_label_plural() ); ?></strong></label>
+			<strong><?php printf( esc_html__( 'Enable %s Ajax Search?', 'kb-support' ), kbs_get_article_label_plural() ); ?></strong></label>
         </p>
     </div>
 
     <div id="kbs_meta_field_select_options_wrap">
-    	<p><strong><?php _e( 'Options', 'kb-support' ); ?></strong><br />
+    	<p><strong><?php esc_html_e( 'Options', 'kb-support' ); ?></strong><br />
 		<label for="kbs_field_select_options">
 			<?php echo KBS()->html->textarea( array(
 				'name'        => 'kbs_field_select_options',
-				'value'       => ! empty( $kbs_edit_field->settings['select_options'] ) ? implode( "\n", $kbs_edit_field->settings['select_options'] ) : null,
-				'placeholder' => __( 'One entry per line', 'kb-support' ),
+				'value'       => ! empty( $kbs_edit_field->settings['select_options'] ) ? esc_html ( implode( "\n", $kbs_edit_field->settings['select_options'] ) ) : null,
+				'placeholder' => esc_html__( 'One entry per line', 'kb-support' ),
 				'class'       => 'kbs_input'
 			) ); ?>
 		</label></p>
@@ -626,9 +626,9 @@ function kbs_render_field_options_rows( $post_id )	{
     	<p><label for="kbs_field_select_multiple">
 			<?php echo KBS()->html->checkbox( array(
 				'name'        => 'kbs_field_select_multiple',
-				'current' => ! empty( $kbs_edit_field->settings['select_multiple'] ) ? $kbs_edit_field->settings['select_multiple'] : null
+				'current' => ! empty( $kbs_edit_field->settings['select_multiple'] ) ? esc_html( $kbs_edit_field->settings['select_multiple'] ) : null
 			) ); ?>
-			<strong><?php _e( 'Multiple Select?', 'kb-support' ); ?></strong></label>
+			<strong><?php esc_html_e( 'Multiple Select?', 'kb-support' ); ?></strong></label>
         </p>
     </div>
 
@@ -638,7 +638,7 @@ function kbs_render_field_options_rows( $post_id )	{
 				'name' => 'kbs_field_option_selected',
 				'current' => ! empty( $kbs_edit_field->settings['selected'] ) ? $kbs_edit_field->settings['selected'] : null
 			) ); ?>
-			<strong><?php _e( 'Initially Selected?', 'kb-support' ); ?></strong></label>
+			<strong><?php esc_html_e( 'Initially Selected?', 'kb-support' ); ?></strong></label>
         </p>
     </div>
 
@@ -646,9 +646,9 @@ function kbs_render_field_options_rows( $post_id )	{
     	<p><label for="kbs_field_select_blank">
 			<?php echo KBS()->html->checkbox( array(
 				'name' => 'kbs_field_select_blank',
-				'current' => ! empty( $kbs_edit_field->settings['blank'] ) ? $kbs_edit_field->settings['blank'] : null
+				'current' => ! empty( $kbs_edit_field->settings['blank'] ) ? esc_html( $kbs_edit_field->settings['blank'] ) : null
 			) ); ?>
-			<strong><?php _e( 'Blank First?', 'kb-support' ); ?></strong></label>
+			<strong><?php esc_html_e( 'Blank First?', 'kb-support' ); ?></strong></label>
         </p>
     </div>
 
@@ -656,30 +656,30 @@ function kbs_render_field_options_rows( $post_id )	{
     	<p><label for="kbs_field_select_chosen">
 			<?php echo KBS()->html->checkbox( array(
 				'name' => 'kbs_field_select_chosen',
-				'current' => ! empty( $kbs_edit_field->settings['chosen'] ) ? $kbs_edit_field->settings['chosen'] : null
+				'current' => ! empty( $kbs_edit_field->settings['chosen'] ) ? esc_html( $kbs_edit_field->settings['chosen'] ) : null
 			) ); ?>
-			<strong><?php _e( 'Searchable?', 'kb-support' ); ?></strong></label>
+			<strong><?php esc_html_e( 'Searchable?', 'kb-support' ); ?></strong></label>
         </p>
     </div>
 
     <div id="kbs_meta_field_select_search_text_wrap">
-    	<p><strong><?php _e( 'Search Text', 'kb-support' ); ?></strong><br>
+    	<p><strong><?php esc_html_e( 'Search Text', 'kb-support' ); ?></strong><br>
         <label for="kbs_field_select_chosen_search">
 			<?php echo KBS()->html->text( array(
 				'name'  => 'kbs_field_select_chosen_search',
-				'value' => ! empty( $kbs_edit_field->settings['chosen_search'] ) ? $kbs_edit_field->settings['chosen_search'] : null,
+				'value' => ! empty( $kbs_edit_field->settings['chosen_search'] ) ? esc_html( $kbs_edit_field->settings['chosen_search'] ) : null,
                 'class' => 'kbs_input',
-                'placeholder' => __( 'Optional search text', 'kb-support' )
+                'placeholder' => esc_html__( 'Optional search text', 'kb-support' )
 			) ); ?>
         </label></p>
     </div>
 
     <div id="kbs_meta_field_placeholder_wrap">
-    	<p><strong><?php _e( 'Placeholder', 'kb-support' ); ?></strong><br />
+    	<p><strong><?php esc_html_e( 'Placeholder', 'kb-support' ); ?></strong><br />
 		<label for="kbs_field_placeholder">
 			<?php echo KBS()->html->text( array(
 				'name'  => 'kbs_field_placeholder',
-				'value' => ! empty( $kbs_edit_field->settings['placeholder'] ) ? $kbs_edit_field->settings['placeholder'] : null,
+				'value' => ! empty( $kbs_edit_field->settings['placeholder'] ) ? esc_html( $kbs_edit_field->settings['placeholder'] ) : null,
 				'class' => 'kbs_input'
 			) ); ?>
 		</label></p>
@@ -689,9 +689,9 @@ function kbs_render_field_options_rows( $post_id )	{
 		<p><label for="kbs_field_hide_label">
 			<?php echo KBS()->html->checkbox( array(
 				'name' => 'kbs_field_hide_label',
-				'current' => ! empty( $kbs_edit_field->settings['hide_label'] ) ? $kbs_edit_field->settings['hide_label'] : null
+				'current' => ! empty( $kbs_edit_field->settings['hide_label'] ) ? esc_html( $kbs_edit_field->settings['hide_label'] ) : null
 			) ); ?>
-			<strong><?php _e( 'Hide Label?', 'kb-support' ); ?></strong></label>
+			<strong><?php esc_html_e( 'Hide Label?', 'kb-support' ); ?></strong></label>
         </p>
 	</div>
     <?php

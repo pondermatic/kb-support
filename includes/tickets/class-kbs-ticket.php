@@ -526,7 +526,7 @@ class KBS_Ticket {
 
 		// Extensions can hook here to add items to this object
 		do_action( 'kbs_setup_ticket', $this, $ticket_id );
-								
+
 		return true;
 	} // setup_ticket
 
@@ -538,7 +538,7 @@ class KBS_Ticket {
 	 */
 	private function insert_ticket() {
 		if ( empty( $this->ticket_title ) )	{
-			$this->ticket_title = sprintf( __( 'New %s', 'kb-support' ), kbs_get_ticket_label_singular() );
+			$this->ticket_title = sprintf( esc_html__( 'New %s', 'kb-support' ), kbs_get_ticket_label_singular() );
 		}
 
 		if ( empty( $this->ip ) ) {
@@ -948,7 +948,7 @@ class KBS_Ticket {
 						do_action( 'kbs_ticket_save', $this, $key );
 						break;
 				}
-                
+
 			}
 
 			$customer = new KBS_Customer( $this->customer_id );
@@ -1082,7 +1082,7 @@ class KBS_Ticket {
 	public function get_ID() {
 		return $this->ID;
 	} // get_ID
-	
+
 	/**
 	 * Retrieve the ticket content
 	 *
@@ -1092,7 +1092,7 @@ class KBS_Ticket {
 	public function get_content() {
 		$content = apply_filters( 'the_content', $this->ticket_content );
 		$content = str_replace( ']]>', ']]&gt;', $content );
-		
+
 		return apply_filters( 'kbs_ticket_content', $content );
 	} // get_content
 
@@ -1112,7 +1112,7 @@ class KBS_Ticket {
 		}
 
 		$more = ' <a class="ticket-toggle-content more">';
-			$more .= __( 'Show more&hellip;', 'kb-support' );
+			$more .= esc_html__( 'Show more&hellip;', 'kb-support' );
 		$more .= '</a>';
 
 		$excerpt = wp_trim_words( $excerpt, 15, $more );
@@ -1331,7 +1331,7 @@ class KBS_Ticket {
 	 * @since	1.0
 	 * @return	int
 	 */
-	public function setup_agent_id()	{	
+	public function setup_agent_id()	{
 		return $this->get_meta( '_kbs_ticket_agent_id', true );
 	} // setup_agent_id
 
@@ -1360,7 +1360,7 @@ class KBS_Ticket {
 	 * @since	1.0
 	 * @return	int
 	 */
-	public function setup_logged_by()	{	
+	public function setup_logged_by()	{
 		return $this->get_meta( '_kbs_ticket_logged_by', true );
 	} // setup_logged_by
 
@@ -1796,7 +1796,7 @@ class KBS_Ticket {
 		$args = wp_parse_args( $args, $defaults );
 
 		$this->replies = get_posts( $args );
-		
+
 		return apply_filters( 'kbs_ticket_replies', $this->replies, $this->ID );
 	} // get_replies
 
@@ -1838,7 +1838,7 @@ class KBS_Ticket {
 		if ( ! $files )	{
 			return false;
 		}
-		
+
 		return $files;
 	} // get_files
 
@@ -1909,7 +1909,7 @@ class KBS_Ticket {
 		$diff = human_time_diff( $end, $now );
 
 		if ( $now > $end )	{
-			$diff .= ' ' . __( 'ago', 'kb-support' );
+			$diff .= ' ' . esc_html__( 'ago', 'kb-support' );
 		}
 
 		return apply_filters( 'kbs_get_sla_remain', $diff );
@@ -1925,7 +1925,7 @@ class KBS_Ticket {
 	public function get_source( $field = 'slug' ) {
 		$return = $this->source;
 
-        $sources = get_the_terms( $this->ID, 'ticket_source' );        
+        $sources = get_the_terms( $this->ID, 'ticket_source' );
 
         if ( $sources && ! is_wp_error( $sources ) ) {
             $return = $sources[0]->$field;
@@ -2071,7 +2071,7 @@ class KBS_Ticket {
 					kbs_insert_note(
 						$reply_data['ticket_id'],
 						sprintf(
-							__( '%s re-opened by %s reply.', 'kb-support' ),
+							esc_html__( '%s re-opened by %s reply.', 'kb-support' ),
 							kbs_get_ticket_label_singular(),
 							$customer_or_agent
 						)
@@ -2093,9 +2093,9 @@ class KBS_Ticket {
 	 */
 	public function get_last_reply_by_values()	{
 		$reply_from = array(
-			1 => __( 'Admin', 'kb-support' ),
-			2 => __( 'Agent', 'kb-support' ),
-			3 => __( 'Customer', 'kb-support' )
+			1 => esc_html__( 'Admin', 'kb-support' ),
+			2 => esc_html__( 'Agent', 'kb-support' ),
+			3 => esc_html__( 'Customer', 'kb-support' )
 		);
 
 		$reply_from = apply_filters( 'last_reply_by_defaults', $reply_from );
@@ -2175,7 +2175,7 @@ class KBS_Ticket {
 
 		if ( ! $thirdparty )	{
 			$form_title = sprintf(
-				__( 'Form: %s', 'kb-support' ),
+				esc_html__( 'Form: %s', 'kb-support' ),
 				get_the_title( $this->form_data['id'] )
 			);
 		} else	{
@@ -2216,23 +2216,32 @@ class KBS_Ticket {
 					if ( isset( $department ) && ! is_wp_error( $department ) )	{
 						$department = $department->name;
 					} else	{
-						$department = sprintf( __( 'Department %s not found', 'kb-support' ), $value );
+						$department = sprintf( esc_html__( 'Department %s not found', 'kb-support' ), $value );
 					}
 
 					$value = $department;
 				}
 
-				if ( 'post_category' == $settings['mapping'] )	{
-					$value = is_array( $value ) ? $value : array( $value );
+				if ( 'post_category' == $settings['mapping'] ) {
+					// Check if empty field.
+					if ( empty( $value ) ) {
+						$value = array();
+					} else {
+						$value = is_array( $value ) ? $value : array( $value );
+					}
+
 					$cats  = array();
-					foreach( $value as $category )	{
-						$term = get_term( $category );
-						if ( $term )	{
-							$cats[] = $term->name;
-						} else	{
-							$cats[] = sprintf( __( 'Term %s no longer exists', 'kb-support' ), $category );
+					if ( ! empty( $value ) ) {
+						foreach ( $value as $category ) {
+							$term = get_term( $category );
+							if ( ! is_wp_error( $term ) && $term ) {
+								$cats[] = $term->name;
+							} else {
+								$cats[] = sprintf( esc_html__( 'Term %s no longer exists', 'kb-support' ), $category );
+							}
 						}
 					}
+
 					$value = $cats;
 				}
 
@@ -2251,8 +2260,8 @@ class KBS_Ticket {
 				$value = apply_filters( 'kbs_show_form_data', $value, $form_field->ID, $settings );
 
 				$output .= sprintf( '<p><strong>%s</strong>: %s</p>',
-					get_the_title( $form_field->ID ),
-					$value
+					esc_html( get_the_title( $form_field->ID ) ),
+					wp_kses_post( htmlspecialchars_decode( $value ) )
 				);
 			}
 		} else	{
@@ -2265,8 +2274,8 @@ class KBS_Ticket {
 			$date_format = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
 
 			$output .= sprintf( '<p class="description">%s: %s</p>',
-				__( 'The privacy policy was acknowledged', 'kb-support' ),
-				date_i18n( $date_format, $privacy_accepted )
+				esc_html__( 'The privacy policy was acknowledged', 'kb-support' ),
+				wp_kses_post( date_i18n( $date_format, $privacy_accepted ) )
 			);
 		}
 
@@ -2275,22 +2284,22 @@ class KBS_Ticket {
 			$date_format = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
 
 			$output .= sprintf( '<p class="description">%s: %s</p>',
-				__( 'The terms and conditions were accepted', 'kb-support' ),
-				date_i18n( $date_format, $terms_agreed )
+				esc_html__( 'The terms and conditions were accepted', 'kb-support' ),
+				wp_kses_post( date_i18n( $date_format, $terms_agreed ) )
 			);
 		}
 
         $submission_origin = $this->get_meta( '_kbs_ticket_submission_origin', true );
         if ( ! empty( $submission_origin ) )    {
             $output .= sprintf( '<p class="description">%s: %s</p>',
-				__( 'Submitted from', 'kb-support' ),
-				$submission_origin
+				esc_html__( 'Submitted from', 'kb-support' ),
+				esc_html( $submission_origin )
 			);
         }
 
 		if ( ! empty( $this->ip ) )	{
 			$output .= sprintf( '<p class="description">%s: %s</p>',
-				sprintf( __( 'This %s was logged from the IP Address', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+				sprintf( esc_html__( 'This %s was logged from the IP Address', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
 				esc_html( $this->ip )
 			);
 		}

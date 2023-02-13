@@ -69,7 +69,7 @@ function kbs_get_ticket( $id_or_object )	{
  * @since	1.0
  * @param	str			$field	The field by which to retrieve.
  * @param	mixed		$value	The value of the field.
- * @return	obj|false	The post object if found, otherwise false 
+ * @return	obj|false	The post object if found, otherwise false
  */
 function kbs_get_ticket_by( $field, $value )	{
 	if ( 'id' == $field )	{
@@ -113,11 +113,11 @@ function kbs_get_ticket_categories( $args = array() )	{
 		'orderby'       => 'name',
 		'order'         => 'ASC'
 	);
-	
+
 	$args = wp_parse_args( $args, $defaults );
-	
+
 	$ticket_categories = get_categories( $args );
-	
+
 	return apply_filters( 'kbs_get_ticket_categories', $ticket_categories, $args );
 } // kbs_get_ticket_categories
 
@@ -202,10 +202,10 @@ function kbs_set_ticket_flag_status( $ticket, $user_id = 0, $flag = true )    {
  */
 function kbs_get_ticket_orderby_options()	{
 	$options = array(
-		'ID'       => __( 'ID', 'kb-support' ),
-		'title'    => __( 'Subject', 'kb-support' ),
-		'date'     => __( 'Date Created', 'kb-support' ),
-		'modified' => __( 'Date Modified', 'kb-support' )
+		'ID'       => esc_html__( 'ID', 'kb-support' ),
+		'title'    => esc_html__( 'Subject', 'kb-support' ),
+		'date'     => esc_html__( 'Date Created', 'kb-support' ),
+		'modified' => esc_html__( 'Date Modified', 'kb-support' )
 	);
 
 	$options = apply_filters( 'kbs_ticket_orderby_options', $options );
@@ -504,7 +504,7 @@ function kbs_get_ticket_status_colour( $status, $default = false )	{
 			$status = 'open';
 		}
 
-		return $defaults[ $status ];
+		return esc_attr( $defaults[ $status ] );
 	}
 
 	$default_colour = '';
@@ -516,7 +516,7 @@ function kbs_get_ticket_status_colour( $status, $default = false )	{
 	$colour = kbs_get_option( 'colour_' . $status, $default_colour );
 	$colour = apply_filters( 'kbs_ticket_status_colour_' . $status, $colour );
 
-	return $colour;
+	return esc_attr( $colour );
 } // kbs_get_ticket_status_colour
 
 /**
@@ -530,7 +530,7 @@ function kbs_get_ticket_statuses( $can_select = true )	{
 	$ticket_statuses = kbs_get_post_statuses( 'labels', $can_select );
 	$statuses        = array();
     $defaults        = kbs_get_default_ticket_statuses();
-	
+
 	foreach ( $ticket_statuses as $ticket_status ) {
 		$statuses[ $ticket_status->name ] = esc_html( $ticket_status->label );
 	}
@@ -643,7 +643,7 @@ function kbs_get_ticket_log_sources()	{
     }
 
 	$sources = apply_filters( 'kbs_ticket_log_sources', $sources );
-	
+
 	return $sources;
 
 } // kbs_get_ticket_log_sources
@@ -667,6 +667,7 @@ function kbs_add_ticket( $ticket_data )	{
     remove_action( 'kbs_update_ticket_meta_key', 'kbs_trigger_agent_assigned_email', 999, 4 );
 
 	$ticket_data = apply_filters( 'kbs_add_ticket_data', $ticket_data );
+
 	$attachments = apply_filters( 'kbs_add_ticket_attachments', $ticket_data['attachments'] );
 	$category    = array();
 	$department  = '';
@@ -753,20 +754,21 @@ function kbs_add_ticket_from_form( $form_id, $form_data )	{
 	$terms_agreed     = false;
 
     if ( ! empty( $form_data['submission_origin'] ) )  {
-        $submission_origin = $form_data['submission_origin'];
+        $submission_origin = sanitize_text_field( wp_unslash( $form_data['submission_origin'] ) );
         unset( $form_data['submission_origin'] );
     }
 
 	if ( isset( $form_data['privacy_accepted'] ) )	{
-		$privacy_accepted = $form_data['privacy_accepted'];
+		$privacy_accepted = sanitize_text_field( wp_unslash( $form_data['privacy_accepted'] ) );
 		unset( $form_data['privacy_accepted'] );
 	}
 
 	if ( isset( $form_data['terms_agreed'] ) )	{
-		$terms_agreed = $form_data['terms_agreed'];
+		$terms_agreed = sanitize_text_field( wp_unslash( $form_data['terms_agreed'] ) );
 		unset( $form_data['terms_agreed'] );
 	}
 
+	// $form_data will be sanitized later on after the filter is applied
 	$ticket_data = array(
 		'user_info'         => array(),
 		'attachments'       => array(),
@@ -782,8 +784,13 @@ function kbs_add_ticket_from_form( $form_id, $form_data )	{
 	foreach( $fields as $field )	{
 		$settings = $kbs_form->get_field_settings( $field->ID );
 
-		if ( 'file_upload' == $settings['type'] && ! empty( $_FILES[ $field->post_name ] ) )	{
-			$ticket_data['attachments'] = $_FILES[ $field->post_name ];
+		if ( 'file_upload' == $settings['type'] && ! empty( $_FILES[ $field->post_name ] ) ) {
+			$fileInfo = wp_check_filetype( basename( $_FILES[ $field->post_name ]['name'][0] ) );
+
+			if (!empty($fileInfo['ext'])) {
+				$ticket_data['attachments'] = $_FILES[ $field->post_name ];
+			}
+
 			continue;
 		}
 
@@ -794,43 +801,51 @@ function kbs_add_ticket_from_form( $form_id, $form_data )	{
 		if ( ! empty( $settings['mapping'] ) )	{
 			switch( $settings['mapping'] )	{
 				case 'customer_email':
-					$ticket_data['user_info']['email']            = strtolower( $form_data[ $field->post_name ] );
-					$ticket_data['user_email']                    = $ticket_data['user_info']['email'];
+					$ticket_data['user_info']['email']            = sanitize_email( wp_unslash( strtolower( $form_data[ $field->post_name ] ) ) );
+					$ticket_data['user_email']                    = sanitize_email( wp_unslash( $ticket_data['user_info']['email'] ) );
 					break;
 
 				case 'customer_first':
-					$ticket_data['user_info']['first_name']       = ucfirst( $form_data[ $field->post_name ] );
+					$ticket_data['user_info']['first_name']       = sanitize_text_field( htmlspecialchars( ucfirst( $form_data[ $field->post_name ] ) ) );
 					break;
 
 				case 'customer_last':
-					$ticket_data['user_info']['last_name']        = ucfirst( $form_data[ $field->post_name ] );
+					$ticket_data['user_info']['last_name']        = sanitize_text_field( htmlspecialchars( ucfirst( $form_data[ $field->post_name ] ) ) );
 					break;
 
 				case 'customer_phone1':
-					$ticket_data['user_info']['primary_phone']    = $form_data[ $field->post_name ];
+					$ticket_data['user_info']['primary_phone']    = intval( $form_data[ $field->post_name ] );
 					break;
 
 				case 'customer_phone2':
-					$ticket_data['user_info']['additional_phone'] = $form_data[ $field->post_name ];
+					$ticket_data['user_info']['additional_phone'] = intval( $form_data[ $field->post_name ] );
 					break;
 
 				case 'customer_website':
-					$ticket_data['user_info']['website']          = $form_data[ $field->post_name ];
+					$ticket_data['user_info']['website']          = esc_url_raw( $form_data[ $field->post_name ] );
+					break;
+
+				case 'post_title':
+					$ticket_data['post_title']                    = sanitize_text_field( strip_tags( $form_data[ $field->post_name ] ) );
 					break;
 
 				default:
-					$ticket_data[ $settings['mapping'] ]          = $form_data[ $field->post_name ];
+					$ticket_data[ $settings['mapping'] ]          = sanitize_text_field( htmlspecialchars( $form_data[ $field->post_name ] ) );
 					break;
 			}
-		} else	{
+		} else {
 			$ticket_data[ $field->post_name ] = array( $field->post_title, strip_tags( addslashes( $form_data[ $field->post_name ] ) ) );
-		
+
 			$data[] = '<strong>' . $field->post_title . '</strong><br />' . $form_data[ $field->post_name ];
 		}
 	}
 
 	$ticket_data = apply_filters( 'kbs_add_ticket_from_form_data', $ticket_data, $form_id, $form_data );
-	$ticket_id   = kbs_add_ticket( $ticket_data );
+
+	// Now let's secure the form data a little so we don't end upt with XSS stored.
+	$ticket_data['form_data']['data'] = array_map( 'sanitize_text_field', array_map( 'htmlspecialchars', array_map( 'trim', $ticket_data['form_data']['data'] ) ) );
+
+	$ticket_id = kbs_add_ticket( $ticket_data );
 
 	if ( $ticket_id )	{
 		$kbs_form->increment_submissions();
@@ -943,7 +958,7 @@ function kbs_set_ticket_status( $ticket_id, $status = 'open' )	{
  * @param	str|null	$initiated_by	The email address of the user changing status
  * @return	void
 */
-function kbs_record_status_change_in_log( $ticket_id = 0, $new_status, $old_status = 'new', $initiated_by = null ) {
+function kbs_record_status_change_in_log( $new_status, $ticket_id = 0, $old_status = 'new', $initiated_by = null ) {
 	global $kbs_logs;
 
 	$log_data = array(
@@ -1097,7 +1112,7 @@ function kbs_get_ticket_user_email( $ticket_id ) {
  */
 function kbs_get_ticket_url( $ticket_id, $admin = false, $key = false )	{
 	$scheme = null;
-	
+
 	if ( $admin )	{
 
 		$scheme = defined( 'FORCE_SSL_ADMIN' ) && FORCE_SSL_ADMIN ? 'https' : 'admin';
@@ -1134,7 +1149,7 @@ function kbs_get_ticket_url( $ticket_id, $admin = false, $key = false )	{
  */
 function kbs_get_agent( $ticket_id )	{
 	$kbs_ticket = new KBS_Ticket( $ticket_id );
-	
+
 	return $kbs_ticket->agent_id;
 } // kbs_get_agent
 
@@ -1440,7 +1455,7 @@ function kbs_remove_agents_from_ticket( $ticket, $agent_ids )   {
  */
 function kbs_get_ticket_source( $ticket_id )	{
 	$kbs_ticket = new KBS_Ticket( $ticket_id );
-	
+
 	return $kbs_ticket->get_source();
 } // kbs_get_ticket_source
 
@@ -1567,7 +1582,7 @@ function kbs_get_note_html( $note, $ticket_id = 0 ) {
 		$user = get_userdata( $note->user_id );
 		$user = $user->display_name;
 	} else {
-		$user = __( 'KBS Bot', 'kb-support' );
+		$user = esc_html__( 'KBS Bot', 'kb-support' );
 	}
 
 	$delete_note_cap = apply_filters( 'kbs_delete_note_cap', 'manage_ticket_settings', $note, $user );
@@ -1575,13 +1590,13 @@ function kbs_get_note_html( $note, $ticket_id = 0 ) {
 
 	$delete_note_url = wp_nonce_url( add_query_arg( array(
 		'kbs-action' => 'delete_ticket_note',
-		'note_id'    => $note->comment_ID,
-		'ticket_id'  => $ticket_id
-	), admin_url() ), 'kbs_delete_ticket_note_' . $note->comment_ID, 'kbs_note_nonce' );
+		'note_id'    => esc_html( $note->comment_ID ),
+		'ticket_id'  => esc_html( $ticket_id )
+	), esc_url( admin_url() ) ), 'kbs_delete_ticket_note_' . esc_html( $note->comment_ID ), 'kbs_note_nonce' );
 
 	$actions = array(
-        'read_note'   => '<a href="#" class="toggle-view-note-option-section">' . __( 'View Note', 'kb-support' ) . '</a>',
-        'delete_note' => '<a href="' . $delete_note_url . '" class="kbs-remove-row kbs-delete">' . __( 'Delete Note', 'kb-support' ) . '</a>'
+        'read_note'   => '<a href="#" class="toggle-view-note-option-section">' . esc_html__( 'View Note', 'kb-support' ) . '</a>',
+        'delete_note' => '<a href="' . $delete_note_url . '" class="kbs-remove-row kbs-delete">' . esc_html__( 'Delete Note', 'kb-support' ) . '</a>'
     );
 
 	if ( $note->user_id != get_current_user_id() && ! current_user_can( $delete_note_cap ) )	{
@@ -1594,11 +1609,11 @@ function kbs_get_note_html( $note, $ticket_id = 0 ) {
 
     <div class="kbs-notes-row-header">
         <span class="kbs-notes-row-title">
-            <?php echo apply_filters( 'kbs_notes_title', sprintf( __( '%s by %s', 'kb-support' ), date_i18n( $date_format, strtotime( $note->comment_date ) ), $user ), $note ); ?>
+            <?php echo apply_filters( 'kbs_notes_title', sprintf( esc_html__( '%s by %s', 'kb-support' ), date_i18n( $date_format, strtotime( $note->comment_date ) ), $user ), $note ); ?>
         </span>
 
         <span class="kbs-notes-row-actions">
-			<?php echo implode( '&nbsp;&#124;&nbsp;', $actions ); ?>
+			<?php echo implode( '&nbsp;&#124;&nbsp;', array_map( 'wp_kses_post', $actions ) ); ?>
         </span>
     </div>
 
@@ -1606,7 +1621,7 @@ function kbs_get_note_html( $note, $ticket_id = 0 ) {
         <div class="kbs-notes-content-sections">
             <div class="kbs-notes-content-section">
                 <?php do_action( 'kbs_ticket_notes_before_content', $note ); ?>
-                <?php echo wpautop( $note->comment_content ); ?>
+                <?php echo wp_kses_post( wpautop( $note->comment_content ) ); ?>
                 <?php do_action( 'kbs_ticket_notes_content', $note ); ?>
             </div>
             <?php do_action( 'kbs_ticket_notes_note', $note ); ?>
@@ -1699,6 +1714,7 @@ function kbs_remove_notes_from_comment_counts( $stats, $post_id ) {
 
 	$total = 0;
 	$approved = array( '0' => 'moderated', '1' => 'approved', 'spam' => 'spam', 'trash' => 'trash', 'post-trashed' => 'post-trashed' );
+	$stats = array();
 
 	foreach ( (array) $count as $row ) {
 		// Don't count post-trashed toward totals
@@ -1730,9 +1746,24 @@ add_filter( 'wp_count_comments', 'kbs_remove_notes_from_comment_counts', 10, 2 )
  * The post types to be deleted when a ticket is deleted.
  *
  * @since	1.0
- * @return	arr		Array of post types to delete when a ticket is being deleted.
+ * @return	array		Array of post types to delete when a ticket is being deleted.
  */
 function kbs_ticket_deleted_item_post_types()	{
 	$post_types = array( 'kbs_ticket_reply', 'kbs_log' );
 	return apply_filters( 'kbs_ticket_deleted_item_post_types', $post_types );
 } // kbs_ticket_deleted_item_post_types
+
+/**
+ * Checks if the tickets are disabled
+ *
+ * @since	1.5.85
+ * @return	bool			TRUE if disabled.
+ */
+function kbs_tickets_disabled() {
+
+	if ( 1 == kbs_get_option( 'disable_tickets' ) ) {
+		return true;
+	}
+
+	return false;
+}

@@ -1,7 +1,7 @@
-<?php	
+<?php
 /**
  * Manage kbs-ticket posts.
- * 
+ *
  * @since		1.0
  * @package		KBS
  * @subpackage	Posts
@@ -72,16 +72,16 @@ function kbs_set_kbs_ticket_post_columns( $columns ) {
 	$columns = array(
         'cb'               => '<input type="checkbox" />',
         'id'               => '#',
-		'title'            => __( 'Title', 'kb-support' ),
-		'dates'            => __( 'Date', 'kb-support' ),
-        'customer'         => __( 'Customer', 'kb-support' ),
+		'title'            => esc_html__( 'Title', 'kb-support' ),
+		'dates'            => esc_html__( 'Date', 'kb-support' ),
+        'customer'         => esc_html__( 'Customer', 'kb-support' ),
 		'ticket_category'  => $category_labels['menu_name'],
 		'ticket_tag'       => $tag_labels['menu_name'],
-        'agent'            => __( 'Agent', 'kb-support' )
+        'agent'            => esc_html__( 'Agent', 'kb-support' )
     );
 
 	if ( kbs_track_sla() )	{
-		$columns['sla'] = __( 'SLA Status', 'kb-support' );
+		$columns['sla'] = esc_html__( 'SLA Status', 'kb-support' );
 	}
 
 	return apply_filters( 'kbs_ticket_post_columns', $columns );
@@ -148,8 +148,8 @@ function kbs_set_kbs_ticket_column_data( $column_name, $post_id ) {
 				echo '<br />';
                 printf(
                     '<span class="description"><a href="%s">%s</a></span>',
-                    $company_url,
-                    $company
+                    esc_url( $company_url ),
+                    esc_html( $company )
                 );
 			}
 			break;
@@ -166,7 +166,7 @@ function kbs_set_kbs_ticket_column_data( $column_name, $post_id ) {
                     );
                 }
 
-				echo implode( ', ', $output );
+				echo wp_kses_post( implode( ', ', $output ) );
 
 			} else	{
 				echo '&mdash;';
@@ -186,7 +186,7 @@ function kbs_set_kbs_ticket_column_data( $column_name, $post_id ) {
 
                 }
 
-				echo implode( ', ', $output );
+				echo wp_kses_post( implode( ', ', $output ) );
 
 			} else	{
 				echo '&mdash;';
@@ -196,12 +196,13 @@ function kbs_set_kbs_ticket_column_data( $column_name, $post_id ) {
 		case 'agent':
 			echo kb_tickets_post_column_agent( $post_id, $kbs_ticket );
 			break;
-			
+
 		case 'sla':
 			echo kb_tickets_post_column_sla( $post_id, $kbs_ticket );
 			break;
 
 		default:
+			echo esc_html__( 'No callback found for post column', 'kb-support' );
 			break;
 	}
 } // kbs_set_kbs_ticket_column_data
@@ -219,14 +220,14 @@ function kb_tickets_post_column_id( $ticket_id, $kbs_ticket )	{
 	do_action( 'kbs_tickets_pre_column_id', $kbs_ticket );
 
 	$output = sprintf( '<span class="kbs-label kbs-label-status" style="background-color: %s;"><a href="%s" title="%s">%s</a></span>',
-		kbs_get_ticket_status_colour( get_post_status_object( $kbs_ticket->post_status )->name ),
-		get_edit_post_link( $ticket_id ),
-		kbs_get_post_status_label( $kbs_ticket->post_status ),
-		kbs_format_ticket_number( kbs_get_ticket_number( $ticket_id ) )
+		esc_html( kbs_get_ticket_status_colour( get_post_status_object( $kbs_ticket->post_status )->name ) ),
+		esc_url( get_edit_post_link( $ticket_id ) ),
+		esc_html( kbs_get_post_status_label( $kbs_ticket->post_status ) ),
+		esc_html( kbs_format_ticket_number( kbs_get_ticket_number( $ticket_id ) ) )
 	);
 
     if ( $kbs_ticket->flagged ) {
-        $title = sprintf( __( 'This %s has been flagged.', 'kb-support' ), kbs_get_ticket_label_singular( true ) );
+        $title = sprintf( esc_html__( 'This %s has been flagged.', 'kb-support' ), esc_html( kbs_get_ticket_label_singular( true ) ) );
         $output .= sprintf(
             ' <span title="%s" class="dashicons dashicons-flag kbs-notice-alert"></span>',
             $title
@@ -236,9 +237,9 @@ function kb_tickets_post_column_id( $ticket_id, $kbs_ticket )	{
 	if ( $kbs_ticket->last_replier )	{
 		$output .= '<p>';
 		$output .= sprintf(
-			__( '<span class="kbs-label kbs-reply-status" style="background-color: %s;">%s replied</span>', 'kb-support' ),
-			kbs_get_ticket_reply_status_colour( $kbs_ticket->last_replier ),
-			$kbs_ticket->last_replier
+			wp_kses_post( __( '<span class="kbs-label kbs-reply-status" style="background-color: %s;">%s replied</span>', 'kb-support' ) ),
+			esc_html( kbs_get_ticket_reply_status_colour( $kbs_ticket->last_replier ) ),
+			esc_html( $kbs_ticket->last_replier )
 		);
 		$output .= '</p>';
 	}
@@ -259,9 +260,9 @@ function kb_tickets_post_column_id( $ticket_id, $kbs_ticket )	{
 function kb_tickets_post_column_date( $ticket_id, $kbs_ticket )	{
 	do_action( 'kbs_tickets_pre_column_date', $kbs_ticket );
 
-	$output  = date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $kbs_ticket->date ) );
+	$output  = esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $kbs_ticket->date ) ) );
 	$output .= '<br />';
-	$output .= date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $kbs_ticket->modified_date ) );
+	$output .= esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $kbs_ticket->modified_date ) ) );
 
 	do_action( 'kbs_tickets_post_column_date', $kbs_ticket );
 
@@ -287,13 +288,13 @@ function kb_tickets_post_column_customer( $ticket_id, $kbs_ticket )	{
 			'post_type' => 'kbs_ticket',
 			'page'      => 'kbs-customers',
 			'view'      => 'userdata',
-			'id'        => $kbs_ticket->customer_id
+			'id'        => esc_attr( $kbs_ticket->customer_id )
 		), admin_url( 'edit.php' ) );
 
-		$output = '<a href="' . $customer_page . '">' . $customer->name . '</a>';
+		$output = '<a href="' . esc_url( $customer_page ) . '">' . esc_html( $customer->name ) . '</a>';
 
 	} else	{
-		$output = __( 'No Customer Assigned', 'kb-support' );
+		$output = esc_html__( 'No Customer Assigned', 'kb-support' );
 	}
 
 	do_action( 'kbs_tickets_post_column_customer', $kbs_ticket );
@@ -316,11 +317,11 @@ function kb_tickets_post_column_agent( $ticket_id, $kbs_ticket )	{
 
 	if ( ! empty( $kbs_ticket->agent_id ) && $agent = new KBS_Agent( (int) $kbs_ticket->agent_id ) )	{
 		$output .= sprintf( '<a href="%s">%s</a>',
-			get_edit_user_link( $kbs_ticket->agent_id ),
-			$agent->name
+			esc_url( get_edit_user_link( $kbs_ticket->agent_id ) ),
+			esc_html( $agent->name )
 		);
 	} else	{
-		$output .= __( 'No Agent Assigned', 'kb-support' );
+		$output .= esc_html__( 'No Agent Assigned', 'kb-support' );
 	}
 
     if ( kbs_departments_enabled() )    {
@@ -339,7 +340,7 @@ function kb_tickets_post_column_agent( $ticket_id, $kbs_ticket )	{
                     'paged'          => 1,
                     'action2'        => -1
                 ), 'edit.php' ),
-                $department->name
+                esc_html( $department->name )
             );
         }
     }
@@ -410,7 +411,7 @@ function kbs_order_admin_tickets( $query )	{
 		case 'title':
 			$query->set( 'orderby',  'title' );
 			$query->set( 'order',  $order );
-			break;			
+			break;
 	}
 } // kbs_order_admin_tickets
 add_action( 'pre_get_posts', 'kbs_order_admin_tickets' );
@@ -527,7 +528,15 @@ function kbs_search_ticket_list_by_id( $query ) {
     }
 
     unset( $query->query_vars['s'] );
-    add_filter( 'get_search_query', function() { return $_GET['s']; } );
+
+	$search_str = '';
+
+	if ( isset( $_GET['s'] ) ) {
+		$search_str = sanitize_text_field( wp_unslash( $_GET['s'] ) );
+	}
+
+
+    add_filter( 'get_search_query', function() { return $search_str; } );
 } // kbs_search_ticket_list_by_id
 add_action( 'parse_request', 'kbs_search_ticket_list_by_id' );
 
@@ -549,11 +558,11 @@ function kbs_add_ticket_filters() {
 			$category_labels = kbs_get_taxonomy_labels( 'ticket_category' );
 
 			echo "<select name='ticket_category' id='ticket_category' class='postform'>";
-				echo "<option value=''>" . sprintf( __( 'Show all %s', 'kb-support' ), strtolower( $category_labels['name'] ) ) . "</option>";
+				echo "<option value=''>" . sprintf( esc_html__( 'Show all %s', 'kb-support' ), strtolower( esc_html( $category_labels['name'] ) ) ) . "</option>";
 
 				foreach ( $terms as $term )	{
 					$selected = isset( $_GET['ticket_category'] ) && $_GET['ticket_category'] == $term->slug ? ' selected="selected"' : '';
-					echo '<option value="' . esc_attr( $term->slug ) . '"' . $selected . '>' . esc_html( $term->name ) .' (' . $term->count .')</option>';
+					echo '<option value="' . esc_attr( $term->slug ) . '"' . $selected . '>' . esc_html( $term->name ) .' (' . esc_html( $term->count ) .')</option>';
 				}
 
 			echo "</select>";
@@ -564,11 +573,11 @@ function kbs_add_ticket_filters() {
 			$tag_labels = kbs_get_taxonomy_labels( 'ticket_tag' );
 
 			echo "<select name='ticket_tag' id='ticket_tag' class='postform'>";
-				echo "<option value=''>" . sprintf( __( 'Show all %s', 'kb-support' ), strtolower( $tag_labels['name'] ) ) . "</option>";
+				echo "<option value=''>" . sprintf( esc_html__( 'Show all %s', 'kb-support' ), strtolower( esc_html( $tag_labels['name'] ) ) ) . "</option>";
 
 				foreach ( $terms as $term ) {
 					$selected = isset( $_GET['ticket_tag'] ) && $_GET['ticket_tag'] == $term->slug ? ' selected="selected"' : '';
-					echo '<option value="' . esc_attr( $term->slug ) . '"' . $selected . '>' . esc_html( $term->name ) .' (' . $term->count .')</option>';
+					echo '<option value="' . esc_attr( $term->slug ) . '"' . $selected . '>' . esc_html( $term->name ) .' (' . esc_html( $term->count ) .')</option>';
 				}
 
 			echo "</select>";
@@ -579,7 +588,7 @@ function kbs_add_ticket_filters() {
 
             if ( is_array( $agents ) && count( $agents ) > 0 )	{
                 echo "<select name='agent' id='agent' class='postform'>";
-                    echo "<option value='0'>" . __( 'All agents', 'kb-support' ) . "</option>";
+                    echo "<option value='0'>" . esc_html__( 'All agents', 'kb-support' ) . "</option>";
 
                     foreach ( $agents as $agent ) {
                         $selected = isset( $_GET['agent'] ) && $_GET['agent'] == $agent->ID ? ' selected="selected"' : '';
@@ -587,7 +596,7 @@ function kbs_add_ticket_filters() {
                             '<option value="%d"' . $selected . '>%s (%d)</option>',
                             esc_attr( $agent->ID ),
                             esc_html( $agent->display_name ),
-                            kbs_agent_ticket_count( $agent->ID )
+                            esc_html( kbs_agent_ticket_count( $agent->ID ) )
                         );
                     }
 
@@ -601,11 +610,11 @@ function kbs_add_ticket_filters() {
                 $tag_labels = kbs_get_taxonomy_labels( 'department' );
 
                 echo "<select name='department' id='department' class='postform'>";
-                    echo "<option value=''>" . sprintf( __( 'All %s', 'kb-support' ), strtolower( $tag_labels['name'] ) ) . "</option>";
+                    echo "<option value=''>" . sprintf( esc_html__( 'All %s', 'kb-support' ), strtolower( esc_html( $tag_labels['name'] ) ) ) . "</option>";
 
                     foreach ( $terms as $term ) {
                         $selected = isset( $_GET['department'] ) && $_GET['department'] == $term->slug ? ' selected="selected"' : '';
-                        echo '<option value="' . esc_attr( $term->slug ) . '"' . $selected . '>' . esc_html( $term->name ) .' (' . $term->count .')</option>';
+                        echo '<option value="' . esc_attr( $term->slug ) . '"' . $selected . '>' . esc_html( $term->name ) .' (' . esc_html( $term->count ) .')</option>';
                     }
 
                 echo "</select>";
@@ -622,19 +631,19 @@ function kbs_add_ticket_filters() {
 			echo '<select name="reply_status" id="reply_status" class="postform">';
 				$selected = '';
 				if ( isset( $_GET ) && isset( $_GET['reply_status'] ) && '' != $_GET['reply_status'] )	{
-					$selected = $_GET['reply_status'];
+					$selected = sanitize_text_field( wp_unslash( $_GET['reply_status'] ) );
 				}
 				printf(
 					'<option value=""%s>%s</option>',
 					'' == $selected ? ' selected="selected"' : '',
-					__( 'All reply statuses', 'kb-support' )
+					esc_html__( 'All reply statuses', 'kb-support' )
 				);
 
 			if ( ! empty( $awaiting_agent ) )	{
 				printf(
 					'<option value="awaiting_support"%s>%s</option>',
 					'awaiting_support' == $selected ? ' selected="selected"' : '',
-					__( 'Awaiting Support Reply', 'kb-support' ) . $awaiting_agent
+					esc_html__( 'Awaiting Support Reply', 'kb-support' ) . esc_html( $awaiting_agent )
 				);
 			}
 
@@ -642,7 +651,7 @@ function kbs_add_ticket_filters() {
 				printf(
 					'<option value="awaiting_customer"%s>%s</option>',
 					'awaiting_customer' == $selected ? ' selected="selected"' : '',
-					__( 'Awaiting Customer Reply', 'kb-support' ) . $awaiting_customer
+					esc_html__( 'Awaiting Customer Reply', 'kb-support' ) . esc_html( $awaiting_customer )
 				);
 			}
 
@@ -690,7 +699,7 @@ function kbs_add_additional_ticket_filters_actions( $which )    {
             $actions[] = sprintf(
                 '<a class="button button-secondary" href="%s">%s</a>',
                 add_query_arg( 'flagged', 1 ),
-                sprintf( __( 'Filter Flagged %s', 'kb-support' ), kbs_get_ticket_label_plural() )
+                sprintf( esc_html__( 'Filter Flagged %s', 'kb-support' ), kbs_get_ticket_label_plural() )
             );
         }
     }
@@ -699,7 +708,7 @@ function kbs_add_additional_ticket_filters_actions( $which )    {
         ob_start(); ?>
         <br class="clear">
         <div class="alignleft kbs-ticket-list-actions">
-            <?php echo implode( '&nbsp;&#124;&nbsp;', $actions ); ?>
+            <?php echo wp_kses_post( implode( '&nbsp;&#124;&nbsp;', $actions ) ); ?>
         </div>
 
         <?php echo ob_get_clean();
@@ -738,9 +747,8 @@ function kbs_filter_customer_tickets( $query )	{
 	if ( ! is_admin() || 'kbs_ticket' != $query->get( 'post_type' ) || ! isset( $_GET['customer'] ) )	{
 		return;
 	}
-
 	$query->set( 'meta_key', '_kbs_ticket_customer_id' );
-	$query->set( 'meta_value', $_GET['customer'] );
+	$query->set( 'meta_value', absint( $_GET['customer'] ) );
 	$query->set( 'meta_type', 'NUMERIC' );
 } // kbs_filter_customer_tickets
 add_action( 'pre_get_posts', 'kbs_filter_customer_tickets' );
@@ -757,7 +765,7 @@ function kbs_filter_company_tickets( $query )	{
 	}
 
 	$query->set( 'meta_key', '_kbs_ticket_company_id' );
-	$query->set( 'meta_value', $_GET['company_id'] );
+	$query->set( 'meta_value', absint( $_GET['company_id'] ) );
 	$query->set( 'meta_type', 'NUMERIC' );
 } // kbs_filter_customer_tickets
 add_action( 'pre_get_posts', 'kbs_filter_company_tickets' );
@@ -769,12 +777,13 @@ add_action( 'pre_get_posts', 'kbs_filter_company_tickets' );
  * @return	void
  */
 function kbs_filter_agent_tickets( $query )	{
-	if ( ! is_admin() || 'kbs_ticket' != $query->get( 'post_type' ) || ! isset( $_GET['agent'] ) || ! is_numeric( $_GET['agent'] ) ) {
+
+	if ( ! is_admin() || 'kbs_ticket' != $query->get( 'post_type' ) || ! isset( $_GET['agent'] ) || '0' === $_GET['agent'] )	{
 		return;
 	}
 
 	$query->set( 'meta_key', '_kbs_ticket_agent_id' );
-	$query->set( 'meta_value', $_GET['agent'] );
+	$query->set( 'meta_value', absint( $_GET['agent'] ) );
 	$query->set( 'meta_type', 'NUMERIC' );
 } // kbs_filter_agent_tickets
 add_action( 'pre_get_posts', 'kbs_filter_agent_tickets' );
@@ -790,7 +799,7 @@ function kbs_filter_tickets_by_reply_status( $query )	{
 		return;
 	}
 
-	$selected = $_GET['reply_status'];
+	$selected = sanitize_text_field( wp_unslash( $_GET['reply_status'] ) );
 
 	if ( 'awaiting_support' == $selected )	{
 
@@ -887,8 +896,8 @@ function kbs_ticket_filter_views( $views )	{
             $colour = kbs_get_ticket_status_colour( $status );
 
             if ( 'all' == $status ) {
-                $search       = __( 'All', 'kb-support' );
-                $replace      = sprintf( __( 'All %s', 'kb-support' ), kbs_get_ticket_label_plural() ); 
+                $search       = esc_html__( 'All', 'kb-support' );
+                $replace      = sprintf( esc_html__( 'All %s', 'kb-support' ), kbs_get_ticket_label_plural() );
                 $views['all'] = str_replace( $search, $replace, $views['all'] );
                 $colour       = $all_colour;
             }
@@ -935,8 +944,8 @@ function kbs_ticket_filter_views( $views )	{
         $views['all'] = preg_replace( '/\(.+\)/U', '(' . number_format_i18n( $count ) . ')', $views['all'] );
 
         if ( $active_only )	{
-            $search       = __( 'All', 'kb-support' );
-            $replace      = sprintf( __( 'Active %s', 'kb-support' ), kbs_get_ticket_label_plural() ); 
+            $search       = esc_html__( 'All', 'kb-support' );
+            $replace      = sprintf( esc_html__( 'Active %s', 'kb-support' ), kbs_get_ticket_label_plural() );
             $views['all'] = str_replace( $search, $replace, $views['all'] );
             $views['all'] = sprintf(
                 $span_string . $views['all'] . '</span>',
@@ -1015,7 +1024,7 @@ add_filter( 'post_row_actions', 'kbs_tickets_remove_ticket_post_actions' );
  *
  * @return	void
  */
-function kbs_ticket_post_save( $post_id, $post, $update )	{	
+function kbs_ticket_post_save( $post_id, $post, $update )	{
 
 	if ( ! isset( $_POST['kbs_ticket_meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['kbs_ticket_meta_box_nonce'], 'kbs_ticket_meta_save' ) ) {
 		return;
@@ -1048,7 +1057,7 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
 		if ( ! empty( $_POST[ $field ] ) ) {
 
 			if ( is_string( $_POST[ $field ] ) )	{
-				$posted_value = sanitize_text_field( $_POST[ $field ] );
+				$posted_value = sanitize_text_field( wp_unslash( $_POST[ $field ] ) );
 			} elseif ( is_int( $_POST[ $field ] ) )	{
 				$posted_value = absint( $_POST[ $field ] );
 			} elseif( is_array( $_POST[ $field ] ) )	{
@@ -1083,7 +1092,7 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
             add_filter( 'kbs_ticket_close_disable_email', '__return_true' );
         }
 
-		$ticket->__set( 'status', $_POST['ticket_status'] );
+		$ticket->__set( 'status', sanitize_text_field( wp_unslash( $_POST['ticket_status'] ) ) );
 	}
 
     if ( isset( $_POST['kbs_ticket_source'] ) )  {
@@ -1106,3 +1115,62 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
 
 } // kbs_ticket_post_save
 add_action( 'save_post_kbs_ticket', 'kbs_ticket_post_save', 10, 3 );
+
+/**
+ * Add navigation tabs to the ticket edit screen.
+ *
+ * @param $views
+ *
+ * @return mixed
+ * @since 1.5.84
+ */
+function add_extensions_tab( $views ) {
+	display_extension_tab();
+	return $views;
+}
+
+/**
+ * Add navigation tabs to the ticket edit screen.
+ *
+ * @return void
+ * @since 1.5.84
+ */
+function display_extension_tab() {
+	?>
+	<h2 class="nav-tab-wrapper">
+		<?php
+
+		$tabs[ 'downloads' ] = array(
+			'name'     => esc_html__('Tickets','kb-support'),
+			'url'      => admin_url( 'edit.php?post_type=kbs_ticket' ),
+		);
+
+		if ( current_user_can( 'install_plugins' ) ) {
+			$tabs[ 'extensions' ] = array(
+				'name'     => esc_html__( 'Manage Extensions', 'kb-support' ),
+				'url'      => admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-settings&tab=licenses' ),
+				'priority' => '5',
+			);
+		}
+
+		$tabs['suggest_feature'] = array(
+			'name'   => esc_html__( 'Suggest a feature', 'kb-support' ),
+			'icon'   => 'dashicons-external',
+			'url'    => 'https://forms.gle/GsCvf83e5o2k1pnU7',
+			'target' => '_blank',
+		);
+
+		/**
+		 * Hook for KB Support CPT table view tabs
+		 *
+		 */
+		$tabs = apply_filters( 'kb_add_edit_tabs', $tabs );
+
+		kbs_tab_navigation( $tabs, 'downloads' );
+		?>
+	</h2>
+	<br/>
+	<?php
+}
+
+add_filter( 'views_edit-kbs_ticket', 'add_extensions_tab', 10, 1 );

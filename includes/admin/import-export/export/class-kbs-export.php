@@ -86,8 +86,8 @@ class KBS_Export {
 	 */
 	public function csv_cols() {
 		$cols = array(
-			'id'   => __( 'ID',   'kb-support' ),
-			'date' => __( 'Date', 'kb-support' )
+			'id'   => esc_html__( 'ID',   'kb-support' ),
+			'date' => esc_html__( 'Date', 'kb-support' )
 		);
 		return $cols;
 	} // csv_cols
@@ -116,7 +116,7 @@ class KBS_Export {
 		$cols = $this->get_csv_cols();
 		$i = 1;
 		foreach( $cols as $col_id => $column ) {
-			echo '"' . addslashes( $column ) . '"';
+			echo '"' . esc_html( addslashes( $column ) ) . '"';
 			echo $i == count( $cols ) ? '' : ',';
 			$i++;
 		}
@@ -167,7 +167,7 @@ class KBS_Export {
 			foreach ( $row as $col_id => $column ) {
 				// Make sure the column is valid
 				if ( array_key_exists( $col_id, $cols ) ) {
-					echo '"' . addslashes( $column ) . '"';
+					echo '"' . esc_html( addslashes( $column ) ) . '"';
 					echo $i == count( $cols ) ? '' : ',';
 					$i++;
 				}
@@ -189,7 +189,7 @@ class KBS_Export {
 	 */
 	public function export() {
 		if ( ! $this->can_export() )
-			wp_die( __( 'You do not have permission to export data.', 'kb-support' ), __( 'Error', 'kb-support' ), array( 'response' => 403 ) );
+			wp_die( esc_html__( 'You do not have permission to export data.', 'kb-support' ), esc_html__( 'Error', 'kb-support' ), array( 'response' => 403 ) );
 
 		// Set headers
 		$this->headers();

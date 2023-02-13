@@ -25,16 +25,16 @@ function kbs_edit_customer()	{
 		return;
 	}
 
-	if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'edit-customer' ) ) {
-		wp_die( __( "Cheatin' eh?!", 'kb-support' ) );
+	if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'edit-customer' ) ) {
+		wp_die( esc_html__( "Cheatin' eh?!", 'kb-support' ) );
 	}
 
 	if ( ! is_admin() || ! kbs_can_edit_customers() ) {
-		wp_die( __( 'You do not have permission to edit this customer.', 'kb-support' ) );
+		wp_die( esc_html__( 'You do not have permission to edit this customer.', 'kb-support' ) );
 	}
 
-	$customer_info = $_POST['customerinfo'];
-	$customer_id   = (int) $_POST['customerinfo']['id'];
+	$customer_info = isset( $_POST['customerinfo'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['customerinfo'] ) ) : array();
+	$customer_id   = isset( $_POST['customerinfo']['id'] ) ? absint( $_POST['customerinfo']['id'] ) : array();
 
 	$customer = new KBS_Customer( $customer_id );
 	if ( empty( $customer->id ) ) {
@@ -51,7 +51,7 @@ function kbs_edit_customer()	{
 	$customer_info = wp_parse_args( $customer_info, $defaults );
 
 	if ( ! is_email( $customer_info['email'] ) ) {
-		$error = __( 'Please enter a valid email address.', 'kb-support' );
+		$error = esc_html__( 'Please enter a valid email address.', 'kb-support' );
 	}
 
 	if ( '-1' == $customer_info['company_id'] )	{
@@ -62,13 +62,13 @@ function kbs_edit_customer()	{
 
 		// Make sure we don't already have this user attached to a customer
 		if ( ! empty( $customer_info['user_id'] ) && false !== KBS()->customers->get_customer_by( 'user_id', $customer_info['user_id'] ) ) {
-			$error = sprintf( __( 'The User ID %d is already associated with a different customer.', 'kb-support' ), $customer_info['user_id'] );
+			$error = sprintf( esc_html__( 'The User ID %d is already associated with a different customer.', 'kb-support' ), $customer_info['user_id'] );
 		}
 
 		// Make sure it's actually a user
 		$user = get_user_by( 'id', $customer_info['user_id'] );
 		if ( ! empty( $customer_info['user_id'] ) && false === $user ) {
-			$error = sprintf( __( 'The User ID %d does not exist. Please assign an existing user.', 'kb-support' ), $customer_info['user_id'] );
+			$error = sprintf( esc_html__( 'The User ID %d does not exist. Please assign an existing user.', 'kb-support' ), $customer_info['user_id'] );
 		}
 
 	}
@@ -77,7 +77,7 @@ function kbs_edit_customer()	{
 		$website = esc_url( $customer_info['website'] );
 
 		if ( empty( $website ) ) {
-			$error = __( 'Please enter a valid website address.', 'kb-support' );
+			$error = esc_html__( 'Please enter a valid website address.', 'kb-support' );
 		}
 
 	} else	{
@@ -195,15 +195,15 @@ function kbs_disconnect_customer_user_id() {
 		return;
 	}
 
-	if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'edit-customer' ) ) {
-		wp_die( __( "Cheatin' eh?!", 'kb-support' ) );
+	if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce($_POST['_wpnonce'], 'edit-customer' ) ) {
+		wp_die( esc_html__( "Cheatin' eh?!", 'kb-support' ) );
 	}
 
 	if ( ! is_admin() || ! kbs_can_edit_customers() ) {
-		wp_die( __( 'You do not have permission to edit this customer.', 'kb-support' ) );
+		wp_die( esc_html__( 'You do not have permission to edit this customer.', 'kb-support' ) );
 	}
 
-	$customer_id = (int) $_POST['customer_id'];
+	$customer_id = isset( $_POST['customer_id'] ) ? (int) $_POST['customer_id'] : 0;
 
 	$customer = new KBS_Customer( $customer_id );
 	if ( empty( $customer->id ) ) {
@@ -218,7 +218,12 @@ function kbs_disconnect_customer_user_id() {
 		global $wpdb;
 
 		if ( ! empty( $customer->ticket_ids ) ) {
-			$wpdb->query( "UPDATE $wpdb->postmeta SET meta_value = 0 WHERE meta_key = '_kbs_ticket_user_id' AND post_id IN ( $customer->ticket_ids )" );
+			$wpdb->query(
+				$wpdb->prepare(
+				"UPDATE $wpdb->postmeta SET meta_value = 0 WHERE meta_key = '_kbs_ticket_user_id' AND post_id IN ( %s )",
+				$customer->ticket_ids
+				)
+			 );
 		}
 
 		$output['success'] = true;
@@ -254,7 +259,7 @@ function kbs_add_customer_email()	{
 	}
 
 	if ( ! is_admin() || ! kbs_can_edit_customers() ) {
-		wp_die( __( 'You do not have permission to edit this customer.', 'kb-support' ) );
+		wp_die( esc_html__( 'You do not have permission to edit this customer.', 'kb-support' ) );
 	}
 
 	$output = array();
@@ -264,32 +269,32 @@ function kbs_add_customer_email()	{
 		$output['success'] = false;
 
 		if ( empty( $_POST['email'] ) ) {
-			$output['message'] = __( 'Email address is required.', 'kb-support' );
+			$output['message'] = esc_html__( 'Email address is required.', 'kb-support' );
 		} else if ( empty( $_POST['customer_id'] ) ) {
-			$output['message'] = __( 'Customer ID is required.', 'kb-support' );
+			$output['message'] = esc_html__( 'Customer ID is required.', 'kb-support' );
 		} else {
-			$output['message'] = __( 'An error has occured. Please try again.', 'kb-support' );
+			$output['message'] = esc_html__( 'An error has occured. Please try again.', 'kb-support' );
 		}
 
-	} else if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'kbs-add-customer-email' ) ) {
+	} else if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( $_POST['_wpnonce'], 'kbs-add-customer-email' ) ) {
 
 		$output = array(
 			'success' => false,
-			'message' => __( 'Nonce verification failed.', 'kb-support' ),
+			'message' => esc_html__( 'Nonce verification failed.', 'kb-support' ),
 		);
 
-	} else if ( ! is_email( $_POST['email'] ) ) {
+	} else if ( ! is_email( wp_unslash( $_POST['email'] ) ) ) {
 
 		$output = array(
 			'success' => false,
-			'message' => __( 'Invalid email address.', 'kb-support' ),
+			'message' => esc_html__( 'Invalid email address.', 'kb-support' ),
 		);
 
 	} else {
 
-		$email       = sanitize_email( $_POST['email'] );
+		$email       = sanitize_email( wp_unslash( $_POST['email'] ) );
 		$customer_id = (int) $_POST['customer_id'];
-		$primary     = 'true' === $_POST['primary'] ? true : false;
+		$primary     = ( isset( $_POST['primary'] ) && ( 'true' === $_POST['primary'] ) ) ? true : false;
 		$customer    = new KBS_Customer( $customer_id );
 
 		if ( false === $customer->add_email( $email, $primary ) ) {
@@ -298,14 +303,14 @@ function kbs_add_customer_email()	{
 
 				$output = array(
 					'success'  => false,
-					'message'  => __( 'Email already assocaited with this customer.', 'kb-support' ),
+					'message'  => esc_html__( 'Email already assocaited with this customer.', 'kb-support' ),
 				);
 
 			} else {
 
 				$output = array(
 					'success' => false,
-					'message' => __( 'Email address is already associated with another customer.', 'kb-support' ),
+					'message' => esc_html__( 'Email address is already associated with another customer.', 'kb-support' ),
 				);
 
 			}
@@ -315,17 +320,17 @@ function kbs_add_customer_email()	{
 			$redirect = admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-customers&view=userdata&id=' . $customer_id . '&kbs-message=email_added' );
 			$output = array(
 				'success'  => true,
-				'message'  => __( 'Email successfully added to customer.', 'kb-support' ),
+				'message'  => esc_html__( 'Email successfully added to customer.', 'kb-support' ),
 				'redirect' => $redirect,
 			);
 
 			$user          = wp_get_current_user();
 			$user_login    = ! empty( $user->user_login ) ? $user->user_login : 'KBSBot';
-			$customer_note = __( sprintf( 'Email address %s added by %s', $email, $user_login ), 'kb-support' );
+			$customer_note = esc_html__( sprintf( 'Email address %s added by %s', $email, $user_login ), 'kb-support' );
 			$customer->add_note( $customer_note );
 
 			if ( $primary ) {
-				$customer_note = __( sprintf( 'Email address %s set as primary by %s', $email, $user_login ), 'kb-support' );
+				$customer_note = esc_html__( sprintf( 'Email address %s set as primary by %s', $email, $user_login ), 'kb-support' );
 				$customer->add_note( $customer_note );
 			}
 
@@ -363,22 +368,22 @@ function kbs_remove_customer_email()	{
 		return false;
 	}
 
-	if ( empty( $_GET['email'] ) || ! is_email( $_GET['email'] ) ) {
+	if ( empty( $_GET['email'] ) || ! is_email( wp_unslash( $_GET['email'] ) ) ) {
 		return false;
 	}
 
 	if ( empty( $_GET['_wpnonce'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], 'kbs-remove-customer-email' ) ) {
-		wp_die( __( 'Nonce verification failed', 'kb-support' ), __( 'Error', 'kb-support' ), array( 'response' => 403 ) );
+		wp_die( esc_html__( 'Nonce verification failed', 'kb-support' ), esc_html__( 'Error', 'kb-support' ), array( 'response' => 403 ) );
 	}
 
-	$customer = new KBS_Customer( $_GET['id'] );
-	if ( $customer->remove_email( $_GET['email'] ) ) {
+	$customer = new KBS_Customer( absint( $_GET['id'] ) );
+	if ( $customer->remove_email( sanitize_email( wp_unslash( $_GET['email'] ) ) ) ) {
 
 		$url = add_query_arg( 'kbs-message', 'email_removed', admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-customers&view=userdata&id=' . $customer->id ) );
 
 		$user          = wp_get_current_user();
 		$user_login    = ! empty( $user->user_login ) ? $user->user_login : 'KBSBot';
-		$customer_note = __( sprintf( 'Email address %s removed by %s', $_GET['email'], $user_login ), 'kb-support' );
+		$customer_note = esc_html__( sprintf( 'Email address %s removed by %s', sanitize_email( wp_unslash( $_GET['email'] ) ), $user_login ), 'kb-support' );
 		$customer->add_note( $customer_note );
 
 	} else {
@@ -407,22 +412,22 @@ function kbs_set_customer_primary_email()	{
 		return;
 	}
 
-	if ( empty( $_GET['email'] ) || ! is_email( $_GET['email'] ) ) {
+	if ( empty( $_GET['email'] ) || ! is_email( wp_unslash( $_GET['email'] ) ) ) {
 		return;
 	}
 
 	if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], 'kbs-set-customer-primary-email' ) ) {
-		wp_die( __( 'Nonce verification failed', 'kb-support' ), __( 'Error', 'kb-support' ), array( 'response' => 403 ) );
+		wp_die( esc_html__( 'Nonce verification failed', 'kb-support' ), esc_html__( 'Error', 'kb-support' ), array( 'response' => 403 ) );
 	}
 
-	$customer = new KBS_Customer( $_GET['id'] );
-	if ( $customer->set_primary_email( $_GET['email'] ) ) {
+	$customer = new KBS_Customer( absint( $_GET['id'] ) );
+	if ( $customer->set_primary_email( sanitize_email( wp_unslash( $_GET['email']  ) ) ) ) {
 
 		$url = add_query_arg( 'kbs-message', 'primary_email_updated', admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-customers&view=userdata&id=' . $customer->id ) );
 
 		$user          = wp_get_current_user();
 		$user_login    = ! empty( $user->user_login ) ? $user->user_login : 'KBSBot';
-		$customer_note = __( sprintf( 'Email address %s set as primary by %s', $_GET['email'], $user_login ), 'kb-support' );
+		$customer_note = esc_html__( sprintf( 'Email address %s set as primary by %s', sanitize_email( wp_unslash( $_GET['email'] ) ), $user_login ), 'kb-support' );
 		$customer->add_note( $customer_note );
 
 	} else {
@@ -446,16 +451,16 @@ function kbs_customer_save_note() {
 		return;
 	}
 
-	if ( ! wp_verify_nonce( $_POST['add_customer_note_nonce'], 'add-customer-note' ) ) {
-		wp_die( __( "Cheatin' eh?!", 'kb-support' ) );
+	if ( !isset( $_POST['add_customer_note_nonce'] ) || ! wp_verify_nonce( $_POST['add_customer_note_nonce'], 'add-customer-note' ) ) {
+		wp_die( esc_html__( "Cheatin' eh?!", 'kb-support' ) );
 	}
 
 	if ( ! is_admin() || ! kbs_can_edit_customers() ) {
-		wp_die( __( 'You do not have permission to edit this customer.', 'kb-support' ) );
+		wp_die( esc_html__( 'You do not have permission to edit this customer.', 'kb-support' ) );
 	}
 
-	$customer_note = trim( sanitize_text_field( $_POST['customer_note'] ) );
-	$customer_id   = (int) $_POST['customer_id'];
+	$customer_note = isset( $_POST['customer_note'] ) ? trim( sanitize_text_field( wp_unslash( $_POST['customer_note'] ) ) ) : '';
+	$customer_id   = isset( $_POST['customer_id'] ) ? (int) $_POST['customer_id'] : 0;
 
 	if ( empty( $customer_note ) ) {
 		$error = 'empty-customer-note';
@@ -476,7 +481,7 @@ function kbs_customer_save_note() {
 		?>
 		<div class="customer-note-wrapper dashboard-comment-wrap comment-item">
 			<span class="note-content-wrap">
-				<?php echo stripslashes( $new_note ); ?>
+				<?php echo wp_kses_post( stripslashes( $new_note ) ); ?>
 			</span>
 		</div>
 		<?php
@@ -484,7 +489,7 @@ function kbs_customer_save_note() {
 		ob_end_clean();
 
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			echo $output;
+			echo wp_kses_post( $output );
 			exit;
 		}
 
@@ -509,15 +514,15 @@ function kbs_customer_delete() {
 		return;
 	}
 
-	if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'delete-customer' ) ) {
-		wp_die( __( "Cheatin' eh?!", 'kb-support' ) );
+	if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( $_POST['_wpnonce'], 'delete-customer' ) ) {
+		wp_die( esc_html__( "Cheatin' eh?!", 'kb-support' ) );
 	}
 
 	if ( ! is_admin() || ! kbs_can_edit_customers() ) {
-		wp_die( __( 'You do not have permission to delete this customer.', 'kb-support' ) );
+		wp_die( esc_html__( 'You do not have permission to delete this customer.', 'kb-support' ) );
 	}
 
-	$customer_id   = (int) $_POST['customer_id'];
+	$customer_id   = isset( $_POST['customer_id'] ) ? (int) $_POST['customer_id'] : 0;
 	$confirm       = ! empty( $_POST['kbs-customer-delete-confirm'] ) ? true : false;
 	$remove_data   = ! empty( $_POST['kbs-customer-delete-records'] ) ? true : false;
 	$error         = false;

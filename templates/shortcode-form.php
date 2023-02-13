@@ -22,14 +22,13 @@ global $kbs_form;
                     <?php $settings    = $kbs_form->get_field_settings( $field->ID ); ?>
 
                     <?php if ( 'hidden' != $settings['type'] ) : ?>
-                        <p class="<?php echo $field->post_name; ?>">
+                        <p class="<?php echo esc_attr( $field->post_name ); ?>">
                     <?php endif; ?>
                             <?php if ( empty( $settings['hide_label'] ) && 'recaptcha' != $settings['type'] ) : ?>
                                 <?php if ( ! empty( $settings['label_class'] ) ) : ?>
                                     <?php $label_class = ' class="' . sanitize_html_class( $settings['label_class'] ) . '"'; ?>
                                 <?php endif; ?>
-
-                                <label for="<?php echo $field->post_name; ?>"<?php echo $label_class; ?>>
+                                <label for="<?php echo esc_attr( $field->post_name ); ?>"<?php echo esc_attr( $label_class ); ?>>
 
                                     <?php echo esc_attr( get_the_title( $field->ID ) ); ?>
 
@@ -59,9 +58,9 @@ global $kbs_form;
                         <div id="kbs-loading" class="kbs-loader kbs-hidden"></div>
                         <div class="kbs_alert kbs_alert_warn kbs-article-search-results kbs_hidden">
                             <span class="right">
-                                <a id="close-search"><?php _e( 'Close', 'kb-support' ); ?></a>
+                                <a id="close-search"><?php esc_html_e( 'Close', 'kb-support' ); ?></a>
                             </span>
-                            <strong><?php printf( __( 'Could any of the following %s help resolve your query?', 'kb-support' ), kbs_get_article_label_plural() ); ?></strong>
+                            <strong><?php printf( esc_html__( 'Could any of the following %s help resolve your query?', 'kb-support' ), kbs_get_article_label_plural() ); ?></strong>
                             <span id="kbs-article-results"></span>
                         </div>
                     <?php endif; ?>

@@ -26,10 +26,10 @@ if ( is_user_logged_in() )	: ?>
 
             $hide_closed = kbs_customer_maybe_hide_closed_tickets( $customer->user_id ) && kbs_customer_has_closed_tickets( $customer->id );
             $hide_closed = ( $hide_closed && ( ! isset( $_REQUEST['show_closed'] ) || '1' != $_REQUEST['show_closed'] ) );
-            $hide_notice = sprintf(
-                __( 'Your closed %1$s are not being displayed below. <a href="%2$s">Show closed %1$s</a>.', 'kb-support' ),
+            $hide_notice = wp_kses_post( sprintf(
+                esc_html__( 'Your closed %1$s are not being displayed below. <a href="%2$s">Show closed %1$s</a>.', 'kb-support' ),
                 kbs_get_ticket_label_plural( true ),
-                add_query_arg( 'show_closed', '1' )
+                add_query_arg( 'show_closed', '1' ) )
             );
         ?>
         <?php if ( $hide_closed ) : ?>
@@ -42,22 +42,22 @@ if ( is_user_logged_in() )	: ?>
                     <thead>
                         <tr id="ticket_history_header">
                             <th><?php echo '#'; ?></th>
-							<th><?php _e( 'Title', 'kb-support' ); ?></th>
-                            <th><?php _e( 'Opened', 'kb-support' ); ?></th>
-                            <th><?php _e( 'Status', 'kb-support' ); ?></th>
-                            <th><?php _e( 'Actions', 'kb-support' ); ?></th>
+							<th><?php esc_html_e( 'Title', 'kb-support' ); ?></th>
+                            <th><?php esc_html_e( 'Opened', 'kb-support' ); ?></th>
+                            <th><?php esc_html_e( 'Status', 'kb-support' ); ?></th>
+                            <th><?php esc_html_e( 'Actions', 'kb-support' ); ?></th>
                         </tr>
                     </thead>
 
                     <?php foreach ( $tickets as $ticket ) : ?>
 
                         <?php $ticket_url = kbs_get_ticket_url( $ticket->ID ); ?>
-                        <tr id="ticket_data_<?php echo $ticket->ID; ?>" class="ticket_data_row">
+                        <tr id="ticket_data_<?php echo esc_attr( $ticket->ID ); ?>" class="ticket_data_row">
                             <td class="the_ticket_id"><a href="<?php echo esc_url( $ticket_url ); ?>"><?php echo kbs_format_ticket_number( kbs_get_ticket_number( $ticket->ID ) ); ?></a></td>
 							<td class="title"><?php echo esc_html( $ticket->post_title ); ?></td>
-							<td class="date"><?php echo date_i18n( get_option( 'date_format' ), strtotime( $ticket->post_date ) ); ?></td>
+							<td class="date"><?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $ticket->post_date ) ) ); ?></td>
                             <td class="status"><span class="kbs-label kbs-label-status" style="background-color: <?php echo kbs_get_ticket_status_colour( $ticket->post_status ); ?>;"><?php echo kbs_get_ticket_status( $ticket, true ); ?></span></td>
-                            <td class="actions"><a href="<?php echo esc_url( $ticket_url ); ?>"><?php _e( 'View', 'kb-support' ); ?></a></td>
+                            <td class="actions"><a href="<?php echo esc_url( $ticket_url ); ?>"><?php esc_html_e( 'View', 'kb-support' ); ?></a></td>
                         </tr>
 
                     <?php endforeach; ?>
@@ -82,7 +82,7 @@ if ( is_user_logged_in() )	: ?>
         </div>
 
 	<?php else : ?>
-        <div class="kbs_alert kbs_alert_info"><?php printf( __( 'You have no %s yet.', 'kb-support' ), kbs_get_ticket_label_plural( true ) ); ?></div>
+        <div class="kbs_alert kbs_alert_info"><?php printf( esc_html__( 'You have no %s yet.', 'kb-support' ), kbs_get_ticket_label_plural( true ) ); ?></div>
     <?php endif; ?>
 
 <?php else : ?>

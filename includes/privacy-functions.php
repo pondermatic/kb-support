@@ -41,14 +41,14 @@ function kbs_register_privacy_policy_template() {
 	}
 
 	$content = sprintf(
-		__( 'We collect and store information about you during the %s submission process on our website. This information may include, but is not limited to, your name, your email address, and any additional details that may be requested from you for the purpose of handling your support %s.', 'kb-support' ),
+		esc_html__( 'We collect and store information about you during the %s submission process on our website. This information may include, but is not limited to, your name, your email address, and any additional details that may be requested from you for the purpose of handling your support %s.', 'kb-support' ),
 		kbs_get_ticket_label_singular( true ),
 		kbs_get_ticket_label_plural( true )
 	);
 
 	$content .= "\n\n";
 
-	$content .= __( 'Handling this information also allows us to:', 'kb-support' );
+	$content .= esc_html__( 'Handling this information also allows us to:', 'kb-support' );
 	$content .= '<ul>';
 	$content .= '<li>- Respond to your support requests, questions and comments</li>';
 	$content .= '<li>- Send you important account/support information</li>';
@@ -59,23 +59,23 @@ function kbs_register_privacy_policy_template() {
 
 	$additional_collection   = array();
 	$additional_collection[] = sprintf(
-		__( 'Your location and traffic data (including IP address) if you create, or reply to a %s', 'kb-support' ),
+		esc_html__( 'Your location and traffic data (including IP address) if you create, or reply to a %s', 'kb-support' ),
 		kbs_get_ticket_label_singular( true )
 	);
 
-	$additional_collection[] = __( 'Your comments and rating reviews if you choose to leave them on our website', 'kb-support' );
+	$additional_collection[] = esc_html__( 'Your comments and rating reviews if you choose to leave them on our website', 'kb-support' );
 
-	$additional_collection[] = __( 'Your account email and password to allow you to access your account, if you have one', 'kb-support' );
+	$additional_collection[] = esc_html__( 'Your account email and password to allow you to access your account, if you have one', 'kb-support' );
 
 	$additional_collection[] = sprintf(
-		__( 'If you choose to create an account with us, your name, and email address, which will be used to populate the submission form future %s', 'kb-support' ),
+		esc_html__( 'If you choose to create an account with us, your name, and email address, which will be used to populate the submission form future %s', 'kb-support' ),
 		kbs_get_ticket_label_plural( true )
 	);
 
 	$additional_collection   = apply_filters( 'kbs_privacy_policy_additional_collection', $additional_collection );
 
 	if ( ! empty( $additional_collection ) )	{
-		$content .= __( 'Additionally we may also collect the following information:', 'kb-support' );
+		$content .= esc_html__( 'Additionally we may also collect the following information:', 'kb-support' );
 		$content .= '<ul>';
 
 		foreach( $additional_collection as $item )	{
@@ -269,7 +269,7 @@ function _kbs_anonymize_customer( $customer_id = 0 ) {
 
 	$customer = new KBS_Customer( $customer_id );
 	if ( empty( $customer->id ) ) {
-		return array( 'success' => false, 'message' => sprintf( __( 'No customer with ID %d', 'kb-support' ), $customer_id ) );
+		return array( 'success' => false, 'message' => sprintf( esc_html__( 'No customer with ID %d', 'kb-support' ), $customer_id ) );
 	}
 
 	/**
@@ -304,7 +304,7 @@ function _kbs_anonymize_customer( $customer_id = 0 ) {
 		if ( 'none' === $action ) {
 			return array(
 				'success' => false,
-				'message' => sprintf( __( 'Customer could not be anonymized due to %s that could not be anonymized or deleted.', 'kb-support' ), kbs_get_ticket_label_plural( true ) )
+				'message' => sprintf( esc_html__( 'Customer could not be anonymized due to %s that could not be anonymized or deleted.', 'kb-support' ), kbs_get_ticket_label_plural( true ) )
 			);
 		}
 	}
@@ -319,8 +319,8 @@ function _kbs_anonymize_customer( $customer_id = 0 ) {
 	}
 
 	$customer->update( array(
-		'name'         => __( 'Anonymized Customer', 'kb-support' ),
-		'email'        => kbs_anonymize_email( $customer->email ),
+		'name'         => esc_html__( 'Anonymized Customer', 'kb-support' ),
+		'email'        => kbs_anonymize_email( esc_html( $customer->email ) ),
 		'date_created' => date( 'Y-m-d H:i:s', 0 ),
 		'notes'        => '',
 		'user_id'      => 0
@@ -337,8 +337,8 @@ function _kbs_anonymize_customer( $customer_id = 0 ) {
 	 */
 	do_action( 'kbs_anonymize_customer', $customer );
 
-	$customer->add_note( __( 'Customer anonymized successfully', 'kb-support' ) );
-	return array( 'success' => true, 'message' => sprintf( __( 'Customer ID %d successfully anonymized.', 'kb-support' ), $customer_id ) );
+	$customer->add_note( esc_html__( 'Customer anonymized successfully', 'kb-support' ) );
+	return array( 'success' => true, 'message' => sprintf( esc_html__( 'Customer ID %d successfully anonymized.', 'kb-support' ), absint( $customer_id ) ) );
 
 } // _kbs_anonymize_customer
 
@@ -362,9 +362,9 @@ function _kbs_anonymize_ticket( $ticket_id = 0 ) {
 		return array(
 			'success' => false,
 			'message' => sprintf(
-				__( 'No %s with ID %d.', 'kb-support' ),
+				esc_html__( 'No %s with ID %d.', 'kb-support' ),
 				kbs_get_ticket_label_singular(),
-				$ticket_id
+				absint( $ticket_id )
 			)
 		);
 	}
@@ -397,7 +397,7 @@ function _kbs_anonymize_ticket( $ticket_id = 0 ) {
 			$return = array(
 				'success' => false,
 				'message' => sprintf(
-					__( '%s not modified, due to status: %s.', 'kb-support' ),
+					esc_html__( '%s not modified, due to status: %s.', 'kb-support' ),
 					kbs_get_ticket_label_singular(),
 					$ticket->status
 				)
@@ -410,7 +410,7 @@ function _kbs_anonymize_ticket( $ticket_id = 0 ) {
 			$return = array(
 				'success' => true,
 				'message' => sprintf(
-					__( '%s %d with status %s deleted.', 'kb-support' ),
+					esc_html__( '%s %d with status %s deleted.', 'kb-support' ),
 					kbs_get_ticket_label_singular(),
 					$ticket->ID,
 					$ticket->status
@@ -429,8 +429,8 @@ function _kbs_anonymize_ticket( $ticket_id = 0 ) {
 
 			wp_update_post( array(
 				'ID' => $ticket->ID,
-				'post_title' => __( 'Anonymized Customer', 'kb-support' ),
-				'post_name'  => sanitize_title( __( 'Anonymized Customer', 'kb-support' ) ),
+				'post_title' => esc_html__( 'Anonymized Customer', 'kb-support' ),
+				'post_name'  => sanitize_title( esc_html__( 'Anonymized Customer', 'kb-support' ) ),
 			) );
 
 			// Because we changed the post_name, WordPress sets a meta on the item for the `old slug`, we need to kill that.
@@ -452,7 +452,7 @@ function _kbs_anonymize_ticket( $ticket_id = 0 ) {
 			$return = array(
 				'success' => true,
 				'message' => sprintf(
-					__( '%s ID %d successfully anonymized.', 'kb-support' ),
+					esc_html__( '%s ID %d successfully anonymized.', 'kb-support' ),
 					kbs_get_ticket_label_singular(),
 					$ticket_id
 				)
@@ -536,7 +536,7 @@ function _kbs_privacy_get_customer_id_for_email( $email_address ) {
 function kbs_register_privacy_exporters( $exporters ) {
 
 	$exporters[] = array(
-		'exporter_friendly_name' => __( 'KBS Customer Record', 'kb-support' ),
+		'exporter_friendly_name' => esc_html__( 'KBS Customer Record', 'kb-support' ),
 		'callback'               => 'kbs_privacy_customer_record_exporter',
 	);
 
@@ -563,39 +563,39 @@ function kbs_privacy_customer_record_exporter( $email_address = '', $page = 1 ) 
 
 	$export_data = array(
 		'group_id'    => 'kbs-customer-record',
-		'group_label' => __( 'KBS Customer Record', 'kb-support' ),
+		'group_label' => esc_html__( 'KBS Customer Record', 'kb-support' ),
 		'item_id'     => "kbs-customer-record-{$customer->id}",
 		'data'        => array(
 			array(
-				'name'  => __( 'Customer ID', 'kb-support' ),
+				'name'  => esc_html__( 'Customer ID', 'kb-support' ),
 				'value' => $customer->id
 			),
 			array(
-				'name'  => __( 'Name', 'kb-support' ),
+				'name'  => esc_html__( 'Name', 'kb-support' ),
 				'value' => $customer->name
 			),
 			array(
-				'name'  => __( 'Primary Email', 'kb-support' ),
+				'name'  => esc_html__( 'Primary Email', 'kb-support' ),
 				'value' => $customer->email
 			),
 			array(
-				'name'  => __( 'Primary Phone', 'kb-support' ),
+				'name'  => esc_html__( 'Primary Phone', 'kb-support' ),
 				'value' => $customer->primary_phone
 			),
 			array(
-				'name'  => __( 'Additional Phone', 'kb-support' ),
+				'name'  => esc_html__( 'Additional Phone', 'kb-support' ),
 				'value' => $customer->additional_phone
 			),
 			array(
-				'name'  => __( 'Website', 'kb-support' ),
+				'name'  => esc_html__( 'Website', 'kb-support' ),
 				'value' => $customer->website
 			),
 			array(
-				'name'  => __( 'Date Created', 'kb-support' ),
+				'name'  => esc_html__( 'Date Created', 'kb-support' ),
 				'value' => $customer->date_created
 			),
 			array(
-				'name'  => __( 'All Email Addresses', 'kb-support' ),
+				'name'  => esc_html__( 'All Email Addresses', 'kb-support' ),
 				'value' => implode( ', ', $customer->emails )
 			)
 		)
@@ -605,7 +605,7 @@ function kbs_privacy_customer_record_exporter( $email_address = '', $page = 1 ) 
 	if ( ! empty( $agree_to_privacy_time ) ) {
 		foreach ( $agree_to_privacy_time as $timestamp ) {
 			$export_data['data'][] = array(
-				'name' => __( 'Agreed to Privacy Policy', 'kb-support' ),
+				'name' => esc_html__( 'Agreed to Privacy Policy', 'kb-support' ),
 				'value' => date_i18n( get_option( 'date_format' ) . ' H:i:s', $timestamp )
 			);
 		}
@@ -615,7 +615,7 @@ function kbs_privacy_customer_record_exporter( $email_address = '', $page = 1 ) 
 	if ( ! empty( $agree_to_terms_time ) ) {
 		foreach ( $agree_to_terms_time as $timestamp ) {
 			$export_data['data'][] = array(
-				'name' => __( 'Agreed to Terms', 'kb-support' ),
+				'name' => esc_html__( 'Agreed to Terms', 'kb-support' ),
 				'value' => date_i18n( get_option( 'date_format' ) . ' H:i:s', $timestamp )
 			);
 		}
@@ -676,7 +676,7 @@ function kbs_privacy_prefetch_customer_id( $email_address, $page = 1 ) {
  */
 function kbs_register_privacy_eraser_customer_id_removal( $erasers = array() ) {
 	$erasers[] = array(
-		'eraser_friendly_name' => __( 'Possibly Delete Customer', 'kb-support' ),
+		'eraser_friendly_name' => esc_html__( 'Possibly Delete Customer', 'kb-support' ),
 		'callback'             => 'kbs_privacy_maybe_delete_customer_eraser',
 	);
 
@@ -730,9 +730,9 @@ function kbs_privacy_maybe_delete_customer_eraser( $email_address, $page = 1 ) {
 	}
 
 	$tickets = kbs_get_tickets( array(
-		'customer' => $customer->id,
+		'customer' => absint( $customer->id ),
 		'output'   => 'tickets',
-		'page'     => $page,
+		'page'     => absint( $page ),
 	) );
 
 	if ( ! empty( $tickets ) ) {
@@ -741,8 +741,8 @@ function kbs_privacy_maybe_delete_customer_eraser( $email_address, $page = 1 ) {
 			'items_retained' => false,
 			'messages'       => array(
 				sprintf(
-					__( 'Customer for %s not deleted, due to remaining %s.', 'kb-support' ),
-					$email_address,
+					esc_html__( 'Customer for %s not deleted, due to remaining %s.', 'kb-support' ),
+					esc_html( $email_address ),
 					kbs_get_ticket_label_plural( true )
 				),
 			),
@@ -756,13 +756,18 @@ function kbs_privacy_maybe_delete_customer_eraser( $email_address, $page = 1 ) {
 		$deleted_customer = KBS()->customers->delete( $customer->id );
 		if ( $deleted_customer ) {
 			$customer_meta_table = KBS()->customer_meta->table_name;
-			$deleted_meta = $wpdb->query( "DELETE FROM {$customer_meta_table} WHERE customer_id = {$customer->id}" );
-
+			$deleted_meta = $wpdb->query(
+				$wpdb->prepare(
+					"DELETE FROM %s WHERE customer_id = %d ",
+					$customer_meta_table,
+					$customer->id,
+				)
+			 );
 			return array(
 				'items_removed'  => true,
 				'items_retained' => false,
 				'messages'       => array(
-					sprintf( __( 'Customer for %s successfully deleted.', 'kb-support' ), $email_address ),
+					sprintf( esc_html__( 'Customer for %s successfully deleted.', 'kb-support' ), esc_html( $email_address ) ),
 				),
 				'done'           => true,
 			);
@@ -773,7 +778,7 @@ function kbs_privacy_maybe_delete_customer_eraser( $email_address, $page = 1 ) {
 		'items_removed'  => false,
 		'items_retained' => false,
 		'messages'       => array(
-			sprintf( __( 'Customer for %s failed to be deleted.', 'kb-support' ), $email_address ),
+			sprintf( esc_html__( 'Customer for %s failed to be deleted.', 'kb-support' ), esc_html( $email_address ) ),
 		),
 		'done'           => true,
 	);
@@ -791,13 +796,13 @@ function kbs_register_privacy_erasers( $erasers = array() ) {
 	// The order of these matter, customer needs to be anonymized prior to the customer, so that the ticket can adopt
 	// properties of the customer like email.
 	$erasers[] = array(
-		'eraser_friendly_name' => __( 'KBS Customer Record', 'kb-support' ),
+		'eraser_friendly_name' => esc_html__( 'KBS Customer Record', 'kb-support' ),
 		'callback'             => 'kbs_privacy_customer_anonymizer',
 	);
 
 	$erasers[] = array(
 		'eraser_friendly_name' => sprintf(
-			__( 'KBS %s Record', 'kb-support' ),
+			esc_html__( 'KBS %s Record', 'kb-support' ),
 			kbs_get_ticket_label_singular()
 		),
 		'callback'             => 'kbs_privacy_ticket_eraser',
@@ -824,7 +829,7 @@ function kbs_privacy_customer_anonymizer( $email_address, $page = 1 ) {
 		return array(
 			'items_removed'  => false,
 			'items_retained' => false,
-			'messages'       => array( $anonymized['message'] ),
+			'messages'       => array( wp_kses_post( $anonymized['message'] ) ),
 			'done'           => true
 		);
 	}
@@ -832,7 +837,7 @@ function kbs_privacy_customer_anonymizer( $email_address, $page = 1 ) {
 	return array(
 		'items_removed'  => true,
 		'items_retained' => false,
-		'messages'       => array( sprintf( __( 'Customer for %s has been anonymized.', 'kb-support' ), $email_address ) ),
+		'messages'       => array( sprintf( esc_html__( 'Customer for %s has been anonymized.', 'kb-support' ), esc_html( $email_address ) ) ),
 		'done'           => true
 	);
 } // kbs_privacy_customer_anonymizer
@@ -846,34 +851,34 @@ function kbs_privacy_customer_anonymizer( $email_address, $page = 1 ) {
  * @return array
  */
 function kbs_privacy_ticket_eraser( $email_address, $page = 1 ) {
-	$customer = _kbs_privacy_get_customer_id_for_email( $email_address );
+	$customer = _kbs_privacy_get_customer_id_for_email( esc_html( $email_address ) );
 
 	$tickets = kbs_get_tickets( array(
-		'customer' => $customer->id,
+		'customer' => absint( $customer->id ),
 		'output'   => 'tickets',
-		'page'     => $page
+		'page'     => absint( $page )
 	) );
 
 	if ( empty( $tickets ) ) {
 
 		if ( 1 === $page )	{
 			$message = sprintf(
-				__( 'No %s found for %s.', 'kb-support' ),
+				esc_html__( 'No %s found for %s.', 'kb-support' ),
 				kbs_get_ticket_label_singular( true ),
-				$email_address
+				esc_html( $email_address )
 			);
 		} else	{
 			$message = sprintf(
-				__( 'All eligible %s anonymized or deleted for %s.', 'kb-support' ), 
+				esc_html__( 'All eligible %s anonymized or deleted for %s.', 'kb-support' ), 
 				kbs_get_ticket_label_plural( true ),
-				$email_address
+				esc_html( $email_address )
 			);
 		}
 
 		return array(
 			'items_removed'  => false,
 			'items_retained' => false,
-			'messages'       => array( $message ),
+			'messages'       => array( wp_kses_post( $message ) ),
 			'done'           => true
 		);
 	}
@@ -882,7 +887,7 @@ function kbs_privacy_ticket_eraser( $email_address, $page = 1 ) {
 	$items_retained = null;
 	$messages       = array();
 	foreach ( $tickets as $ticket ) {
-		$result = _kbs_anonymize_ticket( $ticket->ID );
+		$result = _kbs_anonymize_ticket( absint( $ticket->ID ) );
 
 		if ( ! is_null( $items_removed ) && $result['success'] ) {
 			$items_removed = true;
@@ -892,7 +897,7 @@ function kbs_privacy_ticket_eraser( $email_address, $page = 1 ) {
 			$items_retained = true;
 		}
 
-		$messages[] = $result['message'];
+		$messages[] = wp_kses_post( $result['message'] );
 	}
 
 	return array(

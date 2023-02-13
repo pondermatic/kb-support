@@ -25,7 +25,7 @@ function kbs_media_button()	{
 
 	global $pagenow, $typenow;
 
-	if ( 'kbs_ticket' == $typenow && ( 'draft' == get_post_status() || 'auto-draft' == get_post_status() ) )	{
+	if ( ( 'kbs_ticket' == $typenow && ( 'draft' == get_post_status() || 'auto-draft' == get_post_status() ) ) || kbs_articles_disabled() )	{
 		return;
 	}
 
@@ -37,12 +37,12 @@ function kbs_media_button()	{
 	/** Only run in post/page creation and edit screens */
 	if ( in_array( $pagenow, array( 'post.php', 'page.php', 'post-new.php', 'post-edit.php' ) ) && in_array( $typenow, $post_types ) ) {
 
-        $title = sprintf( __( 'Link %s to %s', 'kb-support' ), kbs_get_article_label_singular(), kbs_get_ticket_label_singular() );
+        $title = sprintf( esc_html__( 'Link %s to %s', 'kb-support' ), kbs_get_article_label_singular(), kbs_get_ticket_label_singular() );
 		$img = '<span class="wp-media-buttons-icon dashicons dashicons-admin-links" id="kbs-media-button"></span> ';
-		$output = '<a href="#TB_inline?width=640&inlineId=choose-article" title="' . $title . '" class="thickbox button kbs-thickbox" style="padding-left: .4em;">' . $img . sprintf( __( 'Link %s', 'kb-support' ), kbs_get_article_label_singular() ) . '</a>';
+		$output = '<a href="#TB_inline?width=640&inlineId=choose-article" title="' . $title . '" class="thickbox button kbs-thickbox" style="padding-left: .4em;">' . $img . sprintf( esc_html__( 'Link %s', 'kb-support' ), kbs_get_article_label_singular() ) . '</a>';
 
 	}
-	echo $output;
+	echo wp_kses_post( $output );
 }
 add_action( 'media_buttons', 'kbs_media_button', 11 );
 
@@ -80,7 +80,7 @@ function kbs_admin_footer_for_thickbox() {
 
 				// Return early if no article is selected
 				if ('' === url || '0' === url) {
-					alert('<?php printf( __( "You must choose a %s.", "kb-support" ), $single_article ); ?>');
+					alert('<?php printf( esc_html__( "You must choose a %s.", "kb-support" ), esc_html( $single_article ) ); ?>');
 					return;
 				}
 
@@ -96,22 +96,22 @@ function kbs_admin_footer_for_thickbox() {
 
 		<div id="choose-article" style="display: none;">
 			<div class="wrap" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
-				<h3><?php echo sprintf( __( 'Complete the form below to insert a link to a %s', 'kb-support' ), $single_article ); ?></h3>
+				<h3><?php echo sprintf( esc_html__( 'Complete the form below to insert a link to a %s', 'kb-support' ), esc_html( $single_article ) ); ?></h3>
 
 				<p>
-                    <label for="kbs-text"><strong><?php _e( 'Enter Link Text', 'kb-support' ); ?></strong>:</label><br>
+                    <label for="kbs-text"><strong><?php esc_html_e( 'Enter Link Text', 'kb-support' ); ?></strong>:</label><br>
                 	<input type="text" class="regular-text" size="30" id="kbs-text" value="" /><br>
-					<span class="description"><?php printf( __( 'Leave empty to use %s title', 'kb-support' ), $single_article ); ?></span>
+					<span class="description"><?php printf( esc_html__( 'Leave empty to use %s title', 'kb-support' ), esc_html( $single_article ) ); ?></span>
 				</p>
 
 				<p>
-				    <label for="articles"><strong><?php printf( __( 'Select %s', 'kb-support' ), $single_article ); ?></strong>:</label><br>
+				    <label for="articles"><strong><?php printf( esc_html__( 'Select %s', 'kb-support' ), esc_html( $single_article ) ); ?></strong>:</label><br>
 					<?php echo KBS()->html->article_dropdown( array( 'name' => 'articles', 'key' => 'url', 'chosen' => true ) ); ?>
 				</p>
 
 				<p class="submit">
-					<input type="button" id="kbs-insert-link" class="button-primary" value="<?php echo sprintf( __( 'Link %s', 'kb-support' ), $single_article ); ?>" onclick="linkArticle();" />
-					<a id="kbs-cancel-link-article" class="button-secondary" onclick="tb_remove();"><?php _e( 'Cancel', 'kb-support' ); ?></a>
+					<input type="button" id="kbs-insert-link" class="button-primary" value="<?php echo sprintf( esc_attr__( 'Link %s', 'kb-support' ), esc_html( $single_article ) ); ?>" onclick="linkArticle();" />
+					<a id="kbs-cancel-link-article" class="button-secondary" onclick="tb_remove();"><?php esc_html_e( 'Cancel', 'kb-support' ); ?></a>
 				</p>
 			</div>
 		</div>
@@ -146,27 +146,27 @@ function kbs_admin_footer_for_add_customer_thickbox() {
 		<div id="add-customer" style="display: none;">
 			<div class="wrap" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
 				<p>
-                    <label for="kbs_name"><strong><?php _e( 'Customer Name', 'kb-support' ); ?></strong>:</label><br>
+                    <label for="kbs_name"><strong><?php esc_html_e( 'Customer Name', 'kb-support' ); ?></strong>:</label><br>
                 	<input type="text" class="regular-text" size="30" id="kbs_name" value="" />
 				</p>
 
                 <p>
-				    <label for="kbs_email"><strong><?php _e( 'Email Address', 'kb-support' ); ?></strong>:</label><br>
+				    <label for="kbs_email"><strong><?php esc_html_e( 'Email Address', 'kb-support' ); ?></strong>:</label><br>
                 	<input type="text" class="regular-text" size="30" id="kbs_email" value="" />
 				</p>
 
                 <?php if ( kbs_has_companies() ) : ?>
                     <p>
-                        <label for="kbs_company"><strong><?php _e( 'Select Company', 'kb-support' ); ?></strong>:</label><br>
+                        <label for="kbs_company"><strong><?php esc_html_e( 'Select Company', 'kb-support' ); ?></strong>:</label><br>
                         <?php echo KBS()->html->company_dropdown( array(
                             'name' => 'kbs_company',
-                            'placeholder'      => __( 'Select a Company', 'kb-support' ),
-                            'show_option_none' => __( 'No Company', 'kb-support' ),
+                            'placeholder'      => esc_html__( 'Select a Company', 'kb-support' ),
+                            'show_option_none' => esc_html__( 'No Company', 'kb-support' ),
                             'number'           => -1,
                             'data'        => array(
                                 'search-type'        => 'company',
-                                'search-placeholder' => __( 'Type to search all companies', 'kb-support' )
-                            )
+                                'search-placeholder' => esc_html__( 'Type to search all companies', 'kb-support' )
+                            ) 
                         ) ); ?>
                     </p>
                 <?php else : ?>
@@ -174,8 +174,8 @@ function kbs_admin_footer_for_add_customer_thickbox() {
                 <?php endif; ?>
 
 				<p class="submit">
-					<input type="button" id="kbs-new-customer-save" class="button-primary" value="<?php _e( 'Create Customer', 'kb-support' ); ?>" />
-					<a id="kbs-cancel-add-customer" class="button-secondary" onclick="tb_remove();"><?php _e( 'Cancel', 'kb-support' ); ?></a>
+					<input type="button" id="kbs-new-customer-save" class="button-primary" value="<?php esc_attr_e( 'Create Customer', 'kb-support' ); ?>" />
+					<a id="kbs-cancel-add-customer" class="button-secondary" onclick="tb_remove();"><?php esc_html_e( 'Cancel', 'kb-support' ); ?></a>
 				</p>
 			</div>
 		</div>

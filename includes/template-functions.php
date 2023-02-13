@@ -40,7 +40,7 @@ function kbs_notices()	{
 		return;
 	}
 
-	echo kbs_display_notice( $_GET['kbs_notice'] );
+	echo kbs_display_notice( sanitize_text_field( wp_unslash( $_GET['kbs_notice'] ) ) );
 
 } // kbs_display_notice
 add_action( 'kbs_notices', 'kbs_notices' );
@@ -52,7 +52,7 @@ add_action( 'kbs_notices', 'kbs_notices' );
  * @return	str		The label for the form submit button.
  */
 function kbs_get_form_submit_label()	{
-    $label = kbs_get_option( 'form_submit_label', sprintf( __( 'Submit %s', 'kb-support' ), kbs_get_ticket_label_singular() ) );
+    $label = kbs_get_option( 'form_submit_label', sprintf( esc_html__( 'Submit %s', 'kb-support' ), kbs_get_ticket_label_singular() ) );
 	return apply_filters( 'kbs_form_submit_label', $label );
 } // kbs_get_form_submit_label
 
@@ -63,7 +63,7 @@ function kbs_get_form_submit_label()	{
  * @return	str		The label for the ticket reply form submit button.
  */
 function kbs_get_ticket_reply_label()	{
-	return kbs_get_option( 'ticket_reply_label', __( 'Reply', 'kb-support' ) );
+	return kbs_get_option( 'ticket_reply_label', esc_html__( 'Reply', 'kb-support' ) );
 } // kbs_get_ticket_reply_label
 
 /**
@@ -95,7 +95,7 @@ function kbs_render_hidden_form_fields( $form_id )	{
     	<input type="hidden" name="<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( $value ); ?>" />
     <?php endforeach; ?>
 
-	<?php wp_nonce_field( 'kbs-form-validate', 'kbs_log_ticket' ); ?>
+	<?php wp_nonce_field( 'kbs_form_validate', 'kbs_log_ticket' ); ?>
 
     <?php echo ob_get_clean();
 } // kbs_render_hidden_form_fields
@@ -117,7 +117,7 @@ function kbs_render_hidden_reply_fields( $ticket_id )	{
 	$hidden_fields = array(
 		'kbs_ticket_id'  => $ticket_id,
 		'kbs_honeypot'   => '',
-		'redirect'       => add_query_arg( 'ticket', $_GET['ticket'], $current_page ),
+		'redirect'       => add_query_arg( 'ticket', isset( $_GET['ticket'] ) ? sanitize_text_field( wp_unslash( $_GET['ticket'] ) ) : 0, $current_page ),
 		'action'         => 'kbs_validate_ticket_reply_form'
 	);
 
@@ -381,6 +381,6 @@ function kbs_get_theme_template_dir_name() {
  * @return	void
 */
 function kbs_version_in_header(){
-	echo '<meta name="generator" content="KB Support v' . KBS_VERSION . '" />' . "\n";
+	echo '<meta name="generator" content="KB Support v' . esc_attr( KBS_VERSION ) . '" />' . "\n";
 }
 add_action( 'wp_head', 'kbs_version_in_header' );

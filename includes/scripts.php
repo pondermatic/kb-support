@@ -57,22 +57,22 @@ function kbs_load_scripts() {
 	wp_localize_script( 'kbs-ajax', 'kbs_scripts', apply_filters( 'kbs_ajax_script_vars', array(
         'ajax_loader'           => KBS_PLUGIN_URL . 'assets/images/loading.gif',
 		'ajaxurl'               => kbs_get_ajax_url(),
-        'honeypot_fail'         => __( 'Honeypot validation error', 'kb-support' ),
+        'honeypot_fail'         => esc_html__( 'Honeypot validation error', 'kb-support' ),
         'is_submission'         => $is_submission,
 		'max_files'             => kbs_get_max_file_uploads(),
 		'max_files_exceeded'    => kbs_get_notices( 'max_files', true ),
 		'needs_bs4'             => $needs_bs4,
-        'one_option'            => __( 'Choose an option', 'kb-support' ),
-		'one_or_more_option'    => __( 'Choose one or more options', 'kb-support' ),
+        'one_option'            => esc_html__( 'Choose an option', 'kb-support' ),
+		'one_or_more_option'    => esc_html__( 'Choose one or more options', 'kb-support' ),
         'permalinks'            => get_option( 'permalink_structure' ) ? '1' : '0',
         'recaptcha_site_key'    => kbs_get_option( 'recaptcha_site_key' ),
         'recaptcha_version'     => kbs_get_recaptcha_version(),
         'replies_to_load'       => kbs_get_customer_replies_to_load(),
         'reply_label'           => kbs_get_ticket_reply_label(),
-        'search_placeholder'    => __( 'Search options', 'kb-support' ),
+        'search_placeholder'    => esc_html__( 'Search options', 'kb-support' ),
         'submit_ticket'         => kbs_get_form_submit_label(),
-		'submit_ticket_loading' => __( 'Please Wait...', 'kb-support' ),
-        'type_to_search'        => __( 'Type to search', 'kb-support' ),
+		'submit_ticket_loading' => esc_html__( 'Please Wait...', 'kb-support' ),
+        'type_to_search'        => esc_html__( 'Type to search', 'kb-support' ),
 	) ) );
 
 	if ( $is_submission )	{
@@ -94,9 +94,9 @@ function kbs_load_scripts() {
 	if ( $needs_bs4 )	{
 		wp_register_script(
 			'kbs-bootstrap-4-js',
-			'https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js',
+			KBS_PLUGIN_URL . 'assets/bootstrap/js/bootstrap.min.js',
 			array( 'jquery' ),
-			'4.2.1'
+			'4.6.1'
 		);
 		wp_enqueue_script( 'kbs-bootstrap-4-js' );
 	}
@@ -183,9 +183,9 @@ function kbs_register_styles() {
 
 		wp_register_style(
 			'kbs-bootstrap-4-css',
-			'https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css',
+			KBS_PLUGIN_URL . 'assets/bootstrap/css/bootstrap.min.css',
 			array(),
-			'4.2.1'
+			'4.6.1'
 		);
 		wp_enqueue_style( 'kbs-bootstrap-4-css' );
 
@@ -231,7 +231,7 @@ function kbs_load_admin_styles( $hook ) {
 
 	if ( 'post.php' == $hook || 'post-new.php' == $hook )	{
 
-		if ( isset( $_GET['post'] ) && 'kbs_ticket' == get_post_type( $_GET['post'] ) )	{
+		if ( isset( $_GET['post'] ) && 'kbs_ticket' == get_post_type( sanitize_text_field( wp_unslash( $_GET['post'] ) ) ) )	{
 			$ui_style = 'humanity';
 		}
 
@@ -289,7 +289,7 @@ function kbs_load_admin_scripts( $hook ) {
 	$editing_field_type = false;
 
 	if ( isset( $_GET['kbs-action'] ) && 'edit_form_field' == $_GET['kbs-action'] )	{
-		$field_settings = kbs_get_field_settings( $_GET['field_id'] );
+		$field_settings = kbs_get_field_settings( isset( $_GET['field_id'] ) ? absint( $_GET['field_id'] ) : 0 );
 
 		if ( $field_settings )	{
 			$editing_field_type = $field_settings['type'];
@@ -299,53 +299,53 @@ function kbs_load_admin_scripts( $hook ) {
     $singular = kbs_get_ticket_label_singular();
 
 	wp_localize_script( 'kbs-admin-scripts', 'kbs_vars', array(
-		'add_new_ticket'          => sprintf( __( 'Add New %s', 'kb-support' ), $singular ),
+		'add_new_ticket'          => sprintf( esc_html__( 'Add New %s', 'kb-support' ), $singular ),
 		'agent_set_status'        => kbs_agent_can_set_status_on_reply(),
 		'admin_url'               => admin_url(),
 		'ajax_loader'             => KBS_PLUGIN_URL . 'assets/images/loading.gif',
-        'customer_email_required' => __( 'Customer email address is required', 'kb-support' ),
-        'customer_name_required'  => __( 'Customer name is required', 'kb-support' ),
-        'delete_reply_warn'       => __( "You will permanently delete this reply.\n\nDepending on configuration, your customer may have already received it via email.\n\nClick 'Cancel' to stop, 'OK' to delete.", 'kb-support' ),
+        'customer_email_required' => esc_html__( 'Customer email address is required', 'kb-support' ),
+        'customer_name_required'  => esc_html__( 'Customer name is required', 'kb-support' ),
+        'delete_reply_warn'       => esc_html__( "You will permanently delete this reply.\n\nDepending on configuration, your customer may have already received it via email.\n\nClick 'Cancel' to stop, 'OK' to delete.", 'kb-support' ),
 		'default_reply_status'    => kbs_agent_get_default_reply_status(),
         'delete_ticket_warn'      => sprintf(
-            __( "You are about to permanently delete this %s.\n\nThis action cannot be undone.\n\nClick 'Cancel' to stop, 'OK' to delete.", 'kb-support' ), kbs_get_ticket_label_singular( true )
+            esc_html__( "You are about to permanently delete this %s.\n\nThis action cannot be undone.\n\nClick 'Cancel' to stop, 'OK' to delete.", 'kb-support' ), kbs_get_ticket_label_singular( true )
         ),
         'disable_closure_email'   => kbs_get_option( 'ticket_closed_disable_email', false ),
 		'editing_field_type'      => $editing_field_type,
-		'editing_ticket'          => isset( $_GET['action'] ) && 'edit' == $_GET['action'] && 'kbs_ticket' == get_post_type( $_GET['post'] ) ? true : false,
-		'field_label_missing'     => __( 'Enter a Label for your field.', 'kb-support' ),
-		'field_type_missing'      => __( 'Select the field Type', 'kb-support' ),
-		'hide_note'               => __( 'Hide Note', 'kb-support' ),
-		'hide_participants'       => __( 'Hide participants', 'kb-support' ),
-		'hide_reply'              => __( 'Hide Reply', 'kb-support' ),
-        'hide_submission'         => __( 'Hide submission data', 'kb-support' ),
+		'editing_ticket'          => isset( $_GET['action'] ) && 'edit' == $_GET['action'] && 'kbs_ticket' == get_post_type( isset( $_GET['post'] ) ? sanitize_text_field( wp_unslash( $_GET['post'] ) ) : '' ) ? true : false,
+		'field_label_missing'     => esc_html__( 'Enter a Label for your field.', 'kb-support' ),
+		'field_type_missing'      => esc_html__( 'Select the field Type', 'kb-support' ),
+		'hide_note'               => esc_html__( 'Hide Note', 'kb-support' ),
+		'hide_participants'       => esc_html__( 'Hide participants', 'kb-support' ),
+		'hide_reply'              => esc_html__( 'Hide Reply', 'kb-support' ),
+        'hide_submission'         => esc_html__( 'Hide submission data', 'kb-support' ),
 		'kbs_version'             => KBS_VERSION,
 		'new_media_ui'            => apply_filters( 'kbs_use_35_media_ui', 1 ),
-        'new_reply_notice'        => sprintf( __( 'A new reply has been added to this %s. Click OK to reload replies now, or Cancel to ignore.', 'kb-support' ), strtolower( $singular ) ),
-		'no_note_content'         => __( 'There is no content in your note', 'kb-support' ),
-		'no_ticket_reply_content' => __( 'There is no content in your reply', 'kb-support' ),
-		'note_not_added'          => __( 'Your note could not be added', 'kb-support' ),
-		'one_option'              => sprintf( __( 'Choose a %s', 'kb-support' ), $singular ),
-		'one_or_more_option'      => sprintf( __( 'Choose one or more %s', 'kb-support' ), kbs_get_ticket_label_plural() ),
-        'please_wait'             => __( 'Please Wait...', 'kb-support' ),
+        'new_reply_notice'        => sprintf( esc_html__( 'A new reply has been added to this %s. Click OK to reload replies now, or Cancel to ignore.', 'kb-support' ), strtolower( $singular ) ),
+		'no_note_content'         => esc_html__( 'There is no content in your note', 'kb-support' ),
+		'no_ticket_reply_content' => esc_html__( 'There is no content in your reply', 'kb-support' ),
+		'note_not_added'          => esc_html__( 'Your note could not be added', 'kb-support' ),
+		'one_option'              => sprintf( esc_html__( 'Choose a %s', 'kb-support' ), $singular ),
+		'one_or_more_option'      => sprintf( esc_html__( 'Choose one or more %s', 'kb-support' ), kbs_get_ticket_label_plural() ),
+        'please_wait'             => esc_html__( 'Please Wait...', 'kb-support' ),
 		'post_id'                 => isset( $post->ID ) ? $post->ID : null,
-		'post_type'               => isset( $_GET['post'] ) ? get_post_type( $_GET['post'] ) : false,
-        'regenerate_api_key'      => __( 'Are you sure you wish to regenerate this API key?', 'kb-support' ),
+		'post_type'               => isset( $_GET['post'] ) ? get_post_type( sanitize_text_field( wp_unslash( $_GET['post'] ) ) ) : false,
+        'regenerate_api_key'      => esc_html__( 'Are you sure you wish to regenerate this API key?', 'kb-support' ),
         'reply_alerts'            => kbs_alert_agent_ticket_reply(),
-		'reply_has_data'          => sprintf( __( 'You have not submitted the reply. If you continue, the reply will not be added to the %s', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
-        'revoke_api_key'          => __( 'Are you sure you wish to revoke this API key?', 'kb-support' ),
-		'search_placeholder'      => sprintf( __( 'Type to search all %s', 'kb-support' ), kbs_get_ticket_label_plural() ),
-        'send_closure_email'      => __( 'Send closure email?', 'kb-support' ),
-		'ticket_confirm_close'    => __( 'Are you sure you wish to close this ticket? Click OK to close, or Cancel to return.', 'kb-support' ),
-        'ticket_flag'             => sprintf( __( 'Flag %s', 'kb-support' ), strtolower( $singular ) ),
-        'ticket_unflag'           => sprintf( __( 'Unflag %s', 'kb-support' ), strtolower( $singular ) ),
+		'reply_has_data'          => sprintf( esc_html__( 'You have not submitted the reply. If you continue, the reply will not be added to the %s', 'kb-support' ), kbs_get_ticket_label_singular( true ) ),
+        'revoke_api_key'          => esc_html__( 'Are you sure you wish to revoke this API key?', 'kb-support' ),
+		'search_placeholder'      => sprintf( esc_html__( 'Type to search all %s', 'kb-support' ), kbs_get_ticket_label_plural() ),
+        'send_closure_email'      => esc_html__( 'Send closure email?', 'kb-support' ),
+		'ticket_confirm_close'    => esc_html__( 'Are you sure you wish to close this ticket? Click OK to close, or Cancel to return.', 'kb-support' ),
+        'ticket_flag'             => sprintf( esc_html__( 'Flag %s', 'kb-support' ), strtolower( $singular ) ),
+        'ticket_unflag'           => sprintf( esc_html__( 'Unflag %s', 'kb-support' ), strtolower( $singular ) ),
 		'ticket_reply_added'      => 'ticket_reply_added',
-		'ticket_reply_failed'     => sprintf( __( 'Could not add %s Reply', 'kb-support' ), $singular ),
-		'type_to_search'          => sprintf( __( 'Type to search %s', 'kb-support' ), kbs_get_article_label_plural() ),
-        'view_reply'              => __( 'View Reply', 'kb-support' ),
-		'view_note'               => __( 'View Note', 'kb-support' ),
-		'view_participants'       => __( 'View participants', 'kb-support' ),
-        'view_submission'         => __( 'View submission data', 'kb-support' )
+		'ticket_reply_failed'     => sprintf( esc_html__( 'Could not add %s Reply', 'kb-support' ), $singular ),
+		'type_to_search'          => sprintf( esc_html__( 'Type to search %s', 'kb-support' ), kbs_get_article_label_plural() ),
+        'view_reply'              => esc_html__( 'View Reply', 'kb-support' ),
+		'view_note'               => esc_html__( 'View Note', 'kb-support' ),
+		'view_participants'       => esc_html__( 'View participants', 'kb-support' ),
+        'view_submission'         => esc_html__( 'View submission data', 'kb-support' )
 	) );
 
 	if ( function_exists( 'wp_enqueue_media' ) && version_compare( $wp_version, '3.5', '>=' ) ) {
@@ -354,12 +354,12 @@ function kbs_load_admin_scripts( $hook ) {
 	}
 
 	if ( 'post.php' == $hook || 'post-new.php' == $hook )	{
-		if ( isset( $_GET['post'] ) && 'kbs_ticket' == get_post_type( $_GET['post'] ) )	{
+		if ( isset( $_GET['post'] ) && 'kbs_ticket' == get_post_type( sanitize_text_field( wp_unslash( $_GET['post'] ) ) ) )	{
 			$ui_style = 'humanity';
 		}
 	}
 
-	wp_register_script( 'kbs-font-awesome', KBS_PLUGIN_DIR . '/assets/js/fontawesome.min.js', array(), KBS_VERSION );
+	wp_register_script( 'kbs-font-awesome', KBS_PLUGIN_URL . '/assets/js/fontawesome.min.js', array(), KBS_VERSION );
 	wp_enqueue_script( 'kbs-font-awesome' );
 
 	wp_enqueue_style( 'wp-color-picker' );
@@ -393,10 +393,10 @@ function kbs_admin_icons() {
 	?>
 	<style type="text/css" media="screen">
 		#dashboard_right_now .ticket-count:before {
-			content: '<?php echo $tickets_icon; ?>';
+			content: '<?php echo esc_html( $tickets_icon ); ?>';
 		}
 		#dashboard_right_now .article-count:before {
-			content: '<?php echo $articles_icon; ?>';
+			content: '<?php echo esc_html( $articles_icon ); ?>';
 		}
 	</style>
 	<?php

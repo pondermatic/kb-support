@@ -152,7 +152,7 @@ function kbs_maybe_set_enctype() {
 	if ( kbs_file_uploads_are_enabled() )	{
 		$output = ' enctype="multipart/form-data"';
 		
-		echo apply_filters( 'kbs_maybe_set_enctype', $output );
+		echo wp_kses_post( apply_filters( 'kbs_maybe_set_enctype', $output ) );
 	}
 } // kbs_maybe_set_enctype
 
@@ -241,7 +241,7 @@ function kbs_attach_file_to_ticket( $attachment, $ticket_id )	{
 
 	add_filter( 'upload_dir', 'kbs_set_upload_dir' );
 
-	if ( $_FILES[ $attachment ]['error'] !== UPLOAD_ERR_OK )	{
+	if ( isset( $_FILES[ $attachment ]['error'] ) && $_FILES[ $attachment ]['error'] !== UPLOAD_ERR_OK )	{
 		return false;
 	}
  
@@ -264,13 +264,24 @@ function kbs_attach_file_to_ticket( $attachment, $ticket_id )	{
  * @return	void
  */
 function kbs_attach_files_to_reply( $reply_id )	{
+
+	if( !isset( $_FILES['kbs_files'] ) ){
+		return;
+	}
+
+	$fileInfo = wp_check_filetype( isset( $_FILES['kbs_files']['name'][0] ) ? sanitize_file_name( $_FILES['kbs_files']['name'][0] ) : '' );
+
+	if ( empty( $fileInfo['ext'] ) ) {
+		return;
+	}
+
 	$attachments = $_FILES['kbs_files'];
 	$attachments = ! is_array( $attachments ) ? array( $attachments ) : $attachments;
 
 	foreach( $attachments['name'] as $key => $value )	{
 		if ( $attachments['name'][ $key ] )	{
 			$attachment = array(
-				'name'     => $attachments['name'][ $key ],
+				'name'     => sanitize_file_name( $attachments['name'][ $key ] ),
 				'type'     => $attachments['type'][ $key ],
 				'tmp_name' => $attachments['tmp_name'][ $key ],
 				'error'    => $attachments['error'][ $key ],
@@ -479,8 +490,8 @@ function kbs_get_ticket_files_list( $files = array() )	{
 
 		$output[] = sprintf(
 			'<a href="%s" target="_blank">%s</a>',
-			$file_url,
-			$file_name
+			esc_url( $file_url ),
+			esc_html( $file_name )
 		);
     }
 

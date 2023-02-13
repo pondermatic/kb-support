@@ -2,9 +2,9 @@
 Contributors: wpchill, silkalns
 Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
-Tested up to: 5.6
+Tested up to: 6.1
 Requires PHP: 5.4
-Stable tag: 1.5.4
+Stable tag: 1.5.85
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,6 +122,45 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+= 1.5.85 - 13.02.2023 =
+Changed: Improved date readability. ( [#245](https://github.com/WPChill/modula-lite/issues/245) )
+Fixed: Fatal error caused by bad ES translation. ( [#250](https://github.com/WPChill/modula-lite/issues/250) )
+Fixed: Wrong escaping in articles list ( [#243](https://github.com/WPChill/kb-support/issues/243) )
+Added: Option to disable Tickets and KB Articles. ( [#252](https://github.com/WPChill/kb-support/issues/252) )
+Fixed: Form submission security failed ( [#246](https://github.com/WPChill/kb-support/issues/246) )
+
+= 1.5.84 - 12.12.2022 =
+Added: Admin navigation tabs for kbs_ticket post type. ( [#208](https://github.com/WPChill/modula-lite/issues/208) )
+Added: Branding bar. ( [#207](https://github.com/WPChill/modula-lite/issues/207) )
+Fixed: Ticket filtering in admin Tickets table list ( [#190](https://github.com/WPChill/kb-support/issues/190) )
+Fixed: Translations ( [#151](https://github.com/WPChill/kb-support/issues/151) )
+Changed: Ticket date received/updated display ( [#163](https://github.com/WPChill/kb-support/issues/163) )
+Changed: KB Articles now working with Gutenberg ( [#240](https://github.com/WPChill/kb-support/issues/240) )
+
+= 1.5.83 - 23.11.2022 =
+Fixed: PHP 8 warnings
+Fixed: Missing arguments on wp_kses_post
+Fixed: Ticket categories warnings
+
+= 1.5.82 - 22.09.2022 =
+Fixed: Sanitization of submission data and email content were wrongly escaped 
+
+= 1.5.81 - 15.09.2022 =
+Fixed: Sanitization of search title being wrongly escaped 
+
+= 1.5.8 - 17.06.2022 =
+Fixed: Not registering what page to be redirected ( https://github.com/WPChill/kb-support/issues/223 )
+
+= 1.5.7 - 31.05.2022 =
+Fixed: Placeholders missing from text fields ( https://github.com/WPChill/kb-support/issues/222 )
+
+= 1.5.6 - 23.05.2022 =
+Fixed: Security, sanitizations and escaping
+Changed: Removed bootstrap file calling from cdn and included the files in the plugin.
+Changed: Replaced file_get_contents call on remote files with WordPress's http-api.
+
+= 1.5.5 - 18.03.2021 =
+Changed: Remove license functionality
 
 = 1.5.4 - 01.03.2021 =
 Fixed: FontAwesome style and scripts

@@ -86,7 +86,7 @@ class KBS_Knowledgebase {
 	public function get_registered_knowledgebases()	{
 		if ( ! isset( $this->registered_integrations ) )	{
 			$this->registered_integrations = array(
-				'kb-support' => __( 'KB Support', 'kb-support' )
+				'kb-support' => esc_html__( 'KB Support', 'kb-support' )
 			);
 		}
 
@@ -118,6 +118,10 @@ class KBS_Knowledgebase {
 	 * @return	void
 	 */
 	public function register_post_type()	{
+		if( kbs_articles_disabled() ){
+			return;
+		}
+
 		$article_archives = defined( 'KBS_ARTICLE_DISABLE_ARCHIVE' ) && KBS_ARTICLE_DISABLE_ARCHIVE ? false : true;
 		$articles_slug    = defined( 'KBS_ARTICLE_SLUG' ) ? KBS_ARTICLE_SLUG : 'articles';
 		$articles_rewrite = defined( 'KBS_ARTICLE_DISABLE_REWRITE' ) && KBS_ARTICLE_DISABLE_REWRITE ? false : array( 'slug' => $articles_slug, 'with_front' => false );
@@ -125,17 +129,17 @@ class KBS_Knowledgebase {
 		$article_labels = array(
 			'name'               => _x( '%2$s', 'article type general name', 'kb-support' ),
 			'singular_name'      => _x( '%1$s', 'article type singular name', 'kb-support' ),
-			'add_new'            => __( 'New %1$s', 'kb-support' ),
-			'add_new_item'       => __( 'New %1$s', 'kb-support' ),
-			'edit_item'          => __( 'Edit %1$s', 'kb-support' ),
-			'new_item'           => __( 'New %1$s', 'kb-support' ),
-			'all_items'          => __( '%2$s', 'kb-support' ),
-			'view_item'          => __( 'View %1$s', 'kb-support' ),
-			'search_items'       => __( 'Search %2$s', 'kb-support' ),
-			'not_found'          => __( 'No %2$s found', 'kb-support' ),
-			'not_found_in_trash' => __( 'No %2$s found in Trash', 'kb-support' ),
+			'add_new'            => esc_html__( 'New %1$s', 'kb-support' ),
+			'add_new_item'       => esc_html__( 'New %1$s', 'kb-support' ),
+			'edit_item'          => esc_html__( 'Edit %1$s', 'kb-support' ),
+			'new_item'           => esc_html__( 'New %1$s', 'kb-support' ),
+			'all_items'          => esc_html__( '%2$s', 'kb-support' ),
+			'view_item'          => esc_html__( 'View %1$s', 'kb-support' ),
+			'search_items'       => esc_html__( 'Search %2$s', 'kb-support' ),
+			'not_found'          => esc_html__( 'No %2$s found', 'kb-support' ),
+			'not_found_in_trash' => esc_html__( 'No %2$s found in Trash', 'kb-support' ),
 			'parent_item_colon'  => '',
-			'menu_name'          => __( '%2$s', 'kb-support' )
+			'menu_name'          => esc_html__( '%2$s', 'kb-support' )
 		);
 
 		foreach ( $article_labels as $key => $value ) {
@@ -146,6 +150,7 @@ class KBS_Knowledgebase {
 			'labels'                => $article_labels,
 			'public'                => true,
 			'show_in_menu'          => true,
+			'menu_position '		=> 25,
 			'menu_icon'             => 'dashicons-welcome-learn-more',
 			'query_var'             => true,
 			'rewrite'               => $articles_rewrite,
@@ -157,7 +162,7 @@ class KBS_Knowledgebase {
 			'can_export'            => true,
             'show_in_rest'          => true,
 			'rest_base'             => 'articles',
-			'rest_controller_class' => 'KBS_Articles_API'
+			'rest_controller_class' => 'WP_REST_Posts_Controller'
 		);
 
 		register_post_type( 'article', $article_args );
@@ -170,20 +175,25 @@ class KBS_Knowledgebase {
 	 * @return	void
 	 */
 	public function register_taxonomies()	{
+
+		if( kbs_articles_disabled() ){
+			return;
+		}
+
 		$articles_slug = defined( 'KBS_ARTICLE_SLUG' ) ? KBS_ARTICLE_SLUG : 'articles';
 
 		$article_category_labels = array(
-			'name'              => _x( 'Categories', 'taxonomy general name', 'kb-support' ),
-			'singular_name'     => _x( 'Category', 'taxonomy singular name', 'kb-support' ),
-			'search_items'      => sprintf( __( 'Search %s Categories', 'kb-support' ), kbs_get_article_label_singular() ),
-			'all_items'         => sprintf( __( 'All %s Categories', 'kb-support' ), kbs_get_article_label_singular() ),
-			'parent_item'       => sprintf( __( 'Parent %s Category', 'kb-support' ), kbs_get_article_label_singular() ),
-			'parent_item_colon' => sprintf( __( 'Parent %s Category:', 'kb-support' ), kbs_get_article_label_singular() ),
-			'edit_item'         => sprintf( __( 'Edit %s Category', 'kb-support' ), kbs_get_article_label_singular() ),
-			'update_item'       => sprintf( __( 'Update %s Category', 'kb-support' ), kbs_get_article_label_singular() ),
-			'add_new_item'      => sprintf( __( 'Add New %s Category', 'kb-support' ), kbs_get_article_label_singular() ),
-			'new_item_name'     => sprintf( __( 'New %s Category Name', 'kb-support' ), kbs_get_article_label_singular() ),
-			'menu_name'         => __( 'Categories', 'kb-support' )
+			'name'              => esc_html_x( 'Categories', 'taxonomy general name', 'kb-support' ),
+			'singular_name'     => esc_html_x( 'Category', 'taxonomy singular name', 'kb-support' ),
+			'search_items'      => sprintf( esc_html__( 'Search %s Categories', 'kb-support' ), kbs_get_article_label_singular() ),
+			'all_items'         => sprintf( esc_html__( 'All %s Categories', 'kb-support' ), kbs_get_article_label_singular() ),
+			'parent_item'       => sprintf( esc_html__( 'Parent %s Category', 'kb-support' ), kbs_get_article_label_singular() ),
+			'parent_item_colon' => sprintf( esc_html__( 'Parent %s Category:', 'kb-support' ), kbs_get_article_label_singular() ),
+			'edit_item'         => sprintf( esc_html__( 'Edit %s Category', 'kb-support' ), kbs_get_article_label_singular() ),
+			'update_item'       => sprintf( esc_html__( 'Update %s Category', 'kb-support' ), kbs_get_article_label_singular() ),
+			'add_new_item'      => sprintf( esc_html__( 'Add New %s Category', 'kb-support' ), kbs_get_article_label_singular() ),
+			'new_item_name'     => sprintf( esc_html__( 'New %s Category Name', 'kb-support' ), kbs_get_article_label_singular() ),
+			'menu_name'         => esc_html__( 'Categories', 'kb-support' )
 		);
 
 		$article_category_args = apply_filters( 'kbs_article_category_args', array(
@@ -206,18 +216,18 @@ class KBS_Knowledgebase {
 
 		/** Article Tags */
 		$article_tag_labels = array(
-			'name'                  => _x( 'Tags', 'taxonomy general name', 'kb-support' ),
-			'singular_name'         => _x( 'Tag', 'taxonomy singular name', 'kb-support' ),
-			'search_items'          => sprintf( __( 'Search %s Tags', 'kb-support' ), kbs_get_article_label_singular() ),
-			'all_items'             => sprintf( __( 'All %s Tags', 'kb-support' ), kbs_get_article_label_singular() ),
-			'parent_item'           => sprintf( __( 'Parent %s Tag', 'kb-support' ), kbs_get_article_label_singular() ),
-			'parent_item_colon'     => sprintf( __( 'Parent %s Tag:', 'kb-support' ), kbs_get_article_label_singular() ),
-			'edit_item'             => sprintf( __( 'Edit %s Tag', 'kb-support' ), kbs_get_article_label_singular() ),
-			'update_item'           => sprintf( __( 'Update %s Tag', 'kb-support' ), kbs_get_article_label_singular() ),
-			'add_new_item'          => sprintf( __( 'Add New %s Tag', 'kb-support' ), kbs_get_article_label_singular() ),
-			'new_item_name'         => sprintf( __( 'New %s Tag Name', 'kb-support' ), kbs_get_article_label_singular() ),
-			'menu_name'             => __( 'Tags', 'kb-support' ),
-			'choose_from_most_used' => sprintf( __( 'Choose from most used %s tags', 'kb-support' ), kbs_get_article_label_singular() )
+			'name'                  => esc_html_x( 'Tags', 'taxonomy general name', 'kb-support' ),
+			'singular_name'         => esc_html_x( 'Tag', 'taxonomy singular name', 'kb-support' ),
+			'search_items'          => sprintf( esc_html__( 'Search %s Tags', 'kb-support' ), kbs_get_article_label_singular() ),
+			'all_items'             => sprintf( esc_html__( 'All %s Tags', 'kb-support' ), kbs_get_article_label_singular() ),
+			'parent_item'           => sprintf( esc_html__( 'Parent %s Tag', 'kb-support' ), kbs_get_article_label_singular() ),
+			'parent_item_colon'     => sprintf( esc_html__( 'Parent %s Tag:', 'kb-support' ), kbs_get_article_label_singular() ),
+			'edit_item'             => sprintf( esc_html__( 'Edit %s Tag', 'kb-support' ), kbs_get_article_label_singular() ),
+			'update_item'           => sprintf( esc_html__( 'Update %s Tag', 'kb-support' ), kbs_get_article_label_singular() ),
+			'add_new_item'          => sprintf( esc_html__( 'Add New %s Tag', 'kb-support' ), kbs_get_article_label_singular() ),
+			'new_item_name'         => sprintf( esc_html__( 'New %s Tag Name', 'kb-support' ), kbs_get_article_label_singular() ),
+			'menu_name'             => esc_html__( 'Tags', 'kb-support' ),
+			'choose_from_most_used' => sprintf( esc_html__( 'Choose from most used %s tags', 'kb-support' ), kbs_get_article_label_singular() )
 		);
 
 		$article_tag_args = apply_filters( 'kbs_article_tag_args', array(
@@ -249,12 +259,12 @@ class KBS_Knowledgebase {
 	 */
 	public function get_meta_fields()	{
 		$object = get_post_type_object( $this->post_type );
-		
+
 		$meta_fields = array(
 			'_kbs_article_restricted' => array(
 				'type'              => 'integer',
 				'description'       => sprintf(
-					__( 'Specifies whether or not the %s is restricted to logged in users only.', 'kb-support' ),
+					esc_html__( 'Specifies whether or not the %s is restricted to logged in users only.', 'kb-support' ),
 					kbs_get_article_label_singular( true )
 				),
 				'single'            => true,
@@ -271,7 +281,7 @@ class KBS_Knowledgebase {
 			kbs_get_article_view_count_meta_key_name() => array(
 				'type'              => 'integer',
 				'description'       => sprintf(
-					__( 'Total number of all time views for this %s.', 'kb-support' ),
+					esc_html__( 'Total number of all time views for this %s.', 'kb-support' ),
 					kbs_get_article_label_singular( true )
 				),
 				'single'            => true,
@@ -288,7 +298,7 @@ class KBS_Knowledgebase {
 			kbs_get_article_view_count_meta_key_name( false ) => array(
 				'type'              => 'integer',
 				'description'       => sprintf(
-					__( 'Current monthly total number of times this %s has been viewed.', 'kb-support' ),
+					esc_html__( 'Current monthly total number of times this %s has been viewed.', 'kb-support' ),
 					kbs_get_article_label_singular( true )
 				),
 				'single'            => true,

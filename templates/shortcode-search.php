@@ -15,7 +15,7 @@ $format = apply_filters( 'search_form_format', $format ); ?>
         <form role="search" method="get" class="search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>">
             <input type="text" class="search-field" placeholder="<?php echo sprintf( esc_attr_x( 'Search %s &hellip;', 'placeholder', 'kb-support' ), $plural ); ?>" value="<?php echo get_search_query(); ?>" name="s_article" />
             <input type="hidden" name="kbs_action" value="search_articles" />
-            <button class="search-submit"><?php echo _x( 'Search', 'submit button', 'kb-support' ); ?></button>
+            <button class="search-submit"><?php echo esc_html_x( 'Search', 'submit button', 'kb-support' ); ?></button>
         </form>
     
     <?php else : ?>
@@ -24,7 +24,7 @@ $format = apply_filters( 'search_form_format', $format ); ?>
             <div>
                 <input type="text" value="<?php echo get_search_query(); ?>" name="s_article" id="s" placeholder="<?php echo sprintf( esc_attr_x( 'Search %s &hellip;', 'placeholder', 'kb-support' ), $plural ); ?>" />
                 <input type="hidden" name="kbs_action" value="search_articles" />
-                <input type="submit" id="searchsubmit" value="<?php echo _x( 'Search', 'submit button', 'kb-support' ); ?>" />
+                <input type="submit" id="searchsubmit" value="<?php echo esc_attr_x( 'Search', 'submit button', 'kb-support' ); ?>" />
             </div>
         </form>
     

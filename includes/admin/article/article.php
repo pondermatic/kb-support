@@ -1,7 +1,7 @@
 <?php
 /**
  * Manage article posts.
- * 
+ *
  * @since		1.0
  * @package		KBS
  * @subpackage	Posts
@@ -10,23 +10,6 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) )
 	exit;
-
-/**
- * Remove block editor for article.
- *
- * @since	1.5
- * @param	bool	$block_editor	Whether or not to use block editor
- * @param	string	$post_type		Post type
- * @return	bool	True to use block editor, or false
- */
-function kbs_article_remove_block_editor( $block_editor, $post_type )	{
-	if ( 'article' == $post_type )	{
-		$block_editor = false;
-	}
-
-	return $block_editor;
-} // kbs_article_remove_block_editor
-add_filter( 'use_block_editor_for_post_type', 'kbs_article_remove_block_editor', 10, 2 );
 
 /**
  * Define the columns that should be displayed for the Article post lists screen
@@ -42,18 +25,18 @@ function kbs_set_article_post_columns( $columns ) {
 
 	$columns = array(
         'cb'               => '<input type="checkbox" />',
-		'title'            => __( 'Title', 'kb-support' ),
-		'date'             => __( 'Date', 'kb-support' ),
-		'article_category' => $category_labels['menu_name'],
-        'article_tag'      => $tag_labels['menu_name'],
-		'author'           => __( 'Author', 'kb-support' ),
-		'views'            => __( 'Views', 'kb-support' ),
-		'visibility'       => __( 'Visibility', 'kb-support' ),
-		'linked'           => sprintf( __( 'Linked %s', 'kb-support' ), kbs_get_ticket_label_plural() )
+		'title'            => esc_html__( 'Title', 'kb-support' ),
+		'date'             => esc_html__( 'Date', 'kb-support' ),
+		'article_category' => esc_html( $category_labels['menu_name'] ),
+        'article_tag'      => esc_html( $tag_labels['menu_name'] ),
+		'author'           => esc_html__( 'Author', 'kb-support' ),
+		'views'            => esc_html__( 'Views', 'kb-support' ),
+		'visibility'       => esc_html__( 'Visibility', 'kb-support' ),
+		'linked'           => sprintf( esc_html__( 'Linked %s', 'kb-support' ), kbs_get_ticket_label_plural() )
     );
-	
+
 	return apply_filters( 'kbs_article_post_columns', $columns );
-	
+
 } // kbs_set_article_post_columns
 add_filter( 'manage_article_posts_columns' , 'kbs_set_article_post_columns' );
 
@@ -66,7 +49,7 @@ add_filter( 'manage_article_posts_columns' , 'kbs_set_article_post_columns' );
  */
 function kbs_set_article_sortable_post_columns( $columns ) {
     $columns['views'] = 'views';
- 
+
     return $columns;
 } // kbs_set_article_sortable_post_columns
 add_filter( 'manage_edit-article_sortable_columns', 'kbs_set_article_sortable_post_columns' );
@@ -92,9 +75,10 @@ function kbs_set_articles_column_data( $column_name, $post_id ) {
 					if ( is_wp_error( $link ) )	{
 						return $link;
 					}
-					$links[] = '<a href="' . esc_url( $link ) . '" rel="tag">' . $term->name . '</a> ' . $restricted;
+					$links[] = '<a href="' . esc_url( $link ) . '" rel="tag">' . esc_html( $term->name ) . '</a> ' . $restricted;
 				}
-				echo implode( '<br />', $links );
+				// Outpout escaped above
+				echo implode( '<br />', $links ); //phpcs:ignore
 			} else	{
 				echo '&mdash;';
 			}
@@ -104,7 +88,7 @@ function kbs_set_articles_column_data( $column_name, $post_id ) {
 			$terms = get_the_term_list( $post_id, 'article_tag', '', '<br />' );
 
 			if ( ! empty( $terms ) )	{
-				echo $terms;
+				echo wp_kses_post( $terms );
 			} else	{
 				echo '&mdash;';
 			}
@@ -114,12 +98,12 @@ function kbs_set_articles_column_data( $column_name, $post_id ) {
 			$total   = kbs_get_article_view_count( $post_id );
 			$monthly = kbs_get_article_view_count( $post_id, false );
 
-			echo $total . ' / ' . $monthly;
+			echo (int)$total . ' / ' . (int)$monthly;
 			break;
 
 		case 'visibility':
 			if ( kbs_article_is_restricted( $post_id ) )	{
-				echo '<span class="padlock" title="' . __( 'This is a restricted article', 'kb-support' ) . '"></span>';
+				echo '<span class="padlock" title="' . esc_html__( 'This is a restricted article', 'kb-support' ) . '"></span>';
 			}
 			do_action( 'kbs_article_column_visibility', $post_id );
 			break;
@@ -133,22 +117,23 @@ function kbs_set_articles_column_data( $column_name, $post_id ) {
 				$linked_tickets = apply_filters( 'kbs_articles_post_column_linked', $linked_tickets, $post_id );
 
 				foreach( $linked_tickets as $ticket_id )	{
-					$ticket_ids[] = '<a href="' . kbs_get_ticket_url( $ticket_id, true ) . '">' . $ticket_id . '</a>';
+					$ticket_ids[] = '<a href="' . kbs_get_ticket_url( $ticket_id, true ) . '">' . (int)$ticket_id . '</a>';
 				}
 
 				if ( ! empty( $ticket_ids ) )	{
-					echo implode( ', ', $ticket_ids );
+					// Output escaped above
+					echo implode( ', ', $ticket_ids );//phpcs:ignore
 				}
 
 			} else	{
 				echo '&mdash;';
 			}
 			break;
-			
+
 		default:
-			$output = __( 'No callback found for post column', 'kb-support' );
+			$output = esc_html__( 'No callback found for post column', 'kb-support' );
 			$output = apply_filters( 'kbs_articles_column_data_' . $column_name, $output, $post_id );
-			echo $output;
+			echo wp_kses_post( $output );
 			break;
 	}
 
@@ -172,7 +157,7 @@ function kbs_add_article_row_actions( $actions, $post )	{
 		), admin_url( 'edit.php' ) );
 
 		$actions['reset_views'] = sprintf(
-			__( '<a href="%s">Reset Views</a>', 'kb-support' ),
+			wp_kses_post( __( '<a href="%s">Reset Views</a>', 'kb-support' ) ),
 			wp_nonce_url( $reset_url, 'reset_views', 'kbs-nonce' )
 		);
 	}
@@ -200,11 +185,11 @@ function kbs_add_article_filters() {
 			$category_labels = kbs_get_taxonomy_labels( 'article_category' );
 
 			echo "<select name='article_category' id='article_category' class='postform'>";
-				echo "<option value=''>" . sprintf( __( 'Show all %s', 'kb-support' ), strtolower( $category_labels['name'] ) ) . "</option>";
+				echo "<option value=''>" . sprintf( esc_html__( 'Show all %s', 'kb-support' ), esc_html( strtolower( $category_labels['name'] ) ) ) . "</option>";
 
 				foreach ( $terms as $term )	{
 					$selected = isset( $_GET['article_category'] ) && $_GET['article_category'] == $term->slug ? ' selected="selected"' : '';
-					echo '<option value="' . esc_attr( $term->slug ) . '"' . $selected . '>' . esc_html( $term->name ) .' (' . $term->count .')</option>';
+					echo '<option value="' . esc_attr( $term->slug ) . '"' . $selected . '>' . esc_html( $term->name ) .' (' . (int)$term->count .')</option>';
 				}
 
 			echo "</select>";
@@ -215,11 +200,11 @@ function kbs_add_article_filters() {
 			$tag_labels = kbs_get_taxonomy_labels( 'article_tag' );
 
 			echo "<select name='article_tag' id='article_tag' class='postform'>";
-				echo "<option value=''>" . sprintf( __( 'Show all %s', 'kb-support' ), strtolower( $tag_labels['name'] ) ) . "</option>";
+				echo "<option value=''>" . sprintf( esc_html__( 'Show all %s', 'kb-support' ), esc_html( strtolower( $tag_labels['name'] ) ) ) . "</option>";
 
 				foreach ( $terms as $term ) {
 					$selected = isset( $_GET['article_tag'] ) && $_GET['article_tag'] == $term->slug ? ' selected="selected"' : '';
-					echo '<option value="' . esc_attr( $term->slug ) . '"' . $selected . '>' . esc_html( $term->name ) .' (' . $term->count .')</option>';
+					echo '<option value="' . esc_attr( $term->slug ) . '"' . $selected . '>' . esc_html( $term->name ) .' (' . (int)$term->count .')</option>';
 				}
 
 			echo "</select>";
@@ -277,7 +262,7 @@ add_action( 'pre_get_posts', 'kbs_article_posts_orderby_by_custom_column' );
  *
  * @return	void
  */
-function kbs_article_post_save( $post_id, $post, $update )	{	
+function kbs_article_post_save( $post_id, $post, $update )	{
 
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )	{
 		return;
@@ -320,9 +305,9 @@ function kbs_article_post_save( $post_id, $post, $update )	{
 		if ( ! empty( $_POST[ $field ] ) ) {
 
 			if ( is_string( $_POST[ $field ] ) )	{
-				$posted_value = sanitize_text_field( $_POST[ $field ] );
+				$posted_value = sanitize_text_field( wp_unslash( $_POST[ $field ] ) );
 			} elseif ( is_int( $_POST[ $field ] ) )	{
-				$posted_value = $_POST[ $field ];
+				$posted_value = sanitize_text_field( wp_unslash( $_POST[ $field ] ) );
 			} elseif( is_array( $_POST[ $field ] ) )	{
 				$posted_value = array_map( 'absint', $_POST[ $field ] );
 			}

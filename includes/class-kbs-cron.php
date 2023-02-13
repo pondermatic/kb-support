@@ -34,7 +34,7 @@ class KBS_Cron	{
 		// Adds once weekly to the existing schedules.
 		$schedules['weekly'] = array(
 			'interval' => WEEK_IN_SECONDS,
-			'display'  => __( 'Once Weekly', 'kb-support' )
+			'display'  => esc_html__( 'Once Weekly', 'kb-support' )
 		);
 
 		return $schedules;

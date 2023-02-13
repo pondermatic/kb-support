@@ -70,8 +70,8 @@ class KBS_Customer_Table extends WP_List_Table {
 
 		// Set parent defaults
 		parent::__construct( array(
-			'singular' => __( 'Customer', 'kb-support' ),
-			'plural'   => __( 'Customers', 'kb-support' ),
+			'singular' => esc_html__( 'Customer', 'kb-support' ),
+			'plural'   => esc_html__( 'Customers', 'kb-support' ),
 			'ajax'     => false,
 		) );
 	} // __construct
@@ -90,16 +90,16 @@ class KBS_Customer_Table extends WP_List_Table {
 		$input_id = $input_id . '-search-input';
 
 		if ( ! empty( $_REQUEST['orderby'] ) ) : ?>
-			<input type="hidden" name="orderby" value="<?php echo esc_attr( $_REQUEST['orderby'] ); ?>" />
+			<input type="hidden" name="orderby" value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['orderby'] ) ) ); ?>" />
         <?php endif;
 
 		if ( ! empty( $_REQUEST['order'] ) ) : ?>
-			<input type="hidden" name="order" value="<?php echo esc_attr( $_REQUEST['order'] ); ?>" />
+			<input type="hidden" name="order" value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['order'] ) ) ); ?>" />
 		<?php endif; ?>
 
 		<p class="search-box">
-			<label class="screen-reader-text" for="<?php echo $input_id ?>"><?php echo $text; ?>:</label>
-			<input type="search" id="<?php echo $input_id ?>" name="s" value="<?php _admin_search_query(); ?>" />
+			<label class="screen-reader-text" for="<?php echo absint( $input_id ); ?>"><?php echo esc_html( $text ); ?>:</label>
+			<input type="search" id="<?php echo absint( $input_id ) ?>" name="s" value="<?php _admin_search_query(); ?>" />
 			<?php submit_button( $text, 'button', false, false, array('ID' => 'search-submit') ); ?>
 		</p>
 		<?php
@@ -133,7 +133,7 @@ class KBS_Customer_Table extends WP_List_Table {
 
 			case 'num_tickets' :
 				$value = '<a href="' .
-					admin_url( '/edit.php?post_type=kbs_ticket&customer=' . urlencode( $item['id'] )
+					admin_url( '/edit.php?post_type=kbs_ticket&customer=' . urlencode( absint( $item['id'] ) )
 				) . '">' . esc_html( $item['num_tickets'] ) . '</a>';
 				break;
 
@@ -151,17 +151,17 @@ class KBS_Customer_Table extends WP_List_Table {
 
 	public function column_name( $item ) {
 		$name        = '#' . $item['id'] . ' ';
-		$name       .= ! empty( $item['name'] ) ? $item['name'] : '<em>' . __( 'Unnamed Customer','kb-support' ) . '</em>';
+		$name       .= ! empty( $item['name'] ) ? $item['name'] : '<em>' . esc_html__( 'Unnamed Customer','kb-support' ) . '</em>';
 		$user        = ! empty( $item['user_id'] ) ? $item['user_id'] : $item['email'];
 		$view_url    = admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-customers&view=userdata&id=' . $item['id'] );
 		$actions     = array(
-			'view'   => '<a href="' . $view_url . '">' . __( 'View', 'kb-support' ) . '</a>',
-			'delete' => '<a href="' . admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-customers&view=delete&id=' . $item['id'] ) . '">' . __( 'Delete', 'kb-support' ) . '</a>'
+			'view'   => '<a href="' . esc_url( $view_url ) . '">' . esc_html__( 'View', 'kb-support' ) . '</a>',
+			'delete' => '<a href="' . admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-customers&view=delete&id=' . absint( $item['id'] ) ) . '">' . esc_html__( 'Delete', 'kb-support' ) . '</a>'
 		);
 
 		$customer = new KBS_Customer( $item['id'] );
 
-		return '<a href="' . esc_url( $view_url ) . '">' . $name . '</a>' . $this->row_actions( $actions );
+		return '<a href="' . esc_url( $view_url ) . '">' . esc_html( $name ) . '</a>' . $this->row_actions( $actions );
 	} // column_name
 
 	/**
@@ -173,11 +173,11 @@ class KBS_Customer_Table extends WP_List_Table {
 	 */
 	public function get_columns() {
 		$columns = array(
-			'name'          => __( 'Name', 'kb-support' ),
-			'company'       => __( 'Company', 'kb-support' ),
-			'email'         => __( 'Primary Email', 'kb-support' ),
+			'name'          => esc_html__( 'Name', 'kb-support' ),
+			'company'       => esc_html__( 'Company', 'kb-support' ),
+			'email'         => esc_html__( 'Primary Email', 'kb-support' ),
 			'num_tickets'   => kbs_get_ticket_label_plural(),
-			'date_created'  => __( 'Date Created', 'kb-support' ),
+			'date_created'  => esc_html__( 'Date Created', 'kb-support' ),
 		);
 
 		return apply_filters( 'kbs_report_customer_columns', $columns );
@@ -229,7 +229,7 @@ class KBS_Customer_Table extends WP_List_Table {
 	 * @return	mixed	String if search is present, false otherwise
 	 */
 	public function get_search() {
-		return ! empty( $_GET['s'] ) ? urldecode( trim( $_GET['s'] ) ) : false;
+		return ! empty( $_GET['s'] ) ? urldecode( trim( sanitize_text_field( wp_unslash( $_GET['s'] ) ) ) ) : false;
 	} // get_search
 
 	/**
@@ -247,8 +247,8 @@ class KBS_Customer_Table extends WP_List_Table {
 		$paged      = $this->get_paged();
 		$offset     = $this->per_page * ( $paged - 1 );
 		$search     = $this->get_search();
-		$order      = isset( $_GET['order'] )      ? sanitize_text_field( $_GET['order'] )   : 'DESC';
-		$orderby    = isset( $_GET['orderby'] )    ? sanitize_text_field( $_GET['orderby'] ) : 'id';
+		$order      = isset( $_GET['order'] )      ? sanitize_text_field( wp_unslash( $_GET['order'] ) )   : 'DESC';
+		$orderby    = isset( $_GET['orderby'] )    ? sanitize_text_field( wp_unslash( $_GET['orderby'] ) ) : 'id';
 		$company_id = isset( $_GET['company_id'] ) ? absint( $_GET['company_id'] )           : 0;
 
 		$args    = array(
@@ -282,7 +282,7 @@ class KBS_Customer_Table extends WP_List_Table {
 					'id'            => $customer->id,
 					'user_id'       => $user_id,
 					'name'          => $customer->name,
-					'company'       => $company ? '<a href="' . get_edit_post_link( $customer->company_id ) . '">' . $company . '</a>' : '&ndash;',
+					'company'       => $company ? '<a href="' . get_edit_post_link( $customer->company_id ) . '">' . esc_html( $company ) . '</a>' : '&ndash;',
 					'email'         => $customer->email,
 					'num_tickets'   => kbs_get_customer_ticket_count( $customer->id ),
 					'date_created'  => $customer->date_created,

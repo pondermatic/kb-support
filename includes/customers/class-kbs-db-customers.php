@@ -291,12 +291,15 @@ class KBS_DB_Customers extends KBS_DB  {
 	} // decrease_stats
 
 	/**
-	 * Updates the email address of a customer record when the email on a user is updated
+	 * Updates the email address of a customer record when the email on a user is updated.
+	 *
+	 * @param	int	$user_id	User ID.
+	 * @return	void|false	Void if successful, false if customer not found.
 	 *
 	 * @access	public
 	 * @since	1.0
 	*/
-	public function update_customer_email_on_user_update( $user_id = 0, $old_user_data ) {
+	public function update_customer_email_on_user_update( $user_id, $old_user_data ) {
         /**
          * Fixes a bug whereby when get_password_reset_key() is called
          * it results in the `profile_updated` hook being used.
@@ -569,9 +572,6 @@ class KBS_DB_Customers extends KBS_DB  {
 
 		$customers = wp_cache_get( $cache_key, 'customers' );
 
-		$args['orderby'] = esc_sql( $args['orderby'] );
-		$args['order']   = esc_sql( $args['order'] );
-
 		$customers = false;
 
 		if( $customers === false ) {
@@ -582,9 +582,11 @@ class KBS_DB_Customers extends KBS_DB  {
                 $join
                 $where
                 GROUP BY $this->primary_key
-                ORDER BY {$args['orderby']} {$args['order']}
+                ORDER BY %1s %2s
                 LIMIT %d,%d;
                 ",
+				esc_sql( $args['orderby'] ),
+				esc_sql( $args['order'] ),
                 absint( $args['offset'] ),
                 absint( $args['number'] )
             );

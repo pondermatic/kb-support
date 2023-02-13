@@ -40,12 +40,12 @@ class KBS_Batch_Export_Customers extends KBS_Batch_Export {
 	public function csv_cols() {
 
 		$cols = array(
-			'id'      => __( 'ID', 'kb-support' ),
-			'name'    => __( 'Name', 'kb-support' ),
-			'email'   => __( 'Email', 'kb-support' ),
-			'company' => __( 'Company', 'kb-support' ),
-			'tickets' => sprintf( __( 'Number of %s', 'kb-support' ), kbs_get_ticket_label_plural() ),
-			'notes'   => __( 'Notes', 'kb-support' )
+			'id'      => esc_html__( 'ID', 'kb-support' ),
+			'name'    => esc_html__( 'Name', 'kb-support' ),
+			'email'   => esc_html__( 'Email', 'kb-support' ),
+			'company' => esc_html__( 'Company', 'kb-support' ),
+			'tickets' => sprintf( esc_html__( 'Number of %s', 'kb-support' ), kbs_get_ticket_label_plural() ),
+			'notes'   => esc_html__( 'Notes', 'kb-support' )
 		);
 
 		return $cols;

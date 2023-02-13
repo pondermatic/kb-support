@@ -99,7 +99,11 @@ function kbs_enforced_form_ssl_redirect_handler() {
 		return;
 	}
 
-	$uri = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+	if( !isset( $_SERVER['HTTP_HOST'] ) || !isset(  $_SERVER['REQUEST_URI'] ) ){
+		return;
+	}
+	
+	$uri = 'https://' . sanitize_url( wp_unslash( $_SERVER['HTTP_HOST'] ) ) . sanitize_url( wp_unslash( $_SERVER['REQUEST_URI'] ) );
 
 	wp_safe_redirect( $uri );
 	exit;
@@ -213,7 +217,7 @@ function kbs_form_default_fields()	{
 			'type'            => 'text',
 			'mapping'         => 'customer_first',
 			'required'        => true,
-			'label'           => __( 'First Name', 'kb-support' ),
+			'label'           => esc_html__( 'First Name', 'kb-support' ),
 			'show_logged_in'  => false,
 			'kb_search'       => false,
 			'menu_order'      => '0'
@@ -222,7 +226,7 @@ function kbs_form_default_fields()	{
 			'type'            => 'text',
 			'mapping'         => 'customer_last',
 			'required'        => true,
-			'label'           => __( 'Last Name', 'kb-support' ),
+			'label'           => esc_html__( 'Last Name', 'kb-support' ),
 			'show_logged_in'  => false,
 			'kb_search'       => false,
 			'menu_order'      => '1'
@@ -231,7 +235,7 @@ function kbs_form_default_fields()	{
 			'type'            => 'email',
 			'mapping'         => 'customer_email',
 			'required'        => true,
-			'label'           => __( 'Email Address', 'kb-support' ),
+			'label'           => esc_html__( 'Email Address', 'kb-support' ),
 			'show_logged_in'  => false,
 			'kb_search'       => false,
 			'menu_order'      => '2'
@@ -240,7 +244,7 @@ function kbs_form_default_fields()	{
 			'type'            => 'text',
 			'mapping'         => 'post_title',
 			'required'        => true,
-			'label'           => __( 'Subject', 'kb-support' ),
+			'label'           => esc_html__( 'Subject', 'kb-support' ),
 			'show_logged_in'  => true,
 			'kb_search'       => true,
 			'menu_order'      => '3'
@@ -249,7 +253,7 @@ function kbs_form_default_fields()	{
 			'type'            => 'rich_editor',
 			'mapping'         => 'post_content',
 			'required'        => true,
-			'label'           => __( 'Description', 'kb-support' ),
+			'label'           => esc_html__( 'Description', 'kb-support' ),
 			'show_logged_in'  => true,
 			'kb_search'       => false,
 			'menu_order'      => '4'
@@ -481,22 +485,22 @@ function kbs_get_field_settings( $field_id )	{
 function kbs_get_field_types()	{
 	
 	$field_types = array(
-		'checkbox'                  => __( 'Checkbox', 'kb-support' ),
-		'checkbox_list'             => __( 'Checkbox List', 'kb-support' ),
-		'date_field'                => __( 'Date Field', 'kb-support' ),
-		'department'                => __( 'Departments List', 'kb-support' ),
-		'email'                     => __( 'Email Field', 'kb-support' ),
-		'file_upload'               => __( 'File Upload', 'kb-support' ),
-		'hidden'                    => __( 'Hidden Field', 'kb-support' ),
-		'number'                    => __( 'Number Field', 'kb-support' ),
-		'radio'                     => __( 'Radio Buttons', 'kb-support' ),
-		'recaptcha'                 => __( 'Google reCAPTCHA', 'kb-support' ),
-		'rich_editor'               => __( 'Rich Text Editor', 'kb-support' ),
-		'select'                    => __( 'Select List', 'kb-support' ),
-		'text'                      => __( 'Text Field', 'kb-support' ),
-		'textarea'                  => __( 'Textarea', 'kb-support' ),
-		'ticket_category_dropdown'  => sprintf( __( '%s Categories', 'kb-support' ), kbs_get_ticket_label_singular() ),
-		'url'                       => __( 'URL Field', 'kb-support' ),		
+		'checkbox'                  => esc_html__( 'Checkbox', 'kb-support' ),
+		'checkbox_list'             => esc_html__( 'Checkbox List', 'kb-support' ),
+		'date_field'                => esc_html__( 'Date Field', 'kb-support' ),
+		'department'                => esc_html__( 'Departments List', 'kb-support' ),
+		'email'                     => esc_html__( 'Email Field', 'kb-support' ),
+		'file_upload'               => esc_html__( 'File Upload', 'kb-support' ),
+		'hidden'                    => esc_html__( 'Hidden Field', 'kb-support' ),
+		'number'                    => esc_html__( 'Number Field', 'kb-support' ),
+		'radio'                     => esc_html__( 'Radio Buttons', 'kb-support' ),
+		'recaptcha'                 => esc_html__( 'Google reCAPTCHA', 'kb-support' ),
+		'rich_editor'               => esc_html__( 'Rich Text Editor', 'kb-support' ),
+		'select'                    => esc_html__( 'Select List', 'kb-support' ),
+		'text'                      => esc_html__( 'Text Field', 'kb-support' ),
+		'textarea'                  => esc_html__( 'Textarea', 'kb-support' ),
+		'ticket_category_dropdown'  => sprintf( esc_html__( '%s Categories', 'kb-support' ), kbs_get_ticket_label_singular() ),
+		'url'                       => esc_html__( 'URL Field', 'kb-support' ),		
 	);
 
 	if ( ! kbs_departments_enabled() )	{
@@ -535,15 +539,15 @@ function kbs_get_field_types()	{
 function kbs_get_mappings( $mapping = null )	{
 
 	$mappings = array(
-		'customer_first'   => __( 'Customer First Name', 'kb-support' ),
-		'customer_last'    => __( 'Customer Last Name', 'kb-support' ),
-		'customer_email'   => __( 'Customer Email', 'kb-support' ),
-		'customer_phone1'  => __( 'Customer Primary Phone', 'kb-support' ),
-		'customer_phone2'  => __( 'Customer Additional Phone', 'kb-support' ),
-		'customer_website' => __( 'Customer Website', 'kb-support' ),
-		'department'       => __( 'Department', 'kb-support' ),
-		'post_content'     => __( 'Ticket Content', 'kb-support' ),
-		'post_title'       => __( 'Ticket Title', 'kb-support' )
+		'customer_first'   => esc_html__( 'Customer First Name', 'kb-support' ),
+		'customer_last'    => esc_html__( 'Customer Last Name', 'kb-support' ),
+		'customer_email'   => esc_html__( 'Customer Email', 'kb-support' ),
+		'customer_phone1'  => esc_html__( 'Customer Primary Phone', 'kb-support' ),
+		'customer_phone2'  => esc_html__( 'Customer Additional Phone', 'kb-support' ),
+		'customer_website' => esc_html__( 'Customer Website', 'kb-support' ),
+		'department'       => esc_html__( 'Department', 'kb-support' ),
+		'post_content'     => esc_html__( 'Ticket Content', 'kb-support' ),
+		'post_title'       => esc_html__( 'Ticket Title', 'kb-support' )
 	);
 
 	if ( ! kbs_departments_enabled() )	{
@@ -560,7 +564,7 @@ function kbs_get_mappings( $mapping = null )	{
 
 	asort( $mappings );
 
-	$mappings = array( '' => __( 'None', 'kb-support' ) ) + $mappings;
+	$mappings = array( '' => esc_html__( 'None', 'kb-support' ) ) + $mappings;
 
 	if ( isset( $mapping ) && array_key_exists( $mapping, $mappings ) )	{
 		return $mappings[ $mapping ];
@@ -627,37 +631,37 @@ function kbs_display_field_setting_icons( $field_id )	{
 	
 	if ( $settings )	{
 		if ( ! empty( $settings['hide_label'] ) )	{
-			$output[] = '<i title="' . __( 'Label Hidden', 'kb-support' ) . '" class="fas fa-tag" aria-hidden="true"></i>';
+			$output[] = '<i title="' . esc_attr__( 'Label Hidden', 'kb-support' ) . '" class="fas fa-tag" aria-hidden="true"></i>';
 		} else	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
 
 		if ( ! empty( $settings['required'] ) )	{
-			$output[] = '<i title="' . __( 'Required Field', 'kb-support' ) . '" class="fas fa-asterisk" aria-hidden="true"></i>';
+			$output[] = '<i title="' . esc_attr__( 'Required Field', 'kb-support' ) . '" class="fas fa-asterisk" aria-hidden="true"></i>';
 		} else	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
 		
 		if ( ! empty( $settings['placeholder'] ) )	{
-			$output[] = '<i title="' . sprintf( __( 'Placeholder: %s', 'kb-support' ), stripslashes( $settings['placeholder'] ) ) . '" class="fas fa-info-circle" aria-hidden="true"></i>';
+			$output[] = '<i title="' . sprintf( esc_attr__( 'Placeholder: %s', 'kb-support' ), esc_attr( stripslashes( $settings['placeholder'] ) ) ) . '" class="fas fa-info-circle" aria-hidden="true"></i>';
 		} else	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
 		
 		if ( ! empty( $settings['mapping'] ) && 'post_category' != $settings['mapping'] )	{
-			$output[] = '<i title="' . sprintf( __( 'Maps to %s', 'kb-support' ), stripslashes( $mappings[ $settings['mapping'] ] ) ) . '" class="fas fa-map-marker-alt" aria-hidden="true"></i>';
+			$output[] = '<i title="' . sprintf( esc_attr__( 'Maps to %s', 'kb-support' ), esc_attr( stripslashes( $mappings[ $settings['mapping'] ] ) ) ) . '" class="fas fa-map-marker-alt" aria-hidden="true"></i>';
 		} else	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
 
         if ( ! empty( $settings['chosen'] ) )	{
-			$output[] = '<i title="' . __( 'Searchable', 'kb-support' ) . '" class="fas fa-search" aria-hidden="true"></i>';
+			$output[] = '<i title="' . esc_attr__( 'Searchable', 'kb-support' ) . '" class="fas fa-search" aria-hidden="true"></i>';
 		} else	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
 
 		if ( 'hidden' == $settings['type'] )	{
-			$output[] = '<i title="' . __( 'Hidden', 'kb-support' ) . '" class="far fa-eye-slash" aria-hidden="true"></i>';
+			$output[] = '<i title="' . esc_attr__( 'Hidden', 'kb-support' ) . '" class="far fa-eye-slash" aria-hidden="true"></i>';
 		} else	{
 			$output[] = '&nbsp;&nbsp;&nbsp;';
 		}
@@ -666,7 +670,7 @@ function kbs_display_field_setting_icons( $field_id )	{
 
 	$output = apply_filters( 'kbs_field_setting_icons', $output, $field_id, $settings );
 
-	return implode( "\t", $output );
+	return wp_kses_post( implode( "\t", $output ) );
 
 } // kbs_display_field_setting_icons
 
@@ -682,7 +686,7 @@ function kbs_display_form( $form_id = 0 ) {
 	global $kbs_form;
 
 	if ( empty( $form_id ) ) {
-		return __( 'Submission form not found', 'kb-support' );
+		return esc_html__( 'Submission form not found', 'kb-support' );
 	}
 
 	if ( has_action( 'kbs_display_form' ) )	{
@@ -692,7 +696,7 @@ function kbs_display_form( $form_id = 0 ) {
 		$kbs_form = new KBS_Form( $form_id );
 	
 		if ( ! $kbs_form ) {
-			return __( 'Submission form not found', 'kb-support' );
+			return esc_html__( 'Submission form not found', 'kb-support' );
 		}
 	
 		ob_start();
@@ -715,18 +719,18 @@ function kbs_display_form( $form_id = 0 ) {
 function kbs_form_submission_errors( $field_id, $error )	{
 
 	$errors = array(
-		'process_error'    => __( 'An internal error has occurred, please try again or contact support.', 'kb-support' ),
-		'required'         => get_the_title( $field_id ) . __( ' is a required field.', 'kb-support' ),
-		'invalid_email'    => get_the_title( $field_id ) . __( ' requires a valid email address.', 'kb-support' ),
-		'agree_to_policy'  => __( 'You must acknowledge and accept our privacy policy', 'kb-support' ),
-		'agree_to_terms'   => __( 'You must agree to the terms and conditions', 'kb-support' ),
-		'google_recaptcha' => get_the_title( $field_id ) . __( ' validation failed', 'kb-support' )
+		'process_error'    => esc_html__( 'An internal error has occurred, please try again or contact support.', 'kb-support' ),
+		'required'         => get_the_title( $field_id ) . esc_html__( ' is a required field.', 'kb-support' ),
+		'invalid_email'    => get_the_title( $field_id ) . esc_html__( ' requires a valid email address.', 'kb-support' ),
+		'agree_to_policy'  => esc_html__( 'You must acknowledge and accept our privacy policy', 'kb-support' ),
+		'agree_to_terms'   => esc_html__( 'You must agree to the terms and conditions', 'kb-support' ),
+		'google_recaptcha' => get_the_title( $field_id ) . esc_html__( ' validation failed', 'kb-support' )
 	);
 
 	$errors = apply_filters( 'kbs_form_submission_errors', $errors, $field_id );
 
 	if ( ! array_key_exists( $error, $errors ) )	{
-		return get_the_title( $field_id ) . __( ' contains an error.', 'kb-support' );
+		return get_the_title( $field_id ) . esc_html__( ' contains an error.', 'kb-support' );
 	}
 
 	return $errors[ $error ];
@@ -840,8 +844,17 @@ function kbs_display_form_text_field( $field, $settings )	{
 	);
 
 	$output = apply_filters( 'kbs_display_form_' . $settings['type'] . '_field', $output, $field, $settings );
-
-	echo $output;
+	$allowed = array(
+		'input' => array(
+			'type' 		  => array(),
+			'name' 		  => array(),
+			'id'    	  => array(),
+			'class' 	  => array(),
+			'value' 	  => array(),
+			'placeholder' => array(), 
+		),
+	);
+	echo wp_kses( $output, $allowed );
 
 } // kbs_display_form_text_field
 add_action( 'kbs_form_display_text_field', 'kbs_display_form_text_field', 10, 2 );
@@ -893,7 +906,15 @@ function kbs_display_form_textarea_field( $field, $settings )	{
 
 	$output = apply_filters( 'kbs_display_form_textarea_field', $output, $field, $settings );
 
-	echo $output;
+	$allowed = array(
+		'textarea' => array(
+			'placeholder'  => array(),
+			'name'  => array(),
+			'id'    => array(),
+			'class' => array()
+		),
+	);
+	echo wp_kses( $output, $allowed );
 
 } // kbs_display_form_textarea_field
 add_action( 'kbs_form_display_textarea_field', 'kbs_display_form_textarea_field', 10, 2 );
@@ -968,8 +989,17 @@ function kbs_display_form_select_field( $field, $settings )	{
 	$output .= '</select>';
 
 	$output = apply_filters( 'kbs_display_form_select_field', $output, $field, $settings );
-
-	echo $output;
+	$allowed = array(
+		'select' => array(
+			'name'  => array(),
+			'id'    => array(),
+			'class' => array()
+		),
+		'option' => array(
+			'value'  => array()
+		),
+	);
+	echo wp_kses( $output, $allowed );
 
 } // kbs_display_form_select_field
 add_action( 'kbs_form_display_select_field', 'kbs_display_form_select_field', 10, 2 );
@@ -1003,7 +1033,7 @@ function kbs_display_form_department_field( $field, $settings )	{
 
 	add_filter( 'kbs_form_select_field_options', 'kbs_get_department_options' );
 	if ( ! empty( $_GET['department'] ) )	{
-		$settings['selected'] = $_GET['department'];
+		$settings['selected'] = sanitize_text_field( wp_unslash( $_GET['department'] ) );
 	}
 	kbs_display_form_select_field( $field, $settings );
 	remove_filter('kbs_form_select_field_options', 'kbs_get_department_options' );
@@ -1032,7 +1062,16 @@ function kbs_display_form_checkbox_field( $field, $settings )	{
 
 	$output = apply_filters( 'kbs_display_form_checkbox_field', $output, $field, $settings );
 
-	echo $output;
+	$allowed = array(
+		'input' => array(
+			'type'  => array(),
+			'name'  => array(),
+			'id'    => array(),
+			'class' => array(),
+			'value' => array()
+		),
+	);
+	echo wp_kses( $output, $allowed );
 
 } // kbs_display_form_textarea_field
 add_action( 'kbs_form_display_checkbox_field', 'kbs_display_form_checkbox_field', 10, 2 );
@@ -1072,20 +1111,20 @@ function kbs_render_agree_to_privacy_policy_field()	{
 	}
 
 	if ( ! empty( $args['input_class'] ) )	{
-		$input_class = ' class="' . sanitize_html_class( $args['input_class'] ) . '"';
+		$input_class = sanitize_html_class( $args['input_class'] );
 	}
 
 	ob_start(); ?>
 
-	<p><input type="checkbox" name="kbs_agree_privacy_policy" id="kbs-agree-privacy-policy"<?php echo $input_class; ?> value="1" /> <a href="#TB_inline?width=600&height=550&inlineId=kbs-ticket-privacy-policy" title="<?php echo esc_html( get_the_title( $privacy_page ) ); ?>" class="thickbox"<?php echo $label_class; ?>><?php esc_attr_e( $label, 'kb-support' ); ?></a></p>
+	<p><input type="checkbox" name="kbs_agree_privacy_policy" id="kbs-agree-privacy-policy" class="<?php echo esc_attr( $input_class ); ?>" value="1" /> <a href="#TB_inline?width=600&height=550&inlineId=kbs-ticket-privacy-policy" title="<?php echo esc_attr( get_the_title( $privacy_page ) ); ?>" class="thickbox<?php echo esc_attr( $label_class ); ?>"><?php esc_html_e( $label, 'kb-support' ); ?></a></p>
 
 	<div id="kbs-ticket-privacy-policy" class="kbs_hidden">
 		<?php do_action( 'kbs_before_privacy_policy' ); ?>
 
         <?php if ( function_exists( 'apply_shortcodes' ) ) : ?>
-            <?php echo wpautop( apply_shortcodes( stripslashes( $privacy_text ) ) ); ?>
+            <?php echo wp_kses_post( wpautop( apply_shortcodes( stripslashes( $privacy_text ) ) ) ); ?>
         <?php else : ?>
-            <?php echo wpautop( do_shortcode( stripslashes( $privacy_text ) ) ); ?>
+            <?php echo wp_kses_post( wpautop( do_shortcode( stripslashes( $privacy_text ) ) ) ); ?>
         <?php endif; ?>
 
 		<?php do_action( 'kbs_after_privacy_policy' ); ?>
@@ -1112,7 +1151,7 @@ function kbs_render_agree_to_terms_field()	{
 	$label          = kbs_get_option( 'agree_terms_label', false );
     $description    = kbs_get_option( 'agree_terms_description', false );
 	$terms_heading  = kbs_get_option( 'agree_terms_heading', sprintf(
-		__( 'Terms and Conditions for Support %s', 'kb-support' ), kbs_get_ticket_label_plural()
+		esc_html__( 'Terms and Conditions for Support %s', 'kb-support' ), kbs_get_ticket_label_plural()
 	) );
 
 	if ( ! $agree_to_terms || ! $agree_text || ! $label )	{
@@ -1132,16 +1171,16 @@ function kbs_render_agree_to_terms_field()	{
 	}
 
 	if ( ! empty( $args['input_class'] ) )	{
-		$input_class = ' class="' . sanitize_html_class( $args['input_class'] ) . '"';
+		$input_class = sanitize_html_class( $args['input_class'] );
 	}
 
 	ob_start(); ?>
 
-	<p><input type="checkbox" name="kbs_agree_terms" id="kbs-agree-terms"<?php echo $input_class; ?> value="1" /> <a href="#TB_inline?width=600&height=550&inlineId=kbs-ticket-terms-conditions" title="<?php esc_attr_e( $terms_heading, 'kb-support' ); ?>" class="thickbox"<?php echo $label_class; ?>><?php esc_attr_e( $label, 'kb-support' ); ?></a></p>
+	<p><input type="checkbox" name="kbs_agree_terms" id="kbs-agree-terms" class="<?php echo esc_attr( $input_class ); ?>" value="1" /> <a href="#TB_inline?width=600&height=550&inlineId=kbs-ticket-terms-conditions" title="<?php esc_attr_e( $terms_heading, 'kb-support' ); ?>" class="thickbox<?php echo esc_attr($label_class); ?>"><?php esc_html_e( $label, 'kb-support' ); ?></a></p>
 
 	<div id="kbs-ticket-terms-conditions" class="kbs_hidden">
 		<?php do_action( 'kbs_before_terms' ); ?>
-		<?php echo wpautop( stripslashes( $agree_text ) ); ?>
+		<?php echo wp_kses_post( wpautop( stripslashes( $agree_text ) ) ); ?>
 		<?php do_action( 'kbs_after_terms' ); ?>
     </div>
 
@@ -1183,8 +1222,18 @@ function kbs_display_form_checkbox_list_field( $field, $settings )	{
 	}
 
 	$output = apply_filters( 'kbs_display_form_checkbox_field', $output, $field, $settings );
+	$allowed = array(
+		'input' => array(
+			'type'  => array(),
+			'name'  => array(),
+			'id'    => array(),
+			'class' => array(),
+			'value' => array()
+		),
+		'br' => array(),
+	);
 
-	echo implode( '<br />', $output );
+	echo wp_kses( implode( '<br />', $output ), $allowed );
 
 } // kbs_display_form_checkbox_list_field
 add_action( 'kbs_form_display_checkbox_list_field', 'kbs_display_form_checkbox_list_field', 10, 2 );
@@ -1199,7 +1248,7 @@ add_action( 'kbs_form_display_checkbox_list_field', 'kbs_display_form_checkbox_l
  */
 function kbs_display_form_radio_field( $field, $settings )	{
 
-	$class   = ! empty( $settings['input_class'] ) ? ' class="' . esc_attr( $settings['input_class'] ) . '"' : '';
+	$class   = ! empty( $settings['input_class'] ) ? ' class="' . esc_attr( $settings['input_class'] ) . '"' : ''; 
 	$options = $settings['select_options'];
 
 	if ( empty ( $options ) )	{
@@ -1218,8 +1267,19 @@ function kbs_display_form_radio_field( $field, $settings )	{
 	}
 
 	$output = apply_filters( 'kbs_display_form_radio_field', $output, $field, $settings );
+	
+	$allowed = array(
+		'input' => array(
+			'type'  => array(),
+			'name'  => array(),
+			'id'    => array(),
+			'class' => array(),
+			'value' => array()
+		),
+		'br'  => array(),
+	);
 
-	echo implode( '<br />', $output );
+	echo wp_kses( implode( '<br />', $output ), $allowed );
 
 } // kbs_display_form_radio_field
 add_action( 'kbs_form_display_radio_field', 'kbs_display_form_radio_field', 10, 2 );
@@ -1269,8 +1329,28 @@ function kbs_display_form_recaptcha_field( $field, $settings )	{
     ) . "\n";
 
     $output = apply_filters( 'kbs_display_form_recaptcha_field', $output, $field, $settings );
+	$allowed = array(
+		'input' => array(
+			'type'  => array(),
+			'name'  => array(),
+			'id'    => array(),
+			'class' => array(),
+			'value' => array()
+		),
+		'div' => array(
+			'id'    => array(),
+			'class' => array(),
+			'value' => array(),
+			'data-sitekey' => array(),
+			'data-theme'   => array(),
+			'data-type'    => array(),
+			'data-size'    => array(),
+		),
+		'br'  => array(),
+	);
 
-    echo $output;
+	echo wp_kses( $output, $allowed );
+
 } // kbs_display_form_recaptcha_field
 add_action( 'kbs_form_display_recaptcha_field', 'kbs_display_form_recaptcha_field', 10, 2 );
 
@@ -1303,8 +1383,19 @@ function kbs_display_form_file_upload_field( $field, $settings )	{
 	}
 
 	$output = apply_filters( 'kbs_display_form_file_upload_field', $output, $field, $settings );
+	$allowed = array(
+		'input' => array(
+			'type'  => array(),
+			'name'  => array(),
+			'id'    => array(),
+			'class' => array(),
+			'value' => array(),
+			'placeholder' => array(),
+		),
+		'br'  => array(),
+	);
 
-	echo $output;
+	echo wp_kses( $output, $allowed );
 
 } // kbs_display_form_file_upload_field
 add_action( 'kbs_form_display_file_upload_field', 'kbs_display_form_file_upload_field', 10, 2 );
@@ -1318,27 +1409,16 @@ add_action( 'kbs_form_display_file_upload_field', 'kbs_display_form_file_upload_
  */
 function kbs_validate_recaptcha( $response )	{
     $version   = kbs_get_recaptcha_version();
-	$post_data = http_build_query( array(
-        'secret'   => kbs_get_option( 'recaptcha_secret' ),
-        'response' => $response,
-        'remoteip' => $_SERVER['REMOTE_ADDR']
-    ) );
 
-    $options = array( 'http' => array(
-        'method'  => 'POST',
-        'header'  => 'Content-type: application/x-www-form-urlencoded',
-        'content' => $post_data
-    ) );
+	$response = wp_remote_get("https://www.google.com/recaptcha/api/siteverify?secret=". kbs_get_option( 'recaptcha_secret' ) ."&response=". $response );
+	$result = json_decode( $response["body"], true );
 
-    $context  = stream_context_create( $options );
-    $response = file_get_contents( 'https://www.google.com/recaptcha/api/siteverify', false, $context );
-    $result   = json_decode( $response );
 
-    if ( ! empty( $result ) && true == $result->success )	{
-        $return = $result->success;
+    if ( ! empty( $result ) && true == $result['success'] )	{
+        $return = $result['success'] ;
 
         if ( 'v3' === $version )    {
-            $return = $result->action == 'submit_kbs_form' && $result->score >= 0.5;
+            $return = $result['action']  == 'submit_kbs_form' && $result['score']  >= 0.5;
         }
 
 		return $return;

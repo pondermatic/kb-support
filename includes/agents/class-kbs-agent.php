@@ -216,7 +216,7 @@ class KBS_Agent {
 		if ( method_exists( $this, 'get_' . $key ) ) {
 			return call_user_func( array( $this, 'get_' . $key ) );
 		} else {
-			return new WP_Error( 'kbs-agent-invalid-property', sprintf( __( "Can't get property %s", 'kb-support' ), $key ) );
+			return new WP_Error( 'kbs-agent-invalid-property', sprintf( esc_html__( "Can't get property %s", 'kb-support' ), $key ) );
 		}
 
 	} // __get
@@ -346,7 +346,7 @@ class KBS_Agent {
 	/**
 	 * Add meta data field to a agent.
 	 *
-	 * @param	str		$meta_key		Metadata name.
+	 * @param	string	$meta_key		Metadata name.
 	 * @param	mixed	$meta_value		Metadata value.
 	 * @param	bool	$unique			Optional, default is false. Whether the same key should not be added.
 	 * @return	bool	False for failure. True for success.
@@ -354,14 +354,14 @@ class KBS_Agent {
 	 * @access	public
 	 * @since       1.2.5
 	 */
-	public function add_meta( $meta_key = '', $meta_value, $unique = false ) {
+	public function add_meta( $meta_key, $meta_value, $unique = false ) {
 		return add_user_meta( $this->id, $meta_key, $meta_value, $unique );
 	} // add_meta
 
 	/**
 	 * Update agent meta field based on agent ID.
 	 *
-	 * @param	str		$meta_key		Metadata key.
+	 * @param	string	$meta_key		Metadata key.
 	 * @param	mixed	$meta_value		Metadata value.
 	 * @param	mixed	$prev_value		Optional. Previous value to check before removing.
 	 * @return	bool	False on failure, true if success.
@@ -369,7 +369,7 @@ class KBS_Agent {
 	 * @access	public
 	 * @since       1.2.5
 	 */
-	public function update_meta( $meta_key = '', $meta_value, $prev_value = '' ) {
+	public function update_meta( $meta_key, $meta_value, $prev_value = '' ) {
 		return update_user_meta( $this->id, $meta_key, $meta_value, $prev_value );
 	} // update_meta
 

@@ -39,14 +39,14 @@ function kbs_set_company_post_columns( $columns ) {
 
 	$columns = array(
         'cb'        => '<input type="checkbox" />',
-		'logo'      => __( 'Logo', 'kb-support' ),     
-		'title'     => __( 'Company', 'kb-support' ),
-		'contact'   => __( 'Contact', 'kb-support' ),
-		'email'     => __( 'Email', 'kb-support' ),
-		'phone'     => __( 'Phone', 'kb-support' ),
-		'website'   => __( 'Web URL', 'kb-support' ),
+		'logo'      => esc_html__( 'Logo', 'kb-support' ),
+		'title'     => esc_html__( 'Company', 'kb-support' ),
+		'contact'   => esc_html__( 'Contact', 'kb-support' ),
+		'email'     => esc_html__( 'Email', 'kb-support' ),
+		'phone'     => esc_html__( 'Phone', 'kb-support' ),
+		'website'   => esc_html__( 'Web URL', 'kb-support' ),
 		'tickets'   => kbs_get_ticket_label_plural(),
-		'customers' => __( 'Customers', 'kb-support' )
+		'customers' => esc_html__( 'Customers', 'kb-support' )
     );
 	
 	return apply_filters( 'kbs_company_post_columns', $columns );
@@ -72,22 +72,22 @@ function kbs_set_company_column_data( $column_name, $post_id ) {
 			break;
 
 		case 'contact':
-			echo $company->contact;
+			echo esc_html( $company->contact );
 			break;
 
 		case 'email':
-			echo $company->email;
+			echo esc_html( $company->email );
 			break;
 
 		case 'phone':
-			echo $company->phone;
+			echo esc_html( $company->phone );
 			break;
 
 		case 'website':
 			printf(
                 '<a href="%1$s" title="%2$s" target="_blank">%1$s</a>',
-                $company->website,
-                sprintf( __( 'Open %s in a new tab', 'kb-support' ), $company->website )
+                esc_url( $company->website ),
+                sprintf( esc_html__( 'Open %s in a new tab', 'kb-support' ), esc_url( $company->website ) )
             );
 			break;
 
@@ -96,9 +96,9 @@ function kbs_set_company_column_data( $column_name, $post_id ) {
 			if ( $company_tickets > 0 )	{
 				$tickets_page = add_query_arg( array(
 					'post_type'  => 'kbs_ticket',
-					'company_id' => $post_id
+					'company_id' => absint( $post_id )
 				), admin_url( 'edit.php' ) );
-				echo '<a href="' . $tickets_page . '">';
+				echo '<a href="' . esc_url( $tickets_page ) . '">';
 			}
 
 			echo kbs_count_company_tickets( $post_id );
@@ -113,11 +113,11 @@ function kbs_set_company_column_data( $column_name, $post_id ) {
 			$customer_page  = add_query_arg( array(
 				'post_type'  => 'kbs_ticket',
 				'page'       => 'kbs-customers',
-				'company_id' => $post_id
+				'company_id' => absint( $post_id )
 			), admin_url( 'edit.php' ) );
 
 			if ( $customer_count > 0 )	{
-				echo '<a href="' . $customer_page . '">';
+				echo '<a href="' . esc_url( $customer_page ) . '">';
 			}
 
 			echo kbs_count_customers_in_company( $post_id );
@@ -128,6 +128,7 @@ function kbs_set_company_column_data( $column_name, $post_id ) {
 			break;
 
 		default:
+			echo esc_html__( 'No callback found for post column', 'kb-support' );
 			break;
 	}
 
@@ -144,7 +145,7 @@ add_action( 'manage_kbs_company_posts_custom_column' , 'kbs_set_company_column_d
  *
  * @return	void
  */
-function kbs_company_post_save( $post_id, $post, $update )	{	
+function kbs_company_post_save( $post_id, $post, $update )	{
 
 	// Remove the save post action to avoid loops
 	remove_action( 'save_post_kbs_company', 'kbs_company_post_save', 10, 3 );
@@ -179,13 +180,13 @@ function kbs_company_post_save( $post_id, $post, $update )	{
 		if ( ! empty( $_POST[ $field ] ) ) {
 
 			if ( '_kbs_company_email' == $field )	{
-				$posted_value = sanitize_email( trim( $_POST[ $field ] ) );
+				$posted_value =  trim( sanitize_email( wp_unslash( $_POST[ $field ] ) ) );
 			} elseif ( 'kbs_company_website' == $field )	{
-				$posted_value = esc_url( $_POST[ $field ] );
+				$posted_value = sanitize_url( wp_unslash( $_POST[ $field ] ) );
 			} elseif ( is_string( $_POST[ $field ] ) )	{
-				$posted_value = sanitize_text_field( $_POST[ $field ] );
+				$posted_value = sanitize_text_field( wp_unslash( $_POST[ $field ] ) );
 			} elseif ( is_int( $_POST[ $field ] ) )	{
-				$posted_value = $_POST[ $field ];
+				$posted_value = absint( $_POST[ $field ] );
 			} elseif( is_array( $_POST[ $field ] ) )	{
 				$posted_value = array_map( 'absint', $_POST[ $field ] );
 			}

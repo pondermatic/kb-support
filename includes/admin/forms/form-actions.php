@@ -32,7 +32,7 @@ function kbs_delete_field_action()	{
 	$url     = remove_query_arg( array( 'kbs-message', 'kbs-action', 'kbs_action_nonce', 'field_id' ) );
 	$message = 'field_deleted';
 	
-	if ( ! kbs_delete_field( $_GET['field_id'] ) )	{
+	if ( !isset( $_GET['field_id'] ) || ! kbs_delete_field( absint( $_GET['field_id'] ) ) )	{
 		$message = 'field_delete_fail';
 	}
 

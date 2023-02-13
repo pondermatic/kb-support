@@ -186,7 +186,8 @@ module.exports = function( grunt ) {
 				files: {
 					'<%= dirs.main.js %>/admin-scripts.min.js': ['<%= dirs.main.js %>/admin-scripts.js'],
 					'<%= dirs.main.js %>/kbs-ajax.min.js': ['<%= dirs.main.js %>/kbs-ajax.js'],
-					'<%= dirs.main.js %>/kbs-live-search.min.js': ['<%= dirs.main.js %>/kbs-live-search.js']
+					'<%= dirs.main.js %>/kbs-live-search.min.js': ['<%= dirs.main.js %>/kbs-live-search.js'],
+					'<%= dirs.main.js %>/admin-conditions-scripts.min.js': ['<%= dirs.main.js %>/admin-conditions-scripts.js'],
 				}
 			}
 		},
@@ -259,6 +260,7 @@ module.exports = function( grunt ) {
 						'**',
 						'!_notes/**',
 						'!node_modules/**',
+						'!tests/**',
 						'!.git/**',
 						'!.editorconfig',
 						'!.jshintrc',

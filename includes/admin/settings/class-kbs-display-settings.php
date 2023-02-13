@@ -71,6 +71,7 @@ class KBS_Display_Settings	{
 	 */
 	public function __construct()	{
 		add_action( 'kbs_menu_after_customers', array( $this, 'add_options_link' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'add_settings_conditions' ) );
 	} // __construct
 
     /**
@@ -80,14 +81,27 @@ class KBS_Display_Settings	{
 	 * @return	void
 	 */
 	public function add_options_link()	{
-        add_submenu_page(
-            'edit.php?post_type=kbs_ticket',
-            __( 'KB Support Settings', 'kb-support' ),
-            __( 'Settings', 'kb-support' ),
-            'manage_ticket_settings',
-            'kbs-settings',
-            array( $this, 'options_page' )
-        );
+        if( kbs_tickets_disabled() ){
+            add_menu_page(
+                //'options-general.php',
+                esc_html__( 'KB Support Settings', 'kb-support' ),
+                esc_html__( 'KB Support Settings', 'kb-support' ),
+                'manage_ticket_settings',
+                'kbs-settings',
+                array( $this, 'options_page' ),
+                'dashicons-book-alt',
+                25
+            );
+        }else{
+            add_submenu_page(
+                'edit.php?post_type=kbs_ticket',
+                esc_html__( 'KB Support Settings', 'kb-support' ),
+                esc_html__( 'Settings', 'kb-support' ),
+                'manage_ticket_settings',
+                'kbs-settings',
+                array( $this, 'options_page' )
+            );
+        }
 	} // add_options_link
 
     /**
@@ -100,10 +114,10 @@ class KBS_Display_Settings	{
 		$this->all_settings  = kbs_get_registered_settings();
 		$this->all_tabs      = kbs_get_settings_tabs();
 		$this->all_tabs      = empty( $this->all_tabs ) ? array() : $this->all_tabs;
-		$this->active_tab    = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : 'general';
-		$this->active_tab    = array_key_exists( $this->active_tab, $this->all_tabs ) ? $this->active_tab : 'general';
+		$this->active_tab    = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : ( !kbs_tickets_disabled()  ? 'general' : 'tickets' );
+		$this->active_tab    = array_key_exists( $this->active_tab, $this->all_tabs ) ? $this->active_tab : ( !kbs_tickets_disabled() ? 'general' : 'tickets' );
 		$this->all_sections  = kbs_get_settings_tab_sections( $this->active_tab );
-		$this->section       = isset( $_GET['section'] ) ? sanitize_text_field( $_GET['section'] ) : 'main';
+		$this->section       = isset( $_GET['section'] ) ? sanitize_text_field( wp_unslash( $_GET['section'] ) ) : 'main';
 		$this->section       = array_key_exists( $this->section, $this->all_sections ) ? $this->section : 'main';
 
 		// Verify we have a 'main' section to show
@@ -153,12 +167,20 @@ class KBS_Display_Settings	{
             <?php
 
             foreach ( $this->all_tabs as $tab_id => $tab_name ) {
-                $tab_url = add_query_arg( array(
-					'post_type'        => 'kbs_ticket',
-					'page'             => 'kbs-settings',
-					'settings-updated' => false,
-					'tab'              => $tab_id
-				), admin_url( 'edit.php' ) );
+                if( kbs_tickets_disabled() ){
+                    $tab_url = add_query_arg( array(
+                        'page'             => 'kbs-settings',
+                        'settings-updated' => false,
+                        'tab'              => $tab_id
+                    ), admin_url( 'admin.php' ) );
+                }else{
+                    $tab_url = add_query_arg( array(
+                        'post_type'        => 'kbs_ticket',
+                        'page'             => 'kbs-settings',
+                        'settings-updated' => false,
+                        'tab'              => $tab_id
+                    ), admin_url( 'edit.php' ) );
+                }
 
                 // Remove the section from the tabs so we always end up at the main section
                 $tab_url   = remove_query_arg( 'section', $tab_url );
@@ -168,7 +190,7 @@ class KBS_Display_Settings	{
                 printf(
                     '<a href="%s" class="nav-tab%s">%s</a>',
                     esc_url( $tab_url ),
-                    $tab_class,
+                    esc_attr( $tab_class ),
                     esc_html( $tab_name )
                 );
             }
@@ -196,6 +218,14 @@ class KBS_Display_Settings	{
         // Loop through sections
         foreach ( $this->all_sections as $section_id => $section_name ) {
             // Tab & Section
+            if( kbs_tickets_disabled() ){
+            $tab_url = add_query_arg( array(
+                'page'             => 'kbs-settings',
+                'settings-updated' => false,
+                'tab'              => $this->active_tab,
+                'section'          => $section_id
+            ), admin_url( 'admin.php' ) );
+        }else{
             $tab_url = add_query_arg( array(
                 'post_type'        => 'kbs_ticket',
                 'page'             => 'kbs-settings',
@@ -203,7 +233,7 @@ class KBS_Display_Settings	{
                 'tab'              => $this->active_tab,
                 'section'          => $section_id
             ), admin_url( 'edit.php' ) );
-
+        }
             // Settings not updated
             $tab_url = remove_query_arg( 'settings-updated', $tab_url );
 
@@ -234,7 +264,7 @@ class KBS_Display_Settings	{
 
         <div class="wp-clearfix">
             <ul class="subsubsub kbs-settings-sub-nav">
-                <?php echo implode( '&#124;', $links ); ?>
+                <?php echo wp_kses_post( implode( '&#124;', $links ) ); ?>
             </ul>
         </div>
 
@@ -303,7 +333,7 @@ class KBS_Display_Settings	{
         $this->maybe_display_notice(); ?>
 
         <div class="wrap <?php echo 'wrap-' . esc_attr( $this->active_tab ); ?>">
-            <h1><?php _e( 'Settings', 'kb-support' ); ?></h1><?php
+            <h1><?php esc_html_e( 'Settings', 'kb-support' ); ?></h1><?php
             // Primary nav
             $this->output_primary_nav();
 
@@ -350,35 +380,35 @@ class KBS_Display_Settings	{
                                 esc_url( KBS_PLUGIN_URL . "assets/images/promo/{$image}" )
                             );
                         } else  {
-                            echo $name;
+                            echo esc_html( $name );
                         } ?>
                     </div>
                     <div class="kbs-sidebar-description-section">
                         <p class="kbs-sidebar-description">
                             <?php if ( ! empty( $description ) )    {
-                                echo $description;
+                                echo wp_kses_post( $description );
                             } else  {
                                 printf(
-                                    __( 'Save %s when purchasing the %s <strong>this week</strong>. Including renewals and upgrades!', 'kb-support' ),
-                                    $discount,
-                                    $product
+                                    esc_html__( 'Save %s when purchasing the %s <strong>this week</strong>. Including renewals and upgrades!', 'kb-support' ),
+                                    wp_kses_post( $discount ),
+                                    wp_kses_post( $product )
                                 );
                             } ?>
                         </p>
                     </div>
                     <div class="kbs-sidebar-coupon-section">
-                        <label for="kbs-coupon-code"><?php _e( 'Use code at checkout:', 'kb-support' ); ?></label>
-                        <input id="kbs-coupon-code" type="text" value="<?php echo $code; ?>" readonly>
+                        <label for="kbs-coupon-code"><?php esc_html_e( 'Use code at checkout:', 'kb-support' ); ?></label>
+                        <input id="kbs-coupon-code" type="text" value="<?php echo esc_attr( $code ); ?>" readonly>
                         <p class="kbs-coupon-note">
                             <?php printf(
-                                __( 'Sale ends %s %s.', 'kb-support' ),
-                                date_i18n( $date_format, $finish ),
-                                $timezone
+                                esc_html__( 'Sale ends %s %s.', 'kb-support' ),
+                                esc_html( date_i18n( $date_format, $finish ) ),
+                                esc_html( $timezone )
                             ); ?>
                         </p>
                     </div>
                     <div class="kbs-sidebar-footer-section">
-                        <a class="button button-primary kbs-cta-button" href="<?php echo esc_url( $cta_url ); ?>" target="_blank"><?php echo $cta; ?></a>
+                        <a class="button button-primary kbs-cta-button" href="<?php echo esc_url( $cta_url ); ?>" target="_blank"><?php echo wp_kses_post( $cta ); ?></a>
                     </div>
                 </div>
             </div>
@@ -393,10 +423,18 @@ class KBS_Display_Settings	{
     public function maybe_display_notice()    {
         if ( isset( $_GET['updated'] ) ) : ?>
             <div id="message" class="updated notice is-dismissible">
-                <p><?php _e( 'Settings saved.', 'kb-support' ); ?></p>
+                <p><?php esc_html_e( 'Settings saved.', 'kb-support' ); ?></p>
             </div>
         <?php endif;
     } // maybe_display_notice
+
+    public function add_settings_conditions(){
+        $assets_dir  = trailingslashit( KBS_PLUGIN_URL . 'assets' );
+        $js_dir      = trailingslashit( $assets_dir . 'js' );
+        $suffix      = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+
+	    wp_enqueue_script( 'kbs-admin-conditions', $js_dir . 'admin-conditions-scripts' . $suffix . '.js', array( 'jquery' ), KBS_VERSION, false );
+    }
 } // KBS_Display_Settings
 
 new KBS_Display_Settings;

@@ -57,7 +57,7 @@ class KBS_Agents_API extends KBS_API {
 				'args'   => array(
 					'id' => array(
 						'type'        => 'integer',
-						'description' => __( 'Unique identifier for the %s.', 'kb-support' )
+						'description' => esc_html__( 'Unique identifier for the %s.', 'kb-support' )
 					)
 				),
 				array(
@@ -262,7 +262,7 @@ class KBS_Agents_API extends KBS_API {
 	protected function get_agent( $id ) {
 		$error = new WP_Error(
 			'rest_agent_invalid_id',
-			__( 'Invalid agent ID.', 'kb-support' ),
+			esc_html__( 'Invalid agent ID.', 'kb-support' ),
 			array( 'status' => 404 )
 		);
 

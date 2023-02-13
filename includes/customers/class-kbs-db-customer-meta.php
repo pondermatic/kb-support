@@ -88,7 +88,7 @@ class KBS_DB_Customer_Meta extends KBS_DB {
 	 * For internal use only. Use KBS_Customer->add_meta() for public usage.
 	 *
 	 * @param	int		$customer_id	Customer ID.
-	 * @param	str		$meta_key		Metadata name.
+	 * @param	string	$meta_key		Metadata name.
 	 * @param	mixed	$meta_value		Metadata value.
 	 * @param	bool	$unique			Optional, default is false. Whether the same key should not be added.
 	 * @return	bool	False for failure. True for success.
@@ -96,7 +96,7 @@ class KBS_DB_Customer_Meta extends KBS_DB {
 	 * @access	private
 	 * @since	1.0
 	 */
-	public function add_meta( $customer_id = 0, $meta_key = '', $meta_value, $unique = false ) {
+	public function add_meta( $customer_id, $meta_key, $meta_value, $unique = false ) {
 		$customer_id = $this->sanitize_customer_id( $customer_id );
 		if ( false === $customer_id ) {
 			return false;
@@ -116,7 +116,7 @@ class KBS_DB_Customer_Meta extends KBS_DB {
 	 * If the meta field for the customer does not exist, it will be added.
 	 *
 	 * @param	int		$customer_id	Customer ID.
-	 * @param	str		$meta_key		Metadata key.
+	 * @param	string	$meta_key		Metadata key.
 	 * @param	mixed	$meta_value		Metadata value.
 	 * @param	mixed	$prev_value		Optional. Previous value to check before removing.
 	 * @return	bool	False on failure, true if success.
@@ -124,7 +124,7 @@ class KBS_DB_Customer_Meta extends KBS_DB {
 	 * @access	private
 	 * @since	1.0
 	 */
-	public function update_meta( $customer_id = 0, $meta_key = '', $meta_value, $prev_value = '' ) {
+	public function update_meta( $customer_id, $meta_key, $meta_value, $prev_value = '' ) {
 		$customer_id = $this->sanitize_customer_id( $customer_id );
 		if ( false === $customer_id ) {
 			return false;

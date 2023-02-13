@@ -162,9 +162,9 @@ class KBS_Emails {
 	 */
 	public function get_templates() {
 		$templates = array(
-			'default' => __( 'Default Template', 'kb-support' ),
-			'basic'   => __( 'Basic HTML, no formatting', 'kb-support' ),
-			'none'    => __( 'No template, plain text only', 'kb-support' )
+			'default' => esc_html__( 'Default Template', 'kb-support' ),
+			'basic'   => esc_html__( 'Basic HTML, no formatting', 'kb-support' ),
+			'none'    => esc_html__( 'No template, plain text only', 'kb-support' )
 		);
 
 		return apply_filters( 'kbs_email_templates', $templates );
@@ -276,7 +276,7 @@ class KBS_Emails {
 	public function send( $to, $subject, $message, $attachments = '' ) {
 
 		if ( ! did_action( 'init' ) && ! did_action( 'admin_init' ) ) {
-			_doing_it_wrong( __FUNCTION__, __( 'You cannot send email with KBS_Emails until init/admin_init has been reached', 'kb-support' ), null );
+			_doing_it_wrong( __FUNCTION__, esc_html__( 'You cannot send email with KBS_Emails until init/admin_init has been reached', 'kb-support' ), null );
 			return false;
 		}
 
@@ -303,7 +303,7 @@ class KBS_Emails {
 			}
 
 			$log_message = sprintf(
-				__( "Email from KB Support failed to send.\nSend time: %s\nTo: %s\nSubject: %s\n\n", 'kb-support' ),
+				esc_html__( "Email from KB Support failed to send.\nSend time: %s\nTo: %s\nSubject: %s\n\n", 'kb-support' ),
 				date_i18n( 'F j Y H:i:s', current_time( 'timestamp' ) ),
 				$to,
 				$subject

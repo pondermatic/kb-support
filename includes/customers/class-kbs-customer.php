@@ -218,7 +218,7 @@ class KBS_Customer {
 
 		} else {
 
-			return new WP_Error( 'kbs-customer-invalid-property', sprintf( __( "Can't get property %s", 'kb-support' ), $key ) );
+			return new WP_Error( 'kbs-customer-invalid-property', sprintf( esc_html__( "Can't get property %s", 'kb-support' ), $key ) );
 
 		}
 
@@ -821,7 +821,7 @@ class KBS_Customer {
 	/**
 	 * Add meta data field to a customer.
 	 *
-	 * @param	str		$meta_key		Metadata name.
+	 * @param	string	$meta_key		Metadata name.
 	 * @param	mixed	$meta_value		Metadata value.
 	 * @param	bool	$unique			Optional, default is false. Whether the same key should not be added.
 	 * @return	bool	False for failure. True for success.
@@ -829,14 +829,14 @@ class KBS_Customer {
 	 * @access	public
 	 * @since	1.0
 	 */
-	public function add_meta( $meta_key = '', $meta_value, $unique = false ) {
+	public function add_meta( $meta_key, $meta_value, $unique = false ) {
 		return KBS()->customer_meta->add_meta( $this->id, $meta_key, $meta_value, $unique );
 	} // add_meta
 
 	/**
 	 * Update customer meta field based on customer ID.
 	 *
-	 * @param	str		$meta_key		Metadata key.
+	 * @param	string	$meta_key		Metadata key.
 	 * @param	mixed	$meta_value		Metadata value.
 	 * @param	mixed	$prev_value		Optional. Previous value to check before removing.
 	 * @return	bool	False on failure, true if success.
@@ -844,7 +844,7 @@ class KBS_Customer {
 	 * @access	public
 	 * @since	1.0
 	 */
-	public function update_meta( $meta_key = '', $meta_value, $prev_value = '' ) {
+	public function update_meta( $meta_key, $meta_value, $prev_value = '' ) {
 		return KBS()->customer_meta->update_meta( $this->id, $meta_key, $meta_value, $prev_value );
 	} // update_meta
 

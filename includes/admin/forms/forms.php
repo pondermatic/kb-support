@@ -20,11 +20,11 @@ function kbs_set_kbs_form_post_columns( $columns ) {
     
 	$columns = array(
         'cb'          => '<input type="checkbox" />',
-		'title'       => __( 'Name', 'kb-support' ),
-		'shortcode'   => __( 'Shortcode', 'kb-support' ),
-		'author'      => __( 'Author', 'kb-support' ),
-		'fields'      => __( 'Field Count', 'kb-support' ),
-		'submissions' => __( 'Submissions', 'kb-support' ),
+		'title'       => esc_html__( 'Name', 'kb-support' ),
+		'shortcode'   => esc_html__( 'Shortcode', 'kb-support' ),
+		'author'      => esc_html__( 'Author', 'kb-support' ),
+		'fields'      => esc_html__( 'Field Count', 'kb-support' ),
+		'submissions' => esc_html__( 'Submissions', 'kb-support' ),
     );
 	
 	return apply_filters( 'kbs_form_post_columns', $columns );
@@ -50,7 +50,7 @@ function kbs_set_kbs_form_column_data( $column_name, $post_id ) {
 			break;
 
 		case 'shortcode':
-			echo '<code>' . $kbs_form->get_shortcode() . '</code>';
+			echo '<code>' . esc_html( $kbs_form->get_shortcode() ) . '</code>';
 			break;
 
 		case 'submissions':
@@ -80,7 +80,7 @@ function kbs_form_post_save( $post_id, $post, $update )	{
 		do_action( 'kbs_form_before_save', $post_id, $post, $update );
 	}
 
-    $redirect = isset( $_POST['kbs_form_redirect'] ) ? $_POST['kbs_form_redirect'] : kbs_get_option( 'tickets_page' );
+    $redirect = isset( $_POST['kbs_form_redirect'] ) ? sanitize_text_field( wp_unslash( $_POST['kbs_form_redirect'] ) ) : kbs_get_option( 'tickets_page' );
 
     update_post_meta( $post_id, '_redirect_page', $redirect );
 
@@ -145,7 +145,7 @@ function kbs_form_edit_form_after_title()	{
 
 	if ( 'kbs_form' == get_post_type() ) : ?>
     	<?php $kbs_form = new KBS_Form( $post->ID ); ?>
-		<input type="text" readonly size="25" onclick="this.focus(); this.select()" id="kbs-form-shortcode" name="kbs_form_shortcode" value='<?php echo $kbs_form->get_shortcode(); ?>' title="<?php _e( 'To copy the shortcode, click here then press Ctrl + C (PC) or Cmd + C (Mac).', 'kb-support' ); ?>" />
+		<input type="text" readonly size="25" onclick="this.focus(); this.select()" id="kbs-form-shortcode" name="kbs_form_shortcode" value='<?php echo esc_attr( $kbs_form->get_shortcode() ); ?>' title="<?php esc_html_e( 'To copy the shortcode, click here then press Ctrl + C (PC) or Cmd + C (Mac).', 'kb-support' ); ?>" />
 	<?php endif;
 
 } // kbs_form_edit_form_after_title

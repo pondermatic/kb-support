@@ -27,18 +27,28 @@ require_once( KBS_PLUGIN_DIR . '/includes/admin/import-export/export/export-acti
 function kbs_do_ajax_export() {
 
 	require_once( KBS_PLUGIN_DIR . '/includes/admin/import-export/export/class-batch-export.php' );
-
-	parse_str( $_POST['form'], $form );
+	if( isset( $_POST['form'] ) ){
+		parse_str( $_POST['form'], $form );
+	}
+	if( $form && !empty( $form ) ){
+		foreach( $form as $key => $value ){
+			if( '_wp_http_referer' == $key ){
+				$form[ $key ]  = sanitize_url( wp_unslash( $form[ $key ] ) );
+			}else{
+				$form[ $key ]  = sanitize_text_field( wp_unslash( $form[ $key ] ) );
+			}
+		}
+	}
 
 	$_REQUEST = $form = (array) $form;
 
-	if ( ! wp_verify_nonce( $_REQUEST['kbs_ajax_export'], 'kbs_ajax_export' ) ) {
+	if ( ! isset( $_REQUEST['kbs_ajax_export'] ) || ! wp_verify_nonce( $_REQUEST['kbs_ajax_export'], 'kbs_ajax_export' ) ) {
 		die( '-2' );
 	}
 
 	do_action( 'kbs_batch_export_class_include', $form['kbs-export-class'] );
 
-	$step     = absint( $_POST['step'] );
+	$step     = isset( $_POST['step'] ) ? absint( $_POST['step'] ) : 1;
 	$class    = sanitize_text_field( $form['kbs-export-class'] );
 	$export   = new $class( $step );
 
@@ -47,7 +57,7 @@ function kbs_do_ajax_export() {
 	}
 
 	if ( ! $export->is_writable ) {
-		echo json_encode( array( 'error' => true, 'message' => __( 'Export location or file not writable', 'kb-support' ) ) ); exit;
+		echo json_encode( array( 'error' => true, 'message' => esc_html__( 'Export location or file not writable', 'kb-support' ) ) ); exit;
 	}
 
 	$export->set_properties( $_REQUEST );
@@ -66,11 +76,11 @@ function kbs_do_ajax_export() {
 
 	} elseif ( true === $export->is_empty ) {
 
-		echo json_encode( array( 'error' => true, 'message' => __( 'No data found for export parameters', 'kb-support' ) ) ); exit;
+		echo json_encode( array( 'error' => true, 'message' => esc_html__( 'No data found for export parameters', 'kb-support' ) ) ); exit;
 
 	} elseif ( true === $export->done && true === $export->is_void ) {
 
-		$message = ! empty( $export->message ) ? $export->message : __( 'Batch Processing Complete', 'kb-support' );
+		$message = ! empty( $export->message ) ? $export->message : esc_html__( 'Batch Processing Complete', 'kb-support' );
 		echo json_encode( array( 'success' => true, 'message' => $message ) ); exit;
 
 	} else {
@@ -98,13 +108,13 @@ add_action( 'wp_ajax_kbs_do_ajax_export', 'kbs_do_ajax_export' );
 function kbs_export_customers_display()	{
 	?>
 	<div class="postbox kbs-export-customers">
-		<h3><span><?php _e( 'Export Customers','kb-support' ); ?></span></h3>
+		<h3><span><?php esc_html_e( 'Export Customers','kb-support' ); ?></span></h3>
 		<div class="inside">
-			<p><?php _e( 'Download a CSV of customers.', 'kb-support' ); ?></p>
+			<p><?php esc_html_e( 'Download a CSV of customers.', 'kb-support' ); ?></p>
 			<form id="kbs-export-customers" class="kbs-export-form kbs-import-export-form" method="post">
 				<?php wp_nonce_field( 'kbs_ajax_export', 'kbs_ajax_export' ); ?>
 				<input type="hidden" name="kbs-export-class" value="KBS_Batch_Export_Customers"/>
-				<?php submit_button( __( 'Generate CSV', 'kb-support' ), 'secondary', 'submit', false ); ?>
+				<?php submit_button( esc_html__( 'Generate CSV', 'kb-support' ), 'secondary', 'submit', false ); ?>
 			</form>
 		</div><!-- .inside -->
 	</div><!-- .postbox -->
@@ -118,14 +128,17 @@ add_action( 'kbs_tools_export_after', 'kbs_export_customers_display', 10 );
  * @since	1.1
  */
 function kbs_export_tickets_display() {
+	if ( kbs_tickets_disabled() ) {
+		return;
+	}
 	$label_single = kbs_get_ticket_label_singular();
 	$label_plural = kbs_get_ticket_label_plural();
 
     ?>
     <div class="postbox kbs-export-tickets">
-		<h3><span><?php printf( __( 'Export %s', 'kb-support' ), $label_plural ); ?></span></h3>
+		<h3><span><?php printf( esc_html__( 'Export %s', 'kb-support' ), $label_plural ); ?></span></h3>
 		<div class="inside">
-			<p><?php printf( __( 'Download a CSV formatted file of %s.', 'kb-support' ), strtolower( $label_plural ) ); ?></p>
+			<p><?php printf( esc_html__( 'Download a CSV formatted file of %s.', 'kb-support' ), strtolower( $label_plural ) ); ?></p>
 
             <form id="kbs-export-tickets" class="kbs-export-form kbs-import-export-form" method="post">
                 <?php wp_nonce_field( 'kbs_ajax_export', 'kbs_ajax_export' ); ?>
@@ -133,21 +146,21 @@ function kbs_export_tickets_display() {
                 <?php echo KBS()->html->date_field( array(
 					'id'          => 'kbs-ticket-export-start',
 					'name'        => 'ticket_start',
-					'placeholder' => __( 'Select Start Date', 'kb-support' )
+					'placeholder' => esc_html__( 'Select Start Date', 'kb-support' )
 				) ); ?>
                 <?php echo KBS()->html->date_field( array(
 					'id'          => 'kbs-ticket-export-end',
 					'name'        => 'ticket_end',
-					'placeholder' => __( 'Select End Date', 'kb-support' )
+					'placeholder' => esc_html__( 'Select End Date', 'kb-support' )
 				) ); ?>
                 <select name="ticket_status">
-                    <option value="any"><?php _e( 'All Statuses', 'kb-support' ); ?></option>
+                    <option value="any"><?php esc_html_e( 'All Statuses', 'kb-support' ); ?></option>
                     <?php foreach( kbs_get_post_statuses( 'labels', true ) as $ticket_status ) : ?>
-                        <option value="<?php echo $ticket_status->name; ?>"><?php echo esc_html( $ticket_status->label ); ?></option>
+                        <option value="<?php echo esc_attr( $ticket_status->name ); ?>"><?php echo esc_html( $ticket_status->label ); ?></option>
                     <?php endforeach; ?>
                 </select>
                 <span>
-                	<?php submit_button( __( 'Generate CSV', 'kb-support' ), 'secondary', 'submit', false ); ?>
+                	<?php submit_button( esc_html__( 'Generate CSV', 'kb-support' ), 'secondary', 'submit', false ); ?>
                     <span class="spinner"></span>
                 </span>
             </form>

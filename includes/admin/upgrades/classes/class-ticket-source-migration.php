@@ -61,23 +61,23 @@ class KBS_Ticket_Sources_Migration extends KBS_Batch_Export {
         $sources = array(
             1  => array(
                 'slug' => 'kbs-website',
-                'name' => __( 'Website', 'kb-support' ),
-                'desc' => sprintf( __( '%s received via website', 'kb-support' ), kbs_get_ticket_label_plural() )
+                'name' => esc_html__( 'Website', 'kb-support' ),
+                'desc' => sprintf( esc_html__( '%s received via website', 'kb-support' ), kbs_get_ticket_label_plural() )
             ),
             2  => array(
                 'slug' => 'kbs-email',
-                'name' => __( 'Email', 'kb-support' ),
-                'desc' => sprintf( __( '%s received via email', 'kb-support' ), kbs_get_ticket_label_plural() )
+                'name' => esc_html__( 'Email', 'kb-support' ),
+                'desc' => sprintf( esc_html__( '%s received via email', 'kb-support' ), kbs_get_ticket_label_plural() )
             ),
             3  => array(
                 'slug' => 'kbs-telephone',
-                'name' => __( 'Telephone', 'kb-support' ),
-                'desc' => sprintf( __( '%s received via telephone', 'kb-support' ), kbs_get_ticket_label_plural() )
+                'name' => esc_html__( 'Telephone', 'kb-support' ),
+                'desc' => sprintf( esc_html__( '%s received via telephone', 'kb-support' ), kbs_get_ticket_label_plural() )
             ),
             99 => array(
                 'slug' => 'kbs-other',
-                'name' => __( 'Other', 'kb-support' ),
-                'desc' => sprintf( __( '%s received via another means', 'kb-support' ), kbs_get_ticket_label_plural() )
+                'name' => esc_html__( 'Other', 'kb-support' ),
+                'desc' => sprintf( esc_html__( '%s received via another means', 'kb-support' ), kbs_get_ticket_label_plural() )
             )
         );
 
@@ -150,8 +150,8 @@ class KBS_Ticket_Sources_Migration extends KBS_Batch_Export {
 
 		if ( ! $this->can_export() ) {
 			wp_die(
-				__( 'You do not have permission to run this upgrade.', 'kb-support' ),
-				__( 'Error', 'kb-support' ),
+				esc_html__( 'You do not have permission to run this upgrade.', 'kb-support' ),
+				esc_html__( 'Error', 'kb-support' ),
 				array( 'response' => 403 )
             );
 		}
@@ -164,7 +164,7 @@ class KBS_Ticket_Sources_Migration extends KBS_Batch_Export {
 		} else {
 			$this->done = true;
 			delete_option( 'kbs_tickets_and_replies_total_sources' );
-			$this->message = sprintf( __( '%s sources updated successfully.', 'kb-support' ), kbs_get_ticket_label_singular() );
+			$this->message = sprintf( esc_html__( '%s sources updated successfully.', 'kb-support' ), kbs_get_ticket_label_singular() );
 			kbs_set_upgrade_complete( 'upgrade_ticket_sources' );
 			return false;
 		}

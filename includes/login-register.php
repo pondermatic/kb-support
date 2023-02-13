@@ -26,7 +26,7 @@ function kbs_login_form( $redirect = '' ) {
 
 	if ( empty( $redirect ) ) {
 		if ( ! empty( $_GET['kbs_redirect'] ) )	{
-			$redirect = $_GET['kbs_redirect'];
+			$redirect = sanitize_url( wp_unslash( $_GET['kbs_redirect'] ) );
 		} else	{
 			$redirect = kbs_get_current_page_url();
 		}
@@ -54,7 +54,7 @@ function kbs_register_form( $redirect = '' ) {
 
 	if ( empty( $redirect ) ) {
 		if ( ! empty( $_GET['kbs_redirect'] ) )	{
-			$redirect = $_GET['kbs_redirect'];
+			$redirect = sanitize_url( wp_unslash( $_GET['kbs_redirect'] ) );
 		} else	{
 			$redirect = kbs_get_current_page_url();
 		}
@@ -78,22 +78,22 @@ function kbs_register_form( $redirect = '' ) {
  * @return void
  */
 function kbs_process_login_form()	{
-	if ( ! isset( $_POST['kbs_action'] ) || 'user_login' != $_POST['kbs_action'] )	{
+	if ( ! isset( $_POST['kbs_action'] ) || 'user_login' != $_POST['kbs_action'] || ! isset( $_POST['kbs_user_login'] )  || '' == $_POST['kbs_user_login'] || ! isset( $_POST['kbs_user_pass'] ) )	{
 		return;
 	}
 
-	if ( wp_verify_nonce( $_POST['kbs_login_nonce'], 'kbs-login-nonce' ) ) {
-        $user_data = get_user_by( 'login', $_POST['kbs_user_login'] );
+	if ( isset( $_POST['kbs_login_nonce'] ) && wp_verify_nonce( $_POST['kbs_login_nonce'], 'kbs-login-nonce' ) ) {
+        $user_data = get_user_by( 'login', sanitize_text_field( wp_unslash( $_POST['kbs_user_login'] ) ) );
 
-        if ( ! $user_data ) {
-            $user_data = get_user_by( 'email', $_POST['kbs_user_login'] );
+        if ( ! $user_data && isset( $_POST['kbs_user_login'] ) ) {
+            $user_data = get_user_by( 'email', sanitize_email( wp_unslash( $_POST['kbs_user_login'] ) ) );
         }
 
         if ( $user_data ) {
             $user_ID = $user_data->ID;
             $user_email = $user_data->user_email;
-            if ( wp_check_password( $_POST['kbs_user_pass'], $user_data->user_pass, $user_data->ID ) ) {
-                kbs_log_user_in( $user_data->ID, $_POST['kbs_user_login'], $_POST['kbs_user_pass'] );
+            if ( wp_check_password( sanitize_text_field( wp_unslash( $_POST['kbs_user_pass'] ) ), $user_data->user_pass, $user_data->ID ) ) {
+                kbs_log_user_in( $user_data->ID, sanitize_text_field( wp_unslash( $_POST['kbs_user_login'] ) ), sanitize_text_field( wp_unslash( $_POST['kbs_user_pass'] ) ) );
             } else {
                 $error = 'password_incorrect';
             }
@@ -105,12 +105,12 @@ function kbs_process_login_form()	{
 			$url = remove_query_arg( array( 'kbs_notice', 'kbs_redirect' ) );
 			wp_redirect( add_query_arg( array(
 				'kbs_notice'   => $error,
-				'kbs_redirect' => $_POST['kbs_redirect']
+				'kbs_redirect' => isset( $_POST['kbs_redirect'] ) ? sanitize_url( wp_unslash( $_POST['kbs_redirect'] ) ) : ''
 			), $url ) );
 			die();
 		}
 
-		$redirect = apply_filters( 'kbs_login_redirect', $_POST['kbs_redirect'], $user_ID );
+		$redirect = apply_filters( 'kbs_login_redirect', isset( $_POST['kbs_redirect'] ) ? sanitize_url( wp_unslash( $_POST['kbs_redirect'] ) ) : '', $user_ID );
 		wp_redirect( $redirect );
 		die();
 	}
@@ -165,15 +165,15 @@ function kbs_process_register_form() {
         $error = 'empty_first_name';
     } elseif ( 'both' == $required_name_fields && empty( $_POST['kbs_user_last_name'] ) ) {
         $error = 'empty_last_name';
-    } elseif ( empty( $_POST['kbs_user_email'] ) || ! is_email( $_POST['kbs_user_email'] ) ) {
+    } elseif ( empty( $_POST['kbs_user_email'] ) || ! is_email( wp_unslash( $_POST['kbs_user_email'] ) ) ) {
 		$error = 'email_invalid';
-    } elseif ( email_exists( $_POST['kbs_user_email'] ) ) {
+    } elseif ( email_exists( sanitize_email( wp_unslash( $_POST['kbs_user_email'] ) ) ) ) {
 		$error = 'email_unavailable';
 	} elseif ( empty( $_POST['kbs_user_pass'] ) ) {
 		$error = 'empty_password';
 	} elseif ( ( ! empty( $_POST['kbs_user_pass'] ) && empty( $_POST['kbs_user_pass2'] ) ) || ( $_POST['kbs_user_pass'] !== $_POST['kbs_user_pass2'] ) ) {
 		$error = 'password_mismatch';
-	} elseif ( kbs_use_recaptcha_on_registration_form() && ! kbs_validate_recaptcha( $_POST['g-recaptcha-response'] ) )    {
+	} elseif ( kbs_use_recaptcha_on_registration_form() && ! kbs_validate_recaptcha( isset( $_POST['g-recaptcha-response'] ) ? $_POST['g-recaptcha-response'] : '' ) )    {
         $error = 'recaptcha_failed';
     }
 
@@ -183,23 +183,23 @@ function kbs_process_register_form() {
 		$url = remove_query_arg( array( 'kbs_notice', 'kbs_redirect' ) );
 		wp_redirect( add_query_arg( array(
 			'kbs_notice'   => $error,
-			'kbs_redirect' => $_POST['kbs_redirect']
+			'kbs_redirect' => isset( $_POST['kbs_redirect'] ) ? sanitize_url( wp_unslash( $_POST['kbs_redirect'] ) ) : ''
 		), $url ) );
 		die();
 	}
 
     $user_data = array(
-        'user_first'      => isset( $_POST['kbs_user_first_name'] ) ? sanitize_text_field( $_POST['kbs_user_first_name'] ) : '',
-        'user_last'       => isset( $_POST['kbs_user_last_name'] )  ? sanitize_text_field( $_POST['kbs_user_last_name'] ) : '',
-		'user_pass'       => $_POST['kbs_user_pass'],
-		'user_email'      => sanitize_email( $_POST['kbs_user_email'] ),
+        'user_first'      => isset( $_POST['kbs_user_first_name'] ) ? sanitize_text_field( wp_unslash( $_POST['kbs_user_first_name'] ) ) : '',
+        'user_last'       => isset( $_POST['kbs_user_last_name'] )  ? sanitize_text_field( wp_unslash( $_POST['kbs_user_last_name'] ) ) : '',
+		'user_pass'       => sanitize_text_field( $_POST['kbs_user_pass'] ),
+		'user_email'      => sanitize_email( wp_unslash( $_POST['kbs_user_email'] ) ),
 		'user_registered' => date( 'Y-m-d H:i:s' ),
 		'role'            => kbs_get_option( 'default_role' )
     );
 
     $user_data['user_login'] = kbs_create_user_name( $user_data );
 
-	$redirect = apply_filters( 'kbs_register_redirect', $_POST['kbs_redirect'] );
+	$redirect = apply_filters( 'kbs_register_redirect', isset( $_POST['kbs_redirect'] ) ? sanitize_url( wp_unslash( $_POST['kbs_redirect'] ) ) : '' );
 
 	kbs_register_and_login_new_user( $user_data );
 

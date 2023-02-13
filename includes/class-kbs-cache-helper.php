@@ -60,9 +60,9 @@ class KBS_Cache_Helper {
 	    	set_transient( 'kbs_cache_excluded_uris', $kbs_page_uris, DAY_IN_SECONDS );
 		}
 
-		if ( is_array( $kbs_page_uris ) )	{
+		if ( is_array( $kbs_page_uris ) && isset( $_SERVER['REQUEST_URI'] ) )	{
 			foreach ( $kbs_page_uris as $uri )	{
-				if ( stristr( trailingslashit( $_SERVER['REQUEST_URI'] ), $uri ) )	{
+				if ( stristr( trailingslashit( sanitize_url( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ), $uri ) )	{
 					self::nocache();
 					break;
 				}

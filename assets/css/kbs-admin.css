@@ -594,6 +594,16 @@ a.kbs_ticket_form_data	{
     font-weight: 600;
 }
 
+#kbs-ticket-metabox-ticket-details .kbs-ticket-content-row-header .kbs-ticket-content-row-title {
+	float: none;
+	display:inline-block;
+	vertical-align: middle;
+}
+
+#kbs-ticket-metabox-ticket-details .kbs-ticket-content-row-header .wpchill-tooltip {
+	vertical-align: middle;
+}
+
 .kbs-ticket-content-row-title,
 .kbs-replies-row-title,
 .kbs-notes-row-title,
@@ -723,9 +733,9 @@ a.kbs_ticket_form_data	{
 	background: #f1f1f1;
 }
 
-.space-between { 
-	justify-content: space-between; 
-}  
+.space-between {
+	justify-content: space-between;
+}
 
 .participant-item {
 	width: 33%;
@@ -1442,6 +1452,72 @@ p.kbs-extension-desc {
 		width: 100% !important;
 		margin: 10px 0;
     }
-    
+
 
 }
+
+.kbs-page-header {
+    display: flex;
+    justify-content: space-between;
+    background: #fff;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    margin-left: -20px;
+	padding: 20px;
+}
+
+.kbs-header-links {
+    margin-left: -20px;
+}
+
+.kbs-header-logo img {
+    max-height: 35px;
+}
+
+.kbs-header-links a span {
+    vertical-align: middle;
+    position: relative;
+    top: -2px;
+    padding-right: 10px;
+}
+
+.wpchill-tooltip {
+	position: relative;
+	display: inline-block;
+	margin-right: 10px;
+  }
+  .wpchill-tooltip > i {
+	cursor: pointer;
+	color: rgba(0, 0, 0, 0.6);
+	margin-left: 5px;
+	font-style: normal;
+  }
+  .wpchill-tooltip .wpchill-tooltip-content {
+	display: none;
+	position: absolute;
+	top: 50%;
+	right: -10px;
+	transform: translate(100%, -50%);
+	width: 300px;
+	background: #000;
+	color: #fff;
+	padding: 10px;
+	box-sizing: border-box;
+	z-index: 99;
+  }
+  .wpchill-tooltip .wpchill-tooltip-content:before {
+	content: '';
+	width: 0px;
+	height: 0px;
+	border-style: solid;
+	border-width: 8px 8px 8px 0;
+	border-color: transparent #000 transparent transparent;
+	display: block;
+	position: absolute;
+	top: 50%;
+	left: -8px;
+	transform: translateY(-50%);
+  }
+  .wpchill-tooltip:hover .wpchill-tooltip-content {
+	display: block;
+  }

@@ -234,7 +234,7 @@ function kbs_sla_has_passed( $ticket, $sla_target = 'response' ) {
  * @since	1.0
  * @param	obj|int		$ticket		The KBS Ticket class object
  * @param	str			$sep		The seperator for the icons
- ( @param	bool		$echo		True to echo, false to return
+ * @param	bool		$echo		True to echo, false to return
  * @return	str|arr		If $echo is false, an array is returned
  */
 function kbs_display_sla_status_icons( $ticket, $sep = '<br />', $echo = true )	{
@@ -244,12 +244,12 @@ function kbs_display_sla_status_icons( $ticket, $sep = '<br />', $echo = true )	
 	}
 
 	$output = array(
-		'response' => kbs_display_sla_response_status_icon( $ticket ),
+		'response' => kbs_display_sla_response_status_icon( $ticket ), 
 		'resolve'  => kbs_display_sla_resolve_status_icon( $ticket )
 	);
 
 	if ( $echo )	{
-		echo implode( $sep, $output );
+		echo wp_kses_post( implode( $sep, $output ) );
 	} else	{
 		return $output;
 	}
@@ -279,16 +279,16 @@ function kbs_display_sla_response_status_icon( $ticket )	{
 		if ( ! empty( $ticket->first_response ) )	{
 
 			$response = strtotime( $ticket->first_response );
-			$text     = __( 'Responded', 'kb-support' );
+			$text     = esc_html__( 'Responded', 'kb-support' );
 			$diff     = human_time_diff( $response, $target );
 
 			if ( $target < $response )	{
 				$respond_class = '_over';
 				$icon          = 'no';
-				$title         = sprintf( __( 'Missed response by %s', 'kb-support' ), $diff );
+				$title         = sprintf( esc_html__( 'Missed response by %s', 'kb-support' ), $diff );
 			} else	{
 				$icon  = 'yes';
-				$title = sprintf( __( 'Responded %s before SLA expired', 'kb-support' ), $diff );
+				$title = sprintf( esc_html__( 'Responded %s before SLA expired', 'kb-support' ), $diff );
 			}
 
 		} elseif ( 'closed' == $ticket->status )	{
@@ -300,28 +300,28 @@ function kbs_display_sla_response_status_icon( $ticket )	{
 			}
 
 			$response = strtotime( $closed );
-			$text     = __( 'Closed', 'kb-support' );
+			$text     = esc_html__( 'Closed', 'kb-support' );
 			$diff     = human_time_diff( $response, $target );
 
 			if ( $target < $response )	{
 				$respond_class = '_over';
 				$icon          = 'no';
-				$title         = sprintf( __( 'Missed response by %s', 'kb-support' ), $diff );
+				$title         = sprintf( esc_html__( 'Missed response by %s', 'kb-support' ), $diff );
 			} else	{
 				$icon  = 'yes';
-				$title = sprintf( __( 'Responded %s before SLA expired', 'kb-support' ), $diff );
+				$title = sprintf( esc_html__( 'Responded %s before SLA expired', 'kb-support' ), $diff );
 			}
 
 		} else	{
 
 			$now  = current_time( 'timestamp' );
-			$text = __( 'No response', 'kb-support' );
+			$text = esc_html__( 'No response', 'kb-support' );
 			$diff = human_time_diff( $target, $now );
 			$icon = 'clock';
 
 			if ( $now > $target )	{
 				$respond_class = '_over';
-				$title         = sprintf( __( 'Missed response by %s', 'kb-support' ), $diff );
+				$title         = sprintf( esc_html__( 'Missed response by %s', 'kb-support' ), $diff );
 			} else	{
 				$warn = kbs_get_option( 'sla_response_time_warn' );
 
@@ -333,12 +333,12 @@ function kbs_display_sla_response_status_icon( $ticket )	{
 					}
 				}
 
-				$title = sprintf( __( '%s left to respond', 'kb-support' ), $diff );
+				$title = sprintf( esc_html__( '%s left to respond', 'kb-support' ), $diff );
 			}
 
 		}
 
-		$output .= '<span class="dashicons dashicons-' . $icon . ' kbs_sla_status' . $respond_class . '" title="' . $title . '">';
+		$output .= '<span class="dashicons dashicons-' . esc_attr( $icon ) . ' kbs_sla_status' . esc_attr( $respond_class ) . '" title="' . esc_attr( $title ) . '">';
 		$output .= '</span> ';
 		$output .= $text;
 
@@ -371,28 +371,28 @@ function kbs_display_sla_resolve_status_icon( $ticket )	{
 		if ( 'closed' == $ticket->status && ! empty( $ticket->closed_date ) )	{
 
 			$resolved = strtotime( $ticket->closed_date );
-			$text     = __( 'Resolved', 'kb-support' );
+			$text     = esc_html__( 'Resolved', 'kb-support' );
 			$diff     = human_time_diff( $resolved, $target );
 
 			if ( $target < $resolved )	{
 				$resolve_class = '_over';
 				$icon          = 'no';
-				$title         = sprintf( __( 'Missed resolution by %s', 'kb-support' ), $diff );
+				$title         = sprintf( esc_html__( 'Missed resolution by %s', 'kb-support' ), $diff );
 			} else	{
 				$icon  = 'yes';
-				$title = sprintf( __( 'Resolved %s before SLA expired', 'kb-support' ), $diff );
+				$title = sprintf( esc_html__( 'Resolved %s before SLA expired', 'kb-support' ), $diff );
 			}
 
 		} else	{
 
 			$now  = current_time( 'timestamp' );
-			$text = __( 'Unresolved', 'kb-support' );
+			$text = esc_html__( 'Unresolved', 'kb-support' );
 			$diff = human_time_diff( $target, $now );
 			$icon = 'clock';
 
 			if ( $now > $target )	{
 				$resolve_class = '_over';
-				$title         = sprintf( __( 'Missed resolution by %s', 'kb-support' ), $diff );
+				$title         = sprintf( esc_html__( 'Missed resolution by %s', 'kb-support' ), $diff );
 			} else	{
 				$warn = kbs_get_option( 'sla_resolve_time_warn' );
 
@@ -403,7 +403,7 @@ function kbs_display_sla_resolve_status_icon( $ticket )	{
 						$resolve_class = '_warn';
 					}
 				}
-				$title = sprintf( __( '%s left to resolve', 'kb-support' ), $diff );
+				$title = sprintf( esc_html__( '%s left to resolve', 'kb-support' ), $diff );
 			}
 
 		}

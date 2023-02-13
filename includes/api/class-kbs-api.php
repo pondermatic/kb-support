@@ -95,7 +95,7 @@ class KBS_API extends WP_REST_Controller {
 	protected function get_post( $id ) {
 		$error = new WP_Error(
 			'rest_post_invalid_id',
-			__( 'Invalid post ID.', 'kb-support' ),
+			esc_html__( 'Invalid post ID.', 'kb-support' ),
 			array( 'status' => 404 )
 		);
 
@@ -163,27 +163,27 @@ class KBS_API extends WP_REST_Controller {
 	 */
 	public function errors( $error )	{
 		$errors = array(
-			'no_auth'            => __( 'Authentication failed.', 'kb-support' ),
-			'no_permission'      => __( 'Access denied.', 'kb-support' ),
-			'required_fields'    => __( 'Required fields missing.', 'kb-support' ),
-			'invalid_email'      => __( 'Invalid email address.', 'kb-support' ),
+			'no_auth'            => esc_html__( 'Authentication failed.', 'kb-support' ),
+			'no_permission'      => esc_html__( 'Access denied.', 'kb-support' ),
+			'required_fields'    => esc_html__( 'Required fields missing.', 'kb-support' ),
+			'invalid_email'      => esc_html__( 'Invalid email address.', 'kb-support' ),
 			'create_failed'      => sprintf(
-				__( 'Unable to create %s.', 'kb-support' ),
+				esc_html__( 'Unable to create %s.', 'kb-support' ),
 				kbs_get_article_label_singular( true )
 			),
             'ticket_not_found'   => sprintf(
-				__( '% not found.', 'kb-support' ),
+				esc_html__( '% not found.', 'kb-support' ),
 				kbs_get_article_label_singular()
 			),
 			'restricted_article' => sprintf(
-				__( 'Criteria not met to access restricted %s.', 'kb-support' ),
+				esc_html__( 'Criteria not met to access restricted %s.', 'kb-support' ),
 				kbs_get_article_label_singular( true )
 			)
 		);
 
 		$errors = apply_filters( 'kbs_api_errors', $errors );
 
-		$errors['no_data'] = __( 'No data.', 'kb-support' );
+		$errors['no_data'] = esc_html__( 'No data.', 'kb-support' );
 
 		if ( array_key_exists( $error, $errors ) )	{
 			return $errors[ $error ];

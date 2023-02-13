@@ -75,8 +75,8 @@ function kbs_admin_footer_rate_us( $footer_text )	{
 	if ( ! $disable && ( 'kbs_ticket' == $typenow || KBS()->KB->post_type == $typenow || 'kbs_form' == $typenow ) )	{
 
 		$footer_text = sprintf(
-			__( 'If <strong>KB Support</strong> is helping you support your customers, please <a href="%s" target="_blank">leave us a ★★★★★ rating</a>. A <strong style="text-decoration: underline;">huge</strong> thank you in advance!', 'kb-support'
-			),
+			wp_kses_post( __( 'If <strong>KB Support</strong> is helping you support your customers, please <a href="%s" target="_blank">leave us a ★★★★★ rating</a>. A <strong style="text-decoration: underline;">huge</strong> thank you in advance!', 'kb-support'
+			) ),
 			'https://wordpress.org/support/view/plugin-reviews/kb-support?rate=5#postform'
 		);
 
@@ -85,3 +85,52 @@ function kbs_admin_footer_rate_us( $footer_text )	{
 	return $footer_text;
 } // kbs_admin_footer_rate_us
 add_filter( 'admin_footer_text', 'kbs_admin_footer_rate_us' );
+
+/**
+ * Tab navigation display
+ *
+ * @param $tabs
+ * @param $active_tab
+ * @since 1.5.84
+ */
+function kbs_tab_navigation( $tabs, $active_tab ) {
+
+	if ( $tabs ) {
+
+		$i = count( $tabs );
+		$j = 1;
+
+		foreach ( $tabs as $tab_id => $tab ) {
+
+			$last_tab = ( $i == $j ) ? ' last_tab' : '';
+			$active   = ( $active_tab == $tab_id ? ' nav-tab-active' : '' );
+			$j ++;
+
+			if ( isset( $tab['url'] ) ) {
+				$url = $tab['url'];
+			}
+
+			echo '<a href="' . esc_url( $url ) . '" class="nav-tab' . esc_attr( $active ) . esc_attr( $last_tab ) . '" ' . ( isset( $tab['target'] ) ? 'target="' . esc_attr( $tab['target'] ) . '"' : '' ) . '>';
+
+			if ( isset( $tab['icon'] ) ) {
+				echo '<span class="dashicons ' . esc_attr( $tab['icon'] ) . '"></span>';
+			}
+
+			// For Extensions and Tickets list tabs
+			if ( isset( $tab['name'] ) ) {
+				echo esc_html( $tab['name'] );
+			}
+
+			// For Settings tabs
+			if ( isset( $tab['label'] ) ) {
+				echo esc_html( $tab['label'] );
+			}
+
+			if ( isset( $tab['badge'] ) ) {
+				echo '<span class="dlm-badge">' . esc_html( $tab['badge'] ) . '</span>';
+			}
+
+			echo '</a>';
+		}
+	}
+}

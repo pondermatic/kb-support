@@ -11,7 +11,7 @@ global $kbs_register_redirect; ?>
             <?php do_action( 'kbs_register_form_fields_top' ); ?>
     
             <fieldset id="kbs_register_form_fields">
-                <legend><?php _e( 'Register New Account', 'kb-support' ); ?></legend>
+                <legend><?php esc_html_e( 'Register New Account', 'kb-support' ); ?></legend>
     
                 <?php do_action( 'kbs_register_form_fields_before' ); ?>
     
@@ -31,14 +31,14 @@ global $kbs_register_redirect; ?>
 						<div class="row">
 							<?php if ( $show_first ) : ?>
 								<div class="col-md-6 mb-3">
-									<label for="kbs-first-name"><?php _e( 'First Name', 'kb-support' ); ?></label>
-									<input type="text" name="kbs_user_first_name" class="required kbs-input" id="kbs-user-first-name"<?php echo $first_class; ?>>
+									<label for="kbs-first-name"><?php esc_html_e( 'First Name', 'kb-support' ); ?></label>
+									<input type="text" name="kbs_user_first_name" class="required kbs-input" id="kbs-user-first-name"<?php echo esc_attr( $first_class ); ?>>
 								</div>
 							<?php endif; ?>
 							<?php if ( $show_last ) : ?>
 								<div class="col-md-6 mb-3">
-									<label for="kbs-last-name"><?php _e( 'Last Name', 'kb-support' ); ?></label>
-									<input type="text" name="kbs_user_last_name" class="required kbs-input" id="kbs-user-last-name"<?php echo $last_class; ?>>
+									<label for="kbs-last-name"><?php esc_html_e( 'Last Name', 'kb-support' ); ?></label>
+									<input type="text" name="kbs_user_last_name" class="required kbs-input" id="kbs-user-last-name"<?php echo esc_attr( $last_class ); ?>>
 								</div>
 							<?php endif; ?>
 						</div><!-- .row -->
@@ -47,7 +47,7 @@ global $kbs_register_redirect; ?>
 					<?php do_action( 'kbs_register_form_after_name' ); ?>
 
                     <div class="mb-3">
-                        <label for="kbs-email"><?php _e( 'Email Address', 'kb-support' ); ?></label>
+                        <label for="kbs-email"><?php esc_html_e( 'Email Address', 'kb-support' ); ?></label>
                         <input type="email" name="kbs_user_email" class="required kbs-input" id="kbs-email" required>
                     </div>
 
@@ -55,11 +55,11 @@ global $kbs_register_redirect; ?>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="kbs-user-pass"><?php _e( 'Password', 'kb-support' ); ?></label>
+                            <label for="kbs-user-pass"><?php esc_html_e( 'Password', 'kb-support' ); ?></label>
                             <input type="password" name="kbs_user_pass" class="required kbs-input" id="kbs-user-pass" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="kbs-user-pass2"><?php _e( 'Confirm Password', 'kb-support' ); ?></label>
+                            <label for="kbs-user-pass2"><?php esc_html_e( 'Confirm Password', 'kb-support' ); ?></label>
                             <input type="password" name="kbs_user_pass2" class="required kbs-input" id="kbs-user-pass2" required>
                         </div>
                     </div><!-- .row -->
@@ -82,7 +82,7 @@ global $kbs_register_redirect; ?>
 <?php else : ?>
 
 	<div class="kbs_alert kbs_alert_warn">
-    	<?php _e( 'You are already logged in. No registration is required.', 'kb-support' ); ?>
+    	<?php esc_html_e( 'You are already logged in. No registration is required.', 'kb-support' ); ?>
     </div>
 
 <?php endif; ?>

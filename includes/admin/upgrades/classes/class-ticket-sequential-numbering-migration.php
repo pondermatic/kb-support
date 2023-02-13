@@ -118,8 +118,8 @@ class KBS_Ticket_Sequential_Numbering_Migration extends KBS_Batch_Export {
 
 		if ( ! $this->can_export() ) {
 			wp_die(
-				__( 'You do not have permission to run this upgrade.', 'kb-support' ),
-				__( 'Error', 'kb-support' ),
+				esc_html__( 'You do not have permission to run this upgrade.', 'kb-support' ),
+				esc_html__( 'Error', 'kb-support' ),
 				array( 'response' => 403 )
             );
 		}
@@ -133,7 +133,7 @@ class KBS_Ticket_Sequential_Numbering_Migration extends KBS_Batch_Export {
 			$this->done = true;
 			delete_option( 'kbs_update_ticket_sequential_numbering_total' );
             delete_option( 'kbs_next_ticket_number' );
-			$this->message = sprintf( __( '%s numbers updated successfully.', 'kb-support' ), kbs_get_ticket_label_singular() );
+			$this->message = sprintf( esc_html__( '%s numbers updated successfully.', 'kb-support' ), kbs_get_ticket_label_singular() );
 			delete_option( 'kbs_upgrade_sequential' );
 			return false;
 		}

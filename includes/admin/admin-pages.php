@@ -29,8 +29,8 @@ function kbs_add_options_link() {
 
 	add_submenu_page(
         'edit.php?post_type=kbs_ticket',
-        __( 'Companies', 'kb-support' ),
-        __( 'Companies', 'kb-support' ),
+        esc_html__( 'Companies', 'kb-support' ),
+        esc_html__( 'Companies', 'kb-support' ),
         $customer_view_role,
         'edit.php?post_type=kbs_company'
     );
@@ -39,8 +39,8 @@ function kbs_add_options_link() {
 
 	add_submenu_page(
         'edit.php?post_type=kbs_ticket',
-        __( 'Customers', 'kb-support' ),
-        __( 'Customers', 'kb-support' ),
+        esc_html__( 'Customers', 'kb-support' ),
+        esc_html__( 'Customers', 'kb-support' ),
         $customer_view_role,
         'kbs-customers',
         'kbs_customers_page'
@@ -49,9 +49,9 @@ function kbs_add_options_link() {
     do_action( 'kbs_menu_after_customers' );
 
 	add_submenu_page(
-        null,
-        __( 'KBS Upgrades', 'kb-support' ),
-        __( 'KBS Upgrades', 'kb-support' ),
+        '',
+        esc_html__( 'KBS Upgrades', 'kb-support' ),
+        esc_html__( 'KBS Upgrades', 'kb-support' ),
         'manage_ticket_settings',
         'kbs-upgrades',
         'kbs_upgrades_screen'
@@ -71,7 +71,7 @@ function kbs_add_licensing_menu_link()  {
     global $submenu;
 
     $submenu['edit.php?post_type=kbs_ticket'][900] = array(
-        __( 'Manage Licenses', 'kb-support' ),
+        esc_html__( 'Manage Extensions', 'kb-support' ),
         'manage_ticket_settings',
         add_query_arg( array(
             'post_type' => 'kbs_ticket',
@@ -142,13 +142,13 @@ function kbs_is_admin_page( $passed_page = '', $passed_view = '' ) {
 	global $pagenow, $typenow;
 
 	$found      = false;
-	$post_type  = isset( $_GET['post_type'] )  ? strtolower( $_GET['post_type'] )  : false;
-	$action     = isset( $_GET['action'] )     ? strtolower( $_GET['action'] )     : false;
-	$taxonomy   = isset( $_GET['taxonomy'] )   ? strtolower( $_GET['taxonomy'] )   : false;
-	$page       = isset( $_GET['page'] )       ? strtolower( $_GET['page'] )       : false;
-	$view       = isset( $_GET['view'] )       ? strtolower( $_GET['view'] )       : false;
-	$kbs_action = isset( $_GET['kbs-action'] ) ? strtolower( $_GET['kbs-action'] ) : false;
-	$tab        = isset( $_GET['tab'] )        ? strtolower( $_GET['tab'] )        : false;
+	$post_type  = isset( $_GET['post_type'] )  ? strtolower( sanitize_text_field( wp_unslash( $_GET['post_type'] ) ) )  : false;
+	$action     = isset( $_GET['action'] )     ? strtolower( sanitize_text_field( wp_unslash( $_GET['action'] ) ) )     : false;
+	$taxonomy   = isset( $_GET['taxonomy'] )   ? strtolower( sanitize_text_field( wp_unslash( $_GET['taxonomy'] ) ) )   : false;
+	$page       = isset( $_GET['page'] )       ? strtolower( sanitize_text_field( wp_unslash( $_GET['page'] ) ) )       : false;
+	$view       = isset( $_GET['view'] )       ? strtolower( sanitize_text_field( wp_unslash( $_GET['view'] ) ) )       : false;
+	$kbs_action = isset( $_GET['kbs-action'] ) ? strtolower( sanitize_text_field( wp_unslash( $_GET['kbs-action'] ) ) ) : false;
+	$tab        = isset( $_GET['tab'] )        ? strtolower( sanitize_text_field( wp_unslash( $_GET['tab'] ) ) )       : false;
 
 	switch ( $passed_page ) {
 		case 'kbs_ticket':

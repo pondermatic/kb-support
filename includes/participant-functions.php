@@ -118,7 +118,7 @@ function kbs_list_ticket_participants( $ticket, $args = array()  )	{
 
 	if ( empty( $_participants ) )	{
 		return sprintf(
-			__( 'There are no participants of this %s.', 'kb-support' ),
+			esc_html__( 'There are no participants of this %s.', 'kb-support' ),
 			kbs_get_ticket_label_singular( true )
 		);
 	}
@@ -161,7 +161,7 @@ function kbs_list_ticket_participants( $ticket, $args = array()  )	{
 			$output .= sprintf(
 				'<a href="#" class="kbs-delete remove-participant" data-participant="%s">%s</a>',
 				$email,
-				__( 'Remove', 'kb-support' )
+				esc_html__( 'Remove', 'kb-support' )
 			);
 			$output .= '</li>';
 		}
