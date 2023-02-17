@@ -4,7 +4,7 @@ Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
 Tested up to: 6.1
 Requires PHP: 5.4
-Stable tag: 1.5.85
+Stable tag: 1.5.86
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,6 +122,12 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.5.86 - 17.02.2023 =
+Fixed: Wrong escaping on log a support tichet page ( [#256](https://github.com/WPChill/kb-support/issues/256) )
+Fixed: Stripped inline css for ticket content which may cause undesired outcome in admin ( [#255](https://github.com/WPChill/kb-support/issues/255) )
+Changed: Made file_upload custom submission field more intuitive regarding file upload limit setting ( [#235](https://github.com/WPChill/kb-support/issues/235) )
+
 = 1.5.85 - 13.02.2023 =
 Changed: Improved date readability. ( [#245](https://github.com/WPChill/modula-lite/issues/245) )
 Fixed: Fatal error caused by bad ES translation. ( [#250](https://github.com/WPChill/modula-lite/issues/250) )
