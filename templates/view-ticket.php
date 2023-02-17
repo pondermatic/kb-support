@@ -131,7 +131,7 @@ if ( $visible && ! empty( $ticket->ID ) ) :
 									<div class="row kbs_ticket_subject">
 										<div class="col-md">
 											<span class="ticket_content">
-												<label><?php esc_html_e( 'Content', 'kb-support' ); ?>:</label> <?php echo wp_kses_post( htmlspecialchars_decode( $ticket->get_content() ) ); ?>
+												<label><?php esc_html_e( 'Content', 'kb-support' ); ?>:</label> <?php echo wp_kses_post( $ticket->get_content() ); ?>
 											</span>
 										</div>
 									</div>
