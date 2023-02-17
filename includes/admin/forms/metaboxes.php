@@ -258,6 +258,10 @@ function kbs_render_form_field_row( $field, $form )	{
         	<br />
             <span class="description"><?php echo esc_html( $settings['description'] ); ?></span>
         <?php endif; ?>
+		<?php if ( 0 >= kbs_get_max_file_uploads() && 'file_upload' === $settings['type'] ) : ?>
+        	<br />
+            <span class="kbs_notice_warning"><?php esc_html_e( "Enable file uploads in Settings > Tickets > Submission Settings > Allow File Uploads.", 'kb-support' ); ?></span>
+        <?php endif; ?>
     </td>
     
     <td><?php echo kbs_get_field_type( $settings['type'] ); ?></td>

@@ -1521,3 +1521,10 @@ p.kbs-extension-desc {
   .wpchill-tooltip:hover .wpchill-tooltip-content {
 	display: block;
   }
+
+  #kbs_form_fields_mb .kbs_notice_warning{
+	font-size: 10px;
+	line-height: 10px;
+	font-weight: 400;
+	color: #f00;
+  }
