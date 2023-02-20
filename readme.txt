@@ -136,8 +136,8 @@ Added: Option to disable Tickets and KB Articles. ( [#252](https://github.com/WP
 Fixed: Form submission security failed ( [#246](https://github.com/WPChill/kb-support/issues/246) )
 
 = 1.5.84 - 12.12.2022 =
-Added: Admin navigation tabs for kbs_ticket post type. ( [#208](https://github.com/WPChill/modula-lite/issues/208) )
-Added: Branding bar. ( [#207](https://github.com/WPChill/modula-lite/issues/207) )
+Added: Admin navigation tabs for kbs_ticket post type. ( [#208](https://github.com/WPChill/kb-support/issues/208) )
+Added: Branding bar. ( [#207](https://github.com/WPChill/kb-support/issues/207) )
 Fixed: Ticket filtering in admin Tickets table list ( [#190](https://github.com/WPChill/kb-support/issues/190) )
 Fixed: Translations ( [#151](https://github.com/WPChill/kb-support/issues/151) )
 Changed: Ticket date received/updated display ( [#163](https://github.com/WPChill/kb-support/issues/163) )
