@@ -20,7 +20,11 @@ global $kbs_form;
 
 					<?php $label_class = ''; ?>
                     <?php $settings    = $kbs_form->get_field_settings( $field->ID ); ?>
-
+                    <?php
+                        if( 0 >= kbs_get_max_file_uploads() && 'file_upload' === $settings['type']){
+                            continue;
+                        }
+                    ?>
                     <?php if ( 'hidden' != $settings['type'] ) : ?>
                         <p class="<?php echo esc_attr( $field->post_name ); ?>">
                     <?php endif; ?>

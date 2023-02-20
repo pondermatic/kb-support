@@ -540,7 +540,7 @@ function kbs_add_credit_text()	{
 	if ( kbs_get_option( 'show_credits', false ) )	{
 		ob_start(); ?>
 
-		<span class="kbs-description"><?php echo wp_kses_post( sprintf( esc_html__( 'Powered by <a href="%s" title="KB Support" target="_blank">KB Support</a>. The ultimate help desk and knowledge base support tool plugin for WordPress. <a href="%s" target="_blank">Download for free</a>.', 'kb-support' ), 'https://kb-support.com/', 'https://wordpress.org/plugins/kb-support' ) ); ?></span>
+		<span class="kbs-description"><?php echo wp_kses_post( sprintf( __( 'Powered by <a href="%s" title="KB Support" target="_blank">KB Support</a>. The ultimate help desk and knowledge base support tool plugin for WordPress. <a href="%s" target="_blank">Download for free</a>.', 'kb-support' ), 'https://kb-support.com/', 'https://wordpress.org/plugins/kb-support' ) ); ?></span>
 
 		<?php echo ob_get_clean();
 	}

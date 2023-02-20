@@ -81,7 +81,7 @@ function kbs_form_add_meta_boxes( $post )	{
 		'normal',
 		'high'
 	);
-			
+
 	add_meta_box(
 		'kbs_form_add_field_mb',
 		esc_html__( 'Add a New Field', 'kb-support' ),
@@ -90,7 +90,7 @@ function kbs_form_add_meta_boxes( $post )	{
 		'side',
 		'high'
 	);
-	
+
 } // kbs_form_add_meta_boxes
 add_action( 'add_meta_boxes_kbs_form', 'kbs_form_add_meta_boxes' );
 
@@ -102,7 +102,7 @@ add_action( 'add_meta_boxes_kbs_form', 'kbs_form_add_meta_boxes' );
  * @return
  */
 function kbs_form_fields_mb_callback( $post )	{
-	
+
 	global $post;
 
 	/*
@@ -110,7 +110,7 @@ function kbs_form_fields_mb_callback( $post )	{
 	 * @since	1.0
 	 */
 	do_action( 'kbs_form_mb_form_fields', $post->ID );
-	
+
 } // kbs_form_fields_mb_callback
 
 /**
@@ -122,7 +122,7 @@ function kbs_form_fields_mb_callback( $post )	{
  * @return
  */
 function kbs_form_add_field_mb_callback( $post, $args )	{
-	
+
 	global $post;
 
 	/*
@@ -130,7 +130,7 @@ function kbs_form_add_field_mb_callback( $post, $args )	{
 	 * @since	1.0
 	 */
 	do_action( 'kbs_form_mb_add_form_field', $post->ID, $args );
-	
+
 } // kbs_form_add_field_mb_callback
 
 /**
@@ -145,11 +145,11 @@ function kbs_form_add_field_mb_callback( $post, $args )	{
  * @return
  */
 function kbs_form_not_ready_mb_callback( $post, $args )	{
-	
+
 	?>
    <p><i class="fas fa-exclamation-circle" aria-hidden="true"></i> <?php esc_html_e( 'Please save or publish your form before adding fields.', 'kb-support' ); ?></p>
     <?php
-	
+
 } // kbs_form_not_ready_mb_callback
 
 /**
@@ -202,7 +202,7 @@ function kbs_display_meta_box_form_fields( $post_id )	{
         </table>
     </div>
 	<?php
-	
+
 } // kbs_display_meta_box_form_fields
 add_action( 'kbs_form_mb_form_fields', 'kbs_display_meta_box_form_fields', 10 );
 
@@ -219,7 +219,7 @@ function kbs_render_form_field_row( $field, $form )	{
 	$settings = $form->get_field_settings( $field->ID );
 
 	$url  = remove_query_arg( array( 'edit_field', 'delete_field', 'kbs-message', 'kbs-action-nonce' ) );
-	
+
 	$edit = wp_nonce_url(
 		add_query_arg(
 			array(
@@ -232,7 +232,7 @@ function kbs_render_form_field_row( $field, $form )	{
 		'edit_form_field',
 		'kbs-action-nonce'
 	);
-	
+
 	$delete = wp_nonce_url(
 		add_query_arg(
 			array(
@@ -252,18 +252,23 @@ function kbs_render_form_field_row( $field, $form )	{
         'value' => esc_attr( $field->menu_order ),
         'class' => 'kbs_sortable_index'
     ) ); ?>
-    
+
     <td><?php echo esc_html( $field->post_title ); ?>
 		<?php if ( ! empty( $settings['description'] ) ) : ?>
         	<br />
             <span class="description"><?php echo esc_html( $settings['description'] ); ?></span>
         <?php endif; ?>
+		<?php if ( 0 >= kbs_get_max_file_uploads() && 'file_upload' === $settings['type'] ) : ?>
+        	<br />
+			<span
+				class="kbs_notice_warning"><?php echo wp_kses_post( sprintf( __( "Enable file uploads in <a href='%s' target='_blank'>Settings</a> > Tickets > Submission Settings > Allow File Uploads.", 'kb-support' ), esc_url( admin_url( 'edit.php?post_type=kbs_ticket&page=kbs-settings&tab=tickets&section=submit' ) ) ) ); ?></span>
+		<?php endif; ?>
     </td>
-    
+
     <td><?php echo kbs_get_field_type( $settings['type'] ); ?></td>
-    
+
     <td><?php echo kbs_display_field_setting_icons( $field->ID ); ?></td>
-    
+
     <td>
     	<a href="<?php echo esc_url( $edit ); ?>" class="button button-primary button-small"><?php esc_html_e( 'Edit', 'kb-support' ); ?></a>
 
@@ -271,7 +276,7 @@ function kbs_render_form_field_row( $field, $form )	{
 	        <a href="<?php echo esc_url( $delete ); ?>" class="button button-secondary button-small"><?php esc_html_e( 'Delete', 'kb-support' ); ?></a>
         <?php endif; ?>
     </td>
-    
+
     <?php
 } // kbs_render_form_field_row
 add_action( 'kbs_render_field_row', 'kbs_render_form_field_row', 10, 2 );
@@ -290,7 +295,7 @@ function kbs_render_field_label_row( $post_id, $args )	{
 	kbs_maybe_editing_field();
 
 	?>
-    
+
 	<div id="kbs_meta_field_label_wrap">
 		<p><strong><?php esc_html_e( 'Label', 'kb-support' ); ?></strong><br />
 		<label for="kbs_field_label">
@@ -327,7 +332,7 @@ function kbs_render_field_description_row( $post_id, $args )	{
 	}
 
 	?>
-    
+
 	<div id="kbs_meta_field_description_wrap">
 		<p><strong><?php esc_html_e( 'Description', 'kb-support' ); ?></strong><br />
 		<label for="kbs_field_description">

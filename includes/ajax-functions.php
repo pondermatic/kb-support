@@ -663,7 +663,10 @@ function kbs_ajax_validate_form_submission()	{
 		$settings = $form->get_field_settings( $field->ID );
 
 		if ( ! empty( $settings['required'] ) && empty( $_POST[ $field->post_name ] ) )	{
-
+			if ( 0 >= kbs_get_max_file_uploads() && 'file_upload' === $settings['type'] ){
+				continue;
+			}
+			
 			$error = kbs_form_submission_errors( $field->ID, 'required' );
 			$field = $field->post_name;
 

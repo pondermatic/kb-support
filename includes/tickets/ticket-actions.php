@@ -67,7 +67,7 @@ function kbs_process_ticket_submission()	{
 		if ( ! in_array( $key, $ignore ) )	{
 
 			if ( is_string( $value ) || is_int( $value ) )	{
-				$posted[ $key ] = wp_kses_post( $value );
+				$posted[ $key ] = preg_replace('/(<[^>]*) style=("[^"]+"|\'[^\']+\')([^>]*>)/i', '$1$3', wp_kses_post( $value ));
 				
 
 			} elseif( is_array( $value ) )	{
@@ -276,7 +276,7 @@ function kbs_ticket_customer_reply_action()	{
 
 	$reply_data = array(
 		'ticket_id'   => absint( $_POST['kbs_ticket_id'] ),
-		'response'    => isset( $_POST['kbs_reply'] ) ? wp_kses_post( $_POST['kbs_reply'] ) : '',
+		'response'    => isset( $_POST['kbs_reply'] ) ? preg_replace('/(<[^>]*) style=("[^"]+"|\'[^\']+\')([^>]*>)/i', '$1$3', wp_kses_post( $_POST['kbs_reply'] )) : '',
 		'close'       => isset( $_POST['kbs_close_ticket'] ) ? true : false,
 		'customer_id' => (int) $ticket->customer_id,
 		'author'      => 0
