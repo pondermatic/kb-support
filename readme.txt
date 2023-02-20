@@ -129,8 +129,8 @@ Fixed: Stripped inline css for ticket content which may cause undesired outcome 
 Changed: Made file_upload custom submission field more intuitive regarding file upload limit setting ( [#235](https://github.com/WPChill/kb-support/issues/235) )
 
 = 1.5.85 - 13.02.2023 =
-Changed: Improved date readability. ( [#245](https://github.com/WPChill/modula-lite/issues/245) )
-Fixed: Fatal error caused by bad ES translation. ( [#250](https://github.com/WPChill/modula-lite/issues/250) )
+Changed: Improved date readability. ( [#245](https://github.com/WPChill/kb-support/issues/245) )
+Fixed: Fatal error caused by bad ES translation. ( [#250](https://github.com/WPChill/kb-support/issues/250) )
 Fixed: Wrong escaping in articles list ( [#243](https://github.com/WPChill/kb-support/issues/243) )
 Added: Option to disable Tickets and KB Articles. ( [#252](https://github.com/WPChill/kb-support/issues/252) )
 Fixed: Form submission security failed ( [#246](https://github.com/WPChill/kb-support/issues/246) )
