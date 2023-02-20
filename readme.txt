@@ -1,4 +1,4 @@
-=== KB Support - Help Desk & Knowledgebase plugin ===
+=== KB Support - WordPress Help Desk ===
 Contributors: wpchill, silkalns
 Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
@@ -123,7 +123,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 == Changelog ==
 
-= 1.5.86 - 17.02.2023 =
+= 1.5.86 - 20.02.2023 =
 Fixed: Wrong escaping on log a support tichet page ( [#256](https://github.com/WPChill/kb-support/issues/256) )
 Fixed: Stripped inline css for ticket content which may cause undesired outcome in admin ( [#255](https://github.com/WPChill/kb-support/issues/255) )
 Changed: Made file_upload custom submission field more intuitive regarding file upload limit setting ( [#235](https://github.com/WPChill/kb-support/issues/235) )
