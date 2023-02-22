@@ -4,7 +4,7 @@ Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
 Tested up to: 6.1
 Requires PHP: 5.4
-Stable tag: 1.5.86
+Stable tag: 1.5.87
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,6 +122,9 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.5.87 - 23.02.2023 =
+Fixed: Reverted inline css strip and added a strict number of allowerd HTML tags for ticket content. ( [#255](https://github.com/WPChill/kb-support/issues/255) )
 
 = 1.5.86 - 20.02.2023 =
 Fixed: Wrong escaping on log a support tichet page ( [#256](https://github.com/WPChill/kb-support/issues/256) )
