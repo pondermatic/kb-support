@@ -1092,7 +1092,6 @@ class KBS_Ticket {
 	public function get_content() {
 		$content = apply_filters( 'the_content', $this->ticket_content );
 		$content = str_replace( ']]>', ']]&gt;', $content );
-		$content = preg_replace('/(<[^>]*) style=("[^"]+"|\'[^\']+\')([^>]*>)/i', '$1$3', htmlspecialchars_decode( $content ));
 
 		return apply_filters( 'kbs_ticket_content', $content );
 	} // get_content
