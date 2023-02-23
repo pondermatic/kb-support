@@ -516,7 +516,7 @@ function kbs_search_ticket_list_by_id( $query ) {
         return;
     }
 
-    if ( is_numeric( $id ) && get_post( $id ) )  {
+    if ( is_numeric( $id ) && !empty( get_post( $id ) && "kbs_ticket" === get_post( $id )->post_type) )  {
 
         $query->query_vars['p'] = $id;
 
@@ -525,7 +525,9 @@ function kbs_search_ticket_list_by_id( $query ) {
         $query->query_vars['meta_key']   = '_kbs_ticket_number';
         $query->query_vars['meta_value'] = $id;
 
-    }
+    }else{
+		return;
+	}
 
     unset( $query->query_vars['s'] );
 
@@ -536,7 +538,7 @@ function kbs_search_ticket_list_by_id( $query ) {
 	}
 
 
-    add_filter( 'get_search_query', function() { return $search_str; } );
+    add_filter( 'get_search_query', function() { return sanitize_text_field( wp_unslash( $_GET['s'] ) ); } );
 } // kbs_search_ticket_list_by_id
 add_action( 'parse_request', 'kbs_search_ticket_list_by_id' );
 
