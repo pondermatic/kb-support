@@ -728,33 +728,12 @@ function kbs_ticket_metabox_content_section( $ticket_id )	{
 
 	global $kbs_ticket, $kbs_ticket_update;
 
-	$allowed_html = 
-		array(
-		'a' => array(
-			'href' => array(),
-			'title' => array()
-		),
-		'br' => array(),
-		'em' => array(),
-		'strong' => array(),
-		'p' => array(
-			'style' => array(),
-		),
-		'span' => array(),
-		'ol' => array(),
-		'ul' => array(),
-		'li' => array(),
-		'blockquote' => array(),
-		'del' => array(),
-
-	);
-
     ?>
     <div class="kbs-ticket-content">
 		<h3>
 			<?php printf( esc_html__( '%s Content', 'kb-support' ), esc_html( kbs_get_ticket_label_singular() ) ); ?>
 		</h3>
-        <?php echo wp_kses( htmlspecialchars_decode( $kbs_ticket->get_content() ), $allowed_html ); ?>
+        <?php echo wp_kses( htmlspecialchars_decode( $kbs_ticket->get_content() ), kbs_allowed_html() ); ?>
     </div>
     <?php
 
