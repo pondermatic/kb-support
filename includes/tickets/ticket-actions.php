@@ -67,8 +67,8 @@ function kbs_process_ticket_submission()	{
 		if ( ! in_array( $key, $ignore ) )	{
 
 			if ( is_string( $value ) || is_int( $value ) )	{
-				$posted[ $key ] =  wp_kses( $value, allowed_html() );
-				
+				$posted[ $key ] =  wp_kses( $value, kbs_allowed_html() );
+
 
 			} elseif( is_array( $value ) )	{
 				$posted[ $key ] = array_map( 'absint', $value );
@@ -227,27 +227,27 @@ function kbs_reopen_ticket()	{
 		$message = 'nonce_fail';
 	} else	{
 		remove_action( 'save_post_kbs_ticket', 'kbs_ticket_post_save', 10, 3 );
-	
+
 		if ( 'closed' == get_post_status( isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0 ) )	{
 			$update = wp_update_post( array(
 				'ID'          => isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0,
 				'post_status' => 'open'
 			) );
-			
+
 			if ( $update )	{
 				$message = 'ticket_reopened';
-				kbs_insert_note( isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0, sprintf( esc_html__( '%s re-opened.', 'kb-support' ), kbs_get_ticket_label_singular() ) ); 
+				kbs_insert_note( isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0, sprintf( esc_html__( '%s re-opened.', 'kb-support' ), kbs_get_ticket_label_singular() ) );
 			}
 		}
-		
+
 		if ( ! isset( $message ) )	{
 			$message = 'ticket_not_closed';
 		}
-		
+
 	}
-	
+
 	$url = remove_query_arg( array( 'kbs-action', 'kbs-message', 'kbs-ticket-nonce' ) );
-	
+
 	wp_redirect( add_query_arg( 'kbs-message', $message, $url ) );
 
 	die();
@@ -276,7 +276,7 @@ function kbs_ticket_customer_reply_action()	{
 
 	$reply_data = array(
 		'ticket_id'   => absint( $_POST['kbs_ticket_id'] ),
-		'response'    => isset( $_POST['kbs_reply'] ) ?  wp_kses( $_POST['kbs_reply'], allowed_html() ) : '',
+		'response'    => isset( $_POST['kbs_reply'] ) ?  wp_kses( $_POST['kbs_reply'], kbs_allowed_html() ) : '',
 		'close'       => isset( $_POST['kbs_close_ticket'] ) ? true : false,
 		'customer_id' => (int) $ticket->customer_id,
 		'author'      => 0
@@ -347,7 +347,7 @@ function kbs_delete_ticket_reply_action()   {
 
     $reply_id  = absint( $_GET['reply_id'] );
     $ticket_id = absint( $_GET['ticket_id'] );
-	
+
     if ( wp_delete_post( $reply_id, true ) )  {
         $message = 'ticket_reply_deleted';
     } else  {
@@ -422,9 +422,9 @@ function kbs_auto_assign_agent_to_ticket_action()	{
 	if ( ! isset( $_GET['post'] ) || 'kbs_ticket' != get_post_type( sanitize_text_field( wp_unslash( $_GET['post'] ) ) ) || ! kbs_get_option( 'auto_assign_agent', false ) )	{
 		return;
 	}
-	
+
 	$kbs_ticket = new KBS_Ticket( sanitize_text_field( wp_unslash( $_GET['post'] ) ) );
-	
+
 	if ( 'new' != $kbs_ticket->post_status || ! empty( $kbs_ticket->agent_id ) )	{
 		return;
 	}
@@ -610,27 +610,3 @@ function kbs_monitor_heartbeat_for_new_ticket_replies( $response, $data )   {
     return $response;
 } // kbs_monitor_heartbeat_for_new_ticket_replies
 add_filter( 'heartbeat_received', 'kbs_monitor_heartbeat_for_new_ticket_replies', 10, 2 );
-
-
-function allowed_html(){
-	
-	return array(
-		'a' => array(
-			'href' => array(),
-			'title' => array()
-		),
-		'br' => array(),
-		'em' => array(),
-		'strong' => array(),
-		'p' => array(
-			'style' => array(),
-		),
-		'span' => array(),
-		'ol' => array(),
-		'ul' => array(),
-		'li' => array(),
-		'blockquote' => array(),
-		'del' => array(),
-
-	);
-}

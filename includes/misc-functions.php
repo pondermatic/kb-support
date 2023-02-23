@@ -1133,3 +1133,35 @@ function kbs_get_current_promotions( $active_only = true )   {
 
     return $promotions;
 } // kbs_get_current_promotions
+
+/**
+ * Retrieve the allowed HTML tags for KB Support.
+ *
+ * @since 1.8.7
+ *
+ * @return array
+ */
+function kbs_allowed_html() {
+
+	return apply_filters(
+		'kb_allowed_html_tags',
+		array(
+			'a'          => array(
+				'href'  => array(),
+				'title' => array()
+			),
+			'br'         => array(),
+			'em'         => array(),
+			'strong'     => array(),
+			'p'          => array(
+				'style' => array(),
+			),
+			'span'       => array(),
+			'ol'         => array(),
+			'ul'         => array(),
+			'li'         => array(),
+			'blockquote' => array(),
+			'del'        => array()
+		)
+	);
+} // kb_allowed_html
