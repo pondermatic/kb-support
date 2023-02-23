@@ -24,14 +24,27 @@ function kbs_add_tools_menu_link() {
 
 	global $kbs_tools_page;
 
-	$kbs_tools_page = add_submenu_page(
-        'kbs-settings',
-        esc_html__( 'Tools', 'kb-support' ),
-        esc_html__( 'Tools', 'kb-support' ),
-        'manage_ticket_settings',
-        'kbs-tools',
-        'kbs_tools_page'
-    );
+
+	if( kbs_tickets_disabled() ){
+		$kbs_tools_page = add_submenu_page(
+			'kbs-settings',
+			esc_html__( 'Tools', 'kb-support' ),
+			esc_html__( 'Tools', 'kb-support' ),
+			'manage_ticket_settings',
+			'kbs-tools',
+			'kbs_tools_page' 
+		);
+	}else{
+		$kbs_tools_page = add_submenu_page(
+			'edit.php?post_type=kbs_ticket',
+			esc_html__( 'Tools', 'kb-support' ),
+			esc_html__( 'Tools', 'kb-support' ),
+			'manage_ticket_settings',
+			'kbs-tools',
+			'kbs_tools_page' 
+		);
+	}
+
 
 } // kbs_add_tools_menu_link
 add_action( 'admin_menu', 'kbs_add_tools_menu_link', 99 );
