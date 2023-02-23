@@ -571,14 +571,14 @@ function kbs_cleanup_after_deleting_ticket( $ticket_id = 0 )	{
 			$wpdb->prepare(
 				"DELETE FROM $wpdb->posts
 				WHERE ID IN( %s )",
-				$item_ids,
+				$item_ids
 			)
 		 );
 		 $wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM $wpdb->postmeta
 				WHERE post_id IN( %s )",
-				$item_ids,
+				$item_ids
 			)
 		 );
 
