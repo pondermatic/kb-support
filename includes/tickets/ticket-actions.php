@@ -71,7 +71,7 @@ function kbs_process_ticket_submission()	{
 
 
 			} elseif( is_array( $value ) )	{
-				$posted[ $key ] = array_map( 'absint', $value );
+				$posted[ $key ] = array_map( 'sanitize_text_field', $value );
 			}
 
 		}

@@ -834,16 +834,31 @@ function kbs_add_ticket_from_form( $form_id, $form_data )	{
 					break;
 			}
 		} else {
-			$ticket_data[ $field->post_name ] = array( $field->post_title, strip_tags( addslashes( $form_data[ $field->post_name ] ) ) );
 
-			$data[] = '<strong>' . $field->post_title . '</strong><br />' . $form_data[ $field->post_name ];
+			if( is_array( $form_data[ $field->post_name ] ) ){
+				$field_value  = implode( ', ', $form_data[ $field->post_name ] );
+			}else{
+				$field_value  = $form_data[ $field->post_name ];
+			}
+
+			$ticket_data[ $field->post_name ] = array( $field->post_title, strip_tags( addslashes( $field_value ) ) );
+
+			$data[] = '<strong>' . $field->post_title . '</strong><br />' . $field_value;
 		}
 	}
 
 	$ticket_data = apply_filters( 'kbs_add_ticket_from_form_data', $ticket_data, $form_id, $form_data );
 
+
 	// Now let's secure the form data a little so we don't end upt with XSS stored.
-	$ticket_data['form_data']['data'] = array_map( 'sanitize_text_field', array_map( 'htmlspecialchars', array_map( 'trim', $ticket_data['form_data']['data'] ) ) );
+	foreach( $ticket_data['form_data']['data'] as $key => $value ){
+
+		if( is_array( $value ) ){
+			$ticket_data['form_data']['data'][$key] = sanitize_text_field( htmlspecialchars( trim( implode( ', ', $value ) ) ) );
+		}else{
+			$ticket_data['form_data']['data'][$key] = sanitize_text_field( htmlspecialchars( trim( $value ) ) );
+		}
+	}
 
 	$ticket_id = kbs_add_ticket( $ticket_data );
 
