@@ -127,6 +127,8 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 Fixed: Tools tab not working when Ticketing system is enabled. ( [#258](https://github.com/WPChill/kb-support/issues/258) )
 Fixed: Search by ticket ID (#) ( [#216](https://github.com/WPChill/kb-support/issues/216) )
 Fixed: Submission form checkbox list array to string conversion ( [#220](https://github.com/WPChill/kb-support/issues/220) )
+Fixed: Added a soft flush_rewrite_rules to prevent articles/tickets leading to 404 pages when activated. ( [#228](https://github.com/WPChill/kb-support/issues/228) )
+Fixed: Privacy policy checkbox was not showing if the label was empty. ( [#233](https://github.com/WPChill/kb-support/issues/233) )
 
 = 1.5.87 - 23.02.2023 =
 Fixed: Reverted inline css strip and added a strict number of allowerd HTML tags for ticket content. ( [#255](https://github.com/WPChill/kb-support/issues/255) )
