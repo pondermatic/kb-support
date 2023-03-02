@@ -1783,24 +1783,28 @@ function kbs_tickets_disabled() {
 	return false;
 }
 
-function kbs_flush_rules_on_setting_update( $option, $old_value, $value ){
-	
-	if( 'kbs_settings' === $option ){
-	
-		if( isset( $old_value['disable_tickets']) && ! isset( $value['disable_tickets'] ) ||
-			! isset( $old_value['disable_tickets']) && isset( $value['disable_tickets'] ) ){
-
-				flush_rewrite_rules( false );
-		}	
-
-		if( isset( $old_value['disable_kb_articles']) && ! isset( $value['disable_kb_articles'] ) ||
-			! isset( $old_value['disable_kb_articles']) && isset( $value['disable_kb_articles'] ) ){
-
-				flush_rewrite_rules( false );
+/**
+ * Reset permalinks when disable or enabling tickets or articles
+ *
+ * @param $option
+ * @param $old_value
+ * @param $value
+ *
+ * @return void
+ * @since 1.5.88
+ */
+function kbs_flush_rules_on_setting_update( $option, $old_value, $value ) {
+	if ( 'kbs_settings' === $option ) {
+		if ( ( isset( $old_value['disable_tickets'] ) && ! isset( $value['disable_tickets'] ) ) ||
+		     ( ! isset( $old_value['disable_tickets'] ) && isset( $value['disable_tickets'] ) ) ) {
+			flush_rewrite_rules( false );
 		}
 
+		if ( ( isset( $old_value['disable_kb_articles'] ) && ! isset( $value['disable_kb_articles'] ) ) ||
+		     ( ! isset( $old_value['disable_kb_articles'] ) && isset( $value['disable_kb_articles'] ) ) ) {
+			flush_rewrite_rules( false );
+		}
 	}
-
 }
 
 add_action( 'updated_option', 'kbs_flush_rules_on_setting_update', 20, 3 );
