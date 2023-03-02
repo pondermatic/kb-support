@@ -531,13 +531,6 @@ function kbs_search_ticket_list_by_id( $query ) {
 
     unset( $query->query_vars['s'] );
 
-	$search_str = '';
-
-	if ( isset( $_GET['s'] ) ) {
-		$search_str = sanitize_text_field( wp_unslash( $_GET['s'] ) );
-	}
-
-
     add_filter( 'get_search_query', function() { return sanitize_text_field( wp_unslash( $_GET['s'] ) ); } );
 } // kbs_search_ticket_list_by_id
 add_action( 'parse_request', 'kbs_search_ticket_list_by_id' );
