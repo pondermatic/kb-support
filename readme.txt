@@ -129,6 +129,7 @@ Fixed: Search by ticket ID (#) ( [#216](https://github.com/WPChill/kb-support/is
 Fixed: Submission form checkbox list array to string conversion ( [#220](https://github.com/WPChill/kb-support/issues/220) )
 Fixed: Added a soft flush_rewrite_rules to prevent articles/tickets leading to 404 pages when activated. ( [#228](https://github.com/WPChill/kb-support/issues/228) )
 Fixed: Privacy policy checkbox was not showing if the label was empty. ( [#233](https://github.com/WPChill/kb-support/issues/233) )
+Fixed: Unknown $post_status in ticket status function. ( [#260](https://github.com/WPChill/kb-support/issues/260) )
 
 = 1.5.87 - 23.02.2023 =
 Fixed: Reverted inline css strip and added a strict number of allowerd HTML tags for ticket content. ( [#255](https://github.com/WPChill/kb-support/issues/255) )

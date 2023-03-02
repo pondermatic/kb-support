@@ -460,7 +460,7 @@ function kbs_get_ticket_status( $ticket, $return_label = false ) {
 			return $ticket->status_nicename;
 		} else {
 			// Make sure we're matching cases, since they matter
-			return array_search( strtolower( $post_status ), array_map( 'strtolower', $statuses ) );
+			return array_search( strtolower( get_post_status( $ticket->ID ) ), array_map( 'strtolower', $statuses ) );
 		}
 	}
 
