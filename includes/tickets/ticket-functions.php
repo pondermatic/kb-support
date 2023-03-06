@@ -460,7 +460,7 @@ function kbs_get_ticket_status( $ticket, $return_label = false ) {
 			return $ticket->status_nicename;
 		} else {
 			// Make sure we're matching cases, since they matter
-			return array_search( strtolower( $post_status ), array_map( 'strtolower', $statuses ) );
+			return array_search( strtolower( get_post_status( $ticket->ID ) ), array_map( 'strtolower', $statuses ) );
 		}
 	}
 
@@ -834,16 +834,31 @@ function kbs_add_ticket_from_form( $form_id, $form_data )	{
 					break;
 			}
 		} else {
-			$ticket_data[ $field->post_name ] = array( $field->post_title, strip_tags( addslashes( $form_data[ $field->post_name ] ) ) );
 
-			$data[] = '<strong>' . $field->post_title . '</strong><br />' . $form_data[ $field->post_name ];
+			if( is_array( $form_data[ $field->post_name ] ) ){
+				$field_value  = implode( ', ', $form_data[ $field->post_name ] );
+			}else{
+				$field_value  = $form_data[ $field->post_name ];
+			}
+
+			$ticket_data[ $field->post_name ] = array( $field->post_title, strip_tags( addslashes( $field_value ) ) );
+
+			$data[] = '<strong>' . $field->post_title . '</strong><br />' . $field_value;
 		}
 	}
 
 	$ticket_data = apply_filters( 'kbs_add_ticket_from_form_data', $ticket_data, $form_id, $form_data );
 
+
 	// Now let's secure the form data a little so we don't end upt with XSS stored.
-	$ticket_data['form_data']['data'] = array_map( 'sanitize_text_field', array_map( 'htmlspecialchars', array_map( 'trim', $ticket_data['form_data']['data'] ) ) );
+	foreach( $ticket_data['form_data']['data'] as $key => $value ){
+
+		if( is_array( $value ) ){
+			$ticket_data['form_data']['data'][$key] = sanitize_text_field( htmlspecialchars( trim( implode( ', ', $value ) ) ) );
+		}else{
+			$ticket_data['form_data']['data'][$key] = sanitize_text_field( htmlspecialchars( trim( $value ) ) );
+		}
+	}
 
 	$ticket_id = kbs_add_ticket( $ticket_data );
 
@@ -1767,3 +1782,29 @@ function kbs_tickets_disabled() {
 
 	return false;
 }
+
+/**
+ * Reset permalinks when disable or enabling tickets or articles
+ *
+ * @param $option
+ * @param $old_value
+ * @param $value
+ *
+ * @return void
+ * @since 1.5.88
+ */
+function kbs_flush_rules_on_setting_update( $option, $old_value, $value ) {
+	if ( 'kbs_settings' === $option ) {
+		if ( ( isset( $old_value['disable_tickets'] ) && ! isset( $value['disable_tickets'] ) ) ||
+		     ( ! isset( $old_value['disable_tickets'] ) && isset( $value['disable_tickets'] ) ) ) {
+			flush_rewrite_rules( false );
+		}
+
+		if ( ( isset( $old_value['disable_kb_articles'] ) && ! isset( $value['disable_kb_articles'] ) ) ||
+		     ( ! isset( $old_value['disable_kb_articles'] ) && isset( $value['disable_kb_articles'] ) ) ) {
+			flush_rewrite_rules( false );
+		}
+	}
+}
+
+add_action( 'updated_option', 'kbs_flush_rules_on_setting_update', 20, 3 );

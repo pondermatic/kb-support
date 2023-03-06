@@ -2,7 +2,7 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: KB Support 1.5.86\n"
+"Project-Id-Version: KB Support 1.5.88\n"
 "Report-Msgid-Bugs-To: https://kb-support.com/\n"
 "POT-Creation-Date: 2022-12-06 12:37:25+00:00\n"
 "MIME-Version: 1.0\n"

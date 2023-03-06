@@ -1022,9 +1022,10 @@ function kbs_get_registered_settings() {
 					'agree_privacy_label' => array(
 						'id'   => 'agree_privacy_label',
 						'name' => esc_html__( 'Agree to Privacy Policy Label', 'kb-support' ),
-						'desc' => sprintf( esc_html__( 'Label shown next to the agree to privacy policy checkbox. This text will link to your defined <a href="%s">privacy policy</a>.', 'kb-support' ), esc_attr( admin_url( 'privacy.php' ) ) ),
+						'desc' => sprintf( wp_kses_post( __( 'Label shown next to the agree to privacy policy checkbox. This text will link to your defined <a href="%s">privacy policy</a>.', 'kb-support' ) ), esc_attr( admin_url( 'privacy.php' ) ) ),
 						'type' => 'text',
-						'size' => 'regular'
+						'size' => 'regular',
+						'std'  => esc_html__( 'I have read and accept the privacy policy.', 'kb-support' )
 					),
                     'agree_privacy_descripton' => array(
 						'id'   => 'agree_privacy_descripton',
