@@ -728,6 +728,7 @@ function kbs_ticket_metabox_content_section( $ticket_id )	{
 
 	global $kbs_ticket, $kbs_ticket_update;
 
+
     ?>
     <div class="kbs-ticket-content">
 		<h3>
