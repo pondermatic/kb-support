@@ -4,7 +4,7 @@ Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
 Tested up to: 6.1
 Requires PHP: 5.4
-Stable tag: 1.5.87
+Stable tag: 1.5.88
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -123,13 +123,14 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 == Changelog ==
 
-= 1.5.88 - TBD =
+= 1.5.88 - 06.03.2023 =
 Fixed: Tools tab not working when Ticketing system is enabled. ( [#258](https://github.com/WPChill/kb-support/issues/258) )
 Fixed: Search by ticket ID (#) ( [#216](https://github.com/WPChill/kb-support/issues/216) )
 Fixed: Submission form checkbox list array to string conversion ( [#220](https://github.com/WPChill/kb-support/issues/220) )
 Fixed: Added a soft flush_rewrite_rules to prevent articles/tickets leading to 404 pages when activated. ( [#228](https://github.com/WPChill/kb-support/issues/228) )
 Fixed: Privacy policy checkbox was not showing if the label was empty. ( [#233](https://github.com/WPChill/kb-support/issues/233) )
 Fixed: Unknown $post_status in ticket status function. ( [#260](https://github.com/WPChill/kb-support/issues/260) )
+Fixed: Email error ( [#199](https://github.com/WPChill/kb-support/issues/199) )
 
 = 1.5.87 - 23.02.2023 =
 Fixed: Reverted inline css strip and added a strict number of allowerd HTML tags for ticket content. ( [#255](https://github.com/WPChill/kb-support/issues/255) )
