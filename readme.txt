@@ -122,6 +122,8 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+= 1.5.89 - TBD =
+Fixed: Escaping issue in customer account ( [#262](https://github.com/WPChill/kb-support/issues/262) )
 
 = 1.5.88 - 06.03.2023 =
 Fixed: Tools tab not working when Ticketing system is enabled. ( [#258](https://github.com/WPChill/kb-support/issues/258) )
