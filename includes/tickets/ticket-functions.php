@@ -701,7 +701,7 @@ function kbs_add_ticket( $ticket_data )	{
 	$ticket->ip               = kbs_get_ip();
 	$ticket->sla_respond      = kbs_calculate_sla_target_response();
 	$ticket->sla_resolve      = kbs_calculate_sla_target_resolution();
-	$ticket->new_files        = $ticket_data['attachments'];
+	$ticket->new_files        = $attachments;
 	$ticket->form_data        = ! empty( $ticket_data['form_data'] ) ? $ticket_data['form_data'] : array();
 	$ticket->privacy_accepted = isset( $ticket_data['privacy_accepted'] ) ? $ticket_data['privacy_accepted'] : false;
 	$ticket->terms_agreed     = isset( $ticket_data['terms_agreed'] ) ? $ticket_data['terms_agreed'] : false;
