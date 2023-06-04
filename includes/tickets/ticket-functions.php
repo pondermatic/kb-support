@@ -661,7 +661,7 @@ function kbs_get_ticket_log_sources()	{
  *     			department?:int,
  *     			agent_id?:int,
  *     			attachments?:array|mixed,
- *     			user_info:array{id?:int,first_name?:string,email?:string,last_name?:string},
+ *     			user_info:array{id?:int,first_name:string,email:string,last_name?:string},
  *     			participants?:array<string>,
  *     			privacy_accepted:false|string,
  *     			terms_agreed:false|string,
