@@ -652,8 +652,25 @@ function kbs_get_ticket_log_sources()	{
  * Adds a new ticket.
  *
  * @since	1.0
- * @param	arr		$ticket_data	Ticket data.
- * @return	mixed	Ticket ID on success, false on failure.
+ * @param	array{
+ *     			post_title:string,
+ *     			post_content:string,
+ *     			user_email:string,
+ *     			post_category?:int,
+ *     			status?:string,
+ *     			department?:int,
+ *     			agent_id?:int,
+ *     			attachments?:array|mixed,
+ *     			user_info:array{id?:int,first_name:string,email:string,last_name?:string},
+ *     			participants?:array<string>,
+ *     			privacy_accepted:false|string,
+ *     			terms_agreed:false|string,
+ *     			form_data?:array,
+ *     			source:string,
+ *     			submission_origin?:string,
+ *     			post_date?:string
+ * 		} $ticket_data	Ticket data.
+ * @return	int|false	Ticket ID on success, false on failure.
  */
 function kbs_add_ticket( $ticket_data )	{
 	if ( ! empty( $ticket_data['attachments'] ) && ! is_array( $ticket_data['attachments'] ) )	{
@@ -702,7 +719,7 @@ function kbs_add_ticket( $ticket_data )	{
 	$ticket->ip               = kbs_get_ip();
 	$ticket->sla_respond      = kbs_calculate_sla_target_response();
 	$ticket->sla_resolve      = kbs_calculate_sla_target_resolution();
-	$ticket->new_files        = $ticket_data['attachments'];
+	$ticket->new_files        = $attachments;
 	$ticket->form_data        = ! empty( $ticket_data['form_data'] ) ? $ticket_data['form_data'] : array();
 	$ticket->privacy_accepted = isset( $ticket_data['privacy_accepted'] ) ? $ticket_data['privacy_accepted'] : false;
 	$ticket->terms_agreed     = isset( $ticket_data['terms_agreed'] ) ? $ticket_data['terms_agreed'] : false;
