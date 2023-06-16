@@ -756,6 +756,11 @@ add_action( 'wp_ajax_nopriv_kbs_validate_ticket_form', 'kbs_ajax_validate_form_s
  */
 function kbs_ajax_get_customer_data()	{
 
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'error' => esc_html__( 'Insufficient permissions.', 'kb-support' ) ) );
+		die();
+	}
+
 	$response = array(
 		'name'  => '',
 		'email' => '',

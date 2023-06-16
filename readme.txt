@@ -125,6 +125,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 = 1.5.89 - TBD =
 Fixed: Escaping issue in customer account ( [#262](https://github.com/WPChill/kb-support/issues/262) )
 Fixed: Filtered attachments were not being applied ( [Thanks to @BrianHenryIE](https://github.com/WPChill/kb-support/pull/266) )
+Fixed: Security issue
 
 = 1.5.88 - 06.03.2023 =
 Fixed: Tools tab not working when Ticketing system is enabled. ( [#258](https://github.com/WPChill/kb-support/issues/258) )
