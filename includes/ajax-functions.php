@@ -303,7 +303,7 @@ function kbs_ajax_display_ticket_replies()	{
                 $auto_expand = ( $expand > 0 && $expand >= $count_expand ) ? true : false;
                 $output .= '<div class="kbs_historic_replies_wrapper">';
                     $output .= kbs_get_reply_html( $reply, absint( $_POST['kbs_ticket_id'] ), $auto_expand );
-                $output .= '</div>'; 
+                $output .= '</div>';
 
                 $count_expand++;
 			}
@@ -434,7 +434,7 @@ add_action( 'wp_ajax_nopriv_kbs_load_front_end_replies', 'kbs_ajax_load_front_en
 function kbs_ajax_mark_reply_as_read() {
 
     $reply_id = isset( $_POST['reply_id'] ) ? absint( $_POST['reply_id'] ) : 0;
-    
+
     if ( ! empty( $reply_id ) )   {
         kbs_mark_reply_as_read( $reply_id );
     }
@@ -583,7 +583,7 @@ function kbs_ajax_add_form_field()	{
 	} else	{
 		$results['message'] = 'field_add_fail';
 	}
-	
+
 	wp_send_json( $results );
 
 } // kbs_ajax_add_form_field
@@ -608,7 +608,7 @@ function kbs_ajax_save_form_field()	{
 	} else	{
 		$results['message'] = 'field_save_fail';
 	}
-	
+
 	wp_send_json( $results );
 
 } // kbs_ajax_save_form_field
@@ -666,7 +666,7 @@ function kbs_ajax_validate_form_submission()	{
 			if ( 0 >= kbs_get_max_file_uploads() && 'file_upload' === $settings['type'] ){
 				continue;
 			}
-			
+
 			$error = kbs_form_submission_errors( $field->ID, 'required' );
 			$field = $field->post_name;
 
@@ -702,14 +702,14 @@ function kbs_ajax_validate_form_submission()	{
 			 */
 			$error = apply_filters( 'kbs_validate_form_field_' . $settings['type'], $error, $field, $settings, sanitize_text_field( wp_unslash( $_POST[ $field->post_name ] ) ), $fields );
 		}
-	
+
 		if ( $error )	{
 			wp_send_json( array(
 				'error' => $error,
 				'field' => $field
 			) );
 		}
-	
+
 	}
 
 	if ( $agree_to_policy && $privacy_page && empty( $_POST['kbs_agree_privacy_policy'] ) )	{
@@ -755,6 +755,8 @@ add_action( 'wp_ajax_nopriv_kbs_validate_ticket_form', 'kbs_ajax_validate_form_s
  * @return	void
  */
 function kbs_ajax_get_customer_data()	{
+
+	check_ajax_referer( 'kbs_admin_action', 'nonce');
 
 	if ( ! current_user_can( 'manage_options' ) ) {
 		wp_send_json_error( array( 'error' => esc_html__( 'Insufficient permissions.', 'kb-support' ) ) );
@@ -938,7 +940,7 @@ function kbs_ajax_search_users()	{
 		);
 
 		if ( ! empty( $_POST['exclude'] ) ) {
-			
+
 			$exclude_array = explode( ',', trim( sanitize_text_field( wp_unslash( $_POST['exclude'] ) ) ) );
 			$get_users_args['exclude'] = $exclude_array;
 		}
