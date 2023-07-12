@@ -251,7 +251,7 @@ module.exports = function( grunt ) {
 		compress: {
 			main: {
 				options: {
-					archive: 'kb-support.zip',
+					archive: 'kb-support-<%= pkg.version %>.zip',
 					mode: 'zip'
 				},
 				files: [{
