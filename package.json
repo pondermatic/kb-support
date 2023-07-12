@@ -1,7 +1,7 @@
 {
   "name": "kb-support",
   "description": "The ultimate help desk and knowledge base support tool plugin for WordPress",
-  "version": "1.4.10",
+  "version": "1.5.89",
   "main": "Gruntfile.js",
   "devDependencies": {
     "grunt": "~1.5.3",

@@ -285,6 +285,7 @@ function kbs_load_admin_scripts( $hook ) {
 
 	wp_register_script( 'kbs-admin-scripts', $js_dir . 'admin-scripts' . $suffix . '.js', $admin_deps, KBS_VERSION, false );
 	wp_enqueue_script( 'kbs-admin-scripts' );
+	wp_add_inline_script( 'kbs-admin-scripts', 'var kbs_ajax_nonce = "' . wp_create_nonce( 'kbs_admin_action' ) . '";' );
 
 	$editing_field_type = false;
 

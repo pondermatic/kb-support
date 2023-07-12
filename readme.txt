@@ -4,7 +4,7 @@ Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
 Tested up to: 6.1
 Requires PHP: 5.4
-Stable tag: 1.5.88
+Stable tag: 1.5.89
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,6 +122,10 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+= 1.5.89 - 12.07.2023 =
+Fixed: Escaping issue in customer account ( [#262](https://github.com/WPChill/kb-support/issues/262) )
+Fixed: Filtered attachments were not being applied ( [Thanks to @BrianHenryIE](https://github.com/WPChill/kb-support/pull/266) )
+Fixed: Security issue
 
 = 1.5.88 - 06.03.2023 =
 Fixed: Tools tab not working when Ticketing system is enabled. ( [#258](https://github.com/WPChill/kb-support/issues/258) )
