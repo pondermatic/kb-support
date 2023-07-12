@@ -122,7 +122,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
-= 1.5.89 - TBD =
+= 1.5.89 - 12.07.2023 =
 Fixed: Escaping issue in customer account ( [#262](https://github.com/WPChill/kb-support/issues/262) )
 Fixed: Filtered attachments were not being applied ( [Thanks to @BrianHenryIE](https://github.com/WPChill/kb-support/pull/266) )
 Fixed: Security issue
