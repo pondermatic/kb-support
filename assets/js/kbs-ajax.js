@@ -83,13 +83,14 @@ jQuery(document).ready(function ($) {
 			tinyMCE.triggerSave();
 		}
 
-        var $form      = $('#kbs_ticket_form'),
-            ticketData = $('#kbs_ticket_form').serialize();
+        var $form      = $('#kbs_ticket_form');
 
 		$.ajax({
 			type       : 'POST',
 			dataType   : 'json',
-			data       : ticketData,
+            processData: false,
+            contentType: false,
+			data       : new FormData( $form[0] ),
 			url        : kbs_scripts.ajaxurl,
 			success    : function (response) {
 				if ( response.error )	{

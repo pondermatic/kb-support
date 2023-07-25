@@ -123,6 +123,9 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 == Changelog ==
 = 1.5.89 - 12.07.2023 =
+Fixed: Required file input validation error ( [#269](https://github.com/WPChill/kb-support/issues/269) )
+
+= 1.5.89 - 12.07.2023 =
 Fixed: Escaping issue in customer account ( [#262](https://github.com/WPChill/kb-support/issues/262) )
 Fixed: Filtered attachments were not being applied ( [Thanks to @BrianHenryIE](https://github.com/WPChill/kb-support/pull/266) )
 Fixed: Security issue
