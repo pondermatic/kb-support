@@ -125,6 +125,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 = 1.5.90 - TBD =
 Fixed: Required file input validation error ( [#269](https://github.com/WPChill/kb-support/issues/269) )
 Changed: Admin scripts only load on KBS related admin pages. ( [#268](https://github.com/WPChill/kb-support/issues/268) )
+Fixed: Tickets menu entry showing for users without tickets access. ( [#265](https://github.com/WPChill/kb-support/issues/265) )
 
 = 1.5.89 - 12.07.2023 =
 Fixed: Escaping issue in customer account ( [#262](https://github.com/WPChill/kb-support/issues/262) )

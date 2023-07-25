@@ -69,6 +69,9 @@ add_action( 'admin_menu', 'kbs_add_options_link', 20 );
  */
 function kbs_add_licensing_menu_link()  {
     global $submenu;
+	if( ! current_user_can( 'read_tickets' ) ){
+		return;
+	}
 
     $submenu['edit.php?post_type=kbs_ticket'][900] = array(
         esc_html__( 'Manage Extensions', 'kb-support' ),
