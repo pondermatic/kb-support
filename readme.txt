@@ -122,7 +122,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
-= 1.5.89 - 12.07.2023 =
+= 1.5.90 - TBD =
 Fixed: Required file input validation error ( [#269](https://github.com/WPChill/kb-support/issues/269) )
 
 = 1.5.89 - 12.07.2023 =
