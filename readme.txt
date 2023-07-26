@@ -2,9 +2,9 @@
 Contributors: wpchill, silkalns
 Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
-Tested up to: 6.1
+Tested up to: 6.3
 Requires PHP: 5.4
-Stable tag: 1.5.89
+Stable tag: 1.5.90
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,7 +122,7 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
-= 1.5.90 - TBD =
+= 1.5.90 - 26.07.2023 =
 Fixed: Required file input validation error ( [#269](https://github.com/WPChill/kb-support/issues/269) )
 Changed: Admin scripts only load on KBS related admin pages. ( [#268](https://github.com/WPChill/kb-support/issues/268) )
 Fixed: Tickets menu entry showing for users without tickets access. ( [#265](https://github.com/WPChill/kb-support/issues/265) )
