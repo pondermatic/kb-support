@@ -1528,3 +1528,8 @@ p.kbs-extension-desc {
 	font-weight: 400;
 	color: #f00;
   }
+
+  a.kbs-upgrate-to-pro {
+    color: orange;
+    font-weight: bold;
+}

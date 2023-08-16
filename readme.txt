@@ -122,6 +122,9 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+= 1.5.91 - 26.07.2023 =
+Added: Upgrade to PRO action link in the plugins ( [#211](https://github.com/WPChill/kb-support/issues/211) )
+
 = 1.5.90 - 26.07.2023 =
 Fixed: Required file input validation error ( [#269](https://github.com/WPChill/kb-support/issues/269) )
 Changed: Admin scripts only load on KBS related admin pages. ( [#268](https://github.com/WPChill/kb-support/issues/268) )
