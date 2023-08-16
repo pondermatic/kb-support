@@ -332,7 +332,7 @@ final class KB_Support {
 			require_once KBS_PLUGIN_DIR . 'includes/admin/upgrades/upgrades.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/welcome.php';
 			require_once KBS_PLUGIN_DIR . 'includes/admin/branding.php';
-			require_once KBS_PLUGIN_DIR . 'includes/admin/class-kbs-admin-upsells.php';
+			require_once KBS_PLUGIN_DIR . 'includes/admin/upsells/class-kbs-admin-upsells.php';
 		}
 
 		require_once KBS_PLUGIN_DIR . 'includes/install.php';

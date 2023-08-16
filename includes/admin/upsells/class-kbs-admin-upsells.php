@@ -8,8 +8,9 @@ class KBS_Admin_Upsells	{
 	public function __construct()	{
 
 		// Upgrade to PRO plugin action link
-		add_filter( 'kbs_admin_pages', array( $this, 'include_admin_style' ), 60 );
+		add_filter( 'admin_enqueue_scripts', array( $this, 'include_admin_style' ), 60 );
         add_filter( 'plugin_action_links_' . plugin_basename( KBS_PLUGIN_FILE ), array( $this, 'filter_action_links' ), 60 );
+        add_action( 'admin_menu', array( $this, 'add_lite_vs_pro_page' ), 120 );
         
 	}
 
@@ -49,10 +50,32 @@ class KBS_Admin_Upsells	{
 	 */
 	public function include_admin_style( $admin_pages ){
 
-        $admin_pages[] = 'plugins.php';
+		$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+		wp_enqueue_style( 'kbs-admin', KBS_PLUGIN_URL . '/assets/css/kbs-admin' . $suffix . '.css', array(), KBS_VERSION );
 
-        return $admin_pages;
     }
+
+	/**
+	 * Add lite vs pro page in menu
+	 *
+	 * @param [type] $links
+	 * @return void
+	 */
+	public function add_lite_vs_pro_page() {
+
+        add_submenu_page( 'edit.php?post_type=kbs_ticket', __( 'LITE vs Premium', 'kb-support' ), __( 'LITE vs Premium', 'kb-support' ), 'manage_options', 'kbs-lite-vs-pro', array( $this, 'lits_vs_pro_page' ), 200 );
+
+	}
+
+    /**
+	 * The LITE vs PRO page
+	 *
+	 * @return void
+	 */
+	public function lits_vs_pro_page() {
+
+		require_once __DIR__ . '/lite-vs-pro-page.php';
+	}
 }
 
 new KBS_Admin_Upsells();
