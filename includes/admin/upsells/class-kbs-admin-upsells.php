@@ -8,10 +8,10 @@ class KBS_Admin_Upsells	{
 	public function __construct()	{
 
 		// Upgrade to PRO plugin action link
-		add_filter( 'admin_enqueue_scripts', array( $this, 'include_admin_style' ), 60 );
+		add_filter( 'kbs_admin_pages', array( $this, 'include_admin_style' ), 60 );
         add_filter( 'plugin_action_links_' . plugin_basename( KBS_PLUGIN_FILE ), array( $this, 'filter_action_links' ), 60 );
         add_action( 'admin_menu', array( $this, 'add_lite_vs_pro_page' ), 120 );
-        
+
 	}
 
     /**
@@ -39,7 +39,7 @@ class KBS_Admin_Upsells	{
 		return $links;
 	}
 
-    /**
+	/**
 	 * Adds plugins.php to the list of pages where we should enqueue admin css
 	 *
 	 * @param $admin_pages
@@ -48,12 +48,12 @@ class KBS_Admin_Upsells	{
 	 *
 	 * @since 1.5.91
 	 */
-	public function include_admin_style( $admin_pages ){
+	public function include_admin_style( $admin_pages ) {
 
-		$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
-		wp_enqueue_style( 'kbs-admin', KBS_PLUGIN_URL . '/assets/css/kbs-admin' . $suffix . '.css', array(), KBS_VERSION );
+		$admin_pages[] = 'plugins.php';
 
-    }
+		return $admin_pages;
+	}
 
 	/**
 	 * Add lite vs pro page in menu
