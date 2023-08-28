@@ -272,13 +272,14 @@ function kbs_load_admin_scripts( $hook ) {
 
 	global $wp_version, $post;
 
-	if( ! isset( $post->post_type ) ){
+	if ( ! isset( $post->post_type ) ) {
 		$post_type = isset( $_REQUEST['post_type'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['post_type'] ) ) : false;
-	}else{
+	} else {
 		$post_type = $post->post_type;
 	}
-	
-	if( !$post_type || ( 'kbs_ticket' != $post_type && 'article' != $post_type && 'kbs_form' != $post_type && 'kbs_company' != $post_type ) ){
+
+	$kbs_cpt = array( 'kbs_ticket', 'article', 'kbs_form', 'kbs_company', 'kbs_log' );
+	if ( ! $post_type || ! in_array( $post_type, $kbs_cpt, true ) ) {
 		return;
 	}
 
