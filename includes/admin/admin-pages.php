@@ -86,6 +86,33 @@ function kbs_add_licensing_menu_link()  {
 add_action( 'admin_menu', 'kbs_add_licensing_menu_link', 900 );
 
 /**
+ * Add a tickets manager page for support customers
+ *
+ * @return  void
+ * @since   1.5.90
+ */
+function kbs_add_ticket_manager_menu_link() {
+
+	// Get current user role.
+	$user = wp_get_current_user();
+	// Return if the user is not a support customer.
+	if ( current_user_can( 'read_tickets' ) || ! in_array( 'support_customer', $user->roles, true ) ) {
+		return;
+	}
+	$settings = get_option( 'kbs_settings' );
+
+	// Return if the tickets page is not set.
+	if ( ! isset( $settings['tickets_page'] ) || empty( $settings['tickets_page'] ) ) {
+		return;
+	}
+
+	$url = get_the_permalink( $settings['tickets_page'] );
+	// Add the menu item.
+	add_menu_page( __( 'Manage tickets', 'kb-support' ), __( 'Manage tickets', 'kb-support' ), 'read', $url, '', 'dashicons-tickets', 900 );
+} // kbs_add_licensing_menu_link
+add_action( 'admin_menu', 'kbs_add_ticket_manager_menu_link', 900 );
+
+/**
  * Display the open ticket count next to the tickets menu item.
  *
  * @since	1.2.5
