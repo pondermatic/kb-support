@@ -122,6 +122,9 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+= 1.5.92 - TBD =
+Fixed: ID prefix won't change ( [#276](https://github.com/WPChill/kb-support/issues/276) )
+
 = 1.5.91 - 26.07.2023 =
 Added: Upgrade to PRO action link in the plugins ( [#211](https://github.com/WPChill/kb-support/issues/211) )
 Added: LITE vs PRO page ( [#210](https://github.com/WPChill/kb-support/issues/210) )
