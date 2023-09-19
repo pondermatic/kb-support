@@ -55,3 +55,20 @@ function kbsAdminConditions(object) {
 		targets.show();
 	}
 }
+
+// Dismiss admin notices
+$( document ).on( 'click', '.notice-kbs-dismiss .notice-dismiss', function () {
+	var notice = $( this ).closest( '.notice-kbs-dismiss' ).data( 'notice' );
+
+	var postData         = {
+		notice    : notice,
+		action       : 'kbs_dismiss_notice'
+	};
+
+	$.ajax({
+			   type: 'POST',
+			   dataType: 'json',
+			   data: postData,
+			   url: ajaxurl
+		   });
+});
