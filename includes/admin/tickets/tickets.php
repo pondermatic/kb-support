@@ -1076,9 +1076,9 @@ function kbs_ticket_post_save( $post_id, $post, $update )	{
     if ( ! $ticket_number ) {
         $number = kbs_get_next_ticket_number();
         if ( $number ) {
+			update_option( 'kbs_last_ticket_number', $number );
             $number = kbs_format_ticket_number( $number );
-            $ticket->__set( 'number', $number );
-            update_option( 'kbs_last_ticket_number', $number );
+       		$ticket->__set( 'number', $number );
         }
     }
 

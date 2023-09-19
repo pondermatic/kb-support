@@ -888,7 +888,7 @@ function kbs_display_form_textarea_field( $field, $settings )	{
 			'editor_class'  => $settings['input_class'],
 			'teeny'         => true,
 			'dfw'           => false,
-			'tinymce'       => true,
+			'tinymce'       => array( 'plugins' => 'paste', 'paste_data_images'=>false ),
 			'quicktags'     => false
 		) );
 

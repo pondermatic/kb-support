@@ -658,47 +658,47 @@ function kbs_ajax_validate_form_submission()	{
 
 	$fields = $form->get_fields();
 
-	foreach ( $fields as $field )	{
+	foreach ( $fields as $field ) {
 
 		$settings = $form->get_field_settings( $field->ID );
 
-		if ( ! empty( $settings['required'] ) && empty( $_POST[ $field->post_name ] ) )	{
-			if ( 0 >= kbs_get_max_file_uploads() && 'file_upload' === $settings['type'] ){
-				continue;
-			}
+		if ( ! empty( $settings['required'] ) && empty( $_POST[ $field->post_name ] ) && 'file_upload' != $settings['type'] ) {
 
 			$error = kbs_form_submission_errors( $field->ID, 'required' );
 			$field = $field->post_name;
+		} elseif ( 'file_upload' == $settings['type'] ) {
 
-		} elseif ( 'file_upload' == $settings['type'] )	{
+			if ( ! empty( $settings['required'] ) ) {
 
-			if ( ! empty( $_FILES ) && ! empty( $_FILES['name'][ kbs_get_max_file_uploads() ] ) )	{
+				if ( '' == $_FILES[ $field->post_name ]['name'][0] || 0 == $_FILES[ $field->post_name ]['size'][0] ) {
+					$error = kbs_form_submission_errors( $field->ID, 'required' );
+					$field = $field->post_name;
+				}
+			}
+
+			if ( ! empty( $_FILES ) && ! empty( $_FILES['name'][ kbs_get_max_file_uploads() ] ) ) {
 
 				$error = kbs_get_notices( 'max_files', true );
 				$field = 'kbs_files';
-
 			}
+		} elseif ( 'email' == $settings['type'] || 'customer_email' == $settings['mapping'] ) {
 
-		} elseif ( 'email' == $settings['type'] || 'customer_email' == $settings['mapping'] )	{
-
-			if ( ! is_email( wp_unslash( $_POST[ $field->post_name ] ) ) )	{
+			if ( ! is_email( wp_unslash( $_POST[ $field->post_name ] ) ) ) {
 				$error = kbs_form_submission_errors( $field->ID, 'invalid_email' );
 				$field = $field->post_name;
-			} elseif ( kbs_check_email_from_submission( sanitize_email( wp_unslash( $_POST[ $field->post_name ] ) ) ) )	{
+			} elseif ( kbs_check_email_from_submission( sanitize_email( wp_unslash( $_POST[ $field->post_name ] ) ) ) ) {
 				$error = kbs_form_submission_errors( $field->ID, 'process_error' );
 				$field = $field->post_name;
 			}
-
-		} elseif ( 'recaptcha' == $settings['type'] && ! kbs_validate_recaptcha( isset( $_POST['g-recaptcha-response'] ) ? $_POST['g-recaptcha-response'] : '' ) )	{
+		} elseif ( 'recaptcha' == $settings['type'] && ! kbs_validate_recaptcha( isset( $_POST['g-recaptcha-response'] ) ? $_POST['g-recaptcha-response'] : '' ) ) {
 
 			$error = kbs_form_submission_errors( $field->ID, 'google_recaptcha' );
 			$field = $field->post_name;
-
-		} else	{
+		} else {
 			/**
 			 * Allow plugins to perform additional validation on individual field types.
 			 *
-			 * @since	1.0
+			 * @since    1.0
 			 */
 			$error = apply_filters( 'kbs_validate_form_field_' . $settings['type'], $error, $field, $settings, sanitize_text_field( wp_unslash( $_POST[ $field->post_name ] ) ), $fields );
 		}
@@ -709,7 +709,6 @@ function kbs_ajax_validate_form_submission()	{
 				'field' => $field
 			) );
 		}
-
 	}
 
 	if ( $agree_to_policy && $privacy_page && empty( $_POST['kbs_agree_privacy_policy'] ) )	{

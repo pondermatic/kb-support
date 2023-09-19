@@ -1253,6 +1253,8 @@ function kbs_get_next_ticket_number()	{
 	$increment_number = true;
 
 	if ( $number )	{
+		
+		$number = preg_replace("/[^0-9]/", "", $number );
 
 		if ( empty( $number ) )	{
 			$number = $start;

@@ -219,7 +219,12 @@ add_action( 'wp_enqueue_scripts', 'kbs_register_styles' );
  */
 function kbs_load_admin_styles( $hook ) {
 
-    if ( ! apply_filters( 'kbs_load_admin_styles', kbs_is_admin_page(), $hook ) ) {
+	// Add this inline style everywhere to highlight the menu item.
+	echo '<style type="text/css">#adminmenu #menu-posts-kbs_ticket ul.wp-submenu li a[href$=kbs-lite-vs-pro] {
+	color: gold;
+}</style>';
+
+	if ( ! apply_filters( 'kbs_load_admin_styles', kbs_is_admin_page(), $hook ) ) {
 		return;
 	}
 
@@ -271,6 +276,17 @@ function kbs_load_admin_scripts( $hook ) {
 	}
 
 	global $wp_version, $post;
+
+	if ( ! isset( $post->post_type ) ) {
+		$post_type = isset( $_REQUEST['post_type'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['post_type'] ) ) : false;
+	} else {
+		$post_type = $post->post_type;
+	}
+
+	$kbs_cpt = array( 'kbs_ticket', 'article', 'kbs_form', 'kbs_company', 'kbs_log' );
+	if ( ! $post_type || ! in_array( $post_type, $kbs_cpt, true ) ) {
+		return;
+	}
 
 	$assets_dir  = trailingslashit( KBS_PLUGIN_URL . 'assets' );
 	$js_dir      = trailingslashit( $assets_dir . 'js' );

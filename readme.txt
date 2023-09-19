@@ -2,9 +2,9 @@
 Contributors: wpchill, silkalns
 Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
-Tested up to: 6.1
+Tested up to: 6.3
 Requires PHP: 5.4
-Stable tag: 1.5.89
+Stable tag: 1.5.90
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,6 +122,16 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.5.90 - 19.09.2023 =
+Fixed: Required file input validation error ( [#269](https://github.com/WPChill/kb-support/issues/269) )
+Changed: Admin scripts only load on KBS related admin pages. ( [#268](https://github.com/WPChill/kb-support/issues/268) )
+Fixed: Tickets menu entry showing for users without tickets access. ( [#265](https://github.com/WPChill/kb-support/issues/265) )
+Fixed: Customers should not be able to drag&drop images in the ticket description editor. ( [#270](https://github.com/WPChill/kb-support/issues/270) )
+Fixed: ID prefix won't change ( [#276](https://github.com/WPChill/kb-support/issues/276) )
+Added: Upgrade to PRO action link in the plugins ( [#211](https://github.com/WPChill/kb-support/issues/211) )
+Added: LITE vs PRO page ( [#210](https://github.com/WPChill/kb-support/issues/210) )
+
 = 1.5.89 - 12.07.2023 =
 Fixed: Escaping issue in customer account ( [#262](https://github.com/WPChill/kb-support/issues/262) )
 Fixed: Filtered attachments were not being applied ( [Thanks to @BrianHenryIE](https://github.com/WPChill/kb-support/pull/266) )
