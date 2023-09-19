@@ -219,7 +219,12 @@ add_action( 'wp_enqueue_scripts', 'kbs_register_styles' );
  */
 function kbs_load_admin_styles( $hook ) {
 
-    if ( ! apply_filters( 'kbs_load_admin_styles', kbs_is_admin_page(), $hook ) ) {
+	// Add this inline style everywhere to highlight the menu item.
+	echo '<style type="text/css">#adminmenu #menu-posts-kbs_ticket ul.wp-submenu li a[href$=kbs-lite-vs-pro] {
+	color: gold;
+}</style>';
+
+	if ( ! apply_filters( 'kbs_load_admin_styles', kbs_is_admin_page(), $hook ) ) {
 		return;
 	}
 

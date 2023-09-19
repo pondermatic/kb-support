@@ -1827,11 +1827,6 @@ a.kbs-upgrate-to-pro {
 }
 
 /* Lite vs PRO Section */
-
-#adminmenu #menu-posts-kbs_ticket ul.wp-submenu li a[href$=kbs-lite-vs-pro] {
-	color: gold;
-}
-
 .kbs_ticket_page_kbs-lite-vs-pro,
 .kbs_ticket_page_kbs-lite-vs-pro p {
 	font-size: 14px;
