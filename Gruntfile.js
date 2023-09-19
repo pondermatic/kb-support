@@ -274,7 +274,7 @@ module.exports = function( grunt ) {
 						'!package.json',
 						'!package-lock.json',
 						'!phpunit.xml',
-						'!kb-support.zip'
+						'!*.zip'
 					]
 				}]
 			}
