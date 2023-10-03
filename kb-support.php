@@ -3,10 +3,10 @@
  * Plugin Name: KB Support
  * Plugin URI: https://kb-support.com/
  * Description: The best help desk tool for WordPress. Simple yet effective. Feature rich.
- * Version: 1.5.90
- * Date: 2 February 2021
- * Author: WPChill
- * Author URI: https://wpchill.com
+ * Version: 1.5.91
+ * Date: 3rd October 2023
+ * Author: WPOmnia
+ * Author URI: https://wpomnia.com
  * Text Domain: kb-support
  * Domain Path: /languages
  * License: GPL2
@@ -29,8 +29,8 @@
  *
  * @package		KBS
  * @category	Core
- * @author		WPChill
- * @version		1.5.90
+ * @author		WPOmnia
+ * @version		1.5.91
  */
 
 // Exit if accessed directly.

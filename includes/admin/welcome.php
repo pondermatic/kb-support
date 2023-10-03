@@ -536,7 +536,6 @@ class KBS_Welcome {
 		$badge_url = KBS_PLUGIN_URL . 'assets/images/kbs-icon-transparent.png';
 		?>
         <h1 class="welcome-h1"><?php echo esc_html( get_admin_page_title() ); ?></h1>
-		<?php $this->social_media_elements(); ?>
 
 		<style type="text/css" media="screen">
             /*<![CDATA[*/

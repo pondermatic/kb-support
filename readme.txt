@@ -1,14 +1,14 @@
-=== KB Support - WordPress Help Desk ===
+=== KB Support - WordPress Help Desk and Knowledge Base ===
 Contributors: jack-kitterhing
 Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
 Tested up to: 6.3
 Requires PHP: 5.4
-Stable tag: 1.5.90
+Stable tag: 1.5.91
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-The best help desk tool for WordPress. Simple yet effective. Feature rich.
+The best help desk and Knowlegde Base plugin for WordPress. Simple yet effective. Feature rich.
 
 == Description ==
 
@@ -122,6 +122,9 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.5.91 - 03.10.2023 =
+Updated: Removed social media follow button from welcome screen. 
 
 = 1.5.90 - 19.09.2023 =
 Fixed: Required file input validation error ( [#269](https://github.com/WPChill/kb-support/issues/269) )
