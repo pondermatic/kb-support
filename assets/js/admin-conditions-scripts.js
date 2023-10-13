@@ -57,15 +57,15 @@ function kbsAdminConditions(object) {
 }
 
 // Dismiss admin notices
-$( document ).on( 'click', '.notice-kbs-dismiss .notice-dismiss', function () {
-	var notice = $( this ).closest( '.notice-kbs-dismiss' ).data( 'notice' );
+jQuery( document ).on( 'click', '.notice-kbs-dismiss .notice-dismiss', function () {
+	var notice = jQuery( this ).closest( '.notice-kbs-dismiss' ).data( 'notice' );
 
 	var postData         = {
 		notice    : notice,
 		action       : 'kbs_dismiss_notice'
 	};
 
-	$.ajax({
+	jQuery.ajax({
 			   type: 'POST',
 			   dataType: 'json',
 			   data: postData,
