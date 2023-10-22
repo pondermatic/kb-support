@@ -172,7 +172,7 @@ class KBS_API extends WP_REST_Controller {
 				kbs_get_article_label_singular( true )
 			),
             'ticket_not_found'   => sprintf(
-				esc_html__( '% not found.', 'kb-support' ),
+				esc_html__( '%s not found.', 'kb-support' ),
 				kbs_get_article_label_singular()
 			),
 			'restricted_article' => sprintf(
