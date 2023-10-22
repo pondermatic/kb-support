@@ -133,7 +133,11 @@ function kbs_articles_exclude_restricted( $query )	{
 		return;
 	}
 
-	if ( is_admin() || ! is_post_type_archive( 'article' ) || ! $query->is_main_query() )	{
+	global $wp_query;
+
+	if ( is_admin() 
+	     || ( isset( $wp_query ) && ! is_post_type_archive( 'article' ) ) 
+	     || ! $query->is_main_query() )	{
 		return;
 	}
 
