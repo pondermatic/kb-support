@@ -115,12 +115,13 @@ add_action( 'wp_enqueue_scripts', 'kbs_load_scripts' );
  function kbs_login_block_assets() {
     wp_enqueue_script(
         'kbs-login-block',
-        plugins_url( 'assets/js/kbs-login-block.js', __FILE__ ),
+        plugins_url( '../assets/js/kbs-login-block.js', __FILE__ ),
         array( 'wp-blocks', 'wp-editor', 'wp-i18n' ),
-        filemtime( plugin_dir_path( __FILE__ ) . 'assets/js/kbs-login-block.js' )
+        filemtime( plugin_dir_path( __FILE__ ) . '../assets/js/kbs-login-block.js' )
     );
 }
 add_action( 'enqueue_block_editor_assets', 'kbs_login_block_assets' );
+
 
 
 /**
