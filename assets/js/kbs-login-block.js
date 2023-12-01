@@ -1,14 +1,20 @@
-( function( blocks, editor, i18n ) {
-    blocks.registerBlockType( 'kbs/login-block', {
-        title: i18n.__( 'KBS Login', 'kb-support' ),
+( function( wp ) {
+    var registerBlockType = wp.blocks.registerBlockType;
+    var ServerSideRender = wp.serverSideRender;
+    var __ = wp.i18n.__;
+
+    registerBlockType( 'kbs/login-block', {
+        title: __( 'KBS Login', 'kb-support' ),
         icon: 'admin-users', // Use a WordPress dashicon or custom SVG
         category: 'common',
 
-        edit: function() {
+        edit: function( props ) {
             return wp.element.createElement(
-                'div',
-                { className: 'kbs-login-block-editor' },
-                i18n.__( 'KBS Login Form Placeholder', 'kb-support' )
+                ServerSideRender,
+                {
+                    block: "kbs/login-block",
+                    attributes: props.attributes
+                }
             );
         },
 
@@ -17,4 +23,5 @@
             return null;
         },
     } );
-} )( window.wp.blocks, window.wp.editor, window.wp.i18n );
+} )( window.wp );
+
