@@ -105,6 +105,25 @@ function kbs_load_scripts() {
 add_action( 'wp_enqueue_scripts', 'kbs_load_scripts' );
 
 /**
+ * Register and enqueue block scripts
+ * Placeholder to test 
+ * todo: update to run in main function
+ * @since 1.5.92
+ * 
+ */
+
+ function kbs_login_block_assets() {
+    wp_enqueue_script(
+        'kbs-login-block',
+        plugins_url( 'assets/js/kbs-login-block.js', __FILE__ ),
+        array( 'wp-blocks', 'wp-editor', 'wp-i18n' ),
+        filemtime( plugin_dir_path( __FILE__ ) . 'assets/js/kbs-login-block.js' )
+    );
+}
+add_action( 'enqueue_block_editor_assets', 'kbs_login_block_assets' );
+
+
+/**
  * Register Styles
  *
  * Checks the styles option and hooks the required filter.
