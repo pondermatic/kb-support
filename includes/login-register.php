@@ -50,26 +50,29 @@ function kbs_login_form( $redirect = '' ) {
  * @return	str		Login form
  */
 function kbs_register_form( $redirect = '' ) {
-	global $kbs_register_redirect;
+    global $kbs_register_redirect;
 
-	if ( empty( $redirect ) ) {
-		if ( ! empty( $_GET['kbs_redirect'] ) )	{
-			$redirect = sanitize_url( wp_unslash( $_GET['kbs_redirect'] ) );
-		} else	{
-			$redirect = kbs_get_current_page_url();
-		}
-	}
+    if ( empty( $redirect ) ) {
+        if ( ! empty( $_GET['kbs_redirect'] ) ) {
+            $redirect = sanitize_url( wp_unslash( $_GET['kbs_redirect'] ) );
+        } else {
+            $redirect = kbs_get_current_page_url();
+        }
+    }
 
-	$kbs_register_redirect = $redirect;
+    $kbs_register_redirect = $redirect;
 
-	ob_start();
+    ob_start();
 
-	if( ! is_user_logged_in() ) {
-		kbs_get_template_part( 'shortcode', 'register' );
-	}
+    if( ! is_user_logged_in() ) {
+        kbs_get_template_part( 'shortcode', 'register' );
+    } else {
+        // Handle logged-in users
+        echo '<p class="kbs-logged-in">' . esc_html__( 'You are already logged in', 'kb-support' ) . '</p>';
+    }
 
-	return apply_filters( 'kbs_register_form', ob_get_clean() );
-} // kbs_register_form
+    return apply_filters( 'kbs_register_form', ob_get_clean() );
+} // kbs_registration_form
 
 /**
  * Process Login Form
