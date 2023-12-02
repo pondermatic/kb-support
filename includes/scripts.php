@@ -122,6 +122,23 @@ add_action( 'wp_enqueue_scripts', 'kbs_load_scripts' );
 }
 add_action( 'enqueue_block_editor_assets', 'kbs_login_block_assets' );
 
+/**
+ * Register and enqueue block script for the registration block as a test
+ * Placeholder to test
+ * @since 1.5.92
+ * 
+ */
+
+ function kbs_register_block_assets() {
+    wp_enqueue_script(
+        'kbs-register-block',
+        plugins_url( '../assets/js/kbs-register-block.js', __FILE__ ),
+        array( 'wp-blocks', 'wp-editor', 'wp-i18n' ),
+        filemtime( plugin_dir_path( __FILE__ ) . '../assets/js/kbs-register-block.js' )
+    );
+}
+add_action( 'enqueue_block_editor_assets', 'kbs_register_block_assets' );
+
 
 
 /**
