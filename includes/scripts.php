@@ -139,6 +139,23 @@ add_action( 'enqueue_block_editor_assets', 'kbs_login_block_assets' );
 }
 add_action( 'enqueue_block_editor_assets', 'kbs_register_block_assets' );
 
+/** 
+ * Register and enqueue the block script for the profile editor block. 
+ * Placeholder to test
+ * @since 1.5.92
+ * 
+ */
+
+ function kbs_profile_editor_block_assets() {
+    wp_enqueue_script(
+        'kbs-register-block',
+        plugins_url( '../assets/js/kbs-profile-editor-block.js', __FILE__ ),
+        array( 'wp-blocks', 'wp-editor', 'wp-i18n' ),
+        filemtime( plugin_dir_path( __FILE__ ) . '../assets/js/kbs-profile-editor-block.js' )
+    );
+}
+add_action( 'enqueue_block_editor_assets', 'kbs_profile_editor_block_assets' );
+
 
 
 /**
