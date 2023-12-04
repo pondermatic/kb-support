@@ -299,6 +299,7 @@ final class KB_Support {
 		require_once KBS_PLUGIN_DIR . 'includes/blocks/kbs-login-block.php';
 		require_once KBS_PLUGIN_DIR . 'includes/blocks/kbs-register-block.php';
 		require_once KBS_PLUGIN_DIR . 'includes/blocks/kbs-profile-editor-block.php';
+		require_once KBS_PLUGIN_DIR . 'includes/blocks/kbs-tickets-block.php';
 
 
 		if ( is_admin() )	{

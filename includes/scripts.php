@@ -148,13 +148,30 @@ add_action( 'enqueue_block_editor_assets', 'kbs_register_block_assets' );
 
  function kbs_profile_editor_block_assets() {
     wp_enqueue_script(
-        'kbs-register-block',
+        'kbs-profile-editor-block',
         plugins_url( '../assets/js/kbs-profile-editor-block.js', __FILE__ ),
         array( 'wp-blocks', 'wp-editor', 'wp-i18n' ),
         filemtime( plugin_dir_path( __FILE__ ) . '../assets/js/kbs-profile-editor-block.js' )
     );
 }
 add_action( 'enqueue_block_editor_assets', 'kbs_profile_editor_block_assets' );
+
+/**
+ * Register and enqueue the block script for the tickets block. 
+ * Placeholder to test
+ * @since 1.5.92
+ * 
+ */
+
+ function kbs_tickets_block_assets() {
+	wp_enqueue_script(
+		'kbs-tickets-block',
+		plugins_url( '../assets/js/kbs-tickets-block.js', __FILE__ ),
+		array( 'wp-blocks', 'wp-editor', 'wp-i18n' ),
+		filemtime( plugin_dir_path( __FILE__ ) .  '../assets/js/kbs-tickets-block.js' )
+	);
+ }
+ add_action( 'enqueue_block_editor_assets', 'kbs_tickets_block_assets' );
 
 
 
