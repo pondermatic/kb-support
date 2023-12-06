@@ -173,6 +173,40 @@ add_action( 'enqueue_block_editor_assets', 'kbs_profile_editor_block_assets' );
  }
  add_action( 'enqueue_block_editor_assets', 'kbs_tickets_block_assets' );
 
+ /**
+ * Register and enqueue the block script for the search block. 
+ * Placeholder to test
+ * @since 1.5.92
+ * 
+ */
+
+ function kbs_search_block_assets() {
+	wp_enqueue_script(
+		'kbs-search-block',
+		plugins_url( '../assets/js/kbs-search-block.js', __FILE__ ),
+		array( 'wp-blocks', 'wp-editor', 'wp-i18n' ),
+		filemtime( plugin_dir_path( __FILE__ ) .  '../assets/js/kbs-search-block.js' )
+	);
+ }
+ add_action( 'enqueue_block_editor_assets', 'kbs_search_block_assets' );
+
+ /**
+ * Register and enqueue the block script for the submit block. 
+ * Placeholder to test
+ * @since 1.5.92
+ * 
+ */
+
+ function kbs_submit_block_assets() {
+	wp_enqueue_script(
+		'kbs-submit-block',
+		plugins_url( '../assets/js/kbs-submit-block.js', __FILE__ ),
+		array( 'wp-blocks', 'wp-editor', 'wp-i18n' ),
+		filemtime( plugin_dir_path( __FILE__ ) .  '../assets/js/kbs-submit-block.js' )
+	);
+ }
+ add_action( 'enqueue_block_editor_assets', 'kbs_submit_block_assets' );
+
 
 
 /**
