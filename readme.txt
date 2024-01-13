@@ -1,10 +1,10 @@
 === KB Support - WordPress Help Desk and Knowledge Base ===
 Contributors: jack-kitterhing
 Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
-Requires at least: 4.1
+Requires at least: 5.0
 Tested up to: 6.4
 Requires PHP: 5.6
-Stable tag: 1.5.92
+Stable tag: 1.6.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -123,8 +123,17 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 
 == Changelog ==
 
-= 1.5.92 - 13.01.2024 = 
+= 1.6.0 - 13.01.2024 =
+Added: Search Block. 
+Added: Login Block. 
+Added: Tickets Block.
+Updated: Build tools. 
+Fixed: KB Support summary not loading. 
+Fixed: jQuery not defined. 
+Fixed: Access level to tickets and notes. 
+Fixed: Broken conditional message output.
 
+= 1.5.92 - 13.01.2024 = 
 Added: Search Block. 
 Added: Login Block. 
 Added: Tickets Block.
