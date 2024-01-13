@@ -105,6 +105,111 @@ function kbs_load_scripts() {
 add_action( 'wp_enqueue_scripts', 'kbs_load_scripts' );
 
 /**
+ * Register and enqueue block scripts
+ * Placeholder to test 
+ * todo: update to run in main function
+ * @since 1.5.92
+ * 
+ */
+
+ function kbs_login_block_assets() {
+    wp_enqueue_script(
+        'kbs-login-block',
+        plugins_url( '../assets/js/kbs-login-block.js', __FILE__ ),
+        array( 'wp-blocks', 'wp-editor', 'wp-i18n' ),
+        filemtime( plugin_dir_path( __FILE__ ) . '../assets/js/kbs-login-block.js' )
+    );
+}
+add_action( 'enqueue_block_editor_assets', 'kbs_login_block_assets' );
+
+/**
+ * Register and enqueue block script for the registration block as a test
+ * Placeholder to test
+ * @since 1.5.92
+ * 
+ */
+
+ function kbs_register_block_assets() {
+    wp_enqueue_script(
+        'kbs-register-block',
+        plugins_url( '../assets/js/kbs-register-block.js', __FILE__ ),
+        array( 'wp-blocks', 'wp-editor', 'wp-i18n' ),
+        filemtime( plugin_dir_path( __FILE__ ) . '../assets/js/kbs-register-block.js' )
+    );
+}
+add_action( 'enqueue_block_editor_assets', 'kbs_register_block_assets' );
+
+/** 
+ * Register and enqueue the block script for the profile editor block. 
+ * Placeholder to test
+ * @since 1.5.92
+ * 
+ */
+
+ function kbs_profile_editor_block_assets() {
+    wp_enqueue_script(
+        'kbs-profile-editor-block',
+        plugins_url( '../assets/js/kbs-profile-editor-block.js', __FILE__ ),
+        array( 'wp-blocks', 'wp-editor', 'wp-i18n' ),
+        filemtime( plugin_dir_path( __FILE__ ) . '../assets/js/kbs-profile-editor-block.js' )
+    );
+}
+add_action( 'enqueue_block_editor_assets', 'kbs_profile_editor_block_assets' );
+
+/**
+ * Register and enqueue the block script for the tickets block. 
+ * Placeholder to test
+ * @since 1.5.92
+ * 
+ */
+
+ function kbs_tickets_block_assets() {
+	wp_enqueue_script(
+		'kbs-tickets-block',
+		plugins_url( '../assets/js/kbs-tickets-block.js', __FILE__ ),
+		array( 'wp-blocks', 'wp-editor', 'wp-i18n' ),
+		filemtime( plugin_dir_path( __FILE__ ) .  '../assets/js/kbs-tickets-block.js' )
+	);
+ }
+ add_action( 'enqueue_block_editor_assets', 'kbs_tickets_block_assets' );
+
+ /**
+ * Register and enqueue the block script for the search block. 
+ * Placeholder to test
+ * @since 1.5.92
+ * 
+ */
+
+ function kbs_search_block_assets() {
+	wp_enqueue_script(
+		'kbs-search-block',
+		plugins_url( '../assets/js/kbs-search-block.js', __FILE__ ),
+		array( 'wp-blocks', 'wp-editor', 'wp-i18n' ),
+		filemtime( plugin_dir_path( __FILE__ ) .  '../assets/js/kbs-search-block.js' )
+	);
+ }
+ add_action( 'enqueue_block_editor_assets', 'kbs_search_block_assets' );
+
+ /**
+ * Register and enqueue the block script for the submit block. 
+ * Placeholder to test
+ * @since 1.5.92
+ * 
+ */
+
+ function kbs_submit_block_assets() {
+	wp_enqueue_script(
+		'kbs-submit-block',
+		plugins_url( '../assets/js/kbs-submit-block.js', __FILE__ ),
+		array( 'wp-blocks', 'wp-editor', 'wp-i18n' ),
+		filemtime( plugin_dir_path( __FILE__ ) .  '../assets/js/kbs-submit-block.js' )
+	);
+ }
+ add_action( 'enqueue_block_editor_assets', 'kbs_submit_block_assets' );
+
+
+
+/**
  * Register Styles
  *
  * Checks the styles option and hooks the required filter.
@@ -283,8 +388,11 @@ function kbs_load_admin_scripts( $hook ) {
 		$post_type = $post->post_type;
 	}
 
-	$kbs_cpt = array( 'kbs_ticket', 'article', 'kbs_form', 'kbs_company', 'kbs_log' );
-	if ( ! $post_type || ! in_array( $post_type, $kbs_cpt, true ) ) {
+	$kbs_cpt      = array( 'kbs_ticket', 'article', 'kbs_form', 'kbs_company', 'kbs_log' );
+	$screen       = get_current_screen();
+	$is_dashboard = is_object( $screen ) && $screen->id === 'dashboard';
+	// this can be loaded via admin dashboard, so we will need to check if it is the dasboard page, or right CPT.
+	if ( ! $is_dashboard && ( ! $post_type || ! in_array( $post_type, $kbs_cpt, true ) ) ) {
 		return;
 	}
 
