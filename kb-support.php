@@ -3,8 +3,7 @@
  * Plugin Name: KB Support
  * Plugin URI: https://kb-support.com/
  * Description: The best help desk tool for WordPress. Simple yet effective. Feature rich.
- * Version: 1.5.92
- * Date: 3rd October 2023
+ * Version: 1.6.0
  * Author: WPOmnia
  * Author URI: https://wpomnia.com
  * Text Domain: kb-support
@@ -30,7 +29,7 @@
  * @package		KBS
  * @category	Core
  * @author		WPOmnia
- * @version		1.5.92
+ * @version		1.6.0
  */
 
 // Exit if accessed directly.
@@ -194,7 +193,7 @@ final class KB_Support {
 	private function setup_constants()	{
 
 		if ( ! defined( 'KBS_VERSION' ) )	{
-			define( 'KBS_VERSION', '1.5.92' );
+			define( 'KBS_VERSION', '1.6.0' );
 		}
 
 		if ( ! defined( 'KBS_PLUGIN_DIR' ) )	{
