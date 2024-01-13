@@ -2,9 +2,9 @@
 Contributors: jack-kitterhing
 Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 4.1
-Tested up to: 6.3
-Requires PHP: 5.4
-Stable tag: 1.5.91
+Tested up to: 6.4
+Requires PHP: 5.6
+Stable tag: 1.5.92
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,6 +122,17 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.5.92 - 13.01.2024 = 
+
+Added: Search Block. 
+Added: Login Block. 
+Added: Tickets Block.
+Updated: Build tools. 
+Fixed: KB Support summary not loading. 
+Fixed: jQuery not defined. 
+Fixed: Access level to tickets and notes. 
+Fixed: Broken conditional message output.
 
 = 1.5.91 - 03.10.2023 =
 Updated: Removed social media follow button from welcome screen. 
