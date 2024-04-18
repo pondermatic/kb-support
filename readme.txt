@@ -2,9 +2,9 @@
 Contributors: jack-kitterhing
 Tags: helpdesk, help desk, ticket system, support ticket, knowledge base
 Requires at least: 5.0
-Tested up to: 6.4
+Tested up to: 6.5
 Requires PHP: 5.6
-Stable tag: 1.6.0
+Stable tag: 1.6.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,6 +122,10 @@ Extensions are available at [https://kb-support.com/extensions/](https://kb-supp
 6. When a customer is accessing a KB Article that is restricted
 
 == Changelog ==
+
+= 1.6.1 - 19.04.2024 =
+Fixed: Correct capablity check on notes and tickets. 
+Fixed: Hard coded open and close status.
 
 = 1.6.0 - 13.01.2024 =
 Added: Search Block. 
